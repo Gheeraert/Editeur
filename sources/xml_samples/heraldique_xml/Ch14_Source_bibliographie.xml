@@ -1,0 +1,5470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Sources et bibliographie</title
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+type="accessibilityFeature"
+>alternativeText</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="bibliography"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Sources et bibliographie</p
+></div
+></front
+><body
+><div
+type="section1"
+xml:id="div01"
+><head
+>Manuscrits et documents d’archives</head
+><div
+type="section2"
+xml:id="div02"
+><head
+>Avignon</head
+><bibl
+>Archives municipales : <hi
+rend="small-caps"
+>CC468</hi
+> (Comptes de Gaspard Droin, dépenses extraordinaires, non numéroté).</bibl
+><bibl
+>Bibliothèque municipale : ms. 2384 (Recueil de statuts et de privilèges de la ville d’Avignon) ; ms. 5712 (Pierre Pansier, <hi
+rend="italic"
+>Les peintres d’Avignon au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle. Biographies et documents</hi
+>).</bibl
+></div
+><div
+type="section2"
+xml:id="div03"
+><head
+>Bologne</head
+><bibl
+>Archivio di Stato : <hi
+rend="italic"
+>Insignia degli Anziani consoli</hi
+>, vol. <hi
+rend="small-caps"
+>VIII</hi
+>.</bibl
+></div
+><div
+type="section2"
+xml:id="div04"
+><head
+>Cahors</head
+><bibl
+>Archives départementales du Lot : F 365 (donation du monastère de Beaulieu-sur-Dordogne par Hugues de Castelnau, 1076).</bibl
+></div
+><div
+type="section2"
+xml:id="div05"
+><head
+>Cité du Vatican</head
+><bibl
+>Archivio Apostolico Vaticano : Armadio <hi
+rend="small-caps"
+>XXXIX</hi
+>.59, fol. 267 et 444 (concessions héraldiques de Jules <hi
+rend="small-caps"
+>III</hi
+>) ; Misc. Arm. <hi
+rend="small-caps"
+>II</hi
+> 150 (relation sur les familles romaines, début <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle).</bibl
+><bibl
+>BAV : Barb. gr. 265 (ms. aux armes de Marcello Cervini, cardinal bibliothécaire) ; Barb. lat. 4342, fol. 82-86 (description de fresque attribuée à Pietro Bellori) ; Cappella Sistina 67 (<hi
+rend="italic"
+>Officium ad Tertiam</hi
+>) ; Cappella Sistina 154 (missel) ; Cappella Sistina 213 (lectionnaire) ; Chigiani A.<hi
+rend="small-caps"
+>II</hi
+>.29, fol. 45 (lettre de Chigi à Malvezzi, 1644) ; Ottoboniani latini 3105 (album Pier Leone Ghezzi) ; Vat. lat. 317 (saint Jérôme, <hi
+rend="italic"
+>Exposition sur les Psaumes</hi
+>) ; Vat. lat. 3561, fol. 8 (discours d’Andrea de Monte) ; Vat. lat. 3790 (Léon <hi
+rend="small-caps"
+>IX</hi
+>, <hi
+rend="italic"
+>Lettres</hi
+>) ; Vat. lat. 3841 (Hildebert de Tours, <hi
+rend="italic"
+>Lettres</hi
+>) ; Vat. lat. 3965, fol. 29r-v (paiement du cardinal bibliothécaire Marcello Cervini) ; Vat. lat. 3967-3969 (<hi
+rend="italic"
+>Registres des dépenses</hi
+> de la Bibliothèque Vaticane) ; Vat. lat. 8253 (Gigli, recueil d’épitaphes) ; Vat. lat. 8254 <hi
+rend="small-caps"
+>II</hi
+> (sur Gauges de’ Gozze) ; Vat. lat. 11258 (papiers de Virgilio Spada) ; Vat. lat. 13295 (dessins de Filippo Juvarra).</bibl
+></div
+><div
+type="section2"
+xml:id="div06"
+><head
+>Florence</head
+><bibl
+>Biblioteca Medicea Laurenziana : Plutei 41.3 (<hi
+rend="italic"
+>Fior di virtù) </hi
+>; 76.63 (<hi
+rend="italic"
+>Fior di virtù</hi
+>) ; Tempiano, n<hi
+rend="sup"
+>o</hi
+> 3 (vues de Sienne et de Florence).</bibl
+><bibl
+>Biblioteca Riccardiana : ms. 1761 (<hi
+rend="italic"
+>Fior di virtù</hi
+>) ; ms. 1763 ; ms. 1774 (<hi
+rend="italic"
+>Fior di virtù</hi
+>).</bibl
+></div
+><div
+type="section2"
+xml:id="div07"
+><head
+>Harvard</head
+><bibl
+>Houghton Library : ms. Typ 136 (pontifical).</bibl
+></div
+><div
+type="section2"
+xml:id="div08"
+><head
+>Milan</head
+><bibl
+>Bibliothèque Ambrosienne : ms. F 227 inf. (Giacomo Grimaldi, <hi
+rend="italic"
+>Instrumenta translationum</hi
+>).</bibl
+></div
+><div
+type="section2"
+xml:id="div09"
+><head
+>New York</head
+><bibl
+>New York Public Library : ms. Spencer 50 (Ésope des Médicis).</bibl
+><bibl
+>Pierpont Morgan Library : ms. H.6 (<hi
+rend="italic"
+>Praeparatio ad Missam Pontificalem</hi
+>).</bibl
+><bibl
+>The Metropolitan Museum of Art : <hi
+rend="italic"
+>Coat of arms of Clement XIII (Rezzonico)</hi
+>, Accession Number 52.570.155.</bibl
+></div
+><div
+type="section2"
+xml:id="div10"
+><head
+>Paris</head
+><bibl
+>Archives nationales : ms. Fr. 23154, fol. 273 (bulle de fondation de la collégiale Saint-Louis de Castelnau-Bretenoux)</bibl
+><bibl
+>BNF : Fr. 9542 (lettre de Gozze à Peiresc) ; It. 364 (Gauges de’ Gozze, <hi
+rend="italic"
+>Dell’antichità delle armi, o insegne delle famiglie</hi
+>) ; Latin 8971 (Jean Bœuf, <hi
+rend="italic"
+>Frontispice</hi
+>, vers 1598).</bibl
+></div
+><div
+type="section2"
+xml:id="div11"
+><head
+>Rome</head
+><bibl
+>Archivio della Compagnia di Gesù : Fondo Gesuitico, Fabbrica di Sant’Ignazio, vol. 1343-1344 (décor de l’église Saint-Ignace).</bibl
+><bibl
+>Archivio di Stato di Roma : Cartari Febei, reg. 164, f. 122 (blasonnement des armes de Jules <hi
+rend="small-caps"
+>III</hi
+>).</bibl
+><bibl
+>ADP : Fonds Archiviolo, n<hi
+rend="sup"
+>o</hi
+> 145 (blasonnement des armes Pamphili) ; scaff. 93, busta 54, interno 2 (<hi
+rend="italic"
+>Riflessioni intorno alla chiarezza dell’Eccellentissima Casa Panphilia dall’anno 850 fino al 1300</hi
+>) ; 86.2, 88.34.1 et 88.34.2 (paiements).</bibl
+><bibl
+>Biblioteca Angelica : ms. 928 (Mariano Cavense, <hi
+rend="italic"
+>Triumphus Montium</hi
+>, 1551).</bibl
+><bibl
+>Biblioteca Casanatense : ms. 1335.</bibl
+><bibl
+>Biblioteca Corsiniana : ms. 275 (Michelangelo Lualdi Romano, <hi
+rend="italic"
+>Memorie istoriche, e curiose del Tempio e Palazzo Vaticano</hi
+>).</bibl
+></div
+><div
+type="section2"
+xml:id="div12"
+><head
+>Tolède</head
+><bibl
+>Bibliothèque capitulaire : Évangéliaire de Jules <hi
+rend="small-caps"
+>III</hi
+> ; Missel du cardinal Girolamo Dandini.</bibl
+></div
+><div
+type="section2"
+xml:id="div13"
+><head
+>Vallombreuse</head
+><bibl
+>Archives de l’abbaye : pièces D.V.3 et D.V.4 (Scritture diverse pertinenti alla nostra congregazione).</bibl
+></div
+><div
+type="section2"
+xml:id="div14"
+><head
+>Viterbe</head
+><bibl
+>Archivio comunale : Pergamene n<hi
+rend="sup"
+>o</hi
+> 11 (concession héraldique impériale).</bibl
+></div
+></div
+><div
+type="section1"
+xml:id="div15"
+><head
+>Livres</head
+><div
+type="section2"
+xml:id="div16"
+><head
+>Livres anciens (éditions antérieures à 1800)</head
+><bibl
+><hi
+rend="italic"
+>Acta Sanctorum Ianuarii</hi
+>, Antverpiae, Apud Joannem Meursium, 1643, t. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Agrippa</hi
+> Camillo, <hi
+rend="italic"
+>Trattato di Scientia d’Arme</hi
+>, In Roma, Per Antonio Blado stampadore apostolico, 1553.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Albani</hi
+> Giovanni Girolamo, <hi
+rend="italic"
+>Erudita atque luculenta disputatio</hi
+>, Romae, Excudebant Valerius et Aloysius Dorici fratres Brixienses, 1553.</bibl
+><bibl
+><hi
+rend="italic"
+>Annales mediolanenses ab anno 1230</hi
+> <hi
+rend="italic"
+>usque ad annum 1402</hi
+>, dans Lodovico Antonio Muratori (éd.), <hi
+rend="italic"
+>Rerum Italicarum Scriptores</hi
+>, Mediolani, Typographia societatis palatinae in regiae curia, 1730, t. 16.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Archinto</hi
+> Filippo, <hi
+rend="italic"
+>De noua christiani orbis pace oratio</hi
+>, Romae, Apud Antonium Bladum Asulanum, 1544.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Armanni</hi
+> Vincenzo, <hi
+rend="italic"
+>Delle Lettere del Signor V. A., colla vita dell’autore per Carlo Cartari</hi
+>, Roma, Iacomo Dragondelli, 1663, t. I ; Macerata, Giuseppe Piccini, 1674, t. <hi
+rend="small-caps"
+>II</hi
+> et <hi
+rend="small-caps"
+>III</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Baudoin</hi
+> Jean, <hi
+rend="italic"
+>Iconologie ou les principales choses qui peuvent tomber dans la pensée touchant les Vices et les Vertus</hi
+>..., Paris, Aux amateurs de livres, 1643.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bernal</hi
+> <hi
+rend="small-caps"
+>di Gioya</hi
+> Antonio,<hi
+rend="italic"
+> Copiosissimo discorso della fontana, e guglia eretta in Piazza Navona, per ordine della Santità di Nostro Signore Innocentio X dal Signor Cavalier Bernini : con una abondante dichiaratione delli quattro fiumi...</hi
+>, Roma, Tiberius, 1651.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Blégier</hi
+> Antoine, <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras, faicte à tresillustre &amp; trespuisssant prince ALEXANDRE FARNES, Cardinal, Legat d’Avignon, Vicechancelier du S. siege Apostolique</hi
+>, Avignon, Par Macé Bonhomme, aux Changes, 1553.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bracciolini</hi
+> Francesco, <hi
+rend="italic"
+>L’elettione di Urbano Papa VIII</hi
+>, [Rome], s. n., [1628].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Brusoni</hi
+> Girolamo, <hi
+rend="italic"
+>Degli allori d’Eurota, poesie di diuersi all’eccellentiss. sig. principe D. Camillo Pamphilio, raccolte dal caualier Girolamo Brusoni, e dedicate all’eccellentissima signora principessa donna Olimpia Aldobrandina Pamphilij</hi
+>, In Venetia, Per il Valuasense, 1662-1663, 2 vol.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Le glorie Pamphilie, oda di Girolamo Brusoni</hi
+>, s. l., s. n., [après 1656].</bibl
+><bibl
+><hi
+rend="italic"
+>Bulla confirmationis priuilegiorum militum sancti Pauli</hi
+>, [Rome], s. n., [v. 1550].</bibl
+><bibl
+><hi
+rend="italic"
+>Bulla indulgentiarum et facultatum pro erectione Ecclesiae, &amp; Monasterii S. Tholemaei in Vrbae Nepesina</hi
+>, [Rome, Antonio Blado, 1543].</bibl
+><bibl
+><hi
+rend="italic"
+>Bullae diuersorum pontificum incipiente a Ioanne XXII usque ad sanctiss. d.n.d. Iulium papam III,</hi
+> Romae, Apud d. Hieronymam de Cartulariis Perusinam, 1550 mense Iunii.</bibl
+><bibl
+><hi
+rend="italic"
+>Bullarium civitatis Avenionensis</hi
+> <hi
+rend="italic"
+>seu Bullae…</hi
+>, Lugduni, Ex Typographia Ioannis Amati Candy, 1657.</bibl
+><bibl
+><hi
+rend="italic"
+>Cæremoniale episcoporum jussu Clementis VIII… Reformatum</hi
+>, Parisiis, Societatis typographicae libr. off. eccl., 1633.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Caferri</hi
+> Angelo, <hi
+rend="italic"
+>Synthema Vetustatis</hi
+>, Romae, Ex tipographia Iacobi Dragondelli, 1670.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Casali</hi
+> Giovanni Battista, <hi
+rend="italic"
+>De profanis, et sacris veteribus ritibus</hi
+>, Romae, Ex typographia Andreae Phaei, 1645.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Castiglione</hi
+> Sabba da, <hi
+rend="italic"
+>Ricordi di monsignor Sabba da Castiglione caualier Gierosolimitano, di nuouo corretti, et ristampati. Con vna tauola copiosissima nuouamente aggiunta. Et appresso breuemente e descritta la vita dell’auttore</hi
+>, In Venetia, Per Paolo Gerardo, 1560.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Catharino</hi
+> Ambrosio, <hi
+rend="italic"
+>Enarrationes r.p.f. Ambrosii Catharini Politi Senensis archiepiscopi Compsani in quinque priora capita libri Geneseos. Adduntur plerique alij tractatus et quaestiones…</hi
+>, Romae, Apud Antonium Bladum Camerae Apostolicae typographum, 1552.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cellonese</hi
+> Andrea, <hi
+rend="italic"
+>Specchio simbolico delle armi gentilizie</hi
+>, Naples, Giovanni Francesco Paci, 1667.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Chasseneuz</hi
+> Barthélémy de, <hi
+rend="italic"
+>Catalogus gloriae mundi, in quo doctissime simul &amp; copiosissime de dignitatibus, honoribus, prærogatiuis, &amp; excellentia spirituum, hominum, animantium, rerumque cæterarum omnium, quæ cælo, mari, terra, inferno que ipso continentur, ita differitur, ut nihil . præteritum sit.</hi
+>, Lugduni, Per honoratum virum Dionysium de Harsy, 1529.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Chattard</hi
+> Giovanni Pietro, <hi
+rend="italic"
+>Nuova descrizione del Vaticano : O Si a Della Sacrosanta Basilica Di S. Pietro Data in Lvce</hi
+>, In Roma, Dalle stampe del Mainardi, 1762-1767, 3 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Chracas</hi
+> Luca Antonio, <hi
+rend="italic"
+>Distinto raguaglio del sontuoso treno delle carrozze con cui andò all’udienza di Sua Santità, il di 8 luglio 1716, l’illustrissimo ed eccellentissimo signore Don Rodrigo Annes de Saa, Almeida e Meneses, marchese di Fontes, conte di Pennaghiano</hi
+>, In Roma, Nella Stamperia di Gio. Francesco Chracas, 1716.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Commeno</hi
+> Andrea Angelo, <hi
+rend="italic"
+>Genealogia d’imperatori romani et constantinopolitani</hi
+>, In Roma, per Valerio Dorico, &amp; Luigi fratelli bresciani, 1551.</bibl
+><bibl
+><hi
+rend="italic"
+>Contra Hebreos retinentes libros in quibus aliquid contra fidem catholicam notetur vel scribatur</hi
+>, Romae, Apud Antonium Bladum impressorem Cameralem, [v. 1554].</bibl
+><bibl
+><hi
+rend="italic"
+>Copia delle lettere del Serenissimo Re d’Inghilterra, &amp; del Reuerendissimo Card. Polo Legato della S. Sede Apostolica alla Santità di N. S. Iulio Papa III. sopra la reduttione di quel Regno alla vnione della Santa Madre Chiesa ; &amp; obedienza della Sede Apostolica</hi
+>, [Rome, Valerio e Luigi Dorico, v. 1554].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Crescenzi</hi
+> Giovanni Pietro, <hi
+rend="italic"
+>Il nobile romano, o sia trattato di nobiltà</hi
+>, Bologna, Per gli eredi d’Antonio Pisarri, 1693.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Crespi</hi
+> Luigi, <hi
+rend="italic"
+>Felsina pittrice</hi
+>, In Roma, Nella Stamperia di Marco Pagliarini, 1769.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Dal Gambaro Sclarici</hi
+> Lorenzo, <hi
+rend="italic"
+>De concilio liber I</hi
+>, Bononiae, Apud Anselmum Giaccarelum, 1551.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Danza</hi
+> Prospero, <hi
+rend="italic"
+>La elettion del beatissimo &amp; summo pontifice Iulio tertio</hi
+>, [Venise, stampata per Proxpero Danza, 1550].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Davidico</hi
+> Lorenzo, <hi
+rend="italic"
+>Anotomia delli vitii</hi
+>, In Firenze, s. n., 1550.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Il vittorioso trionfo di Maria V. Contra Luterani</hi
+>, In Firenze, s. n., 1550.</bibl
+><bibl
+><hi
+rend="italic"
+>Delle antichità delle armi gentilizie, trattato di Celso Cittadini, colle annotazioni di Giovan Girolamo Carli</hi
+>, Lucca, Per Salvatore e Giandomenico Marescandoli, 1741.</bibl
+><bibl
+><hi
+rend="italic"
+>Effigies cardinalium nunc viventium</hi
+>, Rome, Giovanni Giacomo de Rossi, 1660-1676.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Eustathius Thessalonicensis</hi
+>, <hi
+rend="italic"
+>Parekbolai eis ten Homerou Iliada kai Odysseian meta euporotatou kai panu ophelimou pinakos</hi
+>, Romae, Apud Antonium Bladum impressorem cameralem, 1550.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Festini</hi
+> Carlo, <hi
+rend="italic"
+>I trionfi della magnificenza pontificia celebrati per lo passaggio nelle città e luoghi dello Stato ecclesiatico e in Roma per lo ricevimento della Maestà della regina di Svezia</hi
+>, In Roma, Nella Stamperia della Rev. Camera Apost., 1656.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Foglietta</hi
+> Uberto, <hi
+rend="italic"
+>In festo omnium Beatorum</hi
+>, [Rome, Antonio Blado, v. 1553].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fortunio</hi
+> Agostino, <hi
+rend="italic"
+>Cronichetta del Monte San Savino di Toscana</hi
+>, In Firenze, Nella Stamperia di Bartolomeo Sermartelli, 1583.</bibl
+><bibl
+><hi
+rend="italic"
+>Galleria Giustiniana del marchese Vincenzo Giustiniani</hi
+>, [Rome], s. n., [v. 1631], 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Galletti</hi
+> Pier Luigi, <hi
+rend="italic"
+>Inscriptiones Romanae infimi aevi Romae exstantes</hi
+>, Romae, Typis Generosi Salomoni Bibliopolae, 1760.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Georgijevic</hi
+> Bartolomej, <hi
+rend="italic"
+>Libellus vere Christiana lectione dignus diuersas res Turcharum</hi
+>, [Romae, apud Anthonium Bladum, 1552].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Giannotti Rangoni</hi
+> Tommaso, <hi
+rend="italic"
+>De vita hominis ultra CXX. annos protrahenda</hi
+>, Venetiis, s. n., 1553.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Giovio</hi
+> Paolo,<hi
+rend="italic"
+> Dialogo dell’imprese militari et amorose di Monsignor Paolo Giouio Vescouo di Nucera</hi
+>, In Roma, Appresso Antonio Barre, 1555.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Ragionamento di Mons. Paolo Giouio sopra i motti, &amp; disegni d’arme, &amp; d’amore, che communemente chiamano imprese, con vn discorso di Girolamo Ruscelli intorno allo stesso soggetto</hi
+>, In Venetia, Appresso Giordano Ziletti, 1556.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gozze</hi
+> Gauges de’, <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano, overo se da’ corpi delle armi, che rappresentano i cognomi, si possi argomentare ignobiltà in quella fameglia, che le usa [...]</hi
+>, In Roma, Per Vitale Mascardi, 1637.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gualdo Priorato</hi
+> Galeazzo, <hi
+rend="italic"
+>Historia della Sua Reale Maestà Cristina Alessandra, Regina di Svezia</hi
+>, In Roma, Nella Stamperia della Rev. Camera Apost., 1656.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Henry</hi
+> Honoré, <hi
+rend="italic"
+>La magnifique entrée du reverendissime et très illustre seigneur, Monseigneur Alexandre, Cardinal de Farnez, Vichancelier du Sainct siege apostolique, et Legat de la ville et Cité d’Avignon, faicte en icelle le xvi mars 1553</hi
+>, Avignon, s. n., 1553.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Juvarra</hi
+> Filippo,<hi
+rend="italic"
+> Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Roma, Per Antonio de’ Rossi, 1711.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Laguna</hi
+> Andrès, <hi
+rend="italic"
+>Rimedio delle podagre</hi
+>, Roma, Ad istantia di Gio. Maria Scotto, 1552.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Le Laboureur</hi
+> Jean, <hi
+rend="italic"
+>Relation du voyage de la Royne de Pologne et du retour de Mme la mareschalle de Guébriant, ambassadrice extraordinaire... par la Hongrie, l’Autriche, Styrie, Carinthie, le Frioul et l’Italie, avec un discours historique de toutes les villes et estats par où elle a passé et un traitté particulier du royaume de Pologne...</hi
+>, Paris, Chez la veuve Jean Camusat et Pierre Le Petit, 1647.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Leti</hi
+> Gregorio, <hi
+rend="italic"
+>Itinerario della corte di Roma ò vero teatro historico, cronologico, e Politico</hi
+>…, Valenza, Pietro Francesco Guerini, 1675, 3 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lualdi</hi
+> Michelangelo, <hi
+rend="italic"
+>Descrittione della fontana Pamphilia, dove fu già il cerchio Agonale</hi
+>, In Roma, Nella stamperia di Francesco Moneta, 1651.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lunadoro</hi
+> Girolamo, <hi
+rend="italic"
+>Relatione della corte di Roma, e de’riti da osservarsi in essa, e de’suoi magistrati, &amp; offitij, con la loro distinta giurisdittione</hi
+>, Bracciano, Andrea Fei, 1650.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Maggi</hi
+> Bartolomeo, <hi
+rend="italic"
+>De vulnerum sclopetorum et bombardarum curatione</hi
+>, Bononiae, Per Bartholomeum Bonardum, 1552.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Magnus</hi
+> Iohannes, <hi
+rend="italic"
+>Historia de omnibus Gothorum Sueonumque regibus</hi
+>, Romae, [Giovanni Maria Viotti], 1554.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Marescalchi</hi
+> Vincenzo Maria, <hi
+rend="italic"
+>Aulam Vidoniam picturis exornatam Alexandri VII Pont. Opt. Max. Nomini et Numini consecratam Vincentius Maria Marescalchius hisce carminibus adumbrabat</hi
+>, Bologna, Typis Ferronianis, 1665.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Massa</hi
+> Antonio, <hi
+rend="italic"
+>De exercitatione iurisperitorum</hi
+>, [Impressum Romae, Apud Valerium et Aloysium Doricos fratres Brixienses, v. 1550].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Modesti</hi
+> Publio Francesco, <hi
+rend="italic"
+>Christiana pietas</hi
+>, Rimini, Erasmo Virginio, 1552.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Monte</hi
+> Andrea de, <hi
+rend="italic"
+>Oratio habita apud S. D. N. Iulium diuina prouidentia Papam Tertium per Andream de Monte doctorem, quondam Haebreum iam vero sacro baptismate initiatum, ex hebreo in latinum versa, in qua suadetur summum Pontificem ex illustri familia</hi
+> <hi
+rend="italic"
+>montis &amp; illius insignia in sacris literis fuisse praenunciata</hi
+>, Rome, Antonio Blado, s. d.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Morales</hi
+> Cristobal de,<hi
+rend="italic"
+> Cristophori Moralis Hyspalensis Missarum liber primus</hi
+>, [Impressum Rome, Per Valerium Doricum et Ludouicum fratres, 1544].</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Christophori Moralis Hyspalensis missarum liber secundus</hi
+>, [Impressum Rome, Per Valerium Doricum et Ludouicum fratres, 1544].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nacchiante</hi
+> Giacomo, <hi
+rend="italic"
+>Enarrationes piae, doctae, et catholicae : in epistolam Pauli ad Ephesios</hi
+>, Venetiis, 1553.</bibl
+><bibl
+><hi
+rend="italic"
+>Nouveau Theatre de l’Italie </hi
+>[Pierre Mortier, 1704-1705], Amsterdam, Rutgert Christophle Alberts, 1724.</bibl
+><bibl
+><hi
+rend="italic"
+>Novae regvlae cancellariae apostolicae</hi
+>, Rome, s. n., 1552.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nucula</hi
+> Orazio, <hi
+rend="italic"
+>Commentariorum de bello Aphrodisiensi libri quinque</hi
+>, [Romae, Apud Valerium et Ludouicum fratres Brixienses, 1552].</bibl
+><bibl
+><hi
+rend="italic"
+>Ossequii poetici nell’ammirarsi in Bologna l’Heroica risoluzione della sereniss. Principessa Caterina Farnese di monacarsi nel Ven. Monastero delle Madri carmelitane scalze di Santa Teresa in Parma</hi
+>, In Bologna, Per Giacomo Monti, 1661.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Paleotti</hi
+> Gabriele, <hi
+rend="italic"
+>De nothis spuriisque filiis liber</hi
+>, Bononiae, Apud Anselmum Giaccarellum, 1550.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Palestrina</hi
+> Giovanni Pierluigi da, <hi
+rend="italic"
+>Missarum liber primus</hi
+>, [Impressum Romae, Apud Valerium Doricum &amp; Aloysium fratres, 1554].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Passeri</hi
+> Giovanni Battista, <hi
+rend="italic"
+>Vite de’ pittori</hi
+>, In Roma, presso Natale Barbiellini, 1772.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Picart</hi
+> Bernard, <hi
+rend="italic"
+>Cérémonies et coutumes religieuses de tous les peuples du monde</hi
+>, Amsterdam, J.-F. Bernard, 1723-1743, 8 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pietrasanta</hi
+> Silvestro, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, Romae, Typis haeredum Francisci Corbelletti, 1638.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Piranesi</hi
+> Giovanni Battista, <hi
+rend="italic"
+>Le antichità romane</hi
+>, In Roma, Nella stamperia di Angelo Rotilj, 1756, 4 vol.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Lettere di giustificazione scritte a Milord Charlemont e a’ di lui agenti di Roma, dal signor Piranesi socio della real società degli antiquari di Londra intorno la dedica della sua opera delle antichità rom. fatta allo stesso signore ed vltimamente soppressa</hi
+>, In Roma, s. n., 1757.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Della magnificenza ed architettura de’ Romani</hi
+>, [Rome], s. n., 1761.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Le rovine del castello dell’acqua Giulia</hi
+>, [Rome], s. n., 1761.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Lapides Capitolini sive fasti consularesque Romanorum</hi
+>, [Rome], s. n., 1762.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, [<hi
+rend="italic"
+>Vedute di Roma</hi
+>, Rome, s. n., 1745-1763].</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo</hi
+>, In Roma, s. n., 1764.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Diverse maniere d’adornare i cammini</hi
+>, Roma, Generoso Salomoni, 1769.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Vasi, candelabri, cippi, sarcofagi, tripodi, lucerne ed ornamenti antichi</hi
+>, s. l., s. n., 1778.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Poiana</hi
+> Giovanni Battista, <hi
+rend="italic"
+>De iobileo et indulgentiis</hi
+>, [Romae, Apud Valerium, et Aloysium Doricos fratres, 1550].</bibl
+><bibl
+><hi
+rend="italic"
+>Regulae tres S. D. N. D. Iulii diuina prouidentia Papae. III</hi
+>, [Rome, Antonio Blado, v. 1550].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ripa</hi
+> Cesare, <hi
+rend="italic"
+>Iconologia</hi
+>, In Roma, Appresso Lepido Facji, 1603.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rosichino</hi
+> Mattia, <hi
+rend="italic"
+>Dichiarazione delle Pitture della Sala de’ Signori Barberini in Rome</hi
+>, In Roma, Appresso Vitale Mascardi, 1640.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ruscelli</hi
+> Girolamo, <hi
+rend="italic"
+>Le imprese illustri con espositioni, et discorsi del S.or Ieronimo Ruscelli</hi
+>, In Venetia, [Damiano Zenaro], 1566.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Sestini Da Bibbiena</hi
+> Francesco,<hi
+rend="italic"
+> Il maestro di camera […] Di nuove ricorretto secondo il Ceremoniale Romano</hi
+>, Viterbo, Per Il Diotallevi, 1639.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Sigonio</hi
+> Silvestro, <hi
+rend="italic"
+>De concordia servanda</hi
+>, Romae, Apud Antonium Bladum, Stephanus Nicolini Sabiensis imprimendum curauit, 1550.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Taja</hi
+> Agostino, <hi
+rend="italic"
+>Descrizione del Palazzo Apostolico Vaticano</hi
+>, In Roma, Appresso Niccolò e Marco Pagliarini, 1750.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Tantouche</hi
+> Frédéric, <hi
+rend="italic"
+>Traicté des coustumes et ceremonies qui s’observent à Rome, &amp; ailleurs. Tant par nostre S. Père que par Messeigneurs les Eminentissimes &amp; Reverendissimes Cardinaux…</hi
+>, Paris, Fleury Bouriquant, 1631.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Teti</hi
+> Girolamo, <hi
+rend="italic"
+>Aedes Barberinae ad Quirinalem</hi
+>, Romæ, excudebat Mascardus, 1642.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Thaumas De La Thaumassière</hi
+> Gaspard, <hi
+rend="italic"
+>Histoire de Berry</hi
+>, Bourges-Paris, F. Toubeau-Morel, 1689.</bibl
+><bibl
+><hi
+rend="italic"
+>Theatrum Civitatum et admirandorum Italiae</hi
+>, vol. 1, <hi
+rend="italic"
+>Stato della Chiesa</hi
+>, Amsterdam, s. n., 1663.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Tomasi</hi
+> Tommaso, <hi
+rend="italic"
+>Della esaltazione di papa Innocentio X. Lettera panegirica</hi
+>, In Roma, Nella stamperia di Bernardino Tani, 1644.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ughelli</hi
+> Ferdinando, <hi
+rend="italic"
+>Italia Sacra</hi
+>, Romae, Apud Bernardinum Tanum, 1647.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Vavre</hi
+> Claude, <hi
+rend="italic"
+>La cour de Rome la saincte. Ou traicté des ceremonies et coustumes qui s’observent dans la ville de Rome</hi
+>, Paris, Nicolas Buon, 1623.</bibl
+><bibl
+><hi
+rend="italic"
+>Vita del b. Lodolfo Pamphilij vescovo di Gubbio, e abate fondatore della Congreg. Dell’Avellana, detta della Colomba descritta dal p.d. Agostino Romano Fiori monaco camaldolese</hi
+>, Rome, Per Antonio de’ Rossi nella strada del Seminario romano, vicino alla Rotonda, 1722.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Wicquefort</hi
+> Abraham de, <hi
+rend="italic"
+>Mémoire touchant les ambassadeurs et les ministres publics</hi
+>, La Haye, Jean et Daniel Steucker, 1677.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>L’ambassadeur et ses fonctions</hi
+>, La Haye, Maurice Georges Veneur, 1682, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zanotti</hi
+> Giovan Pietro, <hi
+rend="italic"
+>Storia dell’Accademia Clementina di Bologna</hi
+>, <hi
+rend="italic"
+>Giuseppe Rolli</hi
+>, In Bologna, Per Lelio Dalla Volpe, 1739, vol. I.</bibl
+></div
+><div
+type="section2"
+xml:id="div17"
+><head
+>Livres modernes (éditions postérieures à 1800)</head
+><bibl
+><hi
+rend="small-caps"
+>Alexander</hi
+> Jonathan J. G. (dir.), <hi
+rend="italic"
+>The painted page: Italian Renaissance Book Illumination, 1450-1550</hi
+>, catalogue d’exposition, Munich-New York, Prestel, 1994.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Amayden</hi
+> Dirk [Teodoro], <hi
+rend="italic"
+>La</hi
+> <hi
+rend="italic"
+>Storia delle famiglie romane, con note ed aggiunte del Comm. Carlo Augusto Bertini</hi
+> [Rome, Collegio Araldico, 1910], rééd. <hi
+rend="italic"
+>facsimile</hi
+> : Bologne, Forni, 1967 ; Edizioni Romane Colosseum, 1987, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Andrieu</hi
+> Michel, <hi
+rend="italic"
+>Le pontifical romain au Moyen Âge</hi
+>, Cité du Vatican, BAV, 1938-1941.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Armellini</hi
+> Mariano, <hi
+rend="italic"
+>Le chiese di Roma, dal secolo IV al XIX</hi
+>, Rome, Tipografia vaticana, 1891.</bibl
+><bibl
+>— et <hi
+rend="small-caps"
+>Cecchelli</hi
+> Carlo, <hi
+rend="italic"
+>Le chiese di Roma dal secolo IV al XIX</hi
+>, Rome, <hi
+rend="small-caps"
+>RORE</hi
+>, 1942, vol. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Aurigemma</hi
+> Maria Giulia, <hi
+rend="italic"
+>Palazzo Firenze in Campo Marzio</hi
+>, Rome, Istituto poligrafico e zecca dello Stato-Libreria dello Stato, 2007.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Barrau</hi
+> Hippolyte de, <hi
+rend="italic"
+>Documents historiques et généalogiques sur les familles et les hommes remarquables du Rouergue dans les temps anciens et modernes</hi
+>, Rodez, Impr. de N. Ratery, 1853-1860, 4 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bascapé</hi
+> Giacomo Carlo et <hi
+rend="small-caps"
+>Dal Piazzo</hi
+> Marcello, <hi
+rend="italic"
+>Insegne e simboli. Araldica pubblica e privata medievale e moderna</hi
+>, Rome, Ministero per i beni culturali e ambientali, 1983.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Baumefort</hi
+> Victor de, <hi
+rend="italic"
+>Cession de la ville et de l’État d’Avignon au pape Clément VI par Jeanne I</hi
+><hi
+rend="italic sup"
+>re</hi
+>,<hi
+rend="italic"
+> reine de Naples</hi
+>, Apt, Typographie et lithographie J.-S. Jean, 1873.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bayard</hi
+> Marc (dir.), <hi
+rend="italic"
+>Rome-Paris 1640. Transferts culturels et renaissance d’un centre artistique</hi
+>, actes du colloque, Rome, villa Médicis, 17-19 avril 2008, Paris, Somogy, 2010.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Beldon Scott</hi
+> John, <hi
+rend="italic"
+>Images of Nepotism. The Painted Ceilings of Palazzo Barberini</hi
+>, Princeton, Princeton University Press, 1991, t. 3.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Benigni</hi
+> Mario et <hi
+rend="small-caps"
+>zanchi</hi
+> Goffredo, <hi
+rend="italic"
+>Giovanni</hi
+> <hi
+rend="italic"
+>XXIII</hi
+>, Cinisello Balsamo, Edizioni San Paolo, 2000.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Benocci</hi
+> Carla, <hi
+rend="italic"
+>Villa Ludovisi</hi
+>, Rome, Istituto poligrafico e Zecca dello Stato-Libreria dello Stato, 2010.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bevilacqua</hi
+> Mario (éd.), <hi
+rend="italic"
+>Piranesi, Taccuini di Modena</hi
+>, Rome, Artemide, 2008, 2  vol.</bibl
+><bibl
+>— et <hi
+rend="small-caps"
+>Gallavotti Cavallero</hi
+> Daniela (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi. Arte e Architettura</hi
+>, Rome, Artemide, 2010.</bibl
+><bibl
+><hi
+rend="italic"
+>Bibliotheca Hagiographica Latina, antiquae et mediae aetatis</hi
+>, Bruxelles, Société des Bollandistes, 1900-1901.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Birke</hi
+> Veronika (éd.), <hi
+rend="italic"
+>The Illustrated Bartsch</hi
+>, New York, Abaris Book, 1982, vol. 40, part. 1 et 1987, part. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bizzocchi</hi
+> Roberto, <hi
+rend="italic"
+>Genealogie incredibili. Scritti di storia nell’Europa moderna</hi
+>, Bologne, Il Mulino, 1995.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bjurström</hi
+> Per, <hi
+rend="italic"
+>Feast and Theatre in Queen Christina’s Rome</hi
+>, Stockholm, s. n., 1966.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Blaya</hi
+> Nelly et <hi
+rend="small-caps"
+>Bru</hi
+> Nicolas, <hi
+rend="italic"
+>Le mobilier des églises du Moyen Âge dans le Lot</hi
+>, Toulouse, Conseil général Midi-Pyrénées, 2014.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Böhme</hi
+> Gernot, <hi
+rend="italic"
+>Aisthetique. Pour une esthétique de l’expérience sensible </hi
+>[2001], Martin Kaltenecker et Franck Lemonde (trad.), Dijon, Les Presses du réel, 2020.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bohn</hi
+> Babette, <hi
+rend="italic"
+>Ludovico Carracci and the art of drawing</hi
+>, Turnhout, Brepols, 2004.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Boisclair</hi
+> Marie-Nicolas, <hi
+rend="italic"
+>Gaspard Dughet, 1615-1675</hi
+>, Paris, Arthéna, 1986.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Borello</hi
+> Benedetta, <hi
+rend="italic"
+>L’apprentissage de Rome à la Renaissance, officiers à l’ombre de la Curie </hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècles</hi
+>, Turnhout, Brepols, 2021.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Botana</hi
+> Federico, <hi
+rend="italic"
+>Learning through Images in the Italian Renaissance: Illustrated Manuscripts and Education in Quattrocento Florence</hi
+>, Cambridge, Cambridge University Press, 2020, https://doi.org/10.1017/9781108867313.004</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bottino</hi
+> Camilla (dir.), <hi
+rend="italic"
+>Il palazzo comunale di Bologna. Storia, architettura e restauri</hi
+>, Bologne, Compositori, 1999.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bourdieu</hi
+> Pierre, <hi
+rend="italic"
+>La Distinction. Critique sociale du jugement</hi
+>, Paris, Éditions de Minuit, 1979.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bruel</hi
+> Alexandre, <hi
+rend="italic"
+>Inventaire d’une partie des titres de famille et documents historiques de la maison de La Tour d’Auvergne conservés dans les papiers Bouillon pour faire suite aux inventaires rédigés par Baluze (2</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> pt.)</hi
+>, Paris, Archives nationales, 1905.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bursellis</hi
+> Hieronymus de, <hi
+rend="italic"
+>Cronica</hi
+> <hi
+rend="italic"
+>gestorum ac factorum memorabilium civitatis Bononie</hi
+>, A. Sorbelli (éd.), Città di Castello, S. Lapi, 1912.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Campbell</hi
+> Malcolm B., <hi
+rend="italic"
+>Pietro da Cortona at the Pitti Palace. A Study of the Planetary Rooms and Related Projects</hi
+>, Princeton, Princeton University Press, 1977.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cancellieri</hi
+> Francesco, <hi
+rend="italic"
+>Storia de’solenni possessi de’Sommi Pontefici, detti anticamente processi</hi
+>, Rome, Presso Luigi Lazzarini stampatore della R. C. A., 1802.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Carini</hi
+> Isidoro, <hi
+rend="italic"
+>Sul titolo presbiterale di Santa Prisca</hi
+>, Palerme, Tip. Camillo Tamburello, 1885.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ceresa</hi
+> Massimo (dir.), <hi
+rend="italic"
+>La Biblioteca Vaticana tra riforma cattolica, crescita delle collezioni e nuovo edificio (1535-1590)</hi
+>, Cité du Vatican, BAV, « Storia della Biblioteca Apostolica Vaticana, 2 », 2012.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Charpenne</hi
+> Pierre, <hi
+rend="italic"
+>Histoire de réunions temporaires d’Avignon et du Comtat Venaissin à la France</hi
+>, Paris, Calmann-Lévy, 1886.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Chastel</hi
+> André, <hi
+rend="italic"
+>La grottesque</hi
+>, Paris, Le Promeneur, 1988.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Chossat</hi
+> Marcel, <hi
+rend="italic"
+>Les Jésuites et leurs œuvres à Avignon</hi
+> <hi
+rend="italic"
+>: 1553-1768</hi
+>, Avignon, François Seguin, 1896.</bibl
+><bibl
+><hi
+rend="italic"
+>Chronique métrique de Godefroy Paris</hi
+>, J.-A. Buchon (éd.), Paris, Verdière, 1827.</bibl
+><bibl
+><hi
+rend="italic"
+>Clemente XIII Rezzonico, Un papa veneto nella Roma di metà Settecento</hi
+>, catalogue d’exposition, Padoue, Museo Diocesiano, 12 décembre 2008-15 mars 2009, Milan, Silvana Editoriale, 2008.</bibl
+><bibl
+><hi
+rend="italic"
+>Cox</hi
+><hi
+rend="small-caps italic"
+>-</hi
+><hi
+rend="italic"
+>Rearick</hi
+> Janet, <hi
+rend="italic"
+>Dynasty and Destiny</hi
+> <hi
+rend="italic"
+>in Medici Art. Pontormo, Leo X and the two Cosimos</hi
+>, Princeton, Princeton University Press, 1984.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cousinié</hi
+> Frédéric, <hi
+rend="italic"
+>Gloriae. Figurabilité du divin, esthétique de la lumière et dématérialisation de l’œuvre d’art à l’âge Baroque</hi
+>, Rennes, <hi
+rend="small-caps"
+>PUR</hi
+>, 2018.</bibl
+><bibl
+>—, <hi
+rend="small-caps"
+>Lemoine</hi
+> Annick, <hi
+rend="small-caps"
+>Virol</hi
+> Michèle (dir.), <hi
+rend="italic"
+>Soleils baroques. La Gloire de Dieu et des Princes en représentation dans l’époque moderne</hi
+>, Rome-Paris, Académie de France à Rome-Somogy, 2018.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cummings</hi
+> Anthony M., <hi
+rend="italic"
+>The politicized muse: music for Medici festivals, 1512-1537</hi
+>, Princeton, Princeton University Press, 1992.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>The Lion’s Ear: Pope Leo X, the Renaissance Papacy, and Music</hi
+>, Ann Arbor, University of Michigan Press, 2012.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Curzietti</hi
+> Jacopo, <hi
+rend="italic"
+>Antonio Raggi: scultore ticinese nella Roma barocca</hi
+>, Canterano, Aracne editrice, 2020.</bibl
+><bibl
+><hi
+rend="small-caps"
+>D’Amelio</hi
+> Maria Grazia, <hi
+rend="italic"
+>L’obelisco marmoreo del foro italico a Roma. Storia, immagini e note tecniche</hi
+>, Rome, Palombi &amp; Partner, 2009.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>Giovan Lorenzo Bernini e l’oro per il baldacchino di San Pietro (1624-1633)</hi
+>, Rome, Argos, 2021.</bibl
+><bibl
+><hi
+rend="small-caps"
+>De Benedictis</hi
+> Angela, <hi
+rend="italic"
+>Repubblica per contratto. Bologna, una città europea nello Stato della Chiesa</hi
+>, Bologne, Il Mulino, 1995.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Deloche</hi
+> Maximin, <hi
+rend="italic"
+>Cartulaire de l’abbaye de Beaulieu (en Limousin)</hi
+>, Paris, Imprimerie impériale, 1859.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Desachy</hi
+> Matthieu (dir.), <hi
+rend="italic"
+>L’héraldique et le livre</hi
+>, catalogue d’exposition, Montauban-Albi-Toulouse, Paris, Somogy, 2002.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Desplat</hi
+> Christian et <hi
+rend="small-caps"
+>Mironneau</hi
+> Paul (dir.), <hi
+rend="italic"
+>Les entrées : gloire et déclin d’un cérémonial</hi
+>, actes du colloque de Pau, Biarritz, Société Henri <hi
+rend="small-caps"
+>IV</hi
+>, 1997.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Di Crollalanza</hi
+> Giovanni Battista, <hi
+rend="italic"
+>Dizionario storico-blasonico delle famiglie nobili e notabili italiane estinte e fiorenti</hi
+>, Pise, Presso la direzione del giornale araldico, 1886-1890, 3 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Di Crollalanza</hi
+> Goffredo, <hi
+rend="italic"
+>Gli emblemi dei guelfi e dei ghibellini</hi
+> [San Casciano, F. Cappelli, 1878], Milan, Orsini De Marzo, 2010.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Donato</hi
+> Maria Monica et <hi
+rend="small-caps"
+>Parenti</hi
+> Daniela (dir.), <hi
+rend="italic"
+>Dal Giglio al David, Arte civica a Firenze fra Medioevo e Rinascimento</hi
+>, catalogue d’exposition, Florence, Giunti, 2013.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Dykmans</hi
+> Marc, <hi
+rend="italic"
+>Le cérémonial pontifical de la fin du Moyen Âge à la Renaissance</hi
+>, Rome-Bruxelles, Institut historique belge de Rome, 1977-1985, 4 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Emiliani</hi
+> Andrea, <hi
+rend="italic"
+>Leggi, bandi e provvedimenti per la tutela dei beni artistici e culturali negli antichi stati italiani 1571-1860</hi
+> [Alfa, 1978], Bologne, Nuova Alfa, 1996.</bibl
+><bibl
+><hi
+rend="italic"
+>Entrée à Rouen du roi Henri IV en 1596, précédée d’une introduction par J. Félix et de notes par Ch. de Robillard de Beaurepaire</hi
+>, Rouen, Imprimerie de E. Cagniard, 1887.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fagiolo</hi
+> Marcello et <hi
+rend="small-caps"
+>Madonna</hi
+> Maria Luisa (dir.), <hi
+rend="italic"
+>Sisto V</hi
+>, Rome, Istituto poligrafico e Zecca dello Stato, Libreria dello Stato, 1992.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fagiolo Dell’arco</hi
+> Maurizio, <hi
+rend="italic"
+>Corpus delle feste a Roma</hi
+>, vol.<hi
+rend="italic"
+> </hi
+>1,<hi
+rend="italic"
+> La festa barocca</hi
+>, Rome, De Luca, 1997.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Favini</hi
+> Vieri et <hi
+rend="small-caps"
+>Savorelli</hi
+> Alessandro, <hi
+rend="italic"
+>Segni di Toscana. Identità e territorio attraverso l’araldica dei comuni: storia e invenzione grafica (secoli </hi
+><hi
+rend="small-caps italic"
+>XIII</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>XVII</hi
+><hi
+rend="italic"
+>)</hi
+>, Florence, Le lettere, 2006.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Favreau</hi
+> Robert (éd.), <hi
+rend="italic"
+>Poitiers sous le règne de Louis XI, de 1471 à 1482. Registre de délibérations du corps de ville</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 7, Poitiers, Société des Antiquaires de l’Ouest, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Federici</hi
+> Fabrizio et <hi
+rend="small-caps"
+>Garms</hi
+> Jörg, « “Tombs of illustrious Italians at Rome”. L’album di disegni <hi
+rend="small-caps"
+>RCIN</hi
+> 970334 della Royal Library di Windsor », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, volume spécial, 2011.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Feinblatt</hi
+> Ebria, <hi
+rend="italic"
+>Seventeenth-century Bolognese ceiling decorators</hi
+>, Santa Barbara, Fithian Press, 1992.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ferrari</hi
+> Matteo (dir.), <hi
+rend="italic"
+>L’arme segreta, Araldica e storia dell’arte nel Medioevo (secoli XIII-XV)</hi
+>, Alessandro Savorelli (intr.), Florence, Le Lettere, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>—</hi
+>, <hi
+rend="italic"
+>La politica in figure. Temi, funzioni, attori della communicazione visiva nei Comuni lombardi (XII-XIV secolo)</hi
+>, Rome, Viella, 2022.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Filippini</hi
+> Guido et <hi
+rend="small-caps"
+>Zucchini</hi
+> Francesco,<hi
+rend="italic"
+> Miniatori e pittori a Bologna. Documenti del secolo XV</hi
+>, Rome, Accademia nazionale dei Lincei, 1968.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Focillon</hi
+> Henri, <hi
+rend="italic"
+>G. B. Piranesi</hi
+>, Paris, Librairie Renouard-Henri Laurens, 1928.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Forcella</hi
+> Vincenzo, <hi
+rend="italic"
+>Iscrizioni delle chiese e d’altri edificii di Roma dal secolo XI fino ai nostri giorni</hi
+>, Rome, Tipografia delle scienze matematiche e fisiche, 1869-1884, 14 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gaeta Bertelà</hi
+> Giovanna (éd.), avec la collaboration de <hi
+rend="small-caps"
+>Stefano</hi
+> Ferrara, <hi
+rend="italic"
+>Incisori bolognesi ed emiliani del sec. XVII</hi
+>, Bologne, Associazione per le arti Francesco Francia, [1973].</bibl
+><bibl
+><hi
+rend="small-caps"
+>Galbreath </hi
+>Donald Lindsay, <hi
+rend="italic"
+>Papal Heraldry</hi
+>, Cambridge, W. Heffer, 1930.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Garms</hi
+> Jörg, <hi
+rend="small-caps"
+>Juffinger</hi
+> Roswitha et <hi
+rend="small-caps"
+>Ward</hi
+>-<hi
+rend="small-caps"
+>Perkins</hi
+> Bryan (dir.),<hi
+rend="italic"
+> Die mittelalterlichen Grabmäler in Rom und Latium vom 13. bis zum 15. Jahrhundert</hi
+>: I, <hi
+rend="italic"
+>Die Grabplatten und Tafeln</hi
+>, Rome-Vienne, Österreichische Akademie der Wissenschaften, 1981-1994, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gauchat </hi
+>Patrice (dir.), <hi
+rend="italic"
+>Hierarchia Catholica Medii et Recentioris Aevi</hi
+>, Regensburg, Sumptibus et typis Librariae Monasterii, 1935, vol. V, <hi
+rend="italic"
+>1592-1667</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ginzburg </hi
+>Carlo, <hi
+rend="italic"
+>Miti, emblemi</hi
+>, <hi
+rend="italic"
+>spie. Morfologia</hi
+> <hi
+rend="italic"
+>e storia</hi
+>, Turin, Einaudi, 1986.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Giordani</hi
+> Gaetano, <hi
+rend="italic"
+>Pitture della sala Farnese</hi
+>, Bologne, Tipografia Guidi all’Ancora, 1845.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gnoli</hi
+> Umberto, <hi
+rend="italic"
+>Pittori e miniatori nell’Umbria</hi
+>, Spolète, Argentieri, 1923.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gordon</hi
+> Dillian, <hi
+rend="italic"
+>The Wilton Diptych</hi
+>, Londres, The National Gallery, 2015.</bibl
+><bibl
+>—, <hi
+rend="small-caps"
+>Monnas</hi
+> Lisa et <hi
+rend="small-caps"
+>Elam</hi
+> Caroline (dir.), <hi
+rend="italic"
+>The regal image of Richard II and the Wilton Diptych</hi
+>, Londres, Harvey Miller, 1997.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gouzou</hi
+> Joseph-Simon, <hi
+rend="italic"
+>Bretenoux en Haut-Quercy</hi
+>, Villefranche-de-Rouergue, Impr. Salingardes, 1955.</bibl
+><bibl
+><hi
+rend="italic"
+>Grande Dizionario della lingua italiana</hi
+>, Turin, <hi
+rend="small-caps"
+>UTET</hi
+>, 1972, t. <hi
+rend="small-caps"
+>VI</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gualdi</hi
+> Francesco, <hi
+rend="italic"
+>Memorie sepolcrali</hi
+>, Fabrizio Federici (éd.), Cité du Vatican, BAV, à paraître.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Guenée</hi
+> Bernard, <hi
+rend="small-caps"
+>Lehoux</hi
+> Françoise, <hi
+rend="italic"
+>Les entrées royales de 1328 à 1515</hi
+>, Paris, <hi
+rend="small-caps"
+>CNRS</hi
+>, 1968. </bibl
+><bibl
+><hi
+rend="small-caps"
+>Guérin</hi
+> Joseph, <hi
+rend="italic"
+>Panorama d’Avignon, de Vaucluse, du Mont-Ventoux et du Col-Longet suivi de quelques vues des Alpes françaises</hi
+>, Avignon, Imprimerie de Guichard aîné, 1829.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Heim</hi
+> Bruno Bernard,<hi
+rend="italic"
+> Coutumes et droits héraldiques de l’Église</hi
+> [1949], Paris, Beauchesne, 2000.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Herklotz</hi
+> Ingo, <hi
+rend="italic"
+>Cassiano</hi
+> <hi
+rend="italic"
+>Dal Pozzo und die Archäologie des 17. Jahrhunderts</hi
+>, Munich, Hirmer, 1999.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hubert</hi
+> Hans W., <hi
+rend="italic"
+>Der Palazzo Comunale von Bologna</hi
+> Cologne, Weimar, 1993.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Jatta</hi
+> Barbara (dir.), <hi
+rend="italic"
+>Piranesi e l’Aventino</hi
+>, Milan, Electa, 1998.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Jong</hi
+> Jan de, <hi
+rend="italic"
+>Tombs in Early Modern Rome (1400-1600). Monuments of Mourning, Memory and Meditation</hi
+>, Leiden, Brill, 2023.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Juillet</hi
+> Jacques, <hi
+rend="italic"
+>Les 38 barons de Castelnau : seconds barons chrétiens du royaume et leur baronnie, leur château, leurs églises</hi
+>, s. l., Imprimerie Fabrègue, 1971.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Kirsch</hi
+> Johann Peter, <hi
+rend="italic"
+>Die römischen Titelkirchen im Altertum</hi
+>, Paderborn, Druck und Verlag von Ferdinand Schöningh, 1918.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Klein</hi
+> Robert, <hi
+rend="italic"
+>La forme et l’intelligible.</hi
+> <hi
+rend="italic"
+>Écrits sur la Renaissance et l’art moderne</hi
+>, Paris, Gallimard, 1970.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Kybal</hi
+> Vlastimil et <hi
+rend="small-caps"
+>Incisa Della Rocchetta</hi
+> Giovanni (éd.), <hi
+rend="italic"
+>La nunziatura di Fabio Chigi</hi
+>, Rome, Tip. Ist. Grafico Tiberino, 1943, vol. 1.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Larraz</hi
+> Camille, <hi
+rend="italic"
+>Simon de Châlons</hi
+>, Cinisello Balsamo, Silvana Editoriale, 2022.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Laurentiis</hi
+> Elena de et <hi
+rend="small-caps"
+>Talamo</hi
+> Emilia Anna, <hi
+rend="italic"
+>The Lost Manuscripts from the Sistine Chapel, An Epic Journey from Rome to Toledo</hi
+>, catalogue d’exposition, Dallas, Meadows Museum-Southern Methodist University, 2010.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Le</hi
+> <hi
+rend="small-caps"
+>Don</hi
+> Gérard, <hi
+rend="italic"
+>Voir la sculpture. Essai sur le dispositif visuel</hi
+>, Rennes, <hi
+rend="small-caps"
+>PUR</hi
+>, « Aesthetica », 2018.</bibl
+><bibl
+><hi
+rend="italic"
+>Legature papali da Eugenio IV a Paolo VI</hi
+>, catalogue d’exposition, Cité du Vatican, BAV, 1977.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lenzuni</hi
+> Anna (dir.), <hi
+rend="italic"
+>All’ombra del lauro. Documenti librari della cultura in età laurenziana</hi
+>, catalogue d’exposition, Cinisello Balsamo, Silvana Editoriale, 1992.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Leone</hi
+> Stéphanie, <hi
+rend="italic"
+>The Palazzo Pamphilj in Piazza Navona: Constructing Identity in Early Modern Rome</hi
+>, Londres, H. Miller, 2008.</bibl
+><bibl
+><hi
+rend="small-caps"
+>—</hi
+> (dir.),<hi
+rend="italic"
+> The Pamphilj and the Arts: Patronage and Consumption in Baroque Rome</hi
+>, Chestnut Hill-Chicago, McMullen Museum of Art-Boston College-University of Chicago Press, 2011.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Le</hi
+> <hi
+rend="small-caps"
+>Pogam</hi
+> Pierre-Yves, <hi
+rend="italic"
+>De la « cité de Dieu » au « palais du pape » : les résidences pontificales dans la seconde moitié du </hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle (1254-1304)</hi
+>, Rome, École française de Rome, 2005.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lévi</hi
+>-<hi
+rend="small-caps"
+>Strauss</hi
+> Claude, <hi
+rend="italic"
+>Anthropologie structurale</hi
+>, Paris, Plon, 1958.</bibl
+><bibl
+><hi
+rend="italic"
+>Liber Pontificalis</hi
+>, Louis Duchesne (éd.), Paris, E. de Boccard, 1956, t. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Loskoutoff</hi
+> Yvan, <hi
+rend="italic"
+>L’armorial de Calliope, L’œuvre du Père Le Moyne S. J. (1602-1671) : littérature, héraldique, spiritualité</hi
+>, Tübingen, Gunter Narr Verlag, 2000.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>Rome des Césars Rome des Papes. La propagande du cardinal Mazarin</hi
+>, Paris, Honoré Champion, 2007.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>Un art de la Réforme catholique. La symbolique du pape Sixte-Quint et des Peretti-Montalto (1566-1655)</hi
+>, Paris, Honoré Champion, 2011.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>Un art de la Réforme catholique</hi
+>, vol. 2,<hi
+rend="italic"
+> La symbolique du pape Grégoire XIII (1572-1585) et des Boncompagni</hi
+>, Paris, Honoré Champion, 2018.</bibl
+><bibl
+><hi
+rend="small-caps"
+>—</hi
+> (dir.), <hi
+rend="italic"
+>Héraldique et papauté. Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lucarelli</hi
+> Oderigi, <hi
+rend="italic"
+>Memorie e guida storica di Gubbio</hi
+>, Città di Castello, S. Lappi, 1888.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Macioce</hi
+> Stefania, « <hi
+rend="italic"
+>Undique Splendent ». Aspetti della pittura sacra nella Roma di Clemente VIII Aldobrandini (1592-1605)</hi
+>, Rome, De Luca, 1990.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Madonna</hi
+> Maria Luisa (dir.), <hi
+rend="italic"
+>Roma di Sisto V. Le arti e la cultura</hi
+>, Rome, De Luca, 1993.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Manfredi</hi
+> Tommaso, <hi
+rend="italic"
+>Filippo Juvarra. Gli anni giovanili</hi
+>, Rome, Argos, 2010.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Margheriti</hi
+> <hi
+rend="small-caps"
+>Mastino</hi
+> Antonio,<hi
+rend="italic"
+> La Mort du pape</hi
+>, Monaco, Liamar, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Marin</hi
+> Louis, <hi
+rend="italic"
+>Le portrait du roi</hi
+> [1981], Paris, Éditions de Minuit, 2001.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Marinis</hi
+> Tammaro de, <hi
+rend="italic"
+>La legatura artistica in Italia nei secoli XV e XVI, Notizie ed elenchi</hi
+>, Florence, Fratelli Alinari, 1960, 3 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Martin</hi
+> Jacques, <hi
+rend="italic"
+>Heraldry in the Vatican / L’araldica in Vaticano</hi
+>, Gerrards Cross, Van Duren, 1987.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Marucci</hi
+> Valerio, <hi
+rend="small-caps"
+>Mazzo</hi
+> Antonio, <hi
+rend="small-caps"
+>Romano</hi
+> Angela et <hi
+rend="small-caps"
+>Aquilecchia</hi
+> Giovanni (éd.), <hi
+rend="italic"
+>Pasquinate romane del Cinquecento</hi
+>, Rome, Salerno Editrice, 1983, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Masson</hi
+> Georgina, <hi
+rend="italic"
+>Queen Christina</hi
+>, Londres, Secker &amp; Warburg, 1968.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Micalizzi</hi
+> Paolo, <hi
+rend="italic"
+>Gubbio. Storia dell’architettura e della città</hi
+> [2<hi
+rend="sup"
+>e</hi
+> éd.], Gubbio, L’arte grafica, 2009.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Millon</hi
+> Henry A., <hi
+rend="italic"
+>Filippo Juvarra. Drawings from the roman period 1704-1714</hi
+>, Rome, Edizioni dell’Elefante, 1984, vol. 1.</bibl
+><bibl
+>—, <hi
+rend="small-caps"
+>Griseri</hi
+> Andreina, <hi
+rend="small-caps"
+>Mc Phee</hi
+> Sarah et <hi
+rend="small-caps"
+>Viale Ferrero</hi
+> Mercedes (dir.), <hi
+rend="italic"
+>Filippo Juvarra. Drawings from the roman period 1704-1714</hi
+>, Rome, Edizioni dell’Elefante, 1999, vol. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Mochi</hi
+> <hi
+rend="small-caps"
+>Onori</hi
+> Lorenza, <hi
+rend="small-caps"
+>Schutze</hi
+> Sebastian et <hi
+rend="small-caps"
+>Solinas</hi
+> Francesco (dir.), <hi
+rend="italic"
+>I Barberini e la cultura europea del Seicento</hi
+>, Rome, De Luca, 2007.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Modesti</hi
+> Adolfo, <hi
+rend="italic"
+>Corpus numismatum omnium romanorum pontificum</hi
+>, Rome, Adolfo Modesti, 2002-2018, 6 vol.</bibl
+><bibl
+><hi
+rend="italic"
+>Monasticon Italiae</hi
+>, Cesena, Badia di Santa Maria del Monte, 1981, t. 1 : <hi
+rend="italic"
+>Roma e Lazio</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Monstrelet</hi
+> Enguerrand de, <hi
+rend="italic"
+>Chronique</hi
+>, Louis Douët d’Arcq (éd.), Paris, V<hi
+rend="sup"
+>e</hi
+> Jules Renouard, 1857-1862, 6 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Montagu</hi
+> Jennifer, <hi
+rend="italic"
+>Alessandro Algardi</hi
+>, New Haven-Londres, Yale University Press, 1985, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Moretti</hi
+> Italo et <hi
+rend="small-caps"
+>Stopani</hi
+> Renato, <hi
+rend="italic"
+>Architettura romanica religiosa a Gubbio</hi
+>, Florence, Salimbeni, 1973.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Moroni</hi
+> Gaetano, <hi
+rend="italic"
+>Dizionario di erudizione storico-ecclesiastica da S. Pietro sino ai nostri giorni</hi
+>, In Venezia, dalla Tipografia Emiliana, 1840-1878, 103 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Myers</hi
+> Mary, <hi
+rend="italic"
+>Architectural and ornament drawings</hi
+>: <hi
+rend="italic"
+>Juvarra, Vanvitelli, The Bibiena family &amp; other Italian draughtsmen</hi
+>, New York, The Metropolitan Museum of Art, 1975.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nardelli</hi
+> Giuseppe Maria, <hi
+rend="italic"
+>La pianta di Gubbio di Ignazio Cassetta stampata da Joannis Blaeu e Pierre Mortier: rappresentazione e simbolismi</hi
+>, Gubbio, Rotary Club, 2001.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Neppi</hi
+> Lionello, <hi
+rend="italic"
+>Schede del catalogo di opere d’arte mobili (Santa Maria in Vallicella)</hi
+>, Rome, Ministero della Pubblica Istruzione, 1957.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Noblet</hi
+> Julien, <hi
+rend="italic"
+>En perpétuelle mémoire, Collégiales castrales et Saintes-Chapelles à vocation funéraire en France (1450-1560)</hi
+>, Rennes, PUR, 2009.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nova</hi
+> Alessandro, <hi
+rend="italic"
+>The Artistic Patronage of Pope Julius III (1550-1555), Profane Imagery and Buildings for the De Monte Family in Rome</hi
+>, New York-Londres, Garland Publishing, 1988.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Onofrio</hi
+> Cesare d’, <hi
+rend="italic"
+>Roma val bene un’abiura</hi
+>, Rome, Fratelli Palombi, 1976.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Oy</hi
+>-<hi
+rend="small-caps"
+>Marra</hi
+> Elisabeth, <hi
+rend="italic"
+>Profane Repräsentationskunst in Rom von Clemens VIII Aldobrandini bis Alexander VII Chigi. Studien zur Funktion und Semantik römischer Deckenfresken im höfischen Kontext</hi
+>, Munich-Berlin, Deutscher Kunstverlag, 2005.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Palliolo</hi
+> Paolo, <hi
+rend="italic"
+>Le feste pel conferimento del patriziato romano a Giuliano e Lorenzo de’ Medici</hi
+>. Bologne, G. Romagnoli, 1885.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Panciroli</hi
+> Romeo, <hi
+rend="italic"
+>The audience suite of the papal apartments</hi
+>, Cité du Vatican, Libreria Editrice Vaticana, 2004.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Panza</hi
+> Pierluigi, <hi
+rend="italic"
+>Piranesi architetto</hi
+>, Milan, Guerini Studio, 1998.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Paravicini</hi
+> <hi
+rend="small-caps"
+>Bagliani</hi
+> Agostino, <hi
+rend="italic"
+>Il bestiario del papa</hi
+>, Turin, Einaudi, 2016.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pasini</hi
+> <hi
+rend="small-caps"
+>Frassoni</hi
+> Ferruccio, <hi
+rend="italic"
+>Essai d’armorial des papes</hi
+>, Rome, Collège héraldique, 1906.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pastoureau</hi
+> Michel, <hi
+rend="italic"
+>Typologie des sources du Moyen Âge occidental</hi
+>, Turnhout, Brepols, 1976, fasc. 20 : <hi
+rend="italic"
+>Les armoiries</hi
+>.</bibl
+><bibl
+>—, <hi
+rend="italic"
+>L’ours. L’histoire d’un roi déchu</hi
+>, Paris, Seuil, 2016.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pecchiai</hi
+> Pio, <hi
+rend="italic"
+>Un assassinio politico a Roma nel Cinquecento</hi
+>, Rome, Biblioteca d’Arte Editrice, 1956.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>I Barberini</hi
+>, Rome, Biblioteca d’Arte Editrice, 1959.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Perini</hi
+> Davide Aurelio, <hi
+rend="italic"
+>Bibliographia Augustiniana</hi
+>, Florence, Tip. Sordomuti, 1929-1938, 4 vol.</bibl
+><bibl
+><hi
+rend="italic"
+>Piranesi architetto</hi
+>, catalogue d’exposition, American Academy in Rome, 15 mai-5 juillet 1992, Rome, Edizioni dell’Elefante, 1992.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pizzagalli</hi
+> Daniela, <hi
+rend="italic"
+>La regina di Roma. Vita e misteri di Cristina di Svezia nell’Italia barocca</hi
+>, Milan, Rizzoli, 2002.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Plessi</hi
+> Giuseppe (dir.), <hi
+rend="italic"
+>Le Insignia degli Anziani del comune dal 1530 al 1796: catalogo-inventario</hi
+>, Bologne, ASBO, 1954.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Polo</hi
+> Anna, <hi
+rend="italic"
+>Las </hi
+>Annotationi <hi
+rend="italic"
+>de Gauges de’ Gozze (1631) en relación con la obra didáctica de Franciosini</hi
+>, Padoue, <hi
+rend="small-caps"
+>CLEUP</hi
+>, 2021.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Poos</hi
+> Adam, <hi
+rend="italic"
+>San Lorenzo in Damaso a Roma</hi
+>, <hi
+rend="italic"
+>Guida alla basilica</hi
+>, Rome, <hi
+rend="small-caps"
+>GB</hi
+> Editoria, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Poulbrière</hi
+> Jean-Baptiste, <hi
+rend="italic"
+>Notice historique et archéologique sur Castelnau-de-Bretenoux, Lot</hi
+>, Tulle, Imprimerie E. Crauffon, 1873.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Poutrin</hi
+> Isabelle, <hi
+rend="italic"
+>Les convertis du pape. Une famille de banquiers juifs à Rome au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, Paris, Seuil, 2023.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Prodi</hi
+> Paolo, <hi
+rend="italic"
+>Il sovrano pontefice: un corpo e due anime: la monarchia papale nella prima età moderna</hi
+>, Bologne, Il Mulino, 1982.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rietstap</hi
+> Jean-Baptiste, <hi
+rend="italic"
+>Armorial général</hi
+>, Gouda, G. B. van Goor, 1861.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>Armorial général</hi
+>, Londres, Heraldry Today, 1988, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rivosecchi</hi
+> Valerio, <hi
+rend="italic"
+>Esotismo in Roma Barocca. Studi sul Padre Kircher</hi
+>, Rome, Bulzoni, 1982.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Robertson</hi
+> Clare, <hi
+rend="italic"
+>The city and the visual arts under Clement VIII</hi
+>, New Haven, Yale University Press, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roca</hi
+> <hi
+rend="small-caps"
+>De</hi
+> <hi
+rend="small-caps"
+>Amicis</hi
+> Augusto, <hi
+rend="italic"
+>L’opera di Borromini in San Giovanni in Laterano: gli anni della fabbrica (1646,1650</hi
+> ), Rome, Dedalo, 1996.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roettgen</hi
+> Steffi, <hi
+rend="italic"
+>Fresques italiennes du Baroque aux Lumières (1600-1797)</hi
+>, Jeanne Étoré-Lortholary (trad.), Paris, Citadelle &amp; Mazenod, 2007.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rollo</hi
+>-<hi
+rend="small-caps"
+>Koster</hi
+> Joëlle, <hi
+rend="italic"
+>Avignon and its papacy 1309-1417: Popes, Institutions and Society</hi
+>, Londres, Rowman &amp; Littlefield, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Romanis</hi
+> Alfonso Camillo De, <hi
+rend="italic"
+>Per un nuovo Battistero a Santa Prisca. Nova et vetera</hi
+>, Cité du Vatican, Tipografia poliglotta vaticana, 1948.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roncalli</hi
+> Angelo, <hi
+rend="italic"
+>Il Cardinale Cesare Baronio</hi
+>, Rome, Edizioni di storia e letteratura, 1961.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roscoe</hi
+> William, <hi
+rend="italic"
+>Life and Pontificate of Leo X</hi
+>, Londres, Henry G. Bohn, 1846, 2 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rossi</hi
+> Iohannes Baptista de et <hi
+rend="small-caps"
+>Duchesne</hi
+> Ludovicus, <hi
+rend="italic"
+>Acta Sanctorum Novembris.</hi
+> Bruxelles, 1894, vol. 2, part. 1 : <hi
+rend="italic"
+>Martyrologium Hieronymianum</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Safarik</hi
+> Eduard A., <hi
+rend="italic"
+>L’Apoteosi di Romolo di Domenico Maria Canuti in Palazzo Altieri</hi
+>, Rome, Finnat Euramerica, 1995.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Salvestrini</hi
+> Francesco, <hi
+rend="italic"
+>Santa Maria di Vallombrosa. Patrimonio e vita economica di un grande monastero medievale</hi
+>, Florence, Olschki, « Biblioteca Storica Toscana, I, 33 », 1998.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Salvestrini</hi
+> Francesco et <hi
+rend="small-caps"
+>Ciliberti</hi
+> Rosagemma, <hi
+rend="italic"
+>I Vallombrosani nel Piemonte medievale e moderno. Ospizi e monasteri intorno alla strada di Francia</hi
+>, Rome, Viella, 2014.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Sangiorgi</hi
+> Geremia, <hi
+rend="italic"
+>S. Prisca e il suo mitreo</hi
+>, Rome, Marietti, « Le chiese di Roma illustrate, 101 », 1968.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Schiavo</hi
+> Armando, <hi
+rend="italic"
+>Villa Ludovisi e Palazzo Margherita</hi
+>, Rome, Roma Amor, 1981.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Simonetta</hi
+> Giuseppe, <hi
+rend="small-caps"
+>Gigli</hi
+> Laura et <hi
+rend="small-caps"
+>Marchetti</hi
+> Gabriella, <hi
+rend="italic"
+>Sant’Angese in Agone a Piazza Navona. Bellezza, Proporzione, Armonia nelle fabbriche Pamphili</hi
+>, Rome, Gangemi, 2003.</bibl
+><bibl
+><hi
+rend="small-caps"
+>—</hi
+>, <hi
+rend="small-caps"
+>—</hi
+> et <hi
+rend="small-caps"
+>—</hi
+>, <hi
+rend="italic"
+>Sant’Agnese in Agone a Piazza Navona, Immagine, Luce, Ordine, Suono nelle fabbriche Pamphili</hi
+>, Rome, Gangemi, 2005.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Spike</hi
+> John T. (éd.), <hi
+rend="italic"
+>The Illustrated Bartsch</hi
+>, New York, Abaris Book, 1981, vol. 41.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Stagni</hi
+> Simonetta, <hi
+rend="italic"
+>Domenico Maria Canuti</hi
+>, Rimini, Luisè, 1988.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Takahashi</hi
+> Kenichi, <hi
+rend="italic"
+>Giovanni Luigi Valesio. Ritratto de « l’Instabile academico incaminato »</hi
+>, Bologne, Clueb, 2007.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Talamo</hi
+> Emilia Anna, <hi
+rend="italic"
+>Codices cantorum, miniature e disegni nei codici della Cappella Sistina</hi
+>, Florence, Officine del Novecento, 1997.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Thiry</hi
+> Steven, <hi
+rend="italic"
+>Matter(s) of State. Heraldic Display and Discourse in the Early Modern Monarchy (c. 1480-1650)</hi
+>, Ostfildern, Thorbecke Verlag, « Heraldic Studies, 2 », 2018.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Todini</hi
+> Filippo, <hi
+rend="italic"
+>La pittura umbra dal Duecento al primo Cinquecento</hi
+>, Milan, Longanesi, 1989.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Vaillancourt</hi
+> Daniel et <hi
+rend="small-caps"
+>Wagner</hi
+> Marie-France (dir.), <hi
+rend="italic"
+>Dix-septième siècle</hi
+>, numéro spécial :<hi
+rend="italic"
+> Les entrées royales</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 2001.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Villani</hi
+> Giovanni, <hi
+rend="italic"
+>Nuova Cronica</hi
+>, Giuseppe Porta (éd.), Parme, Guanda, 1990-1991, livre <hi
+rend="small-caps"
+>VII</hi
+>, vol. 2.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Von</hi
+> <hi
+rend="small-caps"
+>Pastor</hi
+> Ludwig Freiherr, <hi
+rend="italic"
+>The History of the Popes: From the Close of the Middle Ages, Drawn From the Secret Archives of the Vatican and Other Original Sources</hi
+>, R. F. Kerr (éd.), Londres, Kegan Paul, Trench, Trubner &amp; Co., 1910, vol. 8; 1933, vol. 23.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Waddy</hi
+> Patricia, <hi
+rend="italic"
+>Seventeenth-Century Roman Palaces. Use and the Art of the Plan</hi
+>, Cambridge-Londres, The <hi
+rend="small-caps"
+>MIT</hi
+> Press, 1990.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Weber</hi
+> Christoph Friedrich, <hi
+rend="italic"
+>Zeichen der Ordnung und des Aufruhrs. Heraldische Symbolik in italienischen Stadtkommunen des Mittelalters</hi
+>, Cologne, Böhlau, 2011.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Weddigen</hi
+> Tristam, De <hi
+rend="small-caps"
+>Blaauw</hi
+> Sible et <hi
+rend="small-caps"
+>Kempers</hi
+> Bram (éd.), <hi
+rend="italic"
+>Functions and Decorations: Art and Ritual at the Vatican Palace in the Middle Ages and the Renaissance</hi
+>, Cité du Vatican-Turnhout, BAV-Brepols, 2003.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Wilton</hi
+>-<hi
+rend="small-caps"
+>Ely</hi
+> John, <hi
+rend="italic"
+>Piranesi as Architect and Designer</hi
+>, New York-New Haven-Londres, The Pierpont Morgan Library-Yale University Press, 1993.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Yorke</hi
+> Carolyn et <hi
+rend="small-caps"
+>Minor</hi
+> Heather Hyde, <hi
+rend="italic"
+>Piranese unbound</hi
+>, Princeton et Oxford, Princeton University Press, 2020.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zola</hi
+> Émile, <hi
+rend="italic"
+>Les trois villes. Rome</hi
+>, Paris, G. Charpentier et E. Fasquelle, 1896.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zuccari</hi
+> Alessandro, <hi
+rend="small-caps"
+>Benocci</hi
+> Carla et <hi
+rend="small-caps"
+>Bagolan</hi
+> Maria Cristina (dir.)<hi
+rend="italic"
+>, La Spagna sul Gianicolo</hi
+>, Rome, Eurografica, 2004, 3 vol.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zwart</hi
+> Hub, <hi
+rend="italic"
+>Ethical Consensus and the Truth of Laughter: The Structure of Moral Transformations</hi
+>, Kampen, Kok Pharos, 1996.</bibl
+></div
+></div
+><div
+type="section1"
+xml:id="div18"
+><head
+>Articles</head
+><div
+type="section2"
+xml:id="div19"
+><head
+>Articles d’ouvrages</head
+><bibl
+><hi
+rend="small-caps"
+>Alteri</hi
+> Giancarlo, « Monete e medaglie del pontificato di Clemente <hi
+rend="small-caps"
+>XIII</hi
+> (1758-1769) », dans Barbara Jatta (dir.), <hi
+rend="italic"
+>Piranesi e l’Aventino</hi
+>, Milan, Electa, 1998, p. 204.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Andretta</hi
+> Stefano, « Farnese, Girolamo », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 1995, vol. 45, p. 95-98.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Anselmi</hi
+> Salvatore Enrico, « Novità documentarie su S. Prisca in età barocca. L’attività di Carlo Lambardi e di Carlo Fontana », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi. Arte e Architettura</hi
+>, Rome, Artemide, 2010, p. 73-77.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Argan</hi
+> Giulio Carlo, « La rettorica et l’arte barocca », dans Enrico Castelli (dir.), <hi
+rend="italic"
+>Retorica e Barocco. Atti del 3 congresso internazionale di studi umanistici</hi
+>, Rome, Fratelli Bocca, 1955, p. 10-14, republié dans <hi
+rend="italic"
+>Studi e Note. Da Bramante a Canova</hi
+>, Rome, Bulzoni, 1970.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Arrighi</hi
+> Vanna et <hi
+rend="small-caps"
+>Insabato</hi
+> Elisabetta, « Tra storia e mito, la ricostruzione del passato familiare nella nobiltà toscana dei secoli <hi
+rend="small-caps"
+>XVI</hi
+>-<hi
+rend="small-caps"
+>XVIII</hi
+> », dans <hi
+rend="italic"
+>L’identità genealogica e araldica. Fonti, metodologie, interdisciplinarietà</hi
+>, actes du colloque, Turin, Archive d’État, 21-26 septembre 1988, Rome, Ministero per i beni e le attività culturali, 2000, p. 1099-1121.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Barry</hi
+> Fabio, « “Onward Christian Soldier” : Piranesi at Santa Maria del Priorato », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi, Arte e architettura</hi
+>, Rome, Editoriale Artemide, 2010, p. 140-175.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Beccarini</hi
+> Dario, « Riflessioni e nuove proposte su Francisco Vieira de Matos, detto Vieira Lusitano, “eccellente disegnatore […] felice e franco nell’inventare” », dans Elisa Debenedetti (dir.), <hi
+rend="italic"
+>Studi sul Settecento romano</hi
+>, Rome, Edizioni Quazar, 2021, p. 207-220.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bernardini</hi
+> Carla, « Bologna 1660. Una committenza Farnese per papa Alessandro <hi
+rend="small-caps"
+>VII</hi
+> », dans Andrea Bacchi et Luca M. Barbero (dir.), <hi
+rend="italic"
+>Studi in onore di Stefano Tumidei</hi
+>, Venise-Bologne, Fondazione Cini-Fondazione Zeri, 2016, p. 279-287.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bertrand</hi
+> Pascal-François, « L’uso dell’arazzo a Roma: l’esempio del Cardinale Francesco Barberini », dans Lorenza Mochi Onori, Sebastian Schutze et Francesco Solinas (dir.), <hi
+rend="italic"
+>I Barberini e la cultura europea del Seicento</hi
+>, Rome, De Luca, 2007, p. 421-430.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bevilacqua</hi
+> Mario, « The Young Piranesi: The Itineraries of his formation », dans Mario Bevilacqua, Heather Hyde Minor et Fabio Barri (dir.), <hi
+rend="italic"
+>The Serpent and the Stylus, Essays on G. B. Piranesi</hi
+>, Ann Arbor, The University of Michigan Press, « Supplements to the Memoirs of the American Academy in Rome », 2006, p. 13-53.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Blackburn</hi
+> Bonnie, « Messages in Miniature: Pictorial Programme and Theological Implications in the Alamire Choirbooks », dans <hi
+rend="italic"
+>The Burgundian-Habsburg Court Complex of Music Manuscripts (1500-1535) and the Workshop of Petrus Alamire: Colloquium Proceedings, Leuven, 25-28 November 1999</hi
+>, Louvain-Neerpelt, Alamire Foundation, 2003, p. 161-184.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Boesch</hi
+> <hi
+rend="small-caps"
+>Gajano</hi
+> Sofia, « Storia e tradizione vallombrosane », dans Antonella Degl’Innocenti (dir.), <hi
+rend="italic"
+>Vallombrosa. Memorie agiografiche e culto delle reliquie</hi
+>, Rome, Viella, 2012, p. 15-115.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Boiteux</hi
+> Martine, « La vacance du siège pontifical. De la mort et des funérailles à l’investiture du Pape : les rites de l’époque moderne », dans José Pedro Paiva (dir.), <hi
+rend="italic"
+>Religious Ceremonials and Images</hi
+>. <hi
+rend="italic"
+>Power and social meaning (1400-1750)</hi
+>, Coimbra, Palimage Editores, 2002, p. 103-141.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « <hi
+rend="italic"
+>Il</hi
+> <hi
+rend="italic"
+>Possesso</hi
+>. La presa di potere del Sovrano Pontefice sulla città di Roma », dans Francesco Buranelli (dir.),<hi
+rend="italic"
+> Habemus Papam. Le elezioni pontificie da San Pietro a Benedetto XIV</hi
+>, Rome, De Luca, 2006, p. 131-140.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Linguaggio figurativo ed efficacia rituale », dans Francesca Cantù (dir.), <hi
+rend="italic"
+>I linguaggi del potere. Politica e religione nell’età barocca</hi
+>, Rome, Viella, 2007, p. 39-79.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Les Barberini, Rome et la France : fête et politique », dans Lorenza Mochi Onori, Sebastian Schutze et Francesco Solinas (dir.), <hi
+rend="italic"
+>I Barberini e la cultura europea del Seicento</hi
+>, Rome, De Luca, 2007, p. 345-360.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Funérailles féminines dans la Rome baroque », dans Bernard Dompnier (dir.), <hi
+rend="italic"
+>Les cérémonies extraordinaires du catholicisme baroque</hi
+>, Clermont-Ferrand, PUBP, 2009, p. 389-421.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « La cerimonia della canonizzazione. Teatro riti, stendardi e immagini », dans Alessandra Bartolomei Romagnoli (dir.), <hi
+rend="italic"
+>La canonizzazione di Santa Francesca Romana, Santità, cultura e istituzioni a Roma tra Medioevo e età moderna</hi
+>, Florence, Edizioni del Galluzzo per la Fondazione Ezio Franceschini, 2013, p. 99-121.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Il cerimoniale. La necessità della magnificenza », dans Francesco Buranelli (dir.), <hi
+rend="italic"
+>Il Vaticano Barocco, Arte, architettura e cerimoniale</hi
+>, Milan, Jaca Book, 2014, p. 10-27.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Triomphes romains des Sobieski, 1683-1735 », dans <hi
+rend="italic"
+>I Sobieski a Roma. La famiglia reale polacca nella Città Eterna</hi
+>, Varsovie, Muzeum Pałacu Króla Jana <hi
+rend="small-caps"
+>III</hi
+> w Wiłanwie, 2018, p. 48-51.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « La Croce luminosa, un rito della Settimana Santa nella basilica di San Pietro », dans Roberto Regoli et Ilaria Fiumi Sermattei (dir<hi
+rend="italic"
+>.</hi
+>),<hi
+rend="italic"
+> La religione dei nuovi tempi. Il riformismo spirituale nell’età di Leone XII</hi
+>, Ancone, Consiglio regionale delle Marche, 2020, p. 281-316.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Borello</hi
+> Benedetta, « Strategie di insediamento in città: i Pamphilj a Roma nel primo Cinquecento », dans Maria Antonietta Visceglia (dir.), <hi
+rend="italic"
+>La nobiltà romana in età moderna</hi
+>, Rome, Carocci, 2001, p. 31-61.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Pamphili, Girolamo », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2014, vol. 80, p. 670-671.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bouyé</hi
+> Édouard, « Les clefs de saint Pierre, sur la terre comme au ciel », dans Catalina Girbea, Christine Manigand, Jérôme Grévy, Laurent Hablot, Denise Turrel et Martin Aurell (dir.), <hi
+rend="italic"
+>Signes et couleurs des identités politiques</hi
+>, Rennes, <hi
+rend="small-caps"
+>PUR</hi
+>, 2008, p. 275-312.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Brunelli</hi
+> Giampiero, « Vidoni, Pietro senior », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2020, vol. 99, p. 204-207.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Buscaroli</hi
+> <hi
+rend="small-caps"
+>Fabbri</hi
+> Beatrice, « Il Cardinal Farnese e la sua sala. Un ciclo di affreschi per la famiglia e la città », dans Camilla Bottino (dir.), <hi
+rend="italic"
+>Il palazzo comunale di Bologna. Storia, architettura e restauri</hi
+>, Bologne, Compositori, 1999, p. 99-110.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Coldagelli</hi
+> Umberto, « Armanni, Vincenzo », dans<hi
+rend="italic"
+> DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 1962, vol. 4, p. 222-224.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cacciamani</hi
+> Giuseppe, <hi
+rend="italic"
+>Dizionario degli Istituti di Perfezione</hi
+>, Milan, Paoline, 1974, vol. 1.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Carlevaris</hi
+> Anna Laura, D<hi
+rend="small-caps"
+>e Carlo</hi
+> Laura et <hi
+rend="small-caps"
+>Di Marzio</hi
+> Daniel, « La sala Clementina in Vaticano tra manierismo e barocco », dans Fauzia Farneti et Deanna Lenzi (dir.), <hi
+rend="italic"
+>L’architettura dell’inganno. Quadraturismo e grande decorazione nella pittura di età barocca</hi
+>, Florence, Alinea, 2004, p. 133-148.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cattaneo</hi
+> Maria Vittoria et <hi
+rend="small-caps"
+>Gianasso</hi
+> Elena, « Il Corpus Juvarrianum della Biblioteca Nazionale Universitaria di Torino », dans Franca Porticelli, Costanza Roggero, Chiara Devoti et Gustavo Mola Di Nomaglio (dir.), <hi
+rend="italic"
+>Filippo Juvarra regista di corti e capitali dalla Sicilia al Piemonte all’Europa</hi
+>, Turin, Centro Studi Piemontesi, 2020, p. 197-210.</bibl
+><bibl
+>« Chauvigny de Brosse, armes des », dans la base Sigilla, http://www.sigilla.org/armoiries/chauvigny-25103.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cipriani</hi
+> Angela, « Un programma belloriano », dans Franco Borsi, Gabriele Morolli, Maurizio Caperna <hi
+rend="italic"
+>et al</hi
+>., <hi
+rend="italic"
+>Palazzo Altieri</hi
+>, Gianfranco Spagnesi (introduction), Rome, Editalia, 1991, p. 177-208.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cooper</hi
+> Richard, « Legate’s Luxury : the Entries of Cardinal Alessandro Farnese to Avignon and Carpentras, 1553 », dans Nicolas Russell et Hélène Visentin (dir.), <hi
+rend="italic"
+>French Ceremonial Entries in the Sixteenth century : Event, Image, Text</hi
+>, Toronto, Center for Renaissance and Reformation Studies, 2007, p. 133-161.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cornini</hi
+> Guido, <hi
+rend="small-caps"
+>Strobel</hi
+> Anna Maria de et <hi
+rend="small-caps"
+>Serlupi</hi
+> <hi
+rend="small-caps"
+>Crescenzi</hi
+> Maria, « L’appartamento papale di rappresentanza », dans Carlo Pietrangeli (dir.), <hi
+rend="italic"
+>Il Palazzo apostolico vaticano</hi
+>, Florence, Nardini Editori, 1992, p. 169-185.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Critien</hi
+> John Edward, « Un manoscritto dell’Archivio Magistrale del Sovrano Militare Ordine di Malta di Roma », dans Barbara Jatta (dir.), <hi
+rend="italic"
+>Piranesi e l’Aventino</hi
+>, Milan, Electa, 1998, p. 79-85.</bibl
+><bibl
+><hi
+rend="small-caps"
+>D’Amelio</hi
+> Maria Grazia et <hi
+rend="small-caps"
+>Marder</hi
+> Tod A., « La fontana dei Quattro Fiumi a piazza Navona, iconologia e costruzione », dans Jean-François Bernard (dir.), <hi
+rend="italic"
+>Piazza Navona, ou Place Navone, la plus belle &amp; [et] la plus grande</hi
+>, Rome, École française de Rome, « Collection de l’École Française de Rome, 493 », 2014, p. 399-419.</bibl
+><bibl
+><hi
+rend="small-caps"
+>De Benedictis</hi
+> Angela, « Tra “affratellamento comunitario” e “commensualità rituale”. La “condotta di vita” dei cittadini di governo tra ’400 e ’500 », dans Maurizio Ricci (dir.), <hi
+rend="italic"
+>L’architettura a Bologna nel Rinascimento (1460-1550): centro o periferia?</hi
+>, Bologne, Minerva, 2001, p. 17-27.</bibl
+><bibl
+><hi
+rend="small-caps"
+>De Caro</hi
+> Gaspare, « Brusoni, Girolamo », dans<hi
+rend="italic"
+> Dizionario biografico degli italiani</hi
+>, Rome, Istituto della Enciclopedia italiana, 1972, vol. 14, p. 712-720.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Di</hi
+> <hi
+rend="small-caps"
+>Berardino</hi
+> Angelo, « Prisca, santa », dans <hi
+rend="italic"
+>Nuovo dizionario patristico e di antichità cristiane</hi
+>, Gênes-Milan, Marietti, 2008, vol. 3, col. 4331-4332.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Di</hi
+> <hi
+rend="small-caps"
+>Monte</hi
+> Michele, « La cultura antica e lo specchio della storia », dans Maurizia Cicconi, Flaminia Gennari Santori et Sebastian Schütze (dir.), <hi
+rend="italic"
+>L’immagine sovrana. Urbano VIII e i Barberini</hi
+>, catalogue d’exposition, Rome, Officina libraria, 2023, p. 265-269.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Donato</hi
+> Maria Monica, « “Ogni cosa è pieno d’arme”. Uno sguardo dall’esterno », dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’Arme segreta. Araldica e storia dell’arte nel Medioevo (secoli XIII-XIV)</hi
+>, Alessandro Savorelli (introduction), Florence, Le Lettere, 2015, p. 267-283.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Doulkaridou</hi
+>-<hi
+rend="small-caps"
+>Ramantani</hi
+> Elli, « Jules de Médicis et Pompeo Colonna. Enjeux héraldiques dans les missels de deux cardinaux antagonistes », dans Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique &amp; Papauté, Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020, p. 197-233.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ebert</hi
+>-<hi
+rend="small-caps"
+>Schifferer</hi
+> Sybille, « La romanità in termini bolognesi: Domenico Maria Canuti a palazzo Altieri », dans Sabine Frommel (dir.), <hi
+rend="italic"
+>Crocevia e capitale della migrazione artistica: forestieri a Bologna e bolognesi nel mondo (secolo XVII)</hi
+>, Bologne, Bologna University Press, 2012, p. 327-345.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ermini</hi
+> Gian-Paolo, « La campana del palazzo del popolo di Orvieto (1316) », dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’arme segreta, Araldica e storia dell’arte nel Medioevo (secoli XIII-XV)</hi
+>, Alessandro Savorelli (introduction), Florence, Le Lettere, 2015, p. 109-125.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « La décoration picturale de la grande salle du palais de la Commune d’Orvieto », dans Torsten Hiltman et Miguel de Seixas (dir.), <hi
+rend="italic"
+>Heraldry in Medieval and Early Modern State Rooms</hi
+>, Ostfildern, Thorbecke Verlag, « Heraldic Studies, 3 », 2020, p. 167-171.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Esposito</hi
+> Anna, « Il rione Parione durante il Pontificato Sistino: analisi di un’area campione. Osservazione sulla popolazione rionale », dans Massimo Miglio, Francesca Niutta, Diego Quaglioni et Concetta Ranieri (dir.), <hi
+rend="italic"
+>Un pontificato e una città. Sisto IV (1471-1484)</hi
+>, actes de colloque, Rome, 3-7 décembre 1984, Cité du Vatican, Scuola Vaticana di Paleografia, Diplomatica e Archivistica, « Littera antiqua, 5 », 1986, p. 651-666.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fagiolo</hi
+> Marcello, « I geroglifici, gli emblemi e l’araldica: note sul ragionamento simbolico di Borromini », dans Richard Boesel et Christoph L. Frommel (dir.), <hi
+rend="italic"
+>Borromini e l’universo barocco</hi
+>, Milan, Electa, 1999, p. 95-105.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Feci</hi
+> Simona et <hi
+rend="small-caps"
+>Bortolotti</hi
+> Luca, « Giustiniani, Benedetto », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2001, vol. 57, p. 366-377.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Federici</hi
+> Fabrizio, « “Anticomoderno”: significati ed usi del termine nella letteratura artistica tra Cinque e Settecento », dans Maria Monica Donato et Massimo Ferretti (dir.), <hi
+rend="italic"
+>« Conosco un ottimo storico dell’arte… ». Per Enrico Castelnuovo. Scritti di allievi e amici pisani</hi
+>, Pise, Edizioni della Normale, 2012, p. 291-296.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Un partisan de la France en quête de protection : ce “bon vieux” chevalier Francesco Gualdi et le cardinal Mazarin », dans Yvan Loskoutoff et Patrick Michel (dir.), <hi
+rend="italic"
+>Mazarin, Rome et l’Italie</hi
+>, Mont-Saint-Aignan, PURH, 2022, t. 2, p. 199-238.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Baroque Returns: the Donations and Reuses of Francesco Gualdi », <hi
+rend="italic"
+>Contested Holdings: Museum Collections in Political</hi
+>, dans Eva-Maria Troelenberg, Felicity Bodenstein, Damiana Otoiu (dir.), <hi
+rend="italic"
+>Contested Holdings. Museum Collections in Political, Epistemic and Artistic Processes of Return</hi
+>, actes de colloque, Florence, Kunsthistorisches Institut in Florenz, 21-22 octobre 2016, New York-Oxford, Berghahn, 2022, p. 197-219.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ferrari</hi
+> Matteo, « Stemmi esposti. Presenze araldiche nei broletti lombardi <hi
+rend="italic"
+>»</hi
+>, dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’arme segreta, Araldica e storia dell’arte nel Medioevo (secoli XIII-XV)</hi
+>, Alessandro Savorelli (introduction), Florence, Le Lettere, 2015, p. 91-107.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Héraldique et “mise en signe” de l’espace urbain en Poitou au Moyen Âge », <hi
+rend="italic"
+>L’héraldique dans la ville</hi
+>, Ostfildern, Thorbecke Verlag, « Heraldic Studies, 6 », 2025.</bibl
+><bibl
+><hi
+rend="small-caps"
+>—</hi
+>, <hi
+rend="small-caps"
+>Rao</hi
+> Riccardo et <hi
+rend="small-caps"
+>Terenzi</hi
+> Pierluigi, « Rappresentazioni del potere angioino nell’Italia comunale: sovrani, ufficiali, città », dans Thierry Pécout (dir.), <hi
+rend="italic"
+>Les officiers et la chose publique dans les territoires angevins (</hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle) : vers une culture politique</hi
+>, Rome, École française de Rome, « École française de Rome, 518, 4 », 2020, p. 279-319.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Forni</hi
+> Giorgio, « Nicolò Machiavelli », dans Ezio Raimondi (dir.), <hi
+rend="italic"
+>La letteratura italiana. Dalle origini al Cinquecento</hi
+>, Milan, Bruno Mondadori, 2007, p. 346.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Francastel</hi
+> Pierre, « La Contre-Réforme et les arts en Italie à la fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle », dans Henri Bédarida (dir.), <hi
+rend="italic"
+>À travers l’art italien du </hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic sup"
+>e </hi
+><hi
+rend="italic"
+>au </hi
+><hi
+rend="small-caps italic"
+>xx</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, Paris, Boivin-Société d’études italiennes, 1949, p. 63-113.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fumi</hi
+> <hi
+rend="small-caps"
+>Cambi</hi
+> <hi
+rend="small-caps"
+>Gado</hi
+> Francesca, « Stemmi ed emblemi nella decorazione degli edifici<hi
+rend="italic"
+> »</hi
+>, dans Amerigo Restucci (dir.),<hi
+rend="italic"
+> L’architettura civile in Toscana. Il Medioevo</hi
+>, Sienne, Monte dei Paschi di Siena, 1995, p. 401-441.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gallavotti</hi
+> <hi
+rend="small-caps"
+>Cavallero</hi
+> Daniela, « L’iconografia di santa Prisca e l’immagine di Pietro dalla basilica Vaticana al titulus della santa sull’Aventino nei secoli <hi
+rend="small-caps"
+>XVI</hi
+> e <hi
+rend="small-caps"
+>XVII</hi
+> », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi. Arte e Architettura</hi
+>, Rome, Artemide, 2010, p. 57-71.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gatouillat</hi
+> Françoise, « Prudhomat. Église Saint-Louis, ancienne collégiale Saint-Jean-Baptiste », dans Michel Hérold (dir.), <hi
+rend="italic"
+>Corpus vitrearum. Les vitraux du Midi de la France</hi
+>, Rennes, PUR, 2020, p. 238-240.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Giacomelli</hi
+> Alfeo, « La storia di Bologna dal 1650 al 1796: un racconto e una cronologia », dans Adriano Prosperi (dir.), <hi
+rend="italic"
+>Bologna nell’età moderna (secoli XVI-XVIII). </hi
+>Vol. I.<hi
+rend="italic"
+> Istituzioni, forme del potere, economia e società</hi
+>, Bologne, Bologna University Press, 2009, p. 61-198.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Giordano</hi
+> Silvano, « Sisto V », dans <hi
+rend="italic"
+>Enciclopedia dei Papi</hi
+>, Rome, Treccani, 2000, 3 vol., t. 3, p. 202-222.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hablot</hi
+> Laurent, « Le décor emblématique chez les princes de la fin du Moyen Âge : un outil pour construire et qualifier l’espace », dans Thomas Lienhard (dir.), <hi
+rend="italic"
+>Construction de l’espace au Moyen Âge : pratiques et représentations</hi
+>, actes du 37<hi
+rend="sup"
+>e</hi
+> congrès de la Société des historiens médiévistes de l’enseignement supérieur public, Paris, Publications de la Sorbonne, 2007, p. 147-165.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « “<hi
+rend="italic"
+>Sens dessoubz dessus</hi
+>.” Le blason de la trahison », dans Myriam Soria et Maïté Billoré (dir.), <hi
+rend="italic"
+>La trahison au Moyen Âge, De la monstruosité au crime politique (</hi
+><hi
+rend="small-caps italic"
+>v</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle)</hi
+>, Rennes, PUR, 2010, p. 331-347.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Le bris des armes. L’iconoclasme héraldique dans la société médiévale », dans Marc Gil, Pascale Charron et Ambre Vilain (dir.), <hi
+rend="italic"
+>La pensée du regard. Études d’histoire de l’art du Moyen Âge offertes à Christian Heck</hi
+>, Turnhout, Brepols, 2016, p. 181-191.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Sacralisation of the royal coats of arms in Europe in the Middle Ages », dans Monserrat Herrero, Jaume Aurell, Angela Concetta Micelli Stout (dir.), <hi
+rend="italic"
+>Political theology in Medieval and Early Modern Europe. Discourses, Rites and Representations</hi
+>, Turnhout, Brepols, 2017, p. 313-336.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hayez</hi
+> Jérôme, « Un segno fra altri segni. Forme, significati e usi della marca mercantile verso il 1400 », dans Elena Cecchi Aste (dir.), <hi
+rend="italic"
+>Di mio nome e segno. « Marche » di mercanti nel carteggio Datini (secc. XIV-XV)</hi
+>, Prato, Istituto di studi postali Aldo Cecchi, « Quaderni di storia postale, 30 », 2010 p. <hi
+rend="small-caps"
+>IX</hi
+>-<hi
+rend="small-caps"
+>XLVI</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hermann</hi
+>-<hi
+rend="small-caps"
+>Fiore</hi
+> Kristina, « La salle clémentine au Palais apostolique du Vatican », dans Jean-Marc Olivesi (dir.), <hi
+rend="italic"
+>Les cieux en gloire. Paradis en trompe-l’œil pour la Rome baroque</hi
+>, catalogue d’exposition, Ajaccio, Musée Fesch, 2002, p. 101-115.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hubert</hi
+> Hans W., « La nascita e lo sviluppo architettoncio del Palazzo del Comune di Bologna fra potere comunale e potere papale », dans Camilla Bottino (dir.), <hi
+rend="italic"
+>Il palazzo comunale di Bologna. Storia, architettura e restauri</hi
+>, Bologne, Compositori, 1999, p. 64-87.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ladner</hi
+> Gerhart Burian, « Vegetation Symbolism and the Concept of Renaissance », dans Millard Meiss (dir.), <hi
+rend="italic"
+>De artibus opuscula XL. Essays in Honor of Erwin Panofsky</hi
+>, New York, New York University Press, 1961, vol. I, p. 303-322. </bibl
+><bibl
+><hi
+rend="small-caps"
+>Laurentiis</hi
+> Elena de, « <hi
+rend="italic"
+>Preparatio ad missam pontificalem </hi
+>Vincent Raymond di Lodève (illuminator) », dans Jeffrey F. Hamburger, William P. Stoneman, Anne-Mare Eze et Nancy Netzer (dir.), <hi
+rend="italic"
+>Beyond words: illuminated manuscripts in Boston collections</hi
+>, catalogue d’exposition, Chestnut Hill, McMullen Museum of Art-Boston College, 2016.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lavin</hi
+> Irving, « Giambologna’s Neptune at the crossroads », dans Irving Lavin, <hi
+rend="italic"
+>Past-present essays on historicism in art from Donatello to Picasso</hi
+>, Berkeley, University of California Press, 1993, p. 63-83.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Bernini’s Bumbling Barberini Bees », dans Irving Lavin, <hi
+rend="italic"
+>Visible Spirit. The Art of Gianlorenzo Bernini</hi
+>, Londres, The Pinder Press, 2009, t. 2, p. 955-1017.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Leone</hi
+> Stéphanie, « La costruzione di palazzo Pamphilj », dans <hi
+rend="italic"
+>Palazzo Pamphilj: ambasciata del Brasile a Roma</hi
+>, Turin, U. Allemandi, 2016, p. 15-67. </bibl
+><bibl
+><hi
+rend="small-caps"
+>Llorens</hi
+> Juan Maria, « Miniaturas de Vincent Raymond en los manuscritos musicales de la Capilla Sixtina », dans <hi
+rend="italic"
+>Miscelànea Homenaje a Mons. Higinio Anglès</hi
+>, Barcelone, Consejo Superior de Investigaciones científicas, 1958, 2. vol., t. 1, p. 475-494.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Loskoutoff</hi
+> Yvan, « Augures héraldiques de la papauté », dans Andreas Gottsmann, Pierantonio Piatti et Andreas E. Rehberg (dir.), <hi
+rend="italic"
+>Incorrupta monumenta Ecclesiam defendunt, Studi offerti a Sergio Pagano, Prefetto dell’Archivio Segreto Vaticano</hi
+>, Cité du Vatican, Archivio Segreto Vaticano, 2018, 3 vol., t. 2, p. 976-994.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Concessions héraldiques à la fin de la Renaissance d’après les recueils de brefs de saint Pie V (1566-1572), Grégoire <hi
+rend="small-caps"
+>XIII</hi
+> (1572-1585) et Sixte-Quint (1585-1590) conservés aux Archives du Vatican », dans Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique et papauté. Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020, p. 179-196.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Minor</hi
+> Heather Hyde, « Engraved in Porphyry, Printed on Paper: Piranesi and Lord Charlemont », dans Mario Bevilacqua, Heather Hyde Minor et Fabio Barri (dir.), <hi
+rend="italic"
+>The Serpent and the Stylus, Essays on G. B. Piranesi</hi
+>, Ann Arbor, The University of Michigan Press, « Supplements to the Memoirs of the American Academy in Rome », 2006, p. 123-147.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Moretti</hi
+> Simona, « Manno di Bandino», dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2007, vol. 69, p. 109-110.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Paravicini</hi
+> <hi
+rend="small-caps"
+>Bagliani</hi
+> Agostino, « Boniface <hi
+rend="small-caps"
+>VIII</hi
+> en images, Vision d’église et mémoire de soi », dans Dominic Olariu (dir.), <hi
+rend="italic"
+>Le portrait individuel. Réflexions autour d’une forme de représentation, </hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècles</hi
+>, Berne, Peter Lang, 2009, p. 65-81.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pastoureau</hi
+> Michel, « L’emblématique des Farnèse », dans <hi
+rend="italic"
+>Le palais Farnèse</hi
+>, Rome, École française de Rome, 1981, 2. vol., t. 1, p. 431-455.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pauwels</hi
+> Yves, « Le thème de l’arc de triomphe dans l’architecture urbaine à la Renaissance, entre pouvoir politique et pouvoir religieux », dans Patrick Boucheron et Jean-Philippe Genet (dir.), <hi
+rend="italic"
+>Marquer la ville. Signes, traces, empreintes du pouvoir (</hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle)</hi
+>, Paris-Rome, Éditions de la Sorbonne-École française de Rome, 2014, p. 181-188.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Petitmengin</hi
+> Pierre, avec la collaboration de <hi
+rend="small-caps"
+>Fohlen</hi
+> Jeannine, « I manoscritti latini della Vaticana. Uso, acquisizioni, classificazioni », dans Massimo Ceresa (dir.), <hi
+rend="italic"
+>Storia della Biblioteca apostolica vaticana, </hi
+>vol. II :<hi
+rend="italic"
+> La Biblioteca vaticana tra riforma cattolica, crescita delle collezioni e nuovo edificio (1535-1590)</hi
+>, Cité du Vatican, BAV, 2012, p. 43-90.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pini</hi
+> Raffaella, « La statua di Bonifacio <hi
+rend="small-caps"
+>VIII</hi
+>, Manno da Siena e gli orefici a Bologna », dans Maria Andaloro (dir.), <hi
+rend="italic"
+>Le culture di Bonifacio VIII</hi
+>, Rome, Istituto Storico Italiano per il Medioevo, 2006, p. 231-240.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Popoff</hi
+> Michel, « Le “capo dello scudo” dans l’héraldique florentine, <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+><hi
+rend="small-caps"
+>-xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècles », dans <hi
+rend="italic"
+>Brisures, augmentations et changements d'armoiries</hi
+>, Bruxelles, Académie internationale d’héraldique, 1988, p. 251-255.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Portoghesi</hi
+> Paolo, « Borromini e Innocenzo X: architettura e politica pontificia », dans Alessandro Zuccari et Stefania Macioce (dir.), <hi
+rend="italic"
+>Innocenzo X Pamphili. Arte e potere a Roma nell’età barocca</hi
+>, actes de colloque, Rome, novembre 1990 [2<hi
+rend="sup"
+>e</hi
+> éd.], Rome, Logart Press, 2001, p. 27-34.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Prosperi</hi
+> <hi
+rend="small-caps"
+>Valenti</hi
+> <hi
+rend="small-caps"
+>Rodinò</hi
+> Simonetta, « Cresti, Domenico, detto il Passignano », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 1984, vol. 30, p. 741-749.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Raspe</hi
+> Martin, « La Corsia Nuova dell’Ospedale del <hi
+rend="small-caps"
+>SS</hi
+>. Salvatore ad Sancta Sanctorum e i suoi architetti Giacomo e Giovanni Battista Mola », dans Philine Helas et Patrizia Tosini (dir.), <hi
+rend="italic"
+>Tra Campidoglio e curia: l’Ospedale del SS. Salvatore ad Sancta Sanctorum tra Medioevo ed Età Moderna</hi
+>, Cinisello Balsamo, Silvana, « Studi della Bibliotheca Hertziana, 11 », 2017, p. 137-147.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rehberg</hi
+> Andreas, « Collecting and Drawing against Oblivion. Panvinio, Ceccarelli and Chacón and their Search for the Genealogical-Heraldic Identity of the Families of Rome », dans Noëlle-Laetitia Perret et Hans-Joachim Schmidt (dir.), <hi
+rend="italic"
+>Memories Lost in the Middle Ages. Collective Forgetting as an Alternative Procedure of Social Cohesion</hi
+>, Turnhout, Brepols, 2023, p. 295-324.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ribouillault</hi
+> Denis, « Jeux de mots et d’images : les frises peintes de l’appartement de Jules <hi
+rend="small-caps"
+>III</hi
+> au Vatican (vers 1550-1553) », dans Antonella Fenech Kroke et Annick Lemoine (dir.), <hi
+rend="italic"
+>Frises peintes. Les décors des villas et palais au Cinquecento</hi
+>, Paris-Rome, Somogy-Académie de France à Rome, 2016, p. 103-129.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rice</hi
+> Louise, « Branding, Barberini-style », dans Maurizia Cicconi, Flaminia Gennari Santori, Sebastian Schütze (dir.), <hi
+rend="italic"
+>L’immagine sovrana. Urbano VIII e i Barberini</hi
+>, catalogue d’exposition, Rome, Officina libraria, 2023, p. 245-250.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roli Guidetti</hi
+> Clara, « Caccioli, Giovanni Battista », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 1973, vol. 16, p. 39-40.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rothstein</hi
+> Bret, « The Rule of Metaphor and the Play of the Viewer in the Hours of Mary of Burgundy », dans Reindert Falkenburg, Walter S. Melion et Todd M. Richardson (dir.), <hi
+rend="italic"
+>Image and Imagination of the Religious Self in Late Medieval and Early Modern Europe</hi
+>, Turnhout, Brepols, 2007, p. 237-275.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Safarik</hi
+> Eduard A., « L’Apoteosi di Romolo », dans <hi
+rend="italic"
+>Roma Palazzo Altieri. Le stanze al piano nobile dei cardinali Giovanni Battista e Paluzzo Altieri</hi
+>, Milan, Franco Maria Ricci, 1999, p. 24-29. </bibl
+><bibl
+><hi
+rend="small-caps"
+>Saffiotti</hi
+> <hi
+rend="small-caps"
+>Dale</hi
+> Maria Francesca, « Raymond de Lodève, Vincent », dans <hi
+rend="italic"
+>Dizionario biografico dei miniatori italiani</hi
+>, Milan, Sylvestre Bonnard, 2004, p. 899-902.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Salvestrini</hi
+> Francesco, « Il patrimonio fondiario del monastero di Vallombrosa fra <hi
+rend="small-caps"
+>XIII</hi
+> e <hi
+rend="small-caps"
+>XVI</hi
+> secolo: presenza e utilizzazione del bosco », dans Simonetta Cavaciocchi (dir.), <hi
+rend="italic"
+>L’uomo e la foresta, secc. XIII-XVIII</hi
+>, Prato, Istituto Internazionale di Storia Economica Francesco Datini, 1996, p. 1057-1068.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « L’esperienza di Vallombrosa nella documentazione archivistica (secoli <hi
+rend="small-caps"
+>XI</hi
+>-<hi
+rend="small-caps"
+>XVI</hi
+>) », dans Giancarlo Andenna, Renata Salvarani (dir), <hi
+rend="italic"
+>La memoria dei chiostri: atti delle prime Giornate di studi medievali, Laboratorio di storia monastica dell’Italia settentrionale</hi
+>, Castiglione delle Stiviere, 11-13 octobre 2001, Brescia, <hi
+rend="small-caps"
+>CESIMB</hi
+>, 2002, p. 215-230.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « L’art et la magnificence “contre” le pouvoir du prince. L’abbé général Biagio Milanesi, l’ordre monastique de Vallombreuse, Laurent de Médicis et le pape Léon X », dans Élisabeth Crouzet-Pavan, Jean-Claude Maire Vigueur (dir), <hi
+rend="italic"
+>L’art au service du prince. Paradigme italien, expériences européennes</hi
+> <hi
+rend="italic"
+>(vers 1250-vers 1550)</hi
+>, actes du colloque, Paris, Université de Paris-Sorbonne, Centre Roland-Mousnier, 17-19 octobre 2013, Rome, Viella, « Italia comunale e signorile, 8 », 2015, p. 253-279.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Savorelli</hi
+> Alessandro, « L’araldica per la storia: una fonte ausiliaria ? », dans Maria Pia Paoli (dir.), <hi
+rend="italic"
+>Nel laboratorio della storia: una guida alle fonti dell’età moderna</hi
+>, Rome, Carocci, 2013, p. 289-315.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Segni e simboli araldici nell’arte fiorentina dal Medioevo al Rinascimento », dans Maria Monica Donato et Daniela Parenti (dir.), <hi
+rend="italic"
+>Dal giglio al David. Arte civica a Firenze fra Medioevo e Rinascimento</hi
+>, Florence-Milan, Giunti, 2013, p. 73-77.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Schütze</hi
+> Sebastian, « Urbano <hi
+rend="small-caps"
+>VIII</hi
+> e il concetto di Palazzo Barberini. Alla ricerca di un primato culturale di rinascimentale memoria », dans Christoph Luitpold Frommel et Sebastian Schütze (dir.), <hi
+rend="italic"
+>Pietro da Cortona</hi
+>, Milan, Electa, 1998 p. 86-97.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Simonato</hi
+> Lucia, « Il Palazzo Apostolico Vaticano », dans Francesco Buranelli (dir.), <hi
+rend="italic"
+>Vaticano Barocco. Arte, architettura e cerimoniale</hi
+> [Cité du Vatican, Libreria Editrice Vaticana, 2012], Milan, Jaca Book, 2014, chap. <hi
+rend="small-caps"
+>IV</hi
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Von</hi
+> <hi
+rend="small-caps"
+>Flüe</hi
+> Carlo, « Davidico, Lorenzo », <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, vol. 33, 1987, p. 157-160.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zuccari</hi
+> Alessandro, « Borromini tra religiosità borromaica e cultura scientifica », dans Alessandro Zuccari et Stefania Macioce (dir.), <hi
+rend="italic"
+>Innocenzo X Pamphili. Arte e potere a Roma nell’età barocca</hi
+> [2<hi
+rend="sup"
+>e</hi
+> éd.], actes de colloque, Rome, novembre 1990, Rome, Logart Press, 2001, p. 35-74.</bibl
+></div
+><div
+type="section2"
+xml:id="div20"
+><head
+>Articles de périodiques</head
+><bibl
+><hi
+rend="small-caps"
+>Abromson</hi
+> Morton C., « Clement <hi
+rend="small-caps"
+>VIII’s</hi
+> Patronage of the Brothers Alberti », <hi
+rend="italic"
+>The Art Bulletin</hi
+>, vol. <hi
+rend="small-caps"
+>LX</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, septembre 1978, p. 531-547.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Alonso</hi
+> Carlos, « La chiesa e il convento di santa Prisca a Roma. Vicende storiche, 1535-1724 », <hi
+rend="italic"
+>Analecta Augustiniana</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 58, 1995, p. 215-263.</bibl
+><bibl
+><hi
+rend="small-caps"
+>As</hi
+>-<hi
+rend="small-caps"
+>Vijvers</hi
+> Anne Margreet W., « The Grotesque Initials in the Alamire Choirbooks », <hi
+rend="italic"
+>Journal of the Alamire Foundation</hi
+>, vol. 11, n<hi
+rend="sup"
+>o</hi
+> 1‑2, 2019, p. 13‑46.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Barbiche</hi
+> Bernard et <hi
+rend="small-caps"
+>Dainville</hi
+>-<hi
+rend="small-caps"
+>Barbiche</hi
+> Ségolène de, « Les légats <hi
+rend="italic"
+>a latere</hi
+> en France et leurs facultés aux <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles », <hi
+rend="italic"
+>Archivum Historiae Pontificae</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 23, 1985, p. 93-165.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bartoni</hi
+> Laura, « L’allestimento delle collezioni nella villa pinciana: spazi, criteri, funzioni », <hi
+rend="italic"
+>Storia dell’arte – « Guercino nel Casino Ludovisi (1621-1623) »</hi
+>, vol. 157, n<hi
+rend="sup"
+>o</hi
+> 1, 2022, p. 99-117.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bernardini</hi
+> Carla, « Per una storia dell’Appartamento del Legato, sede delle Collezioni Comunali d’Arte di Palazzo d’Accursio. Una ricerca in prospettiva museografica », <hi
+rend="italic"
+>Schede Umanistiche</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 1989, p. 81-92.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Boislile</hi
+> Arthur de, « Rapport de M. de Boislile sur une communication de M. Destandau », <hi
+rend="italic"
+>Bulletin historique et philologique du Comité des travaux historiques et scientifiques</hi
+>, 1905, p. 356-359.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Boiteux</hi
+> Martine, « Le palais Farnèse : la représentation et l’identité », <hi
+rend="italic"
+>Mélanges de l’École française de Rome</hi
+>, vol. 122, n<hi
+rend="sup"
+>o</hi
+> 2, 2010, p. 311-338.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Rituels funéraires pontificaux », <hi
+rend="italic"
+>Studi romani</hi
+>, vol. 60, n<hi
+rend="sup"
+>o</hi
+> 1-4, 2012, p. 31-56.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Borello</hi
+> Benedetta, « Alleanze matrimoniali e mobilità sociale e geografica. Il caso dei Pamphilj (<hi
+rend="small-caps"
+>XV</hi
+>-<hi
+rend="small-caps"
+>XVII</hi
+> secolo) », <hi
+rend="italic"
+>Mélanges de l’École française de Rome</hi
+>, vol. 115, n<hi
+rend="sup"
+>o</hi
+> 1, 2003, p. 345-366.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Borghetti</hi
+> Vincenzo, « Music and the Representation of Princely Power in the Fifteenth and Sixteenth Century », <hi
+rend="italic"
+>Acta Musicologica</hi
+>, vol. 80, n<hi
+rend="sup"
+>o</hi
+> 2, 2008, p. 179‑214.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bouyé</hi
+> Édouard, « Les armoiries pontificales à la fin du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle : construction d’une campagne de communication », <hi
+rend="italic"
+>Médiévales</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 44, 2003, p. 177 et 178, http://medievales.revues.org/938.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Bühler</hi
+> Curt F., « Studies in the Early Editions of the “Fiore Di Virtù” », <hi
+rend="italic"
+>The Papers of the Bibliographical Society of America</hi
+>, vol. 49, n<hi
+rend="sup"
+>o</hi
+> 4, 1955, p. 315-339.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Busiri</hi
+> <hi
+rend="small-caps"
+>Vici</hi
+> Andrea, « L’erudito della corte russa del Settecento, Ivan Ivanovitch Schouvaloff, ed i suoi rapporti con Roma », <hi
+rend="italic"
+>L’Urbe</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 39, 1976, p. 39-52.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Campbell</hi
+> Tom, « Pope Leo X’s Consistorial “letto de paramento” and the Boughton House Cartoons », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, vol. 138, n<hi
+rend="sup"
+>o</hi
+> 1120, 1996, p. 436-445.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Carlevaris</hi
+> Laura, « La Sala Clementina: La costruzione pittorica delle pareti dallo schema compositivo alla griglia prospettica », <hi
+rend="italic"
+>Bollettino-Monumenti, Musei e Gallerie Pontificie</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 21, 2001, p. 320-361.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Cavazzini</hi
+> Patrizia, « Towards a Chronology of Agostino Tassi », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 144, 2002, p. 396-408<hi
+rend="italic"
+>.</hi
+></bibl
+><bibl
+><hi
+rend="small-caps"
+>Cavicchioli</hi
+> Sonia, « Il cardinale Pietro Vidoni e l’omaggio ad Alessandro <hi
+rend="small-caps"
+>VII</hi
+> Chigi nell’appartamento del legato a Bologna (1665). Una decorazione politica », <hi
+rend="italic"
+>Studi di Storia dell’Arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 29, 2018, p. 167-178.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Coupe</hi
+> C., « An Old Picture », <hi
+rend="italic"
+>The Month</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 84, 1895, p. 229–242.</bibl
+><bibl
+><hi
+rend="small-caps"
+>De Gregori</hi
+> Luigi, « Piazza Navona prima d’Innocenzo X », <hi
+rend="italic"
+>Roma</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 4, 1926, p. 14-25 et 97-116.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Dang</hi
+> Benjamin, « Le bouffon, un héraut du vide », <hi
+rend="italic"
+>Les chantiers de la création. Revue pluridisciplinaire en lettres, langues, arts et civilisations</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 13, 12 juillet 2021, <ref
+target="https://doi.org/10.4000/lcc.4119"
+>https://doi.org/10.4000/lcc.4119</ref
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Deonna</hi
+> Waldemar. « L’abeille et le roi », <hi
+rend="italic"
+>Revue belge d’archéologie et d’histoire de l’art</hi
+>, vol. 25, 1956, p. 105‑131.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Elam</hi
+> Caroline, « Art and Diplomacy in Renaissance Florence », <hi
+rend="italic"
+>RSA Journal</hi
+>, vol. 136, n<hi
+rend="sup"
+>o</hi
+> 5387, 1988, p. 813‑826.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ewart</hi
+> <hi
+rend="small-caps"
+>Witcombe</hi
+> Christopher L. C., « A new fresco by Cherubino Alberti in the Vatican », <hi
+rend="italic"
+>Notes in the History of Art</hi
+>, vol. 4, n<hi
+rend="sup"
+>o</hi
+> 1, 1984, p. 12-16.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Cesare Ripa and the Sala Clementina », <hi
+rend="italic"
+>Journal of the Warburg and Courtauld Institutes</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 55, 1992, p. 277-282.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fagiolo</hi
+> Marcello, « Borromini in Laterano. Il Nuovo Tempio per il Concilio universale », <hi
+rend="italic"
+>L’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 13, 1971, p. 1-46.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Federici</hi
+> Fabrizio, « Il trattato <hi
+rend="italic"
+>Delle memorie sepolcrali</hi
+> del cavalier Francesco Gualdi: un collezionista del Seicento e le testimonianze figurative medievali », <hi
+rend="italic"
+>Prospettiva</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 110-111, avril-juin 2003, p. 149-159.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Battaglie per la tutela nella Roma barocca: Francesco Gualdi e la difesa delle “memorie antiche” », <hi
+rend="italic"
+>Studi Romani</hi
+>, vol. <hi
+rend="small-caps"
+>LXII</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1-4, 2014, p. 149-172.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Feinblatt</hi
+> Ebria, « Giovan Battista Cavalcaselle: a Drawing identified », <hi
+rend="italic"
+>Master Drawings</hi
+>, vol. V, n<hi
+rend="sup"
+>o</hi
+> 2, 1967, p. 569-576.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Franzoni</hi
+> Claudio et <hi
+rend="small-caps"
+>Tempesta</hi
+> Alessandra, « Il museo di Francesco Gualdi nella Roma del Seicento tra raccolta privata ed esibizione pubblica », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, vol. <hi
+rend="small-caps"
+>LXXVII</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 73, 1992, p. 1-42.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fumagalli</hi
+> Camillo, « Dello stemma di Papa Giovanni <hi
+rend="small-caps"
+>XXIII</hi
+>. La genealogia dei Roncalli, Ronco e Roncaglia », <hi
+rend="italic"
+>Atti dell’Ateneo di Scienze, Lettere ed Arti di Bergamo</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 34, 1968-1969, p. 11-22.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Fusconi</hi
+> Giulia, « Da Bartoli a Piranesi: spigolature dai Codici Ottoboniani Latini della Raccolta Ghezzi », <hi
+rend="italic"
+>Xenia Antiqua</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 1994, p. 145-172.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gentile</hi
+> Luisa Clotilde, « La diffusion du capo dell'Impero dans l’Italie du nord », <hi
+rend="italic"
+>Armas e troféus</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 20, 2018, p. 109-138.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Gnoli</hi
+> Umberto, « <hi
+rend="italic"
+>Nobiltà romana e marchi mercantili nel Medioevo »</hi
+>, <hi
+rend="italic"
+>L’Urbe</hi
+>, vol. <hi
+rend="small-caps"
+>VIII</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 11-12, 1943, p. 15-32.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Harvey</hi
+> J. H., « The Wilton Diptych: A Re-examination », <hi
+rend="italic"
+>Archaeologia</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 98, 1961, p. 1-28.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hermann</hi
+> <hi
+rend="small-caps"
+>Fiore</hi
+> Kristina, « Giovanni Albertis Kunst und Wissenschaft der Quadratur. Eine Allegorie in der Sala Clementina des Vatikan », <hi
+rend="italic"
+>Mitteilungen des Kunsthistorisches Institutes in Florens</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 22, 1978, p. 61-84.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Klein</hi
+> Robert, « La théorie de l’expression figurée dans les traités italiens sur les <hi
+rend="italic"
+>Imprese</hi
+>, 1555-1612 », <hi
+rend="italic"
+>Bibliothèque d’humanisme et Renaissance</hi
+>, vol. 19, n<hi
+rend="sup"
+>o</hi
+> 2, 1957, p. 320-341.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Kruse</hi
+> Jeremy, « Hunting, Magnificence and the Court of Leo X », <hi
+rend="italic"
+>Renaissance Studies</hi
+>, vol. 7, n<hi
+rend="sup"
+>o</hi
+> 3, 1993, p. 243‑257.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lanzoni</hi
+> Francesco, « I titoli presbiterali di Roma antica nella storia e nella leggenda », <hi
+rend="italic"
+>Rivista di archeologia cristiana</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 2, 1925, p. 247-250.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Larraz</hi
+> Camille, « La réception tardive de l’art bellifontain dans le Comtat Venaissin : le cas du graveur Jean Bœuf (<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Nouvelles de l’estampe</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 268, décembre 2022, <ref
+target="https://doi.org/10.4000/estampe.3641"
+>https://doi.org/10.4000/estampe.3641</ref
+>.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lartigaut</hi
+> Jean, « Sur la date de construction de la collégiale de Castelnau-Bretenoux », <hi
+rend="italic"
+>Bulletin de la Société des études du Lot</hi
+>, vol. XCVIII, 1977, p. 167-168.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lavaur</hi
+> <hi
+rend="small-caps"
+>De</hi
+> <hi
+rend="small-caps"
+>Sainte</hi
+>-<hi
+rend="small-caps"
+>Fortunade</hi
+> Henri de, « Documents sur la baronnie de Castelnau de Bretenoux », <hi
+rend="italic"
+>Bulletin de la Société scientifique</hi
+>,<hi
+rend="italic"
+> historique et archéologique de la Corrèze</hi
+>, vol. 34, n<hi
+rend="sup"
+>o</hi
+> 1, 1912, p. 353-403.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Leone</hi
+> Stéphanie, « Cardinal Pamphilj Builds a Palace: Self-Representation and Familial Ambition in Seventeenth-Century Rome », <hi
+rend="italic"
+>Journal of the Society of Architectural Historians</hi
+>, vol. 63, n<hi
+rend="sup"
+>o</hi
+> 4, 2004, p. 440-471.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Lévi</hi
+>-<hi
+rend="small-caps"
+>Strauss</hi
+> Claude, « L’efficacité symbolique », <hi
+rend="italic"
+>Revue d’histoire des religions</hi
+>, vol. 135, n<hi
+rend="sup"
+>o</hi
+> 1, 1949, p. 5-27.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Loskoutoff</hi
+> Yvan, « Le symbolisme des <hi
+rend="italic"
+>palle</hi
+> médicéennes à la villa Madama », <hi
+rend="italic"
+>Journal des savants</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 2, 2001, p. 351-391.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Hercule et Atlas à Rome puis à Modène, Un présent diplomatique du cardinal Francesco degli Albizzi au cardinal Mazarin », <hi
+rend="italic"
+>Dix-septième siècle</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 241, octobre-décembre 2008, p. 677-708.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Regrets et pasquinades, Le cycle de Jules <hi
+rend="small-caps"
+>III</hi
+> dans le recueil de Du Bellay », <hi
+rend="italic"
+>Revue d’histoire littéraire de la France</hi
+>, vol. 123, n<hi
+rend="sup"
+>o</hi
+> 1, 2023, p. 5-24.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Macioce</hi
+> Stefania, « Per un’introduzione al pontificato di Clemente <hi
+rend="small-caps"
+>VIII</hi
+> Aldobrandini (1592-1605): politica e committenza », <hi
+rend="italic"
+>Bollettino della Deputazione di Storia Patria per l’Umbria</hi
+>, vol. 111, n<hi
+rend="sup"
+>o</hi
+> 1-2, 2014, p. 709-726 et p. 1412-1413.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Mattingly</hi
+> Harold, « “Fel. Temp. Reparatio” », <hi
+rend="italic"
+>The Numismatic Chronicle and Journal of the Royal Numismatic Society</hi
+>, vol. 5, n<hi
+rend="sup"
+>o</hi
+> 13, 1933, p. 182-202.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Mc</hi
+> <hi
+rend="small-caps"
+>Phee</hi
+> Sarah, « A new sketch-book by Filippo Juvarra », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 135, 1993, p. 346-350.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Filippo Juvarra: a new volume of drawings from the Roman years », <hi
+rend="italic"
+>Studi piemontesi</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 22, 1993, p. 377-383.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Medvedkova</hi
+> Olga, «<ref
+target="https://fr.wikipedia.org/wiki/Š"
+> Š</ref
+>uvalov à Rome (1765-1774), Histoire d’une dédicace », <hi
+rend="italic"
+>Cahiers du monde russe et soviétique</hi
+>, vol. 52, n<hi
+rend="sup"
+>o</hi
+> 1, 2011, p. 45-73.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Messa</hi
+> Pietro, « Il motto di Giovanni XXIII: obbedienza e pace », <hi
+rend="italic"
+>Forma Sororum</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 50, 2013, p. 250-253.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Moureau</hi
+> Emmanuel, « Les collégiales du Quercy et la Curie pontificale du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle », <hi
+rend="italic"
+>Bulletin de la société archéologique et historique de Tarn-et-Garonne</hi
+>, vol. 145, 2020, p. 19-48.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nassiet</hi
+> Michel, « Signes de parenté signes de seigneurie : un système idéologique », <hi
+rend="italic"
+>Mémoires de la Société d’histoire et d’archéologie de Bretagne</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 67, 1991, p. 175-232.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Nova</hi
+> Alessandro, « Bartolomeo Ammannati e Prospero Fontana a Palazzo Firenze. Architettura e emblemi per Giulio <hi
+rend="small-caps"
+>III</hi
+> Del Monte », <hi
+rend="italic"
+>Ricerche di Storia dell’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 21, 1983, p. 53-76.</bibl
+><bibl
+><hi
+rend="small-caps"
+>O’Bryan</hi
+> Robin, « The Medici Pope, Curative Puns, and the Panacean Dwarf in the Sala di Costantino », <hi
+rend="italic"
+>Secac Review</hi
+>, vol. 16, n<hi
+rend="sup"
+>o</hi
+> 5, p. 590-607.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pansier</hi
+> Pierre, « Les débuts de l’imprimerie à Avignon (<hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Mémoires de l’Académie de Vaucluse</hi
+>, vol. XIX, n<hi
+rend="sup"
+>o</hi
+> 2, 1919, p. 153-179.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Panza</hi
+> Pierluigi, « L’araldica e Giovan Battista Piranesi », <hi
+rend="italic"
+>Rivista del Collegio araldico</hi
+>, 2017, p. 142-154.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pastoureau</hi
+> Michel, « Aux origines des hachures héraldiques (<hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle) », <hi
+rend="italic"
+>Revue française d’héraldique et de sigillographie</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 65, 1995, p. 21-31.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Perini</hi
+> <hi
+rend="small-caps"
+>Folesani</hi
+> Giovanna, « Pittura e poesia, arti sorelle nella Bologna rinascimentale e barocca », <hi
+rend="italic"
+>Letteratura e arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 18, 2020, p. 67-80.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Pinelli</hi
+> Antonio, « <hi
+rend="italic"
+>La philosophie des images</hi
+>. Emblemi e imprese fra manierismo e barocco », <hi
+rend="italic"
+>Ricerche di storia dell’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1-2, 1976, p. 3-28.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Preimesberger</hi
+> Rudolf, « Obeliscus Pamphilius. Beitrage zur Vorgeschichte und Ikonographie des Vierstromebrunnes auf Piazza Navona », <hi
+rend="italic"
+>Münchner Jahrbuch der Bildenden Kunst</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 25, 1974, p. 77-162.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « “Pontifex Romanus per Aeneam Praesignatus”, Die Galleria Pamphilj und ihre Fresken », <hi
+rend="italic"
+>Romisches Jahrbuch fur Kunstgeschichte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 16, 1976, p. 221-287.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ravaioli</hi
+> Davide, « Pitture murali di Francesco Lola sulla facciata del Palazzo Comunale », <hi
+rend="italic"
+>Arte a Bologna</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 6, 2007, p. 133-136.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Righini</hi
+> Davide, « Iconografie celebrative. Gli emblemi e i miti raffigurati nelle sale di rappresentanza del Palazzo Pubblico di Bologna (secoli <hi
+rend="small-caps"
+>XV</hi
+>-<hi
+rend="small-caps"
+>XVIII</hi
+>) », <hi
+rend="italic"
+>Arte a Bologna. Bollettino dei Musei Civici d’Arte Antica</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 7-8, 2010-2011, p. 128-140.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Roland</hi
+> Martin et <hi
+rend="small-caps"
+>Zajic</hi
+> Andreas, « Les chartes médiévales enluminées dans les pays d’Europe centrale », <hi
+rend="italic"
+>Bibliothèque de l’École des chartes</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 169, 2011, p. 151-253.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rolet</hi
+> Anne, « Aux sources de l’emblème : blasons et devises », <hi
+rend="italic"
+>Littérature</hi
+>, vol. 145, n<hi
+rend="sup"
+>o</hi
+> 1, 2007, p. 53-78.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Romani</hi
+> Valentino, « Per la storia dell’editoria italiana del Cinquecento: le edizioni romane “In aedibus sanctae Brigidae (1553-1557)” », <hi
+rend="italic"
+>Rara Volumina</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1, 1998, p. 23-36.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ronzani</hi
+> Rocco, « Note di sigillografia dell’ordine di sant’Agostino », <hi
+rend="italic"
+>Subsidia Augustiniana Italica</hi
+> <hi
+rend="small-caps"
+>II</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1, 2009, p. 22-25.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Nota storico-iconografica sulla committenza del cardinale Benedetto Giustiniani in Santa Prisca all’Aventino », <hi
+rend="italic"
+>Studi Romani</hi
+>, à paraître.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rossi</hi
+> Giovanni Battista de, « Della casa d’Aquila e Prisca all’Aventino », <hi
+rend="italic"
+>Bullettino di archeologia cristiana</hi
+>, vol. 3, 1867, p. 44-47.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, « Priscilla e gli Acilii Glabrioni. § <hi
+rend="small-caps"
+>VIII</hi
+>, Aquila e Prisca e gli Acilii Glabrioni », <hi
+rend="italic"
+>Bullettino di archeologia cristiana</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 6, 1888-1889, p. 128-133.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Rouchon</hi
+> Olivier, « Rituels publics, souveraineté et identité citadine. Les cérémonies d’entrée en Avignon (<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Cahiers de la Méditerranée</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 77, 2008, p. 39-59, https://journals.openedition.org/cdlm/4362.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Salvestrini</hi
+> Francesco, « L’apporto dei Vallombrosani e dei Camaldolesi all’edificazione della marina toscana (seconda metà del XVII-anni ’20 del XVIII secolo) », <hi
+rend="italic"
+>Archivio Storico Italiano</hi
+>, vol. 156, n<hi
+rend="sup"
+>o</hi
+> 2, 1998, p. 307-329.</bibl
+><bibl
+>—, « La storiografia sul movimento e sull’Ordine monastico di Vallombrosa », <hi
+rend="italic"
+>Quaderni Medievali</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 53, 2002, p. 294-323.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Savorelli</hi
+> Alessandro, « “Les fleurs de lys y sont partout”. Origine et signification du chef d’Anjou en Italie (<hi
+rend="small-caps"
+>xiii</hi
+>-<hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Armas e troféus</hi
+>, vol. 20, 2018, p. 93-107.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Schwarzenberg</hi
+> Erkinger, « Glovis, impresa di Giuliano de’ Medici », <hi
+rend="italic"
+>Mitteilungen des Kunsthistorischen Institutes in Florenz</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 39, 1995, p. 140-166.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Sickel</hi
+> Lothar, « L’antica cappella Casali in Sant’Agostino a Roma in un disegno di Taddeo Kuntz: una testimonianza per un affresco scomparso del Pintoricchio? », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 43, 2020, p. 59-78.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Tacconi</hi
+> Marica, « Appropriating the Instruments of Worship: The 1512 Medici Restoration and the Florentine Cathedral », <hi
+rend="italic"
+>Renaissance Quarterly</hi
+>, vol. 56, n<hi
+rend="sup"
+>o</hi
+> 2, 2003, p. 333-376.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Van</hi
+> <hi
+rend="small-caps"
+>Der</hi
+> <hi
+rend="small-caps"
+>Heide</hi
+> Klaas, « How Many Paths Must a Choirbook Tread Before it Reaches the Pope? », <hi
+rend="italic"
+>Journal of the Alamire Foundation</hi
+>, vol. 11, n<hi
+rend="sup"
+>o</hi
+> 1‑2, 2019, p. 47‑70.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Visceglia</hi
+> Maria Antonietta, « Giubilei tra pace e guerre (1625-1650) », <hi
+rend="italic"
+>Roma moderna e contemporanea</hi
+>, vol. V, n<hi
+rend="sup"
+>o</hi
+> 2-3, 1997, p. 431-474.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Vitsthum</hi
+> Walter, « A comment on the Iconography of Pietro da Cortona’s Barberini Ceiling », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, vol. 103, n<hi
+rend="sup"
+>o</hi
+> 703, octobre 1961, p. 427-433, repris dans Susan M. Dixon (dir.), <hi
+rend="italic"
+>Italian Baroque Art. Blackwell Anthologies in Art History</hi
+>, Malden-Oxford, Carlton, Blackwell Publishing, 2008, p. 201-208.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Volpi</hi
+> Caterina, « La collezione Ludovisi come “Scuola del mondo”. Il ruolo di Agucchi, Marino, Valesio, Guercino e Domenichino », <hi
+rend="italic"
+>Storia del’arte – « Guercino nel Casino Ludovisi (1621-1623) »</hi
+>, vol. 157, n<hi
+rend="sup"
+>o</hi
+> 1, 2022, p. 118-133.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Weber</hi
+> Christof, « Papstgeschichte und Genealogie », <hi
+rend="italic"
+>Römische Quartalschrift</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 84, 1989, p. 331-400.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Zega</hi
+> Raffaella, « La “Raccolta di varie targhe di Roma...” nell’attività di Filippo Juvarra », <hi
+rend="italic"
+>Archivum Arcis</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 2, 1989, p. 10-51.</bibl
+></div
+><div
+type="section2"
+xml:id="div21"
+><head
+>Thèses et mémoires</head
+><bibl
+><hi
+rend="small-caps"
+>Abromson</hi
+> Morton C., <hi
+rend="italic"
+>Painting in Rome during the Reign of Clement VIII (1592-1607), a Documentary Study</hi
+>, thèse de doctorat, Columbia University, 1976.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Beneš</hi
+> Mirka, <hi
+rend="italic"
+>The Villa Pamphilj (1630,1670): Family, Gardens, and Land in Papal Rome</hi
+>, thèse de doctorat, Université de Yale, 1989.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Broucke</hi
+> Paul-François, <hi
+rend="italic"
+>Les prééminences héraldiques de la cathédrale de Quimper</hi
+>, mémoire de master I, Université de Bretagne Occidentale, 2010.</bibl
+><bibl
+><hi
+rend="bold"
+>—</hi
+>, <hi
+rend="italic"
+>La cathédrale de Saint-Pol de Léon : le chantier des parties orientales du </hi
+><hi
+rend="small-caps italic"
+>xi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, mémoire de master <hi
+rend="small-caps"
+>II</hi
+>, Université de Bretagne Occidentale, 2012.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Hablot</hi
+> Laurent, <hi
+rend="italic"
+>Affinités héraldiques</hi
+>. <hi
+rend="italic"
+>Concessions, augmentations et partages d’armoiries en Europe au Moyen Âge</hi
+>, mémoire d’habilitation à diriger des recherches, Michel Pastoureau (dir.), École pratique des hautes études, 2015.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Harwood</hi
+> <hi
+rend="small-caps"
+>Wood</hi
+> Carolyn, <hi
+rend="italic"
+>The Indian Summer of Bolognese Painting: Gregory XV (1621-23) and Ludovisi art patronage in Rome</hi
+>, thèse de doctorat, The University of North Carolina, 1988.</bibl
+><bibl
+><hi
+rend="small-caps"
+>Ziller</hi
+> <hi
+rend="small-caps"
+>Camenietzki</hi
+> Carlos, <hi
+rend="italic"
+>L’harmonie du monde au </hi
+><hi
+rend="small-caps italic"
+>xvii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle. Essai sur la pensée scientifique d’Athanasius Kircher</hi
+>, thèse de doctorat, Maurice Clavelin (dir.), Université de Paris <hi
+rend="small-caps"
+>IV</hi
+>, 1995.</bibl
+></div
+></div
+></body
+></text
+></TEI
+>

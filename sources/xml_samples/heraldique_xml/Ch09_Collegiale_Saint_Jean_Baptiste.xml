@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>La collégiale Saint-Jean-Baptiste puis Saint-Louis de Castelnau-Bretenoux : un lien étroit et discret avec la papauté</title
+><author
+role="aut"
+><persName
+><forename
+>Emmanuel</forename
+><surname
+>Moureau</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-17"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>La collégiale Saint-Jean-Baptiste puis Saint-Louis de Castelnau-Bretenoux : un lien étroit et discret avec la papauté</p
+><p
+rend="author-aut"
+>Emmanuel Moureau</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Si le château féodal de Castelnau-Bretenoux marque le paysage du nord du Lot<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Commune de Prudhomat.</p
+></note
+>, imposant vaisseau de pierres rouges qui rappelle encore l’important pouvoir de ses seigneurs, l’humble collégiale Saint-Louis<note
+n="2"
+place="foot"
+xml:id="ftn33"
+><p
+>Le vocable de Saint-Louis s’est substitué à celui primitif de Saint-Jean-Baptiste après le don à la fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle d’un bras reliquaire de saint Louis par Louise de Bretagne, épouse de Guy de Castelnau et dame d’atour de Catherine de Médicis.</p
+></note
+>, blottie aux pieds de ses remparts, passe inaperçue. Elle conserve pourtant un riche décor héraldique supporté par des clés de voûte, des vitraux et surtout les imposantes stalles sculptées. Sur ces dernières se sont glissées de discrètes allusions à deux bienfaiteurs du chapitre : le pape Jules II et l’un de ses cardinaux, François Guillaume de Clermont-Lodève.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Une famille et une collégiale</head
+><p
+xml:id="p2"
+>La famille des Castelnau est connue en Quercy depuis la donation à l’abbaye de Cluny du monastère de Beaulieu-sur-Dordogne par Hugues de Castelnau en 1076<note
+n="3"
+place="foot"
+xml:id="ftn34"
+><p
+>Archives départementales du Lot, Cahors : F 365. Pour le texte, voir Maximin Deloche, <hi
+rend="italic"
+>Cartulaire de l’abbaye de Beaulieu (en Limousin)</hi
+>, Paris, Imprimerie impériale, 1859, p. XXIV. </p
+></note
+>. Les barons de Castelnau ont bâti vers 1100 un premier château, remplacé au <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle par l’imposante forteresse qui marque toujours le paysage aujourd’hui. En 1280, après d’âpres luttes, les Castelnau se sont émancipés de la tutelle des vicomtes de Turenne en obtenant le privilège de dépendre directement du roi de France. En 1297, Raymond de Calmont d’Olt, évêque de Rodez et héritier de la seigneurie familiale depuis le décès de son frère Bégon, institue comme héritiers universels ses petits-neveux Hugues de Castelnau et Pierre Pelet<note
+n="4"
+place="foot"
+xml:id="ftn35"
+><p
+>Hugues est le fils d’Alaisie de Calmont (fille de Bégon) et de Matfred de Castelnau ; Pierre le fils d’Alix de Calmont (fille de Bégon) et de Raymond Pellet. Voir Hippolyte de Barrau, <hi
+rend="italic"
+>Documents historiques et généalogiques sur les familles et les hommes remarquables du Rouergue dans les temps anciens et modernes</hi
+>, Rodez, impr. de N. Ratery, 1853-1860, 4 vol., t. 1, p. 385.</p
+></note
+>. Ce dernier est mort avant son père Raymond, qui lègue en 1315 par son testament tous ses biens à Hugues de Castelnau. En 1395, Jean I<hi
+rend="sup"
+>er</hi
+> de Castelnau institue comme légataire universel, aux préjudices des enfants de sa fille, son neveu Pons de Caylus<note
+n="5"
+place="foot"
+xml:id="ftn36"
+><p
+>Il est le fils de Déodat de Caylus et d’Hélène de Castelnau. Voir Hyppolite de Barrau, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 386.</p
+></note
+>, issu d’une famille du Rouergue, à condition que celui-ci substitue à ses armes celles des Castelnau-Calmont. Pons épouse le 28 janvier 1401 Bourguine de Clermont-Lodève. Le couple a six enfants, dont Pons, qui relève le nom et les armes des Clermont-Lodève, Jean, évêque de Cahors (1438-1460) et Antoine, qui poursuit le lignage paternel. Il épouse en 1436 Catherine de Chauvigny qui lui donne notamment Guy, évêque de Cahors puis de Périgueux et Jean II de Castelnau. Du mariage de ce dernier avec Marie de Culant<note
+n="6"
+place="foot"
+xml:id="ftn37"
+><p
+>L’épouse de Jean II de Castelnau est souvent prénommée Anne. Toutefois, elle est figurée sur un vitrail de la collégiale de Prudhomat avec sa sainte patronne Marie Jacobé. </p
+></note
+> naissent Jacques et Jean de Castelnau-Calmont.</p
+><p
+xml:id="p3"
+>Dans son testament, rédigé le 5 février 1505, Jean II de Castelnau exprime son désir et celui de son épouse de fonder une collégiale avec huit chanoines dirigés par un doyen dont les prières quotidiennes soutiendront les âmes de ses parents, de son épouse et de lui-même ainsi que de l’ensemble de leur lignage. La bulle de fondation du pape Jules II précise que le baron de Castelnau souhaite ainsi accumuler des trésors dans le ciel et rendre pérenne dans les cieux et pour l’éternité son passage sur la terre<note
+n="7"
+place="foot"
+xml:id="ftn38"
+><p
+>Archives nationales, ms. Fr. 23154, fol. 273v.</p
+></note
+>. La nouvelle fondation est placée sous le vocable et la protection de saint Jean-Baptiste, patron de Jean II. Cette nouvelle communauté religieuse remplacera les six chapellenies perpétuelles, destinées à six prêtres, que le baron a auparavant instituées au sein de la chapelle de son château. Les chanoines doivent prendre place dans un premier temps au sein de la chapelle castrale<note
+n="8"
+place="foot"
+xml:id="ftn39"
+><p
+>La chapelle du château de Castelnau-Bretenoux existe encore. Des stalles sont disposées de part et d’autre de l’autel, témoins de la présence des chanoines de la collégiale avant la construction de cette dernière.</p
+></note
+>, en attendant que soit construit un édifice spécifique et plus digne contre les murailles de ce dernier. Ce type de fondation ecclésiastique est assez surprenant en Quercy. Il n’existe en effet que très peu de collégiales séculières dans cette ancienne province qui n’a pas été – contrairement à la plupart des autres territoires du royaume –, entre le <hi
+rend="small-caps"
+>xi</hi
+><hi
+rend="sup"
+>e</hi
+> et le début du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, un territoire propice à ce type d’établissement religieux, et il n’en existe aucune fondée par de simples laïcs. Plusieurs raisons expliquent ce phénomène : la forte présence des moines bénédictins, aux anciennes et puissantes maisons, assortie à un contexte politique agité sur plusieurs décennies et à une crise spirituelle qui conduit à un développement d’hérésies et d’un sentiment de méfiance vis-à-vis de l’Église. Il faut attendre la papauté d’Avignon pour que soit fondé le premier chapitre de chanoines de ce type, Saint-Étienne du Tescou à Montauban, en 1318. Le cardinal des Prés fonde par la suite le chapitre de Montpezat entre 1323 et 1343, Bernard Carit, évêque d’Évreux, la modeste collégiale Notre-Dame de Grâce de Puylaroque en 1366 et enfin en 1425 Bernard de Maumont, évêque de Tulle, érige en collégiale les prêtres desservants Saint-Sauveur de Rocamadour<note
+n="9"
+place="foot"
+xml:id="ftn40"
+><p
+>Emmanuel Moureau, « Les collégiales du Quercy et la Curie pontificale du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle », <hi
+rend="italic"
+>Bulletin de la société archéologique et historique de Tarn-et-Garonne</hi
+>, vol. 145, 2020, p. 19-48.</p
+></note
+>.</p
+><p
+xml:id="p4"
+>Pourquoi Jean II et sa femme portent-ils leur choix sur un type d’établissement ecclésiastique qui n’a jamais été prisé en Quercy ? Une hypothèse peut être suggérée en examinant la vie non pas du fondateur mais de son épouse. Marie de Culan est issue d’une ancienne famille du Berry, dont l’aïeul Louis a combattu aux côtés de Jeanne d’Arc. Elle est la fille de Philippe, seigneur de Jaloignes, maréchal de France en 1441 et d’Anne de Beaujeu. Un de ses oncles, Charles de Culan, a épousé en secondes noces Catherine de Castelnau, fille d’Antoine et sœur de son mari Jean II de Castelnau. Or, cette même Catherine de Castelnau avait épousé en premières noces Louis de Culan, cousin de Marie. Ce dernier, conseiller et chambellan du roi, a fondé en 1480 dans son château de Culan (au diocèse de Bourges) une collégiale castrale, réservée à son propre usage et desservie par six chanoines. François de Lignières, époux de Jeanne de Beaujeu, tante de Marie de Culan, a lui aussi fondé près de sa demeure du Berry un chapitre de chanoines similaire<note
+n="10"
+place="foot"
+xml:id="ftn41"
+><p
+>Julien Noblet, <hi
+rend="italic"
+>En perpétuelle mémoire. Collégiales castrales et Saintes-Chapelles à vocation funéraire en France (1450-1560)</hi
+>, Rennes, PUR, 2009.</p
+></note
+>. Le choix de Jean II de Castelnau de privilégier un chapitre canonial séculier comme fondation familiale et mémorielle n’est donc pas incongru et lui a très certainement été inspiré par son épouse Marie, dont la famille avait dans un passé très proche fondé des collégiales.</p
+><p
+xml:id="p5"
+>Cette nouvelle église ne relève toutefois que du seul seigneur : il s’agit là d’une véritable chapelle castrale à usage privé. Le droit de patronage du chapitre, qui inclut la nomination des chanoines, est réservé à la famille du fondateur. Les seigneurs de Castelnau, tout comme à Puylaroque, ne sont pas inhumés dans l’église Saint-Jean mais dans le cimetière avoisinant, au sein d’une modeste chapelle funéraire. La collégiale de Castelnau est là pour perpétuer le souvenir de ses deux fondateurs, mais les chanoines se retrouvent en quelque sorte les gardiens d’un tombeau vide.</p
+><p
+xml:id="p6"
+>Jean II de Castelnau a obtenu de l’évêque de Cahors, Antoine de Luzech (1501-1510), la reconnaissance de sa collégiale, mais il souhaite toutefois que l’approbation soit également donnée par le pape lui-même, pour renforcer le prestige de la nouvelle fondation. Ce type de demande est assez courante dans les étapes de création de chapitres collégiaux séculiers, notamment dans le centre de la France, comme l’a exposé Julien Noblet dans sa thèse<note
+n="11"
+place="foot"
+xml:id="ftn42"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>.</p
+></note
+>. Pour la collégiale Saint-Jean-Baptiste, la confirmation pontificale est accordée en 1506, soit très rapidement après le vœu de Jean II, ce qui suggère une intervention directe auprès du souverain pontife. La bulle de Jules II précise que Guy de Castelnau, alors protonotaire apostolique, a accepté de se démettre de son bénéfice de curé de l’église prieurale Saint-Michel de Loubéjou en faveur de la nouvelle fondation<note
+n="12"
+place="foot"
+xml:id="ftn43"
+><p
+>Ms. Fr. 23154, fol. 273r.</p
+></note
+>. Il semble toutefois qu’un autre personnage plus influent que lui soit intervenu auprès de la Curie. Par comparaison, Louis II de la Trémouille a obtenu en 1516 des privilèges du pape Léon X pour sa collégiale de Thouars, suite à une lettre envoyée par Louis XII. Jean Stuart intervient directement auprès du même pontife en 1520 pour sa Sainte-Chapelle de Vic-le-Comte<note
+n="13"
+place="foot"
+xml:id="ftn44"
+><p
+>Julien Noblet, <hi
+rend="italic"
+>op. cit</hi
+>., p. 78.</p
+></note
+>. Cette hypothèse est confirmée par la statuaire et les meubles héraldiques qui ornent les stalles de la collégiale de Prudhomat.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Un décor héraldique omniprésent et un paradis familial</head
+><p
+xml:id="p7"
+>Suite au testament de Jean II de Castelnau, décédé cette même année 1505, le chantier de la nouvelle collégiale Saint-Jean-Baptiste est lancé suivant son souhait. Jean Lartigaut a découvert dans les archives notariales deux prix-faits qui prouvent que les travaux ont débuté en 1507<note
+n="14"
+place="foot"
+xml:id="ftn45"
+><p
+>Jean Lartigaut, « Sur la date de construction de la collégiale de Castelnau-Bretenoux », <hi
+rend="italic"
+>Bulletin de la société des études du Lot</hi
+>, vol. XCVIII, 1977, p. 167-168.</p
+></note
+>. Les historiens et historiens de l’art qui se sont penchés sur la collégiale – les chanoines Poulbrière<note
+n="15"
+place="foot"
+xml:id="ftn46"
+><p
+>Jean-Baptiste Poulbrière, <hi
+rend="italic"
+>Notice historique et archéologique sur Castelnau-de-Bretenoux, Lot</hi
+>, Tulle, Imprimerie E. Crauffon, 1873.</p
+></note
+> et Gouzou<note
+n="16"
+place="foot"
+xml:id="ftn47"
+><p
+>Joseph-Simon Gouzou, <hi
+rend="italic"
+>Bretenoux en Haut-Quercy</hi
+>, Villefranche-de-Rouergue, Impr. Salingardes, 1955.</p
+></note
+>, Jacques Juillet<note
+n="17"
+place="foot"
+xml:id="ftn48"
+><p
+>Jacques Juillet, <hi
+rend="italic"
+>Les 38 barons de Castelnau : seconds barons chrétiens du royaume et leur baronnie, leur château, leurs églises</hi
+>, s. l., Imprimerie Fabrègue, 1971.</p
+></note
+> ou dernièrement Françoise Gatouillat<note
+n="18"
+place="foot"
+xml:id="ftn49"
+><p
+>Françoise Gatouillat, « Prudhomat. Église Saint-Louis, ancienne collégiale Saint-Jean-Baptiste », dans Michel Hérold (dir.), <hi
+rend="italic"
+>Corpus vitrearum. Les vitraux du midi de la France</hi
+>, Rennes, PUR, 2020, p. 238-240.</p
+></note
+> – pensaient que c’était Jacques de Castelnau, fils de Jean II et époux de Françoise de La Tour, fille d’Agnet IV de La Tour, vicomte de Turenne et d’Agnès de Beaufort<note
+n="19"
+place="foot"
+xml:id="ftn50"
+><p
+>Il l’a épousée le 1<hi
+rend="sup"
+>er</hi
+> février 1500. Voir Alexandre Bruel, <hi
+rend="italic"
+>Inventaire d'une partie des titres de famille et documents historiques de la maison de La Tour d'Auvergne conservés dans les papiers Bouillon pour faire suite aux inventaires rédigés par Baluze (2e pt.)</hi
+>, Paris, Archives nationales, 1905, p. 33. </p
+></note
+> qui avait initié et suivi le chantier de l’église. Toutefois, l’examen du décor héraldique des clés de voûtes de l’édifice permet d’avancer une autre hypothèse. En effet, la clé de voûte du chœur de l’église porte les armes des Castelnau-Calmont – écartelé en 1 et 3 de gueules au château d’or et en 2 et 4 d’azur au lion d’argent – timbrées d’une crosse et d’une mitre. Deux griffons ailés supportent l’écu et s’appuient sur un phylactère qui porte l’inscription suivante en onciales gothiques : « LAN MIL CINC C XIII » (fig. 120). La date ainsi donnée est très certainement celle de l’achèvement des travaux de l’église, qui peut même être affinée avant le 26 mai 1514, date du mariage dans cette collégiale de Pierre Guillaume de Clermont-Lodève et de Marguerite de La Tour-Turenne. Le fait que cette date symbolique soit associée aux armes de Guy de Castelnau-Calmont, évêque de Périgueux depuis 1511, tend à prouver que c’est bien ce prélat qui a exécuté les dernières volontés de son frère Jean II et mené à bien le chantier de construction de la collégiale Saint-Jean-Baptiste.</p
+><p
+xml:id="p8"
+>Les autres clés de voûtes de la nef de l’église sont toutes sculptées d’armoiries posées sur des réseaux flamboyants. Une première porte le blason familial des Castelnau-Calmont puis chacune des autres reprend un écu mi-parti qui rappelle les différents seigneurs du lieu et leurs alliances<note
+n="20"
+place="foot"
+xml:id="ftn51"
+><p
+>La polychromie actuelle des clés de voûtes, qui paraît dater du <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, ne tient pas compte des émaux des armoiries représentées et ne doit, de ce fait, pas être prise en compte. </p
+></note
+>. La généalogie familiale commence avec Antoine de Castelnau et Catherine de Chauvigny<note
+n="21"
+place="foot"
+xml:id="ftn52"
+><p
+>Leur contrat de mariage a été dressé le 16 août 1436 à Issoudun. Voir Gaspard Thaumas de La Thaumassière, <hi
+rend="italic"
+>Histoire de Berry</hi
+>, Bourges-Paris, F. Toubeau-Morel, 1689, p. 527.</p
+></note
+> : aux armes des Castelnau sont associées celles de son épouse, qui porte d’argent à la fasce de fusées de gueules au lambel de six pendants d’azur<note
+n="22"
+place="foot"
+xml:id="ftn53"
+><p
+>Voir notamment la base Sigilla pour les armes des Chauvigny de Brosse, http://www.sigilla.org/armoiries/chauvigny-25103.</p
+></note
+>. À la génération suivante, ce sont les armes de Marie de Culan qui sont associées à celle de son mari Jean II : d’azur semé de molettes d’or, chargé d’un lion du même surmonté d’un lambel du même<note
+n="23"
+place="foot"
+xml:id="ftn54"
+><p
+>Ces armoiries se retrouvent également sur la clé de voûte de la chapelle sud de la collégiale, portées par deux lions. </p
+></note
+>. Enfin, les armoiries de Jacques, baron de Castelnau en titre lors de l’achèvement des travaux de la collégiale en 1514 et de son épouse Françoise de La Tour-Turenne terminent la lignée<note
+n="24"
+place="foot"
+xml:id="ftn55"
+><p
+>Françoise de La Tour-Turenne portait un écartelé : en 1 et 3, d’azur semé de fleur de lys d’or à la tour d’argent maçonnée de sable ; en 2 et 4 bandé d’or et de gueules. </p
+></note
+>. Comme pour Guy de Castelnau, l’écu est supporté par deux aigles qui tiennent entre leurs becs un phylactère, dont la partie basse s’enroule sur un bâton écôté. L’ensemble est posé sur un fond échiqueté. Ce lignage ainsi figuré par l’héraldique sur les clés de voûtes de l’église, éléments architectoniques qui assurent l’équilibre et la stabilité de l’édifice, illustre la vocation même de la collégiale, qui est d’être le panthéon dynastique des Castelnau-Calmont, famille solide et prestigieuse.</p
+><p
+xml:id="p9"
+>Les vitraux qui ornent encore les baies du chœur de la collégiale complètent l’héraldique familiale. Jean II de Castelnau est figuré à genoux, revêtu d’une riche armure damasquinée et d’un tabard à ses armes. Ces dernières figurent également sur le prie-Dieu devant lequel il est agenouillé. Son saint patron, Jean-Baptiste, placé derrière lui, le désigne du doigt (fig. 121). Face à lui, son épouse Marie de Culan est présentée également par sa sainte patronne, Marie Jacobé, sœur légendaire de la Vierge, associée à ses deux enfants, saint Jean l’évangéliste et saint Jacques le Majeur. Les armoiries des Culan, initialement figurées sur le prie-Dieu, ont aujourd’hui disparu. Il manque également, déposées en 1949 lors d’une restauration des verrières, une représentation d’un chevalier en armure dorée, certainement Jacques de Castelnau, et son épouse Françoise de La Tour, dont les armes devaient également accompagner leur images<note
+n="25"
+place="foot"
+xml:id="ftn56"
+><p
+>Voir Françoise Gatouillat, <hi
+rend="italic"
+>op. cit.</hi
+></p
+></note
+>.</p
+><p
+xml:id="p10"
+>Le décor héraldique se poursuit sur les stalles de la collégiale<note
+n="26"
+place="foot"
+xml:id="ftn57"
+><p
+>Sur cet ensemble, voir Nelly Blaya et Nicolas Bru, <hi
+rend="italic"
+>Le mobilier des églises du Moyen Âge dans le Lot</hi
+>, Toulouse, Conseil général Midi-Pyrénées, 2014, p. 42 et 43.</p
+></note
+>. Cet ensemble remarquable en bois occupe encore la dernière travée de la nef avant le chevet (fig. 122). Deux grands corps se font face, chacun comportant treize sièges disposés sur deux rangées. Deux retours en équerre, à l’ouest, associés à une porte aujourd’hui disparue, isolaient à l’origine le chœur liturgique réservé aux chanoines de l’espace ouvert aux simples fidèles. Les appuie-mains et les miséricordes des stalles comportent un riche décor sculpté de personnages du quotidien ou d’animaux et les dorsaux des réseaux de remplages flamboyants aveugles. Les deux derniers panneaux des dorsaux situés près de l’autel sont toutefois ornés au nord par les armes de Guy de Castelnau-Calmont, timbrées de la crosse et de la mitre et soutenu par deux anges ; au sud des armoiries du baron de Castelnau, surmontées d’un casque à cimier avec la tête d’un lion, appuyées sur le même animal et supportées par un homme et une femme sauvages (fig. 123). Là encore, la présence appuyée des armes de Guy de Castelnau renforce l’hypothèse que ce prélat a suivi et accompagné les travaux de la collégiale, y compris la commande et la réalisation des sièges des chanoines.</p
+><p
+xml:id="p11"
+>D’autres armoiries sont présentes sur les stalles. Les parties supérieures des jouées placées au plus près de l’autel comportent, inscrites dans deux motifs circulaires, au nord les armes des Castelnau-Calmont et les armes mi-parti Castelnau-Culan (pour Jean II et sa femme) (fig. 124) ; au sud, le blason des Castelnau et celui mi-parti Castelnau-Rochefort (pour Jean III et son épouse Charlotte de Rochefort<note
+n="27"
+place="foot"
+xml:id="ftn58"
+><p
+>Charlotte de Rochefort, fille de Guy de Rochefort-Pluvant, chancelier de France, a épousé vers 1507 Jean III de Castelnau-Caumont. Elle portait comme armoiries d’azur semé de billettes d’or au chef d’argent chargé d’un lion léopardé de gueules. </p
+></note
+>). L’association des armoiries du fondateur de la collégiale et de Jean III de Castelnau nous permet ainsi de proposer que les sièges des chanoines ont été réalisés après le décès de Jacques de Castelnau, survenu en 1514 ou avant fin avril 1515<note
+n="28"
+place="foot"
+xml:id="ftn59"
+><p
+>Voir Henri de Lavaur de Sainte-Fortunade, « Documents sur la baronnie de Castelnau de Bretenoux », <hi
+rend="italic"
+>Bulletin de la Société scientifique, historique et archéologique de la Corrèze</hi
+>, vol. 34, n<hi
+rend="sup"
+>o</hi
+> 1, 1912, p. 353-403, ici p. 356.</p
+></note
+> et avant celui de Guy de Castelnau en 1523. Un détail supplémentaire pourrait affiner cette fourchette de datation déjà étroite. Le revers de l’un des motifs circulaires avec les armes de Jean II est en effet sculpté d’un dauphin (fig. 125). Or, cet animal héraldique ne figure pas dans le bestiaire traditionnel des Castelnau-Calmont. Le 15 février 1518 est né François de France, Dauphin de France et duc de Bretagne, fils du roi François I<hi
+rend="sup"
+>er</hi
+>. Le dauphin présent dans la collégiale de Prudhomat, vu les liens importants noués entre les Castelnau-Calmont et les familles alliées avec la Cour de France, pourrait être un hommage direct à la naissance de l’héritier du trône royal<note
+n="29"
+place="foot"
+xml:id="ftn60"
+><p
+>De nombreuses fleurs de lys ponctuent également les colonnettes des dorsaux des stalles. </p
+></note
+>. Ainsi, la réalisation des stalles serait plutôt à situer entre 1518 et 1523.</p
+><p
+xml:id="p12"
+>Sur les jouées des sièges canoniaux prennent également place des statuettes qui figurent des saintes et des saints. Leur examen attentif montre que le programme iconographique retenu est directement lié à la famille du patron du chapitre collégial. En effet, l’ensemble des saints protecteurs de la famille des barons de Castelnau-Calmont et de leurs épouses est représenté : Jean le Baptiste et Jean l’évangéliste, Catherine, Marie, Jacques, Guy<note
+n="30"
+place="foot"
+xml:id="ftn61"
+><p
+>Il s’agit très certainement de la statuette d’un évêque, dans laquelle nous proposons d’y voir celle de saint Guy, évêque d’Acqui. </p
+></note
+>, Marguerite et Anne<note
+n="31"
+place="foot"
+xml:id="ftn62"
+><p
+>Ces deux dernières saintes renvoient à Marie et Marguerite de Castelnau, filles de Jean II et de Marie de Culan.</p
+></note
+>. Deux saints toutefois ne participent pas de ce paradis familial. Il s’agit d’un saint pape, reconnaissable à sa tiare (fig. 126) et saint Jérôme en habit de cardinal, avec un lion à ses pieds (fig. 127). Ces deux images sont placées respectivement sur les panneaux des jouées nord et sud des stalles situées au plus près de l’autel. Elles occupent ainsi un emplacement privilégié et paraissent protéger les chanoines et la collégiale. Le pape n’est autre que Jules II, figuré sous les traits de son saint patron Jules I<hi
+rend="sup"
+>er</hi
+>, qui a, nous l’avons vu, confirmé l’érection de la collégiale Saint-Jean-Baptiste de Prudhomat et ainsi le vœu émis par Jean II de Castelnau. Quant au saint cardinal, il faut y voir une allégorie de François-Guillaume de Clermont-Lodève, cardinal depuis 1503, archevêque d’Auch (1507-1511), ambassadeur du roi Louis XII auprès de Jules II. Ce cousin direct des barons de Castelnau-Calmont<note
+n="32"
+place="foot"
+xml:id="ftn63"
+><p
+>Son frère Pierre a épousé Marguerite de La Tour à Prudhomat en 1514 et est devenu après le décès de Jean III en 1530 l’héritier des biens et titres de la maison de Castelnau-Caumont. </p
+></note
+> a très certainement dû appuyer auprès du Souverain Pontife la demande de reconnaissance en collégiale des chapellenies érigées par Jean II à Prudhomat, d’où sa représentation symbolique sur les stalles. Outre ces deux statues, les colonnettes des dorsaux des stalles de Prudhomat portent également des feuilles de chêne – allusion aux armes parlantes de la famille de Jules II, les della Rovere – et des hermines, meuble héraldique des Clermont-Lodève (fig. 128).</p
+><p
+xml:id="p13"
+>La collégiale Saint-Jean-Baptiste-Saint-Louis de Prudhomat est un rare exemple dans le Midi de la France d’un modeste chapitre de chanoines séculiers fondé au début du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle par une riche famille aristocratique qui conserve encore à la fois son décor héraldique mais également ses stalles richement ornées. C’est à travers la sculpture de ces dernières que le commanditaire de cet ensemble, Guy de Castelnau, évêque de Périgueux, a rendu hommage aux deux bienfaiteurs du chapitre canonial voulu par son frère, le pape Jules II et le cardinal de Clermont-Lodève, mis à l’honneur dans le chœur liturgique. Il s’agit très certainement d’un des seuls exemplaires conservés <hi
+rend="italic"
+>in situ</hi
+> à ce jour d’un mobilier religieux qui relie directement, via l’héraldique et la sculpture, un pape et une communauté canoniale reconnue par ce dernier.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig123.JPG"
+></graphic
+><head
+>Figure 120. Clé de voûte aux armes de Guy de Castelnau-Calmont, évêque de Périgueux.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig124.jpg"
+></graphic
+><head
+>Figure 121. Jean II de Castelnau-Calmont et son saint patron, verrière du chœur, vers 1510-1514.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig125.jpg"
+></graphic
+><head
+>Figure 122. Vue générale des stalles de la collégiale de Prudhomat.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig126.jpg"
+></graphic
+><head
+>Figure 123. Armoiries du baron de Castelnau-Calmont, stalles du chœur.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig127.jpg"
+></graphic
+><head
+>Figure 124. Armoiries de Jean II de Castelnau-Calmont et de Marie de Culan, stalles du chœur.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig128.jpg"
+></graphic
+><head
+>Figure 125. Détail du dauphin, stalles du chœur.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig129.jpg"
+></graphic
+><head
+>Figure 126. Saint Jules I<hi
+rend="sup"
+>er</hi
+>, allégorie du pape Jules II, stalles du chœur.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig130.JPG"
+></graphic
+><head
+>Figure 127. Saint Jérôme, allégorie du cardinal François Guillaume de Clermont-Lodève, stalles du chœur.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch09_Moureau/Fig131.jpg"
+></graphic
+><head
+>Figure 128. Détail des hermines et des feuilles de chêne sculptées sur une colonnette des stalles du chœur.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

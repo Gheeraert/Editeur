@@ -1,0 +1,1755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Apothéoses armoriales dans la Rome baroque</title
+><title
+type="sub"
+>De Clément VIII Aldobrandini à Clément X Altieri</title
+><author
+role="aut"
+><persName
+><forename
+>Frédéric</forename
+><surname
+>Cousinié</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><tagsDecl
+><rendition
+scheme="css"
+xml:id="list-ndash"
+>list-style-type:"–";</rendition
+></tagsDecl
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-17"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Apothéoses armoriales dans la Rome baroque</p
+><p
+rend="title-sub"
+>De Clément VIII Aldobrandini à Clément X Altieri</p
+><p
+rend="author-aut"
+>Frédéric Cousinié</p
+></div
+><epigraph
+><cit
+><quote
+>« Cette salle Clémentine, immense, semblait sans bornes à cette heure, dans la clarté crépusculaire des lampes. La décoration si riche, les sculptures, les peintures, les dorures, se noyait, n’était plus qu’une vague apparition fauve, des murs de rêve où dormaient des reflets de joyaux et de pierreries. Et, d’ailleurs, pas un meuble, le dallage sans fin, une solitude élargie, se perdant au fond des demi-ténèbres. […] Aujourd’hui encore, elle était la salle accessible à tous et que tous devaient traverser, simplement une salle des gardes, pleine toujours d’un tumulte de pas, d’allées et de venues sans nombre. Mais quelle mort pesante, dès que la nuit l’avait envahie, et comme elle était désespérée et lasse d’avoir vu défiler tant de choses et tant d’êtres ! »</quote
+><bibl
+>Émile Zola, <hi
+rend="italic"
+>Les Trois Villes. Rome</hi
+>, Paris, G. Charpentier et E. Fasquelle, 1896, chap. XIV, p. 600.</bibl
+></cit
+></epigraph
+></front
+><body
+><p
+xml:id="p1"
+>La célébration des grandes dynasties princières de l’époque moderne a bien souvent pris la forme de grandes compositions monumentales ascensionnelles. Le héros familial – ancêtre mythique ou glorieux prédécesseur – y est emporté dans un halo lumineux et élevé vers le ciel : pensons à la flagorneuse composition de Luca Giordano pour les Médicis du palais Medicis-Riccardi à Florence (1684-1686) ou, du même peintre, à sa non moins obséquieuse <hi
+rend="italic"
+>Gloria de la Monarquía de España</hi
+> qui magnifie la voûte du grand escalier de l’Escorial. Le modèle reconduit celui, en vigueur pour les empereurs romains, de l’apothéose (étymologiquement un « devenir-dieu » : une déification) et il redouble les propres apothéoses ou glorifications des saints catholiques qui se multiplièrent à l’âge baroque. Dans plusieurs cas néanmoins, la représentation figurative d’un individu singulier a été éclipsée par celle du blason familial lui-même élevé « en gloire » vers le ciel selon une forme inédite dans la longue histoire de cet objet. L’apothéose individuelle s’y conjugue ou se soumet à l’apothéose collective d’une dynastie<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Sur la glorification des pouvoirs religieux et civils à l’époque moderne, nous nous permettons de renvoyer à Frédéric Cousinié, Annick Lemoine, Michèle Virol (dir.), <hi
+rend="italic"
+>Soleils baroques. La Gloire de Dieu et des Princes en représentation dans l’époque moderne</hi
+>, Rome-Paris, Académie de France à Rome-Somogy, 2018.</p
+></note
+>.</p
+><p
+xml:id="p2"
+>Avant même que le motif peint ou sculpté de la gloire lumineuse ne se banalise au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, ce dispositif était déjà fréquemment employé par les graveurs. Nous le trouvons par exemple, dès 1612, gravé par le bolonais Oliviero Gatti (1579-1649), dans les armes de Maffeo Barberini (devenu cardinal-prêtre depuis 1606), dont la lourde masse en suspension qui se détache sur un soleil rayonnant est flanquée d’Apollon et d’une autre allégorie féminine. Le même artiste est également l’auteur en 1615, d’après une composition d’Annibal Castelli, d’une réalisation semblable pour la dynastie des Farnèse<note
+n="2"
+place="foot"
+xml:id="ftn44"
+><p
+>John T. Spike (éd.), <hi
+rend="italic"
+>The Illustrated Bartsch</hi
+>, New York, Abaris Book, 1981, vol. 41, Oliver Gatti, et 41 (15), 1612 ; 50 (20), 1615.</p
+></note
+>. Giovanni Luigi Valesio (<hi
+rend="italic"
+>circa</hi
+> 1583-1633), autre graveur bolonais, affectionnait également ce motif auquel il recourt par exemple pour les armes du cardinal Ludovisi entourées des quatre éléments et surmontant le char solaire ; pour celles du cardinal Spinola dont les armes rayonnantes et en lévitation au-dessus de Rome se superposent sur une grande tapisserie tendue par deux figures allégoriques à l’arrière-plan ; ou pour celles encore, destinées à un frontispice d’ouvrage, du cardinal Scipione Borghese, supportées par <hi
+rend="italic"
+>la Renommée</hi
+><note
+n="3"
+place="foot"
+xml:id="ftn45"
+><p
+>Veronika Birke (éd.), <hi
+rend="italic"
+>The Illustrated Bartsch</hi
+>, New York, Abaris Book, 1982, vol. 40, part. 1 et 1987, part. 2, 91 (234) ; 95 (235) et 100 (238).</p
+></note
+>. Dans tous ces cas l’écu, doté de son cartouche, conserve sa forte présence opaque, la lumière venant constituer un nouveau fond immatériel qui illumine <hi
+rend="italic"
+>de retro</hi
+> le motif.</p
+><p
+xml:id="p3"
+>Pour la grande sculpture monumentale romaine, la formule, déjà utilisée par la célébration du trigramme jésuite, a trouvé sa plus remarquable incarnation dans l’étonnante voûte de la chapelle Spada à Santa Maria in Vallicella (conçue par Camillo Arcucci puis Giuseppe Brusati Arcucci et Carlo Rainaldi), dont les stucs sont dus à Giovanni Francesco De Rossi (1666-1679), l’un des collaborateurs du Bernin pour la décoration intérieure de Santa Maria del Popolo. L’œuvre, que j’ai pu ailleurs étudier en détail<note
+n="4"
+place="foot"
+xml:id="ftn46"
+><p
+>Frédéric Cousinié, <hi
+rend="italic"
+>Gloriae. Figurabilité du divin, esthétique de la lumière et dématérialisation de l’œuvre d’art à l’âge Baroque</hi
+>, Rennes, PUR, 2018, « La chapelle Spada/Borromée de S. Maria in Vallicella », p. 181-206.</p
+></note
+>, associe de façon exceptionnelle le motif rayonnant de la gloire, omniprésent à Rome sur nombre d’autels, à l’écu, détaché par un ange, de saint Charles Borromée. Sa présence joue encore, moyennant toute une série de relations (supports de l’architecture, géométrie) avec les armes des fondateurs de la chapelle, disposées au centre du pavement de marbre.</p
+><p
+xml:id="p4"
+>Dans le champ de la peinture, la conjonction de l’élévation ou de la suspension/ lévitation et de la glorification armoriale s’applique à plusieurs exemples exceptionnels du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. Leur analyse se propose d’approcher la poétique inédite qui les organise et de préciser leurs implications interprétatives. Nous constaterons notamment que l’expression de la <hi
+rend="italic"
+>potestas</hi
+> pontificale ne se donne pas dans le seul déchiffrement de ses signes mais dans l’intégration sensible et subjective des dispositifs scéniques et cérémoniaux qui lui sont associés.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Seul en scène : l’apothéose Ludovisi (<hi
+rend="italic"
+>circa</hi
+> 1623)</head
+><p
+xml:id="p5"
+>Le premier exemple, le moins connu, tardivement attribué et peu accessible, est celui de la composition représentant <hi
+rend="italic"
+>L’Apothéose des armes Ludovisi</hi
+> (<hi
+rend="italic"
+>L’Apoteosi dello stemma dei Ludovisi</hi
+>), peinte vers 1623 sur la voûte d’une des salles dite « dell’armadio de’ libri » ou « della Stemma » (petite bibliothèque et salle de musique) du Casino Ludovisi (fig. 164). Le lieu est célèbre pour la fameuse <hi
+rend="italic"
+>Aurore</hi
+> du Guerchin et nous savons qu’il constitue le dernier vestige de la villa du cardinal Ludovico Ludovisi (1595-1632), l’un des deux neveux d’Alessandro Ludovisi, archevêque de Bologne devenu pape sous le nom de Grégoire XV (1621-1623). L’exemple est important, car il serait dû à l’un des graveurs bolonais déjà évoqués qui s’illustrèrent par leur prolixité et leur inventivité en matière héraldique : Giovanni Luigi Valesio, auquel l’œuvre a été attribuée par Armando Schiavo sur la base des mentions apportées par Giovanni Baglione en 1642 et Fioravante Martinelli dans sa description de Rome en 1660<note
+n="5"
+place="foot"
+xml:id="ftn47"
+><p
+>Voir Armando Schiavo, <hi
+rend="italic"
+>Villa Ludovisi e Palazzo Margherita</hi
+>, Rome, Roma Amor, 1981, p. 128 et 129, citant Baglione, p. 354 : « <hi
+rend="italic"
+>Dipinse in quel Palagio alcune stanze con diversi capricci di puttini in fresco coloriti</hi
+> » ; Carolyn Harwood Wood, <hi
+rend="italic"
+>The Indian Summer of Bolognese Painting: Gregory XV (1621-1623) and Ludovisi art patronage in Rome</hi
+>, thèse, The University of North Carolina, 1988, chap. II, « The Casino Ludovisi », p. 94-99, qui relève bien p. 96 que les armes ne sont pas juste « <hi
+rend="italic"
+>hovering but ascending</hi
+> », ; Carla Benocci, <hi
+rend="italic"
+>Villa Ludovisi</hi
+>, Rome, Istituto poligrafico e Zecca dello Stato-Libreria dello Stato, 2010, chap. IV, p. 156, sur le salaire payé à Valesio comme « <hi
+rend="italic"
+>guardaroba</hi
+> » et pour diverses peintures, et p. 172-174, sur un possible programme alchimique et spirituel qui organiserait le décor du Casino ; en dernier lieu, Laura Bartoni, « L’allestimento delle collezioni nella villa pinciana: spazi, criteri, funzioni », <hi
+rend="italic"
+>Storia del’arte – « Guercino nel Casino Ludovisi (1621-1623) »</hi
+>, vol. 157, n<hi
+rend="sup"
+>o</hi
+> 1, 2022, p. 99-117, notamment p. 101 et 102 sur le décor de la salle « <hi
+rend="italic"
+>dell’armadio de’libri</hi
+> » et, dans le même volume, Caterina Volpi, « La collezione Ludovisi come ″Scuola del mondo″. Il ruolo di Agucchi, Marino, Valesio, Guercino e Domenichino », <hi
+rend="italic"
+>ibid., </hi
+>p. 118-133. Voir également, sur l’artiste, Kenichi Takahashi, <hi
+rend="italic"
+>Giovanni Luigi Valesio. Ritratto de « l’Instabile academico incaminato »,</hi
+> Bologne, Clueb, 2007 et Giovanna Perini Folesani, « Pittura e poesia, arti sorelle nella Bologna rinascimentale e barocca », <hi
+rend="italic"
+>Letteratura e arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 18, 2020, p. 67-80. Sur l’œuvre gravée, Veronika Birke (éd.), <hi
+rend="italic"
+>op. cit.</hi
+>, part. 1; et <hi
+rend="italic"
+>ibid</hi
+>., part. 2.</p
+></note
+>. L’artiste, actif dans de nombreux domaines (musique, ballet, miniature, calligraphie, poésie), fut également théoricien, auteur d’un traité sur le dessin et d’un discours sur la nouvelle rhétorique, publié en défense du poète Giovan Battista Marino. Passé en 1621 au service des Ludovisi à Rome, il fut aussi « gardien » des jardins de Porta Pinciana, avant d’être chargé de l’apparat funèbre célébrant à Bologne l’anniversaire de la mort du pape le 25 juillet 1624.</p
+><p
+xml:id="p6"
+>La voûte rectangulaire de la salle <hi
+rend="italic"
+>Dell’armadio de’libri</hi
+> est occupée par une balustrade feinte alternant balustres et piédestaux couverts de riches marbres feints, sur laquelle prennent appui de nombreux angelots ou <hi
+rend="italic"
+>putti</hi
+> représentés dans des attitudes variées et animées. Leur fantaisie est proche de celle qui caractérise les angelots supportant l’écu papal déjà en suspension au sommet de la chambre de la Signature de Raphaël (1508) (fig. 165), et elle peut encore rappeler les <hi
+rend="italic"
+>putti</hi
+> manipulant les lettres du nom de Jules III (Giovanni Maria del Monte) dans les appartements du pontife au Belvédère<note
+n="6"
+place="foot"
+xml:id="ftn48"
+><p
+>Ce dernier exemple, aimablement signalé par Yvan Loskoutoff, est attribué à Prospero Fontana et à son atelier : voir Denis Ribouillault, « Jeux de mots et d’images : les frises peintes de l’appartement de Jules III au Vatican (vers 1550-1553) », dans Antonella Fenech Kroke, Annick Lemoine (dir.), <hi
+rend="italic"
+>Frises peintes. Les décors des villas et palais au Cinquecento</hi
+>, Paris-Rome, Somogy-Académie de France à Rome, 2016, p. 103-129 qui signale également d’autres exemples. Je remercie Elli Doulkaridou pour ses suggestions lors de nos échanges durant le colloque.</p
+></note
+> (1550-1553). Elle anticipe également les attitudes des <hi
+rend="italic"
+>putti</hi
+> jouant avec des guirlandes que l’on retrouve plus tard sur la frise intérieure de l’église de Sant’Ignazio (<hi
+rend="italic"
+>circa</hi
+> 1649-1650), dont Ludovico Ludovisi fut précisément le fondateur, conjuguant ainsi une dimension ludique au jeu « sérieux » des contenus héraldiques et idéologiques de ces programmes<note
+n="7"
+place="foot"
+xml:id="ftn49"
+><p
+>Voir Jennifer Montagu, <hi
+rend="italic"
+>Alessandro Algardi</hi
+>, New Haven-Londres, Yale University Press, 1985, 2 vol., t. I, p. 110-113 et cat. A. 202, p. 456 et 457 avec référence aux archives : Archivio della Compagnia Di Gesù, Fondo Gesuitico, Fabbrica di Sant’Ignazio, vol. 1343, p. 339-354 et vol. 1344, p. 232 ; Jacopo Curzietti, <hi
+rend="italic"
+>Antonio Raggi: scultore ticinese nella Roma barocca</hi
+>, Canterano, Aracne editrice, 2020, cat. 3 (Œuvres rejetées), p. 296-297. L’Algarde, au revers de la façade, a donné les modèles pour les figures de la <hi
+rend="italic"
+>Religion</hi
+> et de la <hi
+rend="italic"
+>Magnificence</hi
+> qui encadrent le grand cadre de stuc avec les inscriptions rappelant le rôle des deux frères Ludovisi dans la construction de l’église. La frise en stuc avec des <hi
+rend="italic"
+>putti</hi
+> supportant les écus du cardinal Ludovico Ludovisi, de son frère le prince Nicolò (associé à celui de sa femme), a été réalisée d’après un projet de l’Algarde vers 1649-1650, par une série de sculpteurs sous la direction de Stefano Castelli. Montagu attribue les sculptures à Raggi ou Giovan Battista Morelli, Curzietti rejetant la première attribution.</p
+></note
+>. Au Casino Ludovisi, un long phylactère ondulant unit ces figures et célèbre comme il se doit le propriétaire des lieux. On peut y lire, en lettres détachées qui obligent à faire le tour de la composition, le nom du pape régnant et celui de « Ludovicus Ludovisi », suivi de son titre de cardinal camerlingue de la sainte Église : « <hi
+rend="small-caps italic"
+>Ludovicus Ludovisius S.R.E. Cardinalis Camerarius SS. Domini Nostri Gregorij PP. XV Nepos</hi
+>. » Essentiel et original est le motif central isolé dont le rouge (« de gueules ») éclate sur le fond ou le « champ » bleu intense (d’« azur ») d’un <hi
+rend="italic"
+>cielo aperto</hi
+> que l’on retrouvera dans les autres exemples<note
+n="8"
+place="foot"
+xml:id="ftn50"
+><p
+>La prégnance du motif tient à son isolement dans le champ et à l’opposition radicale, par superposition de deux des couleurs primaires : rouge et bleu quasi giottesque. Ce jeu entre primaires se retrouve dans l’œuvre de Pietro da Cortona pour la salle de Mars du palais Pitti (étendu au jaune) et, de façon plus modérée, au palais Barberini où le peintre donne leur présence aux formes par un usage plus marqué des valeurs (clair-obscur). Ces contrastes sont en revanche absents tant de la réalisation de Canuti que de celle des frères Alberti, fondées sur une harmonisation tonale (avec usage de couleurs primaires atténuées et de couleurs secondaires : orange, violet, vert) et un faible contraste des valeurs.</p
+></note
+>. Insistons sur le fait que l’intervalle ou l’espace vide et marginal qui n’avait pour fonctions que de marquer l’indépendance de l’écu à l’égard de son support (les écus « détachés »), ou sa mobilité et l’intervalle temporel entre deux instants (l’un des projets du Bernin pour l’écu en suspension du tombeau d’Alexandre VII qui échappe à l’allégorie de la Mort), se déploie désormais dans la profondeur d’un fond dominant – vraie reconquête picturale et pariétale du ciel et du champ – qui prend désormais une valeur transcendantale : il indique le lieu céleste visé par l’écu. Anges et <hi
+rend="italic"
+>putti</hi
+> agglutinés y supportent ou sont supportés par le vaste écu familial dépourvu de cartouche – insistant ainsi sur le décrochement aérien du motif mis en gloire – et surmonté du chapeau cardinalice en suspension dont virevoltent les cordons. Une épaisse guirlande de feuilles et de fruits exprime l’abondance et la fertilité associées à l’action du cardinal honoré, tout en faisant écho aux trophées ou festons végétaux fleuris que portent encore les <hi
+rend="italic"
+>putti</hi
+> de la balustrade.</p
+><p
+xml:id="p7"
+>Nous pourrions retrouver certaines des formules déjà employées par Valesio dans ses propres gravures célébrant le même cardinal. Celle où une cohorte de <hi
+rend="italic"
+>putti</hi
+> tenait déjà en suspension aérienne l’écu surmonté du chapeau et présenté à une figure agenouillée ; ou celle, plus proche de la formule commune du <hi
+rend="italic"
+>Stemma in arrivo</hi
+>, où <hi
+rend="italic"
+>putti</hi
+> et allégorie de la <hi
+rend="italic"
+>Renommée</hi
+> présentent l’armoirie cardinalice à deux héros antiques auxquels le cardinal s’identifiait : Jules César et Fabius Cunctator (Quintus Fabius Maximus Verrucosus), consul et héros de la guerre contre Hannibal loué pour sa prudence (le Temporisateur : <hi
+rend="italic"
+>cunctator</hi
+><note
+n="9"
+place="foot"
+xml:id="ftn51"
+><p
+>Veronica Birke (éd), <hi
+rend="italic"
+>The Illustrated Bartsch</hi
+>, vol. 40, <hi
+rend="italic"
+>op. cit</hi
+>., respectivement 73 (228) et 89 (23).</p
+></note
+>). Dans le Casino Ludovisi, le motif est en revanche splendidement isolé de tout contexte narratif ou allégorique et il célèbre, par métaphore et métonymie, autant l’événement ponctuel de « l’élévation » à la pourpre du <hi
+rend="italic"
+>cardinal-nipote</hi
+>, le 15 février 1621 que, plus largement, l’apothéose céleste ou la gloire mondaine de la dynastie Ludovisi évoqué par le blason familial.</p
+><p
+xml:id="p8"
+>Si l’amplification monumentale de l’écu, la suspension, l’élévation et la mise en gloire sont les principes déterminants auxquels recourt Valesio, ils vont de pair avec une forme de léger pivotement du motif qui implique un dédoublement spéculaire : la création d’au moins deux points de vue privilégiés pour le destinataire. L’écu est ainsi affecté d’une inclinaison axiale qui contraste avec la présentation frontale dominante des nombreuses armoiries pontificales ou cardinalices fixées à l’aplomb de la plupart des appartements princiers ou des lourds et statiques plafonds à caissons des églises romaines (Santo Crisogono, Santa Maria in Trastevere, Santi Cosma e Damiano, plus tard Santo Clemente, San Giovanni in Laterano, etc.). Ce choix oblige au déplacement du visiteur, instaurant une « relation de mobilité réciproque<note
+n="10"
+place="foot"
+xml:id="ftn52"
+><p
+>Gérard Le Don, <hi
+rend="italic"
+>Voir la sculpture. Essai sur le dispositif visuel</hi
+>, Rennes, PUR, « Aesthetica », 2018, p. 48.</p
+></note
+> », tout en participant d’une forme de déséquilibre qui anime avec vivacité toute la composition, conforme en cela au surnom d’« <hi
+rend="italic"
+>Instabile</hi
+> academico incaminato » qu’avait reçu l’artiste à Bologne.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Dématérialisation, inchoativité, contextualisation : les Apothéoses Barberini (1632-1636) et Médici (1644-1646)</head
+><p
+xml:id="p9"
+>Les historiens de l’art ont relevé l’importance qu’a sans doute eu la réalisation novatrice de Valesio pour un second ensemble constitué par deux des œuvres les plus célèbres et spectaculaires de Pietro da Cortona : la fresque s’étendant sur la voûte du grand salon du palais Barberini (1632-1638) à Rome et celle qui occupe, à Florence, la voûte d’une des pièces du palais Pitti, la dite « Anticamera de’ cortigiani » ou salle de Mars (1644-1646). Sans revenir sur le complexe ensemble d’allégories et de scènes narratives qui, absent de la composition de Valesio, occupe les marges de ces deux compositions, je m’arrêterai sur le seul motif central<note
+n="11"
+place="foot"
+xml:id="ftn53"
+><p
+>Voir, respectivement, les études fondatrices de Walter Vitsthum, « A comment on the Iconography of Pietro da Cortona’s Barberini Ceiling », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, vol. 103, n<hi
+rend="sup"
+>o</hi
+> 703, octobre 1961, p. 427-433, repris dans Susan M. Dixon (dir.), <hi
+rend="italic"
+>Italian Baroque Art. Blackwell Anthologies in Art History</hi
+>, Malden-Oxford, Carlton, Blackwell Publishing, 2008, p. 201-208 ; John Beldon Scott, <hi
+rend="italic"
+>Images of Nepotism. The Painted Ceilings of Palazzo Barberini,</hi
+> Princeton, Princeton University Press, 1991, t. 3, chap. X-XII ; Sebastian Schütze, « Urbano VIII e il concetto di Palazzo Barberini. Alla ricerca di un primato culturale di rinascimentale memoria », dans Christoph Luitpold Frommel et Sebastian Schütze (dir.), <hi
+rend="italic"
+>Pietro da Cortona</hi
+>, Milan, Electa, 1998, p. 86-97 ; et Malcolm B. Campbell, <hi
+rend="italic"
+>Pietro da Cortona at the Pitti Palace. A Study of the Planetary Rooms and Related Projects</hi
+>, Princeton, Princeton University Press, 1977. La lecture iconographique du complexe romain est fondée pour l’essentiel sur Francesco Bracciolini, <hi
+rend="italic"
+>L’elettione di Urbano Papa VIII</hi
+>, [Rome], s. n., [1628], les <hi
+rend="italic"
+>Vite de Pittori</hi
+> de Giovanni Battista Passeri, la description de Mattia Rosichino, <hi
+rend="italic"
+>Dichiarazione delle Pitture della Sala de’ Signori Barberini in Rome</hi
+>, In Roma, Appresso Vitale Mascardi, 1640 et celle de Girolamo Teti, <hi
+rend="italic"
+>Aedes Barberinae ad Quirinalem</hi
+>, Romæ, Mascardus, 1642.</p
+></note
+>.</p
+><p
+xml:id="p10"
+>À Rome (fig. 166), les armes des Barberini, réduites aux seules abeilles devenues indépendantes de l’écu désormais évoqué <hi
+rend="italic"
+>in absentia</hi
+> par son seul contour et ses « meubles », sont entourées d’une couronne de lauriers (autre emblème familial) que soutiennent les trois vertus théologales (sans attributs) de la <hi
+rend="italic"
+>Foi</hi
+>, de l’<hi
+rend="italic"
+>Espérance</hi
+> et de la <hi
+rend="italic"
+>Charité</hi
+> (où Giovanni Battista Passeri voulait voir « <hi
+rend="italic"
+>le tre muse principali, Urania, Calliope e Clio</hi
+> »). Au sommet, elles sont complétées de l’allégorie de la <hi
+rend="italic"
+>Religion</hi
+> tenant les immenses clefs de saint Pierre, d’une personnification de Rome qui couronne de la tiare papale le groupe central, et d’un <hi
+rend="italic"
+>putto</hi
+> sur la gauche portant une autre couronne évoquant les qualités poétiques attribuées au pape-poète qu’était Urbain VIII. En contrebas, obéissant à la <hi
+rend="italic"
+>Divine Providence</hi
+> occupant la partie inférieure de la fresque et qui est le moteur central de l’action, une allégorie de l’<hi
+rend="italic"
+>Immortalité</hi
+> (ou de la Gloire/<hi
+rend="italic"
+>Fama</hi
+>), tenant une couronne d’étoiles, est censée rejoindre le groupe principal. Dans ce qui était décrit par Giovanni Baglione ou plus tard Filippo Titi comme un « triomphe de la gloire » (<hi
+rend="italic"
+>il Trionfo della Gloria</hi
+>) célébrant le règne du pontife orné des plus hautes vertus et accédant à l’immortalité, nous assistons donc à un triple, voire à un quadruple couronnement surclassant la simple élévation cardinalice de Ludovico Ludovisi.</p
+><p
+xml:id="p11"
+>Nous retrouvons dans cette composition complexe, outre la monumentalisation générale, plusieurs des procédés associés fréquemment aux armoiries du baroque romain : l’adjonction d’éléments signifiants complémentaires autour des meubles familiaux (les allégories), l’évidement de la surface de l’écu (où les « meubles » que sont les abeilles se détachent directement sur le ciel et se rassemblent à l’intérieur des branches du laurier), la dimension inchoative de la scène où l’écu, loin d’être donné dans une présence éternelle, paraît se former sous nos yeux par agglomération de ses divers éléments (abeilles, lauriers, couronnes<note
+n="12"
+place="foot"
+xml:id="ftn54"
+><p
+>Voir Irving Lavin, « Bernini’s Bumbling Barberini Bees », dans Irving Lavin, <hi
+rend="italic"
+>Visible Spirit. The Art of Gianlorenzo Bernini</hi
+>, Londres, The Pinder Press, 2009, t. 2 ; p. 955-1017, ici p. 1004-1005, qui met en relation cette assemblée spontanée d’abeilles avec les circonstances fabuleuses de l’élection du nouveau pape où un essaim d’abeilles aurait pénétré le Conclave des cardinaux. Le motif de l’autoconstitution de l’écu apparaît à plusieurs reprises dans les gravures de Valesio, Oliviero Gatti ou Giovanni Battista Coriolano.</p
+></note
+>), l’élévation armoriale et le soutien de ce qui s’est substitué aux limites de l’écu (les rameaux de laurier), la suspension et bien sûr la mise en gloire qu’avait déjà expérimentées Valesio. Ajoutons – nouvelle amplification des recherches de l’artiste bolonais – l’animation générale impliquée par le quadruple couronnement – avec un effet de suspens temporel en trois temps correspondant à la plus ou moins grande proximité des couronnes en instance d’être apposées sur le motif central – ; la multiplication et la diffusion des meubles ou des emblèmes des Barberini (on retrouve ailleurs les abeilles ou le soleil) ; et enfin l’incorporation spatiale de cette partie de la fresque dans un vaste et complexe ensemble narratif, symbolique et emblématique qui se déploie latéralement en diverses scènes.</p
+><p
+xml:id="p12"
+>À Florence (fig. 167), programme qui nous éloigne un instant du contexte pontifical mais qui est fondé sur une logique analogue, la salle de Mars du palais des Offices avait été décorée par Pietro da Cortona entre 1644 et 1646 pour le grand-duc Ferdinand II de Medici (1610-1670). Elle s’insère au sein d’un ensemble de cinq pièces consacrées aux principales divinités antiques. Celles-ci sont mises en relation avec l’itinéraire ascendant d’un prince idéal (donné en modèle au jeune fils du duc, futur Cosme III), depuis ses exercices vertueux dans la salle de Vénus jusqu’à son ascension céleste vers la <hi
+rend="italic"
+>Gloire</hi
+> et l’<hi
+rend="italic"
+>Éternité</hi
+> dans la pièce placée sous l’invocation de Saturne. La voûte de la salle de Mars est occupée, sur les côtés, par divers épisodes héroïques où le prince combattant est associé à divers dieux et héros antiques (Mars, Hercule, les Dioscures). Au centre, le motif principal est de nouveau l’armoirie familiale des Medici avec les cinq boules (<hi
+rend="italic"
+>palle</hi
+>) rouges et une bleue décorée par des lis d’or. L’écu, dans ce cas maintenu dans son intégrité unitaire, se confond avec son cartouche et s’appuie encore sur un motif ondulant évoquant une grande coquille soutenue par trois <hi
+rend="italic"
+>putti</hi
+>. La monumentalité des armoiries, qui avait été annulée au palais Barberini par leur dématérialisation, est ici intensifiée. L’ensemble se démarque encore d’un grand cercle d’armes agglutinées formant trophée, tandis que l’écu reçoit une couronne portée par d’autres <hi
+rend="italic"
+>putti,</hi
+> reprenant le motif déjà employé à Rome par le peintre. Comme l’a relevé Malcolm B. Campbell<note
+n="13"
+place="foot"
+xml:id="ftn55"
+><p
+>Malcom B. Campbell, <hi
+rend="italic"
+>op. cit</hi
+>., p. 153 et 154.</p
+></note
+>, le nom inscrit à l’intérieur de la couronne fait de la célébration de la dynastie des Medici une apothéose également <hi
+rend="italic"
+>personnelle</hi
+> du duc Ferdinand. L’ensemble, que l’on peut rapprocher de la fresque d’Angelo Michele Colonna et Agostino Mitelli célébrant Alexandre le Grand (1641), autre modèle de Ferdinand II de Médicis, au palais Pitti, ne sera pas sans incidences sur les grandes réalisations florentines d’Antonio Domenico Gabbiani (1652-1726) : la fresque de <hi
+rend="italic"
+>L’Apothéose de la famille Corsini</hi
+> au palais Corsini al Parione (fig. 168) et celle de <hi
+rend="italic"
+>L’Apothéose de Cosme l’Ancien</hi
+> (ou <hi
+rend="italic"
+>Cosme l’Ancien conduit par la gloire au trône de Jupiter</hi
+>) à la villa de Poggio a Caiano (1698), où la présence céleste du héros familial est associée à celle de l’écu Medici. La formule trouvera l’un de ses ultimes accomplissements dans la fresque d’Ermenegildo Costantini (1731-1791) pour le <hi
+rend="italic"
+>Triomphe de la Maison Borghese et des arts</hi
+> (1768) dans la salle d’audience du palais Borghese à Rome<note
+n="14"
+place="foot"
+xml:id="ftn56"
+><p
+>Autre exemple tardif plus modeste : la fresque centrale du <hi
+rend="italic"
+>pòrtego</hi
+> de Costantino Cedini (1773-1783), au palais Corner della Regina à Venise. Pour un parcours sélectif et synthétique dans ces grands cycles, voir Steffi Roettgen, <hi
+rend="italic"
+>Fresques italiennes du Baroque aux Lumières (1600-1797)</hi
+>, Jeanne Étoré-Lortholary (trad.), Paris, Citadelle &amp; Mazenod, 2007. En France, relevons le projet de Charles Le Brun pour les armes de Fouquet puis du roi dans le grand salon du château de Vaux-Le-Vicomte.</p
+></note
+>.</p
+><p
+xml:id="p13"
+>La proximité est grande avec l’autre réalisation romaine de Pietro da Cortona ; la principale différence, outre le maintien du volume de l’écu que présentait également Valesio, étant le mouvement ascensionnel dynamique de la réalisation florentine qui s’oppose à l’effet de suspension immobilisée de Rome, où ce sont les figures allégoriques qui prennent davantage en charge l’animation. Le modèle est plutôt à rechercher dans l’autre réalisation de Pietro da Cortona pour l’une des petites galeries du palais Barberini (1632), où était également employé le motif du <hi
+rend="italic"
+>Stemma in arrivo</hi
+> associé au couronnement de l’écu (fig. 169). Une autre différence, qui nous rapproche de la solution de Valesio ou de celle de la petite galerie du palais Barberini, est le pivotement angulaire de l’armoirie, qui se distingue de la position, plus orthogonale par rapport au sol, de la réalisation du grand salon du même palais. S’il est donné à la contemplation du spectateur présent dans la salle du palais Pitti, l’écu des Medici est ici d’abord dirigé, au sein même de la composition, vers le prince héroïque qui est représenté sur la partie gauche de la composition.</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>L’écu familial et l’ancêtre fondateur : l’apothéose Altieri (<hi
+rend="italic"
+>circa</hi
+> 1675-1676)</head
+><p
+xml:id="p14"
+>À ces deux célèbres exemples il faut ajouter, troisième ensemble exceptionnel<note
+n="15"
+place="foot"
+xml:id="ftn57"
+><p
+>Nous pourrions ajouter la réalisation, plus modeste mais fondée sur le même principe suspensif, de la fresque du salon du palais du prince Camillo Pamphili à Valmontone (Gaspard Dughet et Guglielmo Cortese, 1658 ; le motif étant sans doute postérieur) où l’écu assemble les meubles du Prince et de son épouse Olimpia Aldobrandini : voir Marie-Nicolas Boisclair, <hi
+rend="italic"
+>Gaspard Dughet, 1615-1675</hi
+>, Paris, Arthéna, 1986, cat. 171-175, p. 226 ; ou celle de Francesco Cozza pour la bibliothèque (1667-1673) du palais Doria-Pamphilj (place Navone) : l’écu familial, tenu en suspension par un ange dans ciel, n’y a qu’une place modeste, mais l’œuvre est intéressante pour la dissémination des meubles familiaux dans le reste de la fresque, qui évoque la réalisation antérieure de la Sala Clementina.</p
+></note
+>, le cas des décors plus tardifs du palais Altieri à Rome. Conçu autour de 1633 par Lorenzo Altieri à proximité du Gesù, puis étendu par l’architecte Giovanni Antonio De’Rossi entre 1650-1655 pour le cardinal Giambattista Altieri, le palais fut complété entre 1670 et 1676 à l’occasion de l’élection d’Emilio Altieri (frère de Giambattista) comme pontife sous le nom de Clément X (1670-1676). Le palais était alors occupé par le cardinal Paluzzo Paluzzi-Albertoni, <hi
+rend="italic"
+>cardinal-nipote</hi
+> adopté par le pape, ainsi que par son frère Angelo et son neveu Gaspare Paluzzi-Albertoni<note
+n="16"
+place="foot"
+xml:id="ftn58"
+><p
+>Le premier était doté des titres de « <hi
+rend="italic"
+>Vicario di Roma</hi
+> », « <hi
+rend="italic"
+>Camerlengo di Santa Chiesa</hi
+> » et « <hi
+rend="italic"
+>Prefetto di Propaganda Fide</hi
+> », le second était « <hi
+rend="italic"
+>Generale di Santa Romana Chiesa</hi
+> ».</p
+></note
+>, époux depuis 1667 de Laura Caterina Altieri, seule descendante de la famille.</p
+><p
+xml:id="p15"
+>Le palais est célèbre pour abriter la fresque de la Sala della Clemenza peinte par Carlo Maratta (1674-1675), tardive et quelque peu plate réponse « classique » au chef-d’œuvre conçu par Pietro da Cortona pour les Barberini. L’usage des éléments du blason papal et familial y est largement présent, quoique relativement discret et associé à plusieurs figures porteuses dont les armoiries restent tributaires : à gauche, la <hi
+rend="italic"
+>Prudenza</hi
+>-Minerva s’y appuie sur l’écu portant les étoiles des Altieri tandis que le personnage vêtu à l’antique présent sur la droite de la composition, évoquant Gaspare Paluzzi-Albertoni, porte le « <hi
+rend="italic"
+>gonfalone</hi
+> » papal avec les clés de saint Pierre ; au sommet de la composition, deux figures de la <hi
+rend="italic"
+>Fama</hi
+> supportent encore la tiare et, de nouveau, les clés.</p
+><p
+xml:id="p16"
+>À proximité, dans l’antichambre du palais qui était commune aux deux appartements familiaux, le plafond est occupé par une vaste fresque réalisée par le bolonais Domenico Maria Canuti, célèbre pour ses grands décors au palais Pepoli de Bologne (<hi
+rend="italic"
+>Apothéose d’Hercule</hi
+>, 1669-1671), puis à la galerie Colonna (1672-1673) et à l’église romaine des Santi Domenico e Sisto (<hi
+rend="italic"
+>Apothéose de saint Dominique</hi
+>, 1673-1675). Au palais Altieri, la fresque représente en son centre <hi
+rend="italic"
+>L’Apothéose de Romulus </hi
+>(<hi
+rend="italic"
+>circa</hi
+> 1675-1676) (fig. 170). Lieu commun de nombreux décors romains (<hi
+rend="italic"
+>L’Apothéose d’Énée</hi
+> de Pietro da Cortona au palais Pamphilj, 1651-1654), elle exalte la continuité de la Rome antique et moderne, chrétienne et païenne. Canuti, associé à Enrico Haffner pour la <hi
+rend="italic"
+>quadratura</hi
+>, renoue avec le faste et l’illusionnisme de Pietro da Cortona ou de Valesio. Ce n’est cependant pas le blason familial qui est en suspension et en gloire, car ses « meubles » – six étoiles « en champ d’azur » extraites de l’écu – sont soutenus et élevés par des <hi
+rend="italic"
+>putti</hi
+> qui restent appuyés latéralement sur l’architecture feinte de la composition et sont subordonnés au motif central (fig. 171). L<hi
+rend="italic"
+>’élévation</hi
+> des meubles dans une zone intermédiaire entre terre et ciel anticipe et accompagne donc, mais ne se confond pas, avec l’<hi
+rend="italic"
+>apothéose</hi
+> du héros dynastique. L’apothéose familiale de la dynastie romaine associée à Clément X passe ainsi avant tout par l’ascension céleste d’un ancêtre mythique du peuple romain auquel pouvait prétendre s’identifier l’antique famille des Altieri, s’autorisant en particulier de la symbolique stellaire qui était un élément commun aux Altieri et aux prestigieux fondateurs romains (Romulus et Remus sont en effet désignés par Ovide comme « <hi
+rend="italic"
+>stelle congiunte</hi
+> », <hi
+rend="italic"
+>Fastes</hi
+>, chant II, 459 et 471-472<note
+n="17"
+place="foot"
+xml:id="ftn59"
+><p
+>Le lion des Paluzzi degli Albertoni, associé à des devises, est encore présent à quatre reprises.</p
+></note
+>).</p
+><p
+xml:id="p17"
+>L’extraction, la diffusion dans le décor et la monumentalisation des meubles de l’écu s’accompagnent par ailleurs de leur association avec des éléments complémentaires qui, tout comme dans le cas de Pietro da Cortona, en enrichissent les connotations : divers types de couronnes (or, roseaux, chêne, herbe, laurier) entourent les différentes étoiles, des figures historiques sont en contrebas (au centre des grands côtés : <hi
+rend="italic"
+>Remus et Romulus allaités par la louve</hi
+> ; <hi
+rend="italic"
+>Romulus apparaissant à Julius Proculus</hi
+>) et des allégories prennent place également à leurs bases (les quatre éléments dans les angles de la composition<note
+n="18"
+place="foot"
+xml:id="ftn60"
+><p
+>Sur cet ensemble, voir Angela Cipriani, « Un programma belloriano », dans Franco Borsi, Gabriele Morolli, Maurizio Caperna <hi
+rend="italic"
+>et al</hi
+>., <hi
+rend="italic"
+>Palazzo Altieri</hi
+>, Rome, Editalia, 1991, p. 177-208 ; Eduard A. Safarik, <hi
+rend="italic"
+>L’Apoteosi di Romolo di Domenico Maria Canuti in Palazzo Altieri</hi
+>, Rome, Finnat Euramerica, 1995 ; texte repris dans « L’Apoteosi di Romolo », dans Daniela Di Castro, Gabriele Reina et Eduard A. Safarik, <hi
+rend="italic"
+>Roma Palazzo Altieri. Le stanze al piano nobile dei cardinali Giovanni Battista e Paluzzo Altieri</hi
+>, Milan, Franco Maria Ricci, 1999, p. 24-29 ; Sybille Ebert-Schifferer, « La romanità in termini bolognesi: Domenico Maria Canuti a palazzo Altieri », dans Sabine Frommel (dir.), <hi
+rend="italic"
+>Crocevia e capitale della migrazione artistica: forestieri a Bologna e bolognesi nel mondo (secolo XVII)</hi
+>, Bologne, Bononia University Press, 2012, p. 327-345. La fresque, disposée dans un espace commun aux deux appartements de Paluzzo Paluzzi-Albertoni et d’Angelo et Gaspare Paluzzi-Albertoni, est décrite dans un manuscrit attribué à Giovanni Pietro Bellori, conservé à la bibliothèque du Vatican (Barb. lat. 4342, fol. 82r-86r, publié en annexe de l’étude de Angela Cipriani citée plus haut) : « <hi
+rend="italic"
+>Romolo portato in cielo da Marte, avanti la maestà di Giove per deificarsi, là dove è Venere in atto supplicante per Romolo </hi
+>[…]<hi
+rend="italic"
+> vi sono ancora alcuni amorini che portano in cielo le insegne romane </hi
+>[dans l’axe principal, au-dessus de l’étoile couronnée des Altieri]<hi
+rend="italic"
+> e le rappresentano al sommo Giove </hi
+>[…]<hi
+rend="italic"
+> vi sono alcune cose que alludono a Romolo et altre alla casa Altieri </hi
+>[…] ». La fresque fait écho à celle de Pietro da Cortona pour le palais Barberini et à celle, consacrée à Énée, peinte au palais Doria Pamphilj. Comme le rappelle Sybille Ebert-Schifferer, la famille Altieri pouvait, à la différence des Barberini ou des Pamphili, se revendiquer d’une ancienne origine romaine et faire valoir les liens établis notamment par Marcantonio Altieri au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle avec l’administration du Capitole. Le programme, attribué par Eduard A. Safarik à l’érudit cardinal Paluzzo, aurait été conçu, selon Sybille Ebert-Schifferer, avec l’aide de Bellori et du cardinal Camillo Massimi, grand connaisseur d’art, également d’antique famille romaine, chargé par le pape des antiquités romaines et peut-être à l’origine du choix du peintre.</p
+></note
+>).</p
+></div
+><div
+type="section1"
+xml:id="div04"
+><head
+>Extension scénique, dissémination et transformisme : l’apothéose Aldobrandini (1596-1602)</head
+><p
+xml:id="p18"
+>L’originalité des réalisations du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle ne doit pas dissimuler ce qu’elles doivent à une œuvre inaugurale sur laquelle nous nous devons d’insister : la salle Clémentine, située au second étage des appartements privés du pape, entre le débouché de la Scala Regia et la salle du Consistoire. Elle était destinée notamment, au sein de la nouvelle résidence papale initiée par Sixte Quint, aux réceptions des délégations étrangères, aux réunions du collège des cardinaux mais également, semble-t-il, à l’exposition du corps du pape défunt comme ce fut encore le cas pour Jean-Paul I et Jean-Paul II<note
+n="19"
+place="foot"
+xml:id="ftn61"
+><p
+>Voir Giovanni Pietro Chattard, <hi
+rend="italic"
+>Nuova descrizione del Vaticano : O Si a Della Sacrosanta Basilica Di S. Pietro Data in Lvce</hi
+>, Rome, Dalle stampe del Mainardi, 1762-1767,3. vol., t. II, chap. XX : « <hi
+rend="italic"
+>Appartamento Nobile pontificio nel’Palazzo di Clemente VIII detto di Sisto </hi
+>», p. 153-160 et p. 174, pour la description où la salle est donnée comme « <hi
+rend="italic"
+>ordinaria residenza della Guardia Svizzera</hi
+> », la fresque du Baptême est donnée comme celle de Constantin par saint Silvestre et non comme celui de saint Clément (p.158) ; voir de même Agostino Taja, <hi
+rend="italic"
+>Descrizione del Palazzo Apostolico Vaticano</hi
+>, In Roma, Appresso Niccolò e Marco Pagliarini, Marco Pagliarini, 1750, p. 493 et 494 (reprenant Baglioni). L’exposition du corps du défunt avait lieu d’abord dans ses appartements privés, puis dans les appartements officiels (salle du Trône, salle du Perroquet ou salle Clémentine), puis dans la chapelle Sixtine et enfin dans la basilique Saint-Pierre : voir Antonio Margheriti Mastino<hi
+rend="italic"
+>, La Mort du pape</hi
+>, Monaco, Liamar, 2015, p. 191-195.</p
+></note
+>. Sa décoration est due essentiellement à deux artistes toscans, Cherubino Alberti (1553-1615) et son frère Giovanni (1588-1601), que leur virtuosité en matière de perspective avait rendu célèbres. Les travaux initiés en 1596 se prolongèrent jusqu’en 1602 et furent commandés par Clément VIII Aldobrandini (1592-1605<note
+n="20"
+place="foot"
+xml:id="ftn62"
+><p
+>Voir toujours la riche monographie de Ludwig Freiherr von Pastor, <hi
+rend="italic"
+>The History of the Popes: From the Close of the Middle Ages, Drawn From the Secret Archives of the Vatican and Other Original Sources</hi
+>, R. F. Kerr (éd.), Londres, Paul Kegan Trench, Trubner &amp; Co., 1933, vol. 33 : <hi
+rend="italic"
+>Clement VIII (1592-1605)</hi
+>. Sur le décor : Stefania Macioce, <hi
+rend="italic"
+>« Undique Splendent ». Aspetti della pittura sacra nella Roma di Clemente VIII Aldobrandini (1592-1605)</hi
+>, Rome, De Luca, 1990, chap. II, p. 74 et suiv. ; « Per un’introduzione al pontificato di Clemente VIII Aldobrandini (1592-1605): politica e committenza », <hi
+rend="italic"
+>Bollettino della Deputazione di Storia Patria per l’Umbria</hi
+>, vol. 111, n<hi
+rend="sup"
+>o</hi
+> 1-2, 2014, p. 709-726 ; Christopher L. C. Ewart Witcombe, « Cesare Ripa and the Sala Clementina », <hi
+rend="italic"
+>Journal of the Warburg and Courtauld Institutes</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 55, 1992, p. 277-282 ; Laura Carlevaris, « La Sala Clementina: La costruzione pittorica delle pareti dallo schema compositivo alla griglia prospettica », <hi
+rend="italic"
+>Bollettino-Monumenti, Musei e Gallerie Pontificie</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 21, 2001, p. 320-361 ; Anna Laura Carlevaris, Laura De Carlo et Daniel Di Marzio, « La sala Clementina in Vaticano tra manierismo e barocco », dans Fauzia Farneti et Deanna Lenzi (dir.), <hi
+rend="italic"
+>L’architettura dell’inganno. Quadraturismo e grande decorazione nella pittura di età barocca</hi
+>, Florence, Alinea, 2004, p. 133-148 ; Elisabeth Oy-Marra, <hi
+rend="italic"
+>Profane Repräsentationskunst in Rom von Clemens VIII Aldobrandini bis Alexander VII Chigi. Studien zur Funktion und Semantik römischer Deckenfresken im höfischen Kontext</hi
+>, Munich-Berlin, Deutscher Kunstverlag, 2005, chap. I : « Der Papst als spirituelles Haupt der Kirche : Die Fresken der Sala Clementina im Vatikan », p. 15-46. Antérieurement : Morton C. Abromson, « Clement VIII’s Patronage of the Brothers Alberti », <hi
+rend="italic"
+>The Art Bulletin</hi
+>, vol. LX, n<hi
+rend="sup"
+>o</hi
+> 3, septembre 1978, p. 531-547 ; <hi
+rend="italic"
+>Painting in Rome during the Reign of Clement VIII (1592-1607), a Documentary Study</hi
+>, these de doctorat, Columbia University, 1976 ; ainsi que Kristina Herrmann Fiore, « Giovanni Albertis Kunst und Wissenschaft der Quadratur. Eine Allegorie in der Sala Clementina des Vatikan », <hi
+rend="italic"
+>Mitteilungen des Kunsthistorisches Institutes in Florens</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 22, 1978, p. 61-84 ; Christopher L. C. Ewart Witcombe, « A new fresco by Cherubino Alberti in the Vatican », <hi
+rend="italic"
+>Notes in the History of Art</hi
+>, 1984, vol. 4, n<hi
+rend="sup"
+>o</hi
+> 1, p. 12-16. Plus largement et récemment : Clare Robertson, <hi
+rend="italic"
+>The city and the visual arts under Clement VIII</hi
+>, New Haven, Yale University Press, 2015 ; Guido Cornini, Anna Maria De Strobel et Maria Serlupi Crescenzi, « L’appartamento papale di rappresentanza », dans Carlo Pietrangeli (dir.), <hi
+rend="italic"
+>l Palazzo apostolico vaticano</hi
+>, Florence, Nardini Editori, 1992, p. 169-185 ; la contribution de Lucia Simonato dans Francesco Buranelli (dir.), <hi
+rend="italic"
+>Vaticano Barocco. Arte, architettura e cerimoniale</hi
+> [Cité du Vatican, Libreria Editrice Vaticana, 2012], Milan, Jaca Book, 2014, chap. IV : « Il Palazzo Apostolico Vaticano » ; Romeo Panciroli, <hi
+rend="italic"
+>The audience suite of the papal apartments</hi
+>, Cité du Vatican, Libreria Editrice Vaticana, 2004.</p
+></note
+>) afin de célébrer le saint homonyme du pape régnant, le martyr saint Clément, saint du premier siècle et troisième successeur de saint Pierre.</p
+><p
+xml:id="p19"
+>Deux grandes compositions occupent les parois des extrémités de la salle. Un vaste paysage, dû à Paul Bril, illustre <hi
+rend="italic"
+>Le Martyre</hi
+> du saint (fig. 172) et fait face à une scène de <hi
+rend="italic"
+>Baptême</hi
+><note
+n="21"
+place="foot"
+xml:id="ftn63"
+><p
+>La scène a été décrite à plusieurs reprises comme le baptême de Constantin : il s’agit plus vraisemblablement soit du propre baptême de Clément, soit, et le seul mentionné par Jacques de Voragine (<hi
+rend="italic"
+>La Légende dorée</hi
+>, chap. CLXVII, II, 652), du baptême par Clément de l’ex-païen Sisinnius, « ami de l’empereur » Domitien, auquel Clément avait rendu la vue et l’ouïe, qu’il convertit puis baptisa avec 313 « personnes de sa famille », Sisinnius ayant par la suite converti nobles et familiers de l’empereur Nerva, le martyre du saint ayant eu lieu sous Trajan.</p
+></note
+> (fig. 173), opposant les deux termes extrêmes de la vie chrétienne : l’entrée dans l’Église et le martyre du saint qui ouvre sur son apothéose céleste. Sur les parois latérales (fig. 174), se déploient nombre d’anges ou de <hi
+rend="italic"
+>putti</hi
+> ainsi que toute une série d’allégories des vertus cardinales et théologales, étroitement inspirées de l’édition de 1593 (non encore illustrée) de l’<hi
+rend="italic"
+>Iconologia</hi
+> de Cesare Ripa, traité dont nous connaissons la fortune au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. D’autres allégories (dont la <hi
+rend="italic"
+>Religion</hi
+> et la <hi
+rend="italic"
+>Charité</hi
+> sur l’axe médian, la <hi
+rend="italic"
+>Clémence</hi
+> et la <hi
+rend="italic"
+>Justice</hi
+> sur l’autre axe, l’<hi
+rend="italic"
+>Abondance</hi
+> et la <hi
+rend="italic"
+>Bénignité</hi
+> ou <hi
+rend="italic"
+>Bienfaisance</hi
+>), se dressent encore sur la balustrade feinte du registre supérieur.</p
+><p
+xml:id="p20"
+>La voûte (fig. 175) est occupée, au centre, par saint Clément agenouillé sur des nuées, dressé vers la Trinité lumineuse, et environné d’anges dont l’un soutient l’ancre avec laquelle il avait été précipité au sein des flots de la mer Noire. Aux deux extrémités, un autre ensemble d’anges soutient dans un savant désordre les emblèmes institutionnels de la papauté. D’un côté, les clefs et l’<hi
+rend="italic"
+>ombrellino</hi
+>, insignes de l’Église romaine et de sa puissance temporelle conférée éternellement à l’Église, même en l’absence du pape<note
+n="22"
+place="foot"
+xml:id="ftn64"
+><p
+>Bruno Bernard Heim<hi
+rend="italic"
+>, Coutumes et droits héraldiques de l’Église</hi
+> [1949], Paris, Beauchesne, 2000, p. 67 rappelle que cet insigne, à la mort du pape, passe, tout comme les clefs, dans le timbre du cardinal camerlingue chargé d’administrer les droits temporels de l’Église pendant la vacance du Saint-Siège au nom du Sacré Collège. Les clefs en tant qu’attributs de l’Église deviennent celles de la papauté qui se confond avec l’Église tout entière : voir Édouard Bouyé, « Les armoiries pontificales à la fin du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. Construction d’une campagne de communication », <hi
+rend="italic"
+>Médiévales</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 44, 2003, p. 177 et 178, http://medievales.revues.org/938 ; de même Martine Boiteux, « La vacance du siège pontifical. De la mort et des funérailles à l’investiture du Pape : les rites de l’époque moderne », dans José Pedro Paiva (dir.), <hi
+rend="italic"
+>Religious Ceremonials and Images</hi
+>. <hi
+rend="italic"
+>Power and social meaning (1400-1750)</hi
+>, Coimbra, Palimage Editores, 2002, p. 103-141, ici p. 110 : la <hi
+rend="italic"
+>potestas</hi
+> papale, lors d’un interrègne, est assurée par un « État éphémère » doté de son blason particulier « par l’assemblage du baldaquin au-dessus des clefs entrecroisées ».</p
+></note
+>. Ils sont placés au-dessus du siège pontifical et de la vive mais provisoire présence de celui qui incarne par sa propre personne cette puissance. À l’opposé, associée à l’étoile (mais non à la bande dentée ou <hi
+rend="italic"
+>rastrelli</hi
+> des Aldobrandini), s’élève la tiare rayonnante sur le monde (<hi
+rend="italic"
+>signum imperii</hi
+> depuis Innocent III), que reçoit le nouveau pape lors de son couronnement en substitution de la mitre. Cette scène décisive de la vie du nouveau pontife est par exemple représentée par Pietro Bernini au sommet du tombeau du pontife dans la chapelle Pauline de Santa Maria Maggiore<note
+n="23"
+place="foot"
+xml:id="ftn65"
+><p
+>Martine Boiteux, art. cité, p. 130 et 131 sur, une fois l’élection faite et antérieurement au <hi
+rend="italic"
+>Possesso</hi
+>, le couronnement public du pape qui s’effectue devant la façade de Saint-Pierre.</p
+></note
+>. Modèle fondateur mythique de la papauté, signes universels de la puissance de l’Église et incarnation individuelle de ce pouvoir sont ainsi conjoints.</p
+><p
+xml:id="p21"
+>Le thème central de la voûte est celui de l’apothéose d’un saint déjà présent « dans l’Empyrée, heureux possesseur de sa Gloire<note
+n="24"
+place="foot"
+xml:id="ftn66"
+><p
+>Voir la description inédite de Michelangelo Lualdi Romano, ms. Bib. Corsininiana cod. 275 : « Memorie istoriche, e curiose del Tempio e Palazzo Vaticano », vol. III, p. 23-25, cité par Kristina Hermann-Fiore, « La salle clémentine au Palais apostolique du Vatican », dans Jean-Marc Olivesi (dir.), <hi
+rend="italic"
+>Les cieux en gloire. Paradis en trompe-l’œil pour la Rome baroque</hi
+>, catalogue d’exposition, Ajaccio, Musée Fesch, 2002, p. 101-115.</p
+></note
+> ». Quand, dans nombre de cas, l’élévation et la suspension de l’armoirie ne semblaient pas avoir de terme ultime, sinon le fait même d’être élevé et en suspens, le point visé est bien le dernier ciel de l’empyrée céleste, explicitant la dimension eschatologique qui est aussi vraisemblablement celle des grandes compositions postérieures de Valesio, Pietro da Cortona ou Canuti. L’exaltation du martyr Clément sert, par homonymie, à la gloire du pape régnant comme le faisait également, à l’égard d’Urbain VIII, le tableau attribué à Charles Mellin et présent dans les collections de Francesco Barberini : <hi
+rend="italic"
+>L’Apothéose de saint Urbain </hi
+>(vers 1630, Rome, Galleria Nazionale di Arte Antica, Palazzo Barberini), pape entre 222 et 230. Le ciel est le lieu auquel peut également prétendre un Clément VIII dont toutes les vertus suprêmes, rassemblées sous la Providence divine, semblent attester l’exemplarité chrétienne et anticiper la propre future apothéose : l’exposition semi-publique des corps des papes défunts en ce lieu, sous l’apothéose même de saint Clément, présentait un suggestif raccourci de l’itinéraire espéré.</p
+><p
+xml:id="p22"
+>Par extension, le martyr Clément offre le modèle d’une gloire céleste non seulement à Clément VIII, mais à toute la dynastie des Aldobrandini, comme l’attestent, sur les parois, l’élévation et la suspension des emblèmes pontificaux et familiaux du pape et, sur la voûte, l’élévation angélique et le couronnement de l’étoile par la tiare. Dans un autre registre historique, <hi
+rend="italic"
+>L’Apothéose de saint Clément </hi
+>pourrait jouer, relativement cette fois aux Aldobrandini, le rôle qu’eut plus tard <hi
+rend="italic"
+>L’Apothéose de Romulus</hi
+> à l’égard de Clément X Altieri et de sa lignée dans l’antichambre du palais familial décorée par Canuti, où nous retrouvons le même meuble héraldique stellaire. Le thème fut repris au <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle sous Clément XI Albani (1700-1721) qui célébra à son tour, avec un large déploiement héraldique, <hi
+rend="italic"
+>L’Apothéose de saint Clément</hi
+> au plafond de l’église Santo Clemente qui en conserve les reliques<note
+n="25"
+place="foot"
+xml:id="ftn67"
+><p
+>C’est <hi
+rend="italic"
+>L’Apothéose de saint Clément</hi
+> peinte par Giuseppe Chiari en 1715.</p
+></note
+>. L’association est celle que l’on trouve encore dans les grands plafonds à caissons des églises romaines déjà signalées, où l’exaltation des armes pontificales (Borghese, Barberini, etc.) s’accorde à plusieurs reprises aux scènes d’apothéose de saints éminents (Crisogono, Cosme et Damien) ou à celles, également ascensionnelles, de l’Assomption et de l’Ascension. Tel est par exemple le cas à Santa Maria in Trastevere, où le plafond à caissons du Dominiquin intègre une <hi
+rend="italic"
+>Assomption</hi
+> répondant à l’écu dédoublé du cardinal Pietro Aldobrandini, qui en fut le commanditaire en 1615. De la même façon, <hi
+rend="italic"
+>L’Ascension du Christ</hi
+> due au Cavalier d’Arpin, qui domine l’autel du transept gauche de San Giovanni in Laterano, fait écho à l’écu monumental de Clément VIII sur le plafond (1597-1601<note
+n="26"
+place="foot"
+xml:id="ftn68"
+><p
+>Rappelons que la sacristie des chanoines de la basilique (dite également <hi
+rend="italic"
+>sala Clementina</hi
+>) honore également saint Clément par un décor de nouveau confié à Giovanni et Cherubino Alberti, associés à Agostino Ciampelli (<hi
+rend="italic"
+>circa</hi
+> 1600).</p
+></note
+>).</p
+></div
+><div
+type="section1"
+xml:id="div05"
+><head
+>Poétique</head
+><p
+xml:id="p23"
+>Nous retrouvons dans ce dispositif complexe, outre l’élévation et la mise en gloire des armes pontificales (clefs, <hi
+rend="italic"
+>ombrellino</hi
+>, tiare, étoile des Adobrandini), l’ensemble quasi complet des nombreuses opérations formelles et rhétoriques qui ont organisé par la suite l’usage des armoiries dans les grands décors du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle romain :</p
+><list
+rendition="#list-ndash"
+type="unordered"
+xml:id="list1"
+><item
+>la monumentalisation, par amplification, des emblèmes de la papauté et des meubles de l’écu personnel et familial ;</item
+><item
+>le soutien et l’élévation angélique de ces éléments où, variante du <hi
+rend="italic"
+>Stemma in arrivo</hi
+> (dans l’espace terrestre), se substitue celui du <hi
+rend="italic"
+>Stemma in partenza</hi
+> (vers le ciel)<hi
+rend="italic"
+>. </hi
+>Les anges <hi
+rend="italic"
+>reggi-stemma </hi
+>associés au commanditaire et à son statut font ici échos aux anges psychopompes (<hi
+rend="italic"
+>reggi-anima</hi
+>) porteurs de l’âme de saint Clément ;</item
+><item
+>l’extraction et la dissémination des meubles dans un contexte inédit, devenus ainsi indépendants de l’armoirie et de son écu. Cherubino Alberti en a repris le principe en 1604 pour la plus modeste échelle de la voûte de la chapelle Aldobrandini à Santa Maria sopra Minerva ;</item
+><item
+>une forme généralisée d’animation et d’activation des objets qui trouve, sur la voûte, son expression ultime dans le couronnement de l’étoile Aldobrandini par la tiare papale ;</item
+><item
+>l’incorporation spatiale des éléments armoriaux au sein d’un nouveau et élargi contexte scénique, narratif et théologique ;</item
+><item
+>le motif de « l’armoirie transformiste » où les armes familiales sont soumises à d’inédites manipulations.</item
+></list
+><p
+xml:id="p24"
+>Insistons sur deux opérations essentielles dans ce décor : la tension entre dissémination et intégration unitaire des meubles ou des autres éléments de l’armoirie ; la dynamique « transformiste » ou « métamorphique » de l’armoirie.</p
+><p
+xml:id="p25"
+>Relevons tout d’abord que emblèmes et meubles héraldiques, dispersés principalement sur les parties hautes, tendent à se rassembler ailleurs : au centre du pavement de la salle, où est présent l’écu familial complet timbré de la tiare et des clefs en sautoir, et sur le registre inférieur des parois latérales de marbre entre les fenêtres et les portes (l’écu avec tiare et clefs, ou bien une seule étoile surmontée de la tiare et des clefs). L’écu complet est également disposé sous une forme monumentale au niveau supérieur de l’architecture fictive de la composition, dans un espace intermédiaire entre ciel et terre qui évoque la solution reprise plus tard par Canuti au palais Altieri. Dans l’un des angles de la voûte (côté trône) deux figures – qui évoquent les <hi
+rend="italic"
+>ignudi</hi
+> de Michel-Ange – soutiennent l’écu Aldobrandini reconstitué (avec étoiles et bande dentée), un <hi
+rend="italic"
+>putto</hi
+> ou un ange élevant la tiare en gloire accompagnée des habituelles clefs en sautoir. Le même motif est présent sur l’angle diagonal opposé (côté entrée) (fig. 176) mais accompagné cette fois d’une reprise extériorisée, amplifiée et transformée de la bande dentée devenue un surprenant fragment de cylindre : il forme une sorte de couronne glissée sous l’entablement du fronton qu’il semble supporter et surélever. Le meuble inscrit dans l’écu est ainsi devenu un élément autonome associé à une fonction à la fois référentielle (l’objet est le support de l’inscription avec le nom du pape régnant), structurelle ou tectonique (il contribue à porter l’édifice), et symbolique : soutenir ce qui peut sans doute s’assimiler à l’<hi
+rend="italic"
+>Ecclesia</hi
+>, situation qui était également celle, sous Jules III del Monte, du <hi
+rend="italic"
+>trimonzio</hi
+> placé sous l’édifice symbolique de l’Église dans certaines représentations<note
+n="27"
+place="foot"
+xml:id="ftn69"
+><p
+>Sur ce point, voir l’article d’Yvan Loskoutoff dans le présent volume, « L’héraldique de Jules III Ciocchi del Monte (1550-1555) dans l’ornement pour le livre », fig. 16.</p
+></note
+>.</p
+><p
+xml:id="p26"
+>La fragmentation/dispersion des meubles armoriaux est ailleurs portée à son comble. Si l’étoile est presque partout présente, de nombreuses figures, anges ou génies placés en amortissement sur la balustrade feinte ou dans les ouvertures des parois latérales, brandissent encore l’étoile ou la bande dentée dans de nouveaux contextes signifiants. D’autres angelots, face-à-face sur les parois latérales, portent également en suspension la tiare ou les clefs de saint Pierre. La figure rhétorique employée est celle de la synecdoque, où un élément isolé renvoie à une unité complète. Étoile, bande dentée, tiare et clefs dispersées ou associées de façon partielle évoquent le blason que le spectateur est amené à reconstituer imaginairement en recomposant les éléments épars : l’écu familial monumental au centre du pavement avec la tiare et les clefs pourrait constituer à cet égard le lieu matriciel où se rassemblent, ou bien d’où se sont dispersées, les unités éparses ailleurs dans l’espace<note
+n="28"
+place="foot"
+xml:id="ftn70"
+><p
+>Dans l’espace multidirectionnel de la salle, l’ordre de lecture et d’interprétation des lieux n’est plus celui auquel oblige la linéarité et la surface du texte et permet des associations ouvertes mais néanmoins réglées et contraignantes.</p
+></note
+>. Diffuse ou ramassée sous différentes configurations, la présence pontificale est ainsi démultipliée et donnée comme une puissance agissante qui investit toute la salle et exige l’implication perceptive et cognitive des destinataires dont la propre activité relationnelle doit se déployer dans l’ensemble de l’espace.</p
+><p
+xml:id="p27"
+>Acmé de cette puissance, la seconde opération décisive qu’il faut relever dans ce grand décor est celle de l’armoirie que nous disons transformiste, dont les meubles sont appelés non plus seulement à se <hi
+rend="italic"
+>rassembler</hi
+> sous la forme unitaire de l’écu et de ses ornements obligés, mais à se <hi
+rend="italic"
+>réagencer et métamorphoser</hi
+> en une autre forme. Virtuose est ici le motif, présent sur une des parois latérales (à droite du trône pontifical) (fig. 177), où les meubles de l’écu – étoiles et « <hi
+rend="italic"
+>banda dentata</hi
+> » – sont recomposés pour former de nouvelles et inédites figures. Deux personnages, l’un vêtu d’une peau animale qui ferait référence au <hi
+rend="italic"
+>Labeur</hi
+> (<hi
+rend="italic"
+>Labor</hi
+>) manuel du peintre (tenant les pinceaux d’une main et un livre au-dessous) et l’autre, avec règle et compas qui évoquent la <hi
+rend="italic"
+>Perspective</hi
+> selon Ripa<note
+n="29"
+place="foot"
+xml:id="ftn71"
+><p
+>Jean Baudoin, <hi
+rend="italic"
+>Iconologie ou les principales choses qui peuvent tomber dans la pensée touchant les Vices et les Vertus</hi
+>..., Paris, Aux amateurs de livres, 1643, t. I, p. 148 et figure p. 146 rapportant la chaîne d’or « où pend un œil en lieu de joyau », la règle, équerre, fil à plomb, miroir (absent ici), le livre mais tenu par l’autre figure.</p
+></note
+>, se trouvent à proximité de deux sphères issues du réagencement des meubles Aldobrandini. Ces sphères font allusion aux sciences de la perspective et des mathématiques maîtrisées par nos artistes<note
+n="30"
+place="foot"
+xml:id="ftn72"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 109, figure p. 107, avec présence de la sphère et tracé d’une étoile.</p
+></note
+>. L’ensemble constitue également une forme d’autoportrait ou de signature des peintres, conjuguant pratique et théorie de l’art tout en témoignant encore de leurs investissements spirituels<note
+n="31"
+place="foot"
+xml:id="ftn73"
+><p
+>Le personnage en contrebas pourrait être un autoportrait de Giovanni Alberti, associant dans ses vêtements les attributs de son protecteur personnel, saint Jean-Baptiste, et de saint Luc (la tête cornée), le chien renvoyant à la Fidélité.</p
+></note
+>.</p
+><p
+xml:id="p28"
+>Les sphères renvoient en outre aux globes armillaires de la science astronomique. Stefania Macioce, à la suite de Kristina Herrmann Fiore, y voit une allégorie sacrée où la Vérité, découverte grâce à l’association du travail et de la science perspective qui scrute le ciel, accède à une connaissance supérieure. Celle-ci est éclairée par la lumière céleste et placée sous la protection pontificale à laquelle ferait allusion la tiare présente au sommet de la composition, associée au <hi
+rend="italic"
+>motto</hi
+> « <hi
+rend="small-caps italic"
+>Undique Sple[n]dent</hi
+> » [il resplendit partout]. Sans doute faut-il établir une relation entre le ciel physique auquel s’attachent les efforts contraints de la science humaine et celui, métaphysique (l’empyrée), auquel seule l’âme sauvée accède au niveau de la voûte, grâce aux autres qualités et vertus acquises.</p
+><p
+xml:id="p29"
+>Le meuble héraldique renaît ainsi et se déploie dans l’univers de l’emblématique, de la devise<note
+n="32"
+place="foot"
+xml:id="ftn74"
+><p
+>Les nombreux cas, attestés dès le <hi
+rend="italic"
+>Dialogo delle imprese militari e amorose </hi
+>de Paolo Giovio en 1551, des devises issues de la reprise de meubles armoriaux.</p
+></note
+> et de l’allégorie, assumant une fonction spirituelle et également poétique ou métalinguistique, où il se prend lui-même pour objet<note
+n="33"
+place="foot"
+xml:id="ftn75"
+><p
+>Sur ces échanges voir par exemple Anne Rolet, « Aux sources de l’emblème : blasons et devises », <hi
+rend="italic"
+>Littérature</hi
+>, vol. 145, n<hi
+rend="sup"
+>o</hi
+> 1, 2007, p. 53-78.</p
+></note
+>.</p
+></div
+><div
+type="section1"
+xml:id="div06"
+><head
+>De la scène au milieu, de l’interprétation à la subjectivation</head
+><p
+xml:id="p30"
+>L’entreprise monumentale de la salle Clémentine constitue sans doute à Rome le plus ambitieux exemple de déploiement armorial de l’époque moderne. L’espace architectural est entièrement investi et absorbé par le pouvoir pontifical qui en marque chaque lieu de façon différenciée, impliquant une organisation à la fois axialisée, polarisée et hiérarchisée de tout l’espace, susceptible d’effets multiples sur le spectateur.</p
+><p
+xml:id="p31"
+>Le point focal déterminant (et le point de fuite de l’architecture de la paroi principale) est bien entendu le trône papal. Il est disposé en contrebas et au centre du portique feint représenté sur la paroi arrière. Le déploiement de la fresque établit un véritable <hi
+rend="italic"
+>frons scenae</hi
+> théâtral qui, simultanément, encadre, détache et permet d’exalter la présence pontificale en s’étalant largement sur les angles des parois latérales pour mettre en évidence toute la partie antérieure de la salle. Le siège papal se situe également au croisement de l’axe horizontal (communautaire) du volume rectangulaire et de l’axe vertical (transcendant) dont la continuité est rendue sensible par les percements successifs du double portique juxtaposé et la superposition de motifs éminents : <hi
+rend="italic"
+>ombrellino</hi
+> et clefs / Saint-Esprit rayonnant (dédoublé sur l’axe transversal pour illuminer également la Justice) / allégorie de la <hi
+rend="italic"
+>Religion</hi
+> (qui reprend aussi les attributs de l’<hi
+rend="italic"
+>Autorité</hi
+><note
+n="34"
+place="foot"
+xml:id="ftn76"
+><p
+>Jean Baudoin, <hi
+rend="italic"
+>op. cit</hi
+>., p. 24 et figure p. 22 : les clefs renvoyant à la puissance « notamment spirituelle » issue de Dieu, le sceptre étant « une marque de la puissance temporelle », les Livres (ici Évangiles et Tables de la Loi) étant « un signe expres de l’Authorité des Escritures ».</p
+></note
+>) / baptême du futur martyr recevant l’eau et sur lequel des anges déversent des fleurs / trône papal. L’autre point focal et complémentaire est précisément le motif central de l’écu familial formé par le dallage du sol. Il se trouve à l’aplomb exact de l’<hi
+rend="italic"
+>Apothéose de saint Clément</hi
+>, ultime destin eschatologique visé également par Clément VIII au terme de sa vie terrestre, et aspiration commune des membres de la dynastie Aldobrandini<note
+n="35"
+place="foot"
+xml:id="ftn77"
+><p
+>La disposition en ce lieu, si tel était le cas, du corps du pape défunt irait dans le sens de cette démonstration symbolique. </p
+></note
+> et de tous les chrétiens.</p
+><p
+xml:id="p32"
+>Comment comprendre l’espace ainsi produit ? Maîtrisé par les artistes, « l’art de peindre la scène » (<hi
+rend="italic"
+>scaeno-graphia</hi
+>) est ce qui accomplit la mise en forme et la « mise en sens » de l’espace architectural<note
+n="36"
+place="foot"
+xml:id="ftn78"
+><p
+>Laurent Hablot, « Le décor emblématique chez les princes de la fin du Moyen Âge : un outil pour construire et qualifier l’espace », dans Thomas Lienhard (dir.), <hi
+rend="italic"
+>Construction de l’espace au Moyen Âge : pratiques et représentations</hi
+>, actes du 37<hi
+rend="sup"
+>e</hi
+> congrès de la Société des historiens médiévistes de l’enseignement supérieur public, Paris, Publications de la Sorbonne, 2007, p. 147-165, article de référence pour notre sujet.</p
+></note
+>, de ses acteurs et plus généralement de ses actants au sein desquels s’insèrent les objets et notamment, aux côtés des nombreuses inscriptions, les signes héraldiques, emblématiques et symboliques. En résulte, plus largement, une « mise en scène » qu’il faut entendre, dans le contexte de la salle Clémentine, au sens premier du terme. C’est-à-dire comme l’établissement d’une <hi
+rend="italic"
+>skènè</hi
+> où se manifestent dans leur actualité phénoménale les dieux et ceux – êtres et choses – qui prétendent les représenter sous différentes formes cumulatives d’instanciation présentielle : corps réel et singulier du pape sur son trône, corps modèle d’identification projective idéale qu’est saint Clément, corps collectif dynastique qu’évoquent les armoiries familiales, corps statutaire trans-individuel que signifient les emblèmes pontificaux.</p
+><p
+xml:id="p33"
+>En cette scène, les êtres représentés et les personnes réelles, les acteurs et les spectateurs devenus à leur tour acteurs, mais aussi les choses représentant ces êtres, paraissent se confondre dans un même espace. L’objet héraldique joue ici, de même que les autres images, un rôle déterminant. Transformé en chose animée et agissante, notamment par la mobilité et les actions dont il est alors fréquemment investi, il tend à devenir ce que nous pourrions désigner comme un « presqu’être ». Insigne (<hi
+rend="italic"
+>insignis</hi
+>) ou ensemble d’insignes, il ne se contente pas, comme le fait un simple signe (<hi
+rend="italic"
+>signum</hi
+>) ou un signal, de renvoyer en termes sémiotiques à son référent et de <hi
+rend="italic"
+>représenter</hi
+> l’individu ou une communauté. Mais il peut tendre effectivement, comme certaines images du pouvoir politique ou religieux<note
+n="37"
+place="foot"
+xml:id="ftn79"
+><p
+>Démonstration classique de Louis Marin, <hi
+rend="italic"
+>Le portrait du roi</hi
+> [1981], Paris, Éditions de Minuit, 2001, « Introduction », p. 13 : « ses signes [les signes iconiques de la présence royale] sont la réalité royale, l’être et la substance du prince, cette croyance est nécessairement exigée par les signes eux-mêmes… ».</p
+></note
+>, à <hi
+rend="italic"
+>s’identifier</hi
+> à ceux qu’il représente, voire même à les <hi
+rend="italic"
+>investir </hi
+>de la puissance et de la dignité qu’ils revendiquaient. Sans doute est-ce cette qualité présentielle et vitaliste qui explique notamment, évoquée par Michel Pastoureau, la « terreur héraldique » des révolutionnaires à l’égard des « signes » dits de « féodalité », en grande partie analogue à l’acharnement des iconoclastes du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle vis-à-vis d’images également suspectées d’entretenir la confusion idolâtre entre représentation et divinité.</p
+><p
+xml:id="p34"
+>Une autre caractéristique éminente du lieu commun où s’articulent ces différents actants est qu’il s’agit d’un espace englobant. Bien que polarisé, hiérarchisé et déterminant une relation frontale vis-à-vis du siège papal, il est presque infiniment dilaté dans toutes ses directions grâce à l’usage de la perspective. Un tel espace ne se réduit pas pour autant à ses coordonnées géométriques abstraites ni à un illusionnisme spatial qui en feraient un simple contenant pour divers contenus. Il est une structure relationnelle, un « milieu » (le <hi
+rend="italic"
+>medium </hi
+>aristotélicien), un « environnement », peut-être une « ambiance » (<hi
+rend="italic"
+>Stimmung</hi
+>) ou une « atmosphère » dont la description qu’en livre Émile Zola et que nous citons en exemple est un précieux bien que tardif témoignage<note
+n="38"
+place="foot"
+xml:id="ftn80"
+><p
+>Émile Zola, <hi
+rend="italic"
+>op. cit</hi
+>, p. 600.</p
+></note
+>. Ce milieu est celui où importent autant les coordonnées géométriques et les signes qui investissent l’espace (relevant des sphères théologiques, politiques et sociales), que les couleurs (fondues en « une vague apparition fauve »), les reflets, la lumière et le clair-obscur (les « reflets de joyaux et de pierreries », les « demi-ténèbres »), faisant de l’espace interne de la salle un lieu indéterminé en accord avec l’ouverture céleste de la voûte. Le lieu est également indissociable des actions qui s’y déroulent et actualisent ses potentialités<note
+n="39"
+place="foot"
+xml:id="ftn81"
+><p
+>Voir par exemple la catégorisation de Gernot Böhme, <hi
+rend="italic"
+>Aisthetique. Pour une esthétique de l’expérience sensible </hi
+>[2001]<hi
+rend="italic"
+>, </hi
+>Martin Kaltenecker et Franck Lemonde (trad.), Dijon, Les Presses du réel, 2020, p. 112, qui distingue cinq « classes de caractères atmosphériques » : les caractères sociaux, les synesthésies, les humeurs, les caractères communicationnels, les impressions de mouvement.</p
+></note
+>. L’ensemble des actants s’inscrit en effet au sein de la représentation d’un récit, ponctué d’étapes et d’épreuves intégratrices (conversion et baptême, vie vertueuse, martyre, apothéose) qui forment autant d’événements se rapportant à l’économie du salut. Le récit, distribué sur tous les axes de l’espace-milieu de la salle Clémentine, est celui que les spectateurs-acteurs étaient eux-mêmes amenés à partager et à revivre pour leur propre salvation, par leurs positions, leurs perceptions, leurs trajectoires et leurs projections imaginaires. En leur absence, que constate le héros d’Émile Zola qui traverse nuitamment des salles désertées, le lieu redevient « une solitude élargie » énigmatique dépourvue de signification.</p
+><p
+xml:id="p35"
+>Une telle conception de l’espace n’est pas sans conséquences sur les usagers comme sur nos propres pratiques interprétatives.</p
+><p
+xml:id="p36"
+>Au-delà des fonctions référentielles et cognitives de ce décor et du déchiffrement érudit presqu’infini qu’il peut communément susciter (lecture iconographique, sémiotique analytique ou synthétique, interprétations exégétiques et herméneutiques), la mise en forme et la mise en scène génèrent des effets peut-être plus essentiels encore sur le spectateur/acteur. Effets à la fois phatiques (contacts), expressifs (sensations synesthésiques, affects, sentiments, <hi
+rend="italic"
+>pathos</hi
+>), injonctifs, conatifs et pragmatiques (obligations, résolutions). Les <hi
+rend="italic"
+>dispositifs</hi
+> formels (l’antique <hi
+rend="italic"
+>dispositio</hi
+>) impliquent notamment des <hi
+rend="italic"
+>dispositions </hi
+>corporelles et intérieures, c’est-à-dire des « tonalités affectives » au sens de Gernot Böhme<note
+n="40"
+place="foot"
+xml:id="ftn82"
+><p
+>Gernot Böhme, <hi
+rend="italic"
+>op. cit</hi
+>., chap. V. La tonalité renvoie au terme traditionnel en allemand de <hi
+rend="italic"
+>Stimmung.</hi
+></p
+></note
+> qui adviennent lors des « expériences d’insertion » que vivent les usagers de ces espaces<note
+n="41"
+place="foot"
+xml:id="ftn83"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 57.</p
+></note
+>. L’attention méditative, l’admiration, la surprise, le saisissement, la fascination, le désir d’imitation, l’exaltation, l’impression d’une intégration immersive dans un univers ascensionnel dont le chrétien est supposé être partie intégrante au sein de l’<hi
+rend="italic"
+>Ecclesia</hi
+>, tous ces sentiments peuvent céder la place à des impressions dysphoriques : sentiments de subordination, voire d’assujettissement, d’écrasement ou d’égarement au sein d’un univers saturé d’objets, de signes et d’obligations cérémonielles. Ces dernières peuvent dès lors être conçues non seulement comme des « marques de la protestation de foy, que nous faisons à Dieu », mais aussi comme un « tesmoignage de notre franche <hi
+rend="italic"
+>servitude</hi
+><note
+n="42"
+place="foot"
+xml:id="ftn84"
+><p
+>Claude Vavre, <hi
+rend="italic"
+>La cour de Rome la saincte. Ou traicté des ceremonies et coustumes qui s’observent dans la ville de Rome</hi
+>, Paris, Nicolas Buon, 1623, p. 134, sur les cérémonies conçues comme « marques de la protestation de foy, que nous faisons à Dieu, &amp; tesmoignage de notre franche servitude, au meilleur maistre de tout le monde, &amp; de l’ordre des creatures inferieures à leur Createur superieur » : à l’inacessibilité d’un Dieu invisible répond « l’exterieur des Ceremonies sacrees » visibles.</p
+></note
+> » à l’égard du Créateur et de ses représentants. Le lieu peut ainsi susciter, à l’image du héros d’Émile Zola dont la traversée déceptive des appartements privés du pape va signer l’échec de son ambition réformatrice, rejet et sentiment de discordance (la « discrépance » au sens de nouveau de Gernot Böhme).</p
+><p
+xml:id="p37"
+>L’espace-milieu et ses objets – où les éléments armoriaux jouent un rôle déterminant dans la salle Clémentine comme dans la plupart des grands décors baroques postérieurs – impliquent ainsi l’assignation à des positions obligées et l’incorporation de postures de soumission et de vénération où le sujet percevant est largement <hi
+rend="italic"
+>construit</hi
+> par l’objet perçu : ce que Michel Foucault désignait comme un processus de subjectivation qui peut être une forme d’aliénation. L’ordre spirituel évoqué – celui du ciel et de ses représentants ici-bas, où la hiérarchie céleste verticale qui culmine avec saint Clément trouve son répondant dans la hiérarchie terrestre horizontale dominée par le corps du pape régnant – oblige à l’intégration d’un ordre politique et social fondé sur l’exaltation d’un modèle de monarchie universelle d’institution divine, qu’attestent les anciens cérémoniaux curiaux<note
+n="43"
+place="foot"
+xml:id="ftn85"
+><p
+>Rappelons que Clément VIII est à l’origine du premier cérémonial publié à la suite du Concile de Trente en 1600 : le <hi
+rend="italic"
+>Cæremoniale episcoporum jussu Clementis VIII </hi
+>(édition parisienne en 1633, avec gravures). Toute une littérature livre la hiérarchie et les rites de la cour romaine, voir notamment Claude Vavre, <hi
+rend="italic"
+>op. cit.</hi
+> ; Frédéric Tantouche, <hi
+rend="italic"
+>Traicté des coustumes et ceremonies qui s’observent à Rome, &amp; ailleurs. Tant par nostre S. Père que par Messeigneurs les Eminentissimes &amp; Reverendissimes Cardinaux…</hi
+>, Paris, Fleury Bouriquant, 1631, notamment p. 88 sur les « Audiences du Pape » avec indication des différentes hiérarchies à respecter ; Francesco Sestini da Bibbiena<hi
+rend="italic"
+>, Il maestro di camera […] Di nuove ricorretto secondo il Ceremoniale Romano</hi
+>, Viterbo, Per Il Diotallevi, 1639 (sur les cardinaux) ; Girolamo Lunadoro, <hi
+rend="italic"
+>Relatione della corte di Roma, e de’riti da osservarsi in essa, e de’suoi magistrati, &amp; offitij, con la loro distinta giurisdittione</hi
+>, Bracciano, Andrea Fei, 1650, p. 86-88 sur la réception des ambassadeurs et des « <hi
+rend="italic"
+>Dame all’Audienza</hi
+> » (mais sans indication des lieux concernés) ; Gregorio Leti, <hi
+rend="italic"
+>Itinerario della corte di Roma ò vero teatro historico, cronologico, e Politico</hi
+>…, Valenza, Pietro Francesco Guerini, 1675, 3 vol., t. 2, p. 481-484, sur les réceptions publiques du pape (mais toujours sans indications de lieu) ; ainsi que Bernard Picart, <hi
+rend="italic"
+>Cérémonies et coutumes religieuses de tous les peuples du monde</hi
+>, Amsterdam, J. F. Bernard, 1723, 8 vol., t. II, « Supplément à ce qui concerne la Hiérarchie de l’Église ; où l’on donne un détail abrégé du spirituel de la Cour du Pape », p. 165-197 ; pour la période médiévale voir la somme de Michel Andrieu, <hi
+rend="italic"
+>Le pontifical romain au Moyen Âge</hi
+>, Cité du Vatican, BAV, 1938-1941. Le <hi
+rend="italic"
+>Diario di Roma</hi
+> mentionne la salle Clémentine à plusieurs occasions au <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle pour la cérémonie du lavement des « <hi
+rend="italic"
+>piedi ai tredici Sacerdoti di diverses nazioni</hi
+> » (29 mars 1823, p. 3, de même le 17 avril 1824, p. 3, etc.), mais cette cérémonie, concernant les « pauvres », se faisait dans la salle Ducale antérieurement (voir Frédéric Tantouche, <hi
+rend="italic"
+>op. cit</hi
+>., p. 64). L’étude de référence sur les relations de l’architecture palatiale (mais sans intégrer les résidences papales) et du cérémonial est celle de Patricia Waddy, <hi
+rend="italic"
+>Seventeenth-Century Roman Palaces. Use and the Art of the Plan</hi
+>, Cambridge-Londres, The MIT Press, 1990 ; sur le palais apostolique, mais avant notre période, voir Tristan Weddigen, Sible de Blaauw et Bram Kempers (éd.), <hi
+rend="italic"
+>Functions and Decorations : Art and Ritual at the Vatican Palace in the Middle Ages and the Renaissance</hi
+>, Cité du Vatican-Turnhout, BAV-Brepols, 2003, notamment la contribution de Bram Kempers, « Ritual and its images. Paris de Grassis, Raphaël and the “signatures” in the Vatican Stanze », p. 71-93. Si manquent les publications, une recherche systématique sur les usages de cette salle serait à mener dans les témoignages anciens et, au Vatican, dans l’<hi
+rend="italic"
+>Archivio delle celebrazioni liturgiche del Sommo Pontefice</hi
+>. Je remercie Martine Boiteux pour ces conseils.</p
+></note
+>. Les usages actuels en démontrent encore la force contraignante : pape en position centrale et élevée, membres éminents de la Curie à ses côtés, cardinaux disposés en rangs latéralement ou représentants extérieurs placés en face et en retrait du pape.</p
+><p
+xml:id="p38"
+>L’ordre symbolique auquel participe de façon décisive l’économie spatiale des armoiries détermine, en retour, une « mise en ordre » sociale et statutaire qui, si elle n’est pas immuable, reste toujours intensément prégnante.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig168.jpg"
+></graphic
+><head
+>Figure 164. Giovanni Luigi Valesio, <hi
+rend="italic"
+>L’Apothéose des armes Ludovisi, </hi
+>c. 1623, fresque, Rome, Casino Ludovisi, voûte de la salle « <hi
+rend="italic"
+>dell’armadio de’ libri</hi
+> » ou « <hi
+rend="italic"
+>della Stemma</hi
+> ».</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig169.jpg"
+></graphic
+><head
+>Figure 165. Raphaël, <hi
+rend="italic"
+>Angelots supportant l’écu papal</hi
+>, 1508, fresque, Cité du Vatican, voûte de la chambre de la Signature.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig170.jpg"
+></graphic
+><head
+>Figure 166. Pietro da Cortona, <hi
+rend="italic"
+>Voûte du grand salon du palais Barberini</hi
+>, 1632-1638, fresque, Rome (détail).</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig171.jpg"
+></graphic
+><head
+>Figure 167. Pietro da Cortona, <hi
+rend="italic"
+>Voûte de l’« Anticamera de’ cortigiani » ou salle de Mars</hi
+>, 1644-1646, fresque, Florence, palais Pitti.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig172.jpg"
+></graphic
+><head
+>Figure 168. Antonio Domenico Gabbiani, <hi
+rend="italic"
+>L’Apothéose de la famille Corsini</hi
+>, c. 1696, huile sur toile, modèle pour la fresque du salon du palais Corsini al Parione, Florence.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig173.jpg"
+></graphic
+><head
+>Figure 169. Pietro da Cortona, <hi
+rend="italic"
+>Décor de la voûte de la petite galerie du palais Barberini</hi
+>, 1632, fresque, Rome.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig174.JPG"
+></graphic
+><head
+>Figure 170. Domenico Maria Canuti, <hi
+rend="italic"
+>L’Apothéose de Romulus</hi
+>, c. 1675-1676, fresque, Rome, palais Altieri, voûte de l’antichambre.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig175.JPG"
+></graphic
+><head
+>Figure 171. Domenico Maria Canuti, <hi
+rend="italic"
+>L’Apothéose de Romulus</hi
+>, c. 1675-1676, fresque, détail d’un des angles de la voûte avec l’étoile des Altieri.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig176.jpg"
+></graphic
+><head
+>Figure 172. Paul Bril, <hi
+rend="italic"
+>Le Martyre de saint Clément</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine.</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig177.JPG"
+></graphic
+><head
+>Figure 173. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>La Sala Clementina</hi
+>, c. 1696-1602, Cité du Vatican.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig178.jpg"
+></graphic
+><head
+>Figure 174. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>Anges, putti et allégories</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail des parois latérales.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig179.JPG"
+></graphic
+><head
+>Figure 175. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>L’Apothéose de saint Clément</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, voûte.</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig180.JPG"
+></graphic
+><head
+>Figure 176. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>L’écu Aldobrandini</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail d’un des angles de la voûte.</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch13_Cousinie/Fig181.jpg"
+></graphic
+><head
+>Figure 177. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>Allégorie, </hi
+>c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail des parois latérales.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

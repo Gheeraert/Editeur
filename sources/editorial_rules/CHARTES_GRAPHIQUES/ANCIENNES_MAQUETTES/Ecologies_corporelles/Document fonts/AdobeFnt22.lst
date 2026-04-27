@@ -1,0 +1,224 @@
+%!Adobe-FontList 1.22
+%Locale:0x40c
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Avenir-Roman
+FamilyName:Avenir
+StyleName:Roman
+FullName:Avenir Roman
+MenuName:Avenir
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\Avenir-Roman.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:101228
+FileModTime:1478596866
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,Avenir Roman
+NameArray:0,Mac,4,Avenir Roman
+NameArray:0,Win,1,Avenir
+NameArray:0,Win,16,Avenir
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CrimsonText-Bold
+FamilyName:Crimson Text
+StyleName:Bold
+FullName:Crimson Text Bold
+MenuName:Crimson Text
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\CrimsonText-Bold.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:64424
+FileModTime:1296000000
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Crimson Text
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CrimsonText-Italic
+FamilyName:Crimson Text
+StyleName:Italic
+FullName:Crimson Text Italic
+MenuName:Crimson Text
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\CrimsonText-Italic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:87932
+FileModTime:1296000000
+WeightClass:400
+WidthClass:5
+AngleClass:1
+NameArray:0,Win,1,Crimson Text
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:CrimsonText-Regular
+FamilyName:Crimson Text
+StyleName:Regular
+FullName:Crimson Text Regular
+MenuName:Crimson Text
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\CrimsonText-Regular.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:125568
+FileModTime:1296000000
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Crimson Text
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+FullName:Minion Pro
+MenuName:Minion Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:217280
+FileModTime:1329304520
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:SimplonBP-Bold
+FamilyName:Simplon BP
+StyleName:Bold
+FullName:Simplon BP Bold
+MenuName:Simplon BP Bold
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\SimplonBP-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:54384
+FileModTime:1319548996
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Simplon BP Bold
+NameArray:0,Win,1,Simplon BP Bold
+NameArray:0,Win,16,Simplon BP
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:SimplonBP-Medium
+FamilyName:Simplon BP
+StyleName:Medium
+FullName:Simplon BP Medium
+MenuName:Simplon BP Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\SimplonBP-Medium.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:51068
+FileModTime:1319549012
+WeightClass:500
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Simplon BP Medium
+NameArray:0,Win,1,Simplon BP Medium
+NameArray:0,Win,16,Simplon BP
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:SimplonBPRegular-Italic
+FamilyName:Simplon BP
+StyleName:Regular Italic
+FullName:Simplon BP Regular Italic
+MenuName:Simplon BP Regular
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\SimplonBPRegular-Italic.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:58440
+FileModTime:1319549016
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Simplon BP Regular Italic
+NameArray:0,Win,1,Simplon BP Regular
+NameArray:0,Win,16,Simplon BP
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:SimplonBPRegular
+FamilyName:Simplon BP
+StyleName:Regular
+FullName:Simplon BP Regular
+MenuName:Simplon BP Regular
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Transition_recreative\MEP_Transition_recreative_20211012\Document fonts\SimplonBPRegular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:50280
+FileModTime:1319549020
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Simplon BP Regular
+NameArray:0,Win,1,Simplon BP Regular
+NameArray:0,Win,16,Simplon BP
+%EndFont
+

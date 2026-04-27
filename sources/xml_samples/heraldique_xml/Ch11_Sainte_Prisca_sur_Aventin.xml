@@ -1,0 +1,1070 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Sainte-Prisca-sur-l’Aventin</title
+><title
+type="sub"
+>Notes d’héraldique pontificale et cardinalice</title
+><author
+role="aut"
+><persName
+><forename
+>Rocco</forename
+><surname
+>Ronzani</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Sainte-Prisca-sur-l’Aventin</p
+><p
+rend="title-sub"
+>Notes d’héraldique pontificale et cardinalice</p
+><p
+rend="author-aut"
+>Rocco Ronzani</p
+></div
+></front
+><body
+><div
+type="section1"
+xml:id="div01"
+><head
+>Remarques sur le monument</head
+><p
+xml:id="p1"
+>Dans cette contribution, il n’est pas possible de résumer l’histoire pluriséculaire de l’antique édifice chrétien de l’Urbe situé sur le mont Aventin. Des études approfondies lui ont été consacrées, il mériterait toutefois d’être à nouveau examiné sous de nombreux aspects : archéologique et architectural, mais aussi historique et artistique<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Isidoro Carini, <hi
+rend="italic"
+>Sul titolo presbiterale di Santa Prisca</hi
+>, Palerme, Tip. Camillo Tamburello, 1885 ; Johann Peter Kirsch, <hi
+rend="italic"
+>Die römischen Titelkirchen im Altertum</hi
+>, Paderborn, Druck ind Verlag von Ferdinand Schöningh, 1918, p. 101-104 ; Francesco Lanzoni, « I titoli presbiterali di Roma antica nella storia e nella leggenda », <hi
+rend="italic"
+>Rivista di archeologia cristiana</hi
+>,n<hi
+rend="sup"
+>o</hi
+> 2, 1925, p. 247-250 ; Geremia Sangiorgi, <hi
+rend="italic"
+>S. Prisca e il suo mitreo</hi
+>, Rome, Marietti, « Le chiese di Roma illustrate, 101 », 1968 ; Mariano Armellini et Carlo Cecchelli, <hi
+rend="italic"
+>Le chiese di Roma dal secolo IV al XIX</hi
+>, Rome, RORE, 1942, t. 2 ; <hi
+rend="italic"
+>Monasticon Italiae</hi
+>, Cesena, Badia di Santa Maria del Monte, 1981, t. 1 : <hi
+rend="italic"
+>Roma e Lazio</hi
+>, p. 73 et 74 ; Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi. Arte e Architettura</hi
+>, Rome, Artemide, 2010 ; Rocco Ronzani, « Nota storico-iconografica sulla committenza del cardinale Benedetto Giustiniani in Santa Prisca all’Aventino », <hi
+rend="italic"
+>Studi Romani</hi
+>, n. s. III, 1-4, 2021, p. 21-32.</p
+></note
+>.</p
+><p
+xml:id="p2"
+>Si, de fait, sa préexistence classique a été amplement étudiée, spécialement après la découverte d’un mithréum du <hi
+rend="small-caps"
+>iii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, situé dans sa partie souterraine, il reste beaucoup à rechercher sur l’histoire du monument et des institutions religieuses qui au cours des siècles se sont succédées à la garde du lieu sacré et des structures édifiées pour l’abriter<note
+n="2"
+place="foot"
+xml:id="ftn20"
+><p
+>Je me réfère en premier lieu au haut Moyen Âge, <hi
+rend="italic"
+>monasterium sancti Donati</hi
+> <hi
+rend="italic"
+>qui ponitur iuxta titulum sanctae Priscae,</hi
+> évoqué pour la première et unique fois dans le <hi
+rend="italic"
+>Liber Pontificalis,</hi
+> à la biographie de Léon III (795‑816), mais aussi à la présence bénédictine prolongée (italienne et française : les bénédictins de Vendôme) et enfin aux autres nombreuses communautés religieuses qui ont gardé le lieu jusqu’à présent. Voir <hi
+rend="italic"
+>Liber Pontificalis</hi
+>, Louis Duchesne (éd.), Paris, E. de Boccard, 1956, t. 2, p. 20.</p
+></note
+>.</p
+><p
+xml:id="p3"
+>En outre, il paraît nécessaire de revoir le complexe dossier hagiographique de la sainte titulaire qui, comme on le suppose, à une fondatrice homonyme du <hi
+rend="italic"
+>titulus</hi
+> tardo-antique<note
+n="3"
+place="foot"
+xml:id="ftn21"
+><p
+>Il s’agissait peut-être d’une <hi
+rend="italic"
+>Aquilia Prisca</hi
+>, nom bien attesté dans l’épigraphie, d’où la confusion avec le couple apostolique qui survint ensuite. Voir Giovanni Battista de Rossi, « Priscilla e gli Acilii Glabrioni. § VIII. Aquila e Prisca e gli Acilii Glabrioni », <hi
+rend="italic"
+>Bullettino di archeologia cristiana</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 6, n<hi
+rend="sup"
+>o</hi
+> 3-4, 1888-1889, p. 128-133, ici p. 131 et 132.</p
+></note
+> superpose la figure d’une martyre vénérée sur les lieux – sa chronologie oscillant entre <hi
+rend="small-caps"
+>i</hi
+><hi
+rend="sup"
+>er</hi
+> et <hi
+rend="small-caps"
+>iii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle – dont les reliques furent vraisemblablement transférées depuis la Via Ostiensis et à laquelle fut consacrée une tardive<hi
+rend="italic"
+> Passio</hi
+><note
+n="4"
+place="foot"
+xml:id="ftn22"
+><p
+>Voir <hi
+rend="italic"
+>Corinthiens</hi
+>, 16:19 ; <hi
+rend="italic"
+>Romains</hi
+>, 16:3-5 ; <hi
+rend="italic"
+>Actes</hi
+>, 18:1-15, 18-19 et 26 ; <hi
+rend="italic"
+>Bibliotheca Hagiographica Latina, antiquae et mediae aetatis</hi
+>, Bruxelles, Société des Hollandistes, 1900-1901, n<hi
+rend="sup"
+>o</hi
+> 6926, p. 1008 ;<hi
+rend="italic"
+> Acta Sanctorum Ianuarii</hi
+>, Antverpiae, Apud Joannem Meursium, 1643, t. 2, p. 184-187 ; Iohannes Baptista de Rossi et Ludovicus Duchesne, <hi
+rend="italic"
+>Acta Sanctorum Novembris</hi
+>, Bruxelles, 1894, vol. 2, part. 1 : <hi
+rend="italic"
+>Martyrologium Hieronymianum</hi
+> ; Angelo Di Berardino, « Prisca, santa », dans <hi
+rend="italic"
+>Nuovo dizionario patristico e di antichità cristiane</hi
+>, Gênes-Milan, Marietti, 2008, vol. 3, col. 4331-4332.</p
+></note
+>. Ensuite, certainement entre <hi
+rend="small-caps"
+>viii</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>ix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, l’église de l’Aventin fut aussi liée aux saints Aquila et Prisca (ou Priscilla), le couple d’époque apostolique cité dans les lettres de saint Paul et dans les <hi
+rend="italic"
+>Actes des apôtres</hi
+>. Une antique inscription métrique située sur la porte du sanctuaire commençait ainsi : « <hi
+rend="italic"
+>Haec domus est Aquilae seu Priscae uirginis almae</hi
+> » [Cette demeure est à Aquila ou à Prisca, la douce vierge<note
+n="5"
+place="foot"
+xml:id="ftn23"
+><p
+>Voir Giovanni Battista de Rossi, « Della casa d’Aquila e Prisca all’Aventino », <hi
+rend="italic"
+>Bullettino di archeologia cristiana</hi
+>, vol. 3, 1867, p. 44-47.</p
+></note
+>].</p
+><p
+xml:id="p4"
+>De tels développements hagiographiques ont contribué de manière décisive à faire de l’église de l’Aventin une sorte de « mémorial apostolique » : saint Paul y aurait peut-être demeuré, en alternance avec la <hi
+rend="italic"
+>domus</hi
+> de la Regola, et certainement saint Pierre y aurait exercé son ministère, célébrant l’eucharistie pour une des plus antiques communautés chrétiennes de Rome, baptisant en outre Prisca, la martyre, qui, dans cette version de la légende hagiographique se trouve par conséquent rétrodatée au <hi
+rend="small-caps"
+>i</hi
+><hi
+rend="sup"
+>er</hi
+> siècle.</p
+><p
+xml:id="p5"
+>La valorisation de la mémoire apostolique de l’Aventin est aussi liée à l’existence plus évidente de témoignages héraldiques présents dans l’édifice sacré comme dans sa crypte, réalisée et décorée de fresques pour permettre aux pèlerins de rejoindre le sous-sol qui, aux yeux des ecclésiastiques députés à la conservation du lieu de culte, conservait vraisemblablement l’un des vestiges chrétiens les plus anciens de Rome. Ce n’est pas un hasard si l’épisode du baptême de Prisca, administré par le prince des apôtres, fut un des motifs les plus valorisés à l’occasion du Jubilé de 1600<note
+n="6"
+place="foot"
+xml:id="ftn24"
+><p
+>C’est dans ce contexte qu’il faut replacer la valorisation des fonts baptismaux de l’église, réalisés dans un beau chapiteau dorique, peut-être au <hi
+rend="small-caps"
+>ii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, sur lequel au Moyen Âge fut gravée l’inscription suivante en commémoration du ministère de Pierre sur l’Aventin : <hi
+rend="italic"
+>« bactismu(m) s(an)c(t)i Petri</hi
+> ». Aujourd’hui, les fonts baptismaux sont situés dans une chapelle latérale de l’église d’après l’aménagement conçu par l’ingénieur Arturo Hoerner, procurateur du chapitre de Saint-Pierre, et par le sculpteur carrarais Antonio Biggi. Voir Mariano Armellini, <hi
+rend="italic"
+>Le chiese di Roma, dal secolo IV al XIX</hi
+>, Rome, Tipografia vaticana, 1891, p. 578 ; Alfonso Camillo De Romanis, <hi
+rend="italic"
+>Per un nuovo Battistero a Santa Prisca. Nova et vetera</hi
+>, Cité du Vatican, Tipografia poliglotta vaticana, 1948.</p
+></note
+>. Le commanditaire des travaux jubilaires fut Benedetto Giustiniani<note
+n="7"
+place="foot"
+xml:id="ftn25"
+><p
+>Voir Simona Feci et Luca Bortolotti, « Giustiniani, Benedetto », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2001, vol. 57, p. 366-377.</p
+></note
+>, cardinal du titre presbytéral de 1599 à 1611 (fig. 136). L’intervention de Giustiniani s’insère dans le cadre de la redécouverte et de la promotion des restes paléochrétiens de l’Urbe, centre de la catholicité, afin de légitimer la primauté de l’Église romaine et de démontrer la continuité comme la cohérence de son patrimoine liturgique et cultuel, doctrinal et disciplinaire, le message évangélique transmis depuis les premières générations chrétiennes assumant ainsi un rôle pertinent dans la polémique antiprotestante. D’analogues initiatives furent déployées non seulement par la monumentalisation des reliques du christianisme romain des origines, mais aussi et surtout dans le domaine de la recherche archéologique, dans la codification liturgique, dans les nombreuses éditions des pères de l’Église et dans les grandes synthèses d’érudition historique, parmi lesquelles il faut en particulier signaler les <hi
+rend="italic"
+>Annales</hi
+> de Cesare Baronio (1538-1607), publiées entre 1588 et 1607, dans les années de la restauration de Sainte-Prisca, restauration à laquelle le cardinal oratorien, lié à Giustiniani, ne dut pas être étranger. À Baronio est aussi due la relecture du dossier hagiographique de Prisca qui, initialement identifiée avec la martyre du <hi
+rend="small-caps"
+>iii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle – elle aurait été exécutée sous le règne de Claude le Gothique (268-270) –, fut rétrodatée par cet historien de l’Église au <hi
+rend="small-caps"
+>i</hi
+><hi
+rend="sup"
+>er</hi
+> siècle, fixant sa mort à la treizième et ultime année du règne de Claude I (41-54), selon toute évidence pour valoriser la tradition de son baptême par saint Pierre.</p
+><p
+xml:id="p6"
+>C’est le mérite de Daniela Gallavotti Cavallero d’avoir illustré le rôle central de la figure de saint Pierre dans le cycle de fresques commandé par Giustiniani à Sainte-Prisca<note
+n="8"
+place="foot"
+xml:id="ftn26"
+><p
+>Daniela Gallavotti Cavallero, « L’iconografia di santa Prisca e l’immagine di Pietro dalla basilica Vaticana al titulus della santa sull’Aventino nei secoli XVI e XVII », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>op. cit.</hi
+>, p. 57-71.</p
+></note
+>. En fait, au détriment de la sainte éponyme de l’édifice sacré, ces fresques sont principalement centrées sur la figure et sur le ministère du premier « pape<hi
+rend="italic"
+> </hi
+>», aussi bien le cycle de la <hi
+rend="italic"
+>confessio </hi
+>que celui du presbytère de l’église, sans oublier le grand retable du maître autel dû à Domenico Cresti, dit le Passignano<note
+n="9"
+place="foot"
+xml:id="ftn27"
+><p
+>Simonetta Prosperi Valenti Rodinò, « Cresti, Domenico, detto il Passignano », dans <hi
+rend="italic"
+>DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., 1984, vol. 30, p. 741-749. Le peintre est mentionné par Giovan Battista Marino dans l’<hi
+rend="italic"
+>Adone</hi
+> et sa patrie, Passignano, est le siège d’une importante abbaye vallombrosane. </p
+></note
+> (1559-1638), qui représente le baptême de Prisca par le prince des apôtres (fig. 137). En complément des références iconographiques déjà relevées par la savante, je voudrais attirer l’attention sur l’abside où la fresque qui représente actuellement saint Augustin (fig. 138), fruit d’un maladroit repeint situable entre le <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et le début du <hi
+rend="small-caps"
+>xx</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, supplante certainement l’image originale d’un saint Pierre en chaire auquel renvoient clairement les symboles pontificaux tenus par des anges : la tiare, la férule pontificale et les clefs pétriniennes (fig. 138 à 140).</p
+><p
+xml:id="p7"
+>La théorie des anges et des saints des fresques de la nef centrale de l’église – où réapparaît la figure de Pierre, accompagné de Paul et des apôtres André et Jean – a été étudiée par Gallavotti Cavallero, mais il reste à élucider la présence de deux saints identifiés par la chercheuse comme saint Benoît et saint Antoine abbé. Le premier (fig. 141) aurait été « choisi en tant que saint éponyme du commanditaire », le cardinal Benedetto Giustiniani ; pour l’autre, Gallavotti Cavallero ne trouve pas de motif évident<note
+n="10"
+place="foot"
+xml:id="ftn28"
+><p
+>Daniela Gallavotti Cavallero, « L’iconografia di santa Prisca e l’immagine di Pietro…<hi
+rend="italic"
+> »</hi
+>, art. cité, p. 64. Il n’y a pas de doute que le premier saint représente le patriarche de la vie monastique occidentale Benoît de Nurcie ; son iconographie est tout à fait traditionnelle : le saint corrige l’indiscipline monastique de sa verge, inspirée de l’hymne <hi
+rend="italic"
+>Signifer invictissime</hi
+> – attribué au moins en partie à saint Pierre Damien – qui résume en vers les épisodes saillants de la <hi
+rend="italic"
+>vita Benedicti</hi
+> au second livre des <hi
+rend="italic"
+>Dialogues</hi
+> de Grégoire le Grand. La strophe de référence dans l’hymne est la suivante : « <hi
+rend="italic"
+>Frater quem tunc nequissimum / vagum raptabat spiritum / dum tua virga ceditur / stabilitati redditur.</hi
+> »</p
+></note
+>. En réalité, le second saint (fig. 142) n’est pas identifiable comme Antoine, mais plutôt comme le réformateur bénédictin Jean Gualbert (995-1073), saint initiateur de la réforme de Vallombreuse. La figure est en fait représentée suivant une iconographie tout à fait traditionnelle : avec l’habit monastique des vallombrosains, tenant de sa main le bâton en forme de tau dont les deux branches s’achèvent par de caractéristiques protomes léonins, qui est aussi la férule héraldique représentée dans les armes de la congrégation de Vallombreuse<note
+n="11"
+place="foot"
+xml:id="ftn29"
+><p
+>Sur les Vallombrosains voir Francesco Salvestrini, « Il patrimonio fondiario del monastero di Vallombrosa fra XIII e XVI secolo: presenza e utilizzazione del bosco », dans Simonetta Cavaciocchi (dir), <hi
+rend="italic"
+>L’uomo e la foresta, secc. XIII-XVIII</hi
+>, Prato, Istituto Internazionale di Storia Economica Francesco Datini, 1996, p. 1057-1068 ; « L’apporto dei Vallombrosani e dei Camaldolesi all’edificazione della marina toscana (seconda metà del XVII-anni ’20 del XVIII secolo) », <hi
+rend="italic"
+>Archivio Storico Italiano</hi
+>, vol. 156, n<hi
+rend="sup"
+>o</hi
+> 2, 1998, p. 307-329 ; <hi
+rend="italic"
+>Santa Maria di Vallombrosa. Patrimonio e vita economica di un grande monastero medievale</hi
+>, Florence, Olschki, « Biblioteca Storica Toscana, I, 33 », 1998 ; « La storiografia sul movimento e sull’Ordine monastico di Vallombrosa », <hi
+rend="italic"
+>Quaderni Medievali,</hi
+> n<hi
+rend="sup"
+>o</hi
+> 53, 2002, p. 294-323 ; « L’esperienza di Vallombrosa nella documentazione archivistica (secoli XI-XVI) », dans Giancarlo Andenna et Renata Salvarani (dir), <hi
+rend="italic"
+>La memoria dei chiostri, Atti delle prime Giornate di studi medievali, Laboratorio di storia monastica dell’Italia settentrionale</hi
+>, Castiglione delle Stiviere, 11-13 octobre 2001, Brescia, CESIMB, 2002, p. 215-230 ; « L’art et la magnificence “contre” le pouvoir du prince. L’abbé général Biagio Milanesi, l’ordre monastique de Vallombreuse, Laurent de Médicis et le pape Léon X », dans Élisabeth Crouzet-Pavan et Jean-Claude Maire Vigueur (dir), <hi
+rend="italic"
+>L’art au service du prince. Paradigme italien, expériences européennes</hi
+> <hi
+rend="italic"
+>(vers 1250-vers 1550)</hi
+>, actes du colloque, Paris, Université de Paris-Sorbonne, Centre Roland-Mousnier, 17-19 octobre 2013, Rome, Viella, « Italia comunale e signorile, 8 », 2015, p. 253-279 ; Francesco Salvestrini et Rosagemma Ciliberti, <hi
+rend="italic"
+>I Vallombrosani nel Piemonte medievale e moderno. Ospizi e monasteri intorno alla strada di Francia</hi
+>, Rome, Viella, 2014 ; Sofia Boesch Gajano, « <hi
+rend="italic"
+>Storia e tradizione vallombrosane</hi
+> », dans Antonella Degl’Innocenti (dir.), <hi
+rend="italic"
+>Vallombrosa. Memorie agiografiche e culto delle reliquie</hi
+>, Rome, Viella, 2012, p. 15-115. Il faut aussi remarquer que le peintre Domenico Cresti, auteur du retable de l’église romaine, avait toujours été actif dans les chantiers toscans des Vallombrosains et que dans la dernière décennie du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècle il avait peint à fresque le cycle gualbertien dans la chapelle du saint à la Sainte-Trinité de Florence (1593-1594). Par ailleurs, jusqu’à l’époque contemporaine l’autel latéral de la nef droite de l’église était dédié au saint vallombrosain, remplacé seulement dans la première moitié du <hi
+rend="small-caps"
+>xx</hi
+><hi
+rend="sup"
+>e</hi
+> siècle par la sainte agostinienne Rita de Cascia avec un retable déjà vénéré dans l’église située au pied du Capitole, démolie puis reconstruite près de la place Campitelli.</p
+></note
+> (fig. 143).</p
+><p
+xml:id="p8"
+>Les figures de Benoît et de Jean Gualbert dans les cycles des fresques de Sainte-Prisca renvoient au milieu bénédictin vallombrosain et à un projet précis, longuement caressé par le cardinal Giustiniani, jusqu’à présent ignoré des études sur le monument de l’Aventin, celui d’installer à Sainte-Prisca une communauté de vallombrosains, ordre duquel le cardinal était aussi le protecteur près le Saint-Siège. Comme le montre le destin postérieur du complexe religieux et la documentation d’archives<note
+n="12"
+place="foot"
+xml:id="ftn30"
+><p
+>Comme me l’a aimablement indiqué Francesco Salvestrini, des informations sur le destin du complexe figurent dans les pièces D.V.3 et D.V.4, <hi
+rend="italic"
+>Scritture diverse pertinenti alla nostra congregazione</hi
+>, de l’archive de l’abbaye de Vallombreuse. Par ailleurs, Salvestrini a aussi observé que, comme cela se produira au <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle à San Vigilio de Sienne, les Vallombrosains soulignaient immédiatement l’acquisition ou la récupération d’une fondation en commandant des œuvres d’art représentant leur père fondateur ou d’autres saints de leur obédience.</p
+></note
+>, la tentative d’installation monastique n’eut pas de suite. Après l’échec de ce premier projet, entre 1606 et 1607, Giustiniani appela à résider à Sainte-Prisca les augustins de la congrégation de l’observance de Lombardie, présents à Rome depuis le <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle à Sainte-Marie-du-Peuple et qui se maintinrent à la tête du complexe sans interruption jusqu’à l’époque napoléonienne, et jusqu’aujourd’hui non sans diverses péripéties<note
+n="13"
+place="foot"
+xml:id="ftn31"
+><p
+>Voir Carlos Alonso, « La chiesa e il convento di santa Prisca a Roma. Vicende storiche, 1535-1724 », <hi
+rend="italic"
+>Analecta Augustiniana, </hi
+>n<hi
+rend="sup"
+>o</hi
+> 58, 1995, p. 215-263 ; Salvatore Enrico Anselmi, « Novità documentarie su S. Prisca in età barocca. L’attività di Carlo Lambardi e di Carlo Fontana », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>op. cit</hi
+>., p. 73-77. </p
+></note
+>.</p
+><p
+xml:id="p9"
+>Après s’être engagé dans la restauration de l’édifice sacré, il était tout à fait naturel que Giustiniani pensât à assurer pour les fidèles et surtout pour les pèlerins, le soin du culte divin par une présence stable, monastique ou religieuse, qui mieux que le clergé séculier pût garantir la continuité et le décorum du lieu saint.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>L’héraldique cardinalice et pontificale du monument</head
+><p
+xml:id="p10"
+>L’héraldique du cardinal Giustiniani est largement représentée dans l’église comme dans la crypte et le décor exploite constamment les meubles de son blason comme ceux des pontifes qui le voulurent membre du Sacré Collège et cardinal prêtre de la basilique aventinienne. Par ailleurs, ces éléments héraldiques, auxquels on n’a pas accordé toute l’importance qu’ils méritaient, permettent de dater pour ainsi dire à l’année près les fresques commandées par le cardinal.</p
+><p
+xml:id="p11"
+>Il est connu que l’ambitieuse politique économique de Sixte Quint, pape de 1585 à 1590, trouva chez les banquiers génois Giustiniani un interlocuteur privilégié et, pour des raisons évidentes, le pape voulut les récompenser en favorisant la brillante carrière du fils ecclésiastique de la famille, le créant finalement cardinal le 16 décembre 1586. Ce lien étroit entre Benedetto Giustiniani et le pontife issu des Marches est exprimé dans le décor de la crypte de Sainte-Prisca où paraissent tantôt les armes complètes du pape (fig. 144, en haut, état très dégradé) tantôt leurs meubles séparés (le lion, fig. 145). Cela rappelle beaucoup les décors picturaux qu’il commanda pour les architectures de Domenico Fontana, dus à Cesare Nebbia et Giovanni Guerra, du monumental salon Sixtin de la Bibliothèque vaticane au complexe du Latran, sans oublier les édifices sacrés : chapelle Sixtine de Sainte-Marie-Majeure ou église Saint-Jérôme-des-Esclavons. Dans ces fresques sont sans cesse répétés les meubles héraldiques du pape : le lion, les poires (par allusion au nom de Peretti, armes parlantes), le <hi
+rend="italic"
+>trimonzio</hi
+> [triple mont] et l’étoile ou comète<note
+n="14"
+place="foot"
+xml:id="ftn32"
+><p
+>Marcello Fagiolo et Maria Luisa Madonna (dir.), <hi
+rend="italic"
+>Sisto V</hi
+>, Rome, Istituto poligrafico e Zecca dello Stato, Libreria dello Stato, 1992 ; Maria Luisa Madonna (dir.), <hi
+rend="italic"
+>Roma di Sisto V. Le arti e la cultura</hi
+>, Rome, De Luca, 1993 ; Silvano Giordano, « Sisto V », dans <hi
+rend="italic"
+>Enciclopedia dei Papi</hi
+>, Rome, Treccani, 3 vol., t. 3, 2000, p. 202-222, ici p. 213 et 214 ; Massimo Ceresa (dir.), <hi
+rend="italic"
+>La Biblioteca Vaticana tra riforma cattolica, crescita delle collezioni e nuovo edificio (1535-1590)</hi
+>, Cité du Vatican, BAV, « Storia della Biblioteca Apostolica Vaticana, 2 », 2012. Pour les aspects héraldiques, on se reportera à Yvan Loskoutoff, <hi
+rend="italic"
+>Un art de la Réforme catholique, La symbolique du pape Sixte-Quint et des Peretti-Montalto (1566-1655)</hi
+>, Paris, Honoré Champion, 2011.</p
+></note
+>. Les armes de Sixte Quint Peretti peuvent en effet se blasonner ainsi : « D’azur au lion d’or tenant une branche de poirier chargée de trois poires au naturel, à la bande voûtée de gueules brochant sur le tout, et chargée d’une comète d’or, et d’une montagne de trois coupeaux d’argent<note
+n="15"
+place="foot"
+xml:id="ftn33"
+><p
+>Jean-Baptiste Rietstap, <hi
+rend="italic"
+>Armorial général</hi
+>, Gouda, G. B. van Goor, 1861, « Peretti », p. 803. Giovanni Battista di Crollalanza donne pour sa part une description où il perd le caractère parlant de l’écu : « <hi
+rend="italic"
+>D’azzurro, al leone tenente colla branca anteriore destra un ramo di tre pomi, fogliato, il tutto d’oro; colla banda di rosso attraversante, caricata verso il capo da una cometa d’oro, e verso la punta da un monte di tre cime d’argento; il tutto nel verso della banda</hi
+> », <hi
+rend="italic"
+>Dizionario storico-blasonico delle famiglie nobili e notabili italiane estinte e fiorenti</hi
+>, Pise, Presso la direzione del giornale araldico, 1886-1890, 3 vol., t 2, « Peretti », p. 313.</p
+></note
+>. »</p
+><p
+xml:id="p12"
+>Comme c’était l’usage, les armes du pape furent intégrées au chef [tiers supérieur] de celles du cardinal qu’il avait créé (fig. 146 à 148). Celles-ci sont présentes dans les fresques, les inscriptions et dans les éléments décoratifs de marbre du maître autel et de l’église. On peut les décrire de la manière suivante : « Coupé : au 1 d’or à l’aigle naissante de sable ; au 2 de gueules au château d’argent<note
+n="16"
+place="foot"
+xml:id="ftn34"
+><p
+>Jean-Baptiste Rietstap, <hi
+rend="italic"
+>Armorial général</hi
+>, <hi
+rend="italic"
+>op. cit.</hi
+>, « Giustiniani », p. 429. Chez Giovanni Battista Crollalanza, le blasonnement diffère dans la mesure où l’écu n’est pas coupé mais comporte un chef et où le château est décrit plus précisément : « <hi
+rend="italic"
+>Di rosso, al castello d’argento sormontato da tre torri, quella di mezzo più elevata, aperto e finestrato del campo ; col capo d’oro, all’aquila nascente di nero, coronata del campo</hi
+> », <hi
+rend="italic"
+>Dizionario storico-blasonico, op. cit</hi
+>., t. 1, « Giustiniani ».</p
+></note
+>. » Comme pour Sixte Quint, outre les armoiries complètes, les meubles furent aussi utilisés séparément, le château (fig. 149) ou l’aigle (fig. 150 et 151).</p
+><p
+xml:id="p13"
+>En ce qui regarde la datation du cycle de saint Pierre et de la sainte martyre, il est important de considérer la date de 1599, où le cardinal Giustiniani fut nommé titulaire de Sainte-Prisca par Clément VIII Aldobrandini (1592-1605), dont les armes figurent dans les fresques de la crypte (fig. 152), et la date de la mort du même pontife en 1605 : c’est dans ces années que peut se situer la réalisation des fresques, sans doute entre 1599 et 1600, date de l’achèvement des travaux et de l’inauguration ainsi que de la pose de la pierre commémorative du presbytère. Les armes de Clément VIII peuvent se décrire ainsi : « D’azur à la bande brétessée et contre-brétessée d’or, accostée de six étoiles du même, rangées en orle<note
+n="17"
+place="foot"
+xml:id="ftn35"
+><p
+>Jean-Baptiste Rietstap, <hi
+rend="italic"
+>Armorial général</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., « Aldobrandini », p. 58. Di Crollalanza donne : « <hi
+rend="italic"
+>D’azzurro, alla banda doppio-merlata d’oro, accompagnata da sei stelle di otto raggi dello stesso</hi
+> », <hi
+rend="italic"
+>Dizionario storico-blasonico</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., t. 1, p. 26, « Aldobrandini ». </p
+></note
+>. »</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>Autres témoignages héraldiques intéressants présents dans l’église</head
+><p
+xml:id="p14"
+>Pour conclure et compléter l’étude héraldique, on doit signaler dans l’abside les armes au bœuf passant de Calixte III Borgia († 1458), qui rappellent les restaurations effectuées sous son pontificat (fig. 153), comme les armes de Clément XII Corsini († 1740), aux trois bandes et à la fasce brochant sur le tout, qui sont aussi liées à une phase de restauration de l’église (fig. 141). Enfin, on remarquera les armes cardinalices puis papales d’Angelo Giuseppe Roncalli, saint Jean XXIII († 1963), qui fut cardinal titulaire de Sainte-Prisca de 1953 à 1958<note
+n="18"
+place="foot"
+xml:id="ftn36"
+><p
+>Roncalli, d’humbles origines, n’avait pas d’armes familiales. Quand il accéda au siège titulaire d’Areopoli, avec le titre d’archevêque, puis à celui de Mesembria, puis au cardinalat, puis au pontificat, il porta un écu peut-être inspiré de celui d’autres familles du même nom ayant vécu dans la région bergamasque, attesté dans les fresques de l’église Saint-Augustin à Bergame, ou, pour certains, de celui des Maytini di Sotto il Monte. Roncalli, dans une de ses notes autobiographiques, raconte qu’à cet écu il voulut ajouter deux lys et le mot <hi
+rend="italic"
+>Oboedientia et pax</hi
+>. Le pontife lui-même, historien de formation, donne plusieurs fois l’explication de ce <hi
+rend="italic"
+>motto</hi
+> dans son <hi
+rend="italic"
+>Journal d’une âme</hi
+> : « Motto de mes armes sont les mots <hi
+rend="italic"
+>Oboedientia et pax</hi
+>, que le père Cesare Baronio prononçait chaque jour en baisant à Saint-Pierre le pied de l’apôtre. Ces mots sont un peu mon histoire et ma vie. Oh, qu’ils soient la glorification de mon pauvre nom dans les siècles » (cité par Mario Benigni et Goffredo Zanchi, <hi
+rend="italic"
+>Giovanni</hi
+> <hi
+rend="italic"
+>XXIII</hi
+>, Cinisello Balsamo, Edizioni San Paolo, 2000, p. 174. Voir Angelo Roncalli, <hi
+rend="italic"
+>Il Cardinale Cesare Baronio</hi
+>, Rome, Edizioni di storia e letteratura, 1961, p. 46 et 47 ; Camillo Fumagalli, « Dello stemma di Papa Giovanni XXIII. La genealogia dei Roncalli, Ronco e Roncaglia », <hi
+rend="italic"
+>Atti dell'Ateneo di Scienze, Lettere ed Arti di Bergamo</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 34, 1968-1969, p. 11-22 ; Jacques Martin, <hi
+rend="italic"
+>Heraldry in the Vatican / L’araldica in Vaticano</hi
+>, Gerrards Cross, Van Duren, 1987, p. 235-245 ; Pietro Messa, « Il motto di Giovanni XXIII: obbedienza e pace », <hi
+rend="italic"
+>Forma Sororum</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 50, 2013, p. 250-253). L’écu peut se décrire ainsi : « De gueules à la fasce d’argent, à la tour au naturel sur le tout, accostée de deux lys d’argent, au chef de saint Marc (d’argent au lion au naturel passant ailé et nimbé, tenant de sa patte droite antérieure un livre ouvert où est inscrite la légende <hi
+rend="small-caps italic"
+>pax tibi marce evangelista meus</hi
+>). » La présence dans l’écu de ce que l’on appelle le chef patriarcal de saint Marc rappelle, comme pour Pie X († 1914) et pour Jean-Paul I († 1978), la période où le cardinal Roncalli fut patriarche de Venise. Il s’agit d’une transposition de l’emblème de la Sérénissime République. Le lion est l’animal symbolique de l’évangéliste Marc qui lors de ses voyages aurait séjourné dans une île de la lagune où il aurait eu la vision d’un ange et entendu le salut : « <hi
+rend="italic"
+>Pax tibi Marce, evangelista meus</hi
+> » [Paix à toi, Marc, mon évangéliste]. Dans les armes de la Sérénissime, le lion était d’or en champ de gueules, rappelant la pourpre impériale, et il tenait un sabre. Adopté par les patriarches, l’emblème devint religieux et non plus politique, le champ passa du gueules à l’argent et le lion au naturel. En outre, pour manifester le caractère pacifique de la religion chrétienne, le lion perdit son sabre. </p
+></note
+> (fig. 154). Par ailleurs, les écus de l’ordre augustin ne manquent pas, la gestion du complexe de l’Aventin lui ayant été confiée en 1606 et ayant duré jusqu’à ce jour. Mais c’est là un autre chapitre que nous ne pouvons approfondir, comme celui non moins intéressant de l’héraldique sur les tissus et parements, souvent négligés par ceux mêmes qui en ont la tutelle. Ils sont pourtant d’importants témoins du destin des monuments sacrés pour lesquels l’héraldique est souvent l’unique clef de lecture et d’accès à une histoire complexe. Montrons la chape portant l’écu prélatice de Camillo Alfonso de Romanis (1885-1950), historien de l’ordre augustin, curé de Sainte-Prisca puis vicaire général de la Cité du Vatican et préfet du sanctuaire apostolique (1937-1950) (fig. 155). Les armes figurées sur ce vêtement liturgique dont il fit don à Sainte-Prisca sont : « [p]arti au 1 d’argent à l’emblème des augustins, au 2 d’azur au lion d’argent à la bande de gueules<note
+n="19"
+place="foot"
+xml:id="ftn37"
+><p
+>Voir Davide Aurelio Perini, <hi
+rend="italic"
+>Bibliographia Augustiniana</hi
+>, Florence, Tip. Sordomuti, 1929-1938, 4 vol., t. 2, p. 29-30 et t. 4, <hi
+rend="italic"
+>Additamenta</hi
+>, p. 74-75 ; Rocco Ronzani, « Note di sigillografia dell’ordine di sant’Agostino », <hi
+rend="italic"
+>Subsidia Augustiniana Italica</hi
+> II, 1, Rome, Centro culturale agostiniano, 2009, p. 22-25.</p
+></note
+> ».</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig139.jpeg"
+></graphic
+><head
+>Figure 136. Portrait du cardinal Benedetto Giustiniani. Michel Natalis, d’après un dessin de Giovanni Citosibio Guidi, gravure (238 mm × 170 mm), Rome, 1636-1647, dans <hi
+rend="italic"
+>Galleria Giustiniana del Marchese Vincenzo Giustiniani</hi
+>, Rome, partie 2, pl. 5, p. 169 ; recueil de gravures des sculptures antiques de la collection de Vincenzo Giustiniani, avec une galerie de portraits de famille, BNF.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig140.jpg"
+></graphic
+><head
+>Figure 137. Rome, église Sainte-Prisca, maître autel, Domenico Cresti,<hi
+rend="italic"
+> Baptême de sainte Prisca</hi
+>.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig141.jpg"
+></graphic
+><head
+>Figure 138. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, image de saint Pierre, repeint en saint Augustin au <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig142.jpg"
+></graphic
+><head
+>Figure 139. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Ange portant la férule pontificale</hi
+>.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig143.jpg"
+></graphic
+><head
+>Figure 140. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Ange portant les clefs de saint Pierre</hi
+>.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig144.jpg"
+></graphic
+><head
+>Figure 141. Rome, église Sainte-Prisca, fresques de la nef centrale, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Saint Benoît de Nursie</hi
+>.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig145.jpg"
+></graphic
+><head
+>Figure 142. Rome, église Sainte-Prisca, fresques de la nef centrale, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Saint Jean Gualbert</hi
+>.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig146.jpg"
+></graphic
+><head
+>Figure 143. Armes de la congrégation de Vallombreuse, miniature, Bibliothèque nationale de Florence, Conventi soppressi, C.V.1912, fol. 2 (8 mai 1513).</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig147.jpg"
+></graphic
+><head
+>Figure 144. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, armes de Sixte Quint Peretti et, au-dessous, du cardinal Giustiniani.</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig148.jpg"
+></graphic
+><head
+>Figure 145. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, lion héraldique Peretti couronné par un ange.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig149.jpg"
+></graphic
+><head
+>Figure 146. Rome, église Sainte-Prisca, décor de marbre du maître autel, armes du cardinal Giustiniani.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig150.jpg"
+></graphic
+><head
+>Figure 147. Rome, église Sainte-Prisca, inscription commémorative encadrée des armes du cardinal Giustiniani et de leurs meubles (aigle éployée et château).</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig151.jpg"
+></graphic
+><head
+>Figure 148. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, armes Giustiniani (l’humidité a fait perdre l’aigle qui avait peut-être été peinte <hi
+rend="italic"
+>a tempera</hi
+>).</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig152.jpg"
+></graphic
+><head
+>Figure 149. Rome, église Sainte-Prisca, frise de l’escalier d’accès à la crypte, détail héraldique Giustiniani (château).</head
+></figure
+><figure
+xml:id="figure15"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig153.jpg"
+></graphic
+><head
+>Figure 150. Rome, église Sainte-Prisca, frise de l’escalier d’accès à la crypte, détail héraldique Giustiniani (aigle).</head
+></figure
+><figure
+xml:id="figure16"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig154.jpg"
+></graphic
+><head
+>Figure 151. Rome, église Sainte-Prisca, crypte, meuble des armes Giustiniani (aigle) sur le bénitier.</head
+></figure
+><figure
+xml:id="figure17"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig155.jpg"
+></graphic
+><head
+>Figure 152. Rome, église Sainte-Prisca, crypte, armes de Clément VIII Aldobrandini.</head
+></figure
+><figure
+xml:id="figure18"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig156.jpg"
+></graphic
+><head
+>Figure 153. Rome, église Sainte-Prisca, abside, inscription surmontée des armes de Callixte III Borgia.</head
+></figure
+><figure
+xml:id="figure19"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig157.jpg"
+></graphic
+><head
+>Figure 154. Rome, église Sainte-Prisca, presbytère, inscription commémorative avec les armes cardinalices et papales d’Angelo Giuseppe Roncalli, saint Jean XXIII.</head
+></figure
+><figure
+xml:id="figure20"
+><graphic
+url="../icono/br/Ch11_Ronzani/Fig158.jpg"
+></graphic
+><head
+>Figure 155. Rome, église Sainte-Prisca, sacristie, chape portant l’écu prélatice de Camillo Alfonso de Romanis (1885-1950), historien de l’ordre augustin, curé de Sainte-Prisca puis vicaire général de la Cité du Vatican et préfet du sacraire apostolique (1937-1950).</head
+></figure
+></div
+></body
+></text
+></TEI
+>

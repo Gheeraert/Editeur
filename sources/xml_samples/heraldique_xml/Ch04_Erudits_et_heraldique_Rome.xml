@@ -1,0 +1,1579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Érudits et héraldique dans la Rome d’Urbain VIII (1623-1644)</title
+><author
+role="aut"
+><persName
+><forename
+>Fabrizio</forename
+><surname
+>Federici</surname
+></persName
+></author
+><editor
+role="trl"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></editor
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Érudits et héraldique dans la Rome d’Urbain VIII (1623-1644)</p
+><p
+rend="author-aut"
+>Fabrizio Federici</p
+><p
+rend="editor-trl"
+>Traduit de l’italien par Yvan Loskoutoff.</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>L’intérêt pour l’héraldique dans la Rome des Barberini fut, comme on pouvait s’y attendre, celui d’une ville envahie par l’essaim vivace, varié et multiforme des abeilles armoriales du pontife régnant Urbain VIII (1623-1644<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Sur les recherches généalogiques et héraldiques à Rome, en particulier sur celles de la deuxième moitié du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, objet de la présente contribution, voir Andreas Rehberg<hi
+rend="italic"
+>, </hi
+>« Collecting and Drawing against Oblivion. Panvinio, Ceccarelli and Chacón and their Search for the Genealogical-Heraldic Identity of the Families of Rome », dans Noëlle-Laetitia Perret et Hans-Joachim Schmidt (dir.), <hi
+rend="italic"
+>Memories Lost in the Middle Ages. Collective Forgetting as an Alternative Procedure of Social Cohesion</hi
+>, Turnhout, Brepols, 2023, p. 295-324. Sur les abeilles des Barberini, voir Louise Rice, « Branding, Barberini-style », dans Maurizia Cicconi, Flaminia Gennari Santori et Sebastian Schütze (dir.), <hi
+rend="italic"
+>L’immagine sovrana. Urbano VIII e i Barberini</hi
+>, catalogue d’exposition, Rome, Officina libraria, 2023, p. 245-250.</p
+></note
+>). Cet intérêt se manifesta plus largement dans la production bibliographique relative au blason que nous évoquerons. Il fut notamment le fait de l’antiquaire Francesco Gualdi qui consacra un traité aux pierres tombales mais qui œuvra aussi pour la conservation des vestiges armoriaux. Enfin, à Rome, la question se pose des origines commerçantes de la noblesse, ayant des répercussions dans la symbolique armoriale.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Publications de sujet héraldique : Gozze et Pietrasanta</head
+><p
+xml:id="p2"
+>Sur le marché éditorial on dénombre des publications à sujet héraldique de types différents, depuis les petits volumes jusqu’aux tomes copieux. Parmi les premiers, figure l’opuscule <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano, overo se da’ corpi delle armi, che rappresentano i cognomi, si possi argomentare ignobiltà in quella fameglia, che le usa [...]</hi
+>, dû à l’antiquaire de Pesaro Gauges de’ Gozze et publié chez l’éditeur Vitale Mascardi en 1637<note
+n="2"
+place="foot"
+xml:id="ftn48"
+><p
+>Gauges de’ Gozze, <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano, overo se da’ corpi delle armi, che rappresentano i cognomi, si possi argomentare ignobiltà in quella fameglia, che le usa [...]</hi
+> [<hi
+rend="italic"
+>Si des armes ou insignes parlants, ou si du corps des armes qui représentent les noms, on peut déduire la noblesse de la famille qui en use..</hi
+>.], In Roma, Per Vitale Mascardi, 1637. Gozze fut un antiquaire de vastes intérêts, qui écrivit et publia sur l’héraldique mais aussi sur l’épigraphie, sur l’histoire antique, la linguistique, la philosophie. Il fut un des collaborateurs à la rédaction du traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+>, entrepris par son protecteur Francesco Gualdi (voir <hi
+rend="italic"
+>infra</hi
+>). Sur lui voir, outre l’introduction à l’édition critique des <hi
+rend="italic"
+>Memorie</hi
+> préparée par nos soins et en cours de publication, Ingo Herklotz, <hi
+rend="italic"
+>Cassiano</hi
+> <hi
+rend="italic"
+>Dal Pozzo und die Archäologie des 17. Jahrhunderts</hi
+>, Munich, Hirmer, 1999, p. 289 et Anna Polo, <hi
+rend="italic"
+>Las </hi
+>Annotationi <hi
+rend="italic"
+>de Gauges de‘ Gozze (1631) en relación con la obra didáctica de Franciosini</hi
+>, Padoue, CLEUP, 2021.</p
+></note
+>. Gozze voulut dédier cette œuvre au collectionneur Francesco Gualdi, son protecteur, non seulement pour « la profonde affection que par votre bonté vous me portez et parce que vous avez daigné plusieurs fois me signifier par des effets que vous me tenez en une certaine estime, moi et tout ce qui me regarde<note
+n="3"
+place="foot"
+xml:id="ftn49"
+><p
+>Gauges de’ Gozze, <hi
+rend="italic"
+>Se dalle armi, o insegne</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 3 (lettre dédicatoire, datée du 22 juillet 1637) : « <hi
+rend="italic"
+>molto affetto, che per sua bontà mi porta, e che più volte si è con effetti degnat</hi
+>[<hi
+rend="italic"
+>o</hi
+>]<hi
+rend="italic"
+> significarmi di tener in qualche stima me, e le cose mie. </hi
+>»</p
+></note
+> », mais surtout pour le fait que c’était ce gentilhomme qui avait convaincu le jeune homme de composer cette dissertation, au cours d’une « grave maladie » qui l’affligea comme il le rapporte dans l’avis au lecteur :</p
+><cit
+xml:id="cit01"
+><quote
+>[...] Étant né un désaccord entre certains gentilshommes de solide et forte littérature et moi au sujet des armes parlantes, eux affirmant qu’elles sont des indices de familles non nobles et moi le niant constamment, nous restâmes alors séparés de part et d’autre par les raisons que nous avions adoptées [...]. Il arriva ensuite que je fus réduit à l’extrémité de la vie par la véhémence de très cruelles douleurs [...] lors de cette grave maladie, je fus plusieurs fois visité avec humanité par monsieur le chevalier Gualdi et entre plusieurs discours il me revint en mémoire le raisonnement que nous avions eu sur les armes et je lui donnai ma parole que si je me relevais de mon mal je développerai mon point de vue sur une telle matière, ce que j’exécutais ensuite en l’espace de deux jours et c’est cela qui t’est maintenant présenté<note
+n="4"
+place="foot"
+xml:id="ftn50"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 6 (<hi
+rend="italic"
+>A chi legge </hi
+>[À qui lit]) : « […] <hi
+rend="italic"
+>essendo nato disparere fra certi gentilhuomini di soda e granita litteratura, e me intorno alle armi, che parlano, ed affermando essi esser elleno inditij di fameglie non nobili, ed io ciò costantemente negando, rimanemmo per allhora dell’una, e dell’altra parte per le ragioni addotte </hi
+>[...]<hi
+rend="italic"
+>. Succedé poi, ch’io mi riducessi all’estremo della vita, per la veemenza di crudelissimi dolori </hi
+>[...]<hi
+rend="italic"
+> in questa grave infermità fui più volte humanamente visitato dal signor cavalier Gualdi, e fra diversi discorsi egli mi tornò a memoria l’havuto ragionamento delle armi, ed io li diedi parola, che rihavuto che mi fossi dal male, harrei diste[s]o il mio parere intorno a sì fatta materia, il che poi nello spatio di due giorni eseguij, ed è questo, ch’hora ti si presenta. </hi
+>»</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p3"
+>Le raisonnement de Gozze pour défendre les armes « parlantes », où le nom de la maison qui les possède se traduit en image, est le suivant : comme tous les écus, excepté ceux qui sont nés de la fantaisie d’un caprice personnel, peuvent se dire parlants parce qu’ils nous communiquent des informations sur les familles qui en usent, « que les corps des armes qui expriment les patronymes soient arguments de noblesse dans la famille qui l’utilise, je ne sais comment le persuader facilement et par une simple affirmation : bon nombre d’exemples nous forcent à suivre l’avis contraire [...]. Dans de nombreux cas on utilisa des choses viles et abjectes pour démontrer qu’on s’était élevé de cette bassesse par sa propre vertu<note
+n="5"
+place="foot"
+xml:id="ftn51"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 24 : « <hi
+rend="italic"
+>che i corpi delle armi, che esprimono i cognomi, sieno argomento d’ignobiltà in quella fameglia, che l’usa, io non so come mi si possa agevolmente, e con un semplice attestato persuadere: havemo esempij in buon numero che ’l contrario parere ci sforzano a seguitare </hi
+>[...]<hi
+rend="italic"
+>. In molti usarono cose vili, ed abbiette in dimostramento che la propia virtù da cotali bassezze gli haveva sollevati </hi
+>[...]<hi
+rend="italic"
+> </hi
+>».</p
+></note
+> [...] ». Dans la lettre dédicatoire <hi
+rend="italic"
+>À Monsieur</hi
+> <hi
+rend="italic"
+>Francesco Gualdi chevalier de Saint Stéphane de Rimini</hi
+>, il est rappelé que le tombeau de la famille Gualdi dans le cloître du Temple de Malatesta était surmonté d’une fresque aujourd’hui perdue « de Giotto », c’est-à-dire d’un suiveur de l’artiste à Rimini : « qu’elle [la famille Gualdi] était originaire d’Allemagne, un indice évident en est l’antique motto qui se voit sur la pierre tombale des Gualdi dans le cloître de saint François à Rimini sous la peinture de Giotto, en caractères allemands <hi
+rend="italic"
+>Anaupe poper</hi
+> : « et elle se glorifie que dans sa patrie, depuis 400 ans et plus, elle a toujours été une famille de renom<note
+n="6"
+place="foot"
+xml:id="ftn52"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 4 : « <hi
+rend="italic"
+>la qual [scil. famiglia Gualdi] habbia origine da Germania, è grand’inditio l’antichissimo motto, che si vede nella lapide sepolcrale de’ Gualdi nel claustro di San Francesco di Rimini a piè la pittura di Giotto, in carattere todesco Anaupe poper: ed ella si gloria che nella patria pel corso di 400 e più anni sia stata sempre fameglia graduata </hi
+>[...]<hi
+rend="italic"
+>. </hi
+>» Les Gualdi figurent aussi dans la liste des « très nobles familles titrées comme privées, dont les corps des armes représentent vivement leurs noms [<hi
+rend="italic"
+>fameglie nobilissime sì titolate, come private, i corpi delle armi delle quali rappresentano vivamente i cognomi di esse</hi
+>] ». Cette famille porte « un lion qui parle également car en langue d’Allemagne (dont la famille est originaire) Guualt ou Geuualt [Gewalt] signifie pouvoir, ce qui est représenté par cet animal [<hi
+rend="italic"
+>un leone, che parimente parla, percioché in lingua todesca (donde la fameglia è originaria) Guualt, o Geuualt [scil. Gewalt] significa potenza, il che viene rappresentato con quell’animale</hi
+>] » (<hi
+rend="italic"
+>ibid</hi
+>., p. 25).</p
+></note
+> ». À la page de titre de l’opuscule sont reproduites, conjointement aux armes du chevalier Francesco, celles qui figurent sur la tombe des Gualdi à Rimini, surmontées du <hi
+rend="italic"
+>motto</hi
+> mystérieux inséré dans le losange quadrilobé qui devait encadrer l’écu sur la pierre tombale (fig. 43). Les deux écus sont cernés de la bordure indentée ou, comme on disait fréquemment au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, de la « ceinture militaire [<hi
+rend="italic"
+>cingolo militare</hi
+>] », souvent concédée par les Malatesta aux familles qui leur étaient fidèles.</p
+><p
+xml:id="p4"
+>À peu près contemporain du traité sur les « armes parlantes », il existe un autre écrit de Gozze à sujet héraldique, de nettement plus grande ampleur, le traité <hi
+rend="italic"
+>Dell’antichità delle armi, o insegne delle famiglie </hi
+>[<hi
+rend="italic"
+>De l’antiquité des armes ou insignes des familles</hi
+>], dédié au cardinal Francesco Barberini et resté manuscrit. Cette œuvre de la main de Gozze constitue le manuscrit It. 364 de la Bibliothèque nationale de France. L’antiquaire de Pesaro la composa en 1635-1636 : le 16 janvier 1636 il en envoyait à Peiresc une « esquisse [<hi
+rend="italic"
+>schizzo</hi
+>] » (à identifier avec le manuscrit parisien ?), et quelques mois plus tard il sollicitait l’avis du Provençal, qui ne s’était pas encore prononcé sur ce traité<note
+n="7"
+place="foot"
+xml:id="ftn53"
+><p
+>BNF, manuscrit Fr. 9542, fol. 100r-101r, lettre de Gozze à Peiresc du 3 avril 1636, fol. 100v : « <hi
+rend="italic"
+>A’ 16 gennaro passato mandai a Vostra Signoria Illustrissima uno schizzo, per così dire, del mio trattato dell’antichità delle armi per attenderne da lei il suo giudicio, non tengo però finhora alcun avviso del ricapito. Non entro a trattar delle armi delle fameglie moderne, ovvero viventi per non tirarmi adosso l’odio di altre che pretendono d’esser eguali alle più illustri</hi
+> ». Sur les rapports entre le savant de Pesaro et le grand érudit provençal, voir Fabrizio Federici, « Alla ricerca dell’esattezza: Peiresc, Francesco Gualdi e l’antico », Marc Bayard (dir.), <hi
+rend="italic"
+>Rome-Paris 1640. Transferts culturels et renaissance d’un centre artistique</hi
+>, actes du colloque, Rome, villa Médicis, 17-19 avril 2008, Paris, Somogy, 2010, p. 229-273, <hi
+rend="italic"
+>passim</hi
+>.</p
+></note
+>. Avec ampleur d’argumentation et abondance de citations d’auteurs antiques, Gozze y affirme que l’origine des armoiries remonte à l’antiquité classique, et donc à une époque très antérieure à ce que soutenaient divers auteurs : « Disons donc que l’usage des armes, c’est-à-dire des insignes des maisons et familles, est non seulement plus ancien que le temps de l’empereur Charlemagne et du roi Artus de Bretagne, comme le pensent certains auteurs modernes, mais ancien au-delà de toute mémoire et même s’il ne s’en trouve pas fait spécifiquement et expressément mention chez les auteurs de l’ancienne langue latine [...] il s’y trouve au moins en général et tacitement mais avec des signes clairs et évidents<note
+n="8"
+place="foot"
+xml:id="ftn54"
+><p
+>BNF, manuscrit It. 364, fol. 44r-v : « <hi
+rend="italic"
+>Diciamo dunque, che l'uso delle armi, cioè delle insegne delle Case, e famiglie è non solo più antico del tempo dell'imperador Carlo Magno, e del re Artù di Brettagna, come sono di parere alcuni scrittori moderni, ma antichissimo affatto oltre ogni memoria: e quantunque non si truovi specificamente, ed espressamente fatta mentione di esse appo gli autori della lingua latina antica </hi
+>[...] <hi
+rend="italic"
+>sì vi si truova almeno in generale, e tacitamente, ma però con chiari, ed evidenti segnali </hi
+>[...]. »</p
+></note
+> [...] ».</p
+><p
+xml:id="p5"
+>La valeur du traité doit néanmoins être relativisée car il s’agit en bonne partie du plagiat d’un écrit de sujet héraldique dû à un autre antiquaire, en certains endroits sensiblement amplifié. L’œuvre que Gozze a pillée, reprenant des passages entiers pratiquement tels quels et s’en servant comme canevas pour son argumentation, est le traité <hi
+rend="italic"
+>Delle antichità delle armi gentilizie </hi
+>[<hi
+rend="italic"
+>De l’antiquité des armes nobiliaires</hi
+>], composé à la fin du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle par le grand philologue et historien de la langue Celso Cittadini. Longtemps resté inédit, il fut publié seulement en 1741 à Lucques, par les soins de Giovan Girolamo Carli<note
+n="9"
+place="foot"
+xml:id="ftn55"
+><p
+><hi
+rend="italic"
+>Delle antichità delle armi gentilizie, trattato di Celso Cittadini, colle annotazioni di Giovan Girolamo Carli</hi
+>, Lucca, Per Salvatore e Giandomenico Marescandoli, 1741. Le passage copié par Gozze, dont la référence est à peine donnée dans le texte, se trouve aux p. 20-22 de cette édition.</p
+></note
+>. Gozze dut connaître l’œuvre manuscrite entre 1631 et 1634, au cours de son séjour à Sienne, ville où avait vécu et travaillé Cittadini, et il s’en servit sans aucun scrupule.</p
+><p
+xml:id="p6"
+>Parmi les passages qui ne proviennent pas de Cittadini figure celui dans lequel Gozze, se servant de certaines figurations sculptées sur la Colonne Trajane, fait remonter à une habitude des soldats romains l’usage de mettre des cimiers au-dessus des écus : « Sur cette colonne j’observe pour la première fois que l’usage de placer des morions, des salades ou des heaumes sur les écus de nos armoiries tire son origine de la coutume que les soldats avaient d’appuyer l’écu à un pal et d’y poser ensuite le morion, alors qu’ils s’occupaient à faire des abris, ou qu’ils se reposaient, restant néanmoins armés, comme cela s’y voit exprimé<note
+n="10"
+place="foot"
+xml:id="ftn56"
+><p
+>BNF, manuscrit It. 364, fol. 64r : « <hi
+rend="italic"
+>Da questa colonna osservo il primo fra tutti l'usanza del porre i morioni, o celate, od elmi sopra gli scudi delle nostre armi, trarre origine dal costume, che i soldati havevano di appoggiare ad un palo lo scudo, e mettervi poi sopra il morione, mentre essi s'affadigavano intorno a' ripari, ovvero riposavano, stando del rimanente armati, come ivi si vede espresso </hi
+>[...] ». Une référence à ce passage se trouve dans l’un des écrits que Gozze composa pour les <hi
+rend="italic"
+>Memorie sepolcrali </hi
+>(cf. <hi
+rend="italic"
+>infra</hi
+>) : « Gauges de’ Gozze de Pesaro dans le livre qu’il fait sur les armoiries des familles porte l’opinion que l’usage du heaume au-dessus de l’écu provient de l’antiquité, se voyant dans la Colonne Trajane, et dans d’autres vestiges précédemment par lui observés, les soldats se reposant ou travaillant non loin à des réparations, ils appuyaient l’écu à un pal et sur lui plaçaient le heaume, d’où provient manifestement l’usage des armoiries avec le heaume ou cimier à notre époque [<hi
+rend="italic"
+>Gauges de’ Gozze da Pesaro nel suo libro che fa delle armi delle fameglie porta oppinione che l’uso dell’elmo sopra lo scudo sia tolto dall’antico, vedendosi nella Colonna Traiana, ed in altre memorie da lui prima osservate, che riposandosi i soldati, o pur lavorando intorno a’ ripari, ch’essi appoggiavan lo scudo ad un palo, e sopra di esso vi collocavan l’elmo, onde se ne cava manifestamente l’uso delle armi coll’elmo, o cimiero del tempo nostro</hi
+>] » (BAV, manuscrit Vat. Lat. 8254, II, fol. 347r).</p
+></note
+> [...] ».</p
+><p
+xml:id="p7"
+>Une œuvre de plus grande ampleur, l’une des principales du siècle et pas seulement en contexte romain, est le traité du jésuite Silvestro Pietrasanta <hi
+rend="italic"
+>Tesserae gentilitiae </hi
+>[<hi
+rend="italic"
+>Les armoiries nobiliaires</hi
+>], volume fondamental autant par la richesse de ses informations que par la mise au point de conventions graphiques pour la reproduction imprimée des écus<note
+n="11"
+place="foot"
+xml:id="ftn57"
+><p
+>Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, Romae, Typis haeredum Francisci Corbelletti, 1638.</p
+></note
+> (fig. 44). L’ouvrage, où sont examinées diverses typologies d’écus, est ponctué de centaines de petits écus calcographiques des familles nobles, souvent romaines (fig. 45). Parmi les sources utilisées par Pietrasanta figurent des pierres tombales, des écus sur des édifices, des recueils manuscrits, mais pas seulement : on reproduit et décrit soigneusement le sceau du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle de Giovanni di Vico, préfet de Rome<note
+n="12"
+place="foot"
+xml:id="ftn58"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 656 et 657.</p
+></note
+>, et un grand relief est accordé en conclusion à une importante peinture perdue. Pietrasanta réserve les ultimes pages du traité à un argument déjà abordé au début de l’œuvre, soit l’origine supposée des écus dans les vêtements utilisés par les souverains et la noblesse. Comme illustration du lien étroit entre les écus et les ornements vestimentaires, le jésuite mentionne la pierre tombale disparue d’Angelotto Normanni († 1378), sur laquelle le défunt portait une armure ornée de ses propres symboles héraldiques (« <hi
+rend="italic"
+>partim liliato panno, et partim schemate vestium undulato</hi
+> [de vêtements partie d’une bande fleurdelysée et partie d’un dessin ondulé<note
+n="13"
+place="foot"
+xml:id="ftn59"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 677, où la pierre tombale est mentionnée et décrite mais non reproduite, pour ne pas conclure l’œuvre, – est-il affirmé dans le texte – par la triste image d’une sépulture : « <hi
+rend="italic"
+>Demum ut in exordio</hi
+> <hi
+rend="italic"
+>[</hi
+>scil. <hi
+rend="italic"
+>in exitu]</hi
+> <hi
+rend="italic"
+>etiam operis confirmem id, quod in illius exordio dixi: nempe gentilitijs tesseris plurimis et vetustissimis esse originem datam, ex vestium cultu domi forisque; possem subijcere oculis tumulum marmoreum, in quo spectatur miles indutus habitu quadripartito; nempe partim liliato panno, et partim schemate vestium undulato. Inscribitur vero semi-barbare:</hi
+> Hic iacet Angeloctus [...]. <hi
+rend="italic"
+>Adijcitur vero ei hoc stemma. Sed ut finiam aspectu laetiore, atque ab imagine sepulchri funesta luctuosaque hoc loco abstineam</hi
+> ». Une note marginale indique la localisation suivante de l’objet, originellement situé dans l’église de Sant’Antonio à Camaldoli, ou de San Niccolò de Forbitoribus, démolie en 1631 pour construire le sanctuaire jésuitique de Saint-Ignace : « La pierre tombale est au Collège romain [<hi
+rend="italic"
+>Lapis sepulchralis in Collegio Romano</hi
+>] ». Sur cette belle pierre tombale, qui fut reproduite dans une des xylographies commandées par Francesco Gualdi pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali </hi
+>(fig. 6), voir Jörg Garms, Roswitha Juffinger et Bryan Ward-Perkins (dir.), <hi
+rend="italic"
+>Die mittelalterlichen Grabmäler in Rom und Latium vom 13. bis zum 15. Jahrhundert</hi
+>: I, <hi
+rend="italic"
+>Die Grabplatten und Tafeln</hi
+>, Rome-Vienne, Österreichische Akademie der Wissenschaften, 1981-1994, 2 vol., t. I, p. 235 et 236.</p
+></note
+>] »), il mentionne aussi les représentations contenues « <hi
+rend="italic"
+>in perveteri tabula, quae extat hodieque, cum icone regis ac reginae Britannorum</hi
+> [dans un très ancien tableau qu’on peut voir aujourd’hui portant l’image du roi et de la reine des Britanniques] ». Une note marginale révèle le lieu de conservation de cette œuvre perdue : à Rome, au collège des Anglais (<hi
+rend="italic"
+>Romae in Collegio Anglorum</hi
+>). Pietrasanta identifie dans les deux personnages agenouillés figurant sur le panneau, qui portent des habits couverts de leurs emblèmes héraldiques, le roi d’Angleterre Richard II et la reine Anne de Bohême, et il publie deux petites eaux-fortes qui les montrent (fig. 46). Le roi est présenté à la Vierge Marie par son saint patron, Jean-Baptiste. Le sens de l’image est précisé par une inscription latine : « Ceci est ta dot, pieuse Vierge, afin que tu puisses la dominer [<hi
+rend="italic"
+>Dos tua Virgo pia haec est : quare rege Maria</hi
+><note
+n="14"
+place="foot"
+xml:id="ftn60"
+><p
+>Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae, op. cit.</hi
+>, p. 677 et 678 : « <hi
+rend="italic"
+>Species alia offert se augusta et plena regiae maiestatis, in perveteri tabula, quae extat hodieque, cum icone regis ac reginae Britannorum, hoc vestium ornatu. </hi
+>[effigie du roi agenouillé]<hi
+rend="italic"
+> Amiciuntur ambo, tum liliato panno, tum veste leopardis picta. </hi
+>[image de la reine]<hi
+rend="italic"
+> Et regina insuper cyclade inornatur aquilis et auro intexta</hi
+> [écu du roi] <hi
+rend="italic"
+>utrique vero consentanei indumentis </hi
+>[écu de la reine]<hi
+rend="italic"
+> clypei tesserarij, hoc est ex eis nati, adpinguntur. Videntur ij esse Riccardus II Rex: qui proximus regnavit ab Edoardo rege; a quo coepta sunt Francica lilia iungi leopardis Britannis; atque Anna Bohema uxor eius; quae cum aut filia aut soror fuerit Wenceslai Bohemi regis Romanorum, ac dein etiam imperatoris, aquila ideo insuper vestiebatur. Haerent vero nixi genibus, dum interim, interprete Divo Ioanne, regiam insulam Britanniae offerunt Deiparae Virgini, cum adscripta ea epigraphe, </hi
+>Dos tua Virgo pia haec est: quare rege Maria<hi
+rend="italic"
+>. Ex avita nimirum regni olim religiosissimi sanctitate: ex qua heu quantum distat iam ibi pravitas haereseos Calvinianae. </hi
+>»</p
+></note
+>] ».</p
+><p
+xml:id="p8"
+>La ressemblance du panneau avec le diptyque Wilton<note
+n="15"
+place="foot"
+xml:id="ftn61"
+><p
+>Visible sur : <ref
+target="https://commons.wikimedia.org/wiki/File:Wilton_diptych.jpg"
+>https://commons.wikimedia.org/wiki/File:Wilton_diptych.jpg</ref
+> (consulté le 03 mars 2025).</p
+></note
+>, pour la forme comme pour le contenu religieux, est claire. Il est vrai que dans la vaste littérature sur le chef-d’œuvre de la National Gallery de Londres, on rencontre de nombreuses références à la peinture romaine<note
+n="16"
+place="foot"
+xml:id="ftn62"
+><p
+>Dillian Gordon, Lisa Monnas, Caroline Elam (dir.), <hi
+rend="italic"
+>The regal image of Richard II and the Wilton Diptych</hi
+>, Londres, Harvey Miller, 1997 ; Dillian Gordon, <hi
+rend="italic"
+>The Wilton Diptych</hi
+>, Londres, The National Gallery, 2015.</p
+></note
+>, depuis un article de Charles Coupe, publié en 1895, où pour la première fois l’attention a été attirée sur le texte de Pietrasanta, présentant pour l’occasion l’unique autre description ancienne de la peinture, contenue dans le manuscrit Harley 360 de la British Library<note
+n="17"
+place="foot"
+xml:id="ftn63"
+><p
+>C. Coupe, « An Old Picture », <hi
+rend="italic"
+>The Month</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 84, 1895, p. 229-242.</p
+></note
+>. La figuration et l’inscription du panneau romain ont été en particulier utilisées pour renforcer la lecture du diptyque londonien comme représentation du roi Richard faisant don de son royaume à la Vierge : une idée de l’Angleterre comme « dot de la Madonne » qui était répandue à l’époque, symbolisée dans le diptyque par l’étendard à la croix de saint Georges surmonté d’un petit globe portant une carte de l’Angleterre tenu par un ange et présenté à la Vierge à l’Enfant. On pourrait vraiment faire l’hypothèse que le diptyque et le panneau romain furent deux moments d’un même programme artistique, conçu par le roi Richard peu après la mort d’Anne de Bohême en 1394 et peu avant son remariage<note
+n="18"
+place="foot"
+xml:id="ftn64"
+><p
+>J. H. Harvey, « The Wilton Diptych: A Re-examination », <hi
+rend="italic"
+>Archaeologia</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 98, 1961, p. 1-28, ici p. 20 : « […] <hi
+rend="italic"
+>it seems highly probable that the Diptych and the Roman polyptych were two related parts of a single artistic programme in Richard's mind, and that they were of approximately the same date, soon after the death of Anne of Bohemia and before the king's remarriage</hi
+> [il semble hautement probable que le diptyque et le polyptyque romain formaient deux parties liées d’un même programme artistique dans l’esprit de Richard et que leurs dates étaient proches : peu après la mort d’Anne de Bohême et avant le remariage du roi]. »</p
+></note
+>.</p
+><p
+xml:id="p9"
+>Malgré l’importance du panneau jadis conservé au collège des Anglais jouxtant l’église Saint-Thomas-de-Cantorbéry, on sait peu de chose de cette œuvre : seulement ce que nous disent les descriptions précédemment mentionnées, on ignore par ailleurs tout de la commande de la peinture et de sa probable destruction. Le paradoxe est évident : si cette œuvre est bien connue dans les études sur la peinture gothique anglaise, la présence d’un exemple notoire de peinture médiévale provenant d’Angleterre passe totalement inaperçue dans la littérature sur l’art au Moyen Âge à Rome et sur la réception de l’art médiéval romain à l’époque moderne. Nous devons aux intérêts héraldiques de Pietrasanta et au rôle du panneau comme source de la connaissance des usages héraldiques du Moyen Âge tardif le fait que le jésuite en parle avec tant d’attention et qu’il nous en ait laissé une reproduction partielle.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Francesco Gualdi et les armoiries, entre érudition et conservation</head
+><p
+xml:id="p10"
+>Francesco Gualdi, évoqué au début de cet article en tant que dédicataire de l’opuscule de Gauges de’ Gozze <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano</hi
+>…, fut le concepteur des <hi
+rend="italic"
+>Memorie sepolcrali </hi
+>[Mémoires sépulcraux], un vaste traité sur les pierres tombales médiévales des églises romaines écrit au début des années 1640 avec l’aide d’une équipe de collaborateurs qui comprenait l’historien Costantino Gigli<note
+n="19"
+place="foot"
+xml:id="ftn65"
+><p
+>Gigli fut le plus proche collaborateur de Gualdi. Son intérêt pour l’héraldique est surtout documenté par deux tomes manuscrits qui constituent le codex de la BAV, Vat. Lat. 8253, dans lequel des centaines de transcriptions d’épitaphes des églises de Rome sont accompagnées de descriptions et de rapides esquisses des écus présents sur les pierres tombales et sur les monuments. À Gigli est lié l’album de dessins de sujet sépulcral RCIN 970334 de la Royal Library de Windsor : voir Fabrizio Federici et Jörg Garms, « “Tombs of illustrious Italians at Rome”. L’album di disegni RCIN 970334 della Royal Library di Windsor », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, volume spécial, 2011.</p
+></note
+> et le poète Ottavio Tronsarelli<note
+n="20"
+place="foot"
+xml:id="ftn66"
+><p
+>Le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+>, dont la composition remonte aux années 1640-1644, donc aux derniers temps du pontificat d’Urbain VIII, resta inédit jusqu’à la mort de Gualdi en 1657. Nous en avons préparé une édition critique de prochaine publication aux éditions de la BAV. Les citations d’extraits de cette œuvre effectuées dans la présente contribution font référence à la division en chapitres et paragraphes adoptée pour cette édition. Sur Gualdi et le traité voir Claudio Franzoni et Alessandra Tempesta, « Il museo di Francesco Gualdi nella Roma del Seicento tra raccolta privata ed esibizione pubblica », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, vol. LXXVII, n<hi
+rend="sup"
+>o</hi
+> 73, 1992, p. 1-42 et Fabrizio Federici, « Il trattato <hi
+rend="italic"
+>Delle memorie sepolcrali</hi
+> del cavalier Francesco Gualdi: un collezionista del Seicento e le testimonianze figurative medievali », <hi
+rend="italic"
+>Prospettiva</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 110-111, avril-juin 2003, p. 149-159.</p
+></note
+>. Dans les <hi
+rend="italic"
+>Memorie, </hi
+>un certain intérêt pour l’héraldique se révèle : les armoiries sculptées ou gravées sur les pierres tombales sont soigneusement décrites et souvent reproduites dans les xylographies destinées à constituer l’appareil illustratif de l’œuvre dont elles constituent la majeure partie (fig. 47). Même des armoiries non sépulcrales sont évoquées à plusieurs occasions en tant que témoignages permettant d’attribuer à certaine famille une commande architecturale<note
+n="21"
+place="foot"
+xml:id="ftn67"
+><p
+>Chap. II, § 11-12 : « <hi
+rend="italic"
+>La famiglia Alberina fabricò non solo la cappella antica di San Domenico, in questo medesimo sito, nel quale si fabrica questa che vediamo, di San Domenico di Soriano; ma fece ancora tutto ’l muro, che si vede in questa testa della traversa, come si prova dalle due porte antiche, delle campane, e della sagrestia, che mettono in mezzo la cappella; nell’architrave delle quali è scolpita l’arme della suddetta famiglia, con queste parole sotto: </hi
+>[…] [La famille Alberina fabriqua non seulement l’ancienne chapelle de Saint-Dominique sur ce même site dans lequel se fabrique celle que nous voyons de Saint Dominique de Soriano ; mais elle fit encore tout le mur qui se voit au début du côté comme le montrent les deux anciennes portes, les cloches et la sacristie qui distinguent la chapelle ; sur leur architrave sont sculptées les armoiries de ladite famille sous lesquelles sont ces mots :…] » ; <hi
+rend="italic"
+>ibid</hi
+>., § 16 : « <hi
+rend="italic"
+>Vedesi ancora nella traversa di questa chiesa, similmente a man sinistra, vicino all’altare della Nunziata, un’altra arme della Casa Alberina, fatta di musaico, la quale si conosce esser frammento di qualche altra lapida antica, oppure, più probabilmente, della fronte d’un altare, quivi fatto dall’istessa famiglia</hi
+> [On voit encore sur le côté de cette église similairement à main gauche, près de l’autel de l’Annonciation, une autre armoirie de la maison Alberina faite en mosaïque et connue pour être un fragment d’une autre ancienne pierre ou plus probablement du fronton d’un autel fait là par la même famille] ».</p
+></note
+> ou comme preuve du patronage d’une chapelle<note
+n="22"
+place="foot"
+xml:id="ftn68"
+><p
+>Chap. XXVIII, § 10-11 : « <hi
+rend="italic"
+>Né altri marmi sepolcrali di questa famiglia a nostra notitia pervenuti sono, che li sopradetti, e la cappella loro antica nel detto tempio d’Araceli del Santissimo Sacramento </hi
+>[…]<hi
+rend="italic"
+>, e dove continuamente sepelite si sono la gente de’ Conti, senza esservi alcuna particolar memoria, né epitaffij dei nomi de’ loro defonti, se non quanto su la volta mirasi un’arma picciola del loro casato antica, come anche occorre alla gente della Casa Cesarina, quale ha per antico uso di sepelirsi nella loro cappella, la qual è medesimamente in Araceli, et in essa non appare di fuori alcuna inscrittione, né memoria, se non l’antica loro arma</hi
+> [D’autres marbres sépulcraux de cette famille ne sont pas venus à notre connaissance sinon ceux que nous avons mentionnés et leur antique chapelle dans le sanctuaire d’Aracoeli du Saint-Sacrement [...], où l’on a constamment enseveli les membres de la famille Conti sans mémoire particulière ni épitaphe aux noms de leurs défunts sinon quand on voit à la voûte une petite armoirie de leur antique maison, comme cela arrive aussi pour ceux de la maison Cesarina qui ont pour antique usage de se faire ensevelir dans leur chapelle laquelle est aussi à l’Aracoeli et en celle-ci n’apparaît ni inscription, ni mémoire, sinon leurs antiques armoiries] ».</p
+></note
+>.</p
+><p
+xml:id="p11"
+>Dans le chapitre portant sur la famille Anguillara, un ample passage est consacré à un épisode dont Gualdi lui-même fut le protagoniste, s’employant à sauver deux écus de cette antique maison qui risquaient d’être perdus ou détruits (fig. 48). Deux écus des Anguillara datant du <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, placés sur la façade de l’hôpital de Saint-Jean-de-Latran pour témoigner qu’un membre de cette famille, Everso II (vers 1398-1464), avait agrandi l’édifice, furent détachés lors des travaux de réfection du bâtiment ordonnés par le pape Urbain VIII, datés de 1636 dans l’épigraphe célébrative fixée à l’angle de la façade vers la rue de Saint-Jean-de-Latran<note
+n="23"
+place="foot"
+xml:id="ftn69"
+><p
+>Sur les travaux entrepris par Urbain VIII à l’Hôpital du Latran voir Martin Raspe, « La Corsia Nuova dell’Ospedale del SS. Salvatore ad Sancta Sanctorum e i suoi architetti Giacomo e Giovanni Battista Mola », dans Philine Helas et Patrizia Tosini (dir.), <hi
+rend="italic"
+>Tra Campidoglio e curia: l’Ospedale del SS. Salvatore ad Sancta Sanctorum tra Medioevo ed Età Moderna</hi
+>, Cinisello Balsamo, Silvana, « Studi della Bibliotheca Hertziana, 11 », 2017, p. 137-147.</p
+></note
+>. Le chevalier Gualdi adressa au cardinal Barberini et aux gardiens de l’hôpital un discours aujourd’hui perdu, dont un ample résumé figure dans les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+>. Dans son écrit le gentilhomme plaidait pour la conservation des deux écus, rappelant une série d’exemples de ce type en rapport avec les témoignages du passé :</p
+><cit
+xml:id="cit02"
+><quote
+>Les deux armoiries mentionnées plus haut, ayant été enlevées de leur lieu les années passées lors de la construction du nouveau bâtiment de l’hôpital, me conduisirent, poussé par mon propre génie de la conservation des antiques vestiges, sacrés comme profanes, à représenter au seigneur cardinal Francesco Barberini et aux seigneurs gardiens de cet hôpital, combien il était inconvenant dans la ville de Rome de priver les familles vivantes ou éteintes de la gloire justement méritée, laquelle ne se peut longuement conserver sinon dans le bronze, dans le marbre ou dans les écritures publiques. Je mentionnai l’exemple de Lautrec, général en Italie de Charles VIII roi de France, lequel voulant prendre la ville de Rimini ma patrie, alors défendue par son seigneur Sigismond Malatesta, le convainquit de renoncer à détruire le célèbre pont d’Octave Auguste, construit sur la Marechia (fleuve formant avec la mer Adriatique le port de la ville rendu célèbre par saint Antoine de Padoue qui en ce lieu où l’on voit une petite chapelle attira les poissons pour entendre sa prédication), Malatesta avait déjà décidé de démolir ce pont pour couper la route aux ennemis de ce côté, mais le grand capitaine Lautrec plutôt que de détruire ce remarquable monument choisit d’essayer de pénétrer dans la ville par des passages plus malaisés et exposés à toutes sortes de dangers. Je mentionnai aussi l’exemple de la noble cité de Florence où une ancienne loi ordonne que si l’on bâtit un nouvel édifice dans un site où se trouvaient des armes ou autres antiques vestiges des familles, ces mêmes témoignages soient remis au même lieu où ils se trouvaient déjà, dans toute leur ancienneté et dans toute leur simplicité<note
+n="24"
+place="foot"
+xml:id="ftn70"
+><p
+>Cela fait référence à la « <hi
+rend="italic"
+>Legge contro chi rimovesse o violasse armi, inscrittioni o memorie existenti apparentemente nelli edifitii così publici come privati</hi
+> [Loi contre ceux qui enlèveraient ou violeraient armoiries, inscriptions ou vestiges existant visiblement dans les édifices publics ou privés] » promulguée par le grand-duc de Toscane le 30 mai 1571, dans laquelle est évoqué « <hi
+rend="italic"
+>l’uso et inveterata consuetudine della città [scil. Firenze] (della quale non è memoria alcuna in contrario)</hi
+> [l’usage et habitude enracinée de la ville [Florence] (dont il n’est aucun témoignage contraire)] », selon lequel « <hi
+rend="italic"
+>non era lecito a chi comperava, o per qual si voglia modo acquistava alcuno edifitio, rimuovere, estinguere o violare le dette armi et memorie de’ construttori o fondatori d’esso</hi
+> [il n’était pas licite à qui achetait, où d’une quelconque manière acquérait un édifice, d’enlever, effacer ou violer lesdites armes ou vestiges de leurs fondateurs ou constructeurs] » (la mesure est rapportée dans Andrea Emiliani, <hi
+rend="italic"
+>Leggi, bandi e provvedimenti per la tutela dei beni artistici e culturali negli antichi stati italiani 1571-1860 </hi
+>[Alfa, 1978], Bologne, Nuova Alfa, 1996, p. 23-24). Teodoro Amayden est aussi un admirateur enthousiaste de la tradition florentine, voir <hi
+rend="italic"
+>La</hi
+> <hi
+rend="italic"
+>Storia delle famiglie romane, con note ed aggiunte del Comm. Carlo Augusto Bertini</hi
+> [Collegio Araldico, 1910], 2 vol., Rome, Edizioni Romane Colosseum, 1987, chap. I, p. 395 : « <hi
+rend="italic"
+>Siano per mille volte benedetti i Fiorentini, che non cancellano mai né inscrizione, né arme </hi
+>[Soient mille fois bénis les Florentins qui n’effaçaient jamais ni inscriptions ni armoiries] ».</p
+></note
+>. J’alléguai enfin l’exemple de Léon XI, d’éternelle mémoire, dont je fus effectivement serviteur 14 ans durant son cardinalat, et 27 jours qu’il plut à Dieu de le donner ou plutôt montrer au monde comme pontife, celui-ci s’étant vu attribuer le titre de Sainte-Praxède et voulant par conséquent mettre cette église en meilleur état, dans les restaurations qu’il fit effectuer, l’ornant de peintures, il voulut qu’avec ses armes on mit encore celles de saint Charles Borromée qui avait été titulaire de la même église, afin qu’avec sa mémoire se conservât aussi celle de son prédécesseur<note
+n="25"
+place="foot"
+xml:id="ftn71"
+><p
+>Chap. VI, § 15-17 : « <hi
+rend="italic"
+>Queste due armi dette di sopra, essendo state gli anni addietro levate dal lor luogo, coll’occasione della nuova fabrica dello spedale, mossero me (il cavalier Gualdi), spinto a ciò dal proprio genio verso la conservatione delle antiche memorie, sì sacre, come profane, a rappresentare al signor cardinale Francesco Barberini, et a’ signori guardiani dello spedale suddetto, quanto sia sconvenevole nella città di Roma il privar le famiglie, o viventi, o vero estinte, della gloria giustamente meritata, la quale non si può lungamente conservare, se non ne’ bronzi, e ne’ marmi, o nelle publiche scritture. Apportai l’esempio di Lotrecco, generale in Italia di Carlo VIII re di Francia, il quale volendo pigliar la città di Rimini mia patria, difesa allhora da Sigismondo Malatesta, signor di quella, fece intendergli, che lasciasse di rovinar il ponte celebre d’Ottaviano Augusto, fabricato sulla Marechia (forma questo fiume, insieme col Mare Adriatico, il porto della città, reso celebre da Sant’Antonio da Padova, il quale nel luogo, ove si vede una cappelletta, fece comparire ad udir la sua predica i pesci del mare), il qual ponte era già destinato dal Malatesta ad esser demolito, per tagliar da quella parte il passo al nemico; eleggendo quel magnanimo capitano, più tosto che la rovina di quell’eccelsa fabrica, il tentar l’entrata nella città per passi più malagevoli, et esposti a qualsivoglia pericolo. Apportai anche l’esempio della nobile città di Fiorenza, nella quale per antica legge vien ordinato, che rifacendosi nuova fabrica in qualche sito, dove fusser poste o armi, o altra memoria antica di famiglie, quelle stesse memorie, così vecchie, e così semplici, come anticamente si solevan fare, si ripongano nell’istesso luogo, dov’eran già collocate. Addussi finalmente l’esempio di Leone XI, di memoria eterna, di cui fui attual servitore per lo spazio di quattordici anni nel cardinalato, e per 27 giorni, che piacque a Dio di darlo, o pure mostrarlo al mondo, pontefice; al quale essendo toccato il titolo di Santa Prassede, e volendo perciò ridurre in migliore stato quella chiesa, ne’ risarcimenti che vi fece, ornandola di pitture, volle che colle armi sue si ponessero quelle ancora del cardinale San Carlo Borromeo, già benefico titolare della medesima chiesa, accioché colla presente sua memoria si conservasse ancora quella del suo antecessore </hi
+>».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p12"
+>Grâce à l’intervention de Gualdi, les deux écus ne furent pas perdus et furent replacés exactement au même endroit qu’ils occupaient avant le lancement des travaux<note
+n="26"
+place="foot"
+xml:id="ftn72"
+><p
+>Une fois replacés, les écus furent accompagnés d’une inscription rappelant qu’ils avaient retrouvé leur position d’origine sur la façade de l’hôpital du Latran : « <hi
+rend="italic"
+>Hoc insigne repertum / affixum muro veteri / d(omini) custodes / in muro novo eodem / in loco affigi mandarunt </hi
+>[Cet insigne ayant été trouvé fixé dans un vieux mur, les seigneurs gardiens ordonnèrent qu’il fût fixé au même endroit dans le mur nouveau] » (Vincenzo Forcella, <hi
+rend="italic"
+>Iscrizioni delle chiese e d’altri edificii di Roma dal secolo XI fino ai nostri giorni</hi
+>, Rome, Tipografia delle scienze matematiche e fisiche, 1869-1884, 14 vol., t. VIII, p. 133, n<hi
+rend="sup"
+>o</hi
+> 347). Un des deux écus des Anguillara est encore visible sur la façade de l’hôpital tournée vers la basilique du Latran, accompagné de l’inscription du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle ; l’autre, jadis inséré dans la façade arrière, vers San Clemente, se trouve maintenant dans une salle de l’hôpital, encastré dans une cloison (les deux côtés de la plaque sont visibles, et l’on peut ainsi constater que, pour réaliser l’écu, on réutilisa un parapet du haut Moyen Âge, décoré de croix et de motifs géometriques).</p
+></note
+>. La “bataille” de Gualdi pour la conservation de ces deux armoiries est à replacer dans le cadre d’une infatigable lutte pour la défense des monuments antiques et médiévaux en péril conduite par le gentilhomme<note
+n="27"
+place="foot"
+xml:id="ftn73"
+><p
+>Voir Fabrizio Federici, « Battaglie per la tutela nella Roma barocca: Francesco Gualdi e la difesa delle “memorie antiche” », <hi
+rend="italic"
+>Studi Romani</hi
+>, vol. LXII, n<hi
+rend="sup"
+>o</hi
+> 1-4, 2014, p. 149-172 (en particulier, pour l’affaire des armoiries des Anguillara, p. 153-155).</p
+></note
+>, qui eut même des retombées légales : ce fut probablement sous la pression du chevalier Gualdi que le cardinal Antonio Barberini sénior promulgua le 2 octobre 1640 un édit où il était intimé « à tous les supérieurs des églises séculiers ou réguliers [<hi
+rend="italic"
+>a tutti i superiori delle chiese, tanto secolari, quanto regolari</hi
+>] » de ne pas faire enlever « témoignages, inscriptions et pierres [<hi
+rend="italic"
+>memorie, inscrittioni, e lapidi</hi
+>] » – expression qui faisait évidemment aussi référence aux armoiries – « sans le consentement des parties et notre autorisation écrite [<hi
+rend="italic"
+>senza il consenso delle parti, e nostra licenza in scritto</hi
+>] », dans lequel il était prescrit de sévères punitions pour les contrevenants<note
+n="28"
+place="foot"
+xml:id="ftn74"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 158-159.</p
+></note
+>.</p
+><p
+xml:id="p13"
+>À l’empressement montré par Gualdi pour sauvegarder les anciens vestiges, on peut ajouter d’autres exemples d’une sensibilité similaire pour la conservation, précédant ou suivant l’action du gentilhomme, issus de la volonté des familles de préserver les traces de leur antique noblesse, ou déterminés par la volonté de transmettre à la postérité les témoignages historiques sans le motif des liens du sang. On peut donner en exemple les vestiges de la famille Casali rassemblés dans l’atrium du palais ancestral de Campo Marzio, au 23 de la rue de la Stelletta : parmi ceux-ci ressortent la pierre tombale de Francesca Casali († 1463), autrefois à Sant’Agostino<note
+n="29"
+place="foot"
+xml:id="ftn75"
+><p
+>Sur la partie haute de la pierre tombale est sculpté l’écu des Casali, dans un losange quadrilobé ; sous celui-ci est gravée l’inscription sépulcrale, en capitales. Dans l’angle inférieur droit est gravé un chandelier. Pour le texte de l’épitaphe, voir Forcella, <hi
+rend="italic"
+>Iscrizioni delle chiese</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, t. V, p. 12, n<hi
+rend="sup"
+>o</hi
+> 23, qui considérait l’objet comme perdu (de même dans Jan L. de Jong, <hi
+rend="italic"
+>Tombs in Early Modern Rome (1400-1600). Monuments of Mourning, Memory and Meditation</hi
+>, Leiden, Brill, 2023, p. 228). La pierre tombale est localisée à Sant’Agostino dans les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> de Gualdi (chap. XXIII, § 3) et aussi par Pier Luigi Galletti, <hi
+rend="italic"
+>Inscriptiones Romanae infimi aevi Romae exstantes</hi
+>, Romae, Typis Generosi Salomoni Bibliopolae, 1760, p. LXIII, n. 7. L’extraction de la pierre tombale du pavement de l’église et son transfert sous le porche du palais durent se produire dans les années qui succédèrent immédiatement à la publication du volume de Galletti, quand la chapelle Casali fut démolie (voir à ce propos l’inscription de 1764 rapportée dans Forcella, <hi
+rend="italic"
+>Iscrizioni delle chiese, op. cit.</hi
+>, t. V, p. 106, n<hi
+rend="sup"
+>o</hi
+> 316 et Lothar Sickel, « L’antica cappella Casali in Sant’Agostino a Roma in un disegno di Taddeo Kuntz: una testimonianza per un affresco scomparso del Pintoricchio? », <hi
+rend="italic"
+>Bollettino d’Arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 43, 2020, p. 59-78).</p
+></note
+>, et un écu des Casali accompagné d’une inscription vulgaire en majuscules gothiques datée de 1429, où est évoquée la construction d’un puits<note
+n="30"
+place="foot"
+xml:id="ftn76"
+><p
+>L’inscription inédite dit : « <hi
+rend="italic"
+>Q(ue)sto poçço a(n)no fac(t)o / li figli d(e) Ia(n)ni d(e) Romano / Casal(e) allo(r) spese et / no alle spe(se) de la contrada c(onstruct)o </hi
+>[?] <hi
+rend="italic"
+>/ p(er) lo(r) case a(nn)o D(omini) M</hi
+><hi
+rend="italic sup"
+>o</hi
+><hi
+rend="italic"
+>IIII</hi
+><hi
+rend="italic sup"
+>C</hi
+><hi
+rend="italic"
+>XXIX </hi
+>[Ce puits, les fils de Jean de Romain Casali l’ont construit à leurs dépens et non à ceux du district pour leurs maisons, l’an du Seigneur 1429] ». Au milieu du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Teodoro Amayden situait l’objet dans le jardin des Casali à Marmorata : « Ils ont dans ledit jardin une pierre tombale de celles qu’on appelle antiques-modernes, avec les armes en haut et au-dessous l’inscription en lettres mi-gothiques [<hi
+rend="italic"
+>Hanno nel sopradetto giardino una lapide di quelle che si chiamano antiche moderne, col arme in cima, e la scrittura sotto in lettera mezza gotica</hi
+>] ». Suit la trancription de l’épigraphe (Biblioteca Casanatense, ms. 1335, fol. 254r ; il s’agit d’un passage du chapitre de la <hi
+rend="italic"
+>Storia delle famiglie romane</hi
+> consacré aux Casali non transcrit dans la discutable édition de Carlo Augusto Bertini, <hi
+rend="italic"
+>La Storia delle famiglie romane...</hi
+>, Rome, 1910, 2 vol.). Sur l’adjectif « <hi
+rend="italic"
+>anticomoderno </hi
+>» employé par Amayden, utilisé à l’époque moderne pour désigner les derniers siècles du Moyen Âge, sinon toute l’époque médiévale, voir Fabrizio Federici, «<hi
+rend="italic"
+> </hi
+>“Anticomoderno”: significati ed usi del termine nella letteratura artistica tra Cinque e Settecento<hi
+rend="italic"
+> </hi
+>», dans Maria Monica Donato et Massimo Ferretti (dir.), <hi
+rend="italic"
+>« Conosco un ottimo storico dell’arte… ». Per Enrico Castelnuovo. Scritti di allievi e amici pisani</hi
+>, Pise, Edizioni della Normale, 2012, p. 291-296.</p
+></note
+> (fig. 49). Ce dernier témoignage offre un intérêt particulier : Giovanni Battista Casali, un membre de la famille qui dans la première moitié du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle collectionnait les antiques et publia plusieurs ouvrages sur l’ancienne Rome, les rituels religieux des Égyptiens, des Romains ou des chrétiens, fit tirer de cet écu une petite xylographie reproduite à la fin de ses doctes volumes en guise de signature<note
+n="31"
+place="foot"
+xml:id="ftn77"
+><p
+>Casali inséra cette gravure à la fin de ses travaux d’antiquaire sur les rites et ensuite en conclusion du volume qui réunit la série, voir Giovanni Battista Casali, <hi
+rend="italic"
+>De profanis, et sacris veteribus ritibus</hi
+>, Romae, Ex typographia Andreae Phaei, 1645.</p
+></note
+> (fig. 50). La gravure, accompagnée d’une brève didascalie (« <hi
+rend="italic"
+>Ex antiquo marmore apud auctorem</hi
+> [d’après un marbre antique, chez l’auteur] »), représente l’écu avec exactitude mais elle omet complètement l’inscription sous-jacente, à l’exception de la date conclusive. En choisissant de sceller les volumes par une antique représentation de son propre écu, Casali entendait souligner son statut d’érudit issu d’une noble lignée, membre d’une illustre maison romaine. À cette xylographie on peut en joindre une autre, figurant parmi celles que Gualdi fit réaliser pour les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> : il s’agit d’une pièce elle aussi de format réduit (65 × 50 mm) qui reproduit l’écu des Gualdi inséré sur le côté nord du Palais Sénatorial, au Capitole (fig. 51 et 52). L’écu de marbre fut placé là dans la première moitié du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle par un des deux ancêtres du chevalier Gualdi qui assumèrent la charge prestigieuse de sénateur de Rome, Galeotto ou Francesco<note
+n="32"
+place="foot"
+xml:id="ftn78"
+><p
+>L’écu reproduit est celui autour duquel Gualdi disposa trois inscriptions en mémoire des sénateurs Galeotto et Francesco, peut-être la même année, 1655, où il érigea non loin de là le monument à Scipion l’Africain (on ne peut cependant exclure que les inscriptions aient été mises à une date antérieure). Sur le monument à Scipion voir Franzoni, Tempesta, <hi
+rend="italic"
+>Il museo di Francesco Gualdi</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+> et Fabrizio Federici, « Baroque Returns: the Donations and Reuses of Francesco Gualdi », dans Eva-Maria Troelenberg, Felicity Bodenstein et Damiana Otoiu (dir.), <hi
+rend="italic"
+>Contested Holdings: Museum Collections in Political, Epistemic and Artistic Processes of Return</hi
+>, actes du colloque <hi
+rend="italic"
+>What do Contentious Objects Want? Political, Epistemic and Artistic Cultures of Return</hi
+>, Florence, Kunsthistorisches Institut in Florenz, 21-22 ottobre 2016, New York-Oxford, Berghahn, 2022, p. 197-219. La xylographie commandée par Gualdi est publiée dans Ferdinando Ughelli, <hi
+rend="italic"
+>Italia Sacra</hi
+>, Rome, Apud Bernardinum Tanum, 1647, t. II, col. 432, à la fin d’un éloge de cette famille de Rimini.</p
+></note
+>. Nous ne savons pas à quel endroit des <hi
+rend="italic"
+>Memorie </hi
+>cette xylographie était destinée : on peut penser que comme l’autre réalisée dans les mêmes années elle était prévue pour clore le volume, pour souligner le prestige de la famille du collectionneur de Rimini et le rang sénatorial de bien deux de ses ancêtres.</p
+><p
+xml:id="p14"
+>Si la décision de préserver les vestiges et les armoiries des Casali dans l’atrium de leur palais fut déterminée par la volonté de sauvegarder la mémoire familiale, le déplacement de la pierre tombale de Giuliano Porcari († 1282) à San Giovanni della Pigna (fig. 53) fut en revanche motivé par une sensibilité pour la conservation indépendante de l’orgueil nobiliaire. En 1562, le recteur de l’église, Nicola Martinelli, fit extraire du pavement du sanctuaire la belle pierre tombale qui montre une croix et un écu nobiliaire en mosaïque dans un cadre de même, et la fit insérer dans un mur, expliquant les raisons de son initiative dans un inscription malheureusement disparue mais recueillie par Forcella : « La pierre que tu vois se trouvait devant l’entrée du sanctuaire ; afin que le signe de la croix ne fût pas foulé aux pieds de ceux qui entrent ni que cette mémoire de l’antiquité de la famille Porcari ne tombât dans l’oubli, Nicola Martinelli, recteur de cette église, l’a fait poser dans ce lieu plus honorable et plus commode, l’an du salut 1562<note
+n="33"
+place="foot"
+xml:id="ftn79"
+><p
+>Vincenzo Forcella, <hi
+rend="italic"
+>op. cit.</hi
+>, t. IX, p. 487, n<hi
+rend="sup"
+>o</hi
+> 976. Sur la pierre tombale du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, voir Jörg Garms, Roswitha Juffinger et Bryan Ward-Perkins (dir.),<hi
+rend="italic"
+> op. cit.</hi
+>, t. I, p. 89-90 : « <hi
+rend="italic"
+>Lapis quem cernis ante ostium templi / iacebat et ne ab introentibus signu(m) / crucis pedib(us) conculcaretur Porciaeq(ue) / familiae vetustatis memoria haec / oblivioni traderetur Nicolaus / Martinellus huius ecclesiae / rector in hunc et honestiorem / et commodiorem locu(m) posuit / anno Salutis MDLXII </hi
+>».</p
+></note
+> ». Le déplacement fut donc motivé non seulement par une raison religieuse (empêcher que la croix fût piétinée par ceux qui entraient dans l’église), mais aussi par la volonté d’éviter que l’antique mémoire des Porcari « tombât dans l’oubli ».</p
+><p
+xml:id="p15"
+>Pour en revenir aux <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> et à l’attention que les armoiries nobiliaires reçoivent dans cette œuvre, un aspect qui reste à mettre en évidence est la faveur avec laquelle est généralement considérée la simplicité des représentations héraldiques sur les pierres tombales du passé. Dans le contexte plus large de l’éloge de la pureté et de la modestie des derniers siècles du Moyen Âge, concentré principalement sur les habits, en particulier féminins, même les armoiries sont exploitées comme preuve d’une intégrité morale supérieure désormais perdue, supplantée par la vaine « pompe » des temps présents. En prenant l’exemple de la pierre tombale de Pietro Muti (fig. 54), il est affirmé :</p
+><cit
+xml:id="cit03"
+><quote
+>La simplicité qui au cours des siècles passés s’observait dans différentes choses a été tellement corrompue qu’enfin dans les armoiries ou insignes elle se trouve tout à fait altérée, d’où on doit bien observer dans les armoiries de nos pierres sépulcrales comment pour être de ces temps elles se trouvent toutes mises et formées sans aucune sorte de cimier ou couronne ou autre ornement extérieur quoiqu’elles soient mémoires de familles romaines ayant dominé des villes et ayant gouverné des États. Cela étant, ils représentaient purement leurs armoiries dans le seul écu ou targe et l’on voit que Bartolomeo Cassaneo, très fameux jurisconsulte qui vivait vers l’an 1529, dans son catalogue <hi
+rend="italic"
+>Gloriae mundi</hi
+> quand il traite des insignes et des armes nous les représente sans aucun ornement quoiqu’elles appartinssent à de grands seigneurs comme on peut l’y voir<note
+n="34"
+place="foot"
+xml:id="ftn80"
+><p
+>Barthélémy de Chasseneuz, <hi
+rend="italic"
+>Catalogus gloriae mundi</hi
+>..., Lugduni, Per honoratum virum Dionysium de Harsy, 1529, partie I, p. 26-34.</p
+></note
+>, signe évident que dans son temps cela n’était pas encore en usage et c’est un peu plus d’un siècle après que s’introduisit l’usage des cimiers et des couronnes. De là on voit que la maison Malatesta parmi beaucoup d’autres, originaire de ma patrie Rimini, laquelle a dominé à plusieurs reprises jusqu’à vingt-deux villes ne s’autorisa pas à déployer ses armes sinon simples, comme le firent beaucoup d’autres très nobles familles de Rome et d’Italie, mais il peut bien être arrivé par concession de potentats, ou par autre raison, qu’on ait commencé à introduire les heaumes, les couronnes et autres ornements<note
+n="35"
+place="foot"
+xml:id="ftn81"
+><p
+>Chap. XLIX, § 14-16 : « <hi
+rend="italic"
+>La semplicità, che negl’andati secoli s’osservava in diverse cose, talmente è stata corrotta, che infin nelle arme, od insegne vedesi affatto alterata, onde ben devesi osservare nelle arme di queste nostre lapidi sepolcrali come, per esser di quei tempi, si trovino tutte collocate, e formate senza sorte alcuna di cimiero, overo corone, od altri ornamenti all’intorno, ancorché sieno memorie di famiglie romane ch’hebbero dominato città, et havuto giurisdittione di Stati. Nondimeno puramente rappresentavano le loro imprese col solo scudo, o targa; e vedesi che Bartolomeo Cassaneo famosissimo giureconsulto, il qual viveva circa l’anno 1529, nel suo catalogo Gloriae mundi, mentre tratta delle insegne, e dell’arme, egli ce le rappresenta spogliate d’ogni ornamento ancorché sieno di signori grandi, come ivi si può vedere, segno evidente che a’ suoi tempi ancor ciò non era in uso; et è poco più del corso d’un secolo in qua, che si è introdotto l’uso del cimiero, e delle corone. Laonde vedesi la Casa Malatesta tra molte altre, originaria di Rimini mia patria, la quale ha dominato in più volte nell’Italia da ventidue città, e nondimeno non si arrogò mai di spiegare le sue arme se non semplici, sì come molte altre nobilissime famiglie di questa città di Roma, e dell’Italia; ma può ben essere accaduto, che poi forse per concessione de’ potentati, o per altra cagione si sieno cominciati ad introdurre gli elmi, e le corone, e gl’altri ornamenti </hi
+>». Suivent aux § 17-19 quelques considérations sur les origines des armoiries : « <hi
+rend="italic"
+>Diedero alcuni l’origine delle arme agl’Egittij ne’ loro simboli, altri a’ Thebani nelle lor guerre, chi ad Artù et a’ cavalieri della tavola rotonda, e chi a’ paladini di Carlo Magno, liberatore del mondo. Non ha dubio però che tra gli antichi il valore de’ soldati che molte cose in guerra generosamente acquistarono, o perché erano dagl’imperadori di doni militari, e di varie corone adorni, diede campo di poter da quelle ritrarne un principio delle nostre arme, le quali dopo il secolo di Barbarossa pigliarono qualche forma, e sempre si sono andate avanzando, et ad imitatione di quei doni de’ capitani antichi hanno con bei simboli divisate le loro insegne; ed i regi dagli antichi imperadori presero le corone radiate, et i principi dagl’Augusti inferiori trassero l’uso delle diademe, o fascie gioiellate per coronare le arme loro, ed il nobile da’ soldati di gran fattione l’uso di alzare il cimiero sopra le loro imprese, e finalmente ciascuno nella vanità degli scudi ripone la gloria della pace</hi
+> [Certains donnèrent l’origine des armes aux Égyptiens dans leurs symboles, d’autres aux Thébains dans leurs guerres, qui à Artus et aux chevaliers de la Table ronde, et qui aux paladins de Charlemagne, libérateur du monde. Il n’y a pourtant aucun doute que, dans l’Antiquité, les soldats ayant généreusement acquis de nombreux gains pendant la guerre ou s’étant vu décerner par les empereurs des dons militaires et orner de couronnes variées, cela donna lieu de pouvoir en tirer l’origine de nos armoiries, lesquelles prirent quelque forme après le siècle de Barbarossa et allèrent toujours en s’avançant, et à l’imitation des dons des capitaines antiques on orna les insignes de beaux symboles ; et les rois prirent les couronnes radiées des antiques empereurs, et les princes prirent l’usage des diadèmes ou des bandeaux ornés de gemmes des Augustes inférieurs pour couronner leurs armoiries, et le noble des soldats méritants l’usage d’élever un cimier au-dessus de leurs armes, et finalement chacun place la gloire de la paix dans la vanité des écus] ». Sur la question des origines des armoiries (que la critique actuelle tend à situer dans la seconde moitié du <hi
+rend="small-caps"
+>xii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle), voir Michel Pastoureau, <hi
+rend="italic"
+>Typologie des sources du Moyen Âge occidental</hi
+>, Turnhout, Brepols, 1976, fasc. 20 : <hi
+rend="italic"
+>Les armoiries</hi
+>, p. 24-27.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p16"
+>On trouve des considérations de la même teneur dans un des discours que Gauges de’ Gozze prépara pour son traité et qui ne trouvèrent pas leur place dans la version finale de l’œuvre :</p
+><cit
+xml:id="cit04"
+><quote
+>Peu d’armoiries ou insignes de familles se trouvent sculptés sur les pierres tombales avec le heaume ou le cimier au-dessus de l’écu dans les siècles passés où l’on aimait une pure et franche simplicité éloignée de toute fumée de grandeur et d’ambition. Après ces bons temps vraiment heureux, étant, outre les autres abus, crû parmi les hommes un désir immodéré de gloire, ils valorisèrent progressivement les titres lesquels étant initialement de sens honorable et appropriés à la qualité de chacun atteignirent ensuite un tel degré de grandeur que les plus élevés se trouvant usurpés par des personnes médiocres sinon viles furent la cause que les cardinaux de notre temps laissèrent l’« illustrissime » devenu trop commun et s’arrogèrent pour eux seuls celui d’« éminentissime ». Ainsi, à la place des simples armes ou écu, les princes dans le simple entourage de la couronne ont ajouté de longs lambrequins et autres ornements, et les nobles (suivis par les plébéiens, quoique leurs singes très vils, ce qui mérite qu’on y remédie) ont placé sur l’écu le heaume et divers emblèmes ou devises<note
+n="36"
+place="foot"
+xml:id="ftn82"
+><p
+>Le passage précède immédiatement celui sur l’origine antique de la coutume de poser des cimiers sur les écus que nous avons déjà cité : « <hi
+rend="italic"
+>Poche armi, od insegne di fameglie si trovano scolpite in lapidi sepolcrali coll’elmo, o cimiero sopra lo scudo negli andati secoli, i quali amavano una pura, e schietta simplicità lontana da ogni fumo di grandezza, ed ambitione: doppo que’ buon tempi veramente felici oltre agli altri abusi, essendo negli huomini cresciuto uno smoderato disiderio di gloria, cominciarono a campeggiar a poco a poco i titoli, i quali da principio essendo di honorevol senso, ed appropriati alla qualità di ciascuno crebbero poi a tal grado di grandezza, che venendo da persone mediocri, nonché vili, usurpati i titoli maggiori, cagionarono che i cardinali a’ tempi nostri lasciassero l’illustrissimo reso troppo commune, e pigliassero quel d’eminentissimo e l’appropriassero a sé soli: così in luogo delle semplici armi, o scudi, i principi al semplice giro della corona hanno aggionte longhissime punte, ed altri ornamenti, ed i nobili (seguiti da plebei etiandio vilissimi loro simie, cosa degna di rimedio) hanno posto sopra lo scudo l’elmo con diversi emblemi, o imprese </hi
+>».</p
+></note
+>.</quote
+></cit
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>Commerce et noblesse</head
+><p
+xml:id="p17"
+>Outre les armoiries, un autre élément d’identification des défunts reçoit une grande attention dans les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> : les marques de marchands que l’on pouvait et peut encore voir aujourd’hui gravées ou sculptées sur les pierres tombales du Moyen Âge tardif et de la Renaissance<note
+n="37"
+place="foot"
+xml:id="ftn83"
+><p
+>Sur les marques de marchands, voir Umberto Gnoli, « Nobiltà romana e marchi mercantili nel Medioevo<hi
+rend="italic"
+> </hi
+>», <hi
+rend="italic"
+>L’Urbe</hi
+>, vol. VIII, n<hi
+rend="sup"
+>o</hi
+> 11-12, 1943, p. 15-32 ; Jérôme Hayez, « Un segno fra altri segni. Forme, significati e usi della marca mercantile verso il 1400 », dans Elena Cecchi Aste (dir.), <hi
+rend="italic"
+>Di mio nome e segno. « Marche » di mercanti nel carteggio Datini (secc. XIV-XV)</hi
+>, Prato, Istituto di studi postali Aldo Cecchi, « Quaderni di storia postale, 30 », 2010, p. IX-XLVI.</p
+></note
+>. Deux marques étaient visibles sur la pierre tombale de Lello Maddaleni dans l’église de la Minerve (fig. 55 et 56), qui suscitent un intéressant débat sur ce genre de signes :</p
+><cit
+xml:id="cit05"
+><quote
+>Nous voyons que depuis environ cinq à six siècles les familles de particuliers ont inventé leurs propres armes ou insignes, et avant on utilisait à leur place les lettres ou caractères voulons-nous dire, ce qui se voit clairement chez Ciaccone, dans les vies des pontifes et des cardinaux de ces temps, ainsi que chez d’autres auteurs. Donc, à propos de ces mêmes lettres ou caractères, les hommes qui faisaient commerce dans les pays lointains, pour marquer leurs marchandises afin que leur propre patron fût reconnu, prirent l’habitude d’y imprimer une lettre ou autre chiffre similaire qui déclarerait le nom propre du marchand et patron de ces marchandises par sa première lettre ou plusieurs ensemble, laquelle se nomme marque ou merque ; ils se servaient d’elle non seulement pour sceau et pour marquer ou merquer lesdites marchandises mais ils l’imprimaient aussi sur toutes leurs affaires, sur leur bétail ou sur toute autre chose, et non contents de cela ils la faisaient enfin graver sur les portes comme sur les meubles de leurs maisons. Plus encore, ils les sculptaient jusque sur leurs sépultures et voulaient les emporter dans la mort comme cela se voit pour notre Madaleni et pour d’autres dans ce livre. Et aujourd’hui tout cela est de coutume pour les marchands puissants et riches<note
+n="38"
+place="foot"
+xml:id="ftn84"
+><p
+>Chap. XVIII, § 3-5 : « <hi
+rend="italic"
+>Noi vediamo che d’intorno a cinque, o sei secoli passati le famiglie de’ particolari hanno inventate le proprie arme, od insegne; e per prima da alcuni usavansi in vece d’esse le lettere, o caratteri che dir vogliamo, il che nel Ciaccone nelle vite di que’ pontefici, e cardinali di que’ tempi, et in altri auttori chiaramente vedesi. Quindi è, che dalle medesime lettere, o caratteri gli huomini che mercatantie in lontane parti facevano, per segnare le loro merci, acciò il proprio padrone riconosciuto fosse, usarono d’imprimere sopra esse una lettera, o altra simile zifra con la quale la prima, o più lettere assieme dichiarassero il nome del proprio mercadante e padrone di quelle merci, la quale marchio, o merchio nominossi; ove con essa non solo per suggello, et per marcare, o merchiare le dette mercadantie servivansi, ma anco vi segnavano tutte le robbe, o bestiami, o altro che fosse, né di ciò contenti infin sopra le porte e suppellettili delle loro case intagliar facevano. Anzi infino nelle sepolture le scolpivano, e seco in morte portar le volevano, come il nostro Madaleni et altri in questo libro vedesi. Et hoggidì il tutto da’ facultosi, e nobili mercadanti usarsi suole</hi
+> ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p18"
+>La présence conjointe de marques de marchands et d’armoiries nobiliaires obligeait à réfléchir sur un thème, celui du rapport entre commerce et noblesse, qui était particulièrement ressenti à Rome où la noblesse autochtone était souvent accusée de ne pouvoir se vanter d’origines très anciennes et de s’être élevée d’humbles conditions seulement dans des temps récents : « la majeure partie des familles aujourd’hui estimées à Rome sont issues de basses origines, comme notaire, apothicaire, ce qui serait supportable, mais aussi de l’art malodorant du tannage des cuirs ; c’est une chose que remarque très souvent Metellino [Castalio Metallino] : V. et N. gentilhomme dans l’art du tannage, chose en vérité ridicule, composant sa noblesse avec tant de souillure et cette origine qu’ils eurent est très fraîche », lit-on dans une relation sur les familles romaines du milieu du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle<note
+n="39"
+place="foot"
+xml:id="ftn85"
+><p
+>Archivio Apostolico Vaticano, Misc. Arm. II 150, fol. 646r-716r, ici fol. 675v-676r : « <hi
+rend="italic"
+>la maggior parte delle famiglie hoggi stimate a Roma nobili vengono da bassi principij, come di notaro, spetiale, che pur sarebbe da soportare, ma dall’arte puzzolente della concia de’ corami; è cosa che nota più, e più volte il Metellino </hi
+>[Castalio Metallino]<hi
+rend="italic"
+>: V. et N. nobilhuomo dell’arte della concia, cosa invero ridicola, componendo la nobiltà con tanta lordura; e questo principio ch’hebbero è molto fresco</hi
+> ». Un peu plus loin, il est ajouté : « C’est une chose certaine qu’aucune famille à Rome ne descend des anciens Romains car Constantin transporta le Sénat à Byzance et avec lui tout ce qu’il y avait de bon à Rome, chacun suivant le prince [<hi
+rend="italic"
+>Certissima cosa è, che non è famiglia in Roma, che discenda dagl’antichi Romani, poiché Costantino condusse il senato in Bisanzio, e seco ciò che di buono era in Roma, seguendo ogn’uno il prencipe</hi
+>] ».</p
+></note
+>. De semblables mots sont prononcés dans ces mêmes années par l’historien français Jean Le Laboureur : « Par cette table l’on peut iuger de la noblesse romaine d’auiourd’huy ; dont la pluspart est de naissance estrangere, et si l’on la remenoit en sa source, l’on ne trouveroit que de la bourbe en plusieurs, qui se sont enrichis par les charges, par la banque, et par le trafic, ou par les fortunes de la cour ; particulierement les romaines, ou l’on pourroit à peine en choisir une douzaine de maisons vrayement nobles<note
+n="40"
+place="foot"
+xml:id="ftn86"
+><p
+>Jean Le Laboureur, <hi
+rend="italic"
+>Relation du voyage de la Royne de Pologne et du retour de Mme la mareschalle de Guébriant, ambassadrice extraordinaire...</hi
+>, Paris, Chez la veuve Jean Camusat, et Pierre Le Petit, 1647, p. 239.</p
+></note
+> ».</p
+><p
+xml:id="p19"
+>À Rome, face à ces accusations, plusieurs auteurs revendiquèrent le fait que la pratique du commerce et plus généralement des activités professionnelles n’est pas contraire à la noblesse. C’est ce qui se lit dans divers passages des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+><note
+n="41"
+place="foot"
+xml:id="ftn87"
+><p
+>Chap. X, § 9 (« <hi
+rend="italic"
+>In questo sepolcro del Bellapani, che è di maniera gotica, vediamo scolpito negl’estremi delle colonnette il marchio di mercadante, ma ciò punto non noce all’esser ben nato, e tenuto per nobile </hi
+>[…] ») ; chap. XVIII, § 6-13 ; chap. XXXIX, § 4-12.</p
+></note
+>, comme dans certains extraits d’un texte à peu près contemporain, la<hi
+rend="italic"
+> Storia delle famiglie romane</hi
+> de Teodoro Amayden : « Cette famille – écrit le polygraphe hollandais à propos de la famille Cavalieri – a sans aucun doute parfois exercé le négoce parce que l’on voit sur une ancienne porte de marbre d’une de leurs maisons à l’Argentina les armes de la famille flanquées de marques de marchands, ce qui ne déroge aucunement à la noblesse de la famille, parce que lesdites armes portent la bordure, signe de noblesse passée et présente, cela ne doit pas paraître étrange car dans l’église de Santa Maria dell’Anima, dans la chapelle faite par Focari [Fugger] après qu’ils furent devenus princes on voit les armes de la famille d’un côté et de l’autre la marque du négoce<note
+n="42"
+place="foot"
+xml:id="ftn88"
+><p
+>Teodoro Amayden, <hi
+rend="italic"
+>op. cit.</hi
+>, t. I, p. 286-287 : « <hi
+rend="italic"
+>Questa famiglia – scrive il poligrafo olandese a proposito della famiglia Cavalieri – senza fallo ha esercitato alcune volte il negozio, perché si vede sopra una porta antica di marmo d’una sua casa sotto l’Argentina l’arme della famiglia immezzo la porta e le note mercantili da’ fianchi, il che non deroga punto alla nobiltà della famiglia, perché detta arme porta la risega, segno di nobiltà precedente e concomitante, il che non deve parer strano, poiché nella chiesa di Santa Maria dell’Anima nella cappella fatta da’ Focari </hi
+>[Fugger]<hi
+rend="italic"
+> dopo che sono prencipi, si vede l’arme della famiglia e dall’altro lato il merco del negozio </hi
+>[…] ».</p
+></note
+> [...] ». La référence est selon toute probabilité à un écu des Cavalieri inséré dans le mur à côté de l’entrée de la tour du Papito, qui s’élève sur l’aire archéologique du Largo de Torre Argentina<note
+n="43"
+place="foot"
+xml:id="ftn89"
+><p
+>L’écu, de facture assez ordinaire, n’est pas flanqué des marques de marchands évoquées par Amayden, probablement gravées sur des portions de travertin qui ne nous sont pas parvenues. Comme d’habitude, l’écu Cavalieri porte la « <hi
+rend="italic"
+>risega</hi
+> », ou bordure, ici indentée.</p
+></note
+> (fig. 57). Amayden encore souligne de manière polémique dans un autre passage : « J’observe bien qu’au cours de pas tellement plus de deux cents ans la noblesse romaine a beaucoup changé, les nobles ayant exercé communément la marchandise ce pourquoi ils étaient riches, alors qu’au jour d’aujourd’hui ils en ont honte et ils sont pauvres<note
+n="44"
+place="foot"
+xml:id="ftn90"
+><p
+>Teodoro Amayden, <hi
+rend="italic"
+>op. cit.</hi
+>, t. II, p. 47 : « <hi
+rend="italic"
+>Ben osservo che, in corso di duecento e poco più anni, si è mutata molto la nobiltà romana, esercitando comunemente la mercanzia li nobili, e perciò erano ricchi, ove alli dì d’oggi l’hanno per vergogna e sono poveri </hi
+>».</p
+></note
+>. » En accord avec les positions exprimées par Gualdi et Amayden est ce qu’affirme Giovanni Pietro Crescenzi, soutenant que le petit commerce n’est pas noble, alors que la « marchandise opulente [<hi
+rend="italic"
+>mercatura opulenta</hi
+>] », les grands traffics ne sont pas en fait incompatibles avec la noblesse<note
+n="45"
+place="foot"
+xml:id="ftn91"
+><p
+>Giovanni Pietro Crescenzi, <hi
+rend="italic"
+>Il nobile romano, o sia trattato di nobiltà</hi
+>, Bologna, Per gli eredi d’Antonio Pisarri, 1693, p. 193-207.</p
+></note
+>.</p
+><p
+xml:id="p20"
+>Aux yeux des nobles qui ne pouvaient se vanter d’une illustre lignée, toutefois, ces arguments ne devaient pas sembler suffisants, et les racines mercantiles de leurs familles continuaient à constituer une source d’embarras. À tel point que certains tentèrent d’occulter leurs propres origines, intervenant matériellement sur les vestiges familiaux. C’est sans doute le cas de la pierre tombale déjà mentionnée de Lello Maddaleni : si la marque mercantile sur le coussin, à droite de la tête du défunt, semble presque entièrement disparue à la suite de l’usure généralement caractéristique des pierres tombales insérées dans le pavement (comme est désormais peu visible le petit écu aussi placé sur le coussin à gauche de la tête de Maddaleni), on ne peut exclure que la marque bien plus évidente entre les jambes du défunt, attestée par la xylographie et dont il ne reste nulle trace, ait été effacée intentionnellement (fig. 56).</p
+><p
+xml:id="p21"
+>Il est certain que l’altération de certains souvenirs familiaux gênants fut pratiquée dans les hauts rangs de la curie pontificale : les Barberini firent effacer sur quelques anciens écus de famille les ciseaux qu’un de leurs ancêtres, Taddeo di Cecco, y avait fait figurer pour signaler le métier de tisserand exercé par lui et par sa famille. Nous savons en particulier qu’en 1636 le cardinal Francesco, par l’intermédiaire du grand érudit et historien Carlo di Tommaso Strozzi, ordonna à un certain Zanobi Radicchi de supprimer les ciseaux dans certains écus de Taddeo présents à Barberino di Val d’Elsa. La lettre où Radicchi annonce au cardinal qu’il a accompli sa mission nous restitue pour ainsi dire une scène de comédie à l’italienne, avec l’émissaire du cardinal, le curé et le maçon qui « expédient l’affaire [<hi
+rend="italic"
+>fanno il negotio</hi
+>] » en pleine nuit, pour n’être surpris par personne :</p
+><cit
+xml:id="cit06"
+><quote
+>Éminentissime Seigneur et Patron très respectable, / Ces derniers jours on m’a fait entendre par le seigneur Carlo Strozzi que Votre Seigneurie Éminentissime aurait aimé que les ciseaux fussent enlevés des trois armoiries qui sont ici à Barberino ; n’ayant d’autre désir que de satisfaire à l’obligation que j’ai de la servir, professant toujours que ses moindres signes me sont des commandements très exprès, dès que j’entendis cela je vins à Barberino, et parce que deux de sesdites armes sont dans l’église de ce château, il me fut nécessaire d’en conférer avec le curé de cette église, le sachant prêtre à qui l’on pourrait confier toute plus importante affaire et ayant pris rendez-vous avec lui pour le soir où cela devait se faire j’arrivai sur les lieux à la deuxième heure de la nuit avec le maçon du monastère et jusqu’à minuit ledit prêtre, le maçon et moi nous expédiâmes l’affaire avec tant de dextérité qu’il n’a pas été su que personne s’en soit aperçu et qu’il ne semble pas qu’on y soit jamais allé, et tant que je serai jugé digne de ses commandements je ferai en sorte qu’elle soit servie avec toute diligence. Pour ne pas l’ennuyer plus, je terminerai demandant pour elle au Seigneur avec toute ma famille le comble de toute félicité. De Barberino le 9 novembre 1636 / de Votre Seigneurie Éminentissime / très humble et très obligé serviteur / Zanobi Radicchi<note
+n="46"
+place="foot"
+xml:id="ftn92"
+><p
+>La lettre a été publiée par Pio Pecchiai, <hi
+rend="italic"
+>Un assassinio politico a Roma nel Cinquecento</hi
+>, Rome, Biblioteca d’Arte Editrice, 1956, p. 91 : « <hi
+rend="italic"
+>Eminentissimo Signore e Padron Colendissimo, / Mi fu accennato alli giorni passati dal signor Carlo Strozzi come Sua Signoria Eminentissima haverebbe hauto gusto che si fosser levate le forbice dalle tre arme che sono qui in Barberino; onde non havendo altro desiderio che di satisfare all'obligo che tengo di servirla, professando sempre che li di lor minimi cenni mi sieno espressissimi comandamenti, subito che ciò hebbi inteso me ne venni a Barberino; e perché dua delle dette lor armi sono nella chiesa di questo castello, mi fu necessario conferirlo con il curato di detta chiesa, conoscendolo per sacerdote da poterli confidare qual si voglia più importante negotio, e rimanendo seco in appuntamento della sera che si doveva fare, arrivai in quella alle due hore di notte con il muratore del monasterio, et in su la meza notte il detto prete, il muratore et io facemmo il negotio con tanta destrezza che non s'è sentito che alcuno se ne sia accorto, né si pare che vi sieno mai state, e sempre che sarò fatto degno de' suoi comandamenti cercherò con ogni diligentia resti servita. Per non l'infastidir maggiormente farò fine, pregandoli sempre con tutta la mia famiglia dal Signore il colmo d'ogni felicità. Di Barberino li 9 novembre 1636 / di Vostra Signoria Eminentissima / humilissimo et obbligatissimo servitore / Zanobi Radicchi.</hi
+> » Sur cet épisode et en général sur les rapports des Barberini avec leur passé, voir Michele Di Monte, « La cultura antica e lo specchio della storia », dans Maurizia Cicconi, Flaminia Gennari Santori et Sebastian Schütze (dir.), <hi
+rend="italic"
+>L’immagine sovrana. Urbano VIII e i Barberini</hi
+>, catalogue d’exposition, Rome, Officina libraria, 2023, p. 265-269. Les écus de Barberino de Val d’Elsa ne furent probablement pas les seuls à être intéressés par la « censure » : deux écus de Taddeo di Cecco à Santa Croce à Florence, l’un à l’intérieur de la basilique et l’autre dans le grand cloître, semblent porter des traces d’une intervention destinée à supprimer ces encombrants ciseaux.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p22"
+>Le travail fut si bien exécuté que, aux dires de Radicchi, il ne semblait pas qu’il y ait jamais eu de ciseaux sur ces armoiries. Qui contrôlait le présent était en mesure, comme chez Orwell, de contrôler le passé, modifiant ses traces de façon à pouvoir le réécrire. Mais parfois le passé n’est pas aussi docile ni aussi facile à domestiquer : un écu des Barberini doté des ciseaux échappa à l’intervention de Radicchi, il peut encore être contemplé aujourd’hui dans la petite ville toscane, dans la sacristie de la chapelle de San Bartolo (fig. 58), nous rappelant les origines humbles et laborieuses de la famille du pape Urbain VIII<note
+n="47"
+place="foot"
+xml:id="ftn93"
+><p
+>La localisation de l’écu n’est pas celle d’origine. À Barberino, dans la chapelle de San Bartolo, et à Tavarnelle, dans l’église paroissiale de Santa Lucia al Borghetto, se trouvent aussi deux écus des Barberini « traités ». Dans la lettre de Radicchi, il est d’abord question de modifier « trois armoiries », mais ensuite on ne parle que d’une intervention sur deux écus, conservés « dans l’église de ce château », ou dans l’église paroissiale de San Bartolomeo : il semble toutefois improbable que l’envoyé du cardinal ait oublié un écu ; plutôt, dans la lettre, il parle de ces deux-là pour expliquer l’implication du prêtre, alors qu’un troisième écu qui fut privé de ses ciseaux devait se trouver ailleurs, peut-être à l’extérieur. Mais il y en eut un quatrième, dont on ignorait l’existence et qui pour cette raison échappa à la censure. Par ailleurs, comme on le sait, la présence des ciseaux n’était pas le seul élément gênant dans l’héraldique des Barberini : nous faisons naturellement référence à la présence originelle dans les armes de la famille non de gracieuses abeilles mais de taons [<hi
+rend="italic"
+>tafani</hi
+>], dont il semble que le cardinal Maffeo, bien avant de monter sur le trône de Pierre, voulut ennoblir l’aspect. À l’évidence, il aurait été beaucoup plus difficile, sinon impossible, d’intervenir sur des taons, car leur modification en abeilles aurait entraîné en pratique la destruction des écus d’origine. On doit écarter l’idée, qui continue à jouir d’une certaine fortune, selon laquelle le nom même de la famille fut à l’origine Tafani : comme l’a déjà fait remarquer Pio Pecchiai, « le nom de Tafani ne se trouve jamais mentionné dans les documents notariés », on le fit probablement dériver à posteriori « des armes adoptées par la famille », originaire d’une zone du fief de Barberino dénommée Tafania (Pio Pecchiai, <hi
+rend="italic"
+>I Barberini</hi
+>, Rome, Biblioteca d’Arte Editrice, 1959, p. 33). </p
+></note
+>.</p
+><p
+xml:id="p23"
+>Dans les écrits comme dans les événements que nous avons évoqués, on remarque avec quelle attention la Rome du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle considérait l’héraldique : on s’interrogeait sur ses origines, on en reconstituait l’histoire, on veillait à sa conservation ou bien au contraire on y intervenait pour effacer certains aspects gênants. Cette attention pour le passé était toujours reliée au présent, cela ne surprend pas pour une société d’Ancien Régime qui, malgré de notables transformations, demeurait dans une certaine continuité avec le Moyen Âge.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch04_Federici/Fig44.jpg"
+></graphic
+><head
+>Figure 43. Gauges de’ Gozze, <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano </hi
+>[...], Roma, Vitale Mascardi, 1637, page de titre, BNCR.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch04_Federici/Fig45.jpg"
+></graphic
+><head
+>Figure 44. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, Romae, Typis haeredum Francisci Corbelletti, 1638, page de titre gravée par Johann Friedrich Greuter sur un dessin de Giovan Francesco Romanelli.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch04_Federici/Fig46.jpg"
+></graphic
+><head
+>Figure 45. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, p. 661.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch04_Federici/Fig47.jpg"
+></graphic
+><head
+>Figure 46. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, p. 677, détail des effigies de Richard II et de la reine Anne sur le tableau perdu du Collège anglais.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch04_Federici/Fig49.jpg"
+></graphic
+><head
+>Figure 47. Xylographie pour les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale perdue d’Angelotto Normanni († 1378), autrefois dans l’église de Sant’Antonio à Camaldoli, collection particulière, Fabrizio Federici.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch04_Federici/Fig50.JPG"
+></graphic
+><head
+>Figure 48. Écu d’Everso II dell’Anguillara, première moitié du <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Rome, Hôpital du Latran.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch04_Federici/Fig51.jpg"
+></graphic
+><head
+>Figure 49. Armes de la famille Casali, 1429, Rome, Palais Casali.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch04_Federici/Fig52.jpg"
+></graphic
+><head
+>Figure 50. Xylographie représentant les armes de la famille Casali, d’après G. B. Casali, <hi
+rend="italic"
+>De profanis, et sacris veteribus ritibus</hi
+>, Romae, Ex typographia Andreae Phaei, 1645, bibliothèque municipale de Grenoble, C.1969.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch04_Federici/Fig53.jpg"
+></graphic
+><head
+>Figure 51. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant l’écu Gualdi sur le flanc nord du Palais sénatorial, collection particulière, Fabrizio Federici.</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch04_Federici/Fig54.jpg"
+></graphic
+><head
+>Figure 52. Armes d’un sénateur de la famille Gualdi, Galeotto ou Francesco, première moitié du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Rome, Palais sénatorial.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch04_Federici/Fig55.JPG"
+></graphic
+><head
+>Figure 53. Pierre tombale de Giuliano Porcari († 1282), Rome, San Giovanni della Pigna.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch04_Federici/Fig56.jpg"
+></graphic
+><head
+>Figure 54. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale de Pietro Muti († 1390) dans l’église de San Pantaleo, collection particulière, Fabrizio Federici.</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch04_Federici/Fig57.jpg"
+></graphic
+><head
+>Figure 55. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale de Lello Maddaleni († 1390) dans l’église de Santa Maria sopra Minerva, collection particulière, Fabrizio Federici.</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch04_Federici/Fig58.JPG"
+></graphic
+><head
+>Figure 56. Pierre tombale de Lello Maddaleni, Rome, Santa Maria sopra Minerva.</head
+></figure
+><figure
+xml:id="figure15"
+><graphic
+url="../icono/br/Ch04_Federici/Fig59.jpg"
+></graphic
+><head
+>Figure 57. Armes de la famille Cavalieri à l’entrée de la Tour du Papito, Rome, Largo di Torre Argentina.</head
+></figure
+><figure
+xml:id="figure16"
+><graphic
+url="../icono/br/Ch04_Federici/Fig60.jpg"
+></graphic
+><head
+>Figure 58. Armes de Taddeo di Cecco da Barberino, 2<hi
+rend="sup"
+>e</hi
+> moitié du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Barberino di Val d’Elsa, chapelle de San Bartolo, sacristie.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

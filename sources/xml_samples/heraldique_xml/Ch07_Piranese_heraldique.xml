@@ -1,0 +1,1272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Piranèse, l’héraldique et Clément XIII Rezzonico (1758-1769)</title
+><author
+role="aut"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Piranèse, l’héraldique et Clément XIII Rezzonico (1758-1769)</p
+><p
+rend="author-aut"
+>Yvan Loskoutoff</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>C’est une idée commune que le <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle vit le déclin de l’héraldique. Piranèse va nous prouver le contraire. Cela peut surprendre, mais l’artiste des ruines romaines fut aussi celui du blason. En publiant ses carnets de dessins conservés à Modène, Mario Bevilacqua écrit : « Outre qu’il a inventé des écus nobiliaires originaux, Piranèse en a souvent copié<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+><hi
+rend="italic"
+>Piranesi, Taccuini di Modena</hi
+>, Rome, Artemide, 2008, 2 vol., t. 1, c. 64v, « <hi
+rend="italic"
+>Oltre ad inventarne di originali, Piranesi ha ripetutamente copiato stemmi nobiliari </hi
+>».</p
+></note
+> ». Dans un autre écrit, le même auteur donne comme exemple d’invention de ce genre le dessin du Louvre intitulé <hi
+rend="italic"
+>Scène d’apothéose</hi
+> ou <hi
+rend="italic"
+>Apothéose d’Isaac Newton</hi
+> : « Au centre apparaît l’image ironique et profanatoire d’un écu fictif<note
+n="2"
+place="foot"
+xml:id="ftn34"
+><p
+>« The Young Piranesi: the Itineraries of his formation », dans Mario Bevilacqua, Heather Hyde Minor et Fabio Barri (dir.), <hi
+rend="italic"
+>The Serpent and the Stylus, Essays on G. B. Piranesi</hi
+>, Ann Arbor, The University of Michigan Press, « Memoirs of the American Academy in Rome », 2006, p. 13-53, ici p. 47 : « <hi
+rend="italic"
+>In the middle of it all appears the ironic, desecrating image of a mock escutcheon.</hi
+> »</p
+></note
+> ». On perçoit une approche complexe : Piranèse copie le blason mais il s’en joue aussi. Mario Bevilacqua traite des dessins, ce goût de l’artiste se manifeste néanmoins d’abord dans la gravure et dans l’architecture. Nous essaierons de montrer comment il s’appliqua à la papauté dans ces deux domaines.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Piranèse et l’héraldique</head
+><p
+xml:id="p2"
+>Avant d’aborder la papauté, nous voudrions montrer l’intime familiarité de l’artiste avec le blason et même sa créativité en la matière. Nous avons choisi pour cela trois exemples pris dans l’ensemble de sa production.</p
+><div
+type="section2"
+xml:id="div02"
+><head
+>Le frontispice Charlemont</head
+><p
+xml:id="p3"
+>En 1756, Piranèse publie à Rome <hi
+rend="italic"
+>Le antichità romane</hi
+>, dont les quatre volumes in-folio sont dédiés à son mécène, Milord Charlemont, un seigneur irlandais qui avait séjourné à Rome. Malheureusement, le soutien financier nécessaire à cette coûteuse entreprise ne correspondit pas aux attentes et l’artiste décida de supprimer la quadruple dédicace de l’édition en cours. Il rendit compte de cette décision l’année suivante dans un opuscule in-4° où il publiait la correspondance échangée pour l’occasion : <hi
+rend="italic"
+>Lettere di giustificazione scritte a Milord Charlemont e a’ di lui agenti di Roma, dal signor Piranesi socio della real società degli antiquari di Londra intorno la dedica della sua opera delle antichità rom. fatta allo stesso signore ed vltimamente soppressa</hi
+>. [<hi
+rend="italic"
+>Lettres de justification écrites à Milord Charlemont et à ses agents de Rome par Monsieur Piranèse, membre de la Société royale des antiquaires de Londres, sur la dédicace de son œuvre des Antiquités de Rome faite audit seigneur et récemment supprimée</hi
+>]. L’affaire a été étudiée mais sans aborder son caractère héraldique<note
+n="3"
+place="foot"
+xml:id="ftn35"
+><p
+>Heather Hyde Minor, « Engraved in porphyry, printed on paper: Piranesi and Lord Charlemont », dans <hi
+rend="italic"
+>ibid.</hi
+>, p. 123-147 ; Pierluigi Panza, « L’araldica e Giovan Battista Piranesi », <hi
+rend="italic"
+>Rivista del Collegio araldico</hi
+>, 2017, p. 142-154.</p
+></note
+>.</p
+><p
+xml:id="p4"
+>Avant la rupture, le frontispice du premier volume des <hi
+rend="italic"
+>Antichità romane</hi
+> situe le blason du dédicataire dans le contexte glorieux de la Rome antique (fig. 96). Piranèse s’explique dans la première de ses <hi
+rend="italic"
+>Lettere di giustificazione</hi
+> :</p
+><cit
+xml:id="cit01"
+><quote
+>La première planche, qui se trouve en tête du premier volume représente un marbre découvert parmi les ruines et montre l’inscription désignant le sujet auquel l’œuvre était consacrée. Sur les trophées antiques qui l’accompagnent on voit un écu portant les armes et les attributs de la maison de Milord, pour en montrer l’antiquité et le lustre<note
+n="4"
+place="foot"
+xml:id="ftn36"
+><p
+><hi
+rend="italic"
+>Lettere di giustificazione...</hi
+>, In Roma, s. n., 1757, p. II, n. 3 : « <hi
+rend="italic"
+>La prima Tavola, che sta alla testa del primo Volume, rappresenta un marmo scoperto fra le rovine, e mostra l’Iscrizione col nome del Suggetto, a cui era dedicata</hi
+> <hi
+rend="italic"
+>l’Opera. Su i trofei antichi, che l’accompagnano, sono in uno Scudo le armi, e gli attributi della Casa di Milord, per mostrarne l’antichità ed il lustro.</hi
+> »</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p5"
+>Dans une intention de célébration, Piranèse avait donc associé deux imaginaires différents, celui du blason d’origine médiévale et celui de l’antiquité romaine. Le frontispice montre en effet sur un fond d’arc de triomphe une stèle portant l’inscription dédicatoire, et à gauche, parmi des trophées, les armoiries du Milord dont ses agents avaient fourni le modèle. Elles se décrivent ainsi et elles ont été fidèlement représentées :</p
+><cit
+xml:id="cit02"
+><quote
+>Burelé d’argent et de gueules ; au canton de gueules chargé d’un léopard d’or. Cimier : une tête et col de dragon de gueules, colleté d’une jumelle d’argent. Supports : deux dragons de gueules ailés de sable, colleté chacun d’une jumelle d’argent. Devise : DEO DUCE, FERRO COMITANTE<note
+n="5"
+place="foot"
+xml:id="ftn37"
+><p
+>Jean-Baptiste Rietstap, <hi
+rend="italic"
+>Armorial général</hi
+>, Londres, Heraldry Today, 1988, 2 vol., t. 1, p. 388, « Caulfeild, comte de Charlemont ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p6"
+>Placé sur un bouclier ovale l’écu s’inscrit parfaitement dans le trophée qui l’entoure. Néanmoins la célébration ne paraît pas univoque. En haut à droite, un fragment sculpté empiète sur la tête du dragon montrant une danseuse nue. On sait que Milord Charlemont menait galante vie et qu’il dut quitter Rome pour une affaire de jalousie. Dès avant la rupture, Piranèse nuançait donc son œuvre encomiastique d’un soupçon de satire.</p
+><p
+xml:id="p7"
+>Dans la deuxième des <hi
+rend="italic"
+>Lettere di giustificazione</hi
+>, Piranèse précise l’exécution de sa vengeance :</p
+><cit
+xml:id="cit03"
+><quote
+>[…] pour ne pas gâter mes planches, j’imiterai ce qui se voit sur l’arc de Septime Sévère dans la ligne où fut enlevé le nom de Geta sur ordre de son frère Caracalla, et je substituerai un compliment au public qui sera autant juge que témoin de ce qui advint de part et d’autre relativement à cette dédicace<note
+n="6"
+place="foot"
+xml:id="ftn38"
+><p
+><hi
+rend="italic"
+>Lettere di giustificazione</hi
+>..., <hi
+rend="italic"
+>op. cit</hi
+>. : « […] <hi
+rend="italic"
+>per non guastar le mie Tavole, imit</hi
+><hi
+rend="italic"
+>erò quel che si vede sull’Arco di Settimio Severo nella linea, da cui fu tolto il nome di Geta per ordine di Caracalla suo fratello, e vi sostituirò un complimento al Pubblico, che sarà insieme e giudice e testimone delle cose passate dall’una e l’altra parte intorno a quella dedica.</hi
+> »</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p8"
+>Il y eut en effet deux états successifs de la gravure remaniée. Certains exemplaires, comme celui du fonds Barberini à la Bibliothèque vaticane<note
+n="7"
+place="foot"
+xml:id="ftn39"
+><p
+>BAV, Stamp. Barb. X.I.20-23.</p
+></note
+>, contiennent les trois frontispices. Dans le premier état modifié, l’inscription est effacée comme le voulait la <hi
+rend="italic"
+>damnatio memoriae</hi
+> antique à laquelle Piranèse se réfère (fig. 97). Mais la modification s’applique aussi au blason qui se trouve « diffamé » suivant une pratique médiévale<note
+n="8"
+place="foot"
+xml:id="ftn40"
+><p
+>Voir Laurent Hablot, « “<hi
+rend="italic"
+>Sens dessoubz dessus</hi
+>”. Le blason de la trahison », dans Myriam Soria et Maïté Billoré (dir.), <hi
+rend="italic"
+>La trahison au Moyen</hi
+> <hi
+rend="italic"
+>Âge. De la monstruosité au crime politique (</hi
+><hi
+rend="small-caps italic"
+>v</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle)</hi
+>, Rennes, PUR, 2010, p. 331-347.</p
+></note
+> dont la lettre ne dit rien. Dans la gloire comme dans la honte, l’antique et le médiéval cheminaient de concert. Comme prévu, dans le dernier état une nouvelle inscription remplaça la précédente, cette fois vouée non à un décevant mécène mais à l’utilité publique, <hi
+rend="italic"
+>VTILITATI PVBLICAE</hi
+>. Piranèse en profita pour accentuer la diffamation des armoiries, qui fut appliquée non plus seulement à l’écu mais aussi à ses pièces extérieures (fig. 98).</p
+></div
+><div
+type="section2"
+xml:id="div03"
+><head
+>Le frontispice Schouvaloff</head
+><p
+xml:id="p9"
+>Favori de l’impératrice Élisabeth, le comte Ivan Schouvaloff (1727-1797), à l’avènement de l’impératrice Catherine, voyagea dans les capitales européennes pour s’installer à Rome où il résida de 1765 à 1774. Là, il multiplia les achats d’antiques pour les institutions d’État russes et pour son compte personnel. Il se lia avec Piranèse qui lui dédia le second volume des <hi
+rend="italic"
+>Vasi, candelabri, cippi, sarcofagi, tripodi, lucerne ed ornamenti antichi</hi
+> publiés en 1778, l’année de sa mort. Le frontispice (fig. 99) a été étudié par Andrea Busiri Vici<note
+n="9"
+place="foot"
+xml:id="ftn41"
+><p
+>« L’erudito della corte russa del Settecento, Ivan Ivanovitch Schouvaloff, ed i suoi rapporti con Roma », <hi
+rend="italic"
+>L’Urbe</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 39, 1976, p. 39-52.</p
+></note
+>, Giulia Fusconi<note
+n="10"
+place="foot"
+xml:id="ftn42"
+><p
+>« Da Bartoli a Piranesi: spigolature dai Codici Ottoboniani Latini della Raccolta Ghezzi », <hi
+rend="italic"
+>Xenia Antiqua</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 1994, p. 145-172.</p
+></note
+> et Olga Medvedkova<note
+n="11"
+place="foot"
+xml:id="ftn43"
+><p
+>«<ref
+target="https://fr.wikipedia.org/wiki/Š"
+> Š</ref
+>uvalov à Rome (1765-1774). Histoire d’une dédicace », <hi
+rend="italic"
+>Cahiers du monde russe et soviétique</hi
+>, vol. 52, n<hi
+rend="sup"
+>o</hi
+> 1, 2011, p. 45-73.</p
+></note
+> qui n’ont pas remarqué son contenu héraldique.</p
+><p
+xml:id="p10"
+>Sur le haut de la gravure on lit : « <hi
+rend="italic"
+>Bassorilievo antico che si vede nel Portico della Chiesa de SS. Apostoli. Le vasi sono estratti dalla raccolta del Cavalier Ghezzi esistente nella Biblioteca Vaticana</hi
+> » [Bas-relief antique que l’on voit sous le portique de l’église des Saints-Apôtres. Les vases sont extraits de la collection du chevalier Ghezzi existant à la Bibliothèque Vaticane]. Giulia Fusconi a en effet retrouvé deux de ces vases dans les recueils de dessins d’antiques réunis par Pier Leone Ghezzi et conservés à la Bibliothèque vaticane : celui du milieu, dont l’inscription ajoutée se rapporte au prince Théodore Golitsine, neveu du comte Schouvaloff qui l’accompagnait à Rome<note
+n="12"
+place="foot"
+xml:id="ftn44"
+><p
+>Olga Medvedkova, art. cité.</p
+></note
+>, et le vase à boire ou rhyton qui surmonte la dédicace (fig. 100). À propos de ce dernier, Giulia Fusconi écrit :</p
+><cit
+xml:id="cit04"
+><quote
+>Quoique fidèle aux modèles, Piranèse enrichit ses copies de forts contrastes en clair-obscur et insère des éléments iconographiques nouveaux, comme la corne sur la tête du protome caprin ou la couronne de pampres au col du vase qui confèrent à l’objet des caractéristiques décoratives surabondantes et fantaisistes<note
+n="13"
+place="foot"
+xml:id="ftn45"
+><p
+>Art. cité, p. 161 : « <hi
+rend="italic"
+>Pur fedele ai modelli, il Piranesi arrichisce le sue copie di forti contrasti chiaroscurali e inserisce elementi iconografici nuovi, come il corno sulla testa della protome caprina, o il serto di pampini attorno al collo del vaso, che conferisce all’oggetto caratteristiche di decorativismo sovrabbondante e fantasioso.</hi
+> »</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p11"
+>Ce qui peut paraître, de prime abord, un ajout de fantaisie décorative sur la source antique est en réalité un hommage héraldique au dédicataire opportunément situé au-dessus de la dédicace. Les Schouvaloff portent en effet : « Coupé : au 1 de sable au chevron d’or accosté de trois étoiles (5) d’argent et chargé de trois grenades du même, allumées de gueules ; au 2 de gueules à une licorne courante d’argent<note
+n="14"
+place="foot"
+xml:id="ftn46"
+><p
+>Jean-Baptiste Rietstap, <hi
+rend="italic"
+>Armorial général</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, t. 2, p. 740, « Schuwalow ».</p
+></note
+> ». Comme pour Milord Charlemont, l’héraldique se greffe sur l’antique, mais ici elle se fait allusive, si allusive qu’elle a échappé à la critique. On peut également se demander si l’aigle antique conservée à l’église des Saints-Apôtres, aimée de Piranèse qui la représente souvent et que nous retrouverons plus tard dans cette étude, n’évoque pas l’aigle impériale russe qui figure d’ailleurs en cimier des armes des Schouvaloff. L’allusion au blason serait ainsi plus complète, se référant non seulement au meuble de l’écu mais aussi à la pièce extérieure qui domine le tout.</p
+><p
+xml:id="p12"
+>Giulia Fusconi écrit encore : « Une recherche plus étendue dans les manuscrits vaticans de la collection Ghezzi permettrait peut-être d’identifier les autres modèles utilisés<note
+n="15"
+place="foot"
+xml:id="ftn47"
+><p
+>Art. cité, p. 161 : « <hi
+rend="italic"
+>Una più capillare ricerca fra i codici vaticani della raccolta Ghezzi permetterebe forse di individuare anche gli altri modeli utilizzati.</hi
+> »</p
+></note
+> ». Dans le même recueil qui contient le prototype du rhyton Schouvaloff, on trouve en effet une lampe à tête de taureau qui a inspiré le vase voisin du vase Golitsine<note
+n="16"
+place="foot"
+xml:id="ftn48"
+><p
+>BAV, ms. Ottoboniani latini 3105.</p
+></note
+>.</p
+></div
+><div
+type="section2"
+xml:id="div04"
+><head
+>Le tombeau de Cecilia Metella</head
+><p
+xml:id="p13"
+>Dans ses <hi
+rend="italic"
+>Vues de Rome</hi
+> exécutées tout au long de sa carrière, Piranèse représente les armoiries quand le monument qu’il traite en comporte. Le palais Farnèse, par exemple, est montré avec de grandes armes sur sa façade tout simplement parce qu’elles sont là. Cela n’attire aucune remarque particulière. Elles ne jouissent pas d’un traitement privilégié. Une de ces vues de Rome suscite pourtant le commentaire : celle du tombeau de Cecilia Metella sur la voie Appienne (fig. 101). L’artiste avait déjà traité le sujet dans ses <hi
+rend="italic"
+>Antichità Romane</hi
+>, purement à l’antique. Néanmoins, le même sujet dans les <hi
+rend="italic"
+>Vedute di Roma</hi
+> introduit au premier plan sur la droite une portion de mur médiéval portant les armoiries des Caetani, grands barons qui avaient dominé cette région. On s’interroge sur les intentions de l’artiste qui aurait pu se dispenser de ce détail. Il est vrai que cet ajout confère une épaisseur historique à la scène, le regard franchissant les époques, d’abord depuis le Moyen Âge pour ensuite arriver à l’Antiquité. Comme dans les exemples précédents, l’héraldique se trouve combinée à l’antique, cette fois non en synthèse mais par plans successifs. Dans la tour éventrée se dresse une silhouette phallique. La scène reste énigmatique.</p
+><p
+xml:id="p14"
+>Ces trois exemples préliminaires nous ont offert un échantillon du sentiment héraldique chez Piranèse, toujours mis en relation avec l’antique, mais de manières variées, depuis la <hi
+rend="italic"
+>damnatio memoriae</hi
+> satirique de Charlemont jusqu’à la célébration allusive de Schouvaloff. Avec la papauté nous allons retrouver la célébration, cryptée ou explicite.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div05"
+><head
+>Clément XIII Rezzonico : un cycle de dédicaces</head
+><p
+xml:id="p15"
+>Mario Bevilacqua signale dans les carnets de Modène un dessin des armes du pape Clément X Altieri (1670-1676) : il s’agit de celles qui se trouvent au-dessus de l’entrée du palais familial à Rome, place du Gesù, sans autre intention que la reproduction de la réalité<note
+n="17"
+place="foot"
+xml:id="ftn49"
+><p
+><hi
+rend="italic"
+>Piranesi, Taccuini di Modena, op. cit., </hi
+>t. 1, c. 64v, « <hi
+rend="italic"
+>Stemma di papa Clemente X Altieri sulla facciata di palazzo Altieri al Gesù</hi
+> ».</p
+></note
+>. C’est sous le règne de Clément XIII Rezzonico (1758-1769), vénitien comme Piranèse, que l’inspiration héraldique prit chez celui-ci son plein développement encomiastique. Il composa, dans la première moitié du pontificat, une suite de trois frontispices pour trois in-folios dédiés au pape, auxquels il faut en ajouter un à la fin du pontificat à l’intention de son neveu Monseigneur Giovan Battista Rezzonico. Ces pièces ont été présentées dans des catalogues d’exposition mais sans étude approfondie du contenu armorial<note
+n="18"
+place="foot"
+xml:id="ftn50"
+><p
+>Barbara Jatta (dir.), <hi
+rend="italic"
+>Piranesi e l’Aventino</hi
+>, Milan, Electa, 1998, chap. IV : « Piranesi negli anni del Priorato » ; <hi
+rend="italic"
+>Clemente XIII Rezzonico, Un papa veneto nella Roma di metà Settecento</hi
+>, catalogue d’exposition, Padoue, Museo Diocesiano, 12 décembre 2008-15 mars 2009, Milan, Silvana Editoriale, 2008, n<hi
+rend="sup"
+>o</hi
+> 126-145, p. 188-205.</p
+></note
+>.</p
+><p
+xml:id="p16"
+>Il faut d’abord signaler un dessin de Piranèse au Metropolitan Museum dont la destination d’usage n’est pas connue<note
+n="19"
+place="foot"
+xml:id="ftn51"
+><p
+>The Metropolitan Museum of Art, <hi
+rend="italic"
+>Coat of arms of Clement XIII (Rezzonico)</hi
+>, Accession Number 52.570.155.</p
+></note
+> (fig. 102). Il représente les armoiries de Clément XIII avec mention des couleurs, ce qui laisse supposer une étude préparatoire pour une peinture. Les armes se décrivent ainsi :</p
+><cit
+xml:id="cit05"
+><quote
+>Écartelé au 1<hi
+rend="sup"
+>er</hi
+> de gueules à la croix d’argent, au 2 et 3 d’azur à la tour d’argent, au 4<hi
+rend="sup"
+>e</hi
+> barré de gueules et d’argent. Sur le tout d’or à l’aigle à deux têtes de sable. Cet écusson couronné d’une couronne à l’antique d’or<note
+n="20"
+place="foot"
+xml:id="ftn52"
+><p
+>Ferruccio Pasini Frassoni, <hi
+rend="italic"
+>Essai d’armorial des papes</hi
+>, Rome, Collège héraldique, 1906, p. 48, « Clément XIII (1758-69) ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p17"
+>Quintiliano Rezzonico, riche marchand, s’était vu conférer la noblesse par le Sénat de Venise en 1687 pour avoir généreusement financé la guerre de Morée. La croix du premier quartier renverrait à la ville de Côme où la famille prit son essor. Elle portait le titre de comtes<hi
+rend="italic"
+> della Torre,</hi
+> ce qui explique la présence de la tour aux quartiers 2 et 3, armes parlantes. L’aigle à deux têtes sur le tout indique le titre de barons du Saint-Empire.</p
+><p
+xml:id="p18"
+>Les quatre frontispices que nous allons étudier forment une série par leur inspiration commune : tous représentent une pièce d’architecture à l’antique où les armoiries ont été sculptées.</p
+><div
+type="section2"
+xml:id="div06"
+><head
+><hi
+rend="italic"
+>Della magnificenza ed architettura de’ Romani</hi
+> (1761)</head
+><p
+xml:id="p19"
+>L’ouvrage étant bilingue, il comporte deux frontispices-titres. Dans l’exemplaire que nous avons consulté, le titre italien précède le titre latin<note
+n="21"
+place="foot"
+xml:id="ftn53"
+><p
+>BAV, Cicognara.X.3853.</p
+></note
+>. L’un et l’autre sont traités comme des stèles montrant une inscription gravée dans le marbre, sous laquelle vient s’insérer un motif sculpté. Dans la version italienne, nous voyons l’aigle des Saints-Apôtres qui reparaîtra au frontispice Schouvaloff. Au titre latin sont réservées les armoiries, ce qui peut sembler paradoxal : leur origine médiévale les eût plutôt associées à l’italien, mais le latin est pourvoyeur de gloire (fig. 103). Sans aucun souci de vraisemblance historique, Piranèse a voulu leur conférer la grandeur antique et il l’a fait en imitant un relief célèbre de la colonne Trajanne : la Victoire qui écrit sur un bouclier. Installée dans un médaillon, ici elle n’inscrit pas le nom des batailles gagnées ou des villes prises mais elle achève de sculpter les armes du pontife, mettant une ultime touche à la tiare. Elle est devenue une artiste au travail, telle un autre Piranèse ; une règle est appuyée sur le bouclier, lui-même adossé à une sphinge sur un sarcophage. Suit un portrait de Clément XIII dont le fauteuil porte les armes, ce qui était de tradition dans ce genre de représentation même si elles sont à demi dissimulées ici. Enfin, le texte de la dédicace, sur le modèle des manuscrits, commence par une initiale, V, ornée de la tiare et des clefs, celle-ci étant conçue comme un chapiteau, en accord avec les frontispices architecturaux. En trois étapes, le titre, le portrait et l’initiale, se développe l’appareil de la gloire héraldique du dédicataire au seuil de l’ouvrage.</p
+><p
+xml:id="p20"
+>La même année, Piranèse publia <hi
+rend="italic"
+>Le rovine del castello dell’acqua Giulia</hi
+>. S’il n’y a pas de grand appareil dédicatoire au pape, on remarque quand même un discret hommage héraldique dans deux culs-de-lampe. Le premier se compose d’un fragment d’architecture accompagné de livres et de médailles. Du sommet crénelé, à l’arrière-plan, émergent les deux têtes de l’aigle Rezzonico (fig. 104). Le second est semblablement conçu. Autour d’un bouclier sont disposés les instruments des arts et des sciences. À l’arrière-plan sur la droite, se profilent l’aigle à deux têtes et la tour. Ces deux vignettes suggèrent l’idée du mécénat pontifical.</p
+></div
+><div
+type="section2"
+xml:id="div07"
+><head
+><hi
+rend="italic"
+>Lapides Capitolini</hi
+> (1762)</head
+><p
+xml:id="p21"
+>L’année suivante Piranèse dédia au pontife ses <hi
+rend="italic"
+>Lapides Capitolini sive fasti consularesque Romanorum</hi
+>. Cette fois, les armoiries sont réservées non point au titre, mais à la dédicace (fig. 105). Celle-ci a aussi été conçue comme une stèle, moins ruiniste cependant : on constate seulement une ébréchure en haut à droite. L’héraldique forme un encadrement. En haut, les armoiries, disposées entre deux <hi
+rend="italic"
+>putti</hi
+> phytomorphes, composent une frise. Comme précédemment, il s’agit d’une citation de l’antique, renvoyant à un fragment de frise du forum de Trajan, alors conservé à Rome au palais Aldobrandini de Magnanapoli. Ce fragment sera reproduit dans le second volume des <hi
+rend="italic"
+>Vasi, candelabri, cippi</hi
+>. Comme précédemment, les <hi
+rend="italic"
+>putti</hi
+> formant supports sont représentés en train de sculpter les armoiries. À un an de distance, les deux compositions obéissent à des principes similaires. La dédicace, inscrite sur une feuille de papier, est encadrée d’une guirlande, supportée en bas par deux meubles issus du blason du pape : la tour et l’aigle. Le portrait n’a pas été traité séparément mais figuré comme l’avers d’une médaille du pontife en haut de la feuille dédicatoire.</p
+></div
+><div
+type="section2"
+xml:id="div08"
+><head
+><hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo</hi
+> (1764)</head
+><p
+xml:id="p22"
+>Deux ans plus tard, paraissent les <hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo. </hi
+>Après le frontispice-titre, composé d’une accumulation de fragments antiques, vient le frontispice-dédicatoire en format double dépliant (fig. 106). Il représente une stèle où la dédicace s’inscrit dans le cercle du zodiaque. Tout autour sont répandus des fragments d’inscriptions et des médailles. À gauche de la stèle, sur un fragment de petit format, plongé dans une demi-pénombre, sont sculptées les armoiries papales. Évidemment, cela surprend, après les deux précédents frontispices où les armes du pape Rezzonico occupaient une position centrale. Ici, elles semblent réduites à l’accessoire. Peut-être l’artiste a-t-il voulu varier la présentation. En tout cas, c’est le dernier des trois frontispices aux armes de Clément XIII. Il n’y en aura plus d’autres jusqu’à sa mort cinq ans plus tard en 1769. On peut se demander si la diminution des armoiries n’annonce pas ce silence à venir. Le texte de la dédicace commence par un S orné de l’aigle des Saints-Apôtres.</p
+></div
+><div
+type="section2"
+xml:id="div09"
+><head
+><hi
+rend="italic"
+>Diverse maniere d’adornare i cammini</hi
+> (1769)</head
+><p
+xml:id="p23"
+>Si Piranèse ne dédia plus rien à Clément XIII, cela ne signifie pas qu’il rompit avec la cour pontificale. En 1769, il dédia à Monseigneur Giovan Battista Rezzonico, neveu du pape, les <hi
+rend="italic"
+>Diverse maniere d’adornare i cammini. </hi
+>Il explique dans l’épître dédicatoire avoir travaillé à la décoration des appartements du prélat ainsi que de ceux de son frère, prenant la défense des modèles égyptiens ou étrusques. Le frontispice dépliant de grand format inclut le titre et la dédicace, conçus comme un monument sur fond nocturne (fig. 107). Le décor n’est pas ruiniste mais égyptianisant. De part et d’autre de l’inscription, deux Diane polymastes entourent une momie couverte de hiéroglyphes. L’héraldique, qui s’était associée à la gloire des ruines de Rome, ne s’accorda pas moins aux mystères de l’Égypte ancienne. Certains théoriciens ne faisaient-ils pas, en effet, remonter les origines du blason aux hiéroglyphes ? Sous l’inscription, figurent les armes du prélat dans un écu en « tête de cheval », supporté par une guirlande que tiennent deux des Diane polymastes. L’ordre des quartiers a été modifié : au 1 et 4 la tour, au 2 la croix, au 3 les barres. Les autres exemples que nous connaissons des armes du prélat respectent pourtant le modèle de celles du pape. Il s’agit probablement d’un effet d’inversion dû à la gravure, car les barres sont devenues des bandes. Par ailleurs, on peut se demander si le choix de l’écu en « tête de cheval » n’est pas à mettre en rapport avec les couples de chevaux affrontés qui se trouvent juste au-dessus.</p
+><p
+xml:id="p24"
+>Dans cette suite de quatre frontispices, Piranèse s’est efforcé d’inclure l’héraldique dans l’antique, qu’il fût romain ou égyptien. C’était une manière d’inscrire la célébration du dédicataire dans la longue durée et d’accroître ainsi sa gloire.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div10"
+><head
+>L’œuvre architecturale</head
+><p
+xml:id="p25"
+>Piranèse fut l’auteur de deux projets architecturaux, celui de Saint-Jean de Latran et celui de l’église Santa Maria du prieuré de Malte. Seul le second fut réalisé, mais l’un et l’autre présentent un caractère héraldique.</p
+><div
+type="section2"
+xml:id="div11"
+><head
+>Saint-Jean de Latran</head
+><p
+xml:id="p26"
+>En 1763, Piranèse reçut commande de Clément XIII pour la réfection du chœur de Saint-Jean de Latran. Le projet fut abandonné en 1767, mais la bibliothèque Avery de l’université de Columbia conserve les dessins préparatoires de l’artiste<note
+n="22"
+place="foot"
+xml:id="ftn54"
+><p
+>Voir <hi
+rend="italic"
+>Piranesi architetto</hi
+>, catalogue d’exposition, American Academy in Rome, 15 mai-5 juillet 1992, Rome, Edizioni dell’Elefante, 1992. </p
+></note
+>. Parmi eux, quatre projets de baldaquin d’esprit borrominien. L’un s’orne de l’aigle des Saints-Apôtres, qui équivalait dans l’imaginaire piranésien à celui des Rezzonico. L’autre présente la tour surmontée de l’aigle.</p
+></div
+><div
+type="section2"
+xml:id="div12"
+><head
+>L’église Santa Maria del Priorato sur l’Aventin</head
+><p
+xml:id="p27"
+>En 1764, alors qu’il travaillait au projet de décor de la basilique du Latran, Piranèse reçut commande de la part de Monseigneur Giovan Battista Rezzonico, neveu de Clément XIII et grand prieur de l’ordre de Malte, pour la rénovation de l’église Santa Maria del Priorato sur l’Aventin. Les travaux se déroulèrent de novembre 1764 à octobre 1766. Le détail en a été recueilli dans un livre de comptes aujourd’hui conservé à la bibliothèque Avery de l’université de Columbia<note
+n="23"
+place="foot"
+xml:id="ftn55"
+><p
+>Ce livre a été publié par Pierluigi Panza en annexe de <hi
+rend="italic"
+>Piranesi architetto</hi
+>, Milan, Guerini Studio, 1998.</p
+></note
+>. Concernant le décor sculpté, Piranèse retint le principe de répandre partout les meubles du blason Rezzonico. On peut examiner ce décor en s’aidant d’une description manuscrite situable entre 1766 et 1769, conservée dans les archives de l’ordre et publiée à la fin du siècle dernier. On procédera en trois étapes : le portail d’entrée sur la place adjacente, l’extérieur de l’église et enfin son intérieur.</p
+><div
+type="section3"
+xml:id="div13"
+><head
+>La place des chevaliers et le portail d’entrée</head
+><p
+xml:id="p28"
+>Le manuscrit conservé dans les archives de l’ordre précise que l’on a voulu donner au portail d’entrée l’apparence d’un arc triomphal. Il est composé de trois reliefs, l’un au-dessus de la porte, les deux autres de part et d’autre. Pour le relief central (fig. 108), le document nous renseigne sur la double interprétation de l’un des meubles du blason Rezzonico, la croix grecque ou croix de saint Jean-Baptiste présente au premier quartier de l’écu :</p
+><cit
+xml:id="cit06"
+><quote
+>[…] à la clef de l’arche de la porte on a mis en bas-relief un type de la puissance maltaise, exprimé par un grand heaume à l’héroïque soutenu par l’emblème de deux navires et entouré d’écus, drapeaux et hallebardes, tant des leurs que de ceux pris aux barbares. Ce heaume couronne la croix, enseigne de Malte et appartenant aussi aux armoiries de l’écu nobiliaire de la maison Rezzonico, dont les attributs se voient pour cette raison représentés en certain des écus précédemment mentionnés<note
+n="24"
+place="foot"
+xml:id="ftn56"
+><p
+>John Edward Critien, « Un manoscritto dell’Archivio Magistrale del Sovrano Militare Ordine di Malta di Roma », dans Barbara Jatta (dir.), <hi
+rend="italic"
+>op. cit.</hi
+>, p. 79-85, ici p. 85 : « […]<hi
+rend="italic"
+> nella proteride della porta si è posto in bassorilievo un Tipo della potenza Maltese, espresso con un grand’elmo all’eroica, sostenuto dall’Emblemma di due Navilj, e circondato da scudi, e banderie e labarde, si sue che prese a barbari. Quest’elmo incorona la Croce, o si Insegna tanto di Malta, quanto appartenente allo stemma gentilizio della Casa Rezzonico, i cui attributi si veggono perciò effiggiati in qualcuno de’detti scudi. </hi
+>» Piranèse aurait participé à la rédaction de ce texte : voir Fabio Barry, « “Onward Christian Soldier”: Piranesi at Santa Maria del Priorato », dans Mario Bevilacqua et Daniela Gallavotti Cavallero (dir.), <hi
+rend="italic"
+>L’Aventino dal Rinascimento a oggi</hi
+>,<hi
+rend="italic"
+> Arte e architettura</hi
+>, Rome, Editoriale Artemide, 2010, p. 140-175.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p29"
+>Par cette croix de saint Jean, Piranèse avait trouvé le moyen d’associer deux gloires en un même symbole, celle de l’ordre de Malte et celle de la famille de son grand prieur, qui était aussi celle du pape. Ce double potentiel symbolique explique le choix d’une position centrale dans le dispositif décoratif. Comme le précise la description, les autres meubles des armoiries Rezzonico sont présents parmi les trophées : on remarque à gauche la tour des comtes della Torre sur un écu et à droite une tête d’aigle en proue de navire devant les drapeaux.</p
+><p
+xml:id="p30"
+>Les panneaux latéraux, quant à eux, comportent en leur centre l’aigle à deux têtes. Le manuscrit décrit correctement chaque panneau mais en intervertissant celui de droite et celui de gauche :</p
+><cit
+xml:id="cit07"
+><quote
+>Au centre des deux bas-reliefs se trouve l’aigle bicéphale, meuble nobiliaire de la même maison Rezzonico. On voit dans le bas-relief à main droite un développement d’écus, l’arc, la pharètre, le heaume, la lance, l’ancre, le timon, la tour et autres symboles sur lesquels glisse le serpent de l’Éternité pour en perpétuer la gloire<note
+n="25"
+place="foot"
+xml:id="ftn57"
+><p
+>John Edward Critien, art. cité. : « <hi
+rend="italic"
+>Siede in mezzo ai due bassorilievi laterali la doppia Aquila pur gentilizia della stessa Casa Rezzonico. Vedesi nel bassorilievo di man diritta una espansione di scudi, l’arco, la faretra, l’elmo, l’aste, l’ancora, il timone, la torre ed altri simboli, su quali scorre a perpetuarne la gloria il serpente dell’Eternità</hi
+> ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p31"
+>La tour se trouve en effet à l’arrière-plan sur la droite du relief (fig. 109). On a remarqué à juste titre que l’aigle bicéphale avait été représentée au sein d’une couronne de lauriers sur le modèle de l’aigle des Saints-Apôtres, certainement l’une des images les plus récurrentes dans l’œuvre de Piranèse. Le panneau de droite est pareillement conçu :</p
+><cit
+xml:id="cit08"
+><quote
+>Dans le bas-relief de droite se voit une aile déployée symbole de la Réputation unie au volume de la geste et de la force de la Sacrée Religion signifiée par la tour dessinée dans le volume même et faisant aussi allusion à la maison Rezzonico, par la colonne et les écus que couvre la même aile. Il y a la trompe de cette Réputation et ses mains qui la tiennent et des acrostoles ou extrémités de navires, indiquant la principale sorte d’armée par laquelle la Sacrée Religion a remporté ses victoires<note
+n="26"
+place="foot"
+xml:id="ftn58"
+><p
+><hi
+rend="italic"
+>Ibid. </hi
+>: « <hi
+rend="italic"
+>Nel bassorilievo poi da sinistra vedesi un’ala spansa, simbolo della Fama unita al volume delle gesta e della fortezza della Sacra Religione Significata per la Torre delineata nel volume stesso ed insieme allusiva alla casa Rezzonico, per la colonna e per gli scudi coperti dalla stessa ala. Sonovi le trombe della stessa Fama, e le mani di essa tenenti questa trombe, e degli acrostolij, o siano estremità de’navilj, indicanti la principale specie di milizia con cui la Sac: Religione ha riportato le sue vittorie.</hi
+> »</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p32"
+>La tour apparaît effectivement sur le volume de la geste des chevaliers et, de même que la croix de saint Jean, un double sens lui est attribué en relation avec l’ordre de Malte, la force, et avec la famille Rezzonico dont elle est le symbole.</p
+><p
+xml:id="p33"
+>La place est ceinte de quatre stèles, une forme architecturale aimée de Piranèse, particulièrement pour ses frontispices. Le manuscrit nous apprend que la stèle centrale, celle qui fait face au portail, est ornée d’un trophée d’armes turques placé derrière l’écu de Malte. Dans la partie inférieure, une tête de Gorgone signifie la terreur des ennemis, et le manuscrit ajoute à propos des trophées qu’ils : « reçoivent en leur milieu ici aussi la tour nobiliaire de la maison Rezzonico<note
+n="27"
+place="foot"
+xml:id="ftn59"
+><p
+><hi
+rend="italic"
+>Ibid. </hi
+>: « <hi
+rend="italic"
+>ricevono in mezzo anco qui la torre gentilizia della Casa Rezzonico</hi
+> ».</p
+></note
+> ». Mais nous savons très bien que cette tour est aussi devenue, dans ce contexte, le symbole de la force des chevaliers. Elle figure également sur un croissant turc au sommet des deux stèles latérales. Pénétrons maintenant dans les jardins de la villa et dirigeons-nous vers l’église.</p
+></div
+><div
+type="section3"
+xml:id="div14"
+><head
+>L’extérieur de l’église</head
+><p
+xml:id="p34"
+>Piranèse avait ajouté à la façade un fronton. On peut s’en faire une idée grâce à une gravure de Cassini datant de 1779. Les deux tourelles latérales sont ornées de l’aigle bicéphale. Au tympan, les armes sont celles de saint Pie V préalablement présentes. Un dessin anonyme du musée Soane à Londres offre une image plus détaillée et différente sur certains points. Les aigles bicéphales sont surmontées par les deux tours et la croix de saint Jean. Sur les montants latéraux des boucliers montrent les barres. Au tympan, se dessinent les armoiries complètes de Clément XIII dont le livre de compte dit qu’elles furent dorées. En 1849, un bombardement des troupes françaises détruisit le fronton et au tympan les armoiries furent remplacées par la croix grecque de Malte et des Rezzonico<note
+n="28"
+place="foot"
+xml:id="ftn60"
+><p
+>Sur l’histoire de la façade d’après les livres de compte, voir Pierluigi Panza, <hi
+rend="italic"
+>Piranesi architetto</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 79-81.</p
+></note
+>.</p
+><p
+xml:id="p35"
+>Les quatre pilastres se révèlent intéressants (fig. 110). Leurs chapiteaux montrent la tour entre deux sphinges, d’après un motif antique alors conservé à la villa Borghèse et représenté à la planche XIII du <hi
+rend="italic"
+>Della magnificenza</hi
+>. Comme dans ses frontispices gravés, l’artiste inclut des sources antiques. Dans les années où il travaillait à cette église, en 1765, il publia son <hi
+rend="italic"
+>Parere sul’architettura</hi
+>. Il y est fait référence à un ordre architectural britannique que James Adam, le frère de Robert Adam, lui aurait montré en 1762, exemple de l’application de l’antiquité aux besoins de l’époque moderne<note
+n="29"
+place="foot"
+xml:id="ftn61"
+><p
+>John Wilton-Ely, <hi
+rend="italic"
+>Piranesi as Architect and Designer</hi
+>, New York-New Haven-Londres, The Pierpont Morgan Library-Yale University Press, 1993, p. 51.</p
+></note
+>. Or, cet ordre britannique inclut dans un chapiteau corinthien les deux supports des armoiries du Royaume-Uni, la licorne et le lion. On peut donc établir un parallèle entre cet exemple illustrant le <hi
+rend="italic"
+>Parere su l’architettura</hi
+> et l’ordre Rezzonico inventé à la même époque pour Santa Maria del Priorato. Cela dit, la pratique d’introduire des meubles armoriaux dans les chapiteaux n’était pas nouvelle. On peut penser à ce propos aux colombes d’Innocent X Doria Pamphili sur la façade de Sant’Agnese place Navone, dues à Borromini, artiste admiré de Piranèse (1653-1657). Pour la même famille, on peut mentionner les lis et les rameaux d’olivier des colonnes de leur palais sur le Corso, œuvre de Gabriele Valvassori (1734). Piranèse, tout en flattant sa passion armoriale, se pliait à une pratique déjà bien admise.</p
+><p
+xml:id="p36"
+>Sur les pilastres eux-mêmes, sont insérés des reliefs représentant des épées dont certaines sont porteuses de la symbolique Rezzonico. Celle de l’extrême gauche montre un fourreau décoré de la tour surmontée de l’aigle bicéphale et une poignée en tête d’aigle. À droite, celle qui est proche de la porte laisse voir les deux têtes de l’aigle couronnée en guise de poignée.</p
+><p
+xml:id="p37"
+>À l’arrière de l’église, derrière le chœur, sous l’aigle et la croix grecque, on remarque deux médailles dédiées au commanditaire Monseigneur Giovan Battista Rezzonico (fig. 111). Elles sont inspirées de ses armoiries. Celle de gauche montre la tour accompagnée du mot : <hi
+rend="italic"
+>SACRA AEDE RESTITVT[A]</hi
+> [Le sanctuaire ayant été restauré]. Celle de droite, les barres accompagnées du nom : <hi
+rend="italic"
+>IOAN. BAPTISTA. REZZONICO. M. P.</hi
+> Piranèse avait un goût marqué pour la numismatique<note
+n="30"
+place="foot"
+xml:id="ftn62"
+><p
+>Carolyn Yorke et Heather Hyde Minor, <hi
+rend="italic"
+>Piranese unbound</hi
+>, Princeton, Princeton University Press, 2020, chapitres « Archaeology, inscriptions, iconography » et « Minting for Mr Menzies ».</p
+></note
+>, tout comme Clément XIII Rezzonico<note
+n="31"
+place="foot"
+xml:id="ftn63"
+><p
+>Giancarlo Alteri, « Monete e medaglie del pontificato di Clemente XIII (1758-1769) », <hi
+rend="italic"
+>Piranesi e l’Aventino</hi
+>,<hi
+rend="italic"
+> op. cit</hi
+>., p. 204.</p
+></note
+> (le frontispice des <hi
+rend="italic"
+>Lapides Capitolini</hi
+> est orné de ses médailles, voir fig. 105). Nous ne connaissons pas d’exemplaire frappé de ces médailles (ou deux faces d’une même médaille) qui demeurent donc à l’état d’ornement architectural.</p
+></div
+><div
+type="section3"
+xml:id="div15"
+><head
+>L’intérieur de l’église</head
+><p
+xml:id="p38"
+>À l’intérieur, se poursuit le procédé des chapiteaux héraldiques. Cette fois, les sphynges ont été remplacées par un simple ornement ionique où s’inscrivent en alterance non seulement la tour mais aussi les autres meubles du blason, croix et aigle bicéphale couronnée (fig. 112). La pièce la plus importante se situe dans l’abside du chœur : on y voit les armes de Giovan Battista Rezzonico disposées dans une coquille (fig. 112). Au-dessus de l’aigle centrale, a été ajoutée la « basilique », c’est-à-dire l’ombrelle et les clefs croisées, privilège réservé aux membres de familles papales.</p
+><p
+xml:id="p39"
+>Sur la voûte de la nef, le relief central montre la croix de saint Jean dans une gloire. Elle figure aussi sur une tunique de chevalier surmontée de la tiare papale. Un des deux reliefs latéraux, celui du côté du chœur (fig. 113), est ainsi décrit dans le manuscrit précédemment cité :</p
+><cit
+xml:id="cit09"
+><quote
+>Puis dans le second se voit l’écu emblématique de la maison Rezzonico flanqué de deux heaumes où sont figurés des tritons, qui, mi-hommes, mi-poissons, font allusion au chevaliers du Sacré Ordre puissants sur mer comme sur terre<note
+n="32"
+place="foot"
+xml:id="ftn64"
+><p
+>John Edward Critien, art. cité : « <hi
+rend="italic"
+>Vedesi poi nel secondo lo stemma emblematico della Casa Rezzonico, fiancheggiato da due elmi, ove son figurati alcuni Tritoni, che mezz’uomini, e mezzo pesci, alludono a Cavalieri del Sacro Ordine potenti in Mare ed in terra.</hi
+> »</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p40"
+>À vrai dire, il ne s’agit pas exactement des armes Rezzonico mais d’une composition qui en est dérivée. Sous le chapeau de prélat, sur un bouclier avec les barres (librement traitées en chevrons), ont été disposés l’un au-dessus de l’autre les trois meubles restants : la croix grecque, la tour, l’aigle bicéphale couronnée.</p
+><p
+xml:id="p41"
+>On a parfois qualifié Piranèse de « gothique » au sens large de non classique ou même d’étrangement inquiétant<note
+n="33"
+place="foot"
+xml:id="ftn65"
+><p
+>Exemples dans Pierluigi Panza, <hi
+rend="italic"
+>Piranesi architetto</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 68 ; ou dans Henri Focillon, <hi
+rend="italic"
+>G. B. Piranesi</hi
+>, Paris, Librairie Renouard-Henri Laurens, 1928, p. 21 et p. 302.</p
+></note
+>. L’héraldique peut entrer dans cette catégorie. Si cet artiste fut un maître de l’antique il fut aussi un maître de l’héraldique. Dans son œuvre de graveur ou d’architecte, ces deux imaginaires à priori divergents s’unissent avec une inventivité toujours renouvelée pour la célébration du pape Rezzonico et de son neveu Giovan Battista, le grand prieur de Malte. L’idée répandue que le <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle a sonné le glas de l’héraldique est une idée à revoir.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig98.JPG"
+></graphic
+><head
+>Figure 96. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, détail du frontispice, 1<hi
+rend="sup"
+>er</hi
+> état, Accademia di Belle Arti di Firenze.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig99.JPG"
+></graphic
+><head
+>Figure 97. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, détail du frontispice, 2<hi
+rend="sup"
+>e</hi
+> état, BAV.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig100.JPG"
+></graphic
+><head
+>Figure 98. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, détail du frontispice, 3<hi
+rend="sup"
+>e</hi
+> état, collection Museum Boijmans Van Beuningen, Rotterdam.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig101.jpg"
+></graphic
+><head
+>Figure 99. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Vasi, candelabri, …</hi
+>, 1778, frontispice du vol. 2.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig102.JPG"
+></graphic
+><head
+>Figure 100. Dessin d’un rhyton, album Ghezzi, BAV, Ott. lat. 3105.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig103.JPG"
+></graphic
+><head
+>Figure 101. Giovanni Battista Piranesi, détail du tombeau de Cecilia Metella, <hi
+rend="italic"
+>Vedute di Roma</hi
+>, collection particulière, Yvan Loskoutoff.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig104.jpg"
+></graphic
+><head
+>Figure 102. Giovanni Battista Piranesi, dessin des armes de Clément XIII Rezzonico. @ The Elisha Whittelsey Collection, The Elisha Whittelsey Fund, 1952.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig105.JPG"
+></graphic
+><head
+>Figure 103. Giovanni Battista Piranesi, <hi
+rend="italic"
+>De Romanorum magnificentia et architectura</hi
+>, 1761, frontispice.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig106.JPG"
+></graphic
+><head
+>Figure 104. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le rovine del castello dell’acqua Giulia, </hi
+>1761, cul-de-lampe, Yale University Art Gallery.</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig107.JPG"
+></graphic
+><head
+>Figure 105. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Lapides Capitolini sive fasti consularesque Romanorum, </hi
+>1762, frontispice, bibliothèques McGill.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig108.JPG"
+></graphic
+><head
+>Figure 106. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo</hi
+>, 1764, frontispice.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig109.JPG"
+></graphic
+><head
+>Figure 107. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Diverse maniere d’adornare i cammini,</hi
+> 1769, frontispice, BNF.</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig110.JPG"
+></graphic
+><head
+>Figure 108. Giovanni Battista Piranesi, portail du prieuré de Malte, Rome (détail).</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig111.JPG"
+></graphic
+><head
+>Figure 109. Giovanni Battista Piranesi, portail du prieuré de Malte, Rome (détail).</head
+></figure
+><figure
+xml:id="figure15"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig112.jpg"
+></graphic
+><head
+>Figure 110. Giovanni Battista Piranesi, façade de Santa Maria del Priorato, Rome (détail), Dipartimento di Architettura. Progetto Sapienza Università di Roma, Paolo Marcoaldi.</head
+></figure
+><figure
+xml:id="figure16"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig113.JPG"
+></graphic
+><head
+>Figure 111. Giovanni Battista Piranesi, extérieur de l’abside du chœur de Santa Maria del Priorato, Rome (détail).</head
+></figure
+><figure
+xml:id="figure17"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig114.jpeg"
+></graphic
+><head
+>Figure 112. Giovanni Battista Piranesi, armes de Giovan Battista Rezzonico, chœur de Santa Maria del Priorato, Rome.</head
+></figure
+><figure
+xml:id="figure18"
+><graphic
+url="../icono/br/Ch07_Loskoutoff_2/Fig115.JPG"
+></graphic
+><head
+>Figure 113. Giovanni Battista Piranesi, composition héraldique en l’honneur de Giovan Battista Rezzonico, Santa Maria del Priorato, Rome.</head
+></figure
+></div
+></div
+></div
+></body
+></text
+></TEI
+>

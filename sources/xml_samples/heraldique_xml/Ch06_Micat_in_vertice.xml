@@ -1,0 +1,1363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>« Micat in vertice »</title
+><title
+type="sub"
+>L’héraldique d’Alexandre VII Chigi à Bologne, entre occultation et célébration (1658-1665)</title
+><author
+role="aut"
+><persName
+><forename
+>Sonia</forename
+><surname
+>Cavicchioli</surname
+></persName
+></author
+><editor
+role="trl"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></editor
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>« <hi
+rend="italic"
+>Micat in vertice</hi
+> »</p
+><p
+rend="title-sub"
+>L’héraldique d’Alexandre VII Chigi à Bologne, entre occultation et célébration (1658-1665)</p
+><p
+rend="author-aut"
+>Sonia Cavicchioli</p
+><p
+rend="editor-trl"
+>Traduit de l’italien par Yvan Loskoutoff.</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Dans les siècles qui vont de l’intronisation de Jules II della Rovere, en novembre 1506, à l’arrivée des troupes françaises en 1796, Bologne appartint sans interruption aux États pontificaux. La cité continua toutefois à cultiver un sentiment municipal qui trouva son expression dans la volonté ou velléité des principales familles de faire valoir leur propre rôle. Bien que le gouvernement municipal fût de fait exercé par le cardinal légat représentant le pontife, une telle ambition fut satisfaite par le Saint-Siège en laissant persister, au moins pour la forme, les anciennes magistratures, particulièrement le Sénat qui, à la fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, comptait cinquante membres appartenant à autant de familles nobles autorisées à siéger par le pontife. À leur tête se trouvait le gonfalonier de justice qui restait en charge deux mois, assisté de huit Anciens, les consuls<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Sur la particularité politique de Bologne, qui se répercute sur les commandes des multiples acteurs de la vie publique voir Angela De Benedictis, « Tra “affratellamento comunitario” e “commensualità rituale”. La “condotta di vita” dei cittadini di governo tra ’400 e ’500 », dans Maurizio Ricci (dir.), <hi
+rend="italic"
+>L’architettura a Bologna nel Rinascimento (1460-1550): centro o periferia?</hi
+>, Bologne, Minerva, 2001, p. 17-27, et pour un vision plus articulée, <hi
+rend="italic"
+>Repubblica per contratto. Bologna, una città europea nello Stato della Chiesa, </hi
+>Bologne, Il Mulino, 1995.</p
+></note
+>.</p
+><p
+xml:id="p2"
+>Le siège du gouvernement bolonais se concentra pendant des siècles au palais connu aujourd’hui sous le nom d’Accursio ou Public, qui constitue le côté occidental de la grand-place, où la coexistence des pouvoirs s’exprimait pour ainsi dire plastiquement. Sur la portion de gauche se trouvaient les bureaux et la résidence des Anciens, alors que sur celle de droite cohabitaient le Sénat municipal et le légat. Au premier étage se réunissait le Sénat, au second se trouvait l’appartement du légat, qui constituait notamment la vraie et propre résidence pontificale hors de Rome<note
+n="2"
+place="foot"
+xml:id="ftn43"
+><p
+>Camilla Bottino (dir.), <hi
+rend="italic"
+>Il palazzo comunale di Bologna. Storia, architettura e restauri</hi
+>, Bologne, Compositori, 1999, <hi
+rend="italic"
+>passim</hi
+> et en particulier dans ce volume, Hans W. Hubert, « La nascita e lo sviluppo architettoncio del Palazzo del Comune di Bologna fra potere comunale e potere papale », p. 64-87 (synthèse de Hans W. Hubert, <hi
+rend="italic"
+>Der Palazzo Comunale von Bologna. Vom Palazzo della Biada zum Palatium Apostolicum</hi
+>, Cologne, Weimar, 1993).</p
+></note
+>. Une telle multiplicité de pouvoirs trouvait naturellement un écho dans d’autres édifices publics et à l’extérieur de la cité. Il en reste un témoignage visuel dans l’inscription et dans la série d’écus disposés sur la façade tournée vers la ville d’une des portes urbaines, la porte Galliera, reconstruite en 1661 suite à un écroulement dû à des infiltrations. Si l’épigraphe signalant la reconstruction in « <hi
+rend="italic"
+>augustiorem formam</hi
+> » fut ordonnée par le Sénat de la cité (SPQB) au cours du pontificat d’Alexandre VII Chigi et dans la quatrième année de légation du cardinal Girolamo Farnèse, la suite d’écus placée au-dessus de l’arche est encore plus révélatrice du <hi
+rend="italic"
+>status</hi
+> de la ville (fig. 84) : au sommet apparaît celui du pape, et sur les côtés, plus bas, figurent ceux du légat et du cardinal neveu Flavio Chigi (peut-être ici représenté comme préfet de la congrégation des confins et surintendant général de l’État ecclésiastique), pour finir par ceux de la famille sénatoriale Bonfioli et de la commune de Bologne. Particulièrement significative est la présence de l’écu des Bonfioli, qui semble renvoyer à la charge de gonfalonier assumée par Lelio Bonfioli dans le cinquième bimestre de cette année 1661<note
+n="3"
+place="foot"
+xml:id="ftn44"
+><p
+>On remarquera que le dernier quartier des armes papales oblitère un quartier Della Rovere (concédés, comme on sait, par Jules II à Agostino Chigi), une croix lui a été substituée. Une occurrence singulière que je n’ai pas le loisir d’élucider ici. </p
+></note
+>.</p
+><p
+xml:id="p3"
+>La cohabitation des pouvoirs impliqués dans le gouvernement municipal est ici représentée dans un monument visible de tous. Mais dans les intérieurs bolonais et dans des documents destinés à une circulation restreinte, elle s’exprime de manières plus complexes, qui proviennent de la volonté d’autopromotion de l’une ou de l’autre des composantes politiques et laissent parfois dans l’ombre justement l’écu du pontife régnant. Les commandes artistiques du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> et du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle constituent un témoignage particulièrement intéressant de la volonté d’autoreprésentation des trois pouvoirs entremêlés mais distincts : les Anciens, les familles sénatoriales et le légat. Laissant de côté les grandes familles, sur lesquelles les études se sont concentrées depuis longtemps, cette contribution se propose de mettre en lumière le caractère composite de la situation bolonaise prenant en considération la magistrature des Anciens et le légat, par une étude sur un nombre limité d’années et sur certaines commandes spécifiques dans lesquelles, d’après moi, se révèle une utilisation de l’héraldique dynamique et sémantiquement assez riche. Il s’agit de deux entreprises décoratives importantes dues à l’initiative des cardinaux légats successifs Girolamo Farnèse et Pietro Vidoni, et de certaines miniatures appartenant à la série connue sous le nom d’<hi
+rend="italic"
+>Insignia degli Anziani consoli</hi
+> [Insignes des Anciens, les consuls]. Les années considérées vont de 1658 à 1665 (1658-1662, la légation Farnèse, puis celle de Vidoni), elles correspondent à une bonne partie du pontificat d’Alexandre VII Chigi, qui, comme on sait, régna de 1655 à 1667.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Girolamo Farnèse, légat à Bologne : «<hi
+rend="italic"
+> Aeterna hic LILIA semper erunt </hi
+>»</head
+><p
+xml:id="p4"
+>Les <hi
+rend="italic"
+>Insignia degli Anziani consoli</hi
+> se composent de centaines de miniatures sur parchemin commandées tous les deux mois de 1530 à 1796 pour célébrer l’intronisation d’un nouveau gonfalonier de justice ou d’un Ancien, aujourd’hui conservées en seize volumes dans l’archive d’État de Bologne<note
+n="4"
+place="foot"
+xml:id="ftn45"
+><p
+>Giuseppe Plessi (dir.), <hi
+rend="italic"
+>Le Insignia degli Anziani del comune dal 1530 al 1796: catalogo-inventario</hi
+>, Bologne, ASBO, 1954. Les miniatures relatives aux années du pontificat d’Alexandre VII sont conservées dans le volume VIII. En réalité tous les bimestres ne sont pas représentés : cela provient probablement de l’absence de commande de la part du gonfalonier.</p
+></note
+>. L’héraldique y domine, car les nouveaux magistrats se qualifient et se présentent dans ces images principalement à travers leurs armoiries familiales, ici accompagnées de la liste de leurs noms. La miniature relative au premier bimestre de 1658, année où Girolamo Farnèse fut envoyé comme légat à Bologne, illustre bien cette typologie particulière<note
+n="5"
+place="foot"
+xml:id="ftn46"
+><p
+>ASBO, <hi
+rend="italic"
+>Insignia</hi
+>, vol. VIII, p. 28.</p
+></note
+> (fig. 85). Sur un ciel de pur azur traversé par l’écliptique, à gauche est figurée Felsina, personnification de Bologne, en train de montrer la ville au pied des collines, alors qu’à droite paraît une sorte de cippe monumental couronné de l’ombelle papale et orné de neuf écus des membres du conseil dont les noms sont reportés dans l’inscription sous-jacente. En recourant à l’astrologie et au mythe, l’image célèbre la venue, en 1658, d’une sorte de nouvel âge d’or, comme le déclare avec emphase l’inscription :</p
+><cit
+xml:id="cit01"
+><quote
+><hi
+rend="italic"
+>Anno Domini 1658, culminantia Saturni astra civilem preduxere foelicitatem. Pan choreas duxit Ganimedes vina profudit cum summa innocentia et sobrietate. Primum hoc bimestre de aureo saeculo, reservatum nobis videtur. </hi
+>[…]<hi
+rend="italic"
+> Rempublicam curavere tunc temporis cum Em.</hi
+><hi
+rend="italic sup"
+>mo</hi
+><hi
+rend="italic"
+> &amp; R.</hi
+><hi
+rend="italic sup"
+>mo</hi
+><hi
+rend="italic"
+> Ioanne Hyeronimo Card.</hi
+><hi
+rend="italic sup"
+>li</hi
+><hi
+rend="italic"
+> Lomellino, Ill.</hi
+><hi
+rend="italic sup"
+>mi</hi
+><hi
+rend="italic"
+> DD.Berlingeus Gypsisius Vexillifer Iustitiae … </hi
+></quote
+></cit
+><p
+xml:id="p5"
+>L’épigraphe explicite la signification politique de l’image, faisant référence à une ère de félicité publique, sous la protection de Saturne, avec la faveur de Pan (qui conduit les danses) et de Ganymède qui verse le vin « avec une innocente sobriété ». Le deux figures mythologiques, représentées sur la bande céleste, font allusion à la félicité reconquise (du corps comme de l’esprit), que la suite de l’inscription attribue au mérite des excellents gouvernants. Et si l’inscription définit Bologne « <hi
+rend="italic"
+>Rempublicam</hi
+> » (république), outre les magistrats municipaux, soit le gonfalonier Berlingero Gessi et les huit Anciens, celle-ci implique aussi le cardinal légat Giovanni Gerolamo Lomellini et le vice-légat Gasparo Lascaris. Mais elle ne fait pas mention du pontife. Si nous passons à l’image, dont l’impact est bien plus fort et immédiat que celui du texte, nous observons que les armoiries des trois autorités ecclésiastiques n’y paraissent pas. Nous avons là un des nombreux indices de ce qui semble une stratégie précise de communication des <hi
+rend="italic"
+>Insignia</hi
+>, tout du moins au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e </hi
+>siècle pris en considération par la recherche : la tendance systématique à occulter le pouvoir ecclésiastique, probablement à mettre sur le compte de la fonction de propagande des miniatures, orchestrée par les gonfaloniers en charge qui en étaient les commanditaires. Celle-ci représente un élément de continuité au cours du siècle et rend ainsi particulièrement pertinent le changement qui s’observe à partir de l’année 1659 et pour quelque temps, en coïncidence avec la légation de Girolamo Farnèse.</p
+><p
+xml:id="p6"
+>Le changement commence avec la miniature du cinquième bimestre, Bartolomeo Lambertini étant gonfalonier (fig. 86) : une image allégorique rigidement symétrique, sur les côtés de laquelle des rameaux d’olivier et des palmes évoquent les valeurs habituelles de ces plantes, paix et gloire. Le long de l’axe central, parmi des anges en vol, sont figurés la tiare papale et le chapeau cardinalice, entourés des symboles du pouvoir ecclésiastique d’un côté (crosse pastorale et mitre épiscopale), et politique de l’autre (sceptres et couronnes). L’image dans son ensemble et son centre est pourtant dominée par une pluie de lys de couleur indigo, formant aussi un cadre et une protection pour les écus du gonfalonier lui-même et des Anciens, qui ornent une sorte d’autel sur lequel on lit :</p
+><cit
+xml:id="cit02"
+><quote
+>Que personne dorénavant n’ose définir les fleurs comme caduques ; ici les LYS seront toujours éternels<note
+n="6"
+place="foot"
+xml:id="ftn47"
+><p
+>« <hi
+rend="italic"
+>Ne quisquam posthac flores dixisse caducos / Audeat Aeterna hic LILIA semper erunt</hi
+> ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p7"
+>L’image et l’inscription célèbrent les lys de l’écu Farnèse, donc le cardinal légat, et elles suggèrent la volonté du gonfalonier ainsi que des Anciens de se confier à sa protection<note
+n="7"
+place="foot"
+xml:id="ftn48"
+><p
+>La miniature est signée en marge en bas à droite : « <hi
+rend="italic"
+>D. Gio. And. Abanti scr(isse) e min(iò)</hi
+> ». </p
+></note
+>. À partir de ce moment, la référence au cardinal devient fréquente dans les <hi
+rend="italic"
+>Insignia</hi
+>, subvertissant l’habituelle absence ou marginalité des écus du pontife régnant et du légat apostolique notées précédemment.</p
+><p
+xml:id="p8"
+>Entre le cinquième bimestre de 1659 que nous venons de considérer et la fin de l’année 1661, alors que le cardinal Farnèse s’apprête à terminer son mandat bolonais, les miniatures exécutées à l’occasion des intronisations du gonfalonier et des Anciens lors de bimestres successifs sont au nombre de sept<note
+n="8"
+place="foot"
+xml:id="ftn49"
+><p
+>Comme on l’a dit plus haut, tous les bimestres ne sont pas représentés. Dans l’intervalle de temps considéré manquent le sixième bimestre de 1659, le premier et deuxième de 1660, le premier, deuxième et cinquième de 1661.</p
+></note
+> : non moins de cinq d’entre elles sont dédiées au cardinal. Du reste, élevé à la pourpre par Alexandre VII le 29 mai 1658 et immédiatement envoyé à Bologne, le cardinal s’était révélé un homme très actif et un administrateur appliqué<note
+n="9"
+place="foot"
+xml:id="ftn50"
+><p
+>Stefano Andretta, « Farnese, Girolamo »,dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 1995, vol. 45, p. 95-98, <ref
+target="https://www.treccani.it/enciclopedia/girolamo-farnese_Dizionario-Biografico/"
+>https://www.treccani.it/enciclopedia/girolamo-farnese_Dizionario-Biografico/</ref
+> ; Alfeo Giacomelli, « La storia di Bologna dal 1650 al 1796: un racconto e una cronologia », dans Adriano Prosperi (dir.), <hi
+rend="italic"
+>Bologna nell’età moderna (secoli XVI-XVIII). </hi
+>Vol. I.<hi
+rend="italic"
+> Istituzioni, forme del potere, economia e società</hi
+>, Bologne, Bologna University Press, 2009, p. 61-198, ici p. 68.</p
+></note
+>. Il devait laisser dans la ville des traces importantes et un excellent souvenir. Sa magnificence et sa profonde implication dans le gouvernement municipal semblent avoir conduit les divers gonfaloniers à lui témoigner une reconnaissance particulière<note
+n="10"
+place="foot"
+xml:id="ftn51"
+><p
+>Ce furent Enrico Hercolani (troisième bimestre 1660) ; Marc’Antonio Ranuzzi (quatrième bimestre 1660) ; Tommaso Campeggi (sixième bimestre 1660) ; Carlo Francesco Caprara (troisième bimestre 1661) ; et Nicola Calderini (quatrième bimestre 1661). Bien que ce ne soit pas l’objectif de cette étude, il vaut la peine de noter que chaque miniature adopte des solutions figuratives et une structure narrative autonome, et cette variété fait du recueil un objet d’étude passionnant et de grand potentiel.</p
+></note
+>. Parmi les miniatures, la plus intéressante pour notre recherche est celle du sixième bimestre 1660, qui eut comme gonfalonier de justice le marquis Tommaso Campeggi<note
+n="11"
+place="foot"
+xml:id="ftn52"
+><p
+>ASBO, <hi
+rend="italic"
+>Insignia</hi
+>, vol. VIII, p. 46. Signé en marge en bas à droite, « D. Gio. And. Abanti ».</p
+></note
+> (fig. 87). On y voit dans une stricte symétrie la statue de métal d’Alexandre VII qui fut offerte au pontife par le cardinal, comme on le lit sur le socle de l’effigie<note
+n="12"
+place="foot"
+xml:id="ftn53"
+><p
+>« <hi
+rend="italic"
+>ALEX. VII. / PONT. MAX. / BENEFACTORI / HIERONIMUS /CARD. FARNES. / AN. MDCLIX</hi
+>. ». Le nom du cardinal est réitéré par deux plus petites inscriptions sur des cheminées à droite et à gauche : « <hi
+rend="italic"
+>Farnesius Legatus</hi
+> », « <hi
+rend="italic"
+>Hieronymus Cardin(alis)</hi
+> ».</p
+></note
+>. L’image célèbre donc les deux personnages et suggère que Tommaso Campeggi leur était particulièrement proche, ou entendait obtenir leur faveur : les écus des huit Anciens sont disposés comme s’ils constituaient les métopes de la frise dorique qui se déploie sur le mur derrière la statue, alors que celui de Campeggi, de grande dimension, paraît au premier plan. Il est dévotement présenté à la statue du pape par deux figures féminines que leurs attributs permettent d’identifier comme la Justice et la Paix. De l’autre côté Felsina offre une maquette de Bologne à la statue, accompagnée d’une jeune femme couronnée de fleurs, portant caducée et cornucopie, qui correspond à la Félicité publique<note
+n="13"
+place="foot"
+xml:id="ftn54"
+><p
+>Comme une bonne partie des personnifications utilisées dans la décoration de l’époque, qui constituent un répertoire de connaissances communes, et souvent tiré de Cesare Ripa, qui s’inspire des monnaies romaines. Elle se trouve là en image dès la première édition illustrée : Cesare Ripa, <hi
+rend="italic"
+>Iconologia</hi
+>, In Roma, Appresso Lepido Facji, 1603, p. 154-155.</p
+></note
+>. Ces quatre personnifications, que les contemporains devaient facilement reconnaître, font référence aux vertus inspiratrices de toute action de gouvernement, comme au but fondamental du bon gouvernement, c’est-à-dire la félicité du peuple<note
+n="14"
+place="foot"
+xml:id="ftn55"
+><p
+>Nous aurons l’occasion de revenir sur la pertinence politique des personnifications de la Justice et de la Paix.</p
+></note
+>. La composition rhétorique de l’image, où l’écu Campeggi est offert en leur présence à la statue d’Alexandre VII, don du cardinal Farnèse, exprime l’hommage du gonfalonier aux deux prélats, et souligne sa volonté d’en partager l’action politique. Un fait peu fréquent dans la Bologne de l’époque moderne, où les <hi
+rend="italic"
+>Insignia</hi
+>, omettant la plupart du temps toute référence au pape et au légat en fonction, revendiquent l’autonomie du gonfalonier et des Anciens.</p
+><p
+xml:id="p9"
+>Comme on le voit, ces miniatures offrent un témoignage visuel particulièrement éloquent si on les étudie de manière comparative, elles révèlent comment l’héraldique procurait à la vie politique un instrument de communication assez souple, grâce auquel il est possible de percevoir des aspects importants de ses dynamiques.</p
+><p
+xml:id="p10"
+>La statue figurée dans la miniature, qui, heureusement, a été conservée, présente elle aussi son intérêt. Cette image souligne avec une certaine subtilité et sur un mode original la dévotion du cardinal envers le pontife, que l’inscription du socle définit comme « bienfaiteur<note
+n="15"
+place="foot"
+xml:id="ftn56"
+><p
+>Quoique le socle actuel ne soit pas l’original, il en reste le souvenir et de son inscription dans la miniature et surtout dans la maquette préparatoire de la statue conservé au Victoria &amp; Albert Museum de Londres (inv. A.60 : 1, 2-1921), pour laquelle on renvoie à la notice en ligne, avec bibliographie et fiche technique (<ref
+target="http://collections.vam.ac.uk"
+>http://collections.vam.ac.uk</ref
+>.). Il faut aussi noter les inscriptions latérales présentes sur le socle de la maquette, qui fournissent des informations importantes, qu’il n’est pas possible de commenter ici. Sur le côté droit on lit : « <hi
+rend="italic"
+>CURATORE / ILL.mo DOMno / SENATre /MARCHne / BAYULIVO / FERDINANDO / DE COSPIIS / EX MANDATis/ EMmi /LEGATI</hi
+> » ; sur le côté gauche : « <hi
+rend="italic"
+>PROTOTYPUM / SIMULACRI / STIVATI IN / AULA / HELVETICORUM / A / DORASTANTE / OSIO FLORENTINO CONSTRUCTUM</hi
+> ».</p
+></note
+> ». Œuvre du Florentin Dorastante Maria d’Osio, ou Osio<note
+n="16"
+place="foot"
+xml:id="ftn57"
+><p
+>Le sculpteur est précisément florentin, non siennois, comme on le lit curieusement dans Carla Bernardini, « Bologna 1660. Una committenza Farnese per papa Alessandro VII », dans Andrea Bacchi et Luca M. Barbero (dir.), <hi
+rend="italic"
+>Studi in onore di Stefano Tumidei</hi
+>, Venise-Bologne, Fondazione Cini-Fondazione Zeri, 2016, p. 279-287. D’autant plus que la signature même de l’artiste, gravée sous le pied gauche de la statue, dit sans aucun doute possible : « <hi
+rend="italic"
+>DORASTANTI M.</hi
+><hi
+rend="italic sup"
+>I</hi
+><hi
+rend="italic"
+> DEOSIIS FLO(RENTINI) AD MDCXXXXXX FECIT</hi
+> » (voir la fig. 4 de l’étude précédemment citée). </p
+></note
+>, c’est une effigie plutôt singulière, en feuille de cuivre sur âme de bois, qui reprend une typologie assez ancienne de portrait pontifical, dont on conserve à Bologne un exemple important avec le <hi
+rend="italic"
+>Boniface VIII</hi
+> daté de 1301<note
+n="17"
+place="foot"
+xml:id="ftn58"
+><p
+>Sur la statue et l’artiste voir Simona Moretti, « Manno di Bandino », dans <hi
+rend="italic"
+>DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., 2007, vol. 69, p. 109-110, <ref
+target="https://www.treccani.it/enciclopedia/manno-di-bandino_Dizionario-Biografico/"
+>https://www.treccani.it/enciclopedia/manno-di-bandino_Dizionario-Biografico/</ref
+>, avec bibliographie, et Raffaella Pini, « La statua di Bonifacio VIII, Manno da Siena e gli orefici a Bologna », dans Maria Andaloro (dir.), <hi
+rend="italic"
+>Le culture di Bonifacio VIII</hi
+>, Rome, Istituto Storico Italiano per il Medioevo, 2006, p. 231-240. On peut se demander si cette commande originale de Farnèse, très sophistiquée dans sa rareté, est une reprise consciente d’un modèle antique (dans ce cas médiéval) destinée à satisfaire aussi bien les attentes du destinataire, le très cultivé pontife Chigi, que l’intérêt diffus à partir de la Contre-Réforme pour remettre en usage les pratiques de l’Église des origines ou médiévale. </p
+></note
+>. Le cardinal fit placer la statue dans la salle des Suisses, atrium de l’appartement du légat<note
+n="18"
+place="foot"
+xml:id="ftn59"
+><p
+>Cela est rappelé par une des inscriptions du socle, voir n. 16. </p
+></note
+>. À cette même époque il avait fait décorer de fresques la vaste pièce qui sert de vestibule solennel à l’appartement, conçue comme l’équivalent bolonais de la Sala Regia au palais du Vatican, ainsi que les études de Hans Hubert l’ont démontré<note
+n="19"
+place="foot"
+xml:id="ftn60"
+><p
+>Voir n. 3. Cette salle, aujourd’hui connue comme la salle Farnèse, est aussi le vestibule de la chapelle du palais, décorée par Prospero Fontana avec des fresques mariales lors de la légation de Charles Borromée, en 1562.</p
+></note
+>. À la lumière de ce décor on peut aussi et surtout considérer la statue en l’honneur d’Alexandre VII comme une sorte de compensation de la part du cardinal, les fresques étant entièrement consacrées à l’exaltation des Farnèse et de leur pape Paul III. L’œuvre fut confiée à Carlo Cignani, le meilleur héritier vivant de la tradition carrachesque, après la mort de son maître Francesco Albani en 1660. L’équipe de Cignani conçut une somptueuse structure décorative, mettant en œuvre des solutions caractéristiques du perspectivisme bolonais [<hi
+rend="italic"
+>quadratura bolognese</hi
+>] destinées à exalter la monumentalité de l’ensemble<note
+n="20"
+place="foot"
+xml:id="ftn61"
+><p
+>Les peintres actifs dans la salle furent Giovanni Maria Bibiena, Lorenzo Pasinelli, Emilio Taruffi, Luigi Scaramuccia, Girolamo Bonini, Antonio Catalani, Bartolomeo Morelli et Francesco Quaini.</p
+></note
+> : elle encadre quelques scènes soigneusement sélectionnées pour synthétiser l’histoire de Bologne en lien avec l’Église romaine. Dans les fresques se mêlent en particulier histoire municipale, exaltation du rôle des légats, hommage à la famille du commanditaire et de ses membres illustres<note
+n="21"
+place="foot"
+xml:id="ftn62"
+><p
+>Sur la décoration de la salle, voir Beatrice Buscaroli Fabbri, « Il Cardinal Farnese e la sua sala. Un ciclo di affreschi per la famiglia e la città », dans Camilla Bottino (dir.), <hi
+rend="italic"
+>Il palazzo comunale di Bologna</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., p. 99-110. Sur les autres pièces décorées et l’appartement dans son ensemble, voir en particulier Carla Bernardini, « Per una storia dell’Appartamento del Legato, sede delle Collezioni Comunali d’Arte di Palazzo d’Accursio. Una ricerca in prospettiva museografica », <hi
+rend="italic"
+>Schede Umanistiche</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 1989, p. 81-92 ; et aussi Davide Righini, « Iconografie celebrative. Gli emblemi e i miti raffigurati nelle sale di rappresentanza del Palazzo Pubblico di Bologna (secoli XV-XVIII) », <hi
+rend="italic"
+>Arte a Bologna. Bollettino dei Musei Civici d’Arte Antica</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 7-8, 2010-2011, p. 128-140. </p
+></note
+>. Parmi les événements cruciaux dont la ville avait été le théâtre comme le <hi
+rend="italic"
+>Couronnement de Charles V de la part de Clément VII </hi
+>(1530) et la <hi
+rend="italic"
+>Rencontre de François I</hi
+><hi
+rend="italic sup"
+>er </hi
+><hi
+rend="italic"
+>de France avec le pape Léon X </hi
+>(1515), où le souverain avait accepté de pratiquer l’attouchement miraculeux des malades, aussi représenté, on trouve l’<hi
+rend="italic"
+>Entrée de Paul III Farnèse à Bologne </hi
+>(1543) (fig. 88). Le pontife est bien reconnaissable au premier plan, chevauchant devant le Palais public à côté d’un imaginaire monument équestre à Pietro Farnèse, ancêtre qui, en 1361, à la tête des troupes pontificales, avait vaincu les Visconti, reconquérant Bologne. Ce passage de Paul III dans la ville était somme toute un épisode historique assez marginal que le programme décoratif élève au rang de moment emblématique, l’associant au souvenir du condottière Pietro par le moyen d’un autre tour de force, aucune statue ne lui ayant jamais été consacrée. Cette iconographie dynastique se trouve conçue comme appartenant à un programme visuel destiné à encadrer la statue en marbre, aujourd’hui perdue, de Paul III Farnèse que Giovanni Zacchi da Volterra avait exécutée pour la salle justement en 1543<note
+n="22"
+place="foot"
+xml:id="ftn63"
+><p
+>Elle était placée sur le côté court entre les fenêtres, sous un baldaquin peint qui encadre maintenant l’<hi
+rend="italic"
+>Alexandre VII Chigi </hi
+>de Dosio.</p
+></note
+>. Cela est rappelé et souligné par l’inscription peinte sur la porte d’entrée de l’appartement du légat, où le cardinal Girolamo explique avoir ennobli la salle à la suite des Bolonais qui avaient placé là au siècle précédent la statue de son ancêtre le pontife<note
+n="23"
+place="foot"
+xml:id="ftn64"
+><p
+>« <hi
+rend="italic"
+>AULAM HANC UBI BONONIENSIUM INCLYTA FIDES PAULO III STATUAM OLIM POSUIT IN AUGUSTIOREM FORMAM EXORNANDAM CURAVIT HYERONIMUS CARDINAL FARNES . LEG. A.D. MDCLX</hi
+> ».</p
+></note
+>.</p
+><p
+xml:id="p11"
+>Mais ce n’est pas tout, car l’héraldique aussi, avec son langage immédiat, est sollicitée pour exalter la lignée, sur les murs comme sur le plafond. Les lys Farnèse sont figurés dans des écus au-dessus des grandes scènes historiques qui illustrent les parois (fig. 88), ils paraissaient aussi aux caissons d’origine du plafond, aujourd’hui disparu mais décrit dans une source contemporaine qui dit :</p
+><cit
+xml:id="cit03"
+><quote
+>en son milieu [du plafond de bois], dans un écu bien grand et majestueux, doré avec profusion, se voient les armes révérées des Chigi, de notre Seigneur le pape Alexandre VII et dans les embrasures qui sont toutes en partie couvertes d’or se trouvent les lys d’azur qui font un beau concert<note
+n="24"
+place="foot"
+xml:id="ftn65"
+><p
+>« <hi
+rend="italic"
+>nel suo mezzo</hi
+> [du plafond de bois], <hi
+rend="italic"
+>in ben grande e maestoso scudo, tutto profusamente indorato, vi si vede la riverita arma Ghisia, di Nostro Signore papa Alessandro VII, e nei vani, che sono partitamente tutti posti a oro vi sono gigli azzurri che fanno un bellissimo concerto</hi
+> ». L’extrait fait partie d’une relation anonyme relative aux embellissements dus à la munificence du cardinal Girolamo Farnèse, adressée en 1661 à Monseigneur Girolamo Boncompagni, archevêque de la ville. Le texte entier figure dans Gaetano Giordani, <hi
+rend="italic"
+>Pitture della sala Farnese</hi
+>, Bologne, Tipografia Guidi all’Ancora, 1845, p. 13 et 14. La lecture de cette source est intéressante aussi pour la description des fresques et du placement de la statue de d’Osio figurant <hi
+rend="italic"
+>Alexandre VII </hi
+>dans la salle des Suisses.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p12"
+>Quoique placées en position éminente, les armes des Chigi étaient entourées de caissons ornés des lys Farnèse. On comprend comment le poids visuel fut accordé à l’héraldique du légat au détriment de celle du pontife.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>« <hi
+rend="italic"
+>Micet in vertice </hi
+>» : Pietro Vidoni et la célébration d’Alexandre VII Chigi</head
+><p
+xml:id="p13"
+>La légation de Girolamo Farnèse, qui fut en poste dans la ville de 1658 à 1662, se conclut par une apothéose d’hommages. Suivit le mandat du Crémonais Pietro Vidoni (1610-1681), qui avait longtemps été apprécié en tant qu’évêque de Lodi. Comme son prédécesseur, Vidoni avait été élevé à la pourpre par Alexandre VII, quoique plus tard, dans le concistoire du 5 avril 1660<note
+n="25"
+place="foot"
+xml:id="ftn66"
+><p
+>Le diocèse lui avait été confié en 1644, mais de fait il s’était absenté de la cité lombarde depuis 1652, année où il avait été appelé à la nonciature près le roi de Pologne Jean Casimir. L’habileté diplomatique dont Vidoni fit preuve en tant que nonce lui valut sa nomination comme protecteur du royaume de Pologne près le Saint-Siège et le fort soutien du roi Jean pour son élévation à la pourpre. Voir à ce propos Gaetano Moroni, <hi
+rend="italic"
+>Dizionario di erudizione storico-ecclesiastica da S. Pietro sino ai nostri giorni</hi
+>, in Venezia, dalla Tipografia Emiliana, 1840-1861, vol. XCIX, p. 246-247 ; Patrice Gauchat (dir.), <hi
+rend="italic"
+>Hierarchia Catholica Medii et Recentioris Aevi</hi
+>, Regensburg, Sumptibus et typis Librariae Monasterii, 1935, vol. V., <hi
+rend="italic"
+>1592-1667</hi
+>, p. 34. Giampiero Brunelli, « Vidoni, Pietro senior », <hi
+rend="italic"
+>DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>, 2020, vol. 99, p. 204-207, <ref
+target="https://www.treccani.it/enciclopedia/pietro-senior-vidoni_Dizionario-Biografico/"
+>https://www.treccani.it/enciclopedia/pietro-senior-vidoni_Dizionario-Biografico/</ref
+>.</p
+></note
+>. Cela est rappelé, comme d’habitude dans le recueil, grâce à un portrait gravé par Albert Clouwet sur un dessin de Pietro Martire Neri dans la série des <hi
+rend="italic"
+>Effigies cardinalium nunc viventium, </hi
+>publiée à Rome par Giovanni Giacomo de Rossi. Il porte les armes du pontife auteur de l’élévation à la pourpre en haut à gauche, celles du cardinal à droite<note
+n="26"
+place="foot"
+xml:id="ftn67"
+><p
+>L’inscription dit : « <hi
+rend="italic"
+>Petrus Tit. S. Callisti S. R. E. Presb. Card. / Vidonus. Episcopus Laudensis / Cremonensis V. Aprilis. MDCLX</hi
+> ».</p
+></note
+> (fig. 89). Il vaut la peine de rappeler le blasonnement de l’écu des Vidoni, qui est assez peu connu :</p
+><cit
+xml:id="cit04"
+><quote
+>D’argent, à une tour de gueules ajourée de sable. À une vigne de sinople feuillée du même et fruitée au naturel, naissant de la porte et accolant la tour, entrant et sortant par les fenêtres et couronnant la cime<note
+n="27"
+place="foot"
+xml:id="ftn68"
+><p
+>« <hi
+rend="italic"
+>D’argento, la torre di rosso aperta e finestrata di nero. La vite sradicata, pampinosa di verde coll’uva, nascente dalla porta ed accollante la torre, entrando e uscendo per le finestre coronando la cima</hi
+> ». Je remercie Gian Luca Tusini pour son aide.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p14"
+>Pour en rester aux <hi
+rend="italic"
+>Insignia</hi
+>, l’avènement de Vidoni ne passa pas inaperçu. La miniature du troisième bimestre de l’année, qui correspond au moment de son arrivée dans la ville, est très éclairante<note
+n="28"
+place="foot"
+xml:id="ftn69"
+><p
+>ASBO, <hi
+rend="italic"
+>Insignia degli Anziani consoli</hi
+>, vol. VIII, p. 56. Signée, comme une bonne partie des précédentes, « <hi
+rend="italic"
+>D. Gio. And. Abanti scr. e min. </hi
+>».</p
+></note
+> (fig. 90). Dans un pré lumineux ceint d’une balustrade faisant face à un ample paysage, est campée la tour de l’écu Vidoni, surmontée du chapeau cardinalice et de l’ombelle, sur laquelle est fixé l’écu du gonfalonier de justice, Giovan Francesco Isolani, alors que les armes des huit Anciens sont prêtes à y prendre leur place après avoir été consacrées par Apollon. Cette miniature aussi montre un usage dynamique de l’héraldique : on peut dire qu’elle illustre les armes Vidoni, complétées par les insignes propres du légat (ombelle, clefs en sautoir, chapeau), et en même temps elle les anime, pour ainsi dire, rendant la tour géante, élément iconique, sorti de l’usuel écu et utilisé comme une architecture symbolique autant que physique, sur laquelle peuvent s’appuyer les écus héraldiques des Anciens. La Justice garde la tour, à côté de la vigne vidonienne surgie de terre, alors qu’à gauche la Paix a déposé le rameau d’olivier afin d’offrir à Apollon l’écu Bentivoglio pour qu’il le couronne, et l’Abondance (qui semble reconnaissable grâce à la corne d’abondance et à la couronne de fleurs) s’apprête à offrir ceux des sept autres Anciens. En marge, en bas à droite, une divinité fluviale, probablement le Reno (fleuve de Bologne, identifiant traditionnellement cette ville), fait jaillir l’eau d’une amphore sur laquelle leurs noms sont inscrits. Un cartel proclame l’intention de la ville de se placer sous la protection de Vidoni par une métaphore : « <hi
+rend="italic"
+>sub umbra alarum tuarum </hi
+>», à l’ombre de tes ailes, qui pourraient être les houppes du chapeau ou les rameaux de la vigne.</p
+><p
+xml:id="p15"
+>Une image aussi emphatique conduirait à penser que Vidoni avait montré depuis son entrée en fonction une attitude de magnificence, et peut-être instauré un lien de protection avec les Anciens et le Sénat. Mais la sensation qui ressort en parcourant les <hi
+rend="italic"
+>Insignia </hi
+>suivants est autre. On a plutôt l’impression qu’au début de sa légation les gonfaloniers successifs ont exprimé à travers les miniatures un augure de continuation du mandat Farnèse, et qu’ensuite cette attente a été démentie par les faits : dans les miniatures suivantes la présence de l’écu Vidoni se réduit peu à peu pour disparaître complètement<note
+n="29"
+place="foot"
+xml:id="ftn70"
+><p
+>On fait ici référence aux miniatures du quatrième bimestre 1662, p. 58 (gonfalonier Achille Volta) et du cinquième bimestre 1662, p. 60 (gonfalonier Gerolamo Capacelli Albergati). Il disparaît à partir du sixième et dernier bimestre de l’année (gonfalonier Odoardo Pepoli). L’écu réapparaît, mais comme élément du décor, inséré dans une architecture éphémère, dans la miniature du quatrième bimestre 1663 (gonfalonier Angelo Michele Guastavillani), p. 68.</p
+></note
+>.</p
+><p
+xml:id="p16"
+>Et pourtant Vidoni, comme Girolamo Farnèse avant lui, laissa durant les quelques années de sa légation un témoignage important de son rôle de commanditaire dans l’appartement du légat. Il s’agit de la décoration de la voûte de la galerie qui porte son nom, la Vidoniana, mais qui mériterait plutôt d’être rebaptisée galerie Chigiana, si l’on tient compte de la signification de ses fresques (fig. 91). Contrairement à celles de la sala Regia voulues par son prédécesseur, celles-ci sont entièrement consacrées à Alexandre VII : on peut en déduire un lien plus étroit de Vidoni avec le pontife, probablement la gratitude pour son élévation à la pourpre et peut-être aussi pour sa nomination comme légat dans la ville la plus riche des États pontificaux après Rome.</p
+><p
+xml:id="p17"
+>Les travaux datent des derniers mois de la légation, vers 1665, et la documentation d’archive montre que Vidoni ne fut pas seulement responsable de la décoration mais aussi de la création de la galerie elle-même<note
+n="30"
+place="foot"
+xml:id="ftn71"
+><p
+>À propos du choix de cette typologie, qui eut un grand succès à cette époque, et pour une étude plus complète de la décoration, voir Sonia Cavicchioli, « Il cardinale Pietro Vidoni e l’omaggio ad Alessandro VII Chigi nell’appartamento del legato a Bologna (1665). Una decorazione politica », <hi
+rend="italic"
+>Studi di Storia dell’Arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 29, 2018, p. 167-178.</p
+></note
+>, située dans une partie de l’appartement dont l’espace et le choix de la disposition étaient limités, la résidence ayant déjà été largement structurée dans les siècles et décennies précédents. Les fresques furent confiées à deux maîtres de l’école de peinture locale, qui au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle était peut-être la plus appréciée en Europe, spécialement pour la grande décoration : il s’agit des perspectivistes (<hi
+rend="italic"
+>quadraturisti</hi
+>) Giovanni Battista Caccioli (1623-1675) et Domenico Santi, dit le Mengazzino (1621-1694), respectivement l’un peintre de figures et l’autre spécialiste d’architecture peinte, élèves le premier de Domenico Canuti, le second d’Agostino Mitelli<note
+n="31"
+place="foot"
+xml:id="ftn72"
+><p
+>La bibliographie sur ces artistes est mince. Sur Caccioli, voir Luigi Crespi, <hi
+rend="italic"
+>Felsina pittrice</hi
+>, In Roma, Nella Stamperia di Marco Pagliarini, 1769, p. 119-120 (en particulier p. 120 pour la référence à la galerie) et p. 57-59 (en particulier p. 59) qui la date de 1665. Ebria Feinblatt, « Giovan Battista Cavalcaselle: a Drawing identified », <hi
+rend="italic"
+>Master Drawings</hi
+>, vol. V, n<hi
+rend="sup"
+>o</hi
+> 2, 1967, p. 569-576 ; Clara Roli Guidetti, « Caccioli, Giovanni Battista », dans <hi
+rend="italic"
+>DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., 1973, vol. 16, p. 39-40, <ref
+target="https://www.treccani.it/enciclopedia/giovanni-battista-caccioli_Dizionario-Biografico"
+>https://www.treccani.it/enciclopedia/giovanni-battista-caccioli_Dizionario-Biografico</ref
+>. Sur Santi, voir les références dans Giovan Pietro Zanotti, <hi
+rend="italic"
+>Storia dell’Accademia Clementina di Bologna</hi
+>, <hi
+rend="italic"
+>Giuseppe Rolli</hi
+>, In Bologna, Per Lelio Dalla Volpe, 1739, vol. I, p. 29, 270, 323 et 373. Et aussi Simonetta Stagni, <hi
+rend="italic"
+>Domenico Maria Canuti</hi
+>, Rimini, Luisè, 1988, p. 136-139 et 149-151. En particulier sur leur travail dans l’« <hi
+rend="italic"
+>aula Vidonia</hi
+> », Ebria Feinblatt,<hi
+rend="italic"
+> Seventeenth-century Bolognese ceiling decorators</hi
+>, Santa Barbara, Fithian Press, 1992, p. 161-162 et p. 163, n. 31. </p
+></note
+>. La décoration rend hommage au pontife de manière sophistiquée, mêlant références héraldiques et emblématiques. La voûte est rythmée par quatre arcs transversaux imaginaires qui délimitent trois travées présentées comme des voûtes de pierre fortement abaissées, au centre desquelles est peinte une scène céleste, ceinte d’un cadre en feint bronze doré. L’entière superficie est peuplée de satyres et satyresses couronnés de pampres, et partout sont peints des sarments et des grappes, en alternance avec de plus communs festons de fruits et bouquets de fleurs. La présence de la vigne, qui sert discrètement de fond aux fresques, suggère une référence héraldique vu son rôle dans le blason du commanditaire.</p
+><p
+xml:id="p18"
+>L’impression est confirmée par un petit poème en latin publié à Bologne en 1665, en parallèle à l’achèvement des fresques : <hi
+rend="italic"
+>Aula Vidonia</hi
+>. Constitué de 186 hexamètres, il offre une sorte d’<hi
+rend="italic"
+>ekphrasis</hi
+> de la décoration de la galerie, consacrée dès le titre au nom et au « <hi
+rend="italic"
+>numen</hi
+> » du pape<note
+n="32"
+place="foot"
+xml:id="ftn73"
+><p
+>La page de titre donne le titre complet : <hi
+rend="italic"
+>Aulam Vidoniam picturis exornatam Alexandri VII Pont. Opt. Max. Nomini et Numini consecratam Vincentius Maria Marescalchius hisce carminibus adumbrabat</hi
+>, Bologna, Typis Ferronianis, 1665. « <hi
+rend="italic"
+>Numen</hi
+> » peut être compris au sens de majesté, autorité religieuse. La référence à la vigne se lit aux vers 62-65.</p
+></note
+>. C’est l’œuvre de Vincenzo Maria Marescalchi, personnalité d’un certain relief dans la Bologne d’alors : plusieurs fois Ancien, et membre de l’importante Académie des Gelati, dont il fut prince en 1652. En 1661, encore au temps de la légation Farnèse, il participa à un recueil collectif d’<hi
+rend="italic"
+>Ossequii poetici nell’ammirarsi in Bologna l’Heroica risoluzione della sereniss. Principessa Caterina Farnese di monacarsi</hi
+><note
+n="33"
+place="foot"
+xml:id="ftn74"
+><p
+><hi
+rend="italic"
+>Ossequii poetici nell’ammirarsi in Bologna l’Heroica risoluzione della sereniss. Principessa Caterina Farnese di monacarsi nel Ven. Monastero delle Madri carmelitane scalze di Santa Teresa in Parma</hi
+>, In Bologna, Per Giacomo Monti, 1661.</p
+></note
+><hi
+rend="italic"
+>,</hi
+> entreprise liée à la prise de voile de la fille du duc de Parme Odoardo I et de Marguerite de Médicis, advenue dans cette ville au monastère des carmélites, dont l’écho peut être compris en relation avec le séjour à Bologne du cardinal de la même famille. Le sonnet composé par Marescalchi pour l’occasion développe la métaphore du Christ « éternel jardinier » et souligne le renoncement de Catherine au monde, qui la portera à cultiver ses fleurs, soit les lys des armes Farnèse, tendant à la vertu (« Va, grande CATHERINE, quitte les parures de pourpre / Pour l’austère voile et les vastes salles pour la cellule monastique, / Distille les rayons de tes yeux en pures fontaines / Et tu verras chacune de tes fleurs [les lys des Farnèse] se changer en étoile », « […]aujourd’hui transplantées[…]/ Dans le terrain de Thérèse l’AUGUSTE LYS<note
+n="34"
+place="foot"
+xml:id="ftn75"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 40 : « <hi
+rend="italic"
+>Vanne gran CATERINA, e gli ostri in lame / Ruvide muta, e le gran Sale in Cella, / Stilla da i raggi tuoi pure fontane, / E ogni tuo fior vedrai cangiare in Stella</hi
+> »; « […]<hi
+rend="italic"
+>oggi trapianti </hi
+>[<hi
+rend="italic"
+>…</hi
+>]<hi
+rend="italic"
+>/ Nel terren di Teresa il GIGLIO AUGUSTO</hi
+> ».</p
+></note
+> »). La gravure destinée à constituer le frontispice du recueil, due au Parmesan Domenico Fontana, se concentre aussi sur l’héraldique Farnèse. Dans un cartouche surmonté d’une couronne, l’écu Farnèse se trouve pour ainsi dire fixé par deux anges sur le plus grand écu carmélitain<note
+n="35"
+place="foot"
+xml:id="ftn76"
+><p
+>Aux Farnèse revenait le titre, donc la couronne, d’Altesse Sérénissime. Comme on le sait, l’écu de l’ordre est constitué du mont Carmel surmonté de la croix, propre à l’ordre des carmélites déchaux, d’une étoile d’argent au pied du mont et de deux autres étoiles de gueules symétriques sur les côtés de la croix.</p
+></note
+> (fig. 92). Pour souligner l’engagement total de la jeune Farnèse, qui avait choisi d’entrer en religion sous le nom de Thérèse, fondatrice de l’ordre, deux anges tiennent respectivement une flèche et un clou, allusion aux extases de la sainte espagnole, alors que la couronne ducale propre à l’écu Farnèse se trouve remplacée par celle d’épines. L’inscription rend la signification de l’image explicite :</p
+><cit
+xml:id="cit05"
+><quote
+>Thérèse, de lignée princière, une couronne d’épines te joint au Christ avec une flèche et un clou, et te place en ce lieu ; avec le dard et le clou le Christ se fait maître des parfums. Ainsi et pour toujours fleurissent les lys mêlés aux ronces<note
+n="36"
+place="foot"
+xml:id="ftn77"
+><p
+>« <hi
+rend="italic"
+>Te iaculo iungit clavoq(ue) Teresia Christo, / Regalisq(ue) loco spinea serta locat. / Et iaculo, et clavo Christus fit cultor odoru(m). / SIC SEMPER FLORENT LILIA mixta rubis</hi
+> ». La flèche est une référence particulière à la transverbération de Thérèse d’Avila (à propos de laquelle la référence obligatoire est la sculpture de Gian Lorenzo Bernini dans la chapelle Cornaro, à Santa Maria della Vittoria à Rome), moment d’extase mystique et de communion suprême avec l’amour divin décrit par la sainte dans sa propre autobiographie, le clou faisant allusion aux stigmates imprimés dans son cœur, toujours selon son témoignage.</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p19"
+>Cette conjonction de l’image et du mot, qui repose sur le langage de l’héraldique et de l’emblématique, est caractéristique de la culture du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, et très ancrée dans celle de Bologne. Elle est aussi à la base des fresques de la galerie commandée par le cardinal Vidoni, dont la signification se révèle grâce au petit poème de Vincenzo Maria Marescalchi déjà cité. Grâce à lui, on peut en comprendre certains détails autrement difficiles à interpréter. Il en ressort l’impression que ce fut Marescalchi qui composa le programme iconographique de la décoration, et qu’il dut, lui ou un autre des érudits qui participèrent aux <hi
+rend="italic"
+>Ossequii poetici per Caterina Farnese,</hi
+> diriger le burin de Domenico Fontana.</p
+><p
+xml:id="p20"
+>L’<hi
+rend="italic"
+>Aula Vidonia</hi
+> décrit la décoration dans un langage dense en métaphores visuelles, commençant par la célébration de la splendeur de l’étoile placée au-dessus des monts de l’écu Chigi (« <hi
+rend="italic"
+>de vertice Montis Chisia Stella micet</hi
+> » [l’étoile Chigi resplendira du sommet du mont], v. 2-3). Marescalchi énonce tout de suite le motto chigien « <hi
+rend="italic"
+>Micat in vertice</hi
+> » [Elle brille au sommet] en le déclinant au futur, et cet élément se révèle crucial dans le poème et dans la décoration de la voûte, dont les scènes principales sont disposées avec intelligence autour de cette image.</p
+><p
+xml:id="p21"
+>Le médaillon central montre Mercure déplaçant la voûte du ciel étoilé comme s’il s’agissait d’un manteau et découvrant la vision lumineuse de Jupiter flanqué de son aigle sur un nuage, qui pose une étoile sur une tiare papale ceinte de laurier, présentée par deux figures féminines agenouillées et embrassées (fig. 93). Il n’y a pas de doute sur la signification politique de l’image : la tiare, symbole du pouvoir papal, y compris temporel, se trouve justement couronnée par l’étoile à huit rayons, meuble des armes Chigi. Le concept visuel, qui joue indubitablement sur l’identification des monts chigiens à la tiare, est enrichi de deux figures agenouillées, identifiables comme Justice et Paix par leurs attributs, l’épée et le rameau d’olivier, dont l’union est enrichie par la couronne de laurier autour de la tiare, rappel de la vertu dont cette plante est le symbole, et peut-être de l’universalité du pontificat, successeur des anciens empereurs qui étaient effectivement couronnés de laurier. Les deux personnifications, déjà vues sur la miniature du sixième bimestre 1660 liée au gonfalonier Campeggi, renvoient évidemment au célèbre verset 11-12 du psaume<hi
+rend="italic"
+> </hi
+>85 (« Amour et vérité se rencontreront, Justice et Paix s’embrasseront »), et constituent une allégorie politique de la fortune, constante et répandue<note
+n="37"
+place="foot"
+xml:id="ftn78"
+><p
+>Sur l’histoire iconographique de ce motif à forte valeur politique, en particulier sur son usage à Bologne entre <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, je renvoie à Sonia Cavicchioli, art. cité, p. 171 et 172. Voir aussi son usage dans la propagande, y compris posthume, du cardinal Mazarin : Yvan Loskoutoff, <hi
+rend="italic"
+>Rome des Césars Rome des Papes. La propagande du cardinal Mazarin</hi
+>, Paris, Honoré Champion, 2007, p. 184-197.</p
+></note
+>. La fresque vise à exalter le pontificat Chigi et son bon gouvernement, soulignant l’importance d’Alexandre VII sur le trône de Pierre. On pourrait l’intituler <hi
+rend="italic"
+>Jupiter couronne de l’étoile chigienne la tiare présentée par la Justice et par la Paix</hi
+>. Grâce à la description donnée par Marescalchi, nous pouvons aussi interpréter les quatre cartouches (« <hi
+rend="italic"
+>bullae</hi
+> ») splendidement peints en monochrome, insérés dans l’encadrement feint du médaillon. Ils figurent les quatre éléments par les figures de <hi
+rend="italic"
+>Cibèle </hi
+>(la terre), <hi
+rend="italic"
+>Vulcain </hi
+>(le feu), <hi
+rend="italic"
+>Junon </hi
+>(l’air) et une <hi
+rend="italic"
+>Divinité fluviale </hi
+>(l’eau). Naturellement, leur présence souligne l’universalité du pouvoir d’Alexandre VII célébré au centre de la fresque.</p
+><p
+xml:id="p22"
+>Pour en venir aux fresques des travées latérales (fig. 94 et 95), il est intéressant de remarquer que, différemment du médaillon central, elles sont enrichies d’un phylactère<note
+n="38"
+place="foot"
+xml:id="ftn79"
+><p
+>Le poème de Marescalchi suggère toutefois qu’une inscription était aussi prévue dans la peinture centrale, énonçant le <hi
+rend="italic"
+>motto</hi
+> : « <hi
+rend="italic"
+>Ambiat hunc apicem nostrum, sine cuspide, fulgur</hi
+> », traduisible en : « que la foudre ceigne notre tiare dépourvue de pointe », le terme « <hi
+rend="italic"
+>fulgur</hi
+> » étant volontairement ambigu, pouvant se référer à la foudre, attribut de Jupiter, comme à l’étoile des Chigi.</p
+></note
+>. Son inscription rend explicite leur nature d’emblème politique, outre celle d’image allégorique. L’étoile chigienne joue son rôle dans les deux cas, et là aussi l’élément héraldique agit comme un symbole dynamique. Dans l’une des deux fresques, Neptune est assis sur un nuage devant un ciel tempétueux, montrant de sa dextre la Prudence, parfaitement identifiable grâce à ses attributs usuels du serpent enroulé autour du bras et du miroir : plutôt que de se regarder dans celui-ci, elle intercepte un des huit rayons de l’étoile chigienne, rayon qui resplendit parmi les nuées (détail actuellement peu visible d’en bas) et s’imprime sur le cristal, alors que de son autre main elle tient la grande voile d’une figure identifiable comme la Fortune, qui paraît vouloir s’enfuir. La fresque a une évidente signification morale, outre que politique<note
+n="39"
+place="foot"
+xml:id="ftn80"
+><p
+>L’idée est renforcée par les vers qui proposent la comparaison entre la Prudence dirigeant la voile de la Fortune et l’image connue de l’aurige qui tient la bride à un cheval rebelle (« <hi
+rend="italic"
+>indomiti […] rector equi</hi
+> », v. 132). Il faut remarquer que la présence de Neptune peut renvoyer au rôle reconnu à cette divinité antique depuis le <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, documenté par les commentaires du passage de l’<hi
+rend="italic"
+>Énéide </hi
+>virgilienne qui commence avec le célèbre « <hi
+rend="italic"
+>Quos ego</hi
+>… » (I. 135) et par la fontaine réalisée justement sous les fenêtres de l’appartement du légat (voir Irving Lavin, « Giambologna’s Neptune at the Crossroads », dans <hi
+rend="italic"
+>Past-Present Essays on Historicism in Art from Donatello to Picasso</hi
+>, Berkeley, University of California Press, 1993, p. 63-83).</p
+></note
+>, et le <hi
+rend="italic"
+>motto</hi
+> peint sur le phylactère, identiquement présent dans le poème de Marescalchi, en révèle le sens : « <hi
+rend="italic"
+>Sidus Prudentem ducit, Prudentia Sortem</hi
+> » [L’étoile conduit celui qui est prudent, la Prudence fait de même avec la Fortune], v. 135. La scène représente donc <hi
+rend="italic"
+>La Prudence, inspirée par l’étoile </hi
+>(chigienne, évidemment)<hi
+rend="italic"
+>, qui tient en lisière la Fortune</hi
+>. L’image et le <hi
+rend="italic"
+>motto</hi
+> expriment une idée politique, non seulement parce que l’emblème des Chigi est là pour rappeler le rôle et le pouvoir du pape régnant, mais aussi parce que la Prudence elle-même est la vertu du gouvernement et de la politique par excellence. Ce n’est pas un hasard si elle est aussi représentée dans les <hi
+rend="italic"
+>specula principis</hi
+><note
+n="40"
+place="foot"
+xml:id="ftn81"
+><p
+>Voir Giorgio Forni, « Nicolò Machiavelli », dans Ezio Raimondi (dir.), <hi
+rend="italic"
+>La letteratura italiana. Dalle origini al Cinquecento</hi
+>, Milan, Bruno Mondadori, 2007, p. 346. </p
+></note
+> [miroirs des princes]<hi
+rend="italic"
+>. </hi
+>L’image de la Fortune à la voile, issue des monnaies antiques et reprise à l’époque moderne, est tout à fait cohérente avec l’idée que la vie humaine et les responsabilités du gouvernement peuvent s’identifier à la navigation et à ses périls, d’autant que dans son poème, Marescalchi identifie le pontife au pilote d’un navire occupé à conduire à bon port la « <hi
+rend="italic"
+>fidei cymba</hi
+> », le navire de la foi.</p
+><p
+xml:id="p23"
+>La signification de la troisième travée se trouve aussi éclairée par le poème. Il rappelle que la figure féminine « <hi
+rend="italic"
+>clavigera</hi
+> » (elle tient les clefs de la main droite) écrase du talon le rebelle Pluton, le précipitant récemment enchaîné dans l’Adès avec les Furies, que la fresque dépeint minutieusement, avec leurs attributs mythologiques : la torche, les serpents et le cyprès, une des plantes sacrées propres à ces figures. Le poème précise que Pluton et les Furies représentent les puissances infernales, rebelles au ciel, et que la figure féminine – définie comme « Force » [<hi
+rend="italic"
+>Vis</hi
+>] ou « Suprême Pouvoir » [<hi
+rend="italic"
+>Suprema Potestas</hi
+>] – est en mesure de les écraser de son regard, de son pied et de sa dextre : « <hi
+rend="italic"
+>Ore, pede, et dextra, premit ima, suprema Potestas</hi
+> » (v. 161), lisons-nous justement aussi bien dans le poème que dans le phylactère porté par le putto en vol dans la fresque. La fresque a donc pour sujet <hi
+rend="italic"
+>Le Pouvoir domine les puissances infernales </hi
+>[<hi
+rend="italic"
+>La Potestà domina le potenze infere</hi
+>]. Cette personnification semble tirée de l’<hi
+rend="italic"
+>Iconologia </hi
+>de Cesare Ripa, qui identifie l’« Autorité ou Pouvoir » comme « une matrone […] vêtue d’un habit riche et somptueux [qui] dans sa main droite levée tienne les deux clefs élevées<note
+n="41"
+place="foot"
+xml:id="ftn82"
+><p
+>Cesare Ripa, <hi
+rend="italic"
+>op. cit</hi
+>., p. 35-36 : « <hi
+rend="italic"
+>matrona (…) vestita d’abito ricco e sontuoso [che] con la destra mano alzata tenghi due chiavi elevate</hi
+> ».</p
+></note
+> ». Un détail s’ajoute à ce que décrit Ripa : la tête de la figure rayonne de lumière telle un astre, et je crois qu’elle doit être identifiée encore une fois comme un pouvoir non générique mais spécifique, celui d’Alexandre VII. L’article que lui consacre Ripa suggère que : « [l]es clefs dénotent l’autorité et le pouvoir spirituel, comme le démontre fort bien le Christ Notre Seigneur et Rédempteur, quand par leur moyen il donna la suprême autorité à saint Pierre [...]. Elle tient ces clefs dans la main droite parce que le pouvoir spirituel est le principal et le plus noble de tous [...] et il n’y a personne qui ne soit sujet à celui du souverain pontife vicaire du Christ sur la terre<note
+n="42"
+place="foot"
+xml:id="ftn83"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+> : « <hi
+rend="italic"
+>Le chiavi denotano l’auttorità e potestà spirituale, come benissimo lo dimostra Cristo Nostro Signore e Redentore, quando per mezzo d’esse diede quella suprema auttorità a San Pietro (…). Tiene dette chiavi nella destra, perché la potestà spirituale è la principale; è più nobile di tutte l’altre (…) e non è alcuno che non sia suddito a quella del sommo Pontefice Vicario di Cristo in terra</hi
+> ».</p
+></note
+> ». Un hommage qui ne pouvait qu’être agréable au pontife dédicataire, exprimé par le jeu séculaire de l’héraldique au cœur de la ville qui s’obstinait à se proclamer république quoique ne l’étant pas.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig86.jpg"
+></graphic
+><head
+>Figure 84.<hi
+rend="italic"
+> Écus</hi
+>, Bologne, Porte Galliera, façade vers la ville.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig87.JPG"
+></graphic
+><head
+>Figure 85. Anonyme, <hi
+rend="italic"
+>Miniature du primier bimestre 1658</hi
+>, Bologne, Archive d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 28.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig88.jpg"
+></graphic
+><head
+>Figure 86. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du cinquième bimestre 1658</hi
+>, Bologne, Archive d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 38.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig89.jpg"
+></graphic
+><head
+>Figure 87. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du sixième bimestre 1660</hi
+>, Bologne, Archive d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 46.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig90.jpg"
+></graphic
+><head
+>Figure 88. Carlo Cignani e Emilio Taruffi, <hi
+rend="italic"
+>Entrée de Paul III Farnèse à Bologne en 1543</hi
+>, Bologne, Palais Public, sala Regia.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig91.jpg"
+></graphic
+><head
+>Figure 89. Albert Clouwet, sur un dessin de Pietro Martire Neri, <hi
+rend="italic"
+>Le cardinal Pietro Vidoni</hi
+>, in <hi
+rend="italic"
+>Effigies cardinalium nunc viventium, </hi
+>Rome, Giovanni Giacomo de Rossi, 1660-1676, The Trustee of the British Museum.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig92.JPG"
+></graphic
+><head
+>Figure 90. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du troisième bimestre 1662</hi
+>, Bologne, Archive d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 56.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig93.jpg"
+></graphic
+><head
+>Figure 91. Domenico Santi, dit le Mengazzino et Giovan Battista Caccioli, <hi
+rend="italic"
+>Galleria Vidoniana</hi
+>, Appartement du légat, Bologne, Palais communal, vue d’ensemble.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig94.jpg"
+></graphic
+><head
+>Figure 92. Domenico Fontana, frontispice des <hi
+rend="italic"
+>Ossequii poetici nell’ammirarsi in Bologna l’Heroica risoluzione della sereniss. Principessa Caterina Farnese di monacarsi nel Ven. Monastero delle Madri carmelitane scalze di Santa Teresa in Parma</hi
+>, In Bologna, Per Giacomo Monti, 1661, Bologne, Bibliothèque communale de l’Archiginnasio.</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig95.jpg"
+></graphic
+><head
+>Figure 93. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>Jupiter place l’étoile chigienne sur la tiare présentée par la Justice et la Paix</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig96.jpg"
+></graphic
+><head
+>Figure 94. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>La Prudence, inspirée par l’étoile chigienne tient la Fortune en lisière</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch06_Cavicchioli/Fig97.jpg"
+></graphic
+><head
+>Figure 95. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>Le Pouvoir domine les puissances infernales</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

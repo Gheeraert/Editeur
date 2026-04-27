@@ -1,0 +1,1215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Table des figures</title
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+type="accessibilityFeature"
+>alternativeText</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="loi"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Table des figures</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Figure 1. <hi
+rend="italic"
+>Antiphonaire de Léon X</hi
+>, Rome, ms. Capp.Sist.10 : Amico Aspertini,n fol. 66v (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p2"
+>Figure 2. <hi
+rend="italic"
+>Praeparatio ad missam pontificalem</hi
+>, New York, The Pierpont Morgan Library, ms. H.6 : Attavante degli Attavanti, fol. Iv-IIr. Gift of the Heineman. The Morgan Library &amp; Museum, New York.</p
+><p
+xml:id="p3"
+>Figure 3. <hi
+rend="italic"
+>Praeparatio ad missam pontificalem</hi
+>, New York, The Pierpont Morgan Library, ms. H.6 : Attavante degli Attavanti, fol. 7v. Gift of the Heineman. The Morgan Library &amp; Museum, New York.</p
+><p
+xml:id="p4"
+>Figure 4. <hi
+rend="italic"
+>Fiore di Virtù</hi
+>, Florence, Biblioteca Riccardiana, ms. Ricc. 1774 : Mariano del Buono, fol. 18r. Su concessione del Ministero della Cultura Biblioteca Riccardiana.</p
+><p
+xml:id="p5"
+>Figure 5. <hi
+rend="italic"
+>Fior di Virtù</hi
+> Florence, Biblioteca Riccardiana, ms. Ricc.1763 : Giovanni di Gregorio d’Antonio Ghinghi (copiste), fol. 13r. Su concessione del Ministero della Cultura Biblioteca Riccardiana.</p
+><p
+xml:id="p6"
+>Figure 6. <hi
+rend="italic"
+>Motets</hi
+>, Jena, ms. 2, fol. 2r (détail). Thüringer Universitäts- und Landesbibliothek.</p
+><p
+xml:id="p7"
+>Figure 7. <hi
+rend="italic"
+>Motets</hi
+>, atelier de Petrus Alamire, Rome, ms. Capp.Sist.36, fol. 66v (détails). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p8"
+>Figure 8. Ferdinando Ruano, <hi
+rend="italic"
+>Registre des dépenses</hi
+>, Vat. lat. 3968, fol. 1r. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p9"
+>Figure 9. Ferdinando Ruano, <hi
+rend="italic"
+>Lettres de Léon IX</hi
+>, 1551, Vat. lat. 3790, fol. 3v. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p10"
+>Figure 10. Ferdinando Ruano, <hi
+rend="italic"
+>Lettres d’Hildebert, évêque du Mans</hi
+>, 1551, Vat. lat. 3841, fol. 1r. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p11"
+>Figure 11. Ferdinando Ruano, saint Jérôme, <hi
+rend="italic"
+>Exposition sur les Psaumes</hi
+>, 1554, Vat. lat. 317, fol. 2v. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p12"
+>Figure 12. Missel, ms. Capp.Sist.154, fol. 3v (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p13"
+>Figure 13. Missel, ms. Capp.Sist.154, fol. 4r (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p14"
+>Figure 14. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, ms. Capp.Sist.67, fol. 4v (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p15"
+>Figure 15. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, ms. Capp.Sist.67, fol. 5r (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p16"
+>Figure 16.<hi
+rend="italic"
+> Officium ad Tertiam</hi
+>, ms. Capp.Sist.67, fol. 7v (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p17"
+>Figure 17.<hi
+rend="italic"
+> Officium ad Tertiam</hi
+>, ms. Capp.Sist.67, fol. 6v (détail). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p18"
+>Figure 18. Vincent Raymond et Apollonio de’ Bonfratelli, Lectionnaire, ms. Capp.Sist.213, folio de titre. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p19"
+>Figure 19. Prospero Fontana et atelier, devise de Jules III, portique de la villa Giulia. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p20"
+>Figure 20. Vincent Raymond (attribué à), <hi
+rend="italic"
+>Évangéliaire de Jules III</hi
+>, premier folio. © Bibliothèque capitulaire de Tolède.</p
+><p
+xml:id="p21"
+>Figure 21. Missel du cardinal Girolamo Dandini, premier folio. © Bibliothèque capitulaire de Tolède.</p
+><p
+xml:id="p22"
+>Figure 22. Vignette de titre pour Antonio Massa,<hi
+rend="italic"
+> De exercitatione iurisperitorum</hi
+>, Rome, 1550. Gallica.bnf.fr/BNF, 8-J-2363.</p
+><p
+xml:id="p23"
+>Figure 23. Vignette de titre pour Giovanni Girolamo Albani, <hi
+rend="italic"
+>Erudita atque luculenta disputatio, </hi
+>Rome, 1553. Biblioteca General Histórica de la Universidad de Salamanca (Espagne).</p
+><p
+xml:id="p24"
+>Figure 24. Vignette de titre pour Giovanni Battista Poiana, <hi
+rend="italic"
+>De iobileo et indulgentiis</hi
+>, Rome, 1550. Su concessione della Biblioteca Casanatense, Rome, MiC. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p25"
+>Figure 25. Vignette de titre pour les <hi
+rend="italic"
+>Regulae tres S. D. N. D. Iulii diuina prouidentia Papae. III, </hi
+>Rome, 1550. Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma.</p
+><p
+xml:id="p26"
+>Figure 26. Vignette de titre pour Silvestro Sigonio,<hi
+rend="italic"
+> De concordia servanda,</hi
+> Rome, 1550. Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma.</p
+><p
+xml:id="p27"
+>Figure 27. Vignette de titre pour <hi
+rend="italic"
+>Contra hebreos</hi
+>…, Rome, 1554. Su concessione della Biblioteca Casanatense, Roma, MiC. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p28"
+>Figure 28. Vignette pour le privilège du commentaire d’Eustathius sur l’<hi
+rend="italic"
+>Iliade, </hi
+>vol. IV, Rome, 1550. Bibliothèque Sainte-Geneviève, FOL Y 7 INV 11 RES.</p
+><p
+xml:id="p29"
+>Figure 29. Vignette de titre pour Uberto Foglietta, <hi
+rend="italic"
+>In festo omnium Beatorum, </hi
+>Rome, 1553. Université de Turin.</p
+><p
+xml:id="p30"
+>Figure 30. Vignette de titre pour les <hi
+rend="italic"
+>Novae regvlae cancellariae apostolicae, </hi
+>Rome, 1552. Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma.</p
+><p
+xml:id="p31"
+>Figure 31. Lettrine pour Ambrosio Catharino, <hi
+rend="italic"
+>Enarrationes in quinque priora capita libri geneseos</hi
+>, Rome, 1552. National Central Library of Rome, domaine public, PDM 1.0.</p
+><p
+xml:id="p32"
+>Figure 32. Vignette pour <hi
+rend="italic"
+>Bullae diuersorum pontificum</hi
+>, Rome, 1550. Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p33"
+>Figure 33. Vignette pour Bartolomej Georgijevic, <hi
+rend="italic"
+>Libellus vere Christiana lectione…, </hi
+>Rome, 1552. Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma.</p
+><p
+xml:id="p34"
+>Figure 34. Ioannes Magnus, <hi
+rend="italic"
+>Historia de omnibus Gothorum Sueonumque regibus,</hi
+> Rome, 1554. Médiathèque d’Orléans, Rés.E2460, CESR, http://www.bvh.univ-tours.fr.</p
+><p
+xml:id="p35"
+>Figure 35. Page de titre pour Palestrina, <hi
+rend="italic"
+>Missarum liber primus</hi
+>, Rome, Valerio &amp; Luigi Dorico, 1554. Museo internazionale e biblioteca della musica, Bologne.</p
+><p
+xml:id="p36"
+>Figure 36. Lettrine pour Palestrina, <hi
+rend="italic"
+>Missarum liber primus</hi
+>, Rome, Valerio &amp; Luigi Dorico, 1554. Bibliothèque du conservatoire de Sainte Cécile, Rome. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p37"
+>Figure 37. Vignette de titre pour Prospero Danza, <hi
+rend="italic"
+>La elettion del beatissimo &amp; summo pontifice Iulio tertio</hi
+>, Venise, 1550, R.I.VI.340(int.8). © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p38"
+>Figure 38. Vignette de titre pour Jacopo Naccchiante, <hi
+rend="italic"
+>Enarrationes piae, doctae, et catholicae : in epistolam Pauli ad Ephesios, </hi
+>Venetiis, 1553. By permission of Biblioteca civica Bertoliana, Vicenza.</p
+><p
+xml:id="p39"
+>Figure 39. Vignette de titre pour Tommaso Giannoti Rangoni, <hi
+rend="italic"
+>De vita hominis ultra CXX. annos protrahenda, </hi
+>Venise, 1553. BNF, RES RT-49. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p40"
+>Figure 40. Vignette de titre pour Lorenzo Davidico, <hi
+rend="italic"
+>Anotomia delli vitii, </hi
+>Florence, 1550, Stamp.De.Luca.V.40255. Su concessione della Biblioteca Casanatense, Rome, MiC. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p41"
+>Figure 41. Vignette de titre pour Lorenzo Dal Gambaro Sclarici, <hi
+rend="italic"
+>De concilio liber I, </hi
+>Bologne, apud Anselmum Giaccarelum, 1551. Su concessione della Biblioteca Casanatense, Rome, MiC. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p42"
+>Figure 42. Vignette de titre pour Bartolomeo Maggi, <hi
+rend="italic"
+>De vulnerum sclopetorum et bombardarum curatione, </hi
+>Bologne, 1552, Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p43"
+>Figure 43. Gauges de’ Gozze, <hi
+rend="italic"
+>Se dalle armi, o insegne, che parlano </hi
+>[...], Roma, Vitale Mascardi, 1637, page de titre, Biblioteca Nazionale Centrale « Vittorio Emanuele II » di Roma. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p44"
+>Figure 44. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, Romae, Typis haeredum Francisci Corbelletti, 1638, page de titre gravée par Johann Friedrich Greuter sur un dessin de Giovan Francesco Romanelli. © Getty Research Institute, Los Angeles (92-B22642).</p
+><p
+xml:id="p45"
+>Figure 45. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, p. 661. © Getty Research Institute, Los Angeles (92-B22642).</p
+><p
+xml:id="p46"
+>Figure 46. Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae</hi
+>, p. 677, détail des effigies de Richard II et de la reine Anne sur le tableau perdu du Collège anglais. © Getty Research Institute, Los Angeles (92-B22642).</p
+><p
+xml:id="p47"
+>Figure 47. Xylographie pour les <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale perdue d’Angelotto Normanni († 1378), autrefois dans l’église de Sant’Antonio à Camaldoli. Collection particulière, Fabrizio Federici.</p
+><p
+xml:id="p48"
+>Figure 48. Écu d’Everso II dell’Anguillara, première moitié du <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Rome, Hôpital du Latran. Photographie Fabrizio Federici.</p
+><p
+xml:id="p49"
+>Figure 49. Armes de la famille Casali, 1429, Rome, Palais Casali. Photographie Fabrizio Federici.</p
+><p
+xml:id="p50"
+>Figure 50. Xylographie représentant les armes de la famille Casali, d’après G. B. Casali, <hi
+rend="italic"
+>De profanis, et sacris veteribus ritibus</hi
+>, Romae, Ex typographia Andreae Phaei, 1645. Ville de Grenoble, bibliothèque municipale, C.1969.</p
+><p
+xml:id="p51"
+>Figure 51. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant l’écu Gualdi sur le flanc nord du Palais sénatorial. Collection particulière, Fabrizio Federici.</p
+><p
+xml:id="p52"
+>Figure 52. Armes d’un sénateur de la famille Gualdi, Galeotto ou Francesco, première moitié du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Rome, Palais sénatorial. Photographie Fabrizio Federici.</p
+><p
+xml:id="p53"
+>Figure 53. Pierre tombale de Giuliano Porcari († 1282), Rome, San Giovanni della Pigna. Photographie Fabrizio Federici.</p
+><p
+xml:id="p54"
+>Figure 54. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale de Pietro Muti († 1390) dans l’église de San Pantaleo. Collection particulière, Fabrizio Federici.</p
+><p
+xml:id="p55"
+>Figure 55. Xylographie pour le traité des <hi
+rend="italic"
+>Memorie sepolcrali</hi
+> figurant la pierre tombale de Lello Maddaleni († 1390) dans l’église de Santa Maria sopra Minerva. Collection particulière, Fabrizio Federici.</p
+><p
+xml:id="p56"
+>Figure 56. Pierre tombale de Lello Maddaleni, Rome, Santa Maria sopra Minerva. Photographie Fabrizio Federici.</p
+><p
+xml:id="p57"
+>Figure 57. Armes de la famille Cavalieri à l’entrée de la Tour du Papito, Rome, Largo di Torre Argentina. Photographie Fabrizio Federici.</p
+><p
+xml:id="p58"
+>Figure 58. Armes de Taddeo di Cecco da Barberino, 2<hi
+rend="sup"
+>e</hi
+> moitié du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Barberino di Val d’Elsa, chapelle de San Bartolo, sacristie. Photographie Gruppo Archeologico Achu APS.</p
+><p
+xml:id="p59"
+>Figure 59. Giovanni Luigi Valesio, <hi
+rend="italic"
+>Stemma del cardinale Innocenzo X Panfili e figure allegoriche, </hi
+>gravure. Bologne, Pinacoteca Nazionale, Gabinetto Disegni e Stampe, 83 Picc. Coll. II. Attribution 4.0 International (CC BY 4.0).</p
+><p
+xml:id="p60"
+>Figure 60. Rome, Santa Maria in Vallicella, Paolo Maruscelli et collaborateurs, mémorial du cardinal Girolamo Pamphili, 1634. Photographie Daniela del Pesco.</p
+><p
+xml:id="p61"
+>Figure 61. Rome, palais Pamphili, salle des Paysages, armes papales d’Innocent X Pamphili. © Daniela del Pesco. Photographie Daniela del Pesco.</p
+><p
+xml:id="p62"
+>Figure 62. Gubbio, palais Pamphili, façade sur la place. Photographie Daniela del Pesco.</p
+><p
+xml:id="p63"
+>Figure 63. Gubbio, palais Pamphili, salle à l’étage noble, emblème de la colombe Pamphili inscrit dans la cheminée. Photographie Daniela del Pesco.</p
+><p
+xml:id="p64"
+>Figure 64. Gubbio, palais Pamphili, salon à l’étage noble, détail de la décoration à fresque avec l’emblème de la colombe Pamphili. Photographie Daniela del Pesco.</p
+><p
+xml:id="p65"
+>Figure 65. Gubbio, ancien cimetière près de l’église San Secondo, chapelle Pamphili, Jacopo Bedi, <hi
+rend="italic"
+>Martyre de saint Sébastien</hi
+>, 1458, fresque (détail). Photographie Daniela del Pesco.</p
+><p
+xml:id="p66"
+>Figure 66. Gubbio, ancien cimetière près de l’église San Secondo, chapelle Pamphili, pierre tombale avec l’écu des Pamphili. Photographie Daniela del Pesco.</p
+><p
+xml:id="p67"
+>Figure 67. Gubbio, palais des Consuls, architrave du portail d’entrée avec emblèmes de la ville (1332-1336). Photographie Daniela del Pesco.</p
+><p
+xml:id="p68"
+>Figure 68. <hi
+rend="italic"
+>Gubbio Città Regia Antichiss[ima] dell'Umbria</hi
+>, gravure, d’après un dessin d’Ignazio Cassetta, Johannes Blaeu, Amsterdam, 1663, reproduit dans Johannes Blaeu, <hi
+rend="italic"
+>Nouveau théâtre d’Italie ou description exacte de ses villes, palais, églises, etc. Tome Quatrième</hi
+>, À Amsterdam, Par le soin de Pierre Mortier Libraire, 1704. Détail montrant la maison des Pamphili, indiquée par la lettre Z. Institut national d’histoire de l’art (France), Attribution 4.0 International (CC BY 4.0).</p
+><p
+xml:id="p69"
+>Figure 69. Armoiries « <hi
+rend="italic"
+>Romae Panfiliorum</hi
+> », dans Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae,</hi
+> Romae, Typis haered. Francisci Corbelletti, 1638, p. 438. © Getty Research Institute, Los Angeles ((92-B22642).</p
+><p
+xml:id="p70"
+>Figure 70. Armoiries de la famille Pamphili (sans attributs cardinalices ou papaux), Rome, palais Pamphili, escalier de l’aile vers la place Pasquino. Photographie Daniela del Pesco.</p
+><p
+xml:id="p71"
+>Figure 71. Rome, palais Pamphili, loggia de la cour centrale, angle nord-est. Photographie Daniela del Pesco.</p
+><p
+xml:id="p72"
+>Figure 72. Rome, palais Pamphili, loggia de la cour centrale (détail). Photographie Daniela del Pesco.</p
+><p
+xml:id="p73"
+>Figure 73. Portrait d’Innocent X, dans Athanasius Kircher, <hi
+rend="italic"
+>Obeliscus Pamphilius</hi
+>, gravure. © Emblem Collection of the University of Illinois.</p
+><p
+xml:id="p74"
+>Figure 74. Jacopo Antonio Fancelli d’après un dessin de Gian Lorenzo Bernini, armes d’Innocent X Pamphili, marbre, Fontaine des Quatre Fleuve (armoiries côté nord). Photographie Daniela del Pesco.</p
+><p
+xml:id="p75"
+>Figure 75. Antonio Raggi, d’après un dessin de Gian Lorenzo Bernini, armes d’Innocenzo X Pamphili, marbre, Fontaine des Quatre Fleuves (armoiries côté sud). Jastrow, domaine public, via Wikimedia Commons.</p
+><p
+xml:id="p76"
+>Figure 76. Basilique de Saint-Jean-de-Latran, intérieur. Photographie Daniela del Pesco.</p
+><p
+xml:id="p77"
+>Figure 77. Basilique de Saint-Jean-de-Latran, décor en stuc avec l’écu du pape Pamphili, double porte entre la basilique et le palais du Latran, d’après un dessin de Francesco Borromini. Photographie Daniela del Pesco.</p
+><p
+xml:id="p78"
+>Figure 78. Francesco Borromini, étude pour la porte double entre le palais du Latran et la basilique, dessin à la mine de plomb (détail). Vienne, Albertina, Az Rom 416.</p
+><p
+xml:id="p79"
+>Figure 79. Francesco Borromini, étude pour la verrière de la fenêtre de la façade orientale de Saint-Jean-de-Latran, dessin à la mine de plomb. Vienne, Albertina, Az Rom 454.</p
+><p
+xml:id="p80"
+>Figure 80. Armes d’Innocent X Pamphili à la fontaine des Quatre Fleuves, côté nord, dans Filippo Juvarra, <hi
+rend="italic"
+>Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate,</hi
+> Antonio De Rossi ed., a Roma, 1711, pl. 15, gravure. @ Getty research institute, Los Angeles (1379-314).</p
+><p
+xml:id="p81"
+>Figure 81. Armes d’Innocent X Pamphili, à la fontaine des Quatre Fleuves, côté sud, dans Filippo Juvarra<hi
+rend="italic"
+>, Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Antonio De Rossi ed., a Roma, 1711, pl. 18, gravure. @ Getty research institute, Los Angeles (1379-314).</p
+><p
+xml:id="p82"
+>Figure 82. Armes d’Innocent X Pamphili à Saint-Jean-de-Latran, arche centrale de la nef principale, in Filippo Juvarra, <hi
+rend="italic"
+>Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Antonio De Rossi ed., a Roma, 1711, pl. 30, gravure. @ Getty research institute, Los Angeles (1379-314).</p
+><p
+xml:id="p83"
+>Figure 83. Filippo Juvarra, étude pour la pl. 30 de la <hi
+rend="italic"
+>Raccolta Di Varie Targhe </hi
+>(Écu Pamphili, Saint-Jean-de-Latran, arche centrale de la nef principale), dessin, MM 117, plume, crayon, encre marron, aquarelle. New York, The Metropolitan Museum of Art, Rogers Fund, 1969, 69.655.</p
+><p
+xml:id="p84"
+>Figure 84. <hi
+rend="italic"
+>Écus</hi
+>, Bologne, Porte Galliera, façade vers la ville. Sailko, licence CC BY-SA 3.0, via Wikimedia Commons.</p
+><p
+xml:id="p85"
+>Figure 85. Anonyme, <hi
+rend="italic"
+>Miniature du primier bimestre 1658</hi
+>, Bologne, Archives d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 28. Photographie Sonia Cavicchioli.</p
+><p
+xml:id="p86"
+>Figure 86. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du cinquième bimestre 1658</hi
+>, Bologne, Archives d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 38. Photographie Sonia Cavicchioli.</p
+><p
+xml:id="p87"
+>Figure 87. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du sixième bimestre 1660</hi
+>, Bologne, Archives d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 46. Photographie Sonia Cavicchioli.</p
+><p
+xml:id="p88"
+>Figure 88. Carlo Cignani e Emilio Taruffi, <hi
+rend="italic"
+>Entrée de Paul III Farnèse à Bologne en 1543</hi
+>, Bologne, Palais Public, sala Regia. Archivio fotografico Musei Civici d’Arte Antica di Bologna, avec l'aimable autorisation de Silvia Battistini, directrice, que nous remercions.</p
+><p
+xml:id="p89"
+>Figure 89. Albert Clouwet, sur un dessin de Pietro Martire Neri, <hi
+rend="italic"
+>Le cardinal Pietro Vidoni</hi
+>, in <hi
+rend="italic"
+>Effigies cardinalium nunc viventium, </hi
+>Rome, Giovanni Giacomo de Rossi, 1660-1676. © The Trustees of the British Museum.</p
+><p
+xml:id="p90"
+>Figure 90. Giovanni Andrea Abanti, <hi
+rend="italic"
+>Miniature du troisième bimestre 1662</hi
+>, Bologne, Archive d’État, <hi
+rend="italic"
+>Anziani Consoli, Insignia</hi
+>, vol. VIII, p. 56. Photographie Sonia Cavicchioli.</p
+><p
+xml:id="p91"
+>Figure 91. Domenico Santi, dit le Mengazzino et Giovan Battista Caccioli, <hi
+rend="italic"
+>Galleria Vidoniana</hi
+>, Appartement du légat, Bologne, Palais communal, vue d’ensemble. Di Waltre manni - Opera propria, licence CC BY-SA 4.0, via Wikimedia Commons.</p
+><p
+xml:id="p92"
+>Figure 92. Domenico Fontana, frontispice des <hi
+rend="italic"
+>Ossequii poetici nell’ammirarsi in Bologna l’Heroica risoluzione della sereniss. Principessa Caterina Farnese di monacarsi nel Ven. Monastero delle Madri carmelitane scalze di Santa Teresa in Parma</hi
+>, In Bologna, Per Giacomo Monti, 1661, Bologne, Bibliothèque communale de l’Archiginnasio.</p
+><p
+xml:id="p93"
+>Figure 93. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>Jupiter place l’étoile chigienne sur la tiare présentée par la Justice et la Paix</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte. Archivio fotografico Musei Civici d’Arte Antica di Bologna, avec l'aimable autorisation de Silvia Battistini, directrice, que nous remercions.</p
+><p
+xml:id="p94"
+>Figure 94. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>La Prudence, inspirée par l’étoile chigienne tient la Fortune en lisière</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte. Archivio fotografico Musei Civici d’Arte Antica di Bologna, avec l'aimable autorisation de Silvia Battistini, directrice, que nous remercions.</p
+><p
+xml:id="p95"
+>Figure 95. Giovan Battista Caccioli et Domenico Santi, dit le Mengazzino, <hi
+rend="italic"
+>Le Pouvoir domine les puissances infernales</hi
+>, Bologne, Palais communal, Galleria Vidoniana, détail de la voûte. Archivio fotografico Musei Civici d’Arte Antica di Bologna, avec l'aimable autorisation de Silvia Battistini, directrice, que nous remercions.</p
+><p
+xml:id="p96"
+>Figure 96. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, détail du frontispice, 1<hi
+rend="sup"
+>er</hi
+> état. Florence, proprietà Stato, Accademia di Belle Arti di Firenze, no 0900452291-8, licence CC-BY 4.0.</p
+><p
+xml:id="p97"
+>Figure 97. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, détail du frontispice, 2<hi
+rend="sup"
+>e</hi
+> état, Stampe.VI.5. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p98"
+>Figure 98. Giovanni Battista Piranesi, « Frontispiece: Urbis Aeternae Vestigia (The Footsteps of the Eternal City) », <hi
+rend="italic"
+>Le antichità romane</hi
+>, 1756, etching, 515 × 760 mm, détail du frontispice, 3<hi
+rend="sup"
+>e</hi
+> état., inv. BdH boek 2 a 3 (PK). Collection Museum Boijmans Van Beuningen, Rotterdam. Gift Dr J. C. J. Bierens de Haan / photographie : Rik Klein Gotink.</p
+><p
+xml:id="p99"
+>Figure 99. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Vasi, candelabri, …</hi
+>, 1778, frontispice du vol. 2. © Getty Research Institute, Los Angeles (90-B18452).</p
+><p
+xml:id="p100"
+>Figure 100. Dessin d’un rhyton, album Ghezzi, Ott. lat. 3105. © Biblioteca Apostolica Vaticana, 2025.</p
+><p
+xml:id="p101"
+>Figure 101. Giovanni Battista Piranesi, détail du tombeau de Cecilia Metella, <hi
+rend="italic"
+>Vedute di Roma</hi
+>. Collection particulière, Yvan Loskoutoff.</p
+><p
+xml:id="p102"
+>Figure 102. Giovanni Battista Piranesi, dessin des armes de Clément XIII Rezzonico. The Met Museum, 52.570.155. © The Elisha Whittelsey Collection, The Elisha Whittelsey Fund, 1952.</p
+><p
+xml:id="p103"
+>Figure 103. Giovanni Battista Piranesi, <hi
+rend="italic"
+>De Romanorum magnificentia et architectura</hi
+>, 1761, frontispice. Domaine public, via Wikimedia Commons.</p
+><p
+xml:id="p104"
+>Figure 104. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Le rovine del castello dell’acqua Giulia, </hi
+>1761, cul-de-lampe, Yale University Art Gallery, The Arthur Ross Collection, 2012.159.21.</p
+><p
+xml:id="p105"
+>Figure 105. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Lapides Capitolini sive fasti consularesque Romanorum, </hi
+>Romae, Typis Generosi Salomoni, 1762, frontispice. Livres rares et collections spécialisées, Bibliothèques McGill.</p
+><p
+xml:id="p106"
+>Figure 106. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo</hi
+>, Roma, s. l., 1764, frontispice. © Getty Research Institut, Los Angeles (90-B18472).</p
+><p
+xml:id="p107"
+>Figure 107. Giovanni Battista Piranesi, <hi
+rend="italic"
+>Diverse maniere d’adornare i cammini,</hi
+> 1769, frontispice. Gallica.bnf.fr/BNF, Montpellier, médiathèque centrale Émile Zola, RTG008.</p
+><p
+xml:id="p108"
+>Figure 108. Giovanni Battista Piranesi, portail du prieuré de Malte, Rome (détail). Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p109"
+>Figure 109. Giovanni Battista Piranesi, portail du prieuré de Malte, Rome (détail). Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p110"
+>Figure 110. Giovanni Battista Piranesi, façade de Santa Maria del Priorato, Rome (détail). © Archi Diap. Dipartimento di Architettura. Progetto Sapienza Università di Roma, Paolo Marcoaldi.</p
+><p
+xml:id="p111"
+>Figure 111. Giovanni Battista Piranesi, extérieur de l’abside du chœur de Santa Maria del Priorato, Rome (détail). Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p112"
+>Figure 112. Giovanni Battista Piranesi, armes de Giovan Battista Rezzonico, chœur de Santa Maria del Priorato, Rome. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p113"
+>Figure 113. Giovanni Battista Piranesi, composition héraldique en l’honneur de Giovan Battista Rezzonico, Santa Maria del Priorato, Rome. Photographie Yvan Loskoutoff.</p
+><p
+xml:id="p114"
+>Figure 114. Giacomo Grimaldi, <hi
+rend="italic"
+>Instrumenta translationum</hi
+>, Milan, bibliothèque Ambrosienne, ms. F 227 inf., copie de la scène de la bénédiction du cycle de fresques de la loggia du Latran. Domaine public, via Wikimedia Commons.</p
+><p
+xml:id="p115"
+>Figure 115. La prééminence des insignes pontificaux sur le Palazzo Vechio. Photographie Matteo Ferrari.</p
+><p
+xml:id="p116"
+>Figure 116. Architrave du palais du Peuple de Gubbio. Photographie Laurent Hablot.</p
+><p
+xml:id="p117"
+>Figure 117. Relief de pierre de la cité d’Ascoli Piceno. Photographie Andrea Di Benedetto.</p
+><p
+xml:id="p118"
+>Figure 118. Allégorie héraldique de la ville de Florence, vers 1360-1370, par Chini Galileo (fin du <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle). Florence, Palazzo dell’Arte della Seta, 0900749643. Licence CC-BY 4.0.</p
+><p
+xml:id="p119"
+>Figure 119. Loggia de Viterbe. Photographie Jean-Pierre Dalbéra.</p
+><p
+xml:id="p120"
+>Figure 120. Clé de voûte aux armes de Guy de Castelnau-Calmont, évêque de Périgueux. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p121"
+>Figure 121. Jean II de Castelnau-Calmont et son saint patron, verrière du chœur, vers 1510-1514. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p122"
+>Figure 122. Vue générale des stalles de la collégiale de Prudhomat. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p123"
+>Figure 123. Armoiries du baron de Castelnau-Calmont, stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p124"
+>Figure 124. Armoiries de Jean II de Castelnau-Calmont et de Marie de Culan, stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p125"
+>Figure 125. Détail du dauphin, stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p126"
+>Figure 126. Saint Jules I<hi
+rend="sup"
+>er</hi
+>, allégorie du pape Jules II, stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p127"
+>Figure 127. Saint Jérôme, allégorie du cardinal François Guillaume de Clermont-Lodève, stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p128"
+>Figure 128. Détail des hermines et des feuilles de chêne sculptées sur une colonnette des stalles du chœur. Photographie Emmanuel Moureau.</p
+><p
+xml:id="p129"
+>Figure 129. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras, faicte à tresillustre &amp; trespuisssant prince ALEXANDRE FARNES, Cardinal, Legat d’Avignon, Vicechancelier du S. siege Apostolique</hi
+> par Antoine Blégier, Avignon, Par Macé Bonhomme, aux Changes, 1553, p. Da verso. Collection particulière, Camille Larraz.</p
+><p
+xml:id="p130"
+>Figure 130. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras… </hi
+>par Antoine Blégier, Avignon, 1553, p. D. Collection particulière, Camille Larraz.</p
+><p
+xml:id="p131"
+>Figure 131. Avignon, Archives municipales, CC 468, Comptes de Gaspard Droin, dépenses extraordinaires, non numéroté. Collection particulière, Camille Larraz.</p
+><p
+xml:id="p132"
+>Figure 132. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras… </hi
+>par Antoine Blégier, Avignon, 1553, p. B ii. Collection particulière, Camille Larraz.</p
+><p
+xml:id="p133"
+>Figure 133. Anonyme, <hi
+rend="italic"
+>Recueil de statuts et de privilèges de la ville d’Avignon</hi
+>. Avignon, Bibliothèque municipale, ms. 2834.</p
+><p
+xml:id="p134"
+>Figure 134. Jean Bœuf, <hi
+rend="italic"
+>Frontispice</hi
+>, vers 1598. Paris, BNF, Latin 8971.</p
+><p
+xml:id="p135"
+>Figure 135. Anonyme, page de titre du <hi
+rend="italic"
+>Bullarium civitatis Avenionensis</hi
+> <hi
+rend="italic"
+>seu Bullae</hi
+>, Lyon, Joannis Amati Candy, 1657. Paris, BNF, département Philosophie, histoire, sciences de l’homme, FOL-LK7-647.</p
+><p
+xml:id="p136"
+>Figure 136. Portrait du cardinal Benedetto Giustiniani. Michel Natalis, d’après un dessin de Giovanni Citosibio Guidi, gravure (238 mm × 170 mm), Rome, 1636-1647, dans <hi
+rend="italic"
+>Galleria Giustiniana del Marchese Vincenzo Giustiniani</hi
+>, Rome, vol. 2. BNF, département Réserve des livres rares, Rés.J.485 © Gallica.bnf.fr/BNF.</p
+><p
+xml:id="p137"
+>Figure 137. Rome, église Sainte-Prisca, maître autel, Domenico Cresti,<hi
+rend="italic"
+> Baptême de sainte Prisca</hi
+>. Photographie Rocco Ronzani.</p
+><p
+xml:id="p138"
+>Figure 138. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, image de saint Pierre, repeint en saint Augustin au <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. Photographie Rocco Ronzani.</p
+><p
+xml:id="p139"
+>Figure 139. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Ange portant la férule pontificale</hi
+>. Photographie Rocco Ronzani.</p
+><p
+xml:id="p140"
+>Figure 140. Rome, église Sainte-Prisca, abside, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Ange portant les clefs de saint Pierre</hi
+>. Photographie Rocco Ronzani.</p
+><p
+xml:id="p141"
+>Figure 141. Rome, église Sainte-Prisca, fresques de la nef centrale, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Saint Benoît de Nursie</hi
+>. Photographie Rocco Ronzani.</p
+><p
+xml:id="p142"
+>Figure 142. Rome, église Sainte-Prisca, fresques de la nef centrale, Anastasio Fontebuoni et collaborateurs, <hi
+rend="italic"
+>Saint Jean Gualbert</hi
+>. Photographie Rocco Ronzani.</p
+><p
+xml:id="p143"
+>Figure 143. Armes de la congrégation de Vallombreuse, miniature, Bibliothèque nationale de Florence, Conventi soppressi, C.V.1912, f. 2r (8 mai 1513).</p
+><p
+xml:id="p144"
+>Figure 144. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, armes de Sixte Quint Peretti et, au-dessous, du cardinal Giustiniani. Photographie Rocco Ronzani.</p
+><p
+xml:id="p145"
+>Figure 145. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, lion héraldique Peretti couronné par un ange. Photographie Rocco Ronzani.</p
+><p
+xml:id="p146"
+>Figure 146. Rome, église Sainte-Prisca, décor de marbre du maître autel, armes du cardinal Giustiniani. Photographie Rocco Ronzani.</p
+><p
+xml:id="p147"
+>Figure 147. Rome, église Sainte-Prisca, inscription commémorative encadrée des armes du cardinal Giustiniani et de leurs meubles (aigle éployée et château). Photographie Rocco Ronzani.</p
+><p
+xml:id="p148"
+>Figure 148. Rome, église Sainte-Prisca, fresques de la crypte, Anastasio Fontebuoni et collaborateurs, armes Giustiniani (l’humidité a fait perdre l’aigle qui avait peut-être été peinte <hi
+rend="italic"
+>a tempera</hi
+>). Photographie Rocco Ronzani.</p
+><p
+xml:id="p149"
+>Figure 149. Rome, église Sainte-Prisca, frise de l’escalier d’accès à la crypte, détail héraldique Giustiniani (château). Photographie Rocco Ronzani.</p
+><p
+xml:id="p150"
+>Figure 150. Rome, église Sainte-Prisca, frise de l’escalier d’accès à la crypte, détail héraldique Giustiniani (aigle). Photographie Rocco Ronzani.</p
+><p
+xml:id="p151"
+>Figure 151. Rome, église Sainte-Prisca, crypte, meuble des armes Giustiniani (aigle) sur le bénitier. Photographie Rocco Ronzani.</p
+><p
+xml:id="p152"
+>Figure 152. Rome, église Sainte-Prisca, crypte, armes de Clément VIII Aldobrandini. Photographie Rocco Ronzani.</p
+><p
+xml:id="p153"
+>Figure 153. Rome, église Sainte-Prisca, abside, inscription surmontée des armes de Callixte III Borgia. Photographie Rocco Ronzani.</p
+><p
+xml:id="p154"
+>Figure 154. Rome, église Sainte-Prisca, presbytère, inscription commémorative avec les armes cardinalices et papales d’Angelo Giuseppe Roncalli, saint Jean XXIII. Photographie Rocco Ronzani.</p
+><p
+xml:id="p155"
+>Figure 155. Rome, église Sainte-Prisca, sacristie, chape portant l’écu prélatice de Camillo Alfonso de Romanis (1885-1950), historien de l’ordre augustin, curé de Sainte-Prisca puis vicaire général de la Cité du Vatican et préfet du sacraire apostolique (1937-1950). Photographie Rocco Ronzani.</p
+><p
+xml:id="p156"
+>Figure 156. Le baldaquin de la basilique Saint-Pierre, photographie. Jebulon, licence CC0 1.0 Universel, via Wikimedia Commons.</p
+><p
+xml:id="p157"
+>Figure 157. La remise des clefs, bas-relief de Ambrogio Buonvicino, 1614-1632, façade de la basilique Saint-Pierre. Vincenzo.paglione, domaine public, via Wikimedia Commons.</p
+><p
+xml:id="p158"
+>Figure 158. Monument funéraire du pape Innocent VIII Cibo, 1492, Antonio Pollaiolo, basilique Saint-Pierre. Torvindus, licence CC BY-SA 3.0, via Wikimedia Commons.</p
+><p
+xml:id="p159"
+>Figure 159. Monument funéraire de Mathilde de Canossa, 1644, Le Bernin, basilique Saint-Pierre. © St Peters basilica.</p
+><p
+xml:id="p160"
+>Figure 160. Plan de <hi
+rend="italic"
+>Sede Vacante</hi
+> au décès d’Urbain VIII Barberini, 1644. Issu de Robert Van Audenaerd, <hi
+rend="italic"
+>Nuova Et Esatta Pianta Del Conclave Con Le Funzioni</hi
+>…, 1647, Domenico De Rossi, Rome. Fondo Corsini, volume 58N19, S-FC122177. Rome, Istituto centrale per la grafica, per gentile concessione del Ministero della cultura, proprietà Accademia Naxionale dei Lincei.</p
+><p
+xml:id="p161"
+>Figure 161. Plan de <hi
+rend="italic"
+>Sede Vacante</hi
+> au décès d’Alexandre VIII Ottoboni, avec le blason du cardinal Médicis dédicataire, anonyme, 1691, gravure. Domaine public.</p
+><p
+xml:id="p162"
+>Figure 162. Cortège du <hi
+rend="italic"
+>Possesso</hi
+> de Léon XI Médicis, [Rome], Cum priuilegio et superior permissu Io. Antonij de Paulis for. Romae, 1605, gravure. © Getty Research Institute, Los Angeles (2563-899).</p
+><p
+xml:id="p163"
+>Figure 163. Théâtre de la canonisation des cinq saints, 1622, Matteo Greuter, gravure. Domaine public, via Wikimedia Commons.</p
+><p
+xml:id="p164"
+>Figure 164. Giovanni Luigi Valesio, <hi
+rend="italic"
+>L’Apothéose des armes Ludovisi, </hi
+>c. 1623, fresque, Rome, Casino Ludovisi, voûte de la salle « <hi
+rend="italic"
+>dell’armadio de’ libri</hi
+> » ou « <hi
+rend="italic"
+>della Stemma</hi
+> ». Photographie Frédéric Cousinié.</p
+><p
+xml:id="p165"
+>Figure 165. Raphaël, <hi
+rend="italic"
+>Angelots supportant l’écu papal</hi
+>, 1508, fresque, Cité du Vatican, voûte de la chambre de la Signature. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p166"
+>Figure 166. Pietro da Cortona, <hi
+rend="italic"
+>Voûte du grand salon du palais Barberini</hi
+>, 1632-1638, fresque, Rome (détail). Photographie Frédéric Cousinié.</p
+><p
+xml:id="p167"
+>Figure 167. Pietro da Cortona, <hi
+rend="italic"
+>Voûte de l’« Anticamera de’ cortigiani » ou salle de Mars</hi
+>, 1644-1646, fresque, Florence, palais Pitti. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p168"
+>Figure 168. Antonio Domenico Gabbiani, <hi
+rend="italic"
+>L’Apothéose de la famille Corsini</hi
+>, c. 1696, huile sur toile, modèle pour la fresque du salon du palais Corsini al Parione, Florence. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p169"
+>Figure 169. Pietro da Cortona, <hi
+rend="italic"
+>Décor de la voûte de la petite galerie du palais Barberini</hi
+>, 1632, fresque, Rome. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p170"
+>Figure 170. Domenico Maria Canuti, <hi
+rend="italic"
+>L’Apothéose de Romulus</hi
+>, c. 1675-1676, fresque, Rome, palais Altieri, voûte de l’antichambre. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p171"
+>Figure 171. Domenico Maria Canuti, <hi
+rend="italic"
+>L’Apothéose de Romulus</hi
+>, c. 1675-1676, fresque, détail d’un des angles de la voûte avec l’étoile des Altieri. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p172"
+>Figure 172. Paul Bril, <hi
+rend="italic"
+>Le Martyre de saint Clément</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p173"
+>Figure 173. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>La Sala Clementina</hi
+>, c. 1696-1602, Cité du Vatican. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p174"
+>Figure 174. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>Anges, putti et allégories</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail des parois latérales. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p175"
+>Figure 175. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>L’Apothéose de saint Clément</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, voûte. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p176"
+>Figure 176. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>L’écu Aldobrandini</hi
+>, c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail d’un des angles de la voûte. Photographie Frédéric Cousinié.</p
+><p
+xml:id="p177"
+>Figure 177. Cherubino et Giovanni Alberti, <hi
+rend="italic"
+>Allégorie, </hi
+>c. 1696-1602, fresque, Cité du Vatican, salle Clémentine, détail des parois latérales. Photographie Frédéric Cousinié.</p
+></body
+></text
+></TEI
+>

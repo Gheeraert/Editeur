@@ -1,0 +1,1088 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Légitimer la légation avignonnaise</title
+><title
+type="sub"
+>Héraldique et politique de l’Altera Roma (xvie-xviie siècles)</title
+><author
+role="aut"
+><persName
+><forename
+>Camille</forename
+><surname
+>Larraz</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-27"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Légitimer la légation avignonnaise</p
+><p
+rend="title-sub"
+>Héraldique et politique de l’Altera Roma (<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles)</p
+><p
+rend="author-aut"
+>Camille Larraz</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>À partir du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, le séjour des souverains pontifes donne une nouvelle dimension à Avignon, qui commence alors à définir son identité culturelle, politique et religieuse en tant qu’<hi
+rend="italic"
+>Altera Roma</hi
+>, réaffirmant ainsi son statut de cité sainte. Même après leur départ en 1418, la ville demeure la propriété du Saint-Siège et est gouvernée par un légat exerçant l’autorité du pape. Si le concept de l’<hi
+rend="italic"
+>Altera Roma</hi
+> est déjà bien étudié<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Notamment par Olivier Rouchon, « Rituels publics, souveraineté et identité citadine. Les cérémonies d’entrée en Avignon (<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Cahiers de la Méditerranée</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 77, 2008, p. 39-59, https://journals.openedition.org/cdlm/4362.</p
+></note
+>, cet article se propose de l’examiner à travers le prisme de l’histoire de l’art, premièrement par le rôle des peintres, lors de somptueuses entrées au cours desquelles est mise en jeu une abondance héraldique, et secondement par le rôle de la gravure, qui favorise une large diffusion de ces idées. Ces quelques exemples nous permettront ainsi d’interroger l’importance du visuel, en particulier des armoiries et autres dispositifs héraldiques, pour exprimer et légitimer le concept d’<hi
+rend="italic"
+>Altera Roma</hi
+> entre la seconde moitié du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et la seconde moitié du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>L’entrée Farnèse de 1553</head
+><p
+xml:id="p2"
+>Les somptueuses entrées à Avignon sont des événements particulièrement propices pour exprimer son identité urbaine et sa loyauté envers le Saint-Siège, en particulier à travers le faste visuel qui est déployé à cette occasion. L’entrée Farnèse de 1553 étant bien documentée par les sources municipales, les archives permettent de comprendre comment une profusion héraldique et décorative est déployée à cette occasion, afin de légitimer la prise de pouvoir du légat et son appropriation de l’espace urbain. Les comptes de la ville soulignent notamment l’importance du métier de peintre, ainsi que des matériaux et pigments qui leur sont alloués pour créer les décors et éléments symboliques visant à recréer une pompe à la romaine. Le 16 mars 1553, le cardinal légat Alexandre Farnèse fait ainsi son entrée solennelle dans la ville d’Avignon, alors qu’il revient de Paris, où l’usage veut qu’il rencontre le roi à la cour. Vice-chancelier de l’Église et archevêque d’Avignon depuis 1535, après la mort du cardinal Hippolyte de Médicis, il est également resté dans les mémoires pour avoir exercé la fonction de légat en Avignon à partir de 1541. Alexandre Farnèse n’ayant lui-même jamais séjourné sur le long terme à Avignon, un vice-légat qui y demeurait de façon permanente faisait office de représentant de la diplomatie pontificale et de sa juridiction spirituelle sur les provinces ecclésiastiques du comtat Venaissin (Vienne, Embrun, Arles, Aix et parfois Narbonne<note
+n="2"
+place="foot"
+xml:id="ftn37"
+><p
+>Bernard Barbiche et Ségolène de Dainville-Barbiche, « Les légats <hi
+rend="italic"
+>a latere</hi
+> en France et leurs facultés aux <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles », <hi
+rend="italic"
+>Archivum Historiae Pontificae</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 23, 1985, p. 93-165, ici p. 94.</p
+></note
+>). Bien que les cérémonies d’entrée soient assez rares au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, elles sont supervisées par le conseil de ville et ses trois consuls. En outre, les magistrats municipaux veillent à ce qu’un livret imprimé relatant l’événement soit rédigé afin de le mémoriser et de le célébrer, mais aussi d’expliquer les subtilités des allégories élaborées et de rendre immuable un moment éphémère par sa nature même<note
+n="3"
+place="foot"
+xml:id="ftn38"
+><p
+>Yves Pauwels, « Le thème de l’arc de triomphe dans l’architecture urbaine à la Renaissance, entre pouvoir politique et pouvoir religieux », dans Patrick Boucheron et Jean-Philippe Genet (dir.), <hi
+rend="italic"
+>Marquer la ville. Signes, traces, empreintes du pouvoir (</hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle)</hi
+>, Paris-Rome, Éditions de la Sorbonne-École française de Rome, 2014, p. 181-188.</p
+></note
+>. Dans le cas d’Avignon, l’entrée Farnèse est la première à être retranscrite sous la forme imprimée, par Honoré Henry, source essentielle pour cette étude<note
+n="4"
+place="foot"
+xml:id="ftn39"
+><p
+>La page de couverture présente les armoiries de la ville d’Avignon.</p
+></note
+>. Les entrées du cardinal Farnèse dans les villes d’Avignon et de Carpentras, respectivement en mars et en avril 1553, ont notamment été étudiées par Olivier Rouchon et Richard Cooper, qui en proposent de fines analyses historiques et iconographiques, permettant de mieux saisir les enjeux identitaires de ces rituels<note
+n="5"
+place="foot"
+xml:id="ftn40"
+><p
+>Olivier Rouchon, art. cité et Richard Cooper, « Legate’s Luxury: the Entries of Cardinal Alessandro Farnese to Avignon and Carpentras, 1553 », dans Nicolas Russell et Hélène Visentin (dir.), <hi
+rend="italic"
+>French Ceremonial Entries in the Sixteenth century: Event, Image, Text</hi
+>, Toronto, Center for Renaissance and Reformation Studies, 2007, p. 133-161.</p
+></note
+>. Ces travaux ne s’attardent toutefois pas sur le rôle des peintres et de l’héraldique, qui nous semble essentiel pour comprendre les mécanismes de pouvoir en jeu.</p
+><p
+xml:id="p3"
+>Formellement, l’entrée consiste en un accueil formalisé de celui qu’on veut honorer, d’abord à l’église de Saint-Véran, juste en-dehors des remparts, puis à la porte Saint-Lazare, avant que l’hôte ne soit mené par un cortège à travers un itinéraire précis dans la ville. Près de la porte est installée une tribune aux harangues depuis laquelle étaient déclamées des paroles rituelles. À la différence d’une entrée royale, l’entrée d’un légat prévoyait l’aménagement d’une chapelle temporaire sous forme de dais, appelé « poisle ». Ce dais fait d’ailleurs partie des éléments codifiés les plus importants de la cérémonie. Honoré Henry, dans son livret de 1553 relatant la cérémonie, nous le décrit précisément : « aiant au dessus de luy un poisle de damas cramoisi rouge à franges d’or, &amp; à sex bastons semés de fleurs de lis que les trois Consulz, assesseurs &amp; deux gentilhommes de la Ville portoient à pied<note
+n="6"
+place="foot"
+xml:id="ftn41"
+><p
+>Honoré Henry, <hi
+rend="italic"
+>La magnifique entrée du reverendissime et très illustre seigneur, Monseigneur Alexandre, Cardinal de Farnez, Vichancelier du Sainct siege apostolique, et Legat de la ville et Cité d’Avignon, faicte en icelle le </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic"
+> mars 1553</hi
+>, Avignon, s. n., 1553, p. C iii.</p
+></note
+> ». Le rouge cramoisi et l’or semblent ainsi faire allusion à la Rome antique, alors que l’usage du poisle est lui aussi fortement symbolique. En effet, ce sont les trois consuls de la ville, le viguier (un magistrat aux fonctions analogues à celles d’un prévôt), et d’autres membres de l’élite locale qui doivent saisir les six montants lorsqu’il est utilisé comme instrument d’honneur. Il est intéressant de souligner les fleurs de lys ornant les montants de bois : la présence des armoiries Farnèse et d’Avignon est un véritable <hi
+rend="italic"
+>leitmotiv</hi
+> qui traverse l’ensemble de la ville, qui demande la protection du légat, auquel elle délègue son pouvoir. Nous retrouvons l’usage du poisle armorié dans d’autres villes du royaume de France lors d’entrées de légats. Par exemple, à Rouen en 1596, « [s]uivant les lettres du Roi, l’on fera Entrée au sieur légat [Alexandre de Médicis, futur Léon XI], auquel sera presenté poisle de damas, aux armaryes dudit 3<hi
+rend="sup"
+>r</hi
+>, porté par les quatre quarteniers<note
+n="7"
+place="foot"
+xml:id="ftn42"
+><p
+><hi
+rend="italic"
+>Entrée à Rouen du roi Henri IV en 1596, précédée d’une introduction par J. Félix et de notes par Ch. de Robillard de Beaurepaire</hi
+>, Rouen, Imprimerie de E. Cagniard, 1887, p. XLIII.</p
+></note
+> ». De même, les entrées de légats à Paris suivent un cérémonial précis qui comprend également l’emploi d’un damas blanc peint aux armes du légat et de la ville, « porté à tour de rôle par les échevins, les bourgeois et les marchands des six corps de la ville<note
+n="8"
+place="foot"
+xml:id="ftn43"
+><p
+>Bernard Barbiche et Ségolène de Dainville-Barbiche, art. cité, p. 106.</p
+></note
+> ».</p
+><p
+xml:id="p4"
+>Les rues que le cortège traverse sont aussi ornées de tentures aux couleurs et décorations significatives. À nouveau, Honoré Henry nous dit à ce propos : « ledict Seigneur, avec toutes les compaignies disposées en bon &amp; convenant ordre, vindrent en une Eglise nommée Sainct Veran [...]. Puis apres vint au devant de ladicte eglise en une Loge tout au tout &amp; au dedans tendue de riche tappisserie, avec arcade &amp; appuys sur le devant, le tout enrichi à force festons, chapeaux de triumphe, &amp; armoiries dudict Seigneur environnez d’or cliquant [...]<note
+n="9"
+place="foot"
+xml:id="ftn44"
+><p
+>Honoré Henry, <hi
+rend="italic"
+>op. cit.</hi
+>, p. B ii. Saint Véran est la première étape du parcours, juste en-dehors de la ville. La représentation du comtat Venaissin dans la galerie des cartes du Vatican par Antonio Danti (1581) montre bien le lieu hors des remparts.</p
+></note
+>. » Comme nous le verrons plus loin, l’or fait partie des matériaux les plus importants alloués aux peintres, un statut qui se reflète visuellement lors du faste de la cérémonie. Ces décors éphémères sont réalisés par des artisans locaux sous la direction d’un architecte ayant conçu le programme, en général d’après les nombreux traités représentant les antiques, tels que celui de Sebastiano Serlio sur les Joyeuses entrées en 1549. Nous ignorons qui a conçu le programme avignonnais, mais il a été supposé qu’il s’agit des mêmes personnes chargées de l’entrée du cardinal à Carpentras en avril 1553, dont le livret écrit par Antoine Blégier, imprimé en italien et en français, présente des gravures de la main de Bernard Salomon, à la différence de la version avignonnaise. Cet imprimé peut ainsi nous servir de point de comparaison pour tenter de reconstituer les décors réalisés à l’occasion de l’entrée du légat à Avignon. On y trouve notamment des architectures éphémères comme des arcs de triomphe ou des tableaux vivants permettant de façonner l’espace urbain et de recréer par là une pompe antique digne des empereurs romains (fig. 129 et 130).</p
+><p
+xml:id="p5"
+>Les décors signalent visuellement la souveraineté pontificale à travers la figure du légat. Symboliquement, la procession sert donc à concrétiser par l’image la prise de possession consentie du légat, qui endosse son rôle de dirigeant et de protecteur, tout en réaffirmant la souveraineté du pape dont il est le représentant. Le faste visuel de la cérémonie devient acte politique : il lui permet de se faire connaître physiquement et publiquement aux citoyens et de manifester son pouvoir par des signes visibles. Comme le note Richard Cooper, un élément créé pour l’occasion est intéressant à plus d’un égard : l’emblème réalisé chaque année à Noël et utilisé pour l’année à venir. Pour 1553, probablement en prévision de l’entrée de mars, il présente la tiare papale, les clés de Saint-Pierre, un chapeau de cardinal dont deux colombes avec une branche d’olivier descendent, deux cornes d’abondance, deux palmes et deux mains jointes avec la devise « <hi
+rend="italic"
+>Sic omnia prospera</hi
+><note
+n="10"
+place="foot"
+xml:id="ftn45"
+><p
+>Honoré Henry, <hi
+rend="italic"
+>op. cit.,</hi
+> p. B iiiiv à B v ; et Richard Cooper, art. cité, p. 138 et 139.</p
+></note
+> ». Cet emblème, représentant l’unité et la paix apportées par la papauté et le cardinal légat, est combiné avec les armes de Farnèse et des six fleurs de lys, pratique qui permet d’intégrer facilement l’alliance de la France et des Farnèse puisque les fleurs font naturellement allusion au royaume. Nous pouvons donc y voir une représentation métaphorique du statut d’Avignon, celle-ci étant autant loyale à Rome et au pape qu’au royaume de France, dont elle est régnicole depuis 1536. La profusion héraldique lors de la cérémonie d’entrée joue donc un rôle fondamental pour « une appropriation symbolique temporaire de l’espace urbain<note
+n="11"
+place="foot"
+xml:id="ftn46"
+><p
+>Olivier Rouchon, art. cité. </p
+></note
+> ».</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Peintres et héraldique</head
+><p
+xml:id="p6"
+>L’abondance héraldique présente lors de la cérémonie fait partie des nombreux éléments de chantier confiés aux peintres de la ville, engagés sur plusieurs mois pour réaliser ces travaux considérables, entre les mois de novembre 1552 et mars 1553. À la tête de l’équipe des artisans, composée d’une douzaine de peintres locaux et peut-être étrangers, se trouve Simon de Mailly, dit de Châlons, premier peintre de la ville<note
+n="12"
+place="foot"
+xml:id="ftn47"
+><p
+>Voir le manuscrit de Pierre Pansier, <hi
+rend="italic"
+>Les peintres d’Avignon au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle. Biographies et documents</hi
+>, Avignon, BM, ms. 5712 ; et Camille Larraz, <hi
+rend="italic"
+>Simon de Châlons</hi
+>, Cinisello Balsamo, Silvana Editoriale, 2022.</p
+></note
+>. Les documents d’archives révèlent quantité d’informations sur les matériaux qui sont alloués aux peintres (fig. 131), notamment des pigments, presque exclusivement confiés à Simon de Châlons, probablement en raison de leur valeur. Nous trouvons une grande variété de pigments fournis à Simon de Mailly : des bleus (florée et azur), des verts (verdet, vert de vessie), des rouges (ocre rouge, cinabre, rosette, rouge de minium, dit « mini »), des jaunes (ocre jaune, orpiment, massicot, le stil de grain, dit « estut de grum »), des blancs (céruse, céruse menue), et du noir broyé<note
+n="13"
+place="foot"
+xml:id="ftn48"
+><p
+>Pierre Pansier, <hi
+rend="italic"
+>Les peintres d’Avignon…</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, fol. 365, 391, 516 et 517.</p
+></note
+>. On lui octroie par la suite des ingrédients essentiels à la préparation desdits pigments, comme de l’huile de noix, du vernis liquide, de la laque fine, de la colle claire, de l’aigue ardent, du papier « d’estrasse<hi
+rend="italic"
+> »</hi
+> et du coton battu (pour appliquer les feuilles d’or). Quantitativement, le blanc et le noir sont les pigments les plus employés, suivis de l’ocre jaune, de l’ocre rouge et de l’azur, de l’orpiment, du cinabre et des verts, de la rouzette et du massicot. Il n’est pas étonnant de voir le blanc et le noir utilisés majoritairement (un très grand nombre de textes poétiques et allégoriques ornaient les décors), tout comme le jaune, rouge et bleu pour les armoiries d’Alexandre Farnèse (d’or à six fleurs de lys d’azur) et de la Ville d’Avignon (de gueules à trois clefs d’or posées en fasce), elles aussi reproduites de très nombreuses fois.</p
+><p
+xml:id="p7"
+>Les quantités d’or et d’argent nécessaires étant vraisemblablement trop importantes pour l’ensemble des décorations, de l’oripeau (« auripel ») est employé comme substitut. Ces feuilles battues de laiton ou de cuivre avaient l’apparence de l’or ou du bronze antique et permettaient de rendre un effet doré à moindre coût. Ces substances ont peut-être également été utilisées pour des armoiries, réalisées en de très nombreux exemplaires ainsi que d’autres éléments de décors intégrés à l’ensemble. Le fait qu’« une grosse auripel » et « deux douzènes auripel » soient données respectivement aux peintres Antoine Duplan et Claude Roc, et que la ligne suivante mentionne l’impressionnant nombre de 1 125 pignons à « dourer<note
+n="14"
+place="foot"
+xml:id="ftn49"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+></p
+></note
+> », laisse imaginer que ce matériau est employé à cet effet. Un mandat individuel engage précisément Antoine Duplan pour dorer 1 125 « pignes » « pour l’entrée de Mgr le légat », pour le prix de 4 livres et 10 sous<note
+n="15"
+place="foot"
+xml:id="ftn50"
+><p
+>Avignon, AM, CC468 ; Avignon, BM, ms. 5712, fol. 515. </p
+></note
+>. Certains autres peintres reçoivent en effet des mandats précis, par exemple pour la peinture de « trois douzaine de petites armes », « unes grandes armes de toile » et 50 fleurs de lis sur « gros papier » pour Louis de Champclaus<note
+n="16"
+place="foot"
+xml:id="ftn51"
+><p
+>Avignon, AM, CC468.</p
+></note
+>, alors que Jean de Linga, ou Langue, réalise 1 250 petites armes, ainsi que deux douzaines de grandes armes pour la porte Saint-Lazare<note
+n="17"
+place="foot"
+xml:id="ftn52"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>.</p
+></note
+>, là où commence l’entrée. Il est difficile de déterminer si ces 1 250 armes sont destinées à l’ensemble du parcours ou simplement à quelques étapes, au nombre de huit. Gonet Chanis reçoit également un mandat pour 4 grands écussons armoriés « de notre saint père le pape de l’eglise, de monseigneur le legat et de la ville<note
+n="18"
+place="foot"
+xml:id="ftn53"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>.</p
+></note
+> ». Malheureusement, nous ignorons à nouveau où sont destinées ces armes, qui devaient être autant accrochées sur l’ensemble du parcours qu’à des endroits spécifiques où étaient habituellement disposés les emblèmes du pape et de la ville. Les gravures de la main de Bernard Salomon dans le livret de Carpentras nous montrent, par exemple, un bâtiment recouvert sur presque chaque brique, ou pierre, de fleurs de lys, surmonté de deux étendards montrant à nouveau l’emblème floral de la France ainsi que les armoiries de la ville (fig. 132). De même, un arc de triomphe laisse apparaître les armes du pape, du cardinal Farnèse et de la couronne de France, dans une mise en scène qui a dû être reproduite à Avignon si l’on en croit les descriptions d’Honoré Henry. Si les concepteurs des deux entrées se révèlent être les mêmes, il y a de fortes chances que les décors soient relativement similaires dans leur conception, avec la présence de figures mythologiques ou allégoriques parsemant les étapes, également ornées de blasons et de devises.</p
+><p
+xml:id="p8"
+>Comme nous avons déjà pu le comprendre avec les extraits cités de Honoré Henry, la confrontation des archives avec son texte et les gravures de Carpentras confirme cette abondance décorative et héraldique : en-dehors des nombreuses mentions d’armoiries présentes sur les décors, l’auteur insiste presque à chaque page sur les tissus portés par les participants de la cérémonie, les différentes compagnies, en particulier sur des tissus chers comme le velours et le satin, toujours de couleurs significatives, surtout de rouge ou d’or. L’importance des costumes se retrouve à nouveau dans les archives, où les artisans sont payés pour réaliser notamment les manches doublées des vêtements : « 2 pans satin rouge fin balhat à mestre Anthoine de la Bancaso pour fere [...] manches »<note
+n="19"
+place="foot"
+xml:id="ftn54"
+><p
+>Avignon, AM, CC468.</p
+></note
+>. Nous pouvons encore citer Honoré Henry, qui décrit entre autres les costumes de la compagnie des veloutiers : « Lequel [gouiat] estoit suyvi de sa bande, quatre à quatre en chasque rang, tous en habits de velours jaulne : des quelz la meilleure part estoit reluysante en mainst beaux boutons, &amp; fers d’or. L’Enseigne trop plus brave en conference des autres, aiant son mourrion en teste, &amp; maniant son enseigne qui estoit de taffetas jaulne, semée de fleurs de list d’asur, armoiries dudict Seigneur<note
+n="20"
+place="foot"
+xml:id="ftn55"
+><p
+>Honoré Henry, <hi
+rend="italic"
+>op. cit.</hi
+>, p. C ii-C iiv.</p
+></note
+>. » Ou encore les trompettes de la ville : « Apres eulx venoient les trompettes de la ville, vestus de satin rouge, avec la baniere de leur trompe de taffetas de pareille couleur, semés de trois clefs d’or, les armoiries de la Ville<note
+n="21"
+place="foot"
+xml:id="ftn56"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. B iiii.</p
+></note
+>. » Les vêtements des participants font donc écho aux décors de la ville ; ce sont des éléments tout aussi codifiés et importants pour visualiser leur consentement et loyauté envers le pape.</p
+><p
+xml:id="p9"
+>De façon générale, chaque étape du parcours, ornementée de grands décors éphémères à l’antique, est accompagnée par l’omniprésence d’armoiries, dont le très grand nombre s’accorde avec les documents d’archives qui voient plusieurs peintres réaliser des blasons, parfois en quantité impressionnante. Par ailleurs, le texte d’Honoré Henry fait fréquemment référence à cette abondance héraldique. Par exemple, il insiste, à propos du portail de la ville, sur l’impossibilité de rendre précisément compte de l’ensemble des décors et des armes : « Je laisse à dire (à cause de briefvesté) les armoiries de nostre Sainct Pere, dudict seigneur Legat, Vicelegat, Gouverneur, &amp; de la Ville, ensemble l’Embleme des Consulz, &amp; devise, le tous assis sus un front d’espic au devant du portal, avec tymbre &amp; festons enrichis : chose certes belle à veoir pour la variété des interpositions des metaulx &amp; couleurs<note
+n="22"
+place="foot"
+xml:id="ftn57"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. C iii.</p
+></note
+>. » Le mot « metaulx » est particulièrement intéressant dans le contexte qui nous occupe, car nous l’avons vu dans les documents d’archives, l’or et l’argent apparaissent régulièrement, ainsi que l’oripeau. Dans le même ordre d’idée, d’autres extraits soulignent le grand nombre d’armoiries exposées parmi les décors éphémères : « Au desus duquel estoit autre couroir à clair voie à la façon Ionique, composé de bien vint &amp; cinq, ou trente arcs enrichis de festons &amp; armoiries dudict Seigneur, &amp; de la Ville<note
+n="23"
+place="foot"
+xml:id="ftn58"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. C iiii.</p
+></note
+> », ou encore, l’auteur remarque aux Augustins « une infinité de factures, enrichies des couleurs dudict Seigneur &amp; de la Ville. [...] Et en l’arc du milieu estoit un grand nombre de fleurs de lis d’asur en champ d’or. [...] Semblablement les deux arcs, costoians celuy du milieu, estoient renouvellez par dedans de clefz d’or en champs de gueules<note
+n="24"
+place="foot"
+xml:id="ftn59"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. D iiv.</p
+></note
+>. » La rencontre dans les comptes de la ville de paiements pour des milliers de blasons semble ainsi confirmée par le rapport visuel d’Honoré Henry. Vis-à-vis des documents, il convient également de remarquer la concordance iconographique entre son texte et les archives conservées. En effet, nous retrouvons dans les deux cas une distinction importante entre les petites et les grandes armes, notamment au palais des Papes, dont l’entrée « estoit ornée de festons &amp; entrelassements magnifiques, bayes, &amp; tymbres remplis par le dedans de petites armoiries &amp; par dehors de quatre grands escussons de luy, &amp; messeigneurs ses trois freres<note
+n="25"
+place="foot"
+xml:id="ftn60"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. E ii.</p
+></note
+> ». Bien qu’il soit difficile de savoir à quelle taille ces blasons correspondaient, il semble notable que l’on privilégie des armoiries de grande taille pour les lieux les plus significatifs, en l’occurrence le palais.</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>Avignon, une « Altera Roma »</head
+><p
+xml:id="p10"
+>Comme le texte d’Honoré Henry nous le confirme, les armes du légat Alexandre Farnèse apparaissent presque systématiquement avec les armes de la ville d’Avignon, permettant à la cité pontificale de réaffirmer son obéissance à Rome. En se plaçant sous la protection de son nouveau dirigeant, la ville espère en retirer non seulement sa bienveillance, mais surtout des bénéfices concrets. Concept éminemment politique et religieux, le principe d’<hi
+rend="italic"
+>Altera Roma</hi
+> est adopté très tôt par les papes avignonnais. Par exemple, une chaire en ogive à Notre-Dame-des-Doms qui servait de trône pontifical depuis 1307 était soutenue par trois anges et complétée de l’inscription « <hi
+rend="italic"
+>SEDES SVMMORVM PONTIFCVM QVI AB AN. M.CCC.VII. PER PLVS QVAM LXX. ANN. AVENIONE ALTERA ROMA DEGENTES ORBI CHRISTIANO PRAEFERVNT</hi
+><note
+n="26"
+place="foot"
+xml:id="ftn61"
+><p
+>Joseph Guérin, <hi
+rend="italic"
+>Panorama d’Avignon, de Vaucluse, du Mont-Ventoux et du Col-Longet suivi de quelques vues des Alpes françaises</hi
+>, Avignon, Imprimerie de Guichard aîné, 1829, p. 86.</p
+></note
+> »<hi
+rend="italic"
+>.</hi
+> Dans la même idée, Clément VI renomma de nombreux sites de la ville afin de refléter ses origines romaines. En 1344, il donna le nom de <hi
+rend="italic"
+>Roma</hi
+> à la chapelle Saint-Michel, située au-dessus de la tour de la Garde-robe du palais, et il construisit sa propre chapelle de Saint-Pierre pour les couronnements des papes<note
+n="27"
+place="foot"
+xml:id="ftn62"
+><p
+>Joëlle Rollo-Koster, <hi
+rend="italic"
+>Avignon and its papacy 1309- 1417: Popes, Institutions and Society</hi
+>, Londres, Rowman &amp; Littlefield, 2015, p. 85.</p
+></note
+>. Cette tradition se poursuit toujours au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. Pierre Pansier relève qu’un ouvrage imprimé en 1500 à Avignon, dont nous ne conservons pas d’exemplaire, portait la mention : « <hi
+rend="italic"
+>Impressit Dominicus Anselmus Avenionensis, Avenione altera Roma ultimo kalendas martii 1500</hi
+><note
+n="28"
+place="foot"
+xml:id="ftn63"
+><p
+>Pierre Pansier « Les débuts de l’imprimerie à Avignon (<hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Mémoires de l’Académie de Vaucluse</hi
+>, vol. XIX, n<hi
+rend="sup"
+>o</hi
+> 2, 1919, p. 153-179, ici p. 166. Il s’agit d’un traité d’un jurisconsulte italien, Odofredo de Bénévent. </p
+></note
+> ». Cette politique identitaire se poursuit encore au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et l’on trouve de nombreuses références visuelles au statut particulier de la ville, comme en atteste le frontispice du <hi
+rend="italic"
+>Recueil de statuts et de privilèges de la ville d’Avignon </hi
+>(Avignon, bibliothèque municipale, ms. 2834, <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècles et <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle), où l’expression SPQA apparaît sur des étendards rouges à la place du traditionnel SPQR<note
+n="29"
+place="foot"
+xml:id="ftn64"
+><p
+>Voir Victor de Baumefort, <hi
+rend="italic"
+>Cession de la ville et de l’état d’Avignon au pape Clément VI par Jeanne I</hi
+><hi
+rend="italic sup"
+>re</hi
+><hi
+rend="italic"
+>, reine de Naples</hi
+>, Apt, Typographie et lithographie J.-S. Jean, 1873, p. 59 et 60.</p
+></note
+> (fig. 133). Deux gerfauts, emblèmes de la cité, entourent les anciennes armoiries de la ville (toutefois sans le dôme crucigère sur la tour du milieu) complétées du texte « <hi
+rend="italic"
+>SENATUS POPULUSQUE AVENIONENSIS</hi
+> ». Des devises sont également inscrites dans des cartouches : « <hi
+rend="italic"
+>FELI[CIUM] TEMPORUM / REPARATIO », « UNGUIBUS ET ROSTRO / ALISQUE ARMATUS IN / HOSTEM</hi
+> » avec les lettres « <hi
+rend="italic"
+>R.A</hi
+> », soit la devise de la ville avec l’expression <hi
+rend="italic"
+>respublica avenionensis</hi
+>, et « <hi
+rend="italic"
+>SINGULIS VARIUS / UTILIS OMNIBUS</hi
+> » (différent pour chacun, avantageux pour tous »). L’expression « <hi
+rend="italic"
+>Felicium temporum reparatio</hi
+> » semble faire allusion à des pièces de monnaie à l’effigie de différents empereurs romains à partir du règne de Constantin<note
+n="30"
+place="foot"
+xml:id="ftn65"
+><p
+>Voir Harold Mattingly, « “Fel. Temp. Reparatio” », <hi
+rend="italic"
+>The Numismatic Chronicle and Journal of the Royal Numismatic Society</hi
+>, vol. 5, n<hi
+rend="sup"
+>o</hi
+> 13, 1933, p. 182-202.</p
+></note
+>.</p
+><p
+xml:id="p11"
+>Cette conscience civique s’étend bien au-delà du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, comme en attestent deux gravures, peu étudiées. La première est un frontispice (fig. 134), gravé pour un ouvrage non déterminé, conservé à la Bibliothèque nationale de France, qui fut ré-employé en 1648 pour l’<hi
+rend="italic"
+>Avenio Christiania</hi
+> de Joseph-Marie Suarès, bibliothécaire pontifical. Il a cependant été réalisé en 1598 au plus tôt, car il porte non seulement la signature de Jean Bœuf « <hi
+rend="italic"
+>Joannes Bouis Avenionensis fec.</hi
+> » en bas, un graveur buriniste actif à Avignon entre l’extrême fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et 1629, date de sa mort<note
+n="31"
+place="foot"
+xml:id="ftn66"
+><p
+>Camille Larraz, « La réception tardive de l’art bellifontain dans le Comtat Venaissin : le cas du graveur Jean Bœuf (<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles) », <hi
+rend="italic"
+>Nouvelles de l’estampe</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 268, décembre 2022, <ref
+target="https://doi.org/10.4000/estampe.3641"
+>https://doi.org/10.4000/estampe.3641</ref
+>.</p
+></note
+>, mais aussi les armoiries du pape Clément VIII (1592-1605), du cardinal Ottavio Acquaviva (1591-1612), légat d’Avignon, et de l’archevêque Jean François Bordini<note
+n="32"
+place="foot"
+xml:id="ftn67"
+><p
+>Marcel Chossat, <hi
+rend="italic"
+>Les Jésuites et leurs œuvres à Avignon</hi
+> <hi
+rend="italic"
+>: 1553-1768</hi
+>, Avignon, François Seguin, 1896, p. 116 et 117.</p
+></note
+> (1598-1609). Nous trouvons également les anciennes et nouvelles armoiries de la ville d’Avignon, une référence évidente au passé de la ville avant le séjour des papes, car elles furent modifiées par Clément VI. Ces blasons ornent un portique aux colonnes torsadées d’ordre corinthien agrémenté de nombreuses figures saintes et éléments symboliques. Face à face se situent des statues de saint Ruf et de sainte Marthe, qui sont identifiables grâce à des inscriptions latines. Patronne de la ville, Marthe est considérée comme la première apôtresse d’Avignon, qu’elle avait évangélisée, faisant ainsi parfaitement pendant à Ruf, premier évêque de la cité. En haut de l’attique se trouve la figure de la ville d’Avignon, « <hi
+rend="italic"
+>secu[n]da sede sap[ientiae]</hi
+> », associée à la figure de la Vierge sur un trône, symbolisant la sagesse, tenant une tiare papale et encadrée par la Foi et la Vérité qui surmontent elles-mêmes la devise de la ville. Enfin, le trône de la figure d’Avignon est placé sous le nom de Jésus. Commandé par les jésuites, ainsi que nous le confirme l’inscription abrégée « <hi
+rend="italic"
+>SCHOL. RHETOR. AVEN. SOC. IESU. P. S. C. P. A. D.</hi
+> », il est vraisemblable que le frontispice ait été commandé dans le cadre de l’entrée du cardinal et archevêque Bordini à Avignon en 1598<note
+n="33"
+place="foot"
+xml:id="ftn68"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>, p. 117.</p
+></note
+>. En effet, l’ordre était régulièrement sollicité par le conseil de ville depuis la fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle pour organiser ces somptueuses fêtes<note
+n="34"
+place="foot"
+xml:id="ftn69"
+><p
+>Olivier Rouchon, art. cité.</p
+></note
+>. Le frontispice aurait donc pu servir de projet au livret qui aurait dû être imprimé pour relater l’événement. À nouveau, nous constatons qu’Avignon se réclame d’ascendance romaine et papale par un discours visuel qui honore ce lien avec Rome, autant par les armoiries de ses dirigeants, c’est-à-dire le pape, l’archevêque et le légat, que par les figures saintes et allégoriques qui font allusion au passé et au présent chrétien de la ville, iconographie renforcée par les anciennes et nouvelles armes d’Avignon.</p
+><p
+xml:id="p12"
+>La seconde gravure (fig. 135), illustrant le <hi
+rend="italic"
+>Bullarium civitatis Avenionensis</hi
+> <hi
+rend="italic"
+>seu Bullae ac constitutiones apostolicae summorum pontificum et diplomata regum</hi
+>, paru à Lyon en 1657, représente précisément cette vision d’<hi
+rend="italic"
+>Altera Roma</hi
+>. L’ouvrage recueille les statuts et privilèges, privilèges qui se trouvaient dans les bulles des Papes, dont les originaux risquaient davantage la destruction<note
+n="35"
+place="foot"
+xml:id="ftn70"
+><p
+>Pierre Charpenne, <hi
+rend="italic"
+>Histoire de réunions temporaires d’Avignon et du Comtat Venaissin à la France</hi
+>, Paris, Calmann Lévy, 1886, p. 64.</p
+></note
+>. Le conseil municipal d’Avignon demanda ainsi au pape de les confirmer afin de les faire imprimer, dans ce recueil de bulles et autres documents concernant les privilèges de la ville. On observe sur la gravure des personnifications allégoriques féminines des concepts d’<hi
+rend="italic"
+>Altera Roma</hi
+> et d’<hi
+rend="italic"
+>Avinio Cavarum</hi
+>, c’est-à-dire de Rome et d’Avignon (cette dernière était considérée comme la ville de la Narbonnaise). Installées sur des piédestaux, elles se font face et entourent une représentation de la ville avec le palais des Papes trônant au centre, du Rhône et du pont Saint-Bénezet. Cette vue est encadrée des armoiries de la ville et de celles du pape Alexandre VII (1655-1667). On trouve également des anges portant des phylactères aux textes suivants : « <hi
+rend="italic"
+>amica clavium veritas</hi
+> » et « <hi
+rend="italic"
+>ungibus et rostro fidelitas</hi
+> », soit « la vérité est amie des clés » et « fidélité de bec et ongles » (« <hi
+rend="italic"
+>ungibus et rostro</hi
+> » est la devise d’Avignon, d’où les deux gerfauts entourant son blason). La figure de l’<hi
+rend="italic"
+>Altera Roma</hi
+> est nue, portant un simple voilage sur son avant-bras gauche retombant pudiquement sur le bas du corps. Elle désigne de sa main droite son collier en forme de cœur, et sa main gauche tient un soleil, souvent porté par la figure de la vérité dans les livres d’emblèmes, faisant ainsi probablement référence à la devise « <hi
+rend="italic"
+>amica clavium veritas</hi
+> ». Quant à la représentation de l’<hi
+rend="italic"
+>Avinio Cavarum</hi
+>, elle est vêtue d’une robe évoquant un modèle antique, avec à ses pieds un aigle. Elle arbore un chien autour du cou, symbole de fidélité qui doit faire allusion à la devise de la cité, et porte une clé dans sa main droite, probablement celle de la ville. Avignon est donc ici mise sur un pied d’égalité avec Rome, justifiant sa demande au pape de faire imprimer les statuts et privilèges qu’il lui accorde. C’est donc grâce à l’image, et surtout le discours héraldique et allégorique, qu’Avignon peut tisser ce lien immuable avec la cité pontificale, dont elle est en quelque sorte le substitut.</p
+></div
+><div
+type="section1"
+xml:id="div04"
+><head
+>Conclusion</head
+><p
+xml:id="p13"
+>Cette étude vise à démontrer que la question de la légitimation de la légation avignonnaise passe en grande partie par l’image, notamment par l’héraldique, mais aussi par les devises et les figures emblématiques, déployées lors de cérémonies grandioses, et par l’imprimé, dont on connaît bien le pouvoir de diffusion. Le pouvoir pontifical, malgré la distance géographique et politique, se construit à travers le concept de l’<hi
+rend="italic"
+>Altera Roma</hi
+> qui vise à faire d’Avignon un autre centre névralgique de la papauté. La communication liée à cette représentation repose sur des outils visuels destinés à promouvoir la légation. Il s’agit donc de créer un lien de familiarité dans l’imaginaire collectif avignonnais, un objectif qui devient probablement d’autant plus important dans les années 1550 et à partir de la Contre-Réforme pour confirmer le statut d’Avignon comme défenseur du catholicisme face à un Languedoc et un Dauphiné protestants. Cette volonté affichée d’apparenter Avignon à Rome se remarque également à travers les arts avignonnais de façon générale, surtout à partir des années 1525, avec des peintres français qui séjournent à Rome avant de s’établir à Avignon comme Henri Guigues, qui importe de façon précoce les modèles de Raphaël en Provence, ou Simon de Châlons, qui imite le Sanzio et Michel-Ange tout au long de sa carrière avignonnaise<note
+n="36"
+place="foot"
+xml:id="ftn71"
+><p
+>Camille Larraz, <hi
+rend="italic"
+>op. cit</hi
+>.</p
+></note
+>. La pérennité et le succès que rencontrent les modèles romains à Avignon doivent sans doute à la politique de l’<hi
+rend="italic"
+>Altera Roma</hi
+>, qui veut elle aussi faire de ses peintres un « autre Raphaël ».</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig132.jpg"
+></graphic
+><head
+>Figure 129. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras, faicte à tresillustre &amp; trespuisssant prince ALEXANDRE FARNES, Cardinal, Legat d’Avignon, Vicechancelier du S. siege Apostolique</hi
+> par Antoine Blégier, Avignon, Par Macé Bonhomme, aux Changes, 1553, p. Da verso, collection particulière, Camille Larraz.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig133.jpg"
+></graphic
+><head
+>Figure 130. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras… </hi
+>par Antoine Blégier, Avignon, 1553, p. D, collection particulière, Camille Larraz.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig134.jpg"
+></graphic
+><head
+>Figure 131. Avignon, Archives municipales, CC 468, Comptes de Gaspard Droin, dépenses extraordinaires, non numéroté, collection particulière, Camille Larraz.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig135.jpg"
+></graphic
+><head
+>Figure 132. Bernard Salomon, dans <hi
+rend="italic"
+>La Magnificque et triumphante entrée de Carpentras… </hi
+>par Antoine Blégier, Avignon, 1553, p. B ii, collection particulière, Camille Larraz.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig136.png"
+></graphic
+><head
+>Figure 133. Anonyme, <hi
+rend="italic"
+>Recueil de statuts et de privilèges de la ville d’Avignon</hi
+>, Avignon, BM, ms. 2884.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig137.jpg"
+></graphic
+><head
+>Figure 134. Jean Bœuf, <hi
+rend="italic"
+>Frontispice</hi
+>, vers 1598. Paris, BNF, Latin 8971.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch10_Larraz/Fig138.jpg"
+></graphic
+><head
+>Figure 135. Anonyme, page de titre du <hi
+rend="italic"
+>Bullarium civitatis Avenionensis</hi
+> <hi
+rend="italic"
+>seu Bullae</hi
+>, Lyon, Joannis Amati Candy, 1657. Paris, BNF, département Philosophie, histoire, sciences de l’homme, FOL-LK7-647.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

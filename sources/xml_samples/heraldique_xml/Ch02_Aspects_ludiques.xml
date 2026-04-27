@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Aspects ludiques dans l’appareil héraldique des manuscrits de Léon X (1513-1521)</title
+><author
+role="aut"
+><persName
+><forename
+>Elli</forename
+><surname
+>Doulkaridou-Ramantani</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-18"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="article"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Aspects ludiques dans l’appareil héraldique des manuscrits de Léon X (1513-1521)</p
+><p
+rend="author-aut"
+>Elli Doulkaridou-Ramantani</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>À l’occasion de ce deuxième volet autour de l’héraldique et de la papauté, je propose quelques réflexions sur l’appareil héraldique des manuscrits du pape Léon X. À travers cette étude, je vais montrer comment l’héraldique érudite des Médicis, et plus particulièrement celle cachée dans leurs manuscrits décorés, permet une vue plus intime et parfois nuancée du personnage de ce pontife, dont la vie coïncide avec des événements exceptionnels pour le continent européen – de Magellan jusqu’à Martin Luther – avec des ramifications pour l’Italie.</p
+><p
+xml:id="p2"
+>J’examinerai principalement deux types de manuscrits. En premier lieu, un pontifical<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>C’est-à-dire un livre contenant les textes prononcés lors de la préparation vestimentaire et rituelle du pape avant d’entrer dans la chapelle pour la messe. </p
+></note
+> daté un an avant la mort du pape et, en deuxième lieu, les livres de musique polyphonique qui lui ont été offerts par Marguerite d’Autriche (1480-1530), fille de l’empereur Maximilien I<hi
+rend="sup"
+>er</hi
+> (1459-1519) et de Marie de Bourgogne<note
+n="2"
+place="foot"
+xml:id="ftn36"
+><p
+>La culture du manuscrit enluminé dans la cour de Bourgogne est considérable. Il suffit de mentionner dans le cadre de cette étude le livre d’heures aujourd’hui conservé à Vienne. Voir Bret Rothstein, « The Rule of Metaphor and the Play of the Viewer in the Hours of Mary of Burgundy », dans Reindert Falkenburg, Walter S. Melion et Todd M. Richardson (dir<hi
+rend="italic"
+>.), Image and Imagination of the Religious Self in Late Medieval and Early Modern Europe</hi
+>, Turnhout, Brepols, 2007, p. 237-275. </p
+></note
+>, et tante du futur Charles Quint. L’examen et la juxtaposition de ces deux manuscrits dans le cadre de cette étude permettront de considérer les implications médiatiques de l’héraldique dans un périmètre européen. Plus particulièrement, cette étude ambitionne de montrer comment le langage de l’héraldique contribue à rendre compte du climat politique et révèle des équilibres délicats, tout en respectant le décorum et en amusant le spectateur. Attavante se montre ici en artiste de cour du plus haut degré.</p
+><p
+xml:id="p3"
+>En tant que cardinal, Jean de Médicis suit les pas de ses illustres ancêtres. Une fois devenu pape sous le nom de Léon X, il se permet petit à petit des digressions ludiques dans le décor de ses manuscrits. Dans son antiphonaire pour la chapelle Sixtine, on retrouve les symboles de la famille, notamment le <hi
+rend="italic"
+>diamante</hi
+> et les plumes d’autruche, la rose des Orsini et le <hi
+rend="italic"
+>broncone</hi
+>, agrémentés des symboles du pape.</p
+><p
+xml:id="p4"
+>C’est dans le feuillet ouvrant l’office des morts que l’on peut relever une première intervention, un jeu autour du lion, symbole à la fois de Florence et du pape (fig. 1). Dans la partie supérieure d’une représentation des trois morts et des trois vivants, l’artiste insère deux lions phytomorphes, à gauche et à droite du <hi
+rend="italic"
+>diamante</hi
+> contenant les <hi
+rend="italic"
+>palle </hi
+>médicéennes. Les lions touchent le <hi
+rend="italic"
+>diamante</hi
+> d’une patte et les clefs de saint Pierre de l’autre. Au-delà de se rapprocher de l’univers des grotesques, ce qui serait une sorte de retour à leur ville d’origine, ces créations phytomorphes évoquent également le thème de la régénération perpétuelle, renvoyant de cette manière au <hi
+rend="italic"
+>motto</hi
+> <hi
+rend="italic"
+>Semper</hi
+> de Laurent le Magnifique<note
+n="3"
+place="foot"
+xml:id="ftn37"
+><p
+>Gerhart Burian Ladner, « Vegetation Symbolism and the Concept of Renaissance », dans Millard Meiss (dir.), <hi
+rend="italic"
+>De artibus opuscula XL. Essays in Honor of Erwin Panofsky</hi
+>, New York, New York University Press, 1961, vol. I, p. 303-322 ; Janet Cox-Rearick,<hi
+rend="italic"
+> Dynasty and Destiny</hi
+> <hi
+rend="italic"
+>in Medici Art. Pontormo, Leo X and the two Cosimos</hi
+>, Princeton, Princeton University Press, 1984. </p
+></note
+>. À travers la figure emblématique du lion entre les grotesques et le <hi
+rend="italic"
+>diamante</hi
+>, le pape se représente comme le maillon entre la famille florentine et la papauté-Rome<note
+n="4"
+place="foot"
+xml:id="ftn38"
+><p
+>Giovanni met en image le conseil de son père. Son cousin, Giulio de’ Medici, choisira une autre variation pour son missel personnel. Voir Elli Doulkaridou-Ramantani, « Jules de Médicis et Pompeo Colonna. Enjeux héraldiques dans les missels de deux cardinaux antagonistes », dans Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique et papauté, Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020, p. 197-233.</p
+></note
+>.</p
+><p
+xml:id="p5"
+>Par ailleurs, la forme circulaire établit une continuité avec les pages de garde des <hi
+rend="italic"
+>Plutei</hi
+>. Le pape florentin confère un niveau supplémentaire à cette forme livresque, devenue ex-libris de la collection médicéenne, en ajoutant un cercle extérieur où l’on trouve des croix surmontant les huit symboles médicéens – le chiffre huit renvoie quant à lui à l’éternité, autre idée chère aux Médicis – qui semblent ainsi confirmer la bénédiction de la famille par le biais de Jean, élevé à la papauté.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Le pontifical de 1520</head
+><p
+xml:id="p6"
+>Le manuscrit illustrant le mieux la logique cumulative des symboles médicéens et la signification de leur transposition sur le sol romain est le manuel de préparation pour la messe pontificale, décoré par Attavante degli Attavanti vers 1520<note
+n="5"
+place="foot"
+xml:id="ftn39"
+><p
+>Pierpont Morgan Library, <hi
+rend="italic"
+>Praeparatio ad Missam Pontificalem</hi
+>, ms. H.6. La version numérique du manuscrit est accessible sur la plateforme Corsair de la Pierpont Morgan Library de New York : <ref
+target="http://corsair.themorgan.org/vwebv/holdingsInfo?bibId=76897"
+><hi
+rend="underline"
+>http://corsair.themorgan.org/vwebv/holdingsInfo?bibId=76897</hi
+></ref
+> (consulté le 02 janvier 2024).</p
+></note
+>. Ce pontifical contient – en dehors des armes et des <hi
+rend="italic"
+>imprese</hi
+> du pape – tous les emblèmes et <hi
+rend="italic"
+>imprese</hi
+> de la maison de Médicis, en remontant jusqu’à Cosme <hi
+rend="italic"
+>pater patriae </hi
+>(fig. 2). Contrairement au Pontifical recueillant les textes pour les cérémonies officiées par l’évêque ou le pape, la <hi
+rend="italic"
+>Praeparatio </hi
+>est habituellement un petit livre composé de quelques cahiers et contenant les textes et instructions concernant le parement ritualisé du pape avant la messe. Plusieurs manuscrits de ce type nous sont parvenus<note
+n="6"
+place="foot"
+xml:id="ftn40"
+><p
+>Pierpont Morgan Library, ms. H.6 ; Harvard, Houghton Library, ms. Typ 136. Voir aussi Elena de Laurentiis, « <hi
+rend="italic"
+>Praeparatio ad missam pontificalem </hi
+>Vincent Raymond di Lodève (illuminator) », dans Jeffrey F. Hamburger, William P. Stoneman, Anne-Marie Eze <hi
+rend="italic"
+>et al</hi
+> (dir.), <hi
+rend="italic"
+>Beyond Words: Illuminated Manuscripts in Boston Collections</hi
+>, catalogue d’exposition, Chestnut Hill, McMullen Museum of Art-Boston College, 2016, cat. 221, p. 276 et 277.</p
+></note
+>, mais le décor de celui qui appartint à Léon X permet une série d’observations concernant la dimension performative de ce livre.</p
+><p
+xml:id="p7"
+>Dans son ouvrage récent sur la musique durant le pontificat de Léon X, John Cummings parle de « lieu de performance » et fournit une description de l’itinéraire du pape. En effet, le pontife se préparait dans la <hi
+rend="italic"
+>Sala de’ Palafrenieri</hi
+> ou la <hi
+rend="italic"
+>Camera del Papagallo</hi
+>. Au même moment, les cardinaux se préparaient eux aussi dans la chambre adjacente, la <hi
+rend="italic"
+>Camera de’ Paramenti</hi
+>. Ils rejoignaient ensuite le pape et commençaient la procession en traversant les salles du consistoire (à savoir la <hi
+rend="italic"
+>Sala Ducale</hi
+> ou <hi
+rend="italic"
+>aula tertia</hi
+> et <hi
+rend="italic"
+>secunda</hi
+> et la <hi
+rend="italic"
+>Sala Regia</hi
+> ou <hi
+rend="italic"
+>aula prima</hi
+>) pour arriver à la chapelle Sixtine<note
+n="7"
+place="foot"
+xml:id="ftn41"
+><p
+>Anthony M. Cummings, <hi
+rend="italic"
+>The Lion’s Ear: Pope Leo X, the Renaissance Papacy, and Music</hi
+>, Ann Arbor, University of Michigan Press, 2012, p. 46 et fig. 6. Voir aussi Tom Campbell, « Pope Leo X’s Consistorial “letto de paramento” and the Boughton House Cartoons », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, vol. 138, n<hi
+rend="sup"
+>o</hi
+> 1120, 1996, p. 436-445, ici p. 439 ; Jonathan J. G. Alexander (dir.), <hi
+rend="italic"
+>The Painted Page: Italian Renaissance Book Illumination, 1450-1550</hi
+>, catalogue d’exposition, Munich-New York, Prestel, 1994, cat. 4, p. 56-60. </p
+></note
+>. Ces manuels contiennent les prières et hymnes que le pape récitait pendant la cérémonie de son habillage. Chaque pièce de vêtement composant l’ensemble du costume ecclésiastique papal était accompagnée d’une prière particulière. Ainsi, la totalité du manuscrit était feuilletée pendant la cérémonie, rendant sa décoration régulièrement accessible. Contrairement aux autres manuscrits de la collection médicéenne, l’exhaustivité choisie pour le manuscrit servant à la préparation non seulement physique, mais également spirituelle du pape, renvoie à une sorte de rituel auquel sont conviés les illustres ancêtres et membres contemporains occupant des postes stratégiques.</p
+><p
+xml:id="p8"
+>Plus encore, il faut supposer que le livre était placé sur un pupitre, ou bien porté par un diacre pendant la cérémonie ; par conséquent, il aurait été visible par toutes les personnalités présentes, y compris les cardinaux. L’intimité de ces lieux, combinée à l’usage régulier du manuscrit, garantissait la présence médicéenne dynastique dans l’esprit de la curie.</p
+><p
+xml:id="p9"
+>La revendication de l’origine florentine est explicite dès les premiers feuillets du manuscrit : saint Jean Baptiste, saint Laurent, Cosme et Damien, évangélistes et docteurs de l’Église, animent les marges. Laurent le Magnifique est également présent grâce à une médaille imitant les profils impériaux romains. Les inscriptions ne laissent aucune place au doute. En passant des marges au centre de la page, nous nous trouvons dans la <hi
+rend="italic"
+>camera del papagalo</hi
+> aux appartements du Vatican. Le plafond à caissons et les draps affichent les <hi
+rend="italic"
+>palle</hi
+> et le <hi
+rend="italic"
+>diamante</hi
+> médicéens. Attavante ajoute la date d’exécution et l’inscription <hi
+rend="italic"
+>Leo X patria florent pont max</hi
+> à la base du trône papal. La jonction entre la ville natale et celle de son règne est accomplie ; dans le registre supérieur, les cieux s’ouvrent pour laisser voir le Christ et Dieu le Père bénissant le pape, entourés des chérubins.</p
+><p
+xml:id="p10"
+>Un élément intéressant est la reprise des <hi
+rend="italic"
+>imprese</hi
+> associées à Julien de Médicis (1479-1516), ainsi qu’à Pierre (1472-1503), les deux frères du pape. Le premier fut nommé gonfalonier de l’Église en 1513, lors d’une somptueuse cérémonie au Capitole<note
+n="8"
+place="foot"
+xml:id="ftn42"
+><p
+>Voir Anthony M. Cummings, <hi
+rend="italic"
+>The Politicized Muse: Music for Medici Festivals, 1512-1537</hi
+>, Princeton, Princeton University Press, 1992. Pour la présence des <hi
+rend="italic"
+>imprese </hi
+>dans les manuscrits de la bibliothèque médicéenne, voir surtout Anna Lenzuni (dir.), <hi
+rend="italic"
+>All’ombra del lauro. Documenti librari della cultura in età laurenziana</hi
+>, catalogue d’exposition, Cinisello Balsamo, Silvana Editoriale, 1992.</p
+></note
+>. Les deux roues, ainsi que l’<hi
+rend="italic"
+>impresa</hi
+> GLOVIS, renvoient surtout à Julien, assassiné en 1516 ; les insignes de Pierre, le soleil et la pluie, le luth et le monogramme IR servent quant à eux à consolider l’importance de la famille, mais surtout à rappeler que la disparition de ce dernier a permis le retour des Médicis à Florence en 1512, événement qui marqua justement le tournant de leur fortune dynastique<note
+n="9"
+place="foot"
+xml:id="ftn43"
+><p
+>Erkinger Schwarzenberg, « Glovis, impresa di Giuliano de’ Medici », <hi
+rend="italic"
+>Mitteilungen des Kunsthistorischen Institutes in Florenz</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 39, 1995, p. 140-166, ici p. 155: «<hi
+rend="italic"
+> Con la morte di Piero, nel 1503, scomparve l’ostacolo maggiore al ritorno dei Medici a Firenze e sotto il papato di Giulio II non mancarono le occasioni che diedero a Giuliano la certezza che la ruota della Fortuna, rimasta incagliata per tanti anni, si sarebbe rimessa a girare.</hi
+> »</p
+></note
+>.</p
+><p
+xml:id="p11"
+>La représentation d’un ourson se régalant du miel d’une ruche, jusqu’à présent passée sous silence, est plus difficile à interpréter (fig. 3). La scène est accompagnée de l’inscription « <hi
+rend="italic"
+>Uno orsacchio ghiotto sono sio mimpugno egle pur buono</hi
+><note
+n="10"
+place="foot"
+xml:id="ftn44"
+><p
+>« Je suis un ourson rassasié, quand je m’attrape à quelque chose je ne lâche pas prise. » Transcription et interprétation de l’auteur. Aucune mention dans la bibliographie existante n’a été trouvée. Dans le catalogue de la Pierpont Morgan Library, l’inscription n’est pas accompagnée d’interprétation ou de commentaire. </p
+></note
+><hi
+rend="italic"
+>. </hi
+>» Il est certes tentant d’y voir une allusion au patronyme de la mère du pape, Clarice Orsini (1453-1488). En effet, les décors après le retour des Médicis soulignent souvent l’alliance avec les Orsini, le jeu de mots Orsini/Orsa/Ursa étant monnaie courante<note
+n="11"
+place="foot"
+xml:id="ftn45"
+><p
+>Voir surtout Marica Tacconi, « Appropriating the Instruments of Worship: The 1512 Medici Restoration and the Florentine Cathedral », <hi
+rend="italic"
+>Renaissance Quarterly</hi
+>, vol. 56, n<hi
+rend="sup"
+>o</hi
+> 2, 2003, p. 333-376, ici p. 348.</p
+></note
+>. Dans notre cas, l’ourson accompagné du <hi
+rend="italic"
+>motto</hi
+> pourrait constituer un jeu sur l’<hi
+rend="italic"
+>impresa</hi
+> aux pots de miel et abeilles de son père, en faisant allusion au petit ourson Jean et à sa prédilection pour les plaisirs de la table<note
+n="12"
+place="foot"
+xml:id="ftn46"
+><p
+>Anthony M. Cummings, <hi
+rend="italic"
+>The Lion’s Ear</hi
+>, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 114 ; Jeremy Kruse, « Hunting, Magnificence and the Court of Leo X », <hi
+rend="italic"
+>Renaissance Studies</hi
+>, vol. 7, n<hi
+rend="sup"
+>o</hi
+> 3, 1993, p. 243‑257.</p
+></note
+>.</p
+><p
+xml:id="p12"
+>Mais toutes ces observations ne suffisent pas pour expliquer cette image à la fois originale et incongrue eu égard à la date d’exécution – 1520 –, au contexte d’usage du manuscrit et au caractère autodérisoire d’un ourson qui se présente comme étant glouton. Ce que nous avons ici est à mon avis une double ruse.</p
+><p
+xml:id="p13"
+>L’artiste et son commanditaire adoptent la stratégie médicéenne ancestrale d’appropriation d’éléments communs et bien connus. D’où puisent-ils les formes archétypales ? Une première réponse évidente serait l’univers héraldique des Orsini ; non seulement autour de la mère Clarice, à laquelle renvoient également et avec plus d’élégance les roses, mais de la famille en général, maintenant que Jean est à Rome et doit valoriser son ascendance romaine.</p
+><p
+xml:id="p14"
+>Toutefois, ce n’est pas un simple ours héraldique comme c’est le cas dans les manuscrits des Orsini ou même dans un livre de chœur de Santa Maria del Fiore, où Clarice prend la forme d’une ourse parmi les lions symbolisant les Médicis<note
+n="13"
+place="foot"
+xml:id="ftn47"
+><p
+>Marica Tacconi, art. cité.</p
+></note
+>. Ni une référence à la constellation de la Grande Ourse comme c’était le cas dans les festivités pour l’investiture de Julien en 1513<note
+n="14"
+place="foot"
+xml:id="ftn48"
+><p
+>Paolo Palliolo, <hi
+rend="italic"
+>Le feste pel conferimento del patriziato romano a Giuliano e Lorenzo de’ Medici</hi
+>, Bologne, G. Romagnoli, 1885, p. 114 et suiv.</p
+></note
+>. Ce que l’ourson souligne est le lien de parenté. Dans la littérature médiévale et contemporaine – de Dante aux <hi
+rend="italic"
+>Vaticinia des Summis pontificibus</hi
+> et de poèmes d’Antonio Nerli ou de Teofilo Folengo, la locution « <hi
+rend="italic"
+>figlio de l’orso/orsa </hi
+>» est amplement utilisée pour signifier un membre de la famille des Orsini<note
+n="15"
+place="foot"
+xml:id="ftn49"
+><p
+>Agostino Paravicini Bagliani, <hi
+rend="italic"
+>Il bestiario del papa</hi
+>, Turin, Einaudi, 2016, p. 249 et suiv. Voir aussi Michel Pastoureau, <hi
+rend="italic"
+>L’ours. L’histoire d’un roi déchu</hi
+>, Paris, Seuil, 2016, p. 113.</p
+></note
+>. Quant au terme « <hi
+rend="italic"
+>ghiotto </hi
+>», le dictionnaire de l’Accademia della Crusca atteste de son association répandue à l’ours friand du miel<note
+n="16"
+place="foot"
+xml:id="ftn50"
+><p
+><hi
+rend="italic"
+>Grande Dizionario della lingua italiana</hi
+>, Turin, UTET, 1972, t. VI, p. 742 ; pour les textes de la période voir par exemple Sabba da Castiglione, <hi
+rend="italic"
+>Ricordi di monsignor Sabba da Castiglione caualier Gierosolimitano, di nuouo corretti, et ristampati. Con vna tauola copiosissima nuouamente aggiunta. Et appresso breuemente e descritta la vita dell’auttore</hi
+>, In Venetia, Per Paolo Gerardo, 1560, p. 133 : « <hi
+rend="italic"
+>più ghiotto che l’orso del miele</hi
+> ». Sur le poème « <hi
+rend="italic"
+>Le api</hi
+> » de Giovanni Rucellai et le poème <hi
+rend="italic"
+>Caos del Triperuno de Teofilo Folengo</hi
+>, voir William Roscoe, <hi
+rend="italic"
+>Life and Pontificate of Leo X</hi
+>, Londres, Henry G. Bohn, 1846, 2 vol., t. II, p. 163 et 171.</p
+></note
+>. Nous avons donc une première base littéraire qui couvre plusieurs siècles et traditions.</p
+><p
+xml:id="p15"
+>Tournons-nous maintenant vers l’univers matériel médicéen lors des années de formation des fils du Magnifique : l’Ésope des Médicis affirme l’emploi de livres illustrés pour l’éducation des enfants<note
+n="17"
+place="foot"
+xml:id="ftn51"
+><p
+>New York Public Library, ms Spencer 50, <ref
+target="https://digitalcollections.nypl.org/collections/fables#/?tab=about"
+>https://digitalcollections.nypl.org/collections/fables#/?tab=about</ref
+> (consulté le 6 avril 2023).</p
+></note
+>. En ce qui concerne plus particulièrement la fable de l’ours et du miel associée au vice de la colère, il fut connu à travers le <hi
+rend="italic"
+>Fior di virtù</hi
+>, un traité populaire d’histoires moralisatrices dont les exemplaires circulaient dans les bibliothèques de l’élite européenne<note
+n="18"
+place="foot"
+xml:id="ftn52"
+><p
+>Curt F. Bühler, « Studies in the Early Editions of the “Fiore Di Virtù” », <hi
+rend="italic"
+>The Papers of the Bibliographical Society of America, </hi
+>vol. 49, n<hi
+rend="sup"
+>o</hi
+> 4, 1955, p. 315-339 ; Federico Botana, <hi
+rend="italic"
+>Learning through Images in the Italian Renaissance: Illustrated Manuscripts and Education in Quattrocento Florence</hi
+>, Cambridge, Cambridge University Press, 2020, p. 58‑79, https://doi.org/10.1017/9781108867313.004.</p
+></note
+>.</p
+><p
+xml:id="p16"
+>La source textuelle apparaît dans les collections médicéennes en deux exemplaires, qui sont pourtant dépourvus d’illustrations<note
+n="19"
+place="foot"
+xml:id="ftn53"
+><p
+>Biblioteca Medicea Laurenziana, Plutei 41.3, 76.63. </p
+></note
+>. Toutefois, un exemplaire contemporain illustré par Mariano del Buono, artiste employé par Laurent le Magnifique, conservé aujourd’hui à la Biblioteca Riccardiana de Florence<note
+n="20"
+place="foot"
+xml:id="ftn54"
+><p
+>Biblioteca Riccardiana, ms. 1774.</p
+></note
+> pourrait constituer une source d’inspiration pour Attavante degli Attavanti (fig. 4). Les deux exemplaires de la Riccardiana présentent des illustrations où la ruche est similaire, tandis qu’une autre copie contemporaine du texte contenant des illustrations moins élaborées pourrait servir de modèle pour l’ourson<note
+n="21"
+place="foot"
+xml:id="ftn55"
+><p
+>Biblioteca Riccardiana, ms. 1763, f. 13r.</p
+></note
+> (fig. 5). La source iconographique étant associée aux manuels destinés à l’éducation des enfants, elle enrichit notre interprétation en lui ajoutant une dimension proprement liée à l’univers de l’enfance.</p
+><p
+xml:id="p17"
+>Nous avons donc une image qui serait reconnue et reliée, dans un premier temps grâce à la culture du spectateur, à une représentation moralisatrice du vice de la colère. Sauf que Léon X n’était point colérique et, qui plus est, l’image nous présente un ourson tout à fait content et indifférent aux abeilles.</p
+><p
+xml:id="p18"
+>Disons d’emblée que l’esprit ludique se trouve au cœur d’une image qui, au sein de la page décorée, prétend être une devise comme ses voisines. Les éléments formels qui participent à cette opération de tromperie du regard sont les couleurs, le cadre et surtout le ruban donnant l’impression de contenir le <hi
+rend="italic"
+>motto</hi
+> de la devise. L’iconographie aide aussi à fondre l’image dans le tissu décoratif de l’ensemble du manuscrit où l’on trouve d’autres animaux sans rapport héraldique avec le pape. Mais contrairement aux adverbes et phrases à la troisième personne, neutres comme le demande le caractère d’un proverbe, l’opération est ici différente : c’est l’ourson qui parle à la première personne et informe le lecteur qu’il est un ourson bien glouton et que s’il s’attrape il ne laissera pas prise. Il s’agit d’une fausse <hi
+rend="italic"
+>impresa</hi
+> de caractère autodérisoire qui, de plus, renvoie à une fable dont le sujet n’est pas à propos : nous avons à faire à une double ruse, picturale/héraldique d’un côté, textuelle/littéraire de l’autre.</p
+><p
+xml:id="p19"
+>Comment pourrait-on expliquer cette ruse qui exploite le langage héraldique ? Afin de répondre à cette question, je dois ouvrir l’analyse au deuxième groupe de manuscrits, à savoir les chants polyphoniques provenant de l’atelier de Petrus Alamire.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Le cadeau de l’Empire</head
+><p
+xml:id="p20"
+>La riche personnalité de Léon X et la conjoncture politique chargée de la deuxième décennie du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle l’ont amené à nouer des relations avec les cours royales qui, à l’époque, se disputaient le contrôle du continent. Parmi les cadeaux diplomatiques qu’il a reçus, on trouve trois livres de chants polyphoniques provenant du scriptorium de Petrus Alamire, scribe, courtisan et espion d’Henri VIII d’Angleterre<note
+n="22"
+place="foot"
+xml:id="ftn56"
+><p
+>BAV, Capp.Sist.160, <ref
+target="https://digi.vatlib.it/view/MSS_Capp.Sist.160"
+>https://digi.vatlib.it/view/MSS_Capp.Sist.160</ref
+> (consulté le 03 mars 2025).</p
+></note
+>. Les manuscrits ont été offerts à Léon X par Marguerite d’Autriche, tante de Charles Quint et à l’époque régente des Pays-Bas. La recherche n’a pas encore tranché sur les dates précises de la remise, possible entre 1513 et 1519. Leur présence dans le fonds de la chapelle Sixtine permet au moins deux conclusions : le cadeau fut accepté et les manuscrits ont été utilisés par les chantres<note
+n="23"
+place="foot"
+xml:id="ftn57"
+><p
+>Sur le rôle de Marguerite d’Autriche dans la conception des livres de chœur de l’atelier d’Alamire, voir Bonnie Blackburn, « Messages in Miniature: Pictorial Programme and Theological Implications in the Alamire Choirbooks », dans <hi
+rend="italic"
+>The Burgundian-Habsburg Court Complex of Music Manuscripts (1500-1535) and the Workshop of Petrus Alamire: Colloquium Proceedings, Leuven, 25-28 November 1999</hi
+>, Louvain-Neerpelt, Alamire Foundation, 2003, p. 161-184. </p
+></note
+>.</p
+><p
+xml:id="p21"
+>Les manuscrits d’Alamire, une cinquantaine à ce jour, étaient souvent le joyau des collections royales et réunissaient à un moment donné les acteurs de toute l’Europe. De l’Angleterre jusqu’au Vatican, en passant par Maximilien I<hi
+rend="sup"
+>er</hi
+> et Fréderic III de Saxe, le regard de tous a croisé les chants et leur décor exceptionnel<note
+n="24"
+place="foot"
+xml:id="ftn58"
+><p
+>Anne Margreet W. As-Vijvers, « The Grotesque Initials in the Alamire Choirbooks », <hi
+rend="italic"
+>Journal of the Alamire Foundation</hi
+>, vol. 11, n<hi
+rend="sup"
+>o</hi
+> 1-2, 2019, p. 13‑46 ; Klaas van der Heide, « How Many Paths Must a Choirbook Tread Before it Reaches the Pope? », <hi
+rend="italic"
+>ibid.</hi
+>, p. 47‑70. </p
+></note
+>. Quel est leur trait caractéristique ? La présence d’initiales grotesques au début de chaque voix (<hi
+rend="italic"
+>bassus, contrabassus, tenor, contratenor</hi
+>). Il s’agit de conceptions hybrides et humoristiques de style flamand. Ces têtes humaines phytomorphes très colorées, habillées et même déguisées avec des coiffures extravagantes, mettent en place une cour virtuelle composée de bouffons. Leur présence ouvre sur un espace d’expression plus large au sein duquel on a le droit de se moquer des autres sans pénalité. Par ailleurs, l’association du bouffon à la mécanique pneumatique de son corps établit un lien entre les chantres et leur activité<note
+n="25"
+place="foot"
+xml:id="ftn59"
+><p
+>Benjamin Dang, « Le bouffon, un héraut du vide », <hi
+rend="italic"
+>Les chantiers de la création. Revue pluridisciplinaire en lettres, langues, arts et civilisations</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 13, 12 juillet 2021, https://doi.org/10.4000/lcc.4119.</p
+></note
+>. Enfin, le bouffon comme contre-exemple peut encourager les associations théologiques. D’une allusion généraliste aux écrits de saint Paul<note
+n="26"
+place="foot"
+xml:id="ftn60"
+><p
+>Surtout 1 Corinthiens 3:18. </p
+></note
+>, on peut facilement arriver à Martin Luther, qui en 1520 se présente comme un bouffon dans son manifeste <hi
+rend="italic"
+>À la noblesse chrétienne de la nation allemande</hi
+><note
+n="27"
+place="foot"
+xml:id="ftn61"
+><p
+>Hub Zwart, <hi
+rend="italic"
+>Ethical Consensus and the Truth of Laughter: The Structure of Moral Transformations</hi
+>, Kampen, Kok Pharos, 1996, p. 156.</p
+></note
+>.</p
+><p
+xml:id="p22"
+>Après une étude comparative des initiales du corpus d’Alamire, et malgré les motifs répétitifs et donc partagés entre les différents possesseurs, il semblerait que le décor ait été repensé pour Léon X. Les initiales sont plus colorées et les figures sont encore plus déguisées et même maquillées<note
+n="28"
+place="foot"
+xml:id="ftn62"
+><p
+>BAV, Capp.Sist.160, <ref
+target="https://digi.vatlib.it/view/MSS_Capp.Sist.160/0199"
+>https://digi.vatlib.it/view/MSS_Capp.Sist.160/0199</ref
+> (consulté le 18 décembre 2024).</p
+></note
+>. Si le trait commun de ces figures est l’incapacité sensorielle, les têtes de Léon X sont encore plus handicapées. Elles sont aveuglées par les grands chapeaux – souvent des chapeaux de cardinal. Elles sont aussi bâillonnées. Quand on compare ces initiales avec les initiales du manuscrit ayant appartenu à Maximilien I<hi
+rend="sup"
+>er</hi
+>, le contraste est parlant. Ce qui permet de penser que l’humour et son goût pour la frivolité étaient non seulement connus, mais dans ce cas-là exploités.</p
+><p
+xml:id="p23"
+>Mais pour revenir à l’héraldique, ces manuscrits mettent en lumière le revers de cette pratique de prestige et de pouvoir, à savoir les obligations qui en découlent. Dans le cas des Médicis, une famille des banquiers qui cultiva avec assiduité et persévérance son image, complètement factice en fin de compte, l’insertion de leurs armes au sein du décor d’un cadeau royal constitue en quelque sorte leur légitimation en dehors de l’Italie en même temps que leur obligation à se plier aux conjonctures, ou du moins un rappel diplomatique de leur appartenance à un plus vaste réseau d’intérêts<note
+n="29"
+place="foot"
+xml:id="ftn63"
+><p
+>Caroline Elam, « Art and Diplomacy in Renaissance Florence », <hi
+rend="italic"
+>RSA Journal</hi
+>, vol. 136, n<hi
+rend="sup"
+>o</hi
+> 5387, 1988, p. 813‑826, ici p. 814.</p
+></note
+>.</p
+><p
+xml:id="p24"
+>Les précédents travaux d’historiens de la musique et des musicologues ont mis en lumière l’agenda théologique lié au dogme de l’Immaculée Conception et à la réforme de l’Église, insinuée surtout à travers le motet intitulé <hi
+rend="italic"
+>L’Homme armé</hi
+> et renvoyant clairement à l’empereur. Pour ma part, je vais combiner quelques éléments et proposer de nouvelles observations en ce qui concerne l’emploi et la signification de l’héraldique de Léon X.</p
+><p
+xml:id="p25"
+>Le cadeau comporte trois volumes<note
+n="30"
+place="foot"
+xml:id="ftn64"
+><p
+>BAV, Capp.Sist.160, <ref
+target="https://digi.vatlib.it/mss/detail/223173"
+>https://digi.vatlib.it/mss/detail/223173</ref
+> (consulté le 18 décembre 2024) ; Capp.Sist.34 ; Capp.Sist.36. </p
+></note
+>. Premièrement, l’un d’entre eux n’était à l’origine pas destiné au pape, mais à un conseiller de Marguerite d’Autriche, Jean III de Glymes, seigneur de Bergen op Zoom. Son prénom identique à celui du pape permettait ce recyclage. Cela veut dire que les armes ont été peintes par-dessus celles du conseiller, ce qui est encore visible aujourd’hui<note
+n="31"
+place="foot"
+xml:id="ftn65"
+><p
+>Klaas van der Heide, « How Many Paths Must a Choirbook Tread Before it Reaches the Pope? », art. cité.</p
+></note
+>.</p
+><p
+xml:id="p26"
+>Deuxièmement : la taille des armes papales. Quand on les compare aux autres manuscrits d’Alamire, on se rend vite compte que leur échelle ne correspond pas au statut papal. En effet, dans les manuscrits d’Alamire, les familles royales des Habsbourg, mais aussi d’Angleterre, sont mises en valeur par le biais de portraits et l’insertion d’un appareil héraldique de proportions impressionnantes (fig. 6 et 7). Nous pourrions même nous demander si les dimensions des armes médicéennes ne cachent pas un certain mépris que l’on pourrait expliquer en utilisant des arguments politiques et surtout la mentalité césaropapiste traversant la politique de Maximilien I<hi
+rend="sup"
+>er</hi
+>. C’est un manuscrit conservé aujourd’hui à Mechelen qui permet de prendre la mesure des ambitions de Maximilien eu égard à la réforme de l’Église : il se présente en tant que chef temporel suprême, dont le couronnement est assisté par le pape<note
+n="32"
+place="foot"
+xml:id="ftn66"
+><p
+>Vincenzo Borghetti, « Music and the Representation of Princely Power in the Fifteenth and Sixteenth Century », <hi
+rend="italic"
+>Acta Musicologica, </hi
+>vol. 80, n<hi
+rend="sup"
+>o</hi
+> 2, 2008, p. 179‑214.</p
+></note
+>.</p
+><p
+xml:id="p27"
+>Comme le tableau de Holbein le met clairement en relief, la musique polyphonique appartenait avec la cartographie et la cosmographie à l’arsenal des cadeaux diplomatiques de l’époque. La musique polyphonique flamande et le décor profondément héraldique et propagandiste devaient infiltrer le Vatican avec ou sans l’empereur. D’aucuns ont proposé d’interpréter le choix comme une suggestion au pape de tempérer sa préférence pour les compositeurs français. Pour ma part, je pense que l’enjeu est plus directement lié au pouvoir. Si les manuscrits partagés entre les possesseurs visaient à consolider leurs liens à travers des références culturelles et théologiques communes, la mise en place d’une cour royale virtuelle, par le biais de bouffons ornant les initiales des chants, permettait aussi la présence de l’Empire au sein de la chapelle Sixtine. En faisant appel au goût de Léon X pour la musique et les bouffons, tout en lui présentant des répertoires inédits et innovants, le langage codé et hiérarchique de l’héraldique, où l’échelle et les proportions sont significatives, indique que derrière la flatterie résidaient les objectifs et les principes impériaux qui, quelques années plus tard, se matérialiseront de manière dramatique avec le sac de Rome et le couronnement de Charles Quint par Clément VII à Bologne.</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>Conclusions</head
+><p
+xml:id="p28"
+>Ce serait un euphémisme de dire que le pape était sous pression en 1520. Deux ans plus tôt, il avait survécu à une tentative d’empoisonnement<note
+n="33"
+place="foot"
+xml:id="ftn67"
+><p
+>Ludwig von Pastor, <hi
+rend="italic"
+>The History of the Popes: From the Close of the Middle Ages, Drawn From the Secret Archives of the Vatican and Other Original Sources</hi
+>, R. F. Kerr (éd.), Londres, Kegan Paul, Trench, Trübner &amp; co, 1910, vol. 8, p. 184. </p
+></note
+>. En dehors de la disparition d’Alfonsina Orsini, facteur de stabilité à Florence et proche de Léon X, le pape devait également agir contre Martin Luther avec la bulle <hi
+rend="italic"
+>Exsurge Domine</hi
+>. C’était au même moment, pour le continent, une période de grands changements dans la répartition du pouvoir. À l’est, Suleyman le Magnifique accédait au trône de l’empire ottoman en même temps que Charles Quint prenait les rênes à l’ouest, alors que François I<hi
+rend="sup"
+>er</hi
+> et Henry VIII d’Angleterre s’efforçaient de dissiper les tensions avec la rencontre du camp du Drap d’or.</p
+><p
+xml:id="p29"
+>La confection de la <hi
+rend="italic"
+>Praeparatio</hi
+>, un livre contenant les paroles capables de le transformer en <hi
+rend="italic"
+>princeps apostolorum</hi
+>, peut être comprise comme un geste de réaffirmation de la part du pape. Il choisit l’enlumineur médicéen par excellence, Attavante degli Attavanti, désormais célèbre, et lui demande d’accentuer la présence médicéenne en tête de l’Église catholique en agrémentant les marges avec tous les symboles des membres de sa famille. Au sein de ce réseau figuratif chargé, Léon dépose son amour pour la musique et les facéties – le livre contient plusieurs vignettes où l’on voit des singes jouant de la musique ou imitant les gestes de parement du pape. En dernier lieu, il incorpore une image entièrement affective : l’ourson.</p
+><p
+xml:id="p30"
+>Ce dernier passe facilement inaperçu grâce à un véritable bestiaire réparti dans les marges du manuscrit par Attavante. Il arrive ainsi à le cacher en pleine vue parmi les animaux héraldiques – le lion, la licorne – et d’autres d’une symbolique plus généralement liée aux marges des manuscrits enluminés, comme les singes, les satyres ou encore les hippocampes. En parlant à la première personne, l’ourson personnifie le cardinal qui arriva malade au conclave de 1513 et dont l’élection fut favorisée par des spéculations tenant compte de son mauvais état de santé. Sept ans plus tard, le <hi
+rend="italic"
+>figlio de l’Orsa </hi
+>rappelle aux cardinaux qui l’entourent dans ses appartements privés – y compris ceux des autres pays de l’Europe et par extension à leurs princes, symbolisés par les abeilles<note
+n="34"
+place="foot"
+xml:id="ftn68"
+><p
+>Waldemar Deonna, « L’abeille et le roi », <hi
+rend="italic"
+>Revue belge d’archéologie et d’histoire de l’art</hi
+>, vol. 25, 1956, p. 105‑131. </p
+></note
+> – que c’est bien lui le chef solide de l’Église catholique. Malheureusement les conjonctures le démentiront un an plus tard.</p
+><p
+xml:id="p31"
+>Bien que ludiques, ces constructions dévoilent des intentions sérieuses, leur fonctionnement anxiolytique pointe justement l’état d’âme d’un pontife qui subit d’énormes pressions et cherche à se rassurer en faisant appel à ces ancêtres et plus précisément à la présence maternelle. Mais plus encore, il opte pour l’humour curatif, thérapeutique que l’on rencontre également dans un format monumental sous les traits du nain exposant son testicule au spectateur dans la <hi
+rend="italic"
+>Sala di Costantino</hi
+>, sans parler des décors de la Villa médicéenne à Poggio a Caiano<note
+n="35"
+place="foot"
+xml:id="ftn69"
+><p
+>Voir surtout Robin O’Bryan, « The Medici Pope, Curative Puns, and the Panacean Dwarf in the Sala di Costantino », <hi
+rend="italic"
+>Secac Review</hi
+>, vol. 16, n<hi
+rend="sup"
+>o</hi
+> 5, p. 590-607.</p
+></note
+>. L’artiste et le commanditaire exploitent la pompe figurative du langage héraldique pour dissimuler un élément affectif et personnel qui rappelle la caresse tendre que le pape bibliophile accorde à la Bible dans son portrait de Raphaël.</p
+><p
+xml:id="p32"
+>Cette mise en perspective des manuscrits polyphoniques d’Alamire et de la commande papale successive d’un livre tout autant intime que d’apparat met en relief la relativité et la polyvalence du signe héraldique. Entre instrument de présentation et moyen de projection d’un soi politique, il peut aussi revêtir des fonctions psychologiques et apotropaïques tout en respectant les codes de communication des cours et des réseaux diplomatiques.</p
+><p
+xml:id="p33"
+>De ce point de vue, étudier l’héraldique dans les livres enluminés ayant appartenu aux papes s’avère un instrument précieux pour obtenir des résultats plus intimes, plus précis, sur les équilibres politiques des réseaux de pouvoir de la période.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig1.jpg"
+></graphic
+><head
+>Figure 1. <hi
+rend="italic"
+>Antiphonaire de Léon X</hi
+>, Rome, BAV, ms. Capp.Sist.10 : Amico Aspertini, fol. 66v (détail).</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig2.jpg"
+></graphic
+><head
+>Figure 2. <hi
+rend="italic"
+>Praeparatio ad missam pontificalem</hi
+>, New York, The Pierpont Morgan Library, ms. H.6 : Attavante degli Attavanti, fol. Iv-IIr.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig3.jpg"
+></graphic
+><head
+>Figure 3.<hi
+rend="italic"
+> Praeparatio ad missam pontificalem</hi
+>, New York, The Pierpont Morgan Library, ms. H.6 : Attavante degli Attavanti, fol. 7v.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig4%20copie.jpg"
+></graphic
+><head
+>Figure 4. <hi
+rend="italic"
+>Fiore di Virtù</hi
+>, Florence, Biblioteca Riccardiana, ms. Ricc. 1774 : Mariano del Buono, fol. 18r.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig5.jpg"
+></graphic
+><head
+>Figure 5. <hi
+rend="italic"
+>Fior di Virtù</hi
+> Florence, Biblioteca Riccardiana, ms. Ricc.1763 : Giovanni di Gregorio d’Antonio Ghinghi (copiste), fol. 13r.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig8a.jpg"
+></graphic
+><head
+>Figure 6. <hi
+rend="italic"
+>Motets</hi
+>, Jena, Thüringer Universitäts- und Landesbibliothek, ms. 2, fol. 2r (détail).</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch02_Doulkaridou/fig7.jpg"
+></graphic
+><head
+>Figure 7 : <hi
+rend="italic"
+>Motets</hi
+>, atelier de Petrus Alamire, Rome, BAV, ms. Capp.Sist.36 : Atelier de Petrus Alamire, fol. 66v (détail).</head
+></figure
+></div
+></body
+></text
+></TEI
+>

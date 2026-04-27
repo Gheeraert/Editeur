@@ -1,0 +1,2265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>L’héraldique d’Innocent X Pamphili (1644-1655)</title
+><title
+type="sub"
+>Origines, architecture, décoration</title
+><author
+role="aut"
+><persName
+><forename
+>Daniela</forename
+><surname
+>del Pesco</surname
+></persName
+></author
+><editor
+role="trl"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></editor
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-27"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>L’héraldique d’Innocent X Pamphili (1644-1655)</p
+><p
+rend="title-sub"
+>Origines, architecture, décoration</p
+><p
+rend="author-aut"
+>Daniela del Pesco</p
+><p
+rend="editor-trl"
+>Traduit de l’italien par Yvan Loskoutoff.</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Dirk Amayden, juriste et érudit originaire du Brabant espagnol (1586-1656), dans son <hi
+rend="italic"
+>Histoire des familles romaines</hi
+>, écrit : « Ma bonne fortune a voulu que dès l’enfance j’aie été familier de cette maison [les Pamphili] favorisée par la fortune et favorisant la fortune, anciens et nobles de la première classe à Gubbio depuis des centaines d’années<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+><hi
+rend="italic"
+>La</hi
+> <hi
+rend="italic"
+>Storia delle famiglie romane, con note ed aggiunte del Comm. Carlo Augusto Bertini</hi
+> [Rome, Collegio araldico, 1910]<hi
+rend="italic"
+>,</hi
+> Bologne, Forni, 1967, vol. 2, p. 124 et 125 (entrée « Pamphilj », p. 124-127). Amayden arrive à Rome pour l’année jubilaire 1600, en 1601-02 il s’y installe pour y mener ses recherches.</p
+></note
+>. »</p
+><p
+xml:id="p2"
+>Le progrès économique et social de cette maison se déroula de fait sur la longue durée dans la cité ombrienne. Le 10 novembre 1460, Sixte IV nomme Antonio Pamphili docteur en droit civil et ecclésiastique, procurateur fiscal de la Chambre Apostolique : il se transfère à Rome, initiant l’ascension de sa famille dans le milieu de la Curie pontificale. En 1604, Girolamo Pamphili, neveu d’Antonio, est élu cardinal<note
+n="2"
+place="foot"
+xml:id="ftn80"
+><p
+>Girolamo Pamphili (1545-1610), docteur <hi
+rend="italic"
+>in utroque iure</hi
+>, décan de la Sainte Rote (à partir de 1602), cardinal prêtre de San Biagio dell’Anello (à partir de 1604), vicaire général de Sa Sainteté pour le diocèse de Rome (de 1605 à 1610). Très lié aux Oratoriens, il résida au palais de la place Navone, le partageant avec son frère Camillo. Vers 1606 furent entrepris des travaux d’adaptation fonctionnelle à la dignité cardinalice de Girolamo. Benedetta Borello, « Pamphili, Girolamo », dans <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, 2014, vol. 80, 2014, p. 670 et 671.</p
+></note
+>, comme en 1630 son neveu Giovan Battista, qui va être élu pape en 1644. Une gravure, conçue par Giovanni Luigi Valesio en 1606, représente l’écu de Girolamo Pamphili entouré des attributs cardinalices, inséré entre des figures allégoriques, sur le fond d’un ciel peuplé de colombes<note
+n="3"
+place="foot"
+xml:id="ftn81"
+><p
+>Babette Bohn, <hi
+rend="italic"
+>Ludovico Carracci and the art of drawing</hi
+>, Turnhout, Brepols, 2004, p. 377, R 59. Un dessin, signé et daté de 1606, a servi de modèle pour la gravure (fig. 1) incluse dans le recueil intitulé : <hi
+rend="italic"
+>Stampe bolognese di Giovanni Valesio, inventore e intagliatore, </hi
+>qui présente de nombreux écus de cardinaux de l’époque. La gravure est conservée à Bologne, Pinacoteca Nazionale, Gabinetto Disegni e Stampe (290 × 380 mm). Voir Giovanna Gaeta Bertelà (éd.), avec la collaboration de Stefano Ferrara, <hi
+rend="italic"
+>Incisori bolognesi ed emiliani del sec. XVII</hi
+>, Bologne, Associazione per le arti Francesco Francia, [1973], n<hi
+rend="sup"
+>o</hi
+> 1009. L’image des armes Pamphili avec les attributs cardinalices se rencontre dans diverses estampes représentant le portrait de Girolamo Pamphili.</p
+></note
+> (fig. 59). Dans l’église romaine de Santa Maria in Vallicella, la pierre tombale du cardinal récapitule son <hi
+rend="italic"
+>cursus honorum</hi
+><note
+n="4"
+place="foot"
+xml:id="ftn82"
+><p
+>L’épigraphe se conclut sur les mots : <hi
+rend="italic"
+>IOANNES BAPTISTA PAMPHILIUS AB VRBANO VIII CARD CREATUS ET PAMPHILIUS FRATRIS FILII MONUMENTUM POSUERE</hi
+>, c’est-à-dire qu’il est affirmé que « posèrent la pierre tombale » les fils de Camillo, frère de Girolamo (« <hi
+rend="italic"
+>Fratris filii</hi
+> »), soit Pamphilio (1563-1639, mari d’Olimpia Maidalchini) et Giovan Battista (1574-1655), futur Innocent X.</p
+></note
+> (fig. 60). Dessinée par Paolo Maruscelli en 1634, elle montre, sous l’épigraphe, gravée sur une élégante dalle de marbre noir, l’image d’une colombe blanche appuyée sur deux rameaux d’olivier verts et feuillus<note
+n="5"
+place="foot"
+xml:id="ftn83"
+><p
+>Lionello Neppi, <hi
+rend="italic"
+>Schede del catalogo di opere d’arte mobili (Santa Maria in Vallicella)</hi
+>, Rome, Ministero della Pubblica Istruzione, 1957, n. 90, l. 389. Girolamo est le premier des Pamphili à ne pas avoir été enterré à San Lorenzo in Damaso, où la famille était titulaire de l’autel de San Domenico (deuxième dans la nef de gauche), par ailleurs détruit lors du réaménagement de l’église (Adam Poos, <hi
+rend="italic"
+>San Lorenzo in Damaso a Roma</hi
+>, <hi
+rend="italic"
+>Guida alla basilica</hi
+>, Rome, GB Editoria, 2015, p. 8).</p
+></note
+>.</p
+><p
+xml:id="p3"
+>Du point de vue de l’héraldique et de la compréhension du message confié à l’écu des Pamphili, nous verrons comment cette image, qui se diffuse à Rome comme conséquence de l’élévation à la pourpre de Girolamo Pamphili, était déjà présente dans les phases précédentes de l’histoire de la famille. Le meuble de la « colombe au rameau d’olivier dans le bec », qui remplit l’écu, se révèle très malléable pour exprimer des significations propres à différentes circonstances. Nous chercherons à les décrypter : en fait, comme on le lit dans le <hi
+rend="italic"
+>Miroir symbolique des armes nobiliaires</hi
+> d’Andrea Cellonese (1667), la création d’un écu répond à la nécessité, propre aux maisons en ascension, de se forger une « devise symbolique qui montre une chose à la vue et une autre à l’intellect, faisant allusion aux vertus de la famille<note
+n="6"
+place="foot"
+xml:id="ftn84"
+><p
+>Andrea Cellonese, <hi
+rend="italic"
+>Specchio simbolico delle armi gentilizie, </hi
+>Naples, Giovanni Francesco Paci, 1667, p. 46 : « <hi
+rend="italic"
+>impresa simbolica che altro mostra alla vista et altro all’intelletto significa e alle virtù della famiglia allude</hi
+> ». </p
+></note
+> ».</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Les lettrés du milieu romain des Pamphili et l’origine de leur emblème nobiliaire</head
+><p
+xml:id="p4"
+>Amayden, dans son ouvrage consacré aux familles romaines, se pose la question de l’origine du nom des Pamphili, « vocable grec », sans trouver de réponse satisfaisante. Il affirme utiliser les écrits de Giovan Battista Cantelmaggio « qui a beaucoup travaillé à chercher et à trouver l’origine et les progrès de cette maison ». Il rapporte en conséquence les données qu’il retient comme documentées : en particulier la présence des Pamphili à Gubbio depuis 1150<note
+n="7"
+place="foot"
+xml:id="ftn85"
+><p
+><hi
+rend="italic"
+>La Storia delle famiglie romane...</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 125 : « <hi
+rend="italic"
+>che molto ha faticato in cercare e trovare l’origine e i progressi di questa Casa</hi
+> ». Giovan Battista Cantelmaggio était auditeur de Rote, c’est-à-dire membre du tribunal ecclésiastique de la Sainte Rote romaine. Dirk Amayden affirme (p. 127) que l’inventeur du beau nom de Pamphilio voulut lui donner une devise correspondante et rapporte qu’Andrea de’ Mantici, descendant de Pamphilio, fut un fameux médecin employé par Louis, roi de Hongrie en 1345 et que l’empereur Frédéric III concéda un très noble privilège à Antonio Pamphili en 1461, monseigneur du ministère public [<hi
+rend="italic"
+>fiscale</hi
+>] sous Sixte IV en 1473, donnant, comme on l’a dit, origine à l’histoire romaine de la famille. Amayden exclut que l’origine du nom « Pam-filio », « ami de tous », terme grec, ait été déterminé par la reconnaissance envers la bénéfique activité médicale de membres de la maison.</p
+></note
+>.</p
+><p
+xml:id="p5"
+>Au milieu du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, l’écu Pamphili est ainsi décrit dans un document de l’archive Doria Pamphili, attribuable à Amayden : « Une colombe, le rameau d’olivier au bec, double symbole de paix, symbolisant […] l’amour et l’amitié compagnons éternels de la quiétude, éloignés du fracas des guerres. Dans la partie supérieure de l’écu, on voit trois lys d’or en chef d’azur ordinaire mais erronément divisé par des pals de gueules qui ont été interprétés comme le rabat ou retombée d’un baldaquin du roi de France, je ne sais sur quel fondement<note
+n="8"
+place="foot"
+xml:id="ftn86"
+><p
+>« <hi
+rend="italic"
+>Una colomba con l’uliva in bocca, dupplicato simbolo di Pace, simbolizzante </hi
+>[…]<hi
+rend="italic"
+> l’amore ed amicizia compagni eterni della quiete, e lontani da strepiti di guerra. Nella parte superiore dello scudo si vedono tre gigli d’oro in campo azzurro traversato commune, ma erroneamente con asse rossi, i quali vengono interpretati da alcuno, che rappresentino il lembo, o vero ricaduta di un Baldacchino del Re di Francia. Non so con che fondamento </hi
+>», ADP, Fonds Archiviolo, n<hi
+rend="sup"
+>o</hi
+> 145, transcrit dans Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti, <hi
+rend="italic"
+>Sant’Agnese in Agone a Piazza Navona. Immagine, Luce, Ordine, Suono nelle fabbriche Pamphili, </hi
+>Rome, Gangemi, 2005, appendice 2, p. 208, et aussi, avec de petites variantes dans le texte, Dirk Amayden, <hi
+rend="italic"
+>La</hi
+> <hi
+rend="italic"
+>Storia delle famiglie romane…</hi
+>, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 127. Sur l’écu, voir aussi : Giovanni Battista Di Crollalanza<hi
+rend="italic"
+>, Dizionario storico blasonico delle famiglie nobili e notabili italiane estinte e fiorenti</hi
+>, Pise, Presso la direzione del Giornale araldico, 1888, vol. II, p. 266. Donald Lindsay Galbreath, <hi
+rend="italic"
+>Papal Heraldry</hi
+>, Cambridge, W. Heffer, 1930, part. I, p. 98, cite un exemple de l’écu Pamphili vu par lui au « musée de Pérouse », qu’il date du <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et mentionne aussi celui qui figure sur la pierre tombale à San Pietro in Montorio à Rome, avec la date de 1600, date non rencontrée sur la sépulture qui porte l’inscription « DOM, Pamphiliis/ad Diem novissimam ». </p
+></note
+> » (fig. 61). Le même document affirme que, dans cet écu, « les lys ne sont ni français, ni espagnols, mais signes et marques des factions comme en usait jadis la noblesse dans les cités italiennes [...], ou que les trois lys faisant partie des armes de la ville de Gubbio, les Pamphili y étant la principale famille noble, ils ont été honorés desdits lys. [...] Dans les armes Pamphili le champ de gueules n’est qu’un mur aux créneaux à l’ancienne dans lesquels furent plantés des lys selon l’usage des maisons fortes<note
+n="9"
+place="foot"
+xml:id="ftn87"
+><p
+>« <hi
+rend="italic"
+>i gigli non sono né francesi, né spagnuoli, ma segni, e note de’fazzioni come anticamente usava la nobiltà nelle città d’Italia </hi
+>[…] <hi
+rend="italic"
+>overo che, sendo i tre gigli parte dell’arme della Città d’Augubio ed i Pamphili, più principale, e più nobile, siano stati onorati di detti gigli.</hi
+>[…]<hi
+rend="italic"
+> Nell’arme pamphilia, il campo rosso non è che un muro colli merli all’antica, in mezzo alli quali fossero piantati gigli a usanza di casa forte</hi
+> ».</p
+></note
+> ». Il n’est pas surprenant qu’Amayden se fasse le défenseur d’une origine « autochtone » de l’écu des Pamphili, exempt de l’influence de puissances étrangères, telles l’Espagne ou la France, la référence à cette dernière s’exprimant par la présence de pals de gueules pour séparer les meubles des lys, alors qu’Amayden les voudrait au contraire en chef d’azur uni, annulant la référence française.</p
+><p
+xml:id="p6"
+>Le polygraphe de Gubbio Vincenzo Armanni (1608-1684), dans ses <hi
+rend="italic"
+>Réflexions sur la célébrité de l’Excellentissime maison Pamphili de l’an 850 à 1300</hi
+><note
+n="10"
+place="foot"
+xml:id="ftn88"
+><p
+><hi
+rend="italic"
+>Riflessioni intorno alla chiarezza dell’Eccellentissima Casa Panphilia dall’anno 850 fino al 1300, </hi
+>Archive Doria Pamphili, scaff. 93, busta 54, interno 2, transcrit dans Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti, <hi
+rend="italic"
+>op. cit.</hi
+>, appendice 2, p. 209 et 210. Voir aussi : Vincenzo Armanni, <hi
+rend="italic"
+>Delle Lettere del Signor V. A., colla vita dell'autore per Carlo Cartari</hi
+>, Rome, Iacomo Dragondelli, t. I, 1663 ; <hi
+rend="italic"
+>ibid</hi
+>., t.<hi
+rend="italic"
+> </hi
+>II et III, Macerata, Giuseppe Piccini, 1674. Dans une lettre, Armanni, souvent accusé de manque de sérieux, défend la rigueur de sa méthode de constitution des généalogies (vol. II, p. 88). Sur Armanni et la généalogie des Pamphili, Gaetano Moroni, <hi
+rend="italic"
+>Dizionario di erudizione storico ecclesiastica</hi
+>, In Venezia, dalla Tipografia Emiliana, 1840-1878, vol. XXXIII, 1845, « Gubbio », p. 162 ; Umberto Coldagelli, « Armanni, Vincenzo »,<hi
+rend="italic"
+> DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., 1962, vol. 4, p. 222-224. L’activité d’Armanni fut certainement encouragée par Camillo Pamphili, bibliophile passionné et collectionneur d’art, fortement engagé dans l’élaboration de l’image de prestige de la famille.</p
+></note
+><hi
+rend="italic"
+>, </hi
+>examine les « armes » de saint Lodolfo Pamphili, évêque de Gubbio en 967, « dit Colombino, et sa congrégation dite de la Colombe, étant très probable que la cause principale de cette dénomination fut la colombe, armes ou insigne de ce saint<note
+n="11"
+place="foot"
+xml:id="ftn89"
+><p
+>« <hi
+rend="italic"
+>detto Colombino, e la sua congregazione detta della Colomba ond’è probabilissimo che la cagion principale di così fatta denominazione fosse la colomba, Arme o insegna di esso Beato</hi
+>… », Archive Doria Pamphili, scaff. 93, busta 54, interno 2, transcrit dans Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 209 et 210.</p
+></note
+>… ». En examinant les conjectures disponibles, Armanni revendique le rôle de Lodolfo dans la fondation de l’ordre des camaldules et affirme que « nous ne pouvons douter que dès ce temps-là cette maison ait eu pour armes la colombe<note
+n="12"
+place="foot"
+xml:id="ftn90"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., « <hi
+rend="italic"
+>non possiamo dubitare che questa casa havesse anche hallora per arme sua la Colomba </hi
+>»<hi
+rend="italic"
+>.</hi
+></p
+></note
+> ». Il ajoute qu’au palais des Pamphili dans le quartier San Lorenzo à Gubbio « on voit peintes depuis plusieurs centaines d’années les mêmes armes et insigne d’une colombe d’argent en champ de gueules qui porte au bec un rameau d’olivier, surmontée de trois lys d’or entre les dents d’un râteau de gueules en champ d’azur. En certains endroits pourtant, particulièrement au plafond de ce palais, on voit au-dessus de la colombe pendre trois drapeaux d’azur, séparés par un espace de gueules, chaque drapeau ayant en son milieu un lys d’or : le pontife régnant et les seigneurs de sa très excellente maison ont composé leurs armes de cette façon<note
+n="13"
+place="foot"
+xml:id="ftn91"
+><p
+><hi
+rend="italic"
+>Ibid., </hi
+>« <hi
+rend="italic"
+>vedesi dipinta di più centinaia d’anni la medesima arme, et insegna di una colomba bianca, che porta nella bocca un ramoscello verde d’oliva in campo rosso, havendo di sopra tre gigli d’oro tra li denti d’un Rastrello rosso in Campo azzurro. In alcune parti però, spetialmente nel soffitto di esso Palazzo, veggonsi al di sopra della Colomba pendenti tre Drapelloni turchini, in ciascheduno de’quali lascia tra sè tanto spatio rosso, quanto basta a dividergli con havere ogni Drapellone in mezzo un giglio d’oro: et in tal maniera han seguitato a far l’arme il pontefice regnante, e i signori della sua eccellentissima Casa. </hi
+>»</p
+></note
+> ». L’allusion renvoie à Camillo Pamphili, neveu d’Innocent X, auquel Armanni dédie ses écrits.</p
+><p
+xml:id="p7"
+>L’hypothèse du rôle du camaldule Lodolfo pour la constitution de l’écu des Pamphili est reprise par Gaetano Moroni dans son <hi
+rend="italic"
+>Dictionnaire d’érudition historico-ecclésiastique </hi
+>(1851). Il affirme qu’un lien entre l’emblème de la colombe et cette famille se serait vérifié dans le milieu de l’ermitage de Fonte Avellana, fondé en 1009, alors que Lodolfo Pamphili participe à la création de l’ermitage consacré à la dévotion à la Sainte Croix, en consonance avec l’œuvre de Romuald de Ravenne (951/953-1027), créateur de l’ordre des camaldules et des monastères voisins de Fonte Avellana<note
+n="14"
+place="foot"
+xml:id="ftn92"
+><p
+>Gaetano Moroni, <hi
+rend="italic"
+>op. cit.</hi
+>, 1851, vol. LI, p. 85 (entrée « Pamphili »), écrit que Lodolfo, évêque de Gubbio fut fondateur de la congrégation Avellana, « qui fut dite aussi de la colombe d’après les armoiries de son fondateur ». Au vol. XXXIII, p. 171 (entrée « Gubbio »), on lit que l’ermitage de l’Avellana /Serra Sant’Abbondio (Pesaro et Urbino), affilié à la règle de saint Benoît, « devint vite un exemple de doctrine ». Voir <hi
+rend="italic"
+>Vita del b. Lodolfo Pamphilij vescovo di Gubbio, e abate fondatore della Congreg. Dell’Avellana, detta della Colomba descritta dal p.d. Agostino Romano Fiori monaco camaldolese</hi
+>, Rome, Per Antonio de’ Rossi nella strada del Seminario romano, vicino alla Rotonda, 1722. Par la bulle de Pie V <hi
+rend="italic"
+>Quantum animus noster</hi
+> du 10 décembre 1569, la congrégation de l’Avellana fut supprimée et, en 1570, les biens du monastère dévolus à l’ordre des camaldules. En 1578, par les dispositions de Grégoire XIII, ces mêmes biens passèrent à l’administration du Collège germanique. Au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, le calice présent dans l’écu fut surmonté d’une étoile ou d’une comète d’or et l’écu, d’un chapeau de prélat avec mitre et pastoral. </p
+></note
+>. Toutefois, l’écu de l’ordre est actuellement documenté en 1183, à l’époque de la reconstruction de l’abbaye, par le sceau du prieur des camaldules<note
+n="15"
+place="foot"
+xml:id="ftn93"
+><p
+>L’abbaye de l’Avellana fut reconstruite en 1171 et consacrée le 31 août 1197. Italo Moretti et Renato Stopani, <hi
+rend="italic"
+>Architettura romanica religiosa a Gubbio, </hi
+>Florence, Salimbeni, 1973, p. 33-37.</p
+></note
+>. Il fut ensuite adopté dans presque tous les monastères et congrégations camaldules : il montre, en champ d’azur, un calice d’or accosté de deux colombes d’argent s’abreuvant. La devise de la congrégation est : « <hi
+rend="italic"
+>Ego vobis, vos mihi</hi
+> » [Je suis pour vous, et vous pour moi]. Les deux colombes représentent les cénobites et les ermites qui s’abreuvent au même calice, symbole du Christ<note
+n="16"
+place="foot"
+xml:id="ftn94"
+><p
+>Giuseppe Cacciamani, <hi
+rend="italic"
+>Dizionario degli Istituti di Perfezione</hi
+>, Milan, Paoline, 1974, vol. 1, col. 1724.</p
+></note
+>.</p
+><p
+xml:id="p8"
+>À l’entourage de Camillo Pamphili (1622-1666) appartient aussi le jésuite Nicolangelo Caferri, auteur d’une vie de Bartolomeo Sacchi, dit Plàtina (1421-1481), de biographies des pontifes et de nombreux écrits portant sur la généalogie des Pamphili. Dans son <hi
+rend="italic"
+>Syntema Vetustatis</hi
+> (<hi
+rend="italic"
+>Abrégé de l’Antiquité,</hi
+> Rome, 1670), compendium de l’histoire du monde des origines à 1665, Caferri traite de la geste antique de la maison, rendue illustre par l’aïeul Amanzio « héros germanique, dans l’entourage de Charles le Grand [Charlemagne<note
+n="17"
+place="foot"
+xml:id="ftn95"
+><p
+>Angelo Caferri, <hi
+rend="italic"
+>Synthema Vetustatis</hi
+>, Romae, Ex tipographia Iacobi Dragondelli, 1670, p. 84-88. Sur ses écrits, voir Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 33, 43 et 209.</p
+></note
+>] ». Cette hypothèse est aussi acceptée par Moroni, qui affirme que « Amanzio Pamphilj, de l’ordre équestre, […] suivant Charlemagne en Italie, fut récompensé par celui-ci avec quelques châteaux et avec les armes des Français dont la famille fait encore usage<note
+n="18"
+place="foot"
+xml:id="ftn96"
+><p
+>Gaetano Moroni, <hi
+rend="italic"
+>op. cit.</hi
+>, vol. LI, p. 85 (entrée « Pamphili ») ; dans le même Moroni, <hi
+rend="italic"
+>ibid</hi
+>., vol. XXXVI, p. 12 et 13, figure l’entrée biographique consacrée à Innocent X.</p
+></note
+> ». Il rapporte en outre qu’en 917, Gubbio fut reconstruite grâce à l’œuvre de Pietro Pamphili, fils d’Amanzio<note
+n="19"
+place="foot"
+xml:id="ftn97"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., vol. XXXIII, p. 167 (entrée « Gubbio », p. 153-178).</p
+></note
+>.</p
+><p
+xml:id="p9"
+>L’attitude d’adulation propre à la littérature encomiastique et l’opinion que la noblesse d’une famille se mesure par l’antiquité de ses origines, portent les lettrés de l’entourage des Pamphili qui écrivent dans les années du pontificat d’Innocent X et ensuite dans le milieu de son neveu Camillo, à insister sur les origines médiévales de l’écu aux lys et à la colombe<note
+n="20"
+place="foot"
+xml:id="ftn98"
+><p
+>Pour le processus de construction d’une noblesse « antique » comme élément destiné à conférer plus de prestige à une maison, particulièrement en Toscane, voir Vanna Arrighi et Elisabetta Insabato, « Tra storia e mito, la ricostruzione del passato familiare nella nobiltà toscana dei secoli XVI-XVIII »<hi
+rend="italic"
+>, </hi
+>dans <hi
+rend="italic"
+>L’identità genealogica e araldica. Fonti, metodologie, interdisciplinarietà, </hi
+>actes du colloque, Turin, Archive d’État, 21-26 septembre 1988, Rome, Ministero per i beni e le attività culturali, 2000, p. 1099-1121.</p
+></note
+>.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>La « colombe portant le rameau d’olivier au bec » à Gubbio et à Rome</head
+><p
+xml:id="p10"
+>Des représentations de l’emblème de la colombe tenant le rameau d’olivier dans son bec sont encore visibles à Gubbio sur des édifices liés à la présence des Pamphili.</p
+><p
+xml:id="p11"
+>Leur demeure révèle un processus d’agrégation complexe initié vers « 1260 alors que Mantia, fils de Pamphilio [...] acquit une maison et un terrain dans le <hi
+rend="italic"
+>rione</hi
+> San Martino, quartier dans lequel les Pamphili de Gubbio résidèrent au moins jusqu’à la fin du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle<note
+n="21"
+place="foot"
+xml:id="ftn99"
+><p
+>Benedetta Borello, « Alleanze matrimoniali e mobilità sociale e geografica. Il caso dei Pamphilj (XV-XVII secolo) », <hi
+rend="italic"
+>Mélanges de l'École française de Rome</hi
+>, vol. 115, n<hi
+rend="sup"
+>o</hi
+> 1, 2003, p. 345-366, ici p. 352 : « <hi
+rend="italic"
+>1260 quando Mantia, figlio di Pamphilio […] acquistò una casa e un terreno nel rione San Martino, quartiere nel quale i Pamphili eugubini risiedettero almeno fino alla fine del Seicento.</hi
+> »</p
+></note
+> ». La construction et les transformations s’y succédèrent sans parvenir à une configuration homogène, laissant voir dans les parements muraux des modifications partielles et des restaurations effectuées au moyen de pierres et de briques de types différents<note
+n="22"
+place="foot"
+xml:id="ftn100"
+><p
+>Au palais Pamphili, l’assemblage de corps de fabrique est évident : ils s’articulent autour d’une cour rectangulaire. Dans cette cour, à l'entrée du palais vers la place adjacente, s’inscrit un portique de douze colonnes à section octagonale et arcs en plein cintre. À côté, il y a aussi une petite cour à portique aux arcs sur quatre colonnes en <hi
+rend="italic"
+>pietra serena </hi
+>(grès). </p
+></note
+> (fig. 62).</p
+><p
+xml:id="p12"
+>L’appartement de l’étage noble du palais conserve des décorations à emblèmes héraldiques qui apparaissent bien plus fragmentaires que celles décrites par Vincenzo Armanni. Une colombe au rameau d’olivier est sculptée dans le linteau en grès de la cheminée d’une salle proche de la salle principale (fig. 63). Là, des fresques assez endommagées représentent, au-dessus d’un lambris décoré de lys, une suite de vases enrichis d’éléments végétaux parmi lesquels on peut observer au moins une colombe (fig. 64).</p
+><p
+xml:id="p13"
+>Dans la chapelle Pamphili de l’ex-cimetière voisin du presbytère de San Secondo, des fresques signées par Jacopo Bedi (« <hi
+rend="italic"
+>Iacopus pinxit</hi
+> »), datées du 7 septembre 1458, illustrent la légende de saint Sébastien :<hi
+rend="italic"
+> Flagellation, Martyre </hi
+>et <hi
+rend="italic"
+>Ensevelissement</hi
+>, évoqués pour conjurer les périls de l’épidémie de peste qui frappa Gubbio précisément cette année-là<note
+n="23"
+place="foot"
+xml:id="ftn101"
+><p
+>Sur Jacopo Bedi on est renseigné de 1432 à 1478. À la voûte de la chapelle Pamphili figurent les effigies des Docteurs de l’Église. Dans deux <hi
+rend="italic"
+>clipei</hi
+> monochromes sont les portraits de saint Jean et de saint Jean l’évangéliste en train de recevoir la vision de l’Apocalypse. Le même Bedi réalisa au palais des Pamphili une <hi
+rend="italic"
+>Annonciation. </hi
+>La fresque fragmentaire fut redécouverte en 1920-1922 (Umberto Gnoli, <hi
+rend="italic"
+>Pittori e miniatori nell'Umbria</hi
+>, Spolète, Argentieri, 1923, p. 131 et 132. Voir aussi Filippo Todini, <hi
+rend="italic"
+>La pittura umbra dal Duecento al primo Cinquecento</hi
+>, Milan, Longanesi, 1989, p. 31.</p
+></note
+>. Le martyre est actualisé : y assistent les habitants de la ville figurée au fond ; le personnage représenté sur la gauche de la scène ornant la paroi centrale pourrait bien être, comme c’est l’usage, le commanditaire (fig. 65). Pour la dévotion de Gubbio, le site de San Secondo offre un intérêt particulier en tant que lieu de formation de saint Ubaldo, évêque et patron vénéré de la ville (1084-1160). Dans le pavement de la chapelle, l’accès à la cavité sépulcrale est clos d’une pierre tombale sur laquelle on remarque l’écu Pamphili aux lys et à la colombe munie du rameau d’olivier, finement encadré d’une bordure au motif du cordon enroulé (fig. 66).</p
+><p
+xml:id="p14"
+>Les symboles des lys inclus dans la partie supérieure de l’écu Pamphili concordent avec les événements historiques qui, entre le <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> et le <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, impliquèrent l’Italie centrale et cette famille. En fait, le développement du quartier de San Martino à Gubbio se situe précisément après la compilation des listes de prescription de gibelins en 1315 et avant la crise du milieu du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e </hi
+>siècle, arc de temps qui voit la construction, le long de l’axe de la rue Dogana (aujourd’hui rue Cavour), des maisons des familles de fidélité guelfe éprouvée, comme les Andreoli, les Beccoli et les Pamphili, qui, par leur activité médicale, avant même celle de judicature, acquirent une position de relief dans la communauté de Gubbio<note
+n="24"
+place="foot"
+xml:id="ftn102"
+><p
+>Paolo Micalizzi, <hi
+rend="italic"
+>Gubbio. Storia dell’architettura e della città</hi
+> [2<hi
+rend="sup"
+>e</hi
+> éd.], Gubbio, L’arte grafica, 2009, p. 185-187. Il s’agit de maisons plutôt que de palais ; leur réalisation, entre la fin du <hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> et les premières décennies du siècle suivant, fut effectuée par la fusion progressive de propriétés, suivant une procédure qui se répètera plus tard pour la demeure de la branche romaine de la maison. Sur les activités médicales et juridiques comme sur l’ascension sociale des Pamphili à Gubbio, voir aussi Benedetta Borello, <hi
+rend="italic"
+>L’apprentissage de Rome à la Renaissance, officiers à l’ombre de la Curie </hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècles,</hi
+> Turnhout, Brepols, 2021, chap. I en particulier ; Alberto Luongo, <hi
+rend="italic"
+>Gubbio nel Trecento</hi
+>, Rome, Viella, 2016, p. 293-294 et 555 (sur la situation des Pamphili à Gubbio au début de la seigneurie des Montefeltro). Dirk Amayden, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 125, affirme que « les Pamphili sont antiques et nobles de première classe dans la région de Gubbio depuis des centaines d’années, antiquité dont témoigne la maison située dans le quartier de San Martino, près du couvent de San Domenico, place de San Lorenzo ».</p
+></note
+>. En 1342, deux membres de la famille Pamphili sont nommés « surintendants des corps de garde du quartier San Martino, institués pour défendre la ville des agressions des gibelins », ceux-ci étant par ailleurs réintégrés à l’avènement de la seigneurie des Montefeltro en 1384<note
+n="25"
+place="foot"
+xml:id="ftn103"
+><p
+>Oderigi Lucarelli, <hi
+rend="italic"
+>Memorie e guida storica di Gubbio, </hi
+>Città di Castello, S. Lappi, 1888, p. 309. L’avènement de la seigneurie des Montefeltro (1384-1632) détermine le développement de Gubbio qui implique une nouvelle définition formelle et planimétrique du tissu urbain. On constate le retour des familles qui avaient été bannies et une sorte de réappropriation gibeline d’une partie du quartier de San Martino. Dans les premières décennies de la seigneurie des Montefeltro on assiste au développement de ce quartier, dans l’espace entourant l’église homonyme (ensuite consacrée à saint Dominique), qui devient le centre de gravité de la zone, contrebalançant les implantations plus anciennes et donnant à Gubbio la forme d’un habitat constitué de deux parties équivalentes, disposées symétriquement (Paolo Micalizzi, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 182-185).</p
+></note
+>.</p
+><p
+xml:id="p15"
+>Ce que nous observons dans le tiers supérieur de l’écu des Pamphili est un signe de leur appartenance au parti guelfe, dans la mesure où c’est une version de ce qui est appelé « chef d’Anjou », une figuration de tradition française, adoptée par Charles I en 1247, composée précisément de deux pals de gueules entre trois lys se détachant sur un champ d’azur<note
+n="26"
+place="foot"
+xml:id="ftn104"
+><p
+>Le chef est une « pièce honorable » qui occupe le tiers supérieur de l’écu ; il est délimité par une ligne horizontale. Alessandro Savorelli, « Segni e simboli araldici nell’arte fiorentina dal Medioevo al Rinascimento », dans Maria Monica Donato et Daniela Parenti (dir.), <hi
+rend="italic"
+>Dal giglio al David. Arte civica a Firenze fra Medioevo e Rinascimento</hi
+>, Florence-Milan, Giunti, 2013, p. 73-77, ici p. 74. En août 1380, Charles III d’Anjou entra à Gubbio, ville des Pamphili. </p
+></note
+>.</p
+><p
+xml:id="p16"
+>Après la défaite de Manfred de Souabe à Bénévent en 1266 et de son neveu Conradin, à Tagliacozzo, en 1268, l’influence de Charles I s’étend sur certaines zones du Piémont, sur la Toscane et sur la région de Montefeltro, se consolidant dans le royaume de l’Italie méridionale. Dans le contexte des affrontements entre factions guelfe et gibeline, l’azur devient la couleur du parti guelfe, soutien des Angevins qui concèderont longtemps et largement à leurs partisans l’usage des lys, insérés entre les pals du haut de l’écu, comme symbole de fidélité, noblesse, force, richesse et gloire. Souvent les vassaux adoptèrent le chef de leurs patrons d’Anjou, les lys, le lambel, les pals et les couleurs de France, comme expression d’hommage et requête de protection<note
+n="27"
+place="foot"
+xml:id="ftn105"
+><p
+>Goffredo Di Crollalanza, <hi
+rend="italic"
+>Gli emblemi dei guelfi e dei ghibellini</hi
+> [San Casciano, F. Cappelli, 1878], Milan, Orsini De Marzo, 2010, chap. III, p. 57 ; Giacomo Carlo Bascapé et Marcello Dal Piazzo, <hi
+rend="italic"
+>Insegne e simboli. Araldica pubblica e privata medievale e moderna, </hi
+>Rome, Ministero per i beni culturali e ambientali, 1983 ; Alessandro Savorelli, « “Les fleurs de lys y sont partout”. Origine et signification du chef d’Anjou en Italie (<hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xiv</hi
+><hi
+rend="sup"
+>e</hi
+> siècles », <hi
+rend="italic"
+>Armas e troféus</hi
+>, vol. 20, 2018, p. 93-107.</p
+></note
+>. Des villes comme Gubbio, Prato, San Gimignano, Florence et des familles guelfes des territoires voisins témoigneront par ce moyen de leur fidélité au parti de l’Église et à la dynastie française de Naples.</p
+><p
+xml:id="p17"
+>Des symboles et des figurations angevines envahirent les espaces publics et les palais municipaux, représentant les aspects positifs du pouvoir royal pour les villes : tutelle, adhésion politique, appartenance à un réseau. Souvent, les insignes pontificaux et ceux des Angevins entrèrent dans les armes des institutions locales, comme cela s’observe à Gubbio, ville des Pamphili, sur l’architrave de la porte du palais des Consuls qui porte des dates de la construction (1332-octobre 1336) et inclut une suite de cinq lys séparés par les pendants d’un lambel<note
+n="28"
+place="foot"
+xml:id="ftn106"
+><p
+>Matteo Ferrari, Riccardo Rao et Pierluigi Terenzi, « Rappresentazioni del potere angioino nell’Italia comunale: sovrani, ufficiali, città », dans Thierry Pécout (dir.), <hi
+rend="italic"
+>Les officiers et la chose publique dans les territoires angevins (</hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle) : vers une culture politique </hi
+>, Rome, École française de Rome, « École française de Rome, 518, 4 », 2020. Voir aussi Francesca Fumi Cambi Gado, « Stemmi ed emblemi nella decorazione degli edifici<hi
+rend="italic"
+> </hi
+>», dans Amerigo Restucci (dir.),<hi
+rend="italic"
+> L’architettura civile in Toscana. Il Medioevo, </hi
+>Sienne, Monte dei Paschi di Siena, 1995, p. 401-441, ici p. 423.</p
+></note
+> (fig. 67).</p
+><p
+xml:id="p18"
+>Bien que la présence des Anjou fût assez contestée, le lys fut conservé dans les répertoires iconographiques locaux, même après leur départ d’Italie<note
+n="29"
+place="foot"
+xml:id="ftn107"
+><p
+>Vieri Favini et Alessandro Savorelli, <hi
+rend="italic"
+>Segni di Toscana. Identità e territorio attraverso l’araldica dei comuni: storia e invenzione grafica (secoli XIII-XVII),</hi
+> Florence, Le Lettere, 2006 ; Alessandro Savorelli, « L’araldica per la storia: una fonte ausiliaria ? », dans Maria Pia Paoli (dir.), <hi
+rend="italic"
+>Nel laboratorio della storia: una guida alle fonti dell'età moderna</hi
+>, Rome, Carocci, 2013, p. 289-315.</p
+></note
+>. On peut ainsi comprendre comment la maison des Pamphili, lorsqu’elle définit son propre écu nobiliaire, inséra l’allusion à un moment clef de son histoire, évoquant sa tenace fidélité à l’Église, exprimée dans l’appartenance au parti guelfe<note
+n="30"
+place="foot"
+xml:id="ftn108"
+><p
+>Giacomo Carlo Bascapé et Marcello Dal Piazzo, <hi
+rend="italic"
+>op. cit.</hi
+>, 1983, p. 41, 57, 76 et 86.</p
+></note
+>.</p
+><p
+xml:id="p19"
+>Pour ce qui regarde la branche romaine de la famille, le groupe des trois lys fut inclus dans l’écu pour évoquer le passé ombrien, référence à une antiquité contribuant au prestige de la maison, engagée à Rome dans la consolidation de sa dignité curiale, pourvoyeuse de droits et de prérogatives toujours plus exclusifs.</p
+><p
+xml:id="p20"
+>Comme on l’a dit, en 1460, avec le transfert d’Antonio Pamphili, commença le destin de la branche romaine de la maison qui se détacha progressivement de l’Ombrie<note
+n="31"
+place="foot"
+xml:id="ftn109"
+><p
+>Un autre moment de la séparation de la branche romaine des Pamphili d’avec Gubbio, est attesté en 1501, quand les trois héritiers d’Angelo Benedetto Pamphili vendent quelques propriétés. Benedetta Borello, , « Alleanze matrimoniali… », art. cité, p. 362-363 ; Benedetta Borello, <hi
+rend="italic"
+>op. cit</hi
+>., 2021, p. 124-128 et 131-134.</p
+></note
+> : toutefois, encore en 1663, son lien avec Gubbio est mis en évidence dans la vue axonométrique de la <hi
+rend="italic"
+>Cité royale très antique </hi
+>[<hi
+rend="italic"
+>Città Regia Antichiss</hi
+>[<hi
+rend="italic"
+>ima</hi
+>]<hi
+rend="italic"
+>,</hi
+> dessinée par le citoyen de Gubbio, Ignazio Cassetta, et éditée à Amsterdam par Johannes Blaeu, avec dédicace à Vincenzo Armanni<note
+n="32"
+place="foot"
+xml:id="ftn110"
+><p
+><hi
+rend="italic"
+>Theatrum Civitatum et admirandorum Italiae</hi
+>, vol. 1, <hi
+rend="italic"
+>Stato della Chiesa</hi
+>, Amsterdam, s. n., 1663, 430 × 575 mm. Dans cette édition en haut à droite, se lit la dédicace de la carte de la part du « Prieur Ignatio Cassetta » (1592-1667), à Vincenzo Armanni. Ce dernier avait accompagné d’une description historique de Gubbio en latin, utile pour élaborer la légende, l’envoi de la carte à Rome à Carlo Cartari, avocat concistorial, qui, à son tour, l’envoya à Blaeu. Dans une autre légende, placée dans la partie inférieure gauche, sont contenues les indications relatives aux lieux et institutions « civils » de la ville ; le palais des Pamphili est indiqué par la lettre « Z ». La vue fut rééditée avec quelques variantes et sans la dédicace à Armanni, par Pierre Mortier dans <hi
+rend="italic"
+>Nouveau théâtre de l’Italie,</hi
+> publié à Amsterdam en 1704-1705 (vol. II) et réédité par Rutger Christoffel Alberts en 1724. Giuseppe Maria Nardelli, <hi
+rend="italic"
+>La pianta di Gubbio di Ignazio Cassetta stampata da Joannis Blaeu e Pierre Mortier: rappresentazione e simbolismi</hi
+>, Gubbio, Rotary Club, 2001. Nardelli étudie en détail les éléments naturels et artificiels présents dans la représentation. </p
+></note
+>. De fait, aux limites nord-ouest de l’habitat, émerge l’imposant édifice du « Palais des Pamphili », unique demeure privée indiquée par une légende dans la carte (fig. 68).</p
+><p
+xml:id="p21"
+>Les années 1630, avec l’élévation au cardinalat de Giovan Battista Pamphili, furent un moment clef pour la fortune romaine de l’écu Pamphili. Nous avons déjà évoqué le monument commémoratif en l’honneur de Girolamo Pamphili à l’église de la Vallicella, réalisée en 1638. La même année, l’écu à la colombe et aux lys, indiqué comme « à Rome, des Pamphili [<hi
+rend="italic"
+>Romae Pamphiliorum</hi
+>] », est publié dans les <hi
+rend="italic"
+>Armoiries nobiliaires</hi
+> du jésuite Silvestro Pietrasanta, qui ne tardera pas à devenir un influent collaborateur du pape Pamphili<note
+n="33"
+place="foot"
+xml:id="ftn111"
+><p
+>Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae,</hi
+> Romae, Typis haeredum Francisci Corbelletti, 1638, p. 438. Pietrasanta décrit ainsi l’écu des Pamphili : « <hi
+rend="italic"
+>Argentea rursus in scuti valvulo muricato, ac rostro attinens oleae ramulum prasinum, cum quadrifida punicea laciniola superne, inumbrante tria aurata lilia est Romae Pamphiliorum</hi
+> ». Marc Vulson de La Colombière accusa Pietrasanta d’avoir copié dans les <hi
+rend="italic"
+>Tesserae</hi
+> la méthode qu’il avait élaborée pour rendre graphiquement les images héraldiques. Le 8 août 1642, l’Inquisition emprisonna le fondateur de l’ordre piariste, Giuseppe Calasanzio (1557-1648). Le 9 mai 1643, Pietrasanta fut nommé visiteur apostolique de cet ordre qui depuis 1612 avait son siège avec son école à San Pantaleo, près du palais Pamphili de la place Navone. À la suite des critiques de Pietrasanta, Innocent X, par un bref du 16 mars 1646, réduisit l’ordre à une congrégation séculière subordonnée aux évêques locaux. L’ordre fut réhabilité en 1656 et rénové en 1669. </p
+></note
+> (fig. 69).</p
+><p
+xml:id="p22"
+>Particulièrement significatives pour la fortune romaine de l’écu furent les circonstances de la réalisation du palais de la famille. Le problème qu’Antonio Pamphili avait affronté à son arrivée à Rome en 1460 était de réussir à s’intégrer à la classe dirigeante de la ville, objectif poursuivi grâce à une habile politique de mariages avec des membres de grandes familles romaines<note
+n="34"
+place="foot"
+xml:id="ftn112"
+><p
+>Benedetta Borello, « Alleanze matrimoniali... », art. cité, p. 345-366 ; Christof Friedrich Weber, « Papstgeschichte und Genealogie », <hi
+rend="italic"
+>Römische Quartalschrift</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 84, 1989, p. 331-400, en particulier p. 394 et 395. </p
+></note
+> et à un choix judicieux du lieu de résidence<note
+n="35"
+place="foot"
+xml:id="ftn113"
+><p
+>Une communauté originaire de Gubbio est présente dans la zone de Parione, mais elle n’est pas assez structurée pour garantir à Antonio Pamphili un rôle social correspondant au rang acquis : Benedetta Borello, « Alleanze matrimoniali… », art. cité, p. 345-366 ; Christof Weber, art. cité, en particulier p. 394 et 395. </p
+></note
+>.</p
+><p
+xml:id="p23"
+>Entre 1471 et 1479, il acquiert quelques propriétés place Pasquino et rue de l’Anima, dans le quartier de Parione, une zone en expansion, stratégiquement située sur la voie papale, la <hi
+rend="italic"
+>via Papalis</hi
+>, parcours solennel pendant la cérémonie de l’intronisation du Pontife entre le Vatican et Saint-Jean-de-Latran<note
+n="36"
+place="foot"
+xml:id="ftn114"
+><p
+>Luigi De Gregori, « Piazza Navona prima d’Innocenzo X », <hi
+rend="italic"
+>Roma</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 4, 1926, p. 14-25 et 97-116, ici p. 111 et 112 ; Mirka Beneš, dans <hi
+rend="italic"
+>The Villa Pamphilj (1630,1670): Family, Gardens, and Land in Papal Rome</hi
+>, thèse de doctorat, Université de Yale, 1989, p. 33, 36, 37, 59 et 60, publie les documents d’archive relatifs aux propriétés acquises par Antonio Pamphili à différentes époques. Anna Esposito, « Il rione Parione durante il Pontificato Sistino: analisi di un'area campione. Osservazione sulla popolazione rionale », dans Massimo Miglio, Francesca Niutta, Diego Quaglioni <hi
+rend="italic"
+>et al</hi
+>. (dir.), <hi
+rend="italic"
+>Un pontificato e una città. Sisto IV (1471-1484)</hi
+>, actes de colloque, Rome, 3-7 décembre 1984, Cité du Vatican, Scuola Vaticana di Paleografia, Diplomatica e Archivistica, « Littera antiqua, 5 », 1986, p. 651-666.</p
+></note
+>. Finalement, en 1497, le fils d’Antonio, Angelo Benedetto Pamphili, est enregistré dans les documents comme citoyen romain et scripteur des lettres apostoliques [<hi
+rend="italic"
+>cives romanus ac litterarum apostolicarum scriptor</hi
+><note
+n="37"
+place="foot"
+xml:id="ftn115"
+><p
+>Benedetta Borello, « Strategie di insediamento in città: i Pamphilj a Roma nel primo Cinquecento », dans Maria Antonietta Visceglia (dir.), <hi
+rend="italic"
+>La nobiltà romana in età moderna</hi
+>, Rome, Carocci, 2001, p. 31-61, en particulier p. 39 et 54. Les conditions sociales de l’implantation d’Antonio Pamphili et de ses descendants à Rome sont approfondies par Benedetta Borello, <hi
+rend="italic"
+>op. cit.</hi
+>, en particulier au chap. II, p. 69-121 et chap. IV, p. 182-184.</p
+></note
+>]<hi
+rend="italic"
+>. </hi
+>Les propriétés de ce quartier de Parione s’étendirent progressivement grâce à l’acquisition d’édifices adjacents au noyau initial : en 1615, les documents enregistrent un projet pour intégrer les parties les plus anciennes dans d’autres donnant sur la place Navone, enregistrées à partir de 1592<note
+n="38"
+place="foot"
+xml:id="ftn116"
+><p
+>Stéphanie Leone, <hi
+rend="italic"
+>The Palazzo Pamphilj in Piazza Navona: Constructing Identity in Early Modern Rome</hi
+>, Londres, H. Miller, 2008. Voir aussi « Cardinal Pamphilj Builds a Palace: Self-Representation and Familial Ambition in Seventeenth-Century Rome », <hi
+rend="italic"
+>Journal of the Society of Architectural Historians</hi
+>, vol. 63, n<hi
+rend="sup"
+>o</hi
+>4, 2004, p. 440-471 (la référence à la décoration des arches de la cour se trouve à la p. 450) ; « La costruzione di palazzo Pamphilj », dans <hi
+rend="italic"
+>Palazzo Pamphilj: ambasciata del Brasile a Roma,</hi
+> Turin, U. Allemandi, 2016, p. 15-67. Stéphanie Leone (<hi
+rend="italic"
+>op. cit</hi
+>., p. 88, fig. 39) observe, sur la base d’un dessin de Stefano Pignatelli de 1615 (ADP 86.2, int.2), que, en réalité, les travées du palais vers la place de Pasquin étaient au nombre de cinq et non de sept comme on le voit dans la gravure de Giovanni Maggi de 1625. Du vestibule donnant sur la place, on accède à un monumental escalier de cérémonie qui conduit aux appartements de représentation du cardinal.</p
+></note
+>. En 1634, Giovan Battista Pamphili acquiert d’autres biens immobiliers de la famille Teofili, doublant l’ampleur de sa propriété ; il demande ensuite à l’architecte Francesco Peperelli (vers 1585-1641) d’unir en une structure unique les corps de fabrique existants et d’installer une demeure correspondant à sa dignité de cardinal<note
+n="39"
+place="foot"
+xml:id="ftn117"
+><p
+>Stéphanie Leone, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 111-126 ; Mirka Beneš, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 75 et 76, confirme que dans cette phase du premier <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, les structures préexistantes furent réutilisées.</p
+></note
+>.</p
+><p
+xml:id="p24"
+>L’aménagement du palais prévoit la création d’appartements destinés à Giovan Battista Pamphili, à son frère et à sa femme Olimpia Maidalchini. Dans le corps sud-ouest, vers la place Pasquino, qui pousse vers les parties les plus anciennement acquises par les Pamphili, est inséré un escalier à plan carré autour d’une cage centrale. Dans l’aménagement voulu par Peperelli, il permet l’accès aux appartements de Donna Olimpia, et, aux étages supérieurs, aux membres de sa suite. Sur le portail d’entrée de l’appartement de représentation<note
+n="40"
+place="foot"
+xml:id="ftn118"
+><p
+>Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 120-126.</p
+></note
+>, on observe un écu de pierre à la colombe et aux lys disposé sur une plaque ornée de rubans déployés, de facture plus ancienne que ceux qui sont visibles ailleurs dans le palais (fig. 70).</p
+><p
+xml:id="p25"
+>Dans la configuration qui suivit, les appartements s’articulent autour de deux cours. Deux vestibules en portiques, accessibles, respectivement, depuis la rue de l’Anima et la place Navone, servent d’entrée pour la cour principale. Dans la <hi
+rend="italic"
+>Mesure et estimation des travaux de stuc faits au palais situé place Navone par l’Emminentissime Seigneur Cardinal Pamphili</hi
+> [<hi
+rend="italic"
+>Misura e stima de’ lavori di stucco fatti nel palazzo posto in Navona dell’…Em.m Sig. Card.le Panfili</hi
+>], datée du 9 juin 1636, le paragraphe relatif à la « façade de la loggia vers la cour » [<hi
+rend="italic"
+>facciata della loggia verso il cortile</hi
+>] enregistre un paiement « pour avoir dessiné et stuqué les six palombes dans les triangles au-dessus des trois arcs avec leurs rameaux d’olivier dans le bec<note
+n="41"
+place="foot"
+xml:id="ftn119"
+><p
+>« <hi
+rend="italic"
+>per aver abozzato e stuccato le 6 palombe nelli triangoli sop.a li 3 archi con suo rame d’oliva in bocca </hi
+>»,<hi
+rend="italic"
+> Misura e stima de’lavori di stucco fatti di tutta robba eccetto la calce bianca da M.ro Ludovico Bossi Capomastro Muratore nel palazzo posto in Navona dell’…Em.m Sig. Card.le Panfili</hi
+>, ADP, 88.34.2, fol. 215, transcrit partiellement dans Stéphanie Leone, <hi
+rend="italic"
+>op. cit.,</hi
+> Appendix, doc. 3, p. 319-321, ici p. 320.</p
+></note
+> » (fig. 71 et 72). Dans le même document, un autre paiement indique que dans la « loggia de la cour, à l’étage noble » [<hi
+rend="italic"
+>loggia del cortile, al piano nobile</hi
+>], sont insérées, dans les volutes de la console, « deux nacelles et en leur milieu [...] une palombe en bas-relief [...] avec son rameau d’olivier au bec<note
+n="42"
+place="foot"
+xml:id="ftn120"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, fol. 212, p. 320 : « <hi
+rend="italic"
+>doi baccelli... et nel suo mezzo fatto una palomba dì mezzo rilievo…con suo ramo d’olive in bocca </hi
+>». À l’est, la loggia était ouverte, alors que les arches vers l’ouest étaient aveugles. Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 112. La loggia manque sur le côté sud, qui coïncide avec les parties les plus anciennes du palais. À l’étage noble, la nouvelle loggia fut de dimentions plus modestes que la précédente : elle incluait quatre colonnes de « <hi
+rend="italic"
+>bigio</hi
+> » et deux de « <hi
+rend="italic"
+>cipollino</hi
+> ». Ces colonnes furent réutilisées, après que leur hauteur eut été réglée, adossées à des pilastres. Elles sont perdues comme les décorations de stuc à la base des arches de la voûte, mentionnées dans le document (Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 114). Des colombes furent aussi incluses dans la décoration de la tour existant aux limites du palais Teofili, comme il résulte du paiement pour « avoir fait le relief du corps des douze palombes dessinées et stuquées avec des rameaux d’olivier au bec dans lesdits triangles sur les arches » [<hi
+rend="italic"
+>Aver fatto l’aggetto del corpo delle n. 12 palombe ne’detti triangoli sopra l’archi abozz.e e stucc.te con rame d’olivo in becco</hi
+>...], ADP, 88.34.2, fol. 207, dans Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 320. Dans un autre document, présent dans le même dossier de l’archive Pamphili, daté du 21 mars 1638, fol. 226-325, ici fol. 247 (Stéphanie Leone, <hi
+rend="italic"
+>op. cit.</hi
+>, chap. <hi
+rend="italic"
+>Lavori fatti nella facciata di d.o Cortile dove è l’Entrone verso la Strada dell’Anima</hi
+>, p. 321-325, ici p. 323) nous avons l’indication que la loggia du rez-de-chaussée est limitée par « deux pilastres isolés ». Vers 1653, un autre document (ADP, 88.34.1 ; Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., Appendix, doc. 4, p. 325-350), inclus dans le chapitre relatif aux « travaux de la façade extérieure sud. Rehaussement vers la place » [<hi
+rend="italic"
+>lavori nella facciata di fuori del sud. Rialzamento verso la piazza</hi
+>], relève l’insertion du motif décoratif des lys (fol. 18) et de la « devise de palombes sur les reliefs des susdits termes faits, la coquille avec des canaux et une cascade de festons au dessous » [<hi
+rend="italic"
+>impresa di Palombe dentro sotto sopra li aggetto delli suddetti termini fattici la conchiglia con canali e cascata di festoni sotto</hi
+>] (fol. 21, Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 326). L’emblème de la colombe ne semble pas figurer dans les peintures des salles décorées durant le cardinalat de Giovan Battista Pamphili, en particulier dans les<hi
+rend="italic"
+> Histoires de Joseph </hi
+>(1630-1632), les <hi
+rend="italic"
+>Histoires de Moïse</hi
+> et dans les <hi
+rend="italic"
+>Marines </hi
+>d’Agostino Tassi (1635) ; Patrizia Cavazzini, « Towards a Chronology of Agostino Tassi », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 144, 2002, p. 396-408<hi
+rend="italic"
+>. </hi
+>Vers 1647, sont documentées les recherches promues par donna Olimpia Maidalchini sur l’héraldique de sa famille paternelle ; voir aussi Tommaso Tomasi, <hi
+rend="italic"
+>Della esaltazione di papa Innocentio X. Lettera panegirica</hi
+>, In Roma, Nella stamperia di Bernardino Tani, 1644.</p
+></note
+> ». L’uniformité qui s’observe dans la forme des colombes sur les façades de la cour centrale et de celle du nord, réalisée après 1645, indique que ces décorations de stuc ont été modifiées après la restructuration documentée de 1636-1638, ou qu’elles ont été exécutées avec une attention particulière pour obtenir un effet homogène<note
+n="43"
+place="foot"
+xml:id="ftn121"
+><p
+>Vers 1653, le document ADP, 88.34.1 (Stéphanie Leone, <hi
+rend="italic"
+>op. cit.</hi
+>, Appendix, doc. 4, p. 325-350), fol. 79, au chapitre « Façade de la galerie dans ladite loggia » [<hi
+rend="italic"
+>Facciata della galleria in detta loggia</hi
+>] (Stéphanie Leone, <hi
+rend="italic"
+>op. cit</hi
+>., p. 333), il y a encore un paiement pour le relevé des arcades de la loggia au premier étage de la cour : « pour le relief stuqué des bandes qui encadrent les triangles , pour six palombes dans lesdits triangles avec leurs rameaux d’olivier et l’enduit de stuc sur le fond de chacun » [<hi
+rend="italic"
+>per l’aggetto stuccato delle fascie, che fanno riquadramento nelli triangoli; per 6 Palombe in d.ti triangoli, con suoi rami d’Olivo et incollato di stucco il campo di ciascuno</hi
+>].</p
+></note
+>.</p
+><p
+xml:id="p26"
+>Après l’élection de Giovan Battista Pamphili au pontificat, en 1644, et avant 1650, date du jubilé, le palais subit des modifications substantielles, confiées aux architectes Girolamo Rainaldi et Francesco Borromini, assumant un aspect encore visible aujourd’hui, où l’emblème de la colombe au rameau d’olivier dans le bec est largement présent<note
+n="44"
+place="foot"
+xml:id="ftn122"
+><p
+>Girolamo Rainaldi, impliqué dans le réaménagement du palais à partir de 1644, créa une troisième cour, reliée par un portique à celle du centre. Les projets de Rainaldi pour l’agrandissement de l’édifice figurent parmi les papiers de Virgilio Spada dans le manuscrit de la BAV, Vat. lat. 11258, fol. 170, 144 et 167, qui contient aussi le projet de Borromini pour la distribution intérieure (fol. 168, 169, 181 et 192). </p
+></note
+>.</p
+><p
+xml:id="p27"
+>L’image symbolique s’enrichit d’autres références : c’est un phénomène récurrent dans le contexte de l’ascension des familles aristocratiques à l’époque moderne que la récupération de références antiques se radicalise au point de devenir légende. Le recours à la figure de l’Énée virgilien caractérise le récit des origines aussi bien chez les Barberini que chez les Pamphili, en lien avec la conception de Rome comme siège mythique d’une autorité politique et spirituelle universelle, diffusée au moins depuis le <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle<note
+n="45"
+place="foot"
+xml:id="ftn123"
+><p
+>Maffeo Barberini, avant d’être élu pape, s’était forgé la devise « <hi
+rend="italic"
+>hic domus</hi
+> » [ici est ma demeure], citation des mots que le héros antique aurait prononcés à son arrivée dans le Latium, auspice de la fondation de Rome et d’un futur âge d’or.</p
+></note
+>.</p
+><p
+xml:id="p28"
+>Dans la décoration du palais de la place Navone, dans la <hi
+rend="italic"
+>Salle de Bacchus</hi
+>, qui prend son nom de la frise peinte par Andrea Camassei en 1646-1648, aux embrasures des fenêtres sont figurées Vénus et Junon. Un panégyrique en l’honneur d’Innocent X indique que la colombe et le lys sont leurs attributs. L’assimilation de la colombe pamphili à Vénus, mère d’Énée, considérée comme fondatrice de la maison, fait partie de l’invention tardive d’un passé aussi glorieux qu’imaginaire, promu par les Pamphili<note
+n="46"
+place="foot"
+xml:id="ftn124"
+><p
+>Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti, <hi
+rend="italic"
+>Sant’Angese in Agone a Piazza Navona. Bellezza, Proporzione, Armonia nelle fabbriche Pamphili</hi
+>, Rome, Gangemi, 2003, p. 55 et 56. Vénus apparaît aussi dans la frise d’Andrea Camassei. Au cours de la démolition de l’ancienne église de Sainte-Agnès, le 17 avril 1652, fut retrouvée une pierre portant une épigraphe avec le nom : « A. Volturgio Pamphilio », qui, pour le jésuite Girolamo Petrucci (1585-1669), collaborateur d’Athanasius Kircher, constituait une nouvelle preuve de l’antiquité de la maison Pamphili. Les affirmations de Petrucci furent contredites sur des bases philologiques par Denis Lambin et par André Schott, qui, à leur tour, furent durement critiqués par le jésuite (<hi
+rend="italic"
+>ibid.</hi
+>, p. 77-80).</p
+></note
+>.</p
+><p
+xml:id="p29"
+>La référence à Énée triomphe dans les <hi
+rend="italic"
+>Histoires </hi
+>de la galerie du palais, œuvre de Pietro da Cortona (1651-1654), connaisseur averti de l’<hi
+rend="italic"
+>Énéide</hi
+><note
+n="47"
+place="foot"
+xml:id="ftn125"
+><p
+>Rudolf Preimesberger, « “Pontifex Romanus per Aeneam Praesignatus”, Die Galleria Pamphilj und ihre Fresken », <hi
+rend="italic"
+>Römisches Jahrbuch für Kunstgeschichte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 16, 1976, p. 221-287. </p
+></note
+>, comme chez Angelo Caferri déjà cité, auteur du programme iconographique des peintures qui montrent un flagrant exemple de ce que l’on a appelé « généalogies incroyables<note
+n="48"
+place="foot"
+xml:id="ftn126"
+><p
+>Roberto Bizzocchi, <hi
+rend="italic"
+>Genealogie incredibili. Scritti di storia nell’Europa moderna</hi
+>, Bologne, Il Mulino, 1995.</p
+></note
+> ». Il faut rappeler que Caferri affirme dans un <hi
+rend="italic"
+>Discours </hi
+>que Numa Pompilius, qu’il appelle « Pamphilius », serait un descendant de la « famille Pamphilia de Sparte dans cette cité fondée par Pamphilio, roi grec des Doriens, 350 ans avant Rome<note
+n="49"
+place="foot"
+xml:id="ftn127"
+><p
+>« <hi
+rend="italic"
+>famiglia Panfilia di Sparta, in quella città fondata da Panfilio re greco de’Dorici, 350 anni prima della fondazione di Roma </hi
+>», Gaetano Moroni, <hi
+rend="italic"
+>op. cit.</hi
+>, 1851, vol. LI, entrée « Pamphili », p. 85, rapporte cette hypothèse, avancée par Nicolò Angelo Caferri, et affirme qu’elle fut dictée par « l’adulation ». L’affirmation de Caferri sur l’origine spartiate des Pamphili et sur leur descendance de Numa Pompilius est déjà avancée par Girolamo Brusoni dans son ode intitulée <hi
+rend="italic"
+>Le glorie Pamphilie, </hi
+>publiée en 1656, et, en 1662, par Camillo Pamphili dans ses compositions poétiques incluses dans le recueil dirigé par Girolamo Brusoni sous le titre<hi
+rend="italic"
+> Degli Allori d’Eurota, Poesie diverse dell’Eccellentiss. Sig. Principe D. Camillo Pamphilo, vol. 2: Raccolte dal Cavalier Girolamo Brusoni, e Dedicate all'Eccellentissima Signora Principessa Donna Olimpia Aldobrandina Pamphilii</hi
+>, parte prima, In Venetia, Per il Valuasense, 1662. Ces hypothèses suscitèrent aussi les critiques de Denis Lambin et d’André Schott (Giuseppe Simonetta, Laura Gigli et Gabriella Marchetti, <hi
+rend="italic"
+>Sant’Angese in Agone a Piazza Navona. Bellezza, Proporzione, Armonia nelle fabbriche Pamphili</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>, p. 79).</p
+></note
+> ». L’affirmation de l’origine spartiate des Pamphili et de leur descendance de Numa Pompilius sont avancées et répétées dans plusieurs écrits par Girolamo Brusoni (1614-1686), érudit et historiographe, originaire du Polesine, chartreux ondoyant, qui, après avoir renié son adhésion aux idées libertines, adopta un radical conformisme, témoignant son respect à l’Église et aux puissants de l’époque<note
+n="50"
+place="foot"
+xml:id="ftn128"
+><p
+>Gaspare De Caro, « Brusoni, Girolamo »,<hi
+rend="italic"
+> DBI</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., vol. 14, 1972, p. 712-720.</p
+></note
+>.</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>L’écu des Pamphili durant le pontificat d’Innocent X (1644-1655) : deux exemples en architecture</head
+><p
+xml:id="p30"
+>Durant le pontificat d’Innocent X (1644-1655), l’écu, centré sur la colombe au rameau d’olivier, se diffuse dans les œuvres architecturales commanditées par le pape et par les membres de sa famille, en particulier son neveu Camillo et sa belle-sœur Olimpia Maidalchini, aussi bien à Rome que dans les fiefs de San Martino al Cimino et de Valmontone.</p
+><p
+xml:id="p31"
+>Un exemple, choisi parmi les œuvres promues par le pontife à Rome, permettra d’éclairer les objectifs et les modalités d’usage de l’emblème dans cette période. Les significations qui lui sont attribuées deviennent parfaitement adéquates à la situation historico-politique et démontrent comment deux caractéristiques apparemment contradictoires peuvent être attribuées à ces images symboliques sur la durée de plusieurs siècles : efficacité communicative et malléabilité.</p
+><p
+xml:id="p32"
+>Pour le premier aspect, on peut relever que l’élaboration d’un écu prévoit souvent l’adoption de symboles disponibles pour plusieurs maisons. Le meuble de la colombe (sans le rameau d’olivier toutefois) est présent dès 1470 dans la chapelle Palombara, dédiée à saint François dans l’église romaine de San Silvestro in Capite<note
+n="51"
+place="foot"
+xml:id="ftn129"
+><p
+>Dirk Amayden, <hi
+rend="italic"
+>op. cit</hi
+>., p. 123-124. Une colombe « au naturel » figure dans l’écu de la famille Rosolini (<hi
+rend="italic"
+>ibid.</hi
+>, p. 171). Pietrasanta aussi (<hi
+rend="italic"
+>op. cit.</hi
+>, p. 438) illustre les écus de plusieurs familles où sont incluses des colombes.</p
+></note
+>. L’écu des Ciccolini de Macerata est « d’azur au mont à six coupeaux d’or, surmonté d’une colombe d’argent tenant en son bec un épi d’or<note
+n="52"
+place="foot"
+xml:id="ftn130"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 359 : « <hi
+rend="italic"
+>d’azzurro al monte di sei cime d’oro, cimato da una colomba d’argento tenente nel becco una spiga di grano d’oro</hi
+> ».</p
+></note
+> ». L’écu du Pérugin Vermigliolo Vermiglioli, conservateur à Rome en 1634, présente, dans sa partie inférieure en champ de gueules « une colombe d’argent béquetant un rameau d’olivier sur lequel elle est posée<note
+n="53"
+place="foot"
+xml:id="ftn131"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 227 : « <hi
+rend="italic"
+>una colomba d’argento in atto di beccare un ramo d’ulivo sul quale è posata </hi
+>». La tombe de Giovanni Maria Vermiglioli, au cloître de Santa Maria della Pace, est datée de 1644.</p
+></note
+> ».</p
+><p
+xml:id="p33"
+>Pour ce qui regarde l’adéquation de l’emblème aux objectifs politiques et idéologiques du pontificat d’Innocent X, une lettre de Fabio Chigi à Virgilio Malvezzi, politologue philo-espagnol et son ami proche, offre une clef de lecture précise. Le cardinal Chigi écrit : « L’État ecclésiastique, l’Italie, le monde entier espèrent beaucoup d’être sauvés des maux présents et que la colombe portant l’olive soit un signe certain que nous avons passé le déluge<note
+n="54"
+place="foot"
+xml:id="ftn132"
+><p
+>« <hi
+rend="italic"
+>Lo Stato Ecclesiastico, l’Italia, il mondo tutto spera il gran ristoro de correnti mali, e che la colomba, e l’oliva che porta, siano certo segno del passato diluvio</hi
+> », Münster, le 5 novembre 1644, de Chigi à Malvezzi, BAV, ms. Chigiani, A.II.29, fol. 45, transcrit dans Vlastimil Kybal et Giovanni Incisa della Rocchetta (éd.), <hi
+rend="italic"
+>La nunziatura di Fabio Chigi</hi
+>, Rome, Tip. Ist. Grafico Tiberino, 1943, vol. 1, p. 536. Je remercie Julien Régibeau pour m’avoir signalé cette lettre.</p
+></note
+>. » La lettre est datée du 5 novembre 1644 ; Giovan Battista Pamphili avait été élu pape le 15 septembre. Sur son initiative, le 23 décembre 1643, Fabio Chigi avait été envoyé comme nonce extraordinaire au congrès de Münster pour négocier la paix qui devait mettre fin à la guerre de Trente Ans.</p
+><p
+xml:id="p34"
+>Dans le domaine religieux, depuis les premiers temps chrétiens, la colombe, animal pur et doux, était le symbole de la Sagesse divine exprimée par le Saint-Esprit<note
+n="55"
+place="foot"
+xml:id="ftn133"
+><p
+>Dans le <hi
+rend="italic"
+>Cantique des Cantiques</hi
+>, 2:14, « Ma colombe » est un qualificatif affectueux réservé à la Sulamite par le pasteur amoureux. Dans la langue hébraïque, Giona (Yohnàh, « colombe ») est un nom masculin commun. L’identification de la colombe à l’Esprit-Saint est dans Tertullien, <hi
+rend="italic"
+>De Baptismo</hi
+>, chap. VIII. Cette identification est illustrée par la médaille d’Innocent X à la colombe dans une couronne d’olivier, <hi
+rend="italic"
+>Replevit orbem terrarum</hi
+>. Voir Yvan Loskoutoff, « Hercule et Atlas à Rome puis à Modène, Un présent diplomatique du cardinal Francesco degli Albizzi au cardinal Mazarin », <hi
+rend="italic"
+>Dix-septième siècle,</hi
+> n<hi
+rend="sup"
+>o</hi
+> 241, octobre-décembre 2008, p. 677-708.</p
+></note
+>. À partir du <hi
+rend="small-caps"
+>iv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, et dans les miniatures des manuscrits des <hi
+rend="small-caps"
+>v</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>vi</hi
+><hi
+rend="sup"
+>e</hi
+> siècles, dans les représentations de l’Annonciation à Marie et de la Trinité, la colombe devient l’icône du Saint-Esprit. Elle est aussi un emblème de renaissance et de salut. Dans la Genèse, une colombe porte à Noé le rameau d’olivier qui annonce la fin du déluge universel et le début d’une nouvelle ère de paix entre Dieu et les hommes<note
+n="56"
+place="foot"
+xml:id="ftn134"
+><p
+><hi
+rend="italic"
+>Genèse</hi
+>, 8:11.</p
+></note
+>. De manière analogue, Pâques, résurrection du Christ, a comme symbole une colombe blanche qui tient un rameau d’olivier dans le bec. L’association entre colombe et renaissance est aussi propre au sacrement du baptême : dans l’évangile de Matthieu il est dit qu’une colombe descendant du ciel apparut à Jean-Baptiste lors du baptême du Christ<note
+n="57"
+place="foot"
+xml:id="ftn135"
+><p
+>Matthieu, <hi
+rend="italic"
+>Évangile</hi
+>, 3:16.</p
+></note
+>.</p
+><p
+xml:id="p35"
+>Les références à saint Jean-Baptiste conviennent à la figure du pape Pamphili, dont le nom était justement Jean-Baptiste, de même que celles à la paix et à la renaissance l’étaient à la situation européenne. Les récits des événements qui précédèrent l’élection d’Innocent X sont parsemés d’apparitions de colombes au rameau d’olivier, de même que les fêtes pour l’intronisation du pontife, la <hi
+rend="italic"
+>possessio. </hi
+>À cette occasion, place Navone, fut construite une machine éphémère représentant Noé qui accueille dans ses bras une colombe en vol ; elle couronnait un parcours allégorique complexe imaginé par Girolamo et Carlo Rainaldi<note
+n="58"
+place="foot"
+xml:id="ftn136"
+><p
+>Francesco Cancellieri, <hi
+rend="italic"
+>Storia de’solenni possessi de’Sommi Pontefici, detti anticamente processi</hi
+>, Rome, Presso Luigi Lazzarini stampatore della R. C. A., 1802, p. 253. À la p. 244, Cancellieri rapporte, citant le <hi
+rend="italic"
+>Journal </hi
+>de Gigli, que le 15 septembre 1644, durant le conclave, une colombe était entrée dans la salle pour aller se poser sur la loge des bénédictions à Saint Pierre (p. 251) ; une colombe aurait aussi pénétré dans la chambre du futur pontife (p. 208). Cancellieri rapporte aussi que le 23 novembre 1644, date de la cérémonie de la <hi
+rend="italic"
+>possessio</hi
+>, on annonçait une tempête, mais une colombe dissipa les nuages et « apporta la sérénité désirée » et le soleil « apparut riant de joie avec plus de splendeur […] comme dans les premiers siècles, l’innocente colombe apporta la tranquillité au bon Noé » (p. 244 et 245). Sur ces manifestations surnaturelles, voir Yvan Loskoutoff, « Augures héraldiques de la papauté », dans Andreas Gottsmann, Pierantonio Piatti et Andreas E. Rehberg (dir.), <hi
+rend="italic"
+>Incorrupta monumenta Ecclesiam defendunt, Studi offerti a Sergio Pagano, Prefetto dell’Archivio Segreto Vaticano</hi
+>, Cité du Vatican, Archivio Segreto Vaticano, 2018, 3 vol., t. 2, p. 976-994.</p
+></note
+>.</p
+><p
+xml:id="p36"
+>La guerre qui avait agité l’Europe centrale se conclut en 1648 par la paix de Westphalie. Le pontife fut contraint de reconnaître la liberté de culte dans les États des princes allemands. Dès lors, tous ses efforts consistèrent à minimiser cette défaite et à réaffirmer le rôle politique de la sainte Église romaine sur la scène internationale.</p
+><p
+xml:id="p37"
+>Le jubilé de 1650 attira à Rome des foules nombreuses et fut donc une occasion parfaite pour la stratégie du pontife. Les œuvres qu’il commanda montrent largement l’image de la colombe au rameau d’olivier, appropriée pour un pape se proposant comme l’arbitre de la paix et de la renaissance universelle après le dramatique conflit. Elle paraît dans les édifices publics, civils et religieux, réalisés par la volonté d’Innocent X : le nouveau palais du Capitole, la rénovation de la basilique du Latran et des nefs de Saint-Pierre, les nouvelles prisons à la via Giulia, la coupole de Saint-Yves-de-la-Sapience, où l’image de la colombe triomphe à l’intérieur, au sommet de la lanterne, exploitant la coïncidence entre l’emblème papal et celui de la Sagesse divine. Dans cette phase prévaut le message de paix et de renaissance : la colombe est souvent représentée sans les lys qui complètent l’écu des Pamphili, mais toujours surmontée de la tiare et des clefs papales.</p
+><p
+xml:id="p38"
+>Pour Giovan Battista Pamphili, l’ascension au trône pontifical fut aussi l’occasion de manifester le prestige de sa propre maison. Sur ce point, l’initiative prioritaire se développa sur le vaste chantier de la place Navone où, entre 1644 et 1650, reprirent les travaux du palais familial. Ils s’accompagnèrent du réaménagement de l’espace public de l’antique stade de Domitien, célébré depuis le <hi
+rend="small-caps"
+>iv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle comme lieu de martyre. L’exaltation du pouvoir personnel du pontife se développa par la construction d’une nouvelle façade pour la demeure, par le projet de transformer l’église de Sainte-Agnès-in-Agone en mausolée familial et de créer le Collège Innocentien, édifices qui furent tous semés d’une myriade de colombes au rameau d’olivier.</p
+><p
+xml:id="p39"
+>La sacralité du lieu et la continuité entre monde païen et monde chrétien furent rehaussées par la monumentale présence de l’obélisque antique, élevé en 1649 au centre de la fontaine des Quatre Fleuves, conçue par le Bernin. L’œuvre de récupération fut soutenue par les recherches du jésuite Athanasius Kircher qui considérait les hiéroglyphes comme des symboles unissant les mystères antiques à ceux de la foi des chrétiens, éléments de connexion entre la réalité terrestre et le monde surnaturel originaire. Pour Kircher l’antiquité représentait l’époque la plus proche de la « Vérité Première », son étude se révélait importante en vue de la restauration d’une harmonie que les hommes avaient perdue par des siècles de péché et d’idolâtrie<note
+n="59"
+place="foot"
+xml:id="ftn137"
+><p
+>Sur Kircher : Valerio Rivosecchi, <hi
+rend="italic"
+>Esotismo in Roma Barocca. Studi sul Padre Kircher</hi
+>, Rome, Bulzoni, 1982 ; Carlos Ziller Camenietzki, <hi
+rend="italic"
+>L’harmonie du monde au </hi
+><hi
+rend="small-caps italic"
+>xvii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle. Essai sur la pensée scientifique d’Athanasius Kircher</hi
+>, thèse de doctorat, Maurice Clavelin (dir.), Université Paris IV, 1995, en particulier p. 466. On ignorait alors que l’obélisque, retrouvé dans le cirque de Maxence, où il gisait brisé en quatre morceaux, avait été fabriqué en Égypte sous Domitien. </p
+></note
+>. Dans le volume monumental consacré par Kircher à l’<hi
+rend="italic"
+>Obeliscus Pamphilius</hi
+>, publié en 1650, « <hi
+rend="italic"
+>Anno Jubilaei</hi
+> », le portrait du pontife est accompagné des mots qui illustrent son emblème : « [Innocent X] lie les lys, la palme et l’olivier, il aime le temps prospère de la paix victorieuse » (fig. 73). Dans la dédicace du volume au pontife « Pam-philio », c’est-à-dire « Amour universel », Kircher affirme : « La colombe visible sur le vert rameau d’olivier s’élève de son vol pour apaiser la divinité irritée et pour obtenir la tranquillité de la paix<note
+n="60"
+place="foot"
+xml:id="ftn138"
+><p
+>Rudolf Preimesberger, « Obeliscus Pamphilius. Beitrage zur Vorgeschichte und Ikonographie des Vierstromebrunnes auf Piazza Navona », <hi
+rend="italic"
+>Münchner Jahrbuch der Bildenden Kunst</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 25, 1974. p. 77-162 : « <hi
+rend="italic"
+>i gigli, la palma e l’ulivo lega insieme, ama il tempo prospero della pace vittoriosa</hi
+> » ; « <hi
+rend="italic"
+>La colomba, visibile sul verde ramo d'ulivo, si alza in volo per placare la divinità arrabbiata, e per [ottenere] la tranquillità della pace</hi
+> ».</p
+></note
+> ».</p
+><p
+xml:id="p40"
+>L’érection de l’obélisque place Navone peut être considérée comme un épisode du repositionnement des obélisque antiques comme pierres milliaires de la sainte Rome moderne, initié par Sixte V. Dans un document de 1647 on lit que par l’érection de l’obélisque de la place Navone « furent imités les vestiges de Sixte V<note
+n="61"
+place="foot"
+xml:id="ftn139"
+><p
+>Maria Grazia D’Amelio, Tod A. Marder, « La fontana dei Quattro Fiumi a piazza Navona, iconologia e costruzione », dans Jean-François Bernard (dir.), <hi
+rend="italic"
+>Piazza Navona, ou Place Navone, la plus belle &amp; [et] la plus grande</hi
+>, Rome, École française de Rome, « Collection de l’École Française de Rome, 493 », 2014, p. 399-419, voir aussi Stephanie Leone (dir.), <hi
+rend="italic"
+>The Pamphilj and the Arts: Patronage and Consumption in Baroque Rome, </hi
+>Chestnut Hill-Chicago, McMullen Museum of Art-Boston College-University of Chicago Press, 2011, p. 23-36.</p
+></note
+> », qui en avait fait les symboles de la puissance du catholicisme et de la réorganisation de la ville comme centre de l’Église universelle et destination de pèlerinage salvateur.</p
+><p
+xml:id="p41"
+>Dans le cas de la place Navone, la présentation de l’obélisque assume une signification symbolique actualisée et spécifique, qui s’exprime en usant de formes différentes de celles, sobres, du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, par l’introduction de l’invention berninienne révolutionnaire du « rocher » comme soutien des statues des quatre fleuves. L’insertion du « rocher » permettait de compenser la hauteur limitée du monument antique ; d’autre part, sa structure en X soulignait sa signification de symbole solaire orienté vers les quatre points cardinaux tout en évoquant le chiffre antique du nom du pontife, Innocent « X ».</p
+><p
+xml:id="p42"
+>L’iconographie des fleuves comme allusion aux quatre parties du monde et la polyvalence symbolique de la colombe sommitale entendaient célébrer sur un mode visuel efficace le triomphe de l’Église romaine sur les quatre continents et manifester un auspice de paix universelle, objectifs perçus comme réalisables seulement par l’œuvre du pontife, ministre du Saint-Esprit<note
+n="62"
+place="foot"
+xml:id="ftn140"
+><p
+>L’insertion du Rio della Plata, exploré en 1516, évoque l’évangélisation des territoires américains par les pères jésuites réformés du Saint Nom de Jésus. </p
+></note
+>. La fontaine des Quatre Fleuves mettait en spectacle [<hi
+rend="italic"
+>mostra</hi
+>] le prolongement de l’<hi
+rend="italic"
+>acqua Vergine</hi
+> ; d’un point de vue symbolique, la présence de l’eau permettait une reconsécration de l’espace, scellée par la colombe, symbole baptismal de la purification offerte aux pèlerins pour l’année jubilaire.</p
+><p
+xml:id="p43"
+>Une série d’écrits, publiés en 1651, parallèlement au Jubilé et à l’inauguration de la fontaine, tels le <hi
+rend="italic"
+>Très copieux discours de la fontaine</hi
+> d’Antonio Bernal di Gioya<note
+n="63"
+place="foot"
+xml:id="ftn141"
+><p
+>Antonio Bernal di Gioya<hi
+rend="italic"
+>, Copiosissimo discorso della fontana, e guglia eretta in Piazza Navona, per ordine della Santità di Nostro Signore Innocentio X dal Signor Cavalier Bernini: con una abondante dichiaratione delli quattro fiumi...</hi
+>, Roma, Tiberius, 1651. On y lit qu’Innocent X « <hi
+rend="italic"
+>imposuit niloticis enigmatibus exaratum lapidem ut salubrem spatiantibus amenitatem, sitientibus potum, meditantibus escam, magnifice largiretur</hi
+> ».</p
+></note
+> ou la <hi
+rend="italic"
+>Description de la fontaine Pamphilia</hi
+> de Michelangelo Lualdi, explicitent ces significations<note
+n="64"
+place="foot"
+xml:id="ftn142"
+><p
+>Michelangelo Lualdi, <hi
+rend="italic"
+>Descrittione della fontana Pamphilia, dove fu già il cerchio Agonale</hi
+>, In Roma, Nella stamperia di Francesco Moneta, 1651.</p
+></note
+>.</p
+><p
+xml:id="p44"
+>À de tels éléments s’ajoute sur la fontaine une composante héraldique explicite, spécifiquement allusive à la maison des Pamphili, constituée par les deux écus monumentaux qui ornent les versants nord et sud, couronnés de la tiare et des clefs de saint Pierre. Un relief particulier leur est accordé par l’usage de précieux marbre de Carrare se détachant sur le travertin des parties environnantes. L’écu du côté nord (fig. 74), réalisé par Jacopo Antonio Fancelli, est soutenu par le Nil. Il est placé au sein d’une coquille, encadré d’épis, de palmes et de pivoines, symboles de paix et d’immortalité. L’écu du côté sud (fig. 75), œuvre d’Antonio Raggi, est porté par le Danube, symbole de l’aire contestée de la nouvelle orthodoxie protestante. Il est flanqué de cornes d’abondance et surmonté d’une coquille jouxtée de dauphins. La majeure partie des éléments présents autour de l’écu du nord se réfère donc à la paix, alors que pour celui du sud, les dauphins font allusion au prince « clément et vigilant » et les cornes d’abondance à la prospérité, dans un temps qui subissait en réalité les famines causées par la guerre de Trente Ans.</p
+><p
+xml:id="p45"
+>Cette fontaine, assez connue et étudiée, doit toutefois être replacée dans le contexte d’une recherche dédiée à l’héraldique et la papauté, car elle représente sur ce point une œuvre emblématique exemplaire du pontificat Pamphili, une remarquable image de pierre, unitaire et complexe, à une époque où le langage de l’allégorie utilise les instruments de communication de l’héraldique.</p
+><p
+xml:id="p46"
+>Le message de paix proposé par la fontaine des Quatre Fleuves fut ultérieurement repris et explicité dans l’iconographie du défilé de Pâques jubilaires de 1650, organisé sur la place Navone par la Confraternité espagnole de la Résurrection et dans l’église Saint-Jacques-des-Espagnols, qui répétait de différentes manières le message des machines éphémères installées lors de la <hi
+rend="italic"
+>possessio</hi
+> d’Innocent X<note
+n="65"
+place="foot"
+xml:id="ftn143"
+><p
+>Colombes et lys constellent aussi les apparats dessinés par Girolamo et Carlo Rainaldi pour la cérémonie de la <hi
+rend="italic"
+>possessio</hi
+> (Francesco Cancellieri, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 248, 249 et 251). </p
+></note
+>. L’installation, dessinée par Carlo Rainaldi, artiste de confiance des ambassadeurs d’Espagne autant que des Pamphili<note
+n="66"
+place="foot"
+xml:id="ftn144"
+><p
+>Maurizio Fagiolo Dell’Arco, <hi
+rend="italic"
+>Corpus delle feste a Roma, </hi
+>vol.<hi
+rend="italic"
+> </hi
+>1<hi
+rend="italic"
+>, La festa barocca, </hi
+>Rome, De Luca, 1997, p. 349-353. Rainaldi aurait aussi construit le catafalque pour les funérailles en effigie de Philippe IV à Sainte-Marie-Majeure (1665).</p
+></note
+>, prévoyait un théâtre fortifié et des arches de bois, avec des obélisques faisant allusion à la mission de défense de la foi catholique confiée à cette nation<note
+n="67"
+place="foot"
+xml:id="ftn145"
+><p
+>Maria Antonietta Visceglia, « Giubilei tra pace e guerre (1625-1650) », <hi
+rend="italic"
+>Roma moderna e contemporanea</hi
+>, vol. V, n<hi
+rend="sup"
+>o</hi
+> 2-3, 1997, p. 431-474. </p
+></note
+>.</p
+><p
+xml:id="p47"
+>Les événements prirent en réalité un tour bien différent de ce qu’on attendait du jubilé à Rome : en ville on dut déplorer des rixes, des hostilités entre Français et Espagnols, une pénurie de denrées alimentaires, qui conduisirent les objectifs poursuivis par le pape Pamphili à un certain échec, faisant de l’<hi
+rend="italic"
+>Urbe</hi
+> l’arène privilégiée des conflits européens et non le siège de l’accomplissement de la paix.</p
+><p
+xml:id="p48"
+>Aux initiatives prévues pour le jubilé de 1650 appartient aussi la restauration de la basilique Saint-Jean-de-Latran<note
+n="68"
+place="foot"
+xml:id="ftn146"
+><p
+>Augusto Roca De Amicis, <hi
+rend="italic"
+>L’opera di Borromini in San Giovanni in Laterano: gli anni della fabbrica (1646,1650)</hi
+>, Rome, Dedalo, 1996.</p
+></note
+>. Son réaménagement aurait été suggéré de manière miraculeuse par la découverte d’une colombe peinte sur les murs antiques<note
+n="69"
+place="foot"
+xml:id="ftn147"
+><p
+>Alessandro Zuccari, « Borromini tra religiosità borromaica e cultura scientifica », dans Alessandro Zuccari et Stefania Macioce (dir.), <hi
+rend="italic"
+>Innocenzo X Pamphili. Arte e potere a Roma nell’età barocca </hi
+>[2<hi
+rend="sup"
+>e</hi
+> éd.], actes de colloque, Rome, novembre 1990, Rome, Logart Press, 2001, p. 35-74.</p
+></note
+>. En valorisant la basilique, on mettait en œuvre une sorte de triangulation du pouvoir papal répartie entre les pôles du Vatican, du Quirinal, demeure du pontife, et du Latran, son siège d’évêque de Rome.</p
+><p
+xml:id="p49"
+>Dans les interventions de Borromini à Saint-Jean, le blason des Pamphili est exhibé avec variété, acquérant une valeur de source pour l’invention des formes. Innocent X et Borromini, aidés de Virgilio Spada, <hi
+rend="italic"
+>moderator consiliorum omnium atque arbiter</hi
+> [modérateur et arbitre de tous les conseils], confirmèrent leur intérêt pour les vestiges des origines chrétiennes, promues par Baronio et par les oratoriens, auxquels le pontife était aussi très lié, suivant les orientations de son oncle le cardinal Girolamo. L’objectif fut de « conserver les antiquités », en suivant une direction opposée à celle qu’on avait adoptée pour les travaux de la basilique Saint-Pierre, démolie au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et complètement reconstruite. En vue du jubilé, sous la direction de Gian Lorenzo Bernini, les pilastres de la nef de Saint-Pierre s’enrichirent d’une décoration de marbres polychromes, exaltant l’histoire de l’Église en même temps que les pontifes du passé et du présent : non moins de 104 emblèmes de la colombe Pamphili « plus grands que nature » y furent placés à côté des portraits des papes.</p
+><p
+xml:id="p50"
+>Au Latran, en revanche, Borromini réussit à conserver le plan à cinq nefs et les parois de l’édifice constantinien qui, quoiqu’assez détériorées, furent habilement consolidées et restèrent visibles à travers douze oculi ouverts sur la partie haute de la nef centrale. La basilique se configura comme une extraordinaire « architecture parlante »<hi
+rend="italic"
+>,</hi
+> dans laquelle un nouvel espace se trouva plus que jamais conjugué avec des significations ingénieuses [<hi
+rend="italic"
+>concetti</hi
+>], convergeant dans un message clair et cohérent, amplifié par la blancheur de la nef<note
+n="70"
+place="foot"
+xml:id="ftn148"
+><p
+>Marcello Fagiolo, « Borromini in Laterano. Il Nuovo Tempio per il Concilio universale », <hi
+rend="italic"
+>L’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 13, 1971, p. 1-46 ; « I geroglifici, gli emblemi e l’araldica: note sul ragionamento simbolico di Borromini », dans Richard Boesel et Christoph L. Frommel (dir.), <hi
+rend="italic"
+>Borromini e l’universo barocco</hi
+>, Milan, Electa, 1999, p. 95-105.</p
+></note
+> (fig. 76). Le choix de l’architecte de faire confluer formes et motifs symboliques dans un tout intimement lié se manifeste par la copieuse élaboration de figures héraldiques répandues dans toute la basilique. Même le pavement propose la combinaison de marbres antiques et modernes qui montrent encore une fois la colombe et des lys. L’usage du symbole du <hi
+rend="italic"
+>chrismon </hi
+>est répandu<hi
+rend="italic"
+>, </hi
+>faisant allusion au Christ, mais aussi à Innocent « X<note
+n="71"
+place="foot"
+xml:id="ftn149"
+><p
+>Alessandro Zuccari, art. cité, p. 35-74. Dans le même volume, voir Paolo Portoghesi, « Borromini e Innocenzo X: architettura e politica pontificia », p. 27-34.</p
+></note
+> ». Dans la décoration en stuc surmontant la double porte d’accès à la basilique depuis le palais du Latran trône le blason du pape Pamphili, inséré sur une sphère symbolisant le monde dominé par son autorité ; des emblèmes du pontife donnent force plastique aux portes correspondantes vers l’intérieur de l’église (fig. 77 et 78). L’emblème reparaît aussi dans les stucs monumentaux des arches qui séparent le transept des nefs latérales, et dans les plus amples arcades centrales, inscrites au milieu de la séquence qui divise la nef principale des nefs secondaires.</p
+><p
+xml:id="p51"
+>De cette façon, l’espace de la basilique évoque l’image de la Jérusalem céleste, décrite dans l’<hi
+rend="italic"
+>Apocalypse</hi
+> de saint Jean : les tabernacles de marbre foncé de la nef centrale, destinés à accueillir les statues des apôtres, font référence aux douze portes de la cité biblique. Même les chérubins qui se succèdent dans les ailes latérales rappellent ceux qui décoraient le temple de Jérusalem, fondé par Salomon en tant que temple de la paix [<hi
+rend="italic"
+>templum Pacis</hi
+>], comme les palmes, les grenades et les images des colonnes salomoniques, sculptées dans des stucs clairs qui décorent la trabéation de la contre-façade<note
+n="72"
+place="foot"
+xml:id="ftn150"
+><p
+>Marcello Fagiolo, art<hi
+rend="italic"
+>. </hi
+>cité, p. 99 et 100. Pour la corrélation entre Saint-Yves-de-la-Sapience et le temple/palais de Salomon : Alessandro Zuccari, art. cité, p. 55, 56 et 59-61.</p
+></note
+>.</p
+><p
+xml:id="p52"
+>Un autre aspect de ce projet met en évidence de manière exemplaire l’utilisation de l’emblème papal comme source de solutions architecturales et décoratives visuellement suggestives. De nombreux dessins conservés à l’Albertina de Vienne, documentent la recherche passionnée et tenace de Borromini pour inscrire l’image de la colombe au centre de la composition des verrières<note
+n="73"
+place="foot"
+xml:id="ftn151"
+><p
+>Les didascalies autographes de Borromini pour les verrières, inscrites dans les dessins de l’Albertina, précisent l’emplacement exact prévu pour les armoiries papales complètes, avec les clefs et la tiare : les lunettes des « nefs extrêmes » (Az Rom 440 et 441) ; « les verrières de la nef principale » (Az Rom 442) ; les « fenêtres ovales entre une chapelle et l’autre » (27 avril 1650, Az Rom 443) ; la « fenêtre principale de la façade » (Az Rom 444) ; les verrières de la « nef du milieu », c’est-à-dire de « la seconde nef, entre la majeure et la mineure » (Az Rom 445) ; les « fenêtres supérieures de la nef centrale » (Az Rom 451). Augusto Roca de Amicis, <hi
+rend="italic"
+>op. cit.</hi
+>, 1996, p. 108-111 et 184-186.</p
+></note
+>. Celles-ci forment une part essentielle du projet d’élaborer un ingénieux système de gradation de la lumière des nefs de la basilique, jouant habilement des différents niveaux des toits<note
+n="74"
+place="foot"
+xml:id="ftn152"
+><p
+>Az Rom 454 : Augusto Roca De Amicis, <hi
+rend="italic"
+>op. cit.</hi
+>, fig. 100, p. 186.</p
+></note
+>(fig. 79). Aux dessins d’étude s’ajoutent les dessins de « présentation », réalisés en collaboration avec le forgeron ; dans ceux-ci, le motif héraldique est mis en évidence par la simple structure du fer au carré, précisément définie dans les mesures. Ces verrières ont disparu ; toutefois les dessins de Borromini montrent comment la fusion de la forme et du symbole, de la transparence et des images, systématiquement poursuivie, était parvenue à de remarquables résultats.</p
+><p
+xml:id="p53"
+>Le blason présenté en peintures et sculptures, dans des édifices, des stucs et des plafonds de bois, mais aussi reproduit dans des gravures, des reliures de livres, des monnaies et des médailles, fut un instrument de la divulgation de l’image héraldique identitaire du pontificat d’Innocent X. Une propagande bien diffusée qui se heurtait toutefois à une situation internationale difficile. Le pape lui-même dans son bref <hi
+rend="italic"
+>Zelo domus Dei</hi
+>, promulgué le 20 août 1650, la considère compromise par l’« infâme paix de Münster ». En effet, sur la scène européenne, le projet universel d’Innocent X se trouva affaibli par la diffusion du culte protestant et par l’émergence des identités nationales.</p
+></div
+><div
+type="section1"
+xml:id="div04"
+><head
+>Épilogue. Une nouvelle fortune pour le blason pamphili : la <hi
+rend="italic"
+>Raccolta Di Varie Targhe di Roma </hi
+>de Filippo Juvarra (1711)</head
+><p
+xml:id="p54"
+>L’emblème du pape Pamphili fut traité au siècle suivant dans un contexte nouveau et différent. Le <hi
+rend="italic"
+>Recueil de diverses targes de Rome faites par les premiers professeurs à Rome, dessinées et gravées</hi
+> de Filippo Juvarra, fut publié par Antonio De Rossi, à Rome, en 1711<note
+n="75"
+place="foot"
+xml:id="ftn153"
+><p
+>Voir Raffaella Zega, « La “Raccolta di varie targhe di Roma...” nell'attività di Filippo Juvarra », <hi
+rend="italic"
+>Archivum Arcis</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 2, 1989, p. 10-51 ; Maria Vittoria Cattaneo et Elena Gianasso, « Il Corpus Juvarrianum della Biblioteca Nazionale Universitaria di Torino », dans Franca Porticelli, Costanza Roggero, Chiara Devoti <hi
+rend="italic"
+>et al</hi
+>. (dir.), <hi
+rend="italic"
+>Filippo Juvarra regista di corti e capitali dalla Sicilia al Piemonte all'Europa</hi
+>, Turin, Centro Studi Piemontesi, 2020, p. 197-210.</p
+></note
+>. Il s’agit d’une anthologie de 50 gravures représentant des armoiries de papes ou de cardinaux, figurées dans des œuvres d’architectes célèbres, de Bramante à l’époque contemporaine. Une bonne vingtaine d’images proviennent du Bernin, six de Borromini. L’écu d’Innocent X est présent dans les images qui reproduisent les targes insérées dans la façade latérale du Capitole (n<hi
+rend="sup"
+>o</hi
+> 45), dans la fontaine de la cour du Vatican (n<hi
+rend="sup"
+>o</hi
+> 35), sur les deux côtés de la fontaine des Quatre Fleuves, vers le nord (n<hi
+rend="sup"
+>o</hi
+> 15, fig. 80) et vers le sud (n<hi
+rend="sup"
+>o</hi
+> 18, fig. 81). Trois planches illustrent les écus de Saint-Jean-de-Latran (n<hi
+rend="sup"
+>o</hi
+> 27 ; n<hi
+rend="sup"
+>o</hi
+> 30, fig. 82 ; n<hi
+rend="sup"
+>o</hi
+> 31<note
+n="76"
+place="foot"
+xml:id="ftn154"
+><p
+>Deux images sont consacrées aux écus de Camillo Pamphili, figurant à San Nicola di Tolentino (pl. 34) et à Sant’Andrea al Quirinale (pl. 13).</p
+></note
+>). En conclusion de l’œuvre, une gravure propose quelques graphiques indiquant les normes pour les proportions et la composition géométrique de divers types d’écus, différenciés suivant le rang du personnage célébré.</p
+><p
+xml:id="p55"
+>Au cours de son activité, Juvarra se révéla très intéressé par la décoration héraldique, comme le prouve la grande quantité d’esquisses et de dessins préparatoires au <hi
+rend="italic"
+>Recueil des targes.</hi
+> Nous disposons de près de 235 dessins réunis dans des albums conservés à New York, au Metropolitan Museum et à Turin, au Musée municipal, à la Bibliothèque nationale et dans la collection Tournon<note
+n="77"
+place="foot"
+xml:id="ftn155"
+><p
+>L’album du Metropolitan Museum (MM 165) contient 12 dessins d’écus préparatoires au recueil. Mary Myers (<hi
+rend="italic"
+>Architectural and ornament drawings</hi
+>: <hi
+rend="italic"
+>Juvarra, Vanvitelli, The Bibiena family &amp; other Italian draughtsmen, </hi
+>New York, The Metropolitan Museum of Art, 1975) démontre que les dessins du musée municipal de Turin, préparatoires pour le recueil, furent exécutés par Juvarra sur la base des dessins du Metropolitan et de ceux de la réserve 59.4 de la Bibliothèque nationale de Turin, preuve d’un processus d’étude soigneux et persévérant de la part de l’artiste. Sarah Mc Phee, « A new sketch-book by Filippo Juvarra », <hi
+rend="italic"
+>The Burlington Magazine</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 135, 1993, p. 346-350 ; « Filippo Juvarra: a new volume of drawings from the Roman years », <hi
+rend="italic"
+>Studi piemontesi</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 22, 1993, p. 377-383 ; Henry A. Millon, <hi
+rend="italic"
+>Filippo Juvarra. Drawings from the roman period 1704-1714, </hi
+>Rome, Edizioni dell’Elefante, 1984, vol. 1, p. XXII, 181, 188-200, 248 et 336-337. Une liste comparative des dessins d’étude de Juvarra et des planches contenues dans le recueil se trouve dans Tommaso Manfredi, <hi
+rend="italic"
+>Filippo Juvarra. Gli anni giovanili, </hi
+>Rome, Argos, 2010, p. 426 ; là, les notes 228, 229, 231, 235 sont consacrées aux écus d’Innocent X.</p
+></note
+>. Quelques études, consacrées à des écus du pape Innocent X, sont conservées à la bibliothèque Vaticane dans le manuscrit Vat. lat. 13295, d’attribution controversée<note
+n="78"
+place="foot"
+xml:id="ftn156"
+><p
+>Le ms. BAV Vat. lat. 13295 contient dix-huit dessins pour la décoration héraldique des piliers de la basilique Saint-Pierre. L’édition critique du recueil vatican, dans lequel au moins huit dessins sont préparatoires pour le recueil des <hi
+rend="italic"
+>Targhe,</hi
+> se trouve dans Henry A. Millon, Andreina Griseri, Sarah Mc Phee <hi
+rend="italic"
+>et al.</hi
+> (dir.), <hi
+rend="italic"
+>Filippo Juvarra: drawings from the Roman period 1704-1714</hi
+>, Rome, Edizioni dell’Elefante, 1999, vol. 2. Pour l’attribution du manuscrit vatican : Tommaso Manfredi, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 427.</p
+></note
+>. Les dessins ont souvent été réalisés en réinterprétant de façon personnelle les modèles et enrichis d’ombres à l’aquarelle qui en augmentent les effets picturaux (fig. 83). Pour Juvarra, ce travail revêtait une fonction de formation et d’apprentissage, conduit tantôt sur la base d’une observation directe des emblèmes présents sur des constructions, tantôt en analysant les estampes et les dessins qui les reproduisent. La dimension des feuilles fait penser que, au moins depuis 1706, il poursuivait le projet de traduire ses études dans un recueil de gravures, afin de réaliser une sorte d’encyclopédie de la décoration baroque.</p
+><p
+xml:id="p56"
+>Les expressions héraldiques innovantes et spectaculaires des maîtres, diffusées grâce à la sérialité des estampes, devinrent des modèles pour la mise au point d’un nouveau langage décoratif. Dédiant son œuvre au cardinal Ottoboni, Juvarra écrit qu’elle est destinée « au bénéfice de ceux qui […] se proposent de tirer profit de l’Académie du dessin<note
+n="79"
+place="foot"
+xml:id="ftn157"
+><p
+>« <hi
+rend="italic"
+>a beneficio [di coloro] i quali…nell’Accademia del disegno procurano di approfittarsi</hi
+> », Filippo Juvarra,<hi
+rend="italic"
+> Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Rome, per Antonio de’ Rossi, 1711, lettre dédicatoire.</p
+></note
+> » : au fin de fournir un répertoire satisfaisant les exigences d’une clientèle désireuse d’autoreprésentation, s’ajoute la fonction d’instrument utile aux enseignements de l’Académie romaine de saint Luc, lieu institutionnel de la formation des artistes.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig61.jpg"
+></graphic
+><head
+>Figure 59. Giovanni Luigi Valesio, armes du cardinal Girolamo Pamphili, <hi
+rend="italic"
+>Stemma del cardinale Innocenzo X Panfili e figure allegoriche, </hi
+>gravure. Bologne, Pinacoteca Nazionale, Gabinetto Disegni e Stampe, 83 Picc. Coll. II.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig62.jpg"
+></graphic
+><head
+>Figure 60. Rome, Santa Maria in Vallicella, Paolo Maruscelli et collaborateurs, mémorial du cardinal Girolamo Pamphili, 1634.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig63.jpg"
+></graphic
+><head
+>Figure 61. Rome, palais Pamphili, salle des Paysages, armes papales d’Innocent X Pamphili.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig64.jpg"
+></graphic
+><head
+>Figure 62. Gubbio, palais Pamphili, façade sur la place.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig65.jpg"
+></graphic
+><head
+>Figure 63. Gubbio, palais Pamphili, salle à l’étage noble, emblème de la colombe Pamphili inscrit dans la cheminée.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig66.jpg"
+></graphic
+><head
+>Figure 64. Gubbio, palais Pamphili, salon à l’étage noble, détail de la décoration à fresque avec l’emblème de la colombe Pamphili.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig67.jpg"
+></graphic
+><head
+>Figure 65. Gubbio, ancien cimetière près de l’église San Secondo, chapelle Pamphili, Jacopo Bedi, <hi
+rend="italic"
+>Martyre de saint Sébastien</hi
+>, 1458, fresque (détail).</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig68.jpg"
+></graphic
+><head
+>Figure 66. Gubbio, ancien cimetière près de l’église San Secondo, chapelle Pamphili, pierre tombale avec l’écu des Pamphili.</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig69.jpg"
+></graphic
+><head
+>Figure 67. Gubbio, palais des consuls, architrave du portail d’entrée avec emblèmes de la ville, pontificaux des Angevins et les dates de la construction (1332-1336).</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig70.jpg"
+></graphic
+><head
+>Figure 68.<hi
+rend="italic"
+> Gubbio Città Regia Antichiss[ima] dell'Umbria</hi
+>, gravure, d’après un dessin d’Ignazio Cassetta, Johannes Blaeu, Amsterdam, 1663, reproduit dans Johannes Blaeu, <hi
+rend="italic"
+>Nouveau théâtre d’Italie ou description exacte de ses villes, palais, églises, etc. Tome Quatrième</hi
+>, À Amsterdam, Par le soin de Pierre Mortier Libraire, 1704. Détail montrant la maison des Pamphili, indiquée par la lettre Z.</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig71.jpg"
+></graphic
+><head
+>Figure 69. Armoiries « <hi
+rend="italic"
+>Romae Panfiliorum</hi
+> », dans Silvestro Pietrasanta, <hi
+rend="italic"
+>Tesserae gentilitiae,</hi
+> Romae, Typis haered. Francisci Corbelletti, 1638, p. 438.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig72.jpg"
+></graphic
+><head
+>Figure 70. Armoiries de la famille Pamphili (sans attributs cardinalices ou papaux), Rome, palais Pamphili, escalier de l’aile vers la place Pasquino.</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig73.jpg"
+></graphic
+><head
+>Figure 71. Rome, palais Pamphili, loggia de la cour centrale, angle nord-est.</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig74.jpg"
+></graphic
+><head
+>Figure 72. Rome, palais Pamphili, loggia de la cour centrale (détail).</head
+></figure
+><figure
+xml:id="figure15"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig75.jpg"
+></graphic
+><head
+>Figure 73. Portrait d’Innocent X, dans Athanasius Kircher, <hi
+rend="italic"
+>Obeliscus Pamphilius</hi
+>, gravure, Emblem Collection of the University of Illinois.</head
+></figure
+><figure
+xml:id="figure16"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig76.jpg"
+></graphic
+><head
+>Figure 74. Jacopo Antonio Fancelli d’après un dessin de Gian Lorenzo Bernini, armes d’Innocent X Pamphili, marbre, Fontaine des Quatre Fleuve (armoiries côté nord).</head
+></figure
+><figure
+xml:id="figure17"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig77.jpg"
+></graphic
+><head
+>Figure 75. Antonio Raggi, d’après un dessin de Gian Lorenzo Bernini, armes d’Innocenzo X Pamphili, marbre, Fontaine des Quatre Fleuves (armoiries côté sud).</head
+></figure
+><figure
+xml:id="figure18"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig78.jpg"
+></graphic
+><head
+>Figure 76. Basilique de Saint-Jean-de-Latran, intérieur.</head
+></figure
+><figure
+xml:id="figure19"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig79.jpg"
+></graphic
+><head
+>Figure 77. Basilique de Saint-Jean-de-Latran, décor en stuc avec l’écu du pape Pamphili, double porte entre la basilique et le palais du Latran, d’après un dessin de Francesco Borromini.</head
+></figure
+><figure
+xml:id="figure20"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig80.png"
+></graphic
+><head
+>Figure 78. Francesco Borromini, étude pour la porte double entre le palais du Latran et la basilique, dessin à la mine de plomb, Vienne, Albertina, Az Rom 416 (détail). On lit : « <hi
+rend="italic"
+>un globo che rappresenta il mondo sarà congiunto insieme il spirituale e il temporale </hi
+>».</head
+></figure
+><figure
+xml:id="figure21"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig81.jpg"
+></graphic
+><head
+>Figure 79. Francesco Borromini, étude pour la verrière de la fenêtre de la façade orientale de Saint-Jean-de-Latran, dessin à la mine de plomb, Vienne, Albertina, Az Rom 454. On lit : « <hi
+rend="italic"
+>finestra della facciata alta palmi 40 larga 20, portello dell’arma del papa alto 10 ¾ largo 8 </hi
+>».</head
+></figure
+><figure
+xml:id="figure22"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig82.jpg"
+></graphic
+><head
+>Figure 80. Armes d’Innocent X Pamphili à la fontaine des Quatre Fleuves, côté nord, dans Filippo Juvarra, <hi
+rend="italic"
+>Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate,</hi
+> Antonio De Rossi ed., a Roma, 1711, pl. 15, gravure.</head
+></figure
+><figure
+xml:id="figure23"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig83.jpg"
+></graphic
+><head
+>Figure 81. Armes d’Innocent X Pamphili, à la fontaine des Quatre Fleuves, côté sud, dans Filippo Juvarra<hi
+rend="italic"
+>, Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Antonio De Rossi ed., a Roma, 1711, pl. 18, gravure.</head
+></figure
+><figure
+xml:id="figure24"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig84.jpg"
+></graphic
+><head
+>Figure 82. Armes d’Innocent X Pamphili à Saint-Jean-de-Latran, arche centrale de la nef principale, in Filippo Juvarra, <hi
+rend="italic"
+>Raccolta Di Varie Targhe di Roma Fatte Da Professori Primarj In Roma, Disegnate, ed intagliate</hi
+>, Antonio De Rossi ed., a Roma, 1711, pl. 30, gravure.</head
+></figure
+><figure
+xml:id="figure25"
+><graphic
+url="../icono/br/Ch05_DelPesco/fig85.jpg"
+></graphic
+><head
+>Figure 83. Filippo Juvarra, étude pour la pl. 30 de la <hi
+rend="italic"
+>Raccolta Di Varie Targhe </hi
+>(Écu Pamphili, Saint-Jean-de-Latran, arche centrale de la nef principale), dessin, MM 117, plume, crayon, encre marron, aquarelle. New York, The Metropolitan Museum of Art.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

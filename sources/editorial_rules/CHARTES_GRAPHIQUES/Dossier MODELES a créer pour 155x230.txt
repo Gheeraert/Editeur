@@ -1,0 +1,10 @@
+Dossier MODELES à créer pour 155x230 :
+
+MOD_pages de titres (PDT, dans "?)
+MOD_pages liminaires (PL, dans "Microfinance")
+MOD_UE collection ("Microfinance")
+MOD_pages intercalaires de parties (INTERCALAIRE, dans ("Microfinance")
+MOD_UE_155x230 (OK) (ajouter style "institution")
+MOD_UE résumés ("Microfinance"
+MOD_UE auteurs ("Microfinance"
+MOD_TDM

@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Énonciation référentielle et révélation des secrets du pouvoir chez Pontis, Sirot et Lenet</title
+><author
+role="aut"
+><persName
+><forename
+>Cécile</forename
+><surname
+>Leduc</surname
+></persName
+><affiliation
+><orgName
+>Sorbonne Université, STIH, EA 4509, Paris, France</orgName
+></affiliation
+></author
+></titleStmt
+><publicationStmt
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+type="accessibilityFeature"
+>alternativeText</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.103"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-07-08"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Énonciation référentielle et révélation des secrets du pouvoir chez Pontis, Sirot et Lenet</p
+><p
+rend="author-aut"
+>Cécile <hi
+rend="small-caps"
+>Leduc</hi
+></p
+><p
+rend="authority_affiliation"
+><hi
+rend="small-caps"
+>S</hi
+>orbonne Université<hi
+rend="small-caps"
+>, </hi
+>STIH, EA 4509, Paris, France</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>L’époque moderne est le théâtre d’un « basculement inédit », qui substitue à « une culture médiévale du secret – entendu comme mystère – […] des pratiques politiques du secret devenues techniques de cryptage et d’occultation<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Bernard Darbord et Agnès Delage, « Présentation », dans <hi
+rend="italic"
+>idem</hi
+> (dir.), <hi
+rend="italic"
+>Le Partage du secret. Cultures du dévoilement et de l’occultation en Europe, du Moyen-Âge à l’époque moderne</hi
+>, Paris, Armand Colin, 2013, p. 7-12, ici p. 8.</p
+></note
+> » : la lecture des Mémoires du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle nous permet d’observer ce mouvement de près. Le secret y est en effet représenté comme « technique de contrôle et de dissimulation<note
+n="2"
+place="foot"
+xml:id="ftn23"
+><p
+>Introduction à la « Partie III : les spectacles du secret », <hi
+rend="italic"
+>ibid.</hi
+>, p. 329-332, ici p. 329.</p
+></note
+> » par un pouvoir évoluant vers l’absolutisme<note
+n="3"
+place="foot"
+xml:id="ftn24"
+><p
+>Voir la « Présentation » de Christian Renoux à la partie « Fabriques du secret », dans Laure Depretto, Christian Renoux, Christophe Speroni <hi
+rend="italic"
+>et al.</hi
+> (dir.), <hi
+rend="italic"
+>Cultures du secret à l’époque moderne. Raisons, espaces, paradoxes, fabriques</hi
+>, Paris, Classiques Garnier, 2023.</p
+></note
+>. Les mémorialistes, qui accèdent aux secrets du pouvoir et qui connaissent le pouvoir de ces secrets, les dévoilent, s’inscrivant ainsi en faux de l’Histoire officielle<note
+n="4"
+place="foot"
+xml:id="ftn25"
+><p
+>Frédéric Charbonneau fait du refus de l’Histoire officielle au profit d’une Histoire secrète l’origine commune de ce corpus hétérogène (<hi
+rend="italic"
+>Les Silences de l’Histoire. Les Mémoires français du </hi
+><hi
+rend="small-caps italic"
+>xvii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, Paris, Hermann, 2016).</p
+></note
+>. Cette entreprise de dévoilement sert une critique des ministres qui sont représentés comme les véritables détenteurs du savoir et du pouvoir.</p
+><p
+xml:id="p2"
+>Il s’agira ici d’analyser les textes de trois mémorialistes, victimes ou complices des secrets et donc – selon l’étymologie du terme – inclus ou exclus du pouvoir : Claude de Létouf, baron de Sirot, disgracié par Mazarin ; Louis de Pontis, exclu du pouvoir par Richelieu mais proche de Louis <hi
+rend="small-caps"
+>XIII </hi
+>; Pierre Lenet, au cœur des négociations avec Mazarin durant la Fronde. Le secret ne prenant vie et forme que dans les discours, nous analyserons uniquement des scènes de discours rapportés entre le mémorialiste et le ministre ou le roi. Ce qui est par essence un non-savoir constitue paradoxalement dans ces scènes le centre du savoir du mémorialiste et la pierre de touche de son plaidoyer.</p
+><p
+xml:id="p3"
+>C’est l’énonciation spécifique au régime factuel, appelée référentielle, qui retiendra notre attention. Contrairement aux textes fictionnels, l’énonciateur des Mémoires est un individu réel ayant vécu ce qu’il raconte. Le terme <hi
+rend="italic"
+>narrateur </hi
+>ne sera pas employé : forgé pour la fiction, il gomme justement l’identité entre la personne ayant historiquement existé et l’instance énonciative. Ce récit d’un passé vécu implique la scission de l’instance énonciative entre un <hi
+rend="italic"
+>je</hi
+> narrant et un <hi
+rend="italic"
+>je </hi
+>narré<note
+n="5"
+place="foot"
+xml:id="ftn26"
+><p
+>Pour une étude précise de ce dispositif énonciatif dans les Mémoires, voir Delphine de Garidel, <hi
+rend="italic"
+>Poétique de Saint-Simon. Cours et détours du récit historique dans</hi
+> Les Mémoires, Paris, Honoré Champion, 2005, et Emmanuèle Lesne, <hi
+rend="italic"
+>La Poétique des Mémoires (1650-1685)</hi
+>, Paris, Honoré Champion, 1996.</p
+></note
+>, sans qu’il soit toujours possible de mesurer l’influence du premier sur le second. Or l’étude du secret dans les Mémoires s’avère particulièrement adaptée à l’analyse de cette scission : le secret peut impliquer un décalage de connaissances entre les deux instances. Le <hi
+rend="italic"
+>je </hi
+>narrant éclairerait de son savoir rétrospectif les secrets de l’expérience du <hi
+rend="italic"
+>je </hi
+>narré. Même si les Mémoires de Pontis n’ont pas été rédigés par Pontis lui-même, ils reprennent la même configuration énonciative<note
+n="6"
+place="foot"
+xml:id="ftn27"
+><p
+>On est sur ce point en désaccord avec René Démoris qui postule un « narrateur doublement fictif » dans ces Mémoires<hi
+rend="italic"
+> </hi
+>: un « Pontis-narrateur » et un « Pontis mondain », mis en scène par le premier, tous deux différant du « Pontis de la retraite », le « Pontis réel » (<hi
+rend="italic"
+>Le Roman à la première personne du classicisme aux Lumières</hi
+>, Genève, Droz, 2002, p. 107). La référentialité énonciative annule à nos yeux l’instance « Pontis-narrateur » ; nous considérons que l’origine énonciative des Mémoires est bien le « Pontis réel » racontant son existence à Du Fossé, et qui se scinde, comme toute énonciation référentielle, entre le <hi
+rend="italic"
+>je </hi
+>narrant (correspondant au « Pontis de la retraite ») et le <hi
+rend="italic"
+>je </hi
+>narré (« le Pontis mondain »).</p
+></note
+>, puisque Thomas Du Fossé n’a fait que retranscrire les propos de Pontis qui « parlait comme avec lui-même devant cet ami dont il ne sait pendant longtemps qu’il couche par écrit sa relation<note
+n="7"
+place="foot"
+xml:id="ftn28"
+><p
+>Andrée Villard, « Présentation », dans Louis de Pontis, <hi
+rend="italic"
+>Mémoires (1676). Avec la totalité des modifications de 1678</hi
+>, recueillis par Pierre Thomas Du Fossé et Andrée Villard (éd.), Paris, Honoré Champion, 2000, p. 7-78, ici p. 29. Toutes nos références renverront à cette édition.</p
+></note
+> ». Il ne s’agira pas de présumer la dimension intentionnelle de la narration faite par le <hi
+rend="italic"
+>je </hi
+>narrant, encore moins sa dimension esthétique, mais bien plutôt d’étudier de près la manière dont les deux instances énonciatives s’articulent dans la narration et les effets rhétoriques qui en découlent. En quoi l’énonciation référentielle permet-elle d’associer représentation et révélation des secrets du pouvoir ? Quelles en sont les conséquences ? On verra tout d’abord comment l’expérience réelle des arcanes du pouvoir conditionne la représentation du secret dans les Mémoires, avant d’observer les implications du dispositif énonciatif des Mémoires dans la représentation et la révélation des secrets.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Le <hi
+rend="italic"
+>je </hi
+>et le pouvoir : une représentation des coulisses</head
+><div
+type="section2"
+xml:id="div02"
+><head
+>Montage narratif : un <hi
+rend="italic"
+>je</hi
+> entre inclusion et exclusion</head
+><p
+xml:id="p4"
+>Dans les Mémoires, les faits relatés sont conditionnés par l’existence du témoin, c’est de son accès réel aux coulisses du pouvoir que dépend sa connaissance des secrets. Il s’agira ici d’observer les manifestations narratives de la position du mémorialiste sur l’échiquier politique.</p
+><p
+xml:id="p5"
+>Le deuxième volume des <hi
+rend="italic"
+>Mémoires</hi
+><note
+n="8"
+place="foot"
+xml:id="ftn29"
+><p
+><hi
+rend="italic"
+>Mémoires et la vie de messire Claude de Letouf, chevalier baron de Sirot, lieutenant général des camps et armée du roy, &amp;c. Sous les règnes des rois Henri </hi
+><hi
+rend="small-caps italic"
+>iv</hi
+><hi
+rend="italic"
+>, Loüis </hi
+><hi
+rend="small-caps italic"
+>XIII</hi
+><hi
+rend="italic"
+>, et Loüis </hi
+><hi
+rend="small-caps italic"
+>XIV</hi
+>, Paris, Claude Barbin, 1683, vol. 2. Toutes nos références renverront à cette édition. L’orthographe sera modernisée dans les citations.</p
+></note
+> de Sirot est scandé par ses tentatives répétées auprès de Mazarin pour obtenir des faveurs royales. La narration met clairement en valeur ses demandes qui suivent toutes le même schéma : requête de Sirot, différentes promesses de Mazarin débouchant soit sur un refus total, soit sur un accord d’une faveur bien en deçà de ce qui lui avait été promis. Ces épisodes répétés sont toujours relatés avec le même vocabulaire : les « protestations » (p. 117 et 138) de Mazarin les ouvrent, puis suivent les « espérances » (p. 134 et 259) de Sirot, et ils sont clos par les refus de Mazarin, introduits par la conjonction de coordination <hi
+rend="italic"
+>mais</hi
+><note
+n="9"
+place="foot"
+xml:id="ftn30"
+><p
+>« […] mais il refusa tous ces expédients » (p. 121), « […] mais tout cela n’aboutit à rien » (p. 132), « […] mais l’aversion naturelle qu’il avait pour moi, s’opposait trop fortement à tout ce qui pouvait contribuer à ma satisfaction » (p. 154), « […] mais […] je trouvai le cardinal entièrement changé pour mes intérêts » (p. 259).</p
+></note
+> qui souligne bien le revirement narratif. N’opposant que son bon service de soldat à la duplicité du ministre, Sirot est contraint de rester en-dehors du jeu, ce que souligne le montage narratif par les multiples répétitions d’un même canevas.</p
+><p
+xml:id="p6"
+>Soldat lui aussi, Pontis a néanmoins accès à une partie des <hi
+rend="italic"
+>arcana imperii </hi
+>en tant qu’intime de Louis <hi
+rend="small-caps"
+>XIII</hi
+>. La narration confronte à trois reprises une scène secrète et intime, entre Pontis et le roi, à une scène officielle et hostile, entre Pontis et Richelieu. Est tout d’abord opposée une « petite farce » (p. 314) jouée par Pontis dans la chambre de Louis <hi
+rend="small-caps"
+>XIII </hi
+>avec pour seul autre spectateur Saint-Simon, à « une audience extraordinaire » devant la porte du roi « en présence des cardinaux, des princes et des seigneurs de la cour » (p. 315). Une disgrâce officielle ordonnée par Richelieu contraste ensuite avec un rendez-vous secret donné par le roi dans une galerie de Saint-Germain. Enfin, deux interrogatoires, le premier mené par Richelieu et le second par De Noyers, dans lesquels Pontis est « tourn[é] et […] retourn[é] en toutes manières » (p. 540), alternent avec deux scènes intimes avec Louis <hi
+rend="small-caps"
+>XIII</hi
+>, la première consistant en une véritable confession royale, dans la garde-robe même du souverain<note
+n="10"
+place="foot"
+xml:id="ftn31"
+><p
+>Suivant Furetière, la garde-robe est le lieu secret par excellence au <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle : « S<hi
+rend="small-caps"
+>ecret</hi
+>, est aussi une epithete particuliere du lieu. Un lieu secret, c’est le privé, la garderobbe. <hi
+rend="italic"
+>Un escalier secret</hi
+> ou desrobé, est un petit escalier par où on se coule sans bruit, ou sans être veu » (<hi
+rend="italic"
+>Dictionnaire universel contenant généralement tous les mots françois, tant vieux que modernes, et les termes de toutes les sciences et des arts</hi
+>, 1690, article « <hi
+rend="small-caps"
+>S</hi
+>ecret »). On notera que lors de la première entrevue, Pontis monte dans la chambre du roi grâce à l’escalier secret de la garde-robe : avec ces notations spatiales, on est en plein dans l’imaginaire du secret.</p
+></note
+>. La confrontation directe de ces scènes de confiance et de défiance met nettement en valeur la complicité qui unit Louis <hi
+rend="small-caps"
+>XIII</hi
+> et Pontis, dépositaire des secrets du roi.</p
+><p
+xml:id="p7"
+>Négociateur pour le prince de Condé, Lenet est un expert des secrets du pouvoir. Ses <hi
+rend="italic"
+>Mémoires</hi
+><note
+n="11"
+place="foot"
+xml:id="ftn32"
+><p
+><hi
+rend="italic"
+>Mémoires de Monsieur L***, conseiller d’État, contenant l’Histoire des guerres civiles des années 1649 et suivantes ; principalement celles de Guienne et autres provinces</hi
+>, [Paris, Marin et Guérin], 1729, 2 volumes. Toutes nos références renverront à cette édition. L’indication du volume sera abrégée par un chiffre romain avant le numéro de page. L’orthographe sera modernisée dans les citations. En l’absence d’une édition scientifique moderne, nous avons en effet choisi l’édition <hi
+rend="italic"
+>princeps.</hi
+></p
+></note
+> consignent les très longs entretiens qu’il a eus avec le cardinal Mazarin. Les deux adversaires s’y jaugent, agissent en fonction d’intérêts cachés et essaient de découvrir les secrets de l’autre pour le devancer. Lors de leur première rencontre dans les Mémoires, Lenet et Mazarin tentent de rester alliés, mais Mazarin se rapproche en même temps secrètement de la maison Vendôme, rivale des Condé, tandis que Lenet réclame pour Condé des terres indispensables s’il devait engager une guerre civile. Les deux autres entretiens confidentiels qui suivent relatent les négociations de Mazarin et Lenet pour s’allier afin de permettre la libération des princes, alors même qu’ils négocient chacun secrètement avec les frondeurs. Lenet a une place de choix et un vrai pouvoir durant les tractations diplomatiques de la Fronde. La narration en rend parfaitement compte par ces longs dialogues rapportant les diverses tentatives de manipulation opérées par les deux camps.</p
+><p
+xml:id="p8"
+>On constate ainsi un double mouvement : les récits sont informés par chaque expérience singulière du pouvoir, mais en retour les narrations s’ajustent pour en rendre compte le plus fidèlement possible. Les diverses formes prises par le secret dans les dialogues dépendent de même des liens existant entre le mémorialiste et le pouvoir.</p
+></div
+><div
+type="section2"
+xml:id="div03"
+><head
+>Visages discursifs du secret : un <hi
+rend="italic"
+>je</hi
+> acteur ou victime</head
+><p
+xml:id="p9"
+>Naissant d’une chose tue ou dite autrement, le secret modèle les discours. On analysera ici ses différentes manifestations et la manière dont il s’y transforme en une arme maniée ou subie par les acteurs de l’interaction.</p
+><p
+xml:id="p10"
+>Les raisons de l’action de Mazarin demeurent partiellement opaques à Sirot qui, trop crédule pour la duplicité régnante, croit autant aux signes extérieurs de Mazarin qu’à ses promesses. Il rapporte ainsi les « promesses que son Éminence [lui] avait faites » (p. 120), insiste sur la charge que « le cardinal [lui] avait promis[e] » (p. 261). La duplicité du pouvoir trouve son expression linguistique dans cette manipulation du performatif. Dans cette dernière citation, l’aspect accompli du verbe indique que l’action est envisagée après son terme, comme étant achevée. Mais l’aspect accompli du performatif, la promesse faite, ne s’accompagne pas de sa réalisation, l’attribution de la charge. Le décalage introduit entre la performativité de ces verbes et leur irréalisation confère au secret le visage de la tromperie, et la répétition de cette parole vide insiste sur ce dérèglement dont Sirot est victime.</p
+><p
+xml:id="p11"
+>Le secret chez Lenet concerne non seulement les intentions d’autrui, mais aussi les propres intentions du mémorialiste, dont les propos masquent ses desseins véritables. Comme l’échange suivant le montre, toutes les paroles de Lenet et de Mazarin sont aiguisées d’implicite, destiné à faire agir l’adversaire contre son gré :</p
+><cit
+xml:id="cit01"
+><quote
+>Si Votre Éminence savait ce qui se brasse de toutes parts contre elle, elle ferait de sérieuses réflexions sur tout ce que je lui dis. Aussi fais-je, me repartit-il ; je sais bien que j’ai beaucoup d’ennemis, mais j’espère d’en venir à bout, comme j’ai fait jusqu’à présent ; j’ai de la résolution, des amis, et la protection de la Reine : demain nous nous reverrons (II, p. 486-487).</quote
+></cit
+><p
+xml:id="p12"
+>Lenet commence par discréditer son adversaire tout en le menaçant. La capacité de Mazarin à comprendre sa propre situation est en effet remise en cause par la subordonnée hypothétique qui envisage cette compréhension comme contraire à l’état actuel des choses. Le verbe semi-factif<note
+n="12"
+place="foot"
+xml:id="ftn33"
+><p
+>Voir Axelle Vatrican, « Savoir que et la notion de présupposition », <hi
+rend="italic"
+>Langages</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 186, 2012/2, p. 69-84.</p
+></note
+> <hi
+rend="italic"
+>savoir</hi
+>, qui présuppose la vérité de la complétive qu’il régit, introduit une menace pour Mazarin qui est contraint de croire ces propos. L’acte illocutoire n’a pas l’effet perlocutoire escompté : Mazarin – peut-être en réalité déstabilisé – parvient en apparence à prendre l’ascendant dans la discussion. Il réemploie le verbe <hi
+rend="italic"
+>savoir </hi
+>pour désamorcer la menace de son adversaire et montrer qu’il maîtrise la situation ; puis il menace à son tour Lenet, en employant des substantifs généraux (« des ennemis », « des amis ») qui peuvent laisser penser à Lenet qu’il est lui aussi trahi. Il reprend enfin définitivement le pouvoir en décidant de la fin de l’échange. Le secret ici est manipulation, et ces longs échanges rapportés avec Mazarin nous montrent la grande habileté de Lenet négociateur.</p
+><p
+xml:id="p13"
+>Dans les Mémoires de Pontis, le secret consiste clairement en un « jeu du tiers inclus-exclu<note
+n="13"
+place="foot"
+xml:id="ftn34"
+><p
+>Expression de Louis Marin qui souligne ce paradoxe du secret : il exige qu’« un des joueurs <hi
+rend="italic"
+>en tant que joueur </hi
+>ne fa[sse] pas partie précisément <hi
+rend="italic"
+>pour que </hi
+>le jeu ait lieu » (« Logiques du secret », <hi
+rend="italic"
+>Lectures traversières</hi
+>, Paris, Albin Michel, 1992, p. 247-257, ici p. 251).</p
+></note
+> » : il oppose Pontis et Louis <hi
+rend="small-caps"
+>XIII</hi
+> à Richelieu. Après avoir reçu Pontis en secret et lui avoir pardonné son acte d’insubordination, Louis <hi
+rend="small-caps"
+>XIII</hi
+> met en scène la rencontre officielle et y participe, jouant la carte de la distance pour dissimuler la mise en scène. La comparaison du début des deux demandes de grâce de Pontis met en évidence la dimension factice d’une parole déterminée par le secret :</p
+><cit
+xml:id="cit02"
+><quote
+>Sire, je ne puis assez <hi
+rend="italic"
+>remercier</hi
+> Votre Majesté de la grâce et de l’honneur qu’elle me fait de vouloir bien que je lui rende compte de mes actions […] (p. 308).<lb
+></lb
+>Sire, je viens me jeter aux pieds de Votre Majesté pour implorer sa miséricorde. […] Mais je <hi
+rend="italic"
+>supplie</hi
+> très humblement votre bonté, Sire, de vouloir auparavant m’accorder la grâce de m’entendre […] (p. 314, nous soulignons).</quote
+></cit
+><p
+xml:id="p14"
+>Lors de la première entrevue, secrète, le verbe performatif <hi
+rend="italic"
+>remercier </hi
+>est opérant. Or, lors de l’entrevue officielle, la performativité des verbes <hi
+rend="italic"
+>implorer </hi
+>et <hi
+rend="italic"
+>supplier </hi
+>est annulée par le secret partagé entre le souverain et Pontis. Ce dernier demande en effet ce qu’il a déjà obtenu lors de la première entrevue. C’est l’ordre des verbes performatifs qui montre la mise en scène et rend impossible la performativité des deux verbes : on supplie puis on remercie et non l’inverse. Comme la scène elle-même qui est pure mise en scène, la parole est scindée entre être et paraître. Ces deux extraits soulignent bien la connivence des deux interactants, et ce de manière directe dans la chambre du souverain, et de manière indirecte devant Richelieu.</p
+><p
+xml:id="p15"
+>L’expérience des coulisses du pouvoir informe la narration et les discours des Mémoires, qui les retranscrivent et les façonnent en retour afin d’en souligner les spécificités. Si cette narration est un véritable plaidoyer <hi
+rend="italic"
+>pro domo </hi
+>chez Sirot, le plaidoyer est plus ténu chez Lenet qui rend compte de son rôle dans l’histoire de Condé. Quant à Pontis, il défend bien sa cause comme il l’aurait fait au moment des faits mais, lorsqu’il raconte son histoire à Du Fossé, il est détaché des vanités mondaines et ne désire plus convaincre que de la nécessité de se tourner vers Dieu<note
+n="14"
+place="foot"
+xml:id="ftn35"
+><p
+>Ajoutons que dans le cas spécifique des Mémoires de Pontis, cette entreprise du <hi
+rend="italic"
+>je </hi
+>narrant double celle du transcripteur qui entend par ce récit faire « remarquer les voies différentes par lesquelles Dieu se plaît de conduire ceux qu’il veut enfin attirer à son service » (« Avertissement », <hi
+rend="italic"
+>op. cit.</hi
+>, p. 83).</p
+></note
+>. Nous voyons mieux ainsi les liens qui unissent <hi
+rend="italic"
+>je </hi
+>narrant et <hi
+rend="italic"
+>je </hi
+>narré pour ce qui est des événements rapportés ; regardons à présent la manière dont ces deux instances articulent représentation et révélation des secrets.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div04"
+><head
+><hi
+rend="italic"
+>Je </hi
+>narré et <hi
+rend="italic"
+>je </hi
+>narrant : le problème de la connaissance des secrets</head
+><div
+type="section2"
+xml:id="div05"
+><head
+><hi
+rend="italic"
+>Je</hi
+> narré et <hi
+rend="italic"
+>je</hi
+> narrant : représentation et révélation des secrets</head
+><p
+xml:id="p16"
+>En littérature factuelle, le secret implique une connaissance. Il a pu être découvert immédiatement, entre le temps de l’événement et celui de l’écriture, ou bien être encore inconnu. Il est alors intéressant d’observer si la narration respecte la chronologie de connaissance du secret.</p
+><p
+xml:id="p17"
+>Dans les Mémoires de Pontis, <hi
+rend="italic"
+>je </hi
+>narré et <hi
+rend="italic"
+>je </hi
+>narrant rendent compte de ce processus de découverte. On peut définir un premier cas de figure dans lequel le <hi
+rend="italic"
+>je </hi
+>narré connaissait le secret et le révèle ; le <hi
+rend="italic"
+>je </hi
+>narrant ne fait alors que le reprendre. L’origine secrète de la haine de Richelieu pour Pontis est ainsi dévoilée une première fois par le biais du <hi
+rend="italic"
+>je </hi
+>narré, puis reprise par le <hi
+rend="italic"
+>je </hi
+>narrant dans une intervention proleptique : « mais je ressentis bientôt les effets de la mauvaise volonté de Monsieur l’évêque d’Amiens qui réussit si habilement à irriter le cardinal contre moi, que je me vis en un instant dépouillé de tout » (p. 498). Second cas de figure, le <hi
+rend="italic"
+>je </hi
+>narrant a appris une information ultérieurement ; la narration le signale alors clairement, par exemple au moyen d’une proposition subordonnée qui permet le décrochage énonciatif : « le roi connut aussitôt le déguisement et l’artifice de cette demande, ainsi qu’il me le témoigna lui-même depuis » (p. 534). En l’occurrence, les circonstances dans lesquelles Louis <hi
+rend="small-caps"
+>XIII</hi
+> a rapporté au <hi
+rend="italic"
+>je </hi
+>narré la demande manipulatrice de Richelieu sont exposées quelques pages plus loin, ce qui renforce la cohérence narrative. La reprise par le <hi
+rend="italic"
+>je </hi
+>narrant des secrets déjà révélés par le <hi
+rend="italic"
+>je </hi
+>narré et l’intégration dans le <hi
+rend="italic"
+>continuum </hi
+>narratif de données détenues par le <hi
+rend="italic"
+>je </hi
+>narrant seul, font de la défiance de Richelieu un fil rouge du récit : celle-ci apparaît comme la clé des malheurs de Pontis. Ces interventions pourraient être liées à la genèse particulière du texte : elles seraient une trace de la posture de conteur adoptée par Pontis relatant sa vie à Du Fossé, ou un indice de l’intervention du scripteur dans la mise en récit.</p
+><p
+xml:id="p18"
+>Chez Lenet, le <hi
+rend="italic"
+>je </hi
+>narrant vient confirmer les dires du <hi
+rend="italic"
+>je </hi
+>narré, qui sait immédiatement énoncer les ressorts cachés de l’événement. Le <hi
+rend="italic"
+>je </hi
+>narré peut ainsi expliquer son hypothèse sur le comportement de Mazarin, élaborée au moment des faits, et le <hi
+rend="italic"
+>je </hi
+>narrant la confirmer, au présent d’énonciation : « je m’imaginai, et je crois que je n’eus pas tort, que le Cardinal qui allait à ses fins comme nous allions aux nôtres voulait que je ne parlasse à Mademoiselle que de l’affaire de Montrond » (II, p. 480). Le <hi
+rend="italic"
+>je </hi
+>narrant peut aussi introduire une confirmation factuelle des interprétations du <hi
+rend="italic"
+>je </hi
+>narré<hi
+rend="italic"
+> </hi
+>: « j’ai jugé […] qu’il pouvait bien avoir insinué au duc de Rohan de proposer cela au prince pour voir comment il le recevrait, et pour s’en servir après contre lui, comme il ne manqua pas de faire » (I, p. 41). Le secret n’est pas élucidé entre les faits et leur narration, mais cet intervalle de temps est important : les événements qui ont suivi ont conforté les opinions du <hi
+rend="italic"
+>je </hi
+>narré. Celui-ci révèle les intentions cachées des actions de Mazarin et le recul du <hi
+rend="italic"
+>je </hi
+>narrant crédibilise ces révélations parce que le temps est venu les confirmer. La clairvoyance immédiate du négociateur n’en est que davantage soulignée.</p
+><p
+xml:id="p19"
+>Le <hi
+rend="italic"
+>je </hi
+>narré dans les Mémoires de Sirot est exclu des secrets du pouvoir, toute révélation devrait donc être imputable au <hi
+rend="italic"
+>je </hi
+>narrant. Or il est très difficile de reconstituer la chronologie de la découverte du secret et la narration présente des contradictions. Alors que Sirot sollicite le paiement de sa rançon, est d’abord révélée par le <hi
+rend="italic"
+>je </hi
+>narré l’origine supposée des refus de Mazarin : des espions lui ont appris ses entrevues avec Condé, et le ministre craint « un attachement secret entre [eux] qui pouvait lui être préjudiciable » (p. 120). Mais cette explication confirmée par un discours rapporté de Mazarin et par le <hi
+rend="italic"
+>je </hi
+>narré (p. 123 et 127-128) est contredite plus loin dans le récit. Un monologue auto-rapporté<note
+n="15"
+place="foot"
+xml:id="ftn36"
+><p
+>Selon la terminologie proposée par Dorrit Cohn dans <hi
+rend="italic"
+>La Transparence intérieure. Modes de représentation de la vie psychique dans le roman</hi
+>, Alain Bony (trad.), Paris, Éditions du Seuil, 1981, p. 185-190.</p
+></note
+> expose les doutes du <hi
+rend="italic"
+>je </hi
+>narré au sujet du comportement du ministre : « mais ne trouverait-il point […] à redire, aux déférences et à l’obéissance que je rends à Messieurs le Prince de Condé, et le duc d’Enghien son fils. Cela ne peut être » (p. 136). Puis le <hi
+rend="italic"
+>je </hi
+>narré évoque « une certaine aversion secrète, dont [il] ne savai[t] pas l’origine » (p. 153). Que penser alors de la première explication alléguée ? Quand Sirot a-t-il appris que des espions avaient informé le ministre de ses entrevues avec Condé ? L’a-t-il su immédiatement, ce qui est contredit par la suite de la narration ? L’a-t-il su durant l’intervalle entre les faits et leur mise en récit et réintroduit <hi
+rend="italic"
+>a posteriori</hi
+> sur le fil chronologique de la narration ? Dans ce cas, les deux confirmations par le récit qui suivent sont-elles à traiter sur le même plan – le <hi
+rend="italic"
+>je </hi
+>narrant réinterprétant les événements pour leur donner une cohérence – ou sont-elles des explications déjà détenues par le <hi
+rend="italic"
+>je </hi
+>narré ? On voit qu’un secret connu du seul <hi
+rend="italic"
+>je </hi
+>narrant peut être intégré à la narration sans que le processus de connaissance du secret soit signalé. La manipulation des informations par le <hi
+rend="italic"
+>je </hi
+>narrant – non nécessairement consciente et intentionnelle – viendrait ici renforcer l’entreprise de dénonciation d’un ministre défiant et ambitieux.</p
+><p
+xml:id="p20"
+>Chaque texte articule donc différemment <hi
+rend="italic"
+>je </hi
+>narré et <hi
+rend="italic"
+>je </hi
+>narrant pour révéler les secrets : le dévoilement des intentions secrètes de Richelieu par les deux <hi
+rend="italic"
+>je </hi
+>chez Pontis permet de montrer que le <hi
+rend="italic"
+>je </hi
+>narré n’était pas dupe des manœuvres du ministre en renforçant la critique émanant du <hi
+rend="italic"
+>je </hi
+>narrant ; les interprétations immédiates du <hi
+rend="italic"
+>je </hi
+>narré chez Lenet valorisent la sagacité du négociateur ; et le savoir rétrospectif du <hi
+rend="italic"
+>je </hi
+>narrant serait potentiellement utilisé à des fins de manipulations narratives chez Sirot, afin d’accentuer ce qui est présenté comme acharnement de la part du ministre sur le <hi
+rend="italic"
+>je </hi
+>narré. Toutes ces révélations sont tout de même étonnantes dans un récit factuel puisqu’elles concernent les intentions cachées d’autrui. Examinons donc les moyens déployés par la narration pour les représenter avec vraisemblance.</p
+></div
+><div
+type="section2"
+xml:id="div06"
+><head
+>L’immixtion (in)vraisemblable du <hi
+rend="italic"
+>je</hi
+> dans les secrets d’autrui</head
+><p
+xml:id="p21"
+>Pour nos mémorialistes, le véritable <hi
+rend="italic"
+>locus politicus</hi
+> est ce <hi
+rend="italic"
+>locus secretus </hi
+>qu’est la psyché opaque des ministres. Afin de mettre au jour ce qu’ils pensent être leurs intentions secrètes, ils emploient fréquemment des compléments circonstanciels de but en <hi
+rend="italic"
+>pour </hi
+>(désormais CCB)<hi
+rend="italic"
+>. </hi
+>Ces CCB présentent deux caractéristiques intéressantes pour notre propos. Premièrement, ils sont toujours de l’ordre de l’interprétation, pourtant ils présentent cette interprétation de manière objective. Dans un CCB, c’est en effet « l’activité de synthèse mentale du sujet<note
+n="16"
+place="foot"
+xml:id="ftn37"
+><p
+>Pierre Cadiot, <hi
+rend="italic"
+>De la grammaire à la cognition : la préposition </hi
+>pour, Paris, CNRS Éditions, 1991, p. 261-262.</p
+></note
+> » qui est responsable de la mise en relation d’une action avec une intention<hi
+rend="italic"
+>. </hi
+>Or le CCB met en place un « dispositif de coénonciation<note
+n="17"
+place="foot"
+xml:id="ftn38"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 260.</p
+></note
+> » qui présente l’intention du locuteur du « même point de vue<note
+n="18"
+place="foot"
+xml:id="ftn39"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 259.</p
+></note
+> » que l’action. Secondement, ces interprétations peuvent être aussi bien le fait du <hi
+rend="italic"
+>je </hi
+>narré, qui analyse la situation au moment des faits, que du <hi
+rend="italic"
+>je </hi
+>narrant qui réanalyse la situation des années après. Si l’intervention du <hi
+rend="italic"
+>je </hi
+>narrant n’est pas précisée, elle est invisible et seul le décalage de connaissances entre les deux instances peut nous l’indiquer. On étudiera donc les conséquences de l’utilisation de ces CCB dans la révélation des secrets.</p
+><p
+xml:id="p22"
+>Commençons par Lenet qui rapporte toutes les interprétations qu’il a faites du comportement de Mazarin au moment même des faits. Tout est clair : le <hi
+rend="italic"
+>je </hi
+>narré connaissait une partie des secrets de son adversaire, et la narration distingue nettement la transcription des actions de Mazarin de leurs interprétations par Lenet. Un verbe d’opinion signale souvent au lecteur l’activité interprétative du <hi
+rend="italic"
+>je </hi
+>narré, qui élabore une hypothèse sur l’intention cachée de l’interlocuteur : « j’ai jugé que le cardinal lui préparait dès lors ce piège pour brouiller [Condé] avec le duc d’Orléans » (I, p. 41). Le verbe d’opinion expose explicitement ce que suppose implicitement le CCB. Comme précédemment, le recul du <hi
+rend="italic"
+>je </hi
+>narrant autorise ces révélations, mais on peut supposer la connaissance immédiate de ces intentions cachées ; la dimension interprétative et subjective du <hi
+rend="italic"
+>je</hi
+> narré est de plus clairement indiquée.</p
+><p
+xml:id="p23"
+>Au contraire, les Mémoires de Sirot ne rendent jamais compte de cette activité interprétative<hi
+rend="italic"
+> </hi
+>; on peut les soupçonner de se servir du recul du <hi
+rend="italic"
+>je </hi
+>narrant pour expliquer les tribulations du <hi
+rend="italic"
+>je </hi
+>narré. Dans l’exemple suivant : « pour me persuader ce qu’il me disait, [Mazarin] me mena chez la Reine et m’y présenta » (p. 117), l’intention de Mazarin n’apparaît pas comme une interprétation du <hi
+rend="italic"
+>je </hi
+>mais bien comme un but naturel de l’action. Cette intention peut même être présupposée, comme par exemple dans une subordonnée, ce qui empêche sa réfutation : « cette Éminence qui ne demandait qu’à gagner du temps pour éluder les propositions qu’on lui faisait, lui dit, qu’il tâcherait de persuader à la reine d’écouter cette nouvelle proposition » (p. 131-132). La narration contraint ainsi le lecteur à croire au caractère manipulateur des actions de Mazarin. On peut vraisemblablement penser que la disgrâce finale du <hi
+rend="italic"
+>je</hi
+> narré oriente ces interprétations, le CCB permet alors au <hi
+rend="italic"
+>je </hi
+>narrant de s’introduire dans le déroulement des faits sans être vu. Cette invisibilisation est un élément de plus à mettre au compte de la critique de Mazarin.</p
+><p
+xml:id="p24"
+>Chez Pontis, les savoirs respectifs du <hi
+rend="italic"
+>je </hi
+>narrant et du <hi
+rend="italic"
+>je </hi
+>narré sont bien distingués, mais c’est dans ce texte que l’effacement de l’énonciation au profit de la révélation des pensées secrètes est la plus saisissante. Comme chez Lenet, le <hi
+rend="italic"
+>je </hi
+>narré peut connaître le secret et le révéler. Mais il est aussi fait mention de l’origine du savoir du <hi
+rend="italic"
+>je </hi
+>narré : c’est parce que ce dernier a appris de Louis <hi
+rend="small-caps"
+>XIII</hi
+> que Richelieu avait essayé de manipuler le roi, en se servant de lui, qu’il est fondé à dire que le cardinal « s’avisa […] de se servir de [s]on nom pour emporter sur son ennemi ce qu’il pouvait souffrir qu’il lui enlevât » (p. 533). La narration objective rend ainsi plausible la révélation des intentions cachées de Richelieu. Dans le passage suivant, qui détaille la réaction de Richelieu venant d’apprendre que le roi s’est opposé à ses desseins en confiant un gouvernement à Cinq-Mars, un pas de plus est franchi dans ce dévoilement :</p
+><cit
+xml:id="cit03"
+><quote
+>Le cardinal, <hi
+rend="italic"
+>qui savait bien que cet autre était Monsieur le grand écuyer,</hi
+> regarda comme le dernier affront qu’il pût recevoir, de ce que celui qui était sa créature, et qui depuis était devenu son ennemi, avait pu emporter sur lui ce gouvernement. <hi
+rend="italic"
+>Comme il s’était persuadé qu’il était maître de tout, et qu’il croyait même s’être rabaissé d’avoir demandé une chose qui dépendait de son pouvoir</hi
+>, il fut piqué très sensiblement du refus du roi ; et jugeant que ce ne pouvait être qu’un effet de la mauvaise volonté de ses ennemis qui l’avaient mis mal dans l’esprit de Sa Majesté, il commença à entrer dans quelque appréhension de voir bientôt renverser toute sa fortune. <hi
+rend="italic"
+>Car il savait</hi
+>, <hi
+rend="bold"
+>comme j’ai dit auparavant</hi
+>, <hi
+rend="italic"
+>qu’il se formait de puissantes cabales contre lui </hi
+>[…] (p. 532-533).</quote
+></cit
+><p
+xml:id="p25"
+>Nous avons laissé en caractères romains la séquence qui relève d’une observation purement factuelle de la scène, correspondant à la mention de la colère de Richelieu. C’est cette réaction qui est expliquée par les pensées du ministre. En italiques, on trouve les savoirs ou les croyances vraisemblables que Pontis attribue à Richelieu et, soulignés, deux brefs basculements en focalisation interne, introduits par trois verbes qui dénotent un processus mental. La mention des croyances vraisemblables de Richelieu permet le glissement insensible vers la focalisation interne. En gras, enfin, nous signalons l’intervention du <hi
+rend="italic"
+>je </hi
+>narrant, qui vient justifier l’exposition des pensées d’autrui. Cette justification, qui consiste notamment en un renvoi à la narration antérieure, renforce la cohérence narrative et objective les composantes interprétatives de la scène. Tous ces éléments confèrent de la vraisemblance au coup de force qu’est, en régime factuel, l’exposition des pensées d’autrui<note
+n="19"
+place="foot"
+xml:id="ftn40"
+><p
+>Dorrit Cohn fait de la focalisation interne un critère de distinction entre la fiction et la factualité (<hi
+rend="italic"
+>Le Propre de la fiction</hi
+>, Claude Hary-Schaeffer (trad.), Paris, Éditions du Seuil, 2001), suivant en cela les analyses de Käte Hamburger (<hi
+rend="italic"
+>Logique des genres littéraires</hi
+>, Pierre Cadiot trad., Paris, Éditions du Seuil, 1986). Marc Hersant, identifiant un passage de focalisation interne dans les Mémoires de Saint-Simon, a discuté ce critère et a conclu qu’il n’était pas « décisif pour “trancherˮ » du caractère factuel ou fictionnel du texte (<hi
+rend="italic"
+>Le Discours de vérité dans les “Mémoires” du duc de Saint-Simon</hi
+>, Paris, Honoré Champion, 2009, p. 524).</p
+></note
+>. Ce passage précède une tentative de manipulation de Louis <hi
+rend="small-caps"
+>XIII </hi
+>par Richelieu : il met efficacement au jour les intentions secrètes de ce dernier pour s’accaparer le pouvoir. La psyché du ministre n’est plus <hi
+rend="italic"
+>locus secretus</hi
+>, mais elle est exposée au grand jour et dénoncée par un <hi
+rend="italic"
+>je </hi
+>non mentionné dans le passage.</p
+><p
+xml:id="p26"
+>La révélation des secrets du pouvoir prend ainsi diverses formes qui laissent plus ou moins apparaître leur part subjective et interprétative. L’origine référentielle est plus marquée chez Lenet par la présence du <hi
+rend="italic"
+>je </hi
+>narrant et la mention de l’activité interprétative du <hi
+rend="italic"
+>je </hi
+>narré ; elle l’est moins chez Sirot qui emploie aussi le <hi
+rend="italic"
+>je </hi
+>narrant mais intègre ses interprétations à la narration sans les signaler ; elle l’est à la fois plus et moins chez Pontis : l’emploi régulier du <hi
+rend="italic"
+>je </hi
+>narrant cohabite avec l’effacement temporaire de la première personne dans un passage en focalisation interne. Cette invisibilisation de l’origine référentielle contribue activement à l’efficacité rhétorique du texte, puisque qu’elle permet de présenter comme une vérité objective ce qui tient en fait de l’interprétation subjective.</p
+><p
+xml:id="p27"
+>On observe finalement que la fusion des deux instances énonciatives est aussi importante que leur scission dans la poétique du secret des Mémoires. Les montages narratifs et les manifestations discursives du secret sont en effet déterminés par l’expérience du <hi
+rend="italic"
+>je</hi
+> narré, mais leur mise en forme finale est bien imputable au <hi
+rend="italic"
+>je</hi
+> narrant, qui rend visibles les spécificités de son expérience des coulisses royales. Si chez Pontis et Lenet, le <hi
+rend="italic"
+>je </hi
+>narrant vient confirmer ce que savait déjà le <hi
+rend="italic"
+>je </hi
+>narré, on a souligné chez Sirot les potentielles manipulations narratives d’un <hi
+rend="italic"
+>je </hi
+>narrant qui incorpore à sa narration des secrets inconnus du <hi
+rend="italic"
+>je </hi
+>narré. Mais c’est au sein des CCB que cette fusion des deux instances énonciatives est la plus forte car la plus invisible. Ils constituent en cela un outil précieux de cohérence narrative parce qu’ils permettent au <hi
+rend="italic"
+>je</hi
+> narrant de donner sens à l’expérience du <hi
+rend="italic"
+>je</hi
+> narré par la révélation d’intentions cachées. Ces révélations servent en même temps la critique efficace d’un pouvoir duplice. Les Mémoires de Pontis constituent sur ce point un hapax : la cohérence narrative et l’accusation d’un ministre machiavélique semblent en effet autoriser l’usage de la focalisation interne, problématique en régime factuel. Toutes nos observations sur cet auteur – alternance de scènes de confiance et de défiance, récits théâtraux de demande de grâce, prolepses narratives et focalisation interne – semblent converger vers une plus grande intervention du <hi
+rend="italic"
+>je</hi
+> narrant dans la mise en récit de l’existence du <hi
+rend="italic"
+>je</hi
+> narré. On peut légitimement se demander dans quelle mesure l’oralité primitive de ce récit et sa retranscription par un tiers auraient partie liée avec ces conclusions.</p
+><p
+xml:id="p28"
+>Il convient d’interpréter cette poétique du secret à l’aune de l’acte rhétorique qui fonde l’écriture des Mémoires. Quel que soit le moment où le secret vient à être connu, il est remarquable qu’il soit toujours révélé au début des épisodes narrés sans jamais constituer un ressort de dramatisation de l’action. En désactivant la possibilité d’un récit à intrigue, ces révélations entravent l’immersion du lecteur. En cela, nos textes factuels se distinguent nettement des récits fictionnels qui usent du secret comme d’« une clé d’accès […] pour favoriser l’immersion du lecteur dans l’espace textuel<note
+n="20"
+place="foot"
+xml:id="ftn41"
+><p
+>Guiomar Hautcœur, <hi
+rend="italic"
+>Roman et secret. Essai sur la lecture à l’époque moderne (</hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xviii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècles)</hi
+>, Paris, Classiques Garnier, 2019, p. 25.</p
+></note
+> ». Au contraire, suivant Raphaël Baroni, la fonction « des comptes rendus historiques […] est davantage d’expliquer le passé que d’intriguer le lecteur<note
+n="21"
+place="foot"
+xml:id="ftn42"
+><p
+>Raphaël Baroni, « Le rôle des personnages dans les rouages de l’intrigue », <hi
+rend="italic"
+>Letras de Hoje</hi
+>, vol. 52, 2017, p. 156-166, ici p. 157.</p
+></note
+> », ce qui amène dès lors à considérer « l’absence de dispositifs intrigants au sein de certains récits [non] comme un défaut, mais au contraire comme une qualité assurant le succès de l’acte de langage<note
+n="22"
+place="foot"
+xml:id="ftn43"
+><p
+><hi
+rend="italic"
+>Ibid.</hi
+>, p. 159.</p
+></note
+> ». L’attention du lecteur est de ce fait attirée sur les enjeux et les conséquences du secret dans la destinée du mémorialiste. On constate ainsi l’utilisation de la spécificité énonciative des Mémoires à des fins différentes : elle sert d’une part la force narrative des textes (raconter sa propre expérience), et d’autre part leur force rhétorique (convaincre de sa vérité sur l’histoire), deux forces qui entrent en tension et se complètent.</p
+></div
+></div
+></body
+></text
+></TEI
+>

@@ -1,0 +1,144 @@
+%!Adobe-FontList 1.22
+%Locale:0x40c
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+FullName:Minion Pro
+MenuName:Minion Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:218640
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:NirmalaUI
+FamilyName:Nirmala UI
+StyleName:Regular
+FullName:Nirmala UI
+MenuName:Nirmala UI
+StyleBits:0
+WritingScript:Kannada
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\Nirmala.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:1448112
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Nirmala UI
+NameArray:0,Win,1,Nirmala UI
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:ArialMT
+FamilyName:Arial
+StyleName:Regular
+FullName:Arial
+MenuName:Arial
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\arial.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:1036584
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Arial
+NameArray:0,Win,1,Arial
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Calibri
+FamilyName:Calibri
+StyleName:Regular
+FullName:Calibri
+MenuName:Calibri
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\calibri.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:1648120
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Calibri
+NameArray:0,Win,1,Calibri
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:SymbolMT
+FamilyName:Symbol
+StyleName:Regular
+FullName:Symbol
+MenuName:Symbol
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\symbol.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:69036
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Symbol
+NameArray:0,Win,1,Symbol
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:TimesNewRomanPSMT
+FamilyName:Times New Roman
+StyleName:Regular
+FullName:Times New Roman
+MenuName:Times New Roman
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:Y:\LIVRES\Regards_croises_sur_la_communication\preparation\dossier_INDD_regards_croises_20200911\20200911_INT_traces_numeriques\Document fonts\times.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:1195688
+FileModTime:1599813423
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Times New Roman
+NameArray:0,Win,1,Times New Roman
+%EndFont
+

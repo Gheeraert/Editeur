@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns3="http://www.w3.org/1999/xlink"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Introduction</title
+><author
+role="aut"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+type="accessibilityFeature"
+>alternativeText</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-17"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="introduction"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Introduction</p
+><p
+rend="author-aut"
+>Yvan Loskoutoff</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Ce deuxième volume d’<hi
+rend="italic"
+>Héraldique et papauté, Moyen Âge-Temps modernes</hi
+> est issu du colloque tenu au centre Saint-Louis de Rome du 7 au 9 juin 2022. L’époque moderne y domine. Les réflexions entamées dans le précédent volume s’y poursuivent, notamment sur les décors monumentaux, sur les cérémonies et sur les manuscrits. De nouveaux champs d’investigation sont ouverts, entre autres, sur des figures de pontifes en particulier ou sur le livre imprimé. Le recueil s’organise en deux parties égales de six articles chacune : l’une se consacre à des pontificats spécifiques, l’autre à la monumentalisation de l’héraldique.</p
+><p
+xml:id="p2"
+>Six pontifes bénéficient d’une étude monographique, deux pour la Renaissance, Léon X et Jules III, trois pour le <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Urbain VIII, Innocent X et Alexandre VII, un pour le <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, Clément XIII. Elli Doulkaridou-Ramantani (université de Paris I), nous entretient de l’ornementation des manuscrits de Léon X Médicis (1513-1521), s’intéressant à un pontifical décoré par Attavante degli Attavanti vers 1520 (Pierpont Morgan Library) et à trois livres de chant polyphonique, provenant du scriptorium de Petrus Alamire, offerts au pape par Marguerite d’Autriche entre 1513 et 1519 (BAV, fonds de la chapelle Sixtine). Elle étudie la « logique cumulative des symboles médicéens », mettant en lumière une tendance à la facétie dans l’esprit de la grotesque dont la mode débutait alors à Rome<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>André Chastel, <hi
+rend="italic"
+>La grottesque</hi
+>, Paris, Le Promeneur, 1988.</p
+></note
+>, volontiers inspirée du blason<note
+n="2"
+place="foot"
+xml:id="ftn7"
+><p
+>Yvan Loskoutoff, « Le symbolisme des <hi
+rend="italic"
+>palle</hi
+> médicéennes à la villa Madama », <hi
+rend="italic"
+>Journal des savants</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 2, 2001, p. 351-391.</p
+></note
+>. Elle analyse notamment l’image de l’ourson amateur de miel, suggérant une allusion aux supports parlants des armes de Clarice Orsini, mère de Léon X.</p
+><p
+xml:id="p3"
+>Yvan Loskoutoff (université Le Havre Normandie, Académie des Jeux floraux) continue l’histoire du livre, manuscrit et imprimé, avec Jules III Del Monte (1550-1555). Une dizaine de manuscrits décorés par Ferdinando Ruano ou Vincent Raymond (BAV, fonds Vatican latin et fonds de la chapelle Sixtine ; Bibliothèque capitulaire de Tolède) témoignent, comme pour Léon X, de l’usage des armoiries comme des devises, à l’instar des décors monumentaux du Vatican ou de la villa Giulia. L’ornement du livre imprimé illustre le développement des vignettes de titre armoriées, qui concurrencent les marques de libraires surtout à Rome, où la pratique constante de la gravure en grisaille semble annoncer le système des hachures héraldiques habituellement daté de la fin du siècle. On remarque un seul frontispice-titre pour le <hi
+rend="italic"
+>Missarum liber primus</hi
+> de Palestrina (1554), mais c’est un remploi des <hi
+rend="italic"
+>Messes</hi
+> de Morales, dédiées à Cosme de Médicis (1544), dont le contenu blasonnant a été modifié.</p
+><p
+xml:id="p4"
+>Fabrizio Federici (chercheur postdoctoral), spécialiste de l’érudit romain Francesco Gualdi<note
+n="3"
+place="foot"
+xml:id="ftn8"
+><p
+>Voir son article, « Un partisan de la France en quête de protection : ce “bon vieux” chevalier Francesco Gualdi et le cardinal Mazarin », dans Yvan Loskoutoff et Patrick Michel (dir.), <hi
+rend="italic"
+>Mazarin, Rome et l’Italie</hi
+>, Mont-Saint-Aignan, Presses universitaires de Rouen et du Havre, 2021-2022, t. 2, p. 199-238.</p
+></note
+>, nous transporte au siècle suivant sous le pontificat d’Urbain VIII Barberini (1623-1644). Il évoque d’abord le succès des traités de blason à cette époque, notamment ceux de Gauges de’ Gozze et celui du jésuite Silvestro Pietrasanta. Dans ce contexte il analyse la présence de l’héraldique dans l’ouvrage de Francesco Gualdi consacré aux tombes médiévales, les <hi
+rend="italic"
+>Memorie sepolcrali,</hi
+> ainsi que son action pour la conservation des vestiges armoriaux. Il aborde enfin la question des origines commerçantes de la noblesse romaine et des traces qu’elles ont laissées dans l’héraldique, montrant comment on s’efforça de les faire disparaître, notamment dans la famille d’Urbain VIII.</p
+><p
+xml:id="p5"
+>Daniela Del Pesco (université de Rome III) s’attache à Innocent X Pamphili (1644-1655). Elle anticipe sur la deuxième partie de ce volume en étudiant la place de ses armoiries dans l’architecture, non sans avoir fait leur histoire depuis la ville d’origine de la famille, Gubbio en Ombrie. Elle choisit deux exemples liés au jubilé de 1650 : la fontaine des Quatre-Fleuves place Navone, due au Bernin, et la restauration de la basilique du Latran, due à son concurrent, Borromini. Elle montre comment la colombe des Pamphili s’inscrit dans le monument du point de vue formel autant que symbolique. Elle achève en évoquant sa nouvelle fortune dans le recueil de gravures de Filippo Juvarra publié en 1711, les targes (écus armoriés) de Rome.</p
+><p
+xml:id="p6"
+>Sonia Cavicchioli (université de Bologne) nous entraîne dans le pontificat suivant, celui d’Alexandre VII Chigi (1655-1667). Elle nous montre comment, à Bologne, les armoiries du pape furent célébrées, mais aussi occultées en raison des sentiments locaux d’indépendance. En effet, le recueil manuscrit des <hi
+rend="italic"
+>Insignia </hi
+>du corps municipal, conservé aux Archives d’État de la ville, témoigne par ses miniatures que pour Girolamo Farnèse, légat de 1658 à 1662, on privilégia ses lys, ignorant toute référence au pape. En revanche, l’héraldique de son successeur, Pietro Vidoni, fut combinée avec celle d’Alexandre VII, non point dans les <hi
+rend="italic"
+>Insignia,</hi
+> qui restèrent a-pontificaux aussi pour lui, mais dans la galerie de son appartement dont les fresques, dues à des peintres perspectivistes locaux, Giovanni Battista Caccioli et Domenico Santi, firent honneur mythologique aux monts et à l’étoile des Chigi.</p
+><p
+xml:id="p7"
+>Yvan Loskoutoff conclut la première partie en évoquant les rapports d’un artiste et d’un pape, Giovanni Battista Piranesi (1720-1778) et Clément XIII Rezzonico, qui régna de 1758 à 1769. C’est une idée commune que le <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle vit le déclin du blason. Piranèse nous prouve le contraire. L’artiste de la Rome antique et moderne fut aussi celui de l’héraldique. Avant de s’appliquer à la papauté, ce goût se manifeste dans la dédicace des <hi
+rend="italic"
+>Antichità romane</hi
+> (1756) à Milord Charlemont, mécène trop peu généreux dont le graveur « diffama » progressivement les armoiries dans les états successifs du frontispice. Il se montre aussi dans le frontispice des <hi
+rend="italic"
+>Vasi, candelabri, cippi</hi
+>… (1778) où un vase antique fut modifié de façon à évoquer la licorne des armes du dédicataire, le comte Ivan Schouvaloff. Il apparaît encore dans certaine vue de Rome où le graveur n’ignore pas le détail médiéval. Les armoiries papales se développent dans un cycle de frontispices dédiés à Clément XIII Rezzonico, vénitien comme Piranèse : <hi
+rend="italic"
+>Della magnificenza ed architettura de’ Romani</hi
+> (1761), <hi
+rend="italic"
+>Lapides Capitolini </hi
+>(1762), <hi
+rend="italic"
+>Antichità d’Albano e di Castel Gandolfo</hi
+> (1764), ou au neveu du pape, monseigneur Giovan Battista Rezzonico, <hi
+rend="italic"
+>Diverse maniere d’adornare i cammini</hi
+> (1769). Cette suite permet d’examiner l’évolution de la représentation héraldique ainsi que son adaptation à un contexte figuratif antiquisant. Giovan Battista Rezzonico fut aussi le commanditaire du décor de la villa des chevaliers de Malte sur l’Aventin, non loin de Sainte-Prisca, Santa Maria del Priorato, seule œuvre architecturale de l’artiste où il déploya tous les pouvoirs décoratifs et symboliques du blason Rezzonico.</p
+><p
+xml:id="p8"
+>La partie précédente a centré l’intérêt sur des figures de papes en particulier, privilégiant le livre, manuscrit ou imprimé, même si dans les trois derniers articles s’annonce le sujet de la présente partie : les manifestations de l’héraldique dans les monuments, sacrés ou profanes, durables ou éphémères. Pour quelles raisons et de quelle manière s’y inscrit-elle ? Cette partie s’ouvre sur une étude médiévale due à Laurent Hablot (École pratique des hautes études). Il s’interroge sur la « mise en signe de l’espace » et sur les conflits qu’elle pouvait entraîner en Italie, en raison de la concurrence du pape, de l’empereur et des communes. Il montre, ville après ville (Bologne, Orvieto, Viterbe), par quels moyens la papauté parvint à imposer ses insignes : apposition sur les monuments, concessions d’armoiries (premier exemple connu pour la ville de Viterbe au début du pontificat de Jean XXII, pape de 1316 à 1334 ; plus tard, Salon-de-Provence qui reçoit des armes d’Innocent VIII en 1488 après avoir refusé celles de l’Empire, du roi ou de son évêque). Le cas pontifical reste une exception du fait de la spécificité de l’institution ecclésiale.</p
+><p
+xml:id="p9"
+>Emmanuel Moureau (université de Toulouse, conservateur Tarn-et-Garonne) nous emmène ensuite dans la collégiale Saint-Jean-Baptiste/Saint-Louis de Castelnau-Bretenoux (Quercy). Après avoir reconstitué l’histoire de ses liens avec la famille de Castelnau¸ il en élucide le décor, rejetant certaines idées admises pour aboutir à un vitrail représentant le pape Jules II Della Rovere sous les traits de saint Jules I<hi
+rend="sup"
+>er</hi
+>, qui avait confirmé l’érection de la collégiale, et le cardinal François-Guillaume de Clermont-Lodève, cousin des Castelnau, ambassadeur de Louis XII auprès du même Jules II, sous les traits de saint Jérôme. Les stalles illustrent le blason des deux personnages, feuilles de rouvre parlantes pour les La Rovere et hermine pour les Clermont-Lodève.</p
+><p
+xml:id="p10"
+>Camille Larraz (université de Genève) s’intéresse pour sa part au monument éphémère, en étudiant l’entrée du cardinal Alexandre Farnèse, légat à Avignon en 1553, elle montre la place de l’héraldique dans l’image d’une « autre Rome ». Les entrées sont à la mode, la bibliographie abondante<note
+n="4"
+place="foot"
+xml:id="ftn9"
+><p
+>Principaux ouvrages : Bernard Guenée et Françoise Lehoux, <hi
+rend="italic"
+>Les entrées royales de 1328 à 1515</hi
+>, Paris, CNRS, 1968 ; Christian Desplat et Paul Mironneau (dir.), <hi
+rend="italic"
+>Les entrées : gloire et déclin d’un cérémonial</hi
+>, actes du colloque de Pau, Biarritz, Société Henri IV, 1997 ; Daniel Vaillancourt et Marie-France Wagner (dir.), <hi
+rend="italic"
+>Dix-septième siècle</hi
+>, numéro spécial : <hi
+rend="italic"
+>Les entrées royales</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 3, 2001. Le GRES (Groupe de recherche sur les entrées solennelles, université Concordia, Canada) publie des <hi
+rend="italic"
+>Cahiers</hi
+>.</p
+></note
+>, mais on a surtout privilégié les entrées royales. Le mérite de Camille Larraz est de se pencher sur le cas d’une ville pontificale. Les documents d’archives éclairent précisément le rôle des peintres en blason sous l’aspect le plus matériel (fourniture en pigments, ingrédients de la peinture, l’or et ses substituts, etc.), pour non moins de 1 250 armoiries. Elle met à profit le premier livret publié pour ce genre de cérémonie à Avignon par Honoré Henry, qui lui permet de détailler le programme. Elle étend ensuite l’analyse à deux gravures pour des ouvrages du siècle suivant déployant l’héraldique des papes, des légats et de la ville dans le contexte de « l’autre Rome », la première faisant probablement référence à l’entrée du cardinal et archevêque François Bordini en 1598.</p
+><p
+xml:id="p11"
+>Le père Rocco Ronzani (université du Latran), revient à Rome pour nous faire visiter son église de Sainte-Prisca. Il retrace l’histoire du monument s’arrêtant au cardinal du titre presbytéral de 1599 à 1611, Benedetto Giustiniani, qui commanda des travaux de restauration pour le jubilé de 1600. Son écu, coupé d’une tour et d’une aigle, orne l’église comme la crypte, sous sa forme complète ou ses meubles séparés. Il en est de même pour le pape Sixte Quint qui l’avait élevé à la pourpre en 1586 et dont il portait les armes en chef. On voit aussi celles de Clément VIII Aldobrandini qui l’avait créé titulaire de Sainte-Prisca en 1599. C’est donc la biographie de Benedetto Giustiniani qui se monumentalise par le blason. Les armes d’autres papes y figurent aussi, en lien avec des phases de restauration de l’église : Calixte III Borgia († 1458), Clément XII Corsini († 1740), ou encore celles de saint Jean XXIII († 1963), cardinal titulaire de 1953 à 1958.</p
+><p
+xml:id="p12"
+>Martine Boiteux (École des hautes études en sciences sociales) poursuit ces visites par la basilique Saint-Pierre. Elle examine la présence de l’emblématique, blasonnante ou non, dans les tombeaux, notamment ceux de trois femmes : Mathilde de Canossa, Christine de Suède, Clémentine Sobieska. Grâce aux témoignages visuels, elle restitue l’emblématique des cérémonies en temps de vacance du trône, elle peut être héraldique (funérailles, conclave, investiture, <hi
+rend="italic"
+>possesso</hi
+>) ou non (cortège funèbre). Il en est de même pour l’exercice du pouvoir, le blason est absent de la fête de la <hi
+rend="italic"
+>Croce luminosa</hi
+>, mais il peut être présent aux canonisations et béatifications. Il est absent des témoignages visuels consultés pour la fête de la <hi
+rend="italic"
+>Chinea</hi
+> (présentation au pape d’une jument blanche en signe d’hommage du royaume de Naples) aux <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> et <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècles<note
+n="5"
+place="foot"
+xml:id="ftn10"
+><p
+>Certains témoignages écrits signalent pourtant sa présence au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle sur le caparaçon de la jument, voir Yvan Loskoutoff, « Introduction », dans Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique et papauté, Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020, p. 16.</p
+></note
+>. Il est présent dans l’accueil des personnalités. Ce jeu de présence et d’absence s’explique par le dialogue entre la gloire mondaine et l’humilité chrétienne sur lequel repose l’exercice même de la papauté<note
+n="6"
+place="foot"
+xml:id="ftn11"
+><p
+>Sur le blason, témoignage de la gloire mondaine confronté à l’humilité chrétienne, voir Yvan Loskoutoff, <hi
+rend="italic"
+>L’armorial de Calliope, L’œuvre du Père Le Moyne S. J. (1602-1671) : littérature, héraldique, spiritualité</hi
+>, Tübingen, Gunter Narr Verlag, 2000, troisième partie.</p
+></note
+>.</p
+><p
+xml:id="p13"
+>L’héraldique n’était pas réservée aux lieux de culte. On peut même dire que son origine laïque la destinait d’abord à l’espace profane. Nous l’avons vu avec Camille Larraz, nous le voyons à nouveau avec Frédéric Cousinié (université de Rouen). Il examine les apothéoses armoriales dans les palais des grandes familles pontificales : Ludovisi (par Giovanni Luigi Valesio, artiste bolonais fort inventif en matière de blason), Barberini (par Pietro da Cortona, comparée à la salle de Mars Médicis au palais des Offices à Florence, du même), Altieri (par Carlo Maratta). Il s’attache surtout à la salle Clémentine du Vatican, exécutée par les frères Alberti pour Clément VIII Aldobrandini. Il établit une typologie de ces représentations : monumentalisation ou amplification, soutien ou élévation par des anges (<hi
+rend="italic"
+>stemma in arrivo, stemma in partenza</hi
+>), extraction et dissémination des meubles, animation-activation des objets et « transformisme ». L’effet produit sur le spectateur nous convainc que l’héraldique constitue l’un des moyens d’expression privilégiés du « baroque », où finalement s’annule la distinction entre sacré et profane.</p
+></body
+></text
+></TEI
+>

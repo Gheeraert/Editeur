@@ -1,0 +1,1113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>La mise en signe de l’espace par les papes : pratiques et conflits</title
+><author
+role="aut"
+><persName
+><forename
+>Laurent</forename
+><surname
+>Hablot</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-27"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>La mise en signe de l’espace par les papes : pratiques et conflits</p
+><p
+rend="author-aut"
+>Laurent Hablot</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Dès la fin du <hi
+rend="small-caps"
+>xii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, et dans le prolongement probable de pratiques impériales plus anciennes, l’apposition de signes emblématiques dans des lieux symboliques de l’espace public permet de faire connaître et d’imposer l’autorité qui s’y exerce. Cet usage s’est appliqué à travers toute l’Europe et jusqu’à la fin des anciens régimes, comme en témoignent toujours d’innombrables traces, visibles ou documentées. Il se poursuit d’ailleurs aujourd’hui encore notamment à travers le déploiement dans l’espace public des drapeaux et des enseignes de l’État. Au Moyen Âge, ce marquage emblématique de l’espace politique correspond néanmoins à des droits précis très disputés et énonce des pouvoirs spécifiques. Il a donc été bien souvent l’occasion de conflits, joués à grande ou petite échelle, depuis les incessantes querelles de prééminences dans le décor héraldiques des églises paroissiales, si bien documentées dans la Bretagne des <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Les prééminences correspondent aux privilèges de représentation détenus par une autorité seigneuriale et comprenant notamment le droit d’apposer ses armoiries sur tels ou tels lieux et supports, en particulier dans les églises (vitraux, clefs de voûtes, enfeux, bancs, litres, etc.). Voir sur cette question Michel Nassiet, « Signes de parenté signes de seigneurie : un système idéologique », <hi
+rend="italic"
+>Mémoires de la société d’Histoire et d’Archéologie de Bretagne</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 67, 1991, p. 175-232 ; Paul-François Broucke, <hi
+rend="italic"
+>Les prééminences héraldiques de la cathédrale de Quimper</hi
+>, mémoire de master I, Université de Bretagne Occidentale, 2010 et <hi
+rend="italic"
+>La cathédrale de Saint-Pol de Léon : le chantier des parties orientales du </hi
+><hi
+rend="small-caps italic"
+>xi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, mémoire de master II, Université de Bretagne Occidentale, 2012.</p
+></note
+>, jusqu’au niveau des espaces urbains, des territoires ou des États. Les sources médiévales et modernes témoignent amplement de ces pratiques de mises en signe et des moyens humains, financiers, techniques et artistiques qui leurs sont consacrés. Mais elles révèlent également les querelles qu’elles induisent et leurs conséquences, entraînant la dégradation, la diffamation, le bûchage, la destruction et parfois le rétablissement de signes héraldiques apposés sur des monuments et des objets symboliques de toutes sortes. D’ailleurs, les grands épisodes de l’histoire, révoltes, révolutions, guerres civiles ou de religions, se traduisent presque toujours par ces « guerres des signes » qui, par les traces qui en sont conservées, marquent encore très souvent notre environnement monumental historique<note
+n="2"
+place="foot"
+xml:id="ftn37"
+><p
+>Voir en dernier lieu sur le sujet Laurent Hablot, « Le bris des armes. L’iconoclasme héraldique dans la société médiévale », dans Marc Gil, Pascale Charron et Ambre Vilain (dir.), <hi
+rend="italic"
+>La pensée du regard. Études d’histoire de l’art du Moyen Âge offertes à Christian Heck</hi
+>, Turnhout, Brepols, 2016, p. 181-191 ; et Steven Thiry, <hi
+rend="italic"
+>Matter(s) of State. Heraldic Display and Discourse in the early Modern Monarchy (c. 1480-1650)</hi
+>, Ostfildern, Thorbecke Verlag, « Heraldic Studies, 2 », 2018.</p
+></note
+>.</p
+><p
+xml:id="p2"
+>Dès lors qu’ils ont fait usage de signes héraldiques, les chefs de l’Église, princes temporels autant que spirituels, n’ont pas dérogé à cette règle pour baliser leurs possessions territoriales et affirmer leur pouvoir et leurs droits à travers le monde chrétien<note
+n="3"
+place="foot"
+xml:id="ftn38"
+><p
+>Je remercie vivement Matteo Ferrari pour m’avoir indiqué de nombreuses et précieuses références et pour les riches échanges que nous avons pu avoir autour de cette question.</p
+></note
+>. Dans ce cas toutefois, la mise en signe des biens de l’Église confond souvent, de façon presque inextricable, les intérêts du pontife et de sa famille avec ceux de l’Institution, dans la mesure où les emblèmes personnels des papes accompagnent, complètent ou remplacent les insignes de l’Église. De très nombreuses attestations documentées ou toujours visibles témoignent encore de cette emblématisation du territoire, spécialement en Italie. Les particularités historiques de cet espace politique, notamment la problématique de l’expansion concurrente de l’Empire et des États de l’Église, ainsi que du système des communes, autant que le statut singulier des papes, n’ont pas manqué d’entretenir d’actives politiques d’apposition d’emblèmes et de soulever de nombreuses contestations et d’importants conflits de marquage héraldique.</p
+><p
+xml:id="p3"
+>Pour ouvrir ce dossier, qui demande à être bien plus largement et plus précisément considéré que dans ce bref article, il convient de revenir, à travers quelques cas documentés, sur les supports de cette mise en signe, sur l’emblématique développée par les papes et sur la législation qui encadre ces pratiques d’apposition d’armoiries.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Les supports de la mise en signe</head
+><p
+xml:id="p4"
+>Dans le cas qui nous intéresse ici, l’emblématisation de l’espace s’applique prioritairement aux cités. Elle se focalise sur quelques supports monumentaux symboliques, fréquemment sollicités, sur lesquels se concentre habituellement l’information héraldique et connus par les hommes de ce temps pour être les habituels relais de l’information politique<note
+n="4"
+place="foot"
+xml:id="ftn39"
+><p
+>Vues de Sienne et de Florence. Florence, Biblioteca Medicea Laurenziana, Tempiano, n<hi
+rend="sup"
+>o</hi
+> 3, planche 1, vers 1330.</p
+></note
+>. Il s’agit bien évidemment des lieux de passage tels que les portes d’entrée des villes et les ponts, des résidences de pouvoir telles que les palais et avant tout le palais communal<note
+n="5"
+place="foot"
+xml:id="ftn40"
+><p
+>Voir sur le sujet les travaux Matteo Ferrari, en dernier lieu <hi
+rend="italic"
+>La politica in figure. Temi, funzioni, attori della communicazione visiva nei Comuni lombardi (XII-XIV secolo)</hi
+>, Rome, Viella, 2022 ; Maria Monica Donato, « “Ogni cosa è pieno d’arme”. Uno sguardo dall’esterno », dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’Arme segreta. Araldica e storia dell’arte nel Medioevo (secoli XIII-XIV)</hi
+>, Florence, Le Lettere, 2015, p. 267-283 ; Christoph Friedrich Weber, <hi
+rend="italic"
+>Zeichen der Ordnung und des Aufruhrs. Heraldische Symbolik in italienischen Stadtkommunen des Mittelalters</hi
+>, Cologne, Böhlau, 2011. </p
+></note
+>, des monuments symboliques comme le beffroi ou les principaux édifices religieux séculiers ou conventuels, des constructions évergétiques et symboliques telles que les fontaines, les halles et les marchés, et des constructions seigneuriales comme les moulins et les pressoirs. La mise en signe de ces supports est matérialisée, de façon pérenne, par des bas-reliefs sculptés, le plus souvent rehaussés de couleurs, ou par de très amples représentations héraldiques peintes. Elle est complétée, de manière plus éphémère, par tout un déploiement de signes mobiles, bannières et enseignes de toile ou de tôle, le plus souvent apposées sur les faîtages. Ce marquage est relayé par tout un ensemble d’objets mobiliers du pouvoir tels que le sceau ou la cloche, qui diffusent l’information visuelle ou sonore, le char de guerre, conservé dans l’église majeure de la cité et porteur de l’étendard et de la cloche, divers instruments symboliques du pouvoir tels que les masses ou les uniformes des agents publics, sans oublier les nombreux décors textiles comme la bannière ou le dais, déployés dans toutes les occasions de manifestations du pouvoir : entrées, fêtes patronales et liturgiques, funérailles, Te Deum, etc.</p
+><p
+xml:id="p5"
+>Identifiés à leur tour par des signes héraldiques, les souverains pontifes s’insèrent progressivement dans cette politique de prise de possession symbolique de l’espace public.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Quels signes pour les papes et l’Église ?</head
+><p
+xml:id="p6"
+>Évoquer la mise en signe de l’espace par les papes impose de s’interroger sur les emblèmes qu’ils apposent et notamment la concurrence qui s’exerce entre des armories institutionnelles, en l’occurrence celles de l’Église, des insignes de fonction, et les armoiries personnelles ou familiales des pontifes.</p
+><p
+xml:id="p7"
+>Comme l’ont précisé les travaux d’Édouard Bouyé, les papes ne commencent à faire un usage assuré d’armoiries qu’à partir de Nicolas III (Giovanni Gaetano Orsini, pape de 1277-1280). Même si quelques occurrences laissent penser que ses prédécesseurs Clément IV (Gui Foucois, pape de 1265-1268) et Innocent IV (Sinibaldo de Fleschi, pape de 1245-1253) aient pu faire usage d’armoiries personnelles ou familiales<note
+n="6"
+place="foot"
+xml:id="ftn41"
+><p
+>Édouard Bouyé, « Les armoiries pontificales à la fin du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle : construction d’une campagne de communication », <hi
+rend="italic"
+>Médiévales</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 44, 2003, p. 177-178, <ref
+target="http://medievales.revues.org/938"
+>http://medievales.revues.org/938</ref
+> (consulté le 24 septembre 2024).</p
+></note
+>.</p
+><p
+xml:id="p8"
+>Passé le pontificat de Boniface VIII (Benedetto Caetani, pape de 1294-1303) qui opère, comme le souligne Édouard Bouyé, un « tournant dans le développement de l’héraldique pontificale » mais contribue aussi à la diffusion du portrait pontifical<note
+n="7"
+place="foot"
+xml:id="ftn42"
+><p
+>Boniface VIII est aussi bien connu pour s’être exposé par portraits interposés. Voir à ce sujet Agostino Paravicini Bagliani, « Boniface VIII en images. Vision d'église et mémoire de soi », dans Dominic Olariu (dir.), <hi
+rend="italic"
+>Le portrait individuel. Réflexions autour d’une forme de représentation, </hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+>-</hi
+><hi
+rend="small-caps italic"
+>xv</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècles</hi
+>, Berne, Peter Lang, 2009, p. 65-81.</p
+></note
+>, tous les pontifes du Moyen Âge, à quelques exceptions près, font usage de leurs armoiries personnelles et/ou familiales. La célèbre Loggia du Latran (fig. 114), réalisée à l’extrême fin du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, livre un des premiers témoignages documentés du marquage héraldique de l’espace par les papes. Connu par un relevé produit au <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècle des fresques qui étaient figurées dans ce même monument<note
+n="8"
+place="foot"
+xml:id="ftn43"
+><p
+>Giacomo Grimaldi, <hi
+rend="italic"
+>Instrumenta translationum</hi
+>, Milan, Bibliothèque ambrosienne, ms. F 227 inf., copie de la scène de la bénédiction du cycle de fresques de la loggia du Latran.</p
+></note
+>, ce décor se déploie sur les corniches et le balcon de la loggia depuis laquelle le pape bénit le peuple de Rome. Les célèbres armes des Caetani (d’or à deux jumelles ondées d’azur posées en bande) y alternent avec plusieurs insignes pontificaux : l’<hi
+rend="italic"
+>ombrellino</hi
+> rayé jaune et rouge et les clefs entrecroisées timbrées d’une tiare.</p
+><p
+xml:id="p9"
+>La cohabitation sur cet ensemble des insignes familiaux avec ceux de la fonction souligne la diffusion, dès la fin du <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle et sans doute antérieurement à l’usage des armoiries familiales, d’autres signes liés à l’institution ou à la charge pontificale. Parmi ceux-ci se retrouvent les insignes pontificaux (clefs, <hi
+rend="italic"
+>ombrellino</hi
+> et tiare), les armoiries de l’Église (de gueules à deux clefs d’argents posées en sautoir) et la bannière ou gonfanon pontifical (de gueules à la croix d’argent cantonnée de quatre clefs en pal du même alias huit clefs posées en sautoir).</p
+><p
+xml:id="p10"
+>Comme en témoignent divers exemples, l’ensemble de ces emblèmes, distribués selon une logique difficile à saisir, semble fournir un panel de signes dont la hiérarchie et les associations, entre eux et avec d’autres emblèmes, sont peut-être signifiantes et relatives, selon les lieux et les supports, à la nature du pouvoir ou des droits exercés, aux fonctions déléguées, etc.</p
+><p
+xml:id="p11"
+>Cette panoplie permet donc aux papes d’occuper symboliquement l’espace visuel en tenant compte de l’expression et des droits respectifs des autres pouvoirs en exercice.</p
+></div
+><div
+type="section1"
+xml:id="div03"
+><head
+>Le droit d’apposer ses armoiries</head
+><p
+xml:id="p12"
+>Rappelons en effet que l’apposition des armoiries dans l’espace public correspond à un droit spécifique strictement réglementé. La performativité de ce « geste », symbole de prise de possession, de protection, d’exercice de droits, de juridiction et de <hi
+rend="italic"
+>memoria</hi
+>, est bien établie, tant par les exemples de marquage liés à la domination d’un espace que par les contestations que ces appositions suscitent. De ce fait, l’exposition de signes héraldiques dans l’espace sacré et, dans l’espace public, le droit de « faire blason fenêtre », d’orner sa demeure ou des édifices publics d’armoiries « de particuliers », sont encadrés par un ensemble de règles coutumières régulièrement couchées par écrit dans les sources normatives ou institutionnelles des communautés, grands fiefs, communes ou cités. De nombreux exemples peuvent être cités à travers l’Europe des <hi
+rend="small-caps"
+>xiii</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècles, à l’instar des villes de Poitiers ou de Lyon<note
+n="9"
+place="foot"
+xml:id="ftn44"
+><p
+>À Poitiers, l’exposition des armoiries du maire sur des bâtiments publics nécessite également l’accord du corps de ville. En 1471, ce dernier autorise son maire à apposer ses armes sur la fontaine du pont Joubert qu’il a fait restaurer. Robert Favreau (éd.), <hi
+rend="italic"
+>Poitiers sous le règne de Louis XI, de 1471 à 1482. Registre de délibérations du corps de ville</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 7, Poitiers, Société des antiquaires de l’Ouest, 2015, p. 186. Sur le sujet, voir l’article de Matteo Ferrari, « Héraldique et “mise en signe” de l’espace urbain en Poitou au Moyen Âge », <hi
+rend="italic"
+>L’héraldique dans la ville</hi
+>, Stuttgart, Thorbecke, « Heraldic Studies, 5 », 2025.</p
+></note
+>.</p
+><p
+xml:id="p13"
+>La péninsule italienne constitue cependant un contexte singulier qui, en raison des concurrences politiques du pape, de l’empereur et de la commune et des multiples pouvoirs qui s’y exercent (<hi
+rend="italic"
+>magnati</hi
+>, podestats et capitaines, partis, corporations, confréries, etc.), exacerbe les enjeux de ce marquage emblématique de l’espace. Il convient également d’y distinguer d’une part les villes des États pontificaux, théoriquement soumises à l’autorité du pape et, à ce titre, marquées de ses signes et de ceux de l’Église et, d’autre part, les communes d’obédience guelfe, qui par libre choix de leurs dirigeants et en signe d’alliance, affichent les armes de l’Église.</p
+><p
+xml:id="p14"
+>Le cas spécifique des communes guelfes du nord de l’Italie a été envisagé dans un récent article dans lequel Gian Paolo Ermini rappelle les interdictions faites par Pérouse, (1297), Brescia (1290) et Sienne (1310) de figurer des armes de particuliers sur des lieux publics<note
+n="10"
+place="foot"
+xml:id="ftn45"
+><p
+>Gian Paolo Ermini, « La décoration picturale de la grande salle du palais de la commune d’Orvieto », dans Torsten Hiltman et Miguel de Seixas (dir.), <hi
+rend="italic"
+>Heraldry in Medieval and Early Modern State Rooms</hi
+>, Ostfildern, Thorbecke Verlag, « Heraldic Studies, 3 », 2020, p. 165-184, ici p. 167-171. Voir aussi d’autres exemples dans Matteo Ferrari, <hi
+rend="italic"
+>La politica in figure</hi
+>, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 121.</p
+></note
+>. Plusieurs de ces réglementations somptuaires concernent les armoiries pontificales. Ainsi, à Florence, les gouverneurs de la commune, cherchant à annihiler les pouvoirs des partis et factions, après avoir ordonné en 1312 la destruction de toutes les aigles impériales figurées dans la cité, décident, suite à l’épisode du gouvernement de Charles de Calabre en 1328, d’interdire la figuration et d’exiger la destruction de toute sculpture ou peinture figurant des armoiries personnelles. N’autorisant que les figurations du Christ, de la Vierge et de saints « <hi
+rend="italic"
+>vel armorum Sancte Romane Ecclesie vel domini Summi Pontificis vel Regis Karoli seu descendentium vel Regis Francie</hi
+> », la commune spécifie encore que les armes d’Anjou ne doivent être associées avec aucune armoirie personnelle, de la commune, du peuple, d’aucune société ou parti guelfe (voir fig. 115, la prééminence des insignes pontificaux sur le Palazzo Vecchio). En 1390 encore, des lois somptuaires relatives à l’exposition publique des armoiries à Florence sont prises, confirmant la difficulté des autorités à faire appliquer ces lois<note
+n="11"
+place="foot"
+xml:id="ftn46"
+><p
+>Voir sur le sujet Maria Monica Donato, « “Ogni cosa è pieno d’arme”… », art. cité. Voir aussi l’article de Matteo Ferrari, « Stemmi esposti. Presenze araldiche nei broletti lombardi », dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’Arme segreta</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., p. 91-107.</p
+></note
+>.</p
+><p
+xml:id="p15"
+>Les mêmes mesures restrictives sont appliquées à Prato en 1329, visant notamment l’exposition d’armoiries d’autres communes (Florence principalement). Ce qui n’empêche pas la cité de faire réaliser en 1336, sur le palais du Peuple, deux séries d’écus sculptés aux armes du pape (en fait de l’Église), du roi (c’est-à-dire d’Anjou), de la commune et du vicaire.</p
+><p
+xml:id="p16"
+>En 1338, la commune de Gubbio suit l’exemple florentin et, après avoir imposé la destruction des emblèmes sur les édifices publics, n’autorise que les « <hi
+rend="italic"
+>arma sive insignia Sancte Romane Ecclesie ac etiam Summi Pontificis et domini Regis Roberti et domini Regis Francie et communis Eugubii </hi
+>». C’est dans ce contexte qu’est sculptée en 1336 l’architrave du palais du Peuple toujours en place (fig. 116) figurant les armes de la ville sous le <hi
+rend="italic"
+>Capo d’Angiò</hi
+><note
+n="12"
+place="foot"
+xml:id="ftn47"
+><p
+>Le <hi
+rend="italic"
+>capo</hi
+> ou chef de l’écu est une pièce ajoutée à une armoirie initiale et qui intègre les armoiries d’une autorité de tutelle, plaçant le bénéficiaire dans une forme de patronage ou de sujétion honorable. En Italie, les personnes et les institutions affichent ainsi leur obédience à l’empereur ou au pape en retenant le <hi
+rend="italic"
+>capo dell’Impero</hi
+> (d’or à l’aigle de sable) ou le <hi
+rend="italic"
+>capo d’Angio</hi
+> (aux armes des rois de Naples, défenseurs de la papauté). Voir sur le sujet Michel Popoff, « Le “capo dello scudo” dans l’héraldique florentine, <hi
+rend="small-caps"
+>xiii-xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècles », dans <hi
+rend="italic"
+>Brisures, augmentations et changements d'armoiries</hi
+>, Bruxelles, Académie internationale d’héraldique, 1988, p. 251-255 et mon mémoire inédit d’HDR, <hi
+rend="italic"
+>Affinités héraldiques</hi
+>, Michel Pastoureau (dir.), École pratique des hautes études, 2015, « Capo d’Angio Capo d’Impero, la mise en signe de la péninsule », p. 239 et suiv. Voir aussi Luisa Clotilde Gentile, « La diffusion du capo dell'Impero dans l’Italie du nord », <hi
+rend="italic"
+>Armas e troféus</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 20, 2018, p. 109-138.</p
+></note
+> (de gueules au mont à cinq coupeaux d’argent au chef d’azur semée de fleurs de lis d’or au lambel de gueules brochant) et celles du roi de Naples encadrant, en prééminence, les armes de l’Église dans la version de l’écu « de gueules à la croix d’argent cantonnée de huit clefs en sautoir et liées d’argent ». Mais d’autres formules semblent encore possibles. Ainsi, un relief de pierre de la cité d’Ascoli Piceno dans les Marches (fig. 117), expose, en prééminence, un parti aux armes de l’Église (une croix cantonnée de quatre sautoirs de clefs<note
+n="13"
+place="foot"
+xml:id="ftn48"
+><p
+>Sur ces armes à la croix et aux clefs, voir Édouard Bouyé, « Les clefs de saint Pierre, sur la terre comme au ciel », dans Catalina Girbea, Christine Manigand, Laurent Hablot et <hi
+rend="italic"
+>al.</hi
+> (dir.), <hi
+rend="italic"
+>Signes et couleurs des identités politiques</hi
+>, Rennes, PUR, 2008, p. 275-312.</p
+></note
+>) et du pape Boniface IX (1389-1404) accostées par celles de la cité et celles du capitaine du peuple.</p
+><p
+xml:id="p17"
+>Dans les États de l’Église, en 1330, Amelia d’Ombrie, ville pontificale agitée par une forte opposition entre les partis guelfe et gibelin, est l’objet d’une violente révolte antipapale suscitée par la récente descente dans la Péninsule de l’empereur Louis IV en 1328 et qui s’incarne assurément par la destruction des signes pontificaux. Cette action motive en tous cas la rédaction de statuts interdisant la figuration de tous signes héraldiques dans la ville<note
+n="14"
+place="foot"
+xml:id="ftn49"
+><p
+>Gian Paolo Ermini, « La décoration picturale… », art. cité, p. 170 et171.</p
+></note
+>. Malgré cela, en 1357, les règlements pris à ce sujet par les Constitutions égidiennes rétablissent de nouveau la primauté des armes du pape et de l’Église sur celles des seigneurs locaux.</p
+><p
+xml:id="p18"
+>Ces luttes politiques par images interposées ont marqué les contemporains tels Franco Sacchetti ou saint Bernardin de Sienne<note
+n="15"
+place="foot"
+xml:id="ftn50"
+><p
+>Maria Monica Donato, « “Ogni cosa e pieno d’arme”… », art. cité, p. 21 et 23</p
+></note
+>. Elles font d’ailleurs écho au célèbre attentat d’Anagni de 1303 durant lequel la prise de possession emblématique de l’espace avait joué un rôle essentiel. En effet, lorsque la troupe de Guillaume de Nogaret, qui avait symboliquement occupé le palais pontifical sans aucun doute marqué aux armes des Caetani et de l’Église, en balisant l’espace de bannières fleurdelisées, est chassée de la ville, la population s’en prend aussitôt aux emblèmes royaux<note
+n="16"
+place="foot"
+xml:id="ftn51"
+><p
+><hi
+rend="italic"
+>Chronique métrique de Godefroy Paris</hi
+>, J.-A. Buchon (éd.), Paris, Verdière, 1827, v. 1995 à 2042 et 2124 et suiv. : « Ainsi ques l’ont (les conseillers du pape) reconforté / La bannière le roy osté / ont, qui sus le schastel estoit mise. / Chascun sa partie en a prise, / Et l’ont despecie trestoute / pièce ni ot qui ne fut route. »</p
+></note
+>.</p
+></div
+><div
+type="section1"
+xml:id="div04"
+><head
+>S’emparer d’une ville par les « armes », quelques exemples</head
+><p
+xml:id="p19"
+>Favorisés par les lois somptuaires des communes de leurs États dans le marquage de l’espace public, les papes doivent néanmoins, y compris dans leurs domaines, composer avec les autres pouvoirs en place et, selon les contextes, avoir recours aux différentes formules emblématiques disponibles : armoiries familiales, emblèmes de l’Église et concessions d’armoiries<note
+n="17"
+place="foot"
+xml:id="ftn52"
+><p
+>Voir Pierre-Yves Le Pogam, <hi
+rend="italic"
+>De la « cité de Dieu » au « palais du pape » : les résidences pontificales dans la seconde moitié du </hi
+><hi
+rend="small-caps italic"
+>xiii</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle (1254-1304)</hi
+>, Rome, École française de Rome, 2005, en particulier, sur la lutte entre Boniface VIII et la famille Colonna par armoiries interposées, p. 550-553.</p
+></note
+>.</p
+><p
+xml:id="p20"
+>L’historiographie de l’héraldique pontificale rapporte un exemple très précoce et assez singulier – mais très probablement imaginaire – qui introduit la pratique du partage ou de la concession de leurs armoiries par les papes à des communautés, solution qui offre un moyen plus subtil mais non moins efficace de présence héraldique dans l’espace politique. La <hi
+rend="italic"
+>Chronique</hi
+> de Giovanni Villani mentionne ainsi les armes que Clément IV aurait concédées vers 1265 à ses partisans guelfes florentins<note
+n="18"
+place="foot"
+xml:id="ftn53"
+><p
+>Sur ces armoiries, voir les notices 24 (<hi
+rend="italic"
+>Stemma della Parte Guelfa</hi
+>), 25 (<hi
+rend="italic"
+>Sigillo della Parte Guelfa</hi
+>) et 26 (<hi
+rend="italic"
+>Sigillo della Parte Guelfa</hi
+>) du catalogue de l’exposition <hi
+rend="italic"
+>Dal Giglio al David</hi
+>, <hi
+rend="italic"
+>Arte civica a Firenze fra Medioevo e Rinascimento</hi
+>, Maria Monica Donato et Daniela Parenti (dir.), Florence, Giunti, 2013, p. 157-159.</p
+></note
+> : « d’argent à l’aigle de gueules terrassant un dragon de sinople<note
+n="19"
+place="foot"
+xml:id="ftn54"
+><p
+>« <hi
+rend="italic"
+>In questi tempi [1265] i Guelfi usciti di Firenze e dell’altre terre di Toscana </hi
+>[...]<hi
+rend="italic"
+> mandarono loro ambasciadori a papa Chimento, accio che gli raccomandasse al conte Carlo eletto re di Cicilia, e profferendosi al servigio di santa Chiesa; i quali dal detto papa furono ricevuti graziosamente, e proveduti di moneta e d’altri benifici; e volle il detto papa che per suo amore la parte guelfa di Firenze portasse sempre la sua arme propia in bandiera e in suggello, la quale era, ed è, il campo bianco con una aguglia vermiglia in su uno serpente verde, la quale portarono e tennero poi, e fanno insino a’ nostri presenti tempi</hi
+> », dans <hi
+rend="italic"
+>Nuova Cronica</hi
+>, Giuseppe Porta (éd.), Parma, Guanda, 1990-1991, livre VII, vol. 2.</p
+></note
+> ». Aucune autre attestation ne vient confirmer l’usage de ces armes par le pape Clément IV mais une matrice de sceau du parti guelfe datée des années 1270 les porte bien et confirme leur usage par ce groupe politique très puissant. À partir de la fin du XIII<hi
+rend="sup"
+>e</hi
+> siècle, ce signe du parti guelfe est régulièrement cité dans la quadrilogie des armes liées à la Commune : le lis de gueules de la commune, la croix de gueules du Popolo, les armes parties d’argent et de gueules de l’armée communale. Dans les décors, cet ensemble est d’ailleurs régulièrement distribué autour des armes de l’Église placées en prééminence, conformément aux statuts communaux cités plus haut. C’est par exemple le cas dans les décors héraldiques du Palazzo della Lana, peints vers 1350, ou dans l’allégorie héraldique de la ville peinte vers 1366 par Jacoeo di Cione dans le Palazzo dell’Arte dei guidici e dei notari, thème en grande partie repris vers 1360-1370 dans le Palazzo dell’Arte della Seta (voir en fig. 118 l’allégorie héraldique de la ville de Florence). Le célèbre monument funéraire de Piero da Farnese, réalisé vers 1376, offre, lui aussi, un bel exemple de ce déploiement héraldique de la cité distribué autour des armes de l’Église associées à celles du roi de Naples.</p
+><p
+xml:id="p21"
+>Un riche exemple de ces concurrences de mise en signe est fourni par la ville de Bologne. En 1349, Galéas Visconti s’empare de la ville au nom de son oncle Jean Visconti, archevêque et seigneur de Milan, et, après une entrée militaire où se déploient les bannières aux armes de Visconti et d’Empire, il fait apposer ses emblèmes à travers toute la cité après y avoir fait effacer les lis, les lambels (armes d’Anjou), les clefs (armes de l’Église) et les lions. Le chroniqueur rapporte même la frayeur que ces monstres héraldiques jamais observés encore, guivre et aigle, suscite auprès des petits enfants<note
+n="20"
+place="foot"
+xml:id="ftn55"
+><p
+><hi
+rend="italic"
+>Annales mediolanenses ab anno 1230 usque ad annum 1402</hi
+>, dans Lodovico Antonio Muratori (éd.), <hi
+rend="italic"
+>Rerum Italicarum Scriptores</hi
+>, Mediolani, Typographia societatis palatinae in regiae curia, 1730, t. 16., coll. 721-722, CXVI.</p
+></note
+>. En 1360, le pape reprend possession de la cité. À lire les chroniques, ce changement d’obédience est formalisé par une ample campagne d’apposition des armes de l’Église. Un char à la bannière de la ville est élevé à Saint-François tandis que des enseignes aux clefs et aux armes de la commune sont apposées sur le palais communal. Une véritable chasse aux figurations de l’aigle impériale est organisée à travers toute la ville<note
+n="21"
+place="foot"
+xml:id="ftn56"
+><p
+>Hyeronimus de Bursellis, <hi
+rend="italic"
+>Cronica</hi
+>, A. Sorbelli (éd.), Città di Castello, S. Lapi, 1912, p. 48 et Flavia Gramellini, <hi
+rend="italic"
+>Le Antichità di Bologna di Bartolomeo della Pugliola</hi
+>, thèse de doctorat, Luciano Formisano (dir.), Bologne, Université de Bologne, 2008, p. 38.</p
+></note
+>. La célèbre statue de Boniface VIII, apposée sur la façade du palais de la commune depuis 1301, est rénovée et repeinte aux armes de l’Église (« <hi
+rend="italic"
+>depicta cum armis ecclesie</hi
+> », « <hi
+rend="italic"
+>si s’orno et depinsesi con l’armadura della Santa Chiesa</hi
+><note
+n="22"
+place="foot"
+xml:id="ftn57"
+><p
+>Respectivement, Hyeronimus de Bursellis, <hi
+rend="italic"
+>Cronica</hi
+>, <hi
+rend="italic"
+>op. cit</hi
+>., p. 49 et Flavia Gramellini, <hi
+rend="italic"
+>op. cit</hi
+>., p. 43.</p
+></note
+> »). En 1410 encore, les comptes de la ville signalent le salaire de six peintres chargés de figurer les armes du pape sur le palais et sur les galons (<hi
+rend="italic"
+>guazalones</hi
+>) du baldaquin aux armes du pape et de l’Église<note
+n="23"
+place="foot"
+xml:id="ftn58"
+><p
+>Guido Filippini et Francesco Zucchini,<hi
+rend="italic"
+> Miniatori e pittori a Bologna. Documenti del secolo XV</hi
+>, Rome, Accademia nazionale dei Lincei, 1968, p. 172 et Hans W. Hubert, <hi
+rend="italic"
+>Der Palazzo Comunale von Bologna. Vom Palazzo della Biada zum Palatium Apostolicum</hi
+>, Cologne, 1993, p. 181. Notons d’ailleurs qu’à cette date, le trône pontifical est sans doute vacant car Alexandre V meurt en juin 1409 et Jean XXIII n’est élu qu’en mai 1410. Les armes du pape et de l’Église seraient donc une forme redondante classique dans les textes médiévaux. Je remercie Matteo Ferrari pour cette précieuse remarque.</p
+></note
+>. En 1425, le peintre Francesco Lola est payé pour les travaux de peinture et d’armoiries réalisés aux quatre principales portes de la ville et sur le palais communal, aux armes du pape et de l’Église et des seigneurs du gouvernement et de la commune de Bologne<note
+n="24"
+place="foot"
+xml:id="ftn59"
+><p
+>Davide Ravaioli, « Pitture murali di Francesco Lola sulla facciata del Palazzo Comunale », <hi
+rend="italic"
+>Arte a Bologna</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 6, 2007, p. 133-136 et principalement p. 132 et 133.</p
+></note
+>.</p
+><p
+xml:id="p22"
+>À Orvieto enfin, d’après les chroniqueurs dont Luca Manenti, en 1287, le pape Honorius IV Savelli et le podestat Bertoldo Orsini apposent leurs armes sur le pont de Rigochiaro tandis que le pape fait peindre le palais de la commune, sans doute à ses armes<note
+n="25"
+place="foot"
+xml:id="ftn60"
+><p
+>« <hi
+rend="italic"
+>feci pingere il palazzo nuovo de signori VII</hi
+> (palais de la commune) », Gian Paolo Ermini, « La décoration picturale… », art. cité, p. 180.</p
+></note
+>. Le même chroniqueur rapporte que, sous Boniface VIII, sont ajoutées aux portes de la ville deux statues du pontife ornées de ses armes et de celles de l’Église<note
+n="26"
+place="foot"
+xml:id="ftn61"
+><p
+>Voir Gian Paolo Ermini, « La campana del palazzo del popolo di Orvieto (1316) », dans Matteo Ferrari (dir.), <hi
+rend="italic"
+>L’Arme segreta, op. cit.</hi
+>, p. 109-125, ici p. 115.</p
+></note
+>. Cet auteur nous apprend encore qu’en 1304, après la mort de Boniface VIII, « <hi
+rend="italic"
+>fu ordinato che in tutto lo stato de Orvieto sopre le porte et palazzi si debia pingere l’arme de la communità de Orvieto</hi
+> », ce qui implique l’effacement des armes pontificales et révèle en creux le déplaisir de la commune face à cette emprise emblématique du pape.</p
+><p
+xml:id="p23"
+>À Viterbe, dans un style très proche du décor révélé par les fresques du Latran, les restes de la loggia pontificale, édifiée en 1267, offrent encore un magnifique exemple de la mise en signe des édifices pontificaux (fig. 119). Au-dessus des arcades, quatre registres sculptés alternent de haut en bas, une frise portant une succession de clefs en sautoir et de tiares, puis les armes fascées du capitaine du peuple Raniero Gatti, issu d’une des plus puissantes familles de la cité, et celles à l’aigle du parti guelfe ou de l’Empire, une frise constituée d’une succession de tiares, une frise alternant les armes des Gatti et celles de la ville au lion passant regardant brochant sur une palme<note
+n="27"
+place="foot"
+xml:id="ftn62"
+><p
+>Un sceau de 1198 lui donne pour armes un lion tenant un arbre déraciné associé à la légende <hi
+rend="italic"
+>NON METUENS VERBUM LEO SUM QUI SIGNO VITERBUM</hi
+><hi
+rend="small-caps"
+>. </hi
+>Cité dans Martin Roland et Andreas Zajic, « Les chartes médiévales enluminées dans les pays d’Europe centrale », <hi
+rend="italic"
+>Bibliothèque de l’école des Chartes</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 169, 2011, p. 187 et n. 172.</p
+></note
+>. Véritable synthèse des pouvoirs en exercice dans la cité, ce programme héraldique donne néanmoins la prééminence à l’Église de Clément IV qui ne fait pas usage d’armes personnelles. La construction d’une autre partie du palais sous le pontificat de Nicolas III Orsini (1277-1280) et sous l’autorité de son neveu Orso, podestat de Viterbe entre 1277 et 1280, leur permet en revanche de s’imposer face aux Gatti en apposant notamment leurs armes sur la célèbre fontaine du Sepale accompagnée de la mention « <hi
+rend="italic"
+>Papa Nicolaus regnabat in orbe beatus // Orso dominus prudens, clarus et potens</hi
+> ». Leurs armes seront d’ailleurs effacées après la mort de Nicolas III et la révolte de la ville contre Orso<note
+n="28"
+place="foot"
+xml:id="ftn63"
+><p
+>Gian Paolo Ermini, « La décoration picturale… », art. cité, p. 181 et 182.</p
+></note
+>.</p
+><p
+xml:id="p24"
+>Mais la présence pontificale s’impose à Viterbe par un moyen plus efficace encore. La première augmentation d’armoirie réellement accordée par un pape est précisément documentée pour Viterbe par une lettre d’armoiries datant du début du pontificat de Jean XXII (1316-1334) et constituant un des premiers exemples du genre si ce n’est le premier. En 1316, en effet, la ville reçoit du vicaire général du pape en Tuscie, Bernard de Coucy, une charte lui attribuant le titre de « gonfalonier de l’armée pontificale », la possession de la seigneurie de Montefiascone pour dix ans et de nouvelles armoiries : l’ajout au lion passant regardant sur la palme de ses armes d’un gonfanon pontifical dans la patte dextre du lion (de gueules à la croix d’argent cantonnée de quatre clefs posées en pal du même<note
+n="29"
+place="foot"
+xml:id="ftn64"
+><p
+>Sur cette concession, sa bibliographie et celle sur les armes de Viterbe, voir Martin Roland et Andreas Zajic, « Les chartes médiévales enluminées… », art. cité, p. 183-186.</p
+></note
+>). Cette composition, blasonnée et illustrée dans l’acte<note
+n="30"
+place="foot"
+xml:id="ftn65"
+><p
+>Visible sur <ref
+target="https://www.monasterium.net/mom/IlluminierteUrkunden/1316-03-11_Viterbo/charter"
+>https://www.monasterium.net/mom/IlluminierteUrkunden/1316-03-11_Viterbo/charter</ref
+> (consulté le 12/03/2025).</p
+></note
+>, rappelle l’action de la cité en faveur du pape et de son représentant dans la reconquête des territoires du patrimoine de Saint-Pierre ayant fait sécession après la mort de Clément V. Il n’est d’ailleurs pas impossible que la bannière pontificale tenue par le lion soit venue remplacer dans ces armes une bannière impériale (à la croix) accordée par les empereurs au milieu du <hi
+rend="small-caps"
+>xii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle. Cette charte fut même peinte, à une date inconnue, sur les murs du palais communal de Viterbe où elle se voyait encore au milieu du <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, établissant publiquement la présence du pape dans le paysage visuel de la ville<note
+n="31"
+place="foot"
+xml:id="ftn66"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 185 et notes, rappellent que les sources du <hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+> siècle précisent que ce gonfanon pontifical remplace une bannière impériale concédée à Viterbe par Frédéric I<hi
+rend="sup"
+>er</hi
+> Barberousse en 1167 ou 1170 et confirmée le 19 mars 1172 à Sienne par le légat impérial. Mais les auteurs ont établi que l’acte en question de 1172 (Viterbe, Archivio comunale, Pergamene n<hi
+rend="sup"
+>o</hi
+> 11) porte seulement au dos la confirmation de la possession des biens dont l’empereur avait gratifié la ville au moyen du rituel de l’étendard impérial « <hi
+rend="italic"
+>per vexillum imperiale</hi
+> ». Voir aussi Christoph Friedrich Weber, <hi
+rend="italic"
+>op. cit.</hi
+>, [n. 170], p. 70-73, 173 et <hi
+rend="italic"
+>passim</hi
+> (résumé p. 507-521) qui indique que Crémone, investie de ses biens par l’empereur Henri VI en 1195 par une bannière (de gueules à la croix d’argent), a en effet ajouté cet emblème dans ses armes. </p
+></note
+>.</p
+><p
+xml:id="p25"
+>Cette pratique de concession de l’armoirie de l’Église permet à l’évidence une voie médiane moins problématique que l’apposition des armes sur les monuments publics. Un exemple plus tardif et attestant de la diffusion de la pratique au-delà des États de l’Église est fourni par la ville de Salon-de-Provence. La cité avait primitivement reçu pour armes celles de l’Empire, d’or à l’aigle bicéphale de sable, modifiées par l’évêque Eustache de Lévis, devenu seigneur de Salon lors de son rattachement au royaume en 1486. Après avoir fait arracher les armes impériales et les avoir remplacées par celles du roi, l’évêque avait alors imposé ses propres armes à la ville : d’or à trois chevrons de sable au lambel de gueules. À la demande des habitants, se plaignant de cette soumission héraldique de la ville, le pape Innocent VIII (Giovanni Battista Cybo, 1481 à 1492) donne de nouvelles armes à Salon par une bulle <hi
+rend="italic"
+>motu proprio</hi
+> datée du 12 décembre 1488 : coupé de gueules à deux clefs d’argent et d’or à l’aigle de sable<note
+n="32"
+place="foot"
+xml:id="ftn67"
+><p
+>Arthur de Boislile, « Rapport de M. de Boislile sur une communication de M. Destandau », <hi
+rend="italic"
+>Bulletin historique et philologique du Comité des travaux historiques et scientifiques</hi
+>, 1905, p. 356-359, https://gallica.bnf.fr/ark:/12148/bpt6k5721727m. L’acte était conservé aux archives municipales sous les cotes A.A 3, n<hi
+rend="sup"
+>o</hi
+> 1 et D.D. 7, fol. 31 et 51.</p
+></note
+>. Par lettres d’avril 1537, François I<hi
+rend="sup"
+>er</hi
+> modifiera de nouveau ces armes<note
+n="33"
+place="foot"
+xml:id="ftn68"
+><p
+>Voir dans mon mémoire inédit d’HDR, <hi
+rend="italic"
+>Affinités héraldiques</hi
+>, « Les concessions dans le royaume de France ».</p
+></note
+>.</p
+><p
+xml:id="p26"
+>Le marquage emblématique de l’espace par les papes s’inscrit bien dans le cadre de pratiques héraldiques observables dans l’ensemble de l’Occident entre la fin du XIII<hi
+rend="sup"
+>e</hi
+> siècle et celle du XVI<hi
+rend="sup"
+>e</hi
+> siècle<note
+n="34"
+place="foot"
+xml:id="ftn69"
+><p
+>Voir la base de données ARMMA (Armorial monumental du Moyen Âge) : <ref
+target="https://armma.saprat.fr"
+>https://armma.saprat.fr</ref
+> (consultée le 5 novembre 2024).</p
+></note
+>. En France comme dans l’Empire et les autres royaumes d’Europe, qui restent tous la somme de pouvoirs partagés et négociés, ces mises en signes construisent et exposent de très subtils équilibres entre les pouvoirs en place. Elles sont finalement, lorsqu’elles résultent d’un commun accord et du respect des directives juridiques locales, une preuve éclatante de la concorde qui règne dans l’espace concerné. Mais les enjeux pratiques et honorifiques que ces figurations recouvrent font également de ces manifestations héraldiques un <hi
+rend="italic"
+>casus belli</hi
+> exemplaire, première cible des conflits et des contestations.</p
+><p
+xml:id="p27"
+>Cet intérêt ou ce rejet pour les expositions publiques d’armoiries attestent d’ailleurs de la culture héraldique commune des hommes de ce temps, capables à l’évidence de reconnaître ces signes, de repérer et d’interpréter les informations qui leur sont ainsi communiquées et de les contester et de les modifier si nécessaire.</p
+><p
+xml:id="p28"
+>Le cas pontifical reste néanmoins une forme d’exception, tant à cause des particularités du système politique de l’Italie médiévale qu’en raison de la spécificité de la fonction papale et du statut très singulier de l’institution ecclésiale. La cohabitation de signes de différents statuts dans les manifestations emblématiques des papes en témoigne. Ces programmes permettent notamment de suivre les évolutions de l’image emblématique du pape, depuis la bannière de l’Église et les insignes de la fonction jusqu’aux armoiries des dynasties pontificales. Une analyse plus fine de l’utilisation de ces différents registres de signes reste à faire, en multipliant les études de cas finement contextualisées pour tenter de déterminer les motivations et les fonctions de tel ou tel signe et la valeur de leur association. L’analyse de ces pratiques dans le contexte particulier des États pontificaux comparés aux villes guelfes, dans le cadre de l’exil avignonnais ou celui du Grand Schisme et des conflits entre deux papautés apporterait également d’importantes informations.</p
+><p
+xml:id="p29"
+>Compte-tenu de l’inflexion des discours relatifs aux armoiries souveraines, que des légendes héraldiques et des pratiques juridiques contribuent à sacraliser et à protéger sous le régime de la lèse-majesté<note
+n="35"
+place="foot"
+xml:id="ftn70"
+><p
+>Voir Laurent Hablot, « Sacralisation of the royal coats of arms in Europe in the Middle Ages », dans Monserrat Herrero, Jaume Aurell, Angela Concetta Micelli Stout (dir.), <hi
+rend="italic"
+>Political theology in Medieval and Early Modern Europe. Discourses, Rites and Representations</hi
+>, Turnhout, Brepols, 2017, p. 313-336.</p
+></note
+>, il serait également pertinent de s’interroger plus avant sur la nature sacrée des armes de l’Église et du pape<note
+n="36"
+place="foot"
+xml:id="ftn71"
+><p
+>En 1408, encore, Monstrelet évoque les envoyés de Pedro de Luna, anti-pape en Avignon sous le nom de Benoît XIII et qui refuse d’admettre la soustraction d’obédience décidée par Charles VI, qui sont publiquement diffamés à Paris. Déguisés en évêques, portant les armes renversées de leur maître autour du cou, ils sont promenés sur un tombereau, puis mis au pilori dans la cour du palais de la Cité, chapeautés de mitres inscrites : « eulx cy sont desloyaux à l’Eglise et au Roy ». Enguerrand de Monstrelet, <hi
+rend="italic"
+>Chronique</hi
+>, Louis Douët d’Arcq (éd.), Paris, V<hi
+rend="sup"
+>e</hi
+> Jules Renouard, 1857-1862, 6 vol., t. I, chap. 43, p. 264 et 265.</p
+></note
+>.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig116.jpg"
+></graphic
+><head
+>Figure 114. Giacomo Grimaldi, <hi
+rend="italic"
+>Instrumenta translationum</hi
+>, Milan, bibliothèque Ambrosienne, ms. F 227 inf., copie de la scène de la bénédiction du cycle de fresques de la loggia du Latran.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig117.jpg"
+></graphic
+><head
+>Figure 115. La prééminence des insignes pontificaux sur le Palazzo Vechio.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig118.jpg"
+></graphic
+><head
+>Figure 116. Architrave du palais du Peuple de Gubbio.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig119.jpg"
+></graphic
+><head
+>Figure 117. Relief de pierre de la cité d’Ascoli Piceno.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig120.jpg"
+></graphic
+><head
+>Figure 118. Allégorie héraldique de la ville de Florence, vers 1360-1370, par Chini Galileo (fin du <hi
+rend="small-caps"
+>xix</hi
+><hi
+rend="sup"
+>e</hi
+> siècle), Palazzo dell’Arte della Seta, Florence.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch08_Hablot/Fig121.jpg"
+></graphic
+><head
+>Figure 119. Loggia de Viterbe.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

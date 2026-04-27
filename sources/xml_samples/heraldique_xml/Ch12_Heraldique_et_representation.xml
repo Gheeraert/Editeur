@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>Héraldique et représentation à Saint-Pierre de Rome</title
+><title
+type="sub"
+>Entre le durable et l’éphémère</title
+><author
+role="aut"
+><persName
+><forename
+>Martine</forename
+><surname
+>Boiteux</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-17"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="chapter"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>Héraldique et représentation à Saint-Pierre de Rome</p
+><p
+rend="title-sub"
+>Entre le durable et l’éphémère</p
+><p
+rend="author-aut"
+>Martine Boiteux</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>À partir d’un corpus visuel d’images commémoratives et mémorielles, sont présentés les blasons et emblèmes sur les monuments de la basilique Saint-Pierre, lieu de mémoire, ou leur absence, ainsi que sur les décors éphémères des cérémonies, et leurs représentations sur des gravures, en éclairant leurs significations par les textes écrits. Les monuments et apparats éphémères sont représentés sur des images à double signification : à la fois projet d’architecte et objet mémoriel pour la fabrication et la diffusion de l’événement éphémère, communication et propagande au service d’une stratégie politique. Les images sont de deux types : iconiques et narratives ; faites avant l’événement et distribuées, elles portent l’interprétation officielle.</p
+><p
+xml:id="p2"
+>Les emblèmes sont utilisés comme instrument de communication ; l’héraldique sert à identifier le commanditaire du monument durable ou éphémère. Indispensables sur les monuments et sur les architectures éphémères des fêtes nombreuses à l’époque baroque<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Pierre Francastel, « La Contre-Réforme et les arts en Italie à la fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècle », dans Henri Bédarida (dir.), <hi
+rend="italic"
+>À travers l’art italien du xv</hi
+><hi
+rend="italic sup"
+>e </hi
+><hi
+rend="italic"
+>au </hi
+><hi
+rend="small-caps italic"
+>xx</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, Paris, Boivin-Société d’études italiennes, 1949, p. 63-113.</p
+></note
+>, ils sont à la fois ornements et signes identitaires<note
+n="2"
+place="foot"
+xml:id="ftn29"
+><p
+>Pierre Bourdieu, <hi
+rend="italic"
+>La Distinction : critique sociale du jugement</hi
+>, Paris, Éditions de Minuit, 1979.</p
+></note
+>. Le contexte culturel pousse à la théâtralisation dans une Rome <hi
+rend="italic"
+>caput mundi </hi
+>et théâtre du monde, où tout est représentation comme l’écrivait l’ambassadeur Wicquefort<note
+n="3"
+place="foot"
+xml:id="ftn30"
+><p
+>Abraham de Wicquefort, <hi
+rend="italic"
+>Mémoire touchant les ambassadeurs et les ministres publics</hi
+>, La Haye, Jean et Daniel Steucker, 1677, p. 229 ; <hi
+rend="italic"
+>L’ambassadeur et ses fonctions</hi
+>, La Haye, Maurice Georges Veneur, 1682, 2 vol.</p
+></note
+><hi
+rend="italic"
+>.</hi
+> Le pape, souverain absolu au double pouvoir, temporel et spirituel sur Rome et la Chrétienté<note
+n="4"
+place="foot"
+xml:id="ftn31"
+><p
+>Paolo Prodi, <hi
+rend="italic"
+>Il sovrano pontefice : un corpo e due anime : la monarchia papale nella prima età moderna</hi
+>, Bologne, Il Mulino, 1982.</p
+></note
+>, surveille la magnificence de la basilique et des rituels qui s’y déroulent<note
+n="5"
+place="foot"
+xml:id="ftn32"
+><p
+>Martine Boiteux, « Il cerimoniale. La necessità della magnificenza », dans Francesco Buranelli (dir.), <hi
+rend="italic"
+>Il Vaticano Barocco, Arte, architettura e cerimoniale,</hi
+> Milan, Jaca Book, 2014, p. 10-27.</p
+></note
+>. Antonio Pinelli montre la profusion des emblèmes<note
+n="6"
+place="foot"
+xml:id="ftn33"
+><p
+>Antonio Pinelli, « <hi
+rend="italic"
+>La philosophie des images</hi
+>. Emblemi e imprese fra manierismo e barocco », <hi
+rend="italic"
+>Ricerche di storia dell’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1-2, 1976, p. 3-28 ; Carlo Ginzburg, <hi
+rend="italic"
+>Miti, emblemi</hi
+>, <hi
+rend="italic"
+>spie. Morfologia</hi
+> <hi
+rend="italic"
+>e storia</hi
+>, Turin, Einaudi, 1986.</p
+></note
+> et rappelle les nombreux traités publiés à partir du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècle<note
+n="7"
+place="foot"
+xml:id="ftn34"
+><p
+>Paolo Giovio, <hi
+rend="italic"
+>Dialogo dell’imprese militari et amorose</hi
+>, In Roma, Appresso Antonio Barre, 1555.</p
+></note
+> montrant l’utilisation de l’<hi
+rend="italic"
+>impresa</hi
+> comme figure de rhétorique<note
+n="8"
+place="foot"
+xml:id="ftn35"
+><p
+>Giulio Carlo Argan, « La rettorica et l’arte barocca », dans Enrico Castelli (dir.), <hi
+rend="italic"
+>Retorica e Barocco. Atti del 3 congresso internazionale di studi umanistici</hi
+>, Rome, Fratelli Bocca, 1955, p. 10-14, republié dans <hi
+rend="italic"
+>Studi e Note. Da Bramante a Canova</hi
+>, Rome, Bulzoni, 1970.</p
+></note
+>. Robert Klein<note
+n="9"
+place="foot"
+xml:id="ftn36"
+><p
+>Robert Klein, « La théorie de l’expression figurée dans les traités italiens sur les <hi
+rend="italic"
+>Imprese</hi
+>, 1555-1612 », <hi
+rend="italic"
+>Bibliothèque d’humanisme et Renaissance</hi
+>, vol. 19, n<hi
+rend="sup"
+>o</hi
+> 2, n<hi
+rend="sup"
+>o</hi
+> 2, 1957, p. 320-341 ; <hi
+rend="italic"
+>La forme et l’intelligible</hi
+>. <hi
+rend="italic"
+>Écrits sur la Renaissance et l’art moderne</hi
+>, Paris, Gallimard, 1970, p. 125-150.</p
+></note
+> souligne sa valeur de distinction sociale ainsi que sa fonction de talisman voulu et consciemment utilisé à l’époque de la Contre-Réforme catholique. Héraldique, pouvoir et efficacité symbolique<note
+n="10"
+place="foot"
+xml:id="ftn37"
+><p
+>Claude Lévi-Strauss, « L’efficacité symbolique », <hi
+rend="italic"
+>Revue d’histoire des religions</hi
+>, vol. 135, n<hi
+rend="sup"
+>o</hi
+> 1, 1949, p. 5-27, repris dans <hi
+rend="italic"
+>Anthropologie structurale</hi
+>, Paris, Plon, 1958, chap. X ; Martine Boiteux, « Linguaggio figurativo ed efficacia rituale », dans Francesca Cantù (dir.), <hi
+rend="italic"
+>I linguaggi del potere. Politica e religione nell’età barocca</hi
+>, Rome, Viella, 2007, p. 39-79.</p
+></note
+> sont liés et interagissent.</p
+><p
+xml:id="p3"
+>Sont ici proposés quelques exemples d’utilisation, de typologie et d’emplacement des armoiries, blasons, devises et emblèmes dans la basilique Saint-Pierre sur des supports variés. Comment s’expriment les décorations et la propagande ? La présence ou l’absence des emblèmes du pape sur les monuments et sur les apparats éphémères ? Quels sont les signes identitaires et mémoriels ?</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>La basilique : un monument marqué par ses constructeurs et ses utilisateurs</head
+><p
+xml:id="p4"
+>Un seul exemple pour le monument est présenté ici : le baldaquin Barberini (fig. 156). De nombreuses études lui ayant été consacrées, l’analyse est donc limitée à quelques remarques en relation avec l’héraldique. Il est construit de 1624 à 1633 par le jeune Gian Lorenzo Bernini, avec la participation de son rival Borromini. Ce baldaquin est conçu comme une machine processionnelle et des expérimentations de forme sont faites : ainsi, les dessins et gravures réalisés en 1630 pour le catafalque du frère du pape, Carlo Barberini. Il est bien connu que le marbre et le bronze sont pris au Panthéon pour sa construction. Les abeilles sont déjà présentes sur les architectures éphémères. C’est l’image de l’Église de la Contre-Réforme avec la présence dominante des emblèmes d’Urbain VIII Barberini : abeilles, soleil, laurier et emblèmes du pontificat fondus avec les symboles de la gloire de Pierre et de la religion catholique romaine<note
+n="11"
+place="foot"
+xml:id="ftn38"
+><p
+>Maria Grazia D’Amelio, <hi
+rend="italic"
+>L’obelisco marmoreo del foro italico a Roma. Storia, immagini e note tecniche</hi
+>, Rome, Palombi &amp; Partner, 2009 ; <hi
+rend="italic"
+>Giovan Lorenzo Bernini e l’oro per il baldacchino di San Pietro (1624-1633)</hi
+>, Rome, Argos, 2021.</p
+></note
+>. Sur les bases au milieu du blason sont sculptés des bas-reliefs avec des visage douloureux mystérieux. Les colonnes salomoniques sont couvertes de laurier grimpant. La lumière est un élément constitutif de l’architecture du monument. L’intention du monument est la célébration : le pape Barberini, commanditaire, très présent dans la réalisation du baldaquin, veut démontrer la légitimité de la succession apostolique et le primat du pape qui en procède<note
+n="12"
+place="foot"
+xml:id="ftn39"
+><p
+>Maria Grazia D’Amelio, <hi
+rend="italic"
+>Giovan Lorenzo Bernini…</hi
+>,<hi
+rend="italic"
+> op. cit</hi
+>.</p
+></note
+> : sur la coupole, la présence de <hi
+rend="italic"
+>putti</hi
+> avec les emblèmes du pouvoir, tiare et clefs, en témoignent. L’importance du symbole de la remise des clefs est soulignée sur une peinture de Perugino (1581-1582) dans la chapelle Sixtine ; et également par le relief sur la façade de la basilique sculpté par Ambrogio Buonvicino dans les années 1614-1632 (fig. 157).</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>Les personnes</head
+><div
+type="section2"
+xml:id="div03"
+><head
+>Les tombeaux des papes</head
+><p
+xml:id="p5"
+>Les tombeaux de certains papes se trouvent dans les cryptes et leurs monuments funéraires dans la basilique. Ils se composent toujours de la statue, rarement du blason et souvent de sculptures allégoriques. C’est le cas à plusieurs reprises : en 1492, pour Innocent VIII Cibo par Antonio Pollaiolo, le monument le plus ancien avec les clefs sur la base (fig. 158) ; en 1545, pour Paul III Farnèse par Guglielmo della Porta, sans blason, avec des statues allégoriques dont deux se trouvent au palais Farnèse par manque de place dans Saint-Pierre ; en 1585, pour Grégoire XIII Boncompagni par Camillo Rusconi, avec des statues allégoriques, inscription et le dragon, animal du blason du pape, sous l’urne ; pour Urbain VIII Barberini, terminé après sa mort en 1644, sans blason ni abeille ; en 1667, pour Alexandre VII Chigi par Le Bernin, avec statues ; pour Benoît XIV par Pietro Bracci, 1764-1769 ; en 1769, pour Clément XIII Rezzonico par Antonio Canova, avec la tiare et les lions qui gardent la porte.</p
+></div
+><div
+type="section2"
+xml:id="div04"
+><head
+>Les tombeaux de personnalités </head
+><p
+xml:id="p6"
+>Trois femmes seulement sont présentes dans la basilique Saint-Pierre.</p
+><p
+xml:id="p7"
+>Mathilde de Canossa ou de Toscane (1046-1115) est une souveraine forte et un soutien fidèle de l’Église ; en 1632, Urbain VIII fait transférer sa dépouille au château Saint Ange, puis, en 1644, à Saint-Pierre, où un monument funèbre est réalisé par Le Bernin (fig. 159).</p
+><p
+xml:id="p8"
+>Christine de Suède, la grande convertie, arrivée à Rome en 1655 après son abdication, est accueillie avec les honneurs dus à son rang de reine de sang royal ; elle mène une vie mondaine, religieuse et intellectuelle active. Elle est célébrée avec faste lors de sa guérison en 1689 à San Salvatore in Lauro. Lors de ses grandioses funérailles d’État en 1689 à la Chiesa Nuova, église des Oratoriens, voulues par le pape malgré ses volontés testamentaires<note
+n="13"
+place="foot"
+xml:id="ftn40"
+><p
+>Martine Boiteux, « Funérailles féminines dans la Rome baroque », dans Bernard Dompnier (dir.), <hi
+rend="italic"
+>Les cérémonies extraordinaires du catholicisme baroque</hi
+>, Clermont-Ferrand, PUBP, 2009, p. 389-421.</p
+></note
+>, les signes emblématiques de sa famille et de sa dignité royale sont présents : sceptre, couronne et manteau royal posés sur son corps exposé et dominé par le dais sacral. La gravure du transport à Saint-Pierre, où se déroulent les secondes funérailles, porte le blason des Wasa, famille royale suédoise<note
+n="14"
+place="foot"
+xml:id="ftn41"
+><p
+>Visible sur : <ref
+target="https://collections.vam.ac.uk/item/O649881/pompae-funebres-habitae-in-funere-print-robert-van-auden/"
+>https://collections.vam.ac.uk/item/O649881/pompae-funebres-habitae-in-funere-print-robert-van-auden/</ref
+> (consulté le 03 mars 2025).</p
+></note
+>. C’est une reine qui est célébrée dans la basilique par une célébration éphémère et par un tombeau. Construit sur un projet de l’architecte Carlo Fontana, ce monument intègre son portrait modelé par Giovanni Giardini sur un médaillon en bronze dominant la couronne royale. Christine est identifiée par l’inscription.</p
+><p
+xml:id="p9"
+>Maria Clementina Sobieska, morte en 1735, a des funérailles d’État sur le modèle de celles de Christine de Suède, parce qu’elle aussi est de sang royal et mariée au prétendant catholique au trône d’Angleterre, Jacques III Stuart<note
+n="15"
+place="foot"
+xml:id="ftn42"
+><p
+>Martine Boiteux, « Triomphes romains des Sobieski, 1683-1735 », dans <hi
+rend="italic"
+>I Sobieski a Roma. La famiglia reale polacca nella Città Eterna</hi
+>, Varsovie, Muzeum Pałacu Króla Jana III w Wiłanwie, 2018, p. 48-51.</p
+></note
+>. Cette célébration a lieu dans sa paroisse des Santi Apostoli puis dans la basilique Saint-Pierre. Son tombeau de style encore baroque comporte des sculptures de Pietro Bracci exécutées sur dessin de Filippo Barigioni (1739-1742). Son portrait, en mosaïque de Pietro Paolo Cristofari à partir d’une peinture d’Ignaz Stern, fait scandale dans Saint-Pierre car trop mondain et pas assez religieux ; il est retiré, mais le pape le fait remettre en place. Son mari, Jacques Stuart, toujours prétendant catholique au trône britannique, meurt en 1766 et a droit aux mêmes honneurs funèbres. Un tombeau par Canova en 1819 l’accueille avec leurs deux fils et est installé en face de celui de sa femme ; de style néoclassique, il évoque les tombeaux étrusques, la porte est gardée par deux anges ; il est surmonté du blason familial et de la couronne royale.</p
+><p
+xml:id="p10"
+>Les cérémonies de funérailles pour des personnalités dans la basilique Saint-Pierre ne suscitent pas d’images mais seulement la réalisation de tombeaux, monuments durables sans blason pour les trois femmes.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div05"
+><head
+>La basilique lieu du cérémonial : cérémonies éphémères et représentations</head
+><div
+type="section2"
+xml:id="div06"
+><head
+>Les funérailles</head
+><p
+xml:id="p11"
+>Le cortège funèbre du pape se déroule du palais du Quirinal, où il réside, à la basilique Saint-Pierre ; il est fait de manière anonyme et sans blason ni emblèmes, seulement une croix et le corps exposé : il n’est plus pape, sans pouvoir, ni individu vivant. Après l’exposition au Quirinal, il est exposé à Saint-Pierre, toujours sans emblème.</p
+><p
+xml:id="p12"
+>En temps de <hi
+rend="italic"
+>Sede vacante</hi
+>, vacance du Siège Apostolique, les plans du conclave apparaissent à la fin <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e </hi
+>siècle, après le Concile de Trente et dans le contexte de réaffirmation du pouvoir pontifical. La vie est régulée par des cérémoniels écrits<note
+n="16"
+place="foot"
+xml:id="ftn43"
+><p
+>Marc Dykmans, <hi
+rend="italic"
+>Le cérémonial pontifical de la fin du Moyen Âge à la Renaissance</hi
+>, Rome-Bruxelles, Institut historique belge de Rome, 1977-1985, 4 vol. </p
+></note
+> et figurés<note
+n="17"
+place="foot"
+xml:id="ftn44"
+><p
+>Martine Boiteux, « Rituels funéraires pontificaux », <hi
+rend="italic"
+>Studi romani</hi
+>, vol. 60, n<hi
+rend="sup"
+>o</hi
+> 1-4, 2012, p. 31-56.</p
+></note
+> ; ces images sérielles de natures variées, normatives et mémorielles, sont toujours au nom du pape défunt, excepté en 1585 pour Sixte Quint à peine élu : la norme n’est pas encore fixée. L’image iconique souligne les lieux avec la figuration du Saint-Esprit et de l’emblème pontifical, exprimant la sacralisation du pouvoir (fig. 160) ; l’image narrative souligne les actions rituelles spécifiques à cette période, avec parfois le portrait du pape défunt ou avec des vignettes, comme sur une bande dessinée, depuis la mort jusqu’à l’adoration du nouvel élu. Ces plans sont le plus souvent sans emblème personnalisé, avec seulement ceux du pontife (tiare et clefs croisées), quelquefois avec le portrait du défunt. Le blason et le portrait du cardinal dédicataire peuvent être représentés, comme en 1691 pour le cardinal de Médicis, au décès d’Alexandre VIII Ottoboni (fig. 161). Ces plans sont souvent réutilisés et actualisés en changeant les inscriptions et les noms. Les images sont identifiées par la présence de la colombe du Saint-Esprit en position dominante et l’emblème pontifical, c’est-à-dire les clefs entrecroisées et la tiare ou triple couronne.</p
+><p
+xml:id="p13"
+>Les cérémonies funèbres sont somptueuses, de même que les catafalques des papes présents sur des gravures autonomes et sur les plans des conclaves, avec la présence d’emblèmes. Ils restent dans Saint-Pierre le temps des <hi
+rend="italic"
+>Novendiales</hi
+>, neuf jours de deuil jusqu’à l’entrée en conclave des cardinaux pour l’élection du nouveau pape.</p
+><p
+xml:id="p14"
+>Les premiers catafalques pontificaux apparaissent un an après le décès à la basilique Sainte-Marie-Majeure, avec les emblèmes familiaux sur les apparats éphémères et le blason des Peretti sur la coupole pour Sixte Quint en 1591, puis pour Paul V Borghèse en 1622, où l’architecture est de Venturini, les sculptures du Bernin et la gravure de Greuter, avec des blasons sur les médaillons du décor de la nef.</p
+><p
+xml:id="p15"
+>Deux modèles existent : l’un en forme de tholos ou de tiare, l’autre incluant l’urne entourée d’obélisques. Tous les catafalques portent la tiare sans les clefs (l’homme est alors rendu à son statut individuel et familial) et le blason familial, sur le piédestal comme sur le baldaquin de Saint-Pierre pour les abeilles Barberini<note
+n="18"
+place="foot"
+xml:id="ftn45"
+><p
+>Martine Boiteux, « Les Barberini, Rome et la France : fête et politique », dans Lorenza Mochi Onori, Sebastian Schutze et Francesco Solinas (dir.), <hi
+rend="italic"
+>I Barberini e la cultura europea del Seicento</hi
+>, Rome, De Luca, 2007, p. 345-360.</p
+></note
+>. Le modèle avec les obélisques l’emportera, magnifié par le dessin du Bernin pour Alexandre VII Chigi en 1667 où il opère une métaphore conceptuelle<note
+n="19"
+place="foot"
+xml:id="ftn46"
+><p
+>Antonio Pinelli, art. cité.</p
+></note
+> : l’emblématique intégrée est fondamentale dans le projet<hi
+rend="italic"
+>.</hi
+></p
+><p
+xml:id="p16"
+>Les catafalques se ressemblent parce que le modèle architectural est souvent repris avec peu de variantes, sinon le renouvellement des emblèmes et des médaillons narratifs.</p
+></div
+><div
+type="section2"
+xml:id="div07"
+><head
+>Les rituels d’investiture</head
+><p
+xml:id="p17"
+>Le nouvel élu choisit son blason ; le plus souvent le blason familial est alors surmonté de la tiare, triple couronne signe du pouvoir, et des clefs de Saint-Pierre, signe de continuité.</p
+><p
+xml:id="p18"
+>Le couronnement a lieu à l’extérieur de la basilique et suscite rarement une représentation, sauf la fresque de Giovanni Guerra et Cesare Nebbia du <hi
+rend="italic"
+>Salone Sistino</hi
+> à la Bibliothèque vaticane pour Sixte Quint, en 1585. Pour le couronnement d’Innocent X en octobre 1644 le cardinal Francesco Barberini, toujours vice-chancelier et ex-cardinal neveu d’Urbain VIII, pour la décoration de la porte de la basilique Saint-Pierre, prête deux draps de soie brodée représentant deux épisodes de la vie de Déborah, dont le nom en hébreu signifie abeille ; l’allusion au pape-poète précédent, Urbain VIII Barberini, est transparente. Par ce rappel du pontificat précédent et de sa propre famille, Francesco Barberini utilise l’emblème familial symboliquement et de manière évidente pour les participants cultivés de la cérémonie<note
+n="20"
+place="foot"
+xml:id="ftn47"
+><p
+>Pascal-François Bertrand, « L’uso dell’arazzo a Roma: l’esempio del Cardinale Francesco Barberini », dans Lorenza Mochi Onori, Sebastian Schutze et Francesco Solinas (dir.), <hi
+rend="italic"
+>op. cit.</hi
+>, p. 421-430, ici p. 429.</p
+></note
+>.</p
+><p
+xml:id="p19"
+>Le <hi
+rend="italic"
+>Possesso</hi
+> transporte hors du Vatican mais il fait partie du cérémonial pontifical<note
+n="21"
+place="foot"
+xml:id="ftn48"
+><p
+>Francesco Cancellieri, <hi
+rend="italic"
+>Storia de'solenni possessi ,</hi
+> Rome, Luigi Lazzarini stampatore della R. C. A., 1802 ; Gaetano Moroni, <hi
+rend="italic"
+>Dizionario di erudizione storico-ecclesiastica</hi
+>, In Venezia, dalla Tipografia Emiliana, 1840-1861, 103 vol. ; Martine Boiteux, « <hi
+rend="italic"
+>Il</hi
+> <hi
+rend="italic"
+>Possesso</hi
+>. La presa di potere del Sovrano Pontefice sulla città di Roma », dans Francesco Buranelli (dir.),<hi
+rend="italic"
+> Habemus Papam. Le elezioni pontificie da San Pietro a Benedetto XIV</hi
+>, Rome, De Luca, 2006, p. 131-140.</p
+></note
+>. Il marque la prise de possession de la ville et de l’évêché de Rome par une grande procession qui traverse l’espace urbain d’ouest en est, de Saint-Pierre à Saint-Jean-de-Latran, avec une étape au Capitole. Au <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle, il part parfois du Quirinal. Pour tous les papes, sont publiées des gravures sérielles et normatives répétitives identifiées par le blason et souvent le portrait du nouvel élu, excepté pour Sixte Quint dont le <hi
+rend="italic"
+>Possesso</hi
+> est représenté sur une peinture comme le couronnement. Ainsi, en 1605, Léon XI Médicis est figuré avec son blason et son portrait en compagnie des trois autres papes Médicis qui l’ont précédé (fig. 162). Les arcs de triomphe éphémères qui rythment le parcours sont actualisés et identifiés par les emblèmes, blasons et inscriptions : offerts par la commune et situés en haut de l’escalier du Capitole, ils font voisiner les blasons du pape et de la municipalité, comme le montre en 1605 la gravure de Tempesta. Offerts par le duc de Parm<hi
+rend="strikethrough"
+>e</hi
+>, un Farnèse, puis son héritier le roi de Naples, un Bourbon, les emblèmes identifient les arcs élevés dans le forum, notamment les lys communs aux familles ; souvent presque identiques avec comme seules variantes les inscriptions, portraits ou emblèmes en position sommitale.</p
+></div
+><div
+type="section2"
+xml:id="div08"
+><head
+>L’exercice du pouvoir : quelques exemples d’utilisation des emblèmes</head
+><p
+xml:id="p20"
+>Lors de la Semaine sainte, pour la cérémonie de la <hi
+rend="italic"
+>Croce Luminosa</hi
+><note
+n="22"
+place="foot"
+xml:id="ftn49"
+><p
+>Martine Boiteux, « La Croce luminosa, un rito della Settimana Santa nella basilica di San Pietro », dans Roberto Regoli et Ilaria Fiumi Sermattei (dir<hi
+rend="italic"
+>.), La religione dei nuovi tempi. Il riformismo spirituale nell’età di Leone XII</hi
+>, Ancone, Consiglio regionale delle Marche, 2020, p. 281-316.</p
+></note
+>, on constate une absence de blason et de tout signe identitaire du commanditaire de la cérémonie, comme le montre un tableau de Desprez représentant la participation à la cérémonie du roi Gustave III de Suède. C’est un rituel religieux et liturgique du pouvoir pontifical, il n’est donc pas personnalisé.</p
+><p
+xml:id="p21"
+>Les béatifications donnent lieu à de somptueuses cérémonies à partir de celle de François de Sales en 1662 ; le cérémonial est identique à la canonisation qui reprend le même apparat et les mêmes signes et symboles. Lors des canonisations l’emblèmes de chaque saint est figuré sur les étendards comme signe identitaire<note
+n="23"
+place="foot"
+xml:id="ftn50"
+><p
+>Martine Boiteux, « La cerimonia della canonizzazione. Teatro riti, stendardi e immagini », dans Alessandra Bartolomei Romagnoli (dir.), <hi
+rend="italic"
+>La canonizzazione di Santa Francesca Romana, Santità, cultura e istituzioni a Roma tra Medioevo e età moderna</hi
+>, Florence, Edizioni del Galluzzo per la Fondazione Ezio Franceschini, 2013, p. 99-121.</p
+></note
+>. La façade de la basilique est décorée avec les images des saints et de leurs emblèmes et aussi avec les blasons des papes. En 1610, pour la canonisation de Carlo Borromeo, la façade est totalement recouverte d’un apparat éphémère ; la gloire de Milan éclate opposée à celle de Rome, manifeste lors la récente canonisation en 1608 de Francesca Romana patronne de la ville. Sur la gravure sont mis en valeur le blason du dédicataire, le cardinal Federico Borromeo neveu du canonisé, ainsi que de nombreux portraits des archevêques et évêques de Milan, prédécesseurs du canonisé, soulignant l’absence du blason du pape.</p
+><p
+xml:id="p22"
+>Le théâtre où se déroule la célébration est représenté sur les gravures de canonisation. Ainsi, en 1622, Greuter figure le blason du pape célébrant Grégoire XV Ludovisi et les emblèmes identitaires des cinq nouveaux saints sur les vignettes du pourtour ainsi que sur les étendards suspendus dans la basilique comme signes identitaires (fig. 163) : pour Ignace et François Xavier est présent l’emblème jésuite ; pour Philippe Neri son image iconique avec sa vision de la Madone et la présence du lys ; pour Isidore le bâton et le surgissement de l’eau ; pour Thérèse d’Avila sa vision et le livre. Les étendards sont suspendus à des couronnes largement éclairées comme symboles de la gloire céleste.</p
+><p
+xml:id="p23"
+>Sur les images de la présentation de la <hi
+rend="italic"
+>Chinea</hi
+> du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle dans la basilique et du <hi
+rend="small-caps"
+>xviii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle dans la <hi
+rend="italic"
+>Sala Regia</hi
+> du Vatican, ainsi que sur celle de l’arrivée du cortège à Saint-Pierre, aucun emblème ni blason n’est figuré.</p
+></div
+><div
+type="section2"
+xml:id="div09"
+><head
+>L’accueil des personnalités</head
+><p
+xml:id="p24"
+>Christine de Suède<note
+n="24"
+place="foot"
+xml:id="ftn51"
+><p
+>Carlo Festini, <hi
+rend="italic"
+>I trionfi della magnificenza pontificia celebrati per lo passaggio nelle città e luoghi dello Stato ecclesiatico e in Roma per lo ricevimento della Maestà della regina di Svezia, </hi
+>In Roma, Nella Stamperia della Rev. Camera Apost., 1656. La bibliographie concernant Christine de Suède est infinie ; parmi bien d’autres titres en rapport direct avec notre sujet : Galeazzo Gualdo Priorato, <hi
+rend="italic"
+>Historia della Sua Reale Maestà Cristina Alessandra, Regina di Svezia</hi
+>, In Roma, Nella Stamperia della Rev. Camera Apost., 1656 ; Per Bjurström, <hi
+rend="italic"
+>Feast and Theatre in Queen Christina’s Rome</hi
+>, Stockholm, s. n., 1966 ; Georgina Masson, <hi
+rend="italic"
+>Queen Christina</hi
+>, Londres, Secker &amp; Warburg, 1968 ; Cesare d’Onofrio, <hi
+rend="italic"
+>Roma val bene un’abiura</hi
+>, Rome, Fratelli Palombi, 1976 ; Daniela Pizzagalli, <hi
+rend="italic"
+>La regina di Roma. Vita e misteri di Cristina di Svezia nell’Italia barocca</hi
+>, Milan, Rizzoli, 2002.</p
+></note
+>, convertie au catholicisme, est accueillie comme une reine par le pape Clément IX Rospigliosi, malgré son abdication. À son arrivée, il la loge au Vatican et lui offre un dîner en 1668 ; certes ils sont à deux tables séparées comme le prévoit le protocole ; le blason de Clément IX Rospigliosi et les <hi
+rend="italic"
+>Trionfi</hi
+> symboliques qui décorent la table sont représentés sur l’image qui montre l’emblème papal au fond de la pièce. Lorsque sa résidence est transférée, sur volonté du pape, au palais Farnèse<note
+n="25"
+place="foot"
+xml:id="ftn52"
+><p
+>Martine Boiteux, « Le palais Farnèse : la représentation et l’identité », <hi
+rend="italic"
+>Mélanges de l’École française de Rome</hi
+>, vol. 122, n<hi
+rend="sup"
+>o</hi
+> 2, 2010, p. 311-338.</p
+></note
+>, son blason et celui de sa famille sont présents mais pas celui du pape sur la façade éphémère plaquée sur le palais<note
+n="26"
+place="foot"
+xml:id="ftn53"
+><p
+>Michel Pastoureau, dans « L’emblématique des Farnèse », <hi
+rend="italic"
+>Le palais Farnèse</hi
+>, Rome, École française de Rome, 1981, 2 vol., t. 1, p. 431-455, a montré la large utilisation des emblèmes dans le palais par les Farnèse, comme le faisaient les grandes familles romaines dans leur palais familial.</p
+></note
+>.</p
+><p
+xml:id="p25"
+>Les ambassadeurs rivalisent de faste à l’occasion des cortèges pour venir remettre leurs lettres de créance, et lors les audiences protocolaires. Ainsi une publication de Luca Antonio Chracas décrit le cortège du marquis de Fontès, ambassadeur portugais se rendant à l’audience du pape Clément XI le 8 juillet 1716<note
+n="27"
+place="foot"
+xml:id="ftn54"
+><p
+><hi
+rend="italic"
+>Distinto raguaglio del sontuoso treno delle carrozze con cui andò all’udienza di Sua Santità, il di 8 luglio 1716, l’illustrissimo ed eccellentissimo signore Don Rodrigo Annes de Saa, Almeida e Meneses, marchese di Fontes, conte di Pennaghiano</hi
+>, In Roma, Nella Stamperia di Gio. Francesco Chracas, 1716.</p
+></note
+>, jour de la fête de sainte Élisabeth reine du Portugal. Il souligne l’opulence des carrosses dorés ornés d’éléments héraldiques, mythologiques et symboliques, comme en témoigne un dessin de Vieira<note
+n="28"
+place="foot"
+xml:id="ftn55"
+><p
+>Dario Beccarini, « Riflessioni e nuove proposte su Francisco Vieira de Matos, detto Vieira Lusitano, “eccellente disegnatore […] felice e franco nell’inventare” », dans Elisa Debenedetti (dir.), <hi
+rend="italic"
+>Studi sul Settecento romano</hi
+>, Rome, Edizioni Quazar, 2021, p. 207-220, ici p. 208.</p
+></note
+> : le texte décrit dans le détail le carrosse des océans, qui évoque l’extension de l’empire portugais, pour l’ambassadeur, et quatre autres pour sa suite, véritables chars de triomphe, ainsi que dix carrosses d’escorte. Sont également énumérés les ornements dorés magnifiques surmontés par le blason de l’ambassadeur, les nombreux éléments allégoriques et symboliques comme le dragon symbole du Portugal, le soleil pour l’immortalité, le serpent qui se mord la queue pour l’éternité, le lion pour l’intrépidité.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div10"
+><head
+>Conclusion</head
+><p
+xml:id="p26"
+>Dans la basilique Saint-Pierre, les emblèmes servent la glorification, l’autoreprésentation du pouvoir pontifical et l’identité de ses représentants ; chaque pape laisse la marque de son passage et de ce qu’il accepte d’accueillir, personnes et cérémonies.</p
+><p
+xml:id="p27"
+>Sur les monuments, sur les apparats éphémères et les gravures qui les représentent, les emblèmes servent comme ornements et comme signes identitaires. Blasons, armes et emblèmes sont nombreux. Une plus grande complexité héraldique est laissée aux créations durables tandis que les architectures éphémères, et les images qui en sont faites, donnent un image héraldique simplifiée.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig159.jpg"
+></graphic
+><head
+>Figure 156. Le baldaquin de la basilique Saint-Pierre.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig160.jpg"
+></graphic
+><head
+>Figure 157. La remise des clefs, bas-relief de Ambrogio Buonvicino, 1614-1632, façade de la basilique Saint-Pierre.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig161.JPG"
+></graphic
+><head
+>Figure 158. Monument funéraire du pape Innocent VIII Cibo, 1492, Antonio Pollaiolo, basilique Saint-Pierre.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig162.jpg"
+></graphic
+><head
+>Figure 159. Monument funéraire de Mathilde de Canossa, 1644, Le Bernin, basilique Saint-Pierre.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig164.jpg"
+></graphic
+><head
+>Figure 160. Plan de <hi
+rend="italic"
+>Sede Vacante</hi
+> au décès d’Urbain VIII Barberini, 1644, gravure, Rome, Istituto centrale per la grafica.</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig165.jpg"
+></graphic
+><head
+>Figure 161. Plan de <hi
+rend="italic"
+>Sede Vacante</hi
+> au décès d’Alexandre VIII Ottoboni, avec le blason du cardinal Médicis dédicataire, 1691, gravure.</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig166.jpg"
+></graphic
+><head
+>Figure 162. Cortège du <hi
+rend="italic"
+>Possesso</hi
+> de Léon XI Médicis, 1605, gravure.</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch12_Boiteux/Fig167.jpg"
+></graphic
+><head
+>Figure 163. Théâtre de la canonisation des cinq saints, 1622, Matteo Greuter, gravure.</head
+></figure
+></div
+></body
+></text
+></TEI
+>

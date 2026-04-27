@@ -1,0 +1,237 @@
+%!Adobe-FontList 1.22
+%Locale:0x40c
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-It
+FamilyName:Minion Pro
+StyleName:Italic
+FullName:Minion Pro Italic
+MenuName:Minion Pro
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\MinionPro-It.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:258056
+FileModTime:1329300920
+WeightClass:400
+WidthClass:5
+AngleClass:1
+DesignSize:110
+NameArray:0,Mac,18,Minion Pro Ital
+NameArray:0,Mac,4,Minion Pro Italic
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+FullName:Minion Pro
+MenuName:Minion Pro
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:217280
+FileModTime:1329300920
+WeightClass:400
+WidthClass:5
+AngleClass:0
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-Bold
+FamilyName:Spectral
+StyleName:Bold
+FullName:Spectral Bold
+MenuName:Spectral
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-Bold.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:277004
+FileModTime:1497214800
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-BoldItalic
+FamilyName:Spectral
+StyleName:Bold Italic
+FullName:Spectral Bold Italic
+MenuName:Spectral
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-BoldItalic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:287308
+FileModTime:1497214800
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-Italic
+FamilyName:Spectral
+StyleName:Italic
+FullName:Spectral Italic
+MenuName:Spectral
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-Italic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:272052
+FileModTime:1497214800
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-Light
+FamilyName:Spectral
+StyleName:Light
+FullName:Spectral Light
+MenuName:Spectral Light
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-Light.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:266848
+FileModTime:1497214800
+WeightClass:300
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral Light
+NameArray:0,Win,16,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-LightItalic
+FamilyName:Spectral
+StyleName:Light Italic
+FullName:Spectral Light Italic
+MenuName:Spectral Light
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-LightItalic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:282224
+FileModTime:1497214800
+WeightClass:300
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral Light
+NameArray:0,Win,16,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-Medium
+FamilyName:Spectral
+StyleName:Medium
+FullName:Spectral Medium
+MenuName:Spectral Medium
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-Medium.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:276340
+FileModTime:1497214800
+WeightClass:500
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral Medium
+NameArray:0,Win,16,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Spectral-MediumItalic
+FamilyName:Spectral
+StyleName:Medium Italic
+FullName:Spectral Medium Italic
+MenuName:Spectral Medium
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\Spectral-MediumItalic.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:285672
+FileModTime:1497214800
+WeightClass:500
+WidthClass:5
+AngleClass:0
+NameArray:0,Win,1,Spectral Medium
+NameArray:0,Win,16,Spectral
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:ArialMT
+FamilyName:Arial
+StyleName:Regular
+FullName:Arial
+MenuName:Arial
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:C:\Users\bernam22\Desktop\Caricature\MEP_Caricature_sous_le_signe_de_la_Revolution_20211214\Document fonts\arial.ttf
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:1036584
+FileModTime:1575709706
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,4,Arial
+NameArray:0,Win,1,Arial
+%EndFont
+

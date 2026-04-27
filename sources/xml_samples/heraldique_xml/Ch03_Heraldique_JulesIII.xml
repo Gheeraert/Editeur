@@ -1,0 +1,1576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI
+change="commons_edition"
+xmlns="http://www.tei-c.org/ns/1.0"
+xmlns:ns5="http://www.w3.org/1999/xlink"
+xmlns:ns4="http://www.w3.org/2001/XInclude"
+xmlns:ns2="http://www.w3.org/1998/Math/MathML"
+xmlns:ns="http://www.tei-c.org/ns/1.0"
+><teiHeader
+><fileDesc
+><titleStmt
+><title
+type="main"
+>L’héraldique de Jules III Ciocchi del Monte (1550-1555) dans l’ornement pour le livre</title
+><author
+role="aut"
+><persName
+><forename
+>Yvan</forename
+><surname
+>Loskoutoff</surname
+></persName
+></author
+></titleStmt
+><publicationStmt
+><ref
+target="Heraldique_et_Papaute_volII.xml"
+type="volume_xml"
+></ref
+><ab
+type="expression"
+><bibl
+><publisher
+></publisher
+><availability
+><licence
+target="#"
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+type="book"
+><bibl
+><date
+type="publishing"
+></date
+><biblScope
+from=""
+unit="page"
+></biblScope
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="PDF"
+type="digital_download"
+><bibl
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><dim
+extent=""
+type="weight"
+unit="Mo"
+></dim
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+><ab
+subtype="EPUB"
+type="digital_download"
+><bibl
+><idno
+type="ISBN-13"
+></idno
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><distributor
+></distributor
+><date
+type="publishing"
+></date
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+><dim
+extent=""
+type="weight"
+unit="Ko"
+></dim
+></bibl
+><desc
+type="accessMode"
+>textual</desc
+><desc
+type="accessMode"
+>visual</desc
+><desc
+type="accessibilityFeature"
+>ARIA</desc
+><desc
+type="accessibilityFeature"
+>highContrastDisplay</desc
+><desc
+type="accessibilityFeature"
+>readingOrder</desc
+><desc
+type="accessibilityFeature"
+>structuralNavigation</desc
+><desc
+type="accessibilityFeature"
+>tableOfContents</desc
+><desc
+type="accessibilityFeature"
+>unlocked</desc
+><desc
+subtype="soundHazard"
+type="accessibilityHazard"
+>noSoundHazard</desc
+><desc
+subtype="flashingHazard"
+type="accessibilityHazard"
+>noFlashingHazard</desc
+><desc
+subtype="motionSimulationHazard"
+type="accessibilityHazard"
+>noMotionSimulationHazard</desc
+><desc
+type="accessModeSufficient"
+>textual,visual</desc
+><desc
+type="accessibilitySummary"
+>Cette publication est conforme aux normes d’accessibilité WCAG 2.0, au moins au niveau A.</desc
+></ab
+><ab
+subtype="HTML"
+type="digital_online"
+><bibl
+><distributor
+></distributor
+><name
+type="CMS"
+></name
+><idno
+subtype="-"
+type="DOI"
+></idno
+><ref
+type="DOI"
+></ref
+><ref
+type="site"
+></ref
+><date
+type="publishing"
+></date
+><date
+type="embargoend"
+></date
+><idno
+type="documentnumber"
+></idno
+><availability
+><licence
+></licence
+><p
+></p
+></availability
+></bibl
+></ab
+></publicationStmt
+><sourceDesc
+><p
+>COMMONS/Métopes : 1.0</p
+></sourceDesc
+></fileDesc
+><encodingDesc
+><appInfo
+><application
+ident="Word-tpl"
+version="1.0"
+><label
+>Word template</label
+><desc
+>Version of MS Word template used</desc
+><ref
+target="#"
+></ref
+></application
+><application
+ident="circe-Metopes"
+version="0.0.97"
+><label
+>Circé</label
+><desc
+>Document converted into TEI using Circé application (doc2tei pipeline)</desc
+><ref
+target="#"
+></ref
+></application
+></appInfo
+><editorialDecl
+><normalization
+rendition="notes"
+><p
+rendition="note"
+select="restart"
+></p
+><p
+rendition="table"
+select="restart"
+></p
+><p
+rendition="annexe"
+select="restart"
+></p
+><p
+rendition="floatingText"
+select="restart"
+></p
+></normalization
+></editorialDecl
+></encodingDesc
+><profileDesc
+><langUsage
+><language
+ident="fr-FR"
+></language
+></langUsage
+></profileDesc
+><revisionDesc
+><listChange
+><change
+type="creation"
+when="2025-03-27"
+>XML-TEI file creation</change
+></listChange
+></revisionDesc
+></teiHeader
+><text
+type="article"
+xml:id="text"
+><front
+><div
+type="titlePage"
+><p
+rend="title-main"
+>L’héraldique de Jules III Ciocchi del Monte (1550-1555) dans l’ornement pour le livre</p
+><p
+rend="author-aut"
+>Yvan Loskoutoff</p
+></div
+></front
+><body
+><p
+xml:id="p1"
+>Le livre constitue un support privilégié du blason dans sa reliure comme dans son décor intérieur peint pour les manuscrits et gravé pour les imprimés<note
+n="1"
+place="foot"
+xml:id="ftn1"
+><p
+>Voir par exemple, Matthieu Desachy (dir.), <hi
+rend="italic"
+>L’héraldique et le livre</hi
+>, catalogue d’exposition, Montauban-Albi-Toulouse, Paris, Somogy, 2002.</p
+></note
+>. Les reliures aux armes du pape Jules III (1550-1555) ont été étudiées par Tammaro de Marinis, qui en a recensé une dizaine d’exemplaires<note
+n="2"
+place="foot"
+xml:id="ftn36"
+><p
+><hi
+rend="italic"
+>La legatura artistica in Italia nei secoli XV e XVI, Notizie ed elenchi</hi
+>, Florence, Fratelli Alinari, 1960, 3 vol., t. 1, n<hi
+rend="sup"
+>o</hi
+> 871, 877, 879-884, 906. Voir aussi <hi
+rend="italic"
+>Legature papali da Eugenio IV a Paolo VI</hi
+>, catalogue d’exposition, Cité du Vatican, BAV, 1977, n<hi
+rend="sup"
+>o</hi
+> 95-100.</p
+></note
+>. Nous nous intéresserons ici au décor intérieur des manuscrits puis des imprimés afin d’examiner comment l’héraldique pontificale y est traitée.</p
+><div
+type="section1"
+xml:id="div01"
+><head
+>Les armoiries de Jules III</head
+><p
+xml:id="p2"
+>Originaire de Monte San Savino près d’Arezzo, Jules III portait des armes parlantes, faisant allusion à son nom et à sa ville. Elles sont ainsi décrites dans le diplôme par lequel le pape autorisait les comtes Spada de Terni à les porter en chef : « d’azur à la bande de gueules bordée d’or chargée de trois monts de trois coupeaux de même, et accostée de deux couronnes de laurier aussi d’or<note
+n="3"
+place="foot"
+xml:id="ftn37"
+><p
+>Ferruccio Pasini Frassoni, <hi
+rend="italic"
+>Essai d’armorial des papes</hi
+>, Rome, Collège héraldique, 1906, p. 37. Cet auteur ne donne pas la localisation du document. Aux archives du Vatican, nous n’avons trouvé que deux concessions de ses propres armoiries par Jules III, elles accompagnent des créations de comtes palatins, l’une à Polidamas Maynus de Pavie (14 mai 1550), l’autre à Florianus Aurelius de Bologne (5 novembre 1550). Dans les deux cas, il est précisé que ces armes s’ajouteront à celles du récipiendaire, et pour le deuxième en chef (Archivio Apostolico Vaticano, Armadio XXXIX.59, fol. 267 et 444).</p
+></note
+> ». Son oncle, le cardinal Antonio Maria del Monte, qui s’était élevé par ses talents de juriste et qui avait favorisé la carrière de son neveu, portait les mêmes, comme on peut le voir sur les pages de titre des recueils publiés à l’occasion des fêtes romaines de Pasquin dont il était le protecteur<note
+n="4"
+place="foot"
+xml:id="ftn38"
+><p
+>Valerio Marucci, Antonio Mazzo, Angela Romano <hi
+rend="italic"
+>et al</hi
+>. (éd.), <hi
+rend="italic"
+>Pasquinate romane del Cinquecento</hi
+>, Rome, Salerno Editrice, 1983, 2 vol., t. 2, pl. XXXVI à XL. Voir aussi Yvan Loskoutoff, « Regrets et pasquinades. Le cycle de Jules III dans le recueil de Du Bellay », <hi
+rend="italic"
+>Revue d’histoire littéraire de la France</hi
+>, vol. 123, n<hi
+rend="sup"
+>o</hi
+> 1, 2023, p. 5-24.</p
+></note
+>.</p
+><p
+xml:id="p3"
+>Les Archives d’État de Rome conservent un témoignage sur l’histoire de ces armes, selon lequel Jules III serait intervenu pour les modifier :</p
+><cit
+xml:id="cit01"
+><quote
+>« Del Monte San Savino : d’azur à une bande de gueules bordée d’or, incluant trois monts de trois coupeaux chacun. Tel fut l’antique écu de cette maison qui prit son nom du château dit Monte S. Savino près d’Arezzo, appelé d’abord des Ciocchi. Furent ensuite ajoutés dans l’azur aux côtés de la bande deux rameaux de laurier recourbés en forme de couronne obtenus sous forme de concession par Fabiano del Monte fameux juriste. Ces armes furent finalement changées par le cardinal Gian Maria del Monte après qu’il fut élevé au pontificat sous le nom de Jules III, lequel, ayant entendu d’un certain astrologue que ces armes présageaient je ne sais quoi de funeste, changea la disposition des monts, de tombant qu’ils étaient il les mit sur pied et enlevant les deux rameaux de laurier il mit en leur place deux couronnes d’olivier en guirlandes<note
+n="5"
+place="foot"
+xml:id="ftn39"
+><p
+>Archivio di Stato di Roma, Cartari Febei, reg. 164, f. 122, cité par Maria Giulia Aurigemma, <hi
+rend="italic"
+>Palazzo Firenze in Campo Marzio</hi
+>, Rome, Istituto poligrafico e zecca dello Stato-Libreria dello Stato, 2007, p. 94, n. 70 : « <hi
+rend="italic"
+>Del Monte San Savino : D’azzurro con una banda di rosso profilata d’oro, cornice di tre mucchi di monti ciascuno. Questa fu l’arma antica di questa casa che prese il cognome dal Castello detto il Monte di S. Savino presso ad Arezzo, chiamato prima de’ Ciocchi. Furono poi aggiunti nell’azzurro à lati della banda due rami d’alloro ritorti in giro a modo di corone, ottenuti per concessione da Fabiano del Monte chiaro Giurista. Mutossi finalmente quest’arme dal Cardinal Gian Maria del Monte dopo ch’ei fu assunto al Pontificato col nome di Giulio terzo, il</hi
+> <hi
+rend="italic"
+>quale avendo inteso da un certo Astrologo, che questa insegna presagiva non sò che d’infausto, mutò la disposizione de’monti e da cadenti che erano gli pose tutti in piè, e togliendo i due rami d’alloro vi pose in lor vece due corone à ghirlande di olivo.</hi
+> » </p
+></note
+>. »</quote
+></cit
+><p
+xml:id="p4"
+>La modification porte sur deux points : les monts de mauvais présage, car tombants qui sont redressés, illustrant la croyance aux pouvoirs auguraux du blason pontifical que nous avons étudiée ailleurs<note
+n="6"
+place="foot"
+xml:id="ftn40"
+><p
+>Yvan Loskoutoff, « Augures héraldiques de la papauté », dans Andreas Gottsmann, Pierantonio Piatti et Andreas E. Rehberg (dir.), <hi
+rend="italic"
+>Incorrupta monumenta Ecclesiam defendunt, Studi offerti a Sergio Pagano, Prefetto dell’Archivio Segreto Vaticano</hi
+>, Cité du Vatican, Archivio Segreto Vaticano, 2018, 3 vol., t. 2, p. 976-994.</p
+></note
+> et les couronnes de laurier qui deviennent d’olivier, symbole de paix. Un témoignage imprimé légèrement postérieur à Jules III confirme que les couronnes furent effectivement modifiées : « le champ d’azur contient une bande de gueules chargée de trois monts d’or qui est accostée de deux couronnes de poètes ou impériales d’or dans ledit champ d’azur (changées ensuite par le pape Jules III en deux simples rameaux de laurier<note
+n="7"
+place="foot"
+xml:id="ftn41"
+><p
+>Agostino Fortunio, <hi
+rend="italic"
+>Cronichetta del Monte San Savino di Toscana</hi
+>, In Firenze, Nella Stamperia di Bartolomeo Sermartelli, 1583, p. 38 : « <hi
+rend="italic"
+>il campo azurro contiene per compartimento vna sbarra rossa con tre monti d’oro, che rimane attrauersata da due Corone poetali, o imperiali doro in detto campo azurro (divertite poi da Papa Giulio III. in due semplici Ramoscelli di lauro).</hi
+> »</p
+></note
+>). »</p
+><p
+xml:id="p5"
+>Les deux textes s’accordent sur le fait qu’une modification fut bien voulue par Jules III, mais ils divergent sur sa nature. Quoi qu’il en soit, cela n’eut pas d’incidence notable sur la représentation des armes papales. Il est généralement difficile de discerner si le feuillage des couronnes est constitué de laurier ou d’olivier. Concernant les triples monts « remis sur pied » alors qu’ils étaient placés sur le bord gauche de la bande prenant un air penché : cela veut-il dire mis dans le sens de la bande ? Ou encore à l’horizontale par rapport à l’ensemble de l’écu ? On rencontre également ces trois sortes de dispositions.</p
+></div
+><div
+type="section1"
+xml:id="div02"
+><head
+>L’ornement des manuscrits</head
+><p
+xml:id="p6"
+>Nous avons identifié une dizaine de manuscrits présentant un décor intérieur de nature héraldique pour Jules III. Ils se répartissent en trois fonds : à la bibliothèque Vaticane, fonds latin et fonds de la chapelle Sixtine, et en provenance de ce dernier, à la Bibliothèque capitulaire de Tolède. Dans tous les cas, il sera intéressant d’examiner non seulement la présence des armoiries pontificales, mais aussi comment les meubles en furent extraits et employés pour constituer un décor.</p
+><div
+type="section2"
+xml:id="div03"
+><head
+>Le fonds Vatican latin</head
+><p
+xml:id="p7"
+>Dans le fonds Vatican latin, quatre manuscrits sont l’œuvre du <hi
+rend="italic"
+>scriptor</hi
+> Ferdinando Ruano, calligraphe et miniaturiste<note
+n="8"
+place="foot"
+xml:id="ftn42"
+><p
+>Pierre Petitmengin, avec la collaboration de Jeannine Fohlen, « I manoscritti latini della Vaticana. Uso, acquisizioni, classificazioni », dans Massimo Ceresa (éd.), <hi
+rend="italic"
+>Storia della Biblioteca apostolica vaticana</hi
+>, vol. II :<hi
+rend="italic"
+> La Biblioteca vaticana tra riforma cattolica, crescita delle collezioni e nuovo edificio (1535-1590)</hi
+>, Cité du Vatican, BAV, 2012, p. 43-90, ici p. 52.</p
+></note
+>. Deux d’entre eux exploitent la même formule : ils montrent les armoiries entourées d’une branche de laurier. Un meuble a donc été emprunté à l’écu pour lui servir d’encadrement. Certes, il n’était pas rare avant Jules III de placer l’écu dans une couronne de feuillage, les exemples abondent. Mais dans ce cas la couronne est un meuble armorial, il ne s’agit d’ailleurs pas à proprement parler d’une couronne, mais d’une branche de laurier recourbée sur elle-même comme celles qui se trouvent dans les armes de part et d’autre de la bande. Ainsi, l’intérieur et l’extérieur de l’écu se répondent.</p
+><p
+xml:id="p8"
+>Un exemple en est offert par le <hi
+rend="italic"
+>Registre des dépenses</hi
+> de la bibliothèque Vaticane en trois volumes (Vat. lat. 3967-3969). Il fut commencé le 28 octobre 1548 et terminé le 4 avril 1555. Le premier volume montre à la page de titre les armes de Paul III Farnèse, ayant été exécuté à la fin de son pontificat. Les deux volumes suivants sont ornés des armes de Jules III (fig. 8). L’écu ovale, forme habituelle pour les papes, s’inscrit dans un rectangle à enroulements, la couronne de laurier servant d’encadrement est formée d’une seule branche recourbée sur elle-même comme le meuble armorial. Peut-être pour souligner ce parallèle, les deux couronnes dans l’écu ne sont pas d’or, mais de sinople. De part et d’autre, l’inscription en lettres d’or indique le nom et la qualité du pontife.</p
+><p
+xml:id="p9"
+>Le volume des <hi
+rend="italic"
+>Lettres</hi
+> de Léon IX daté de 1551 offre un exemple similaire (Vat. lat. 3790). Sur la page de garde, nous retrouvons sans surprise la même formule appréciée de ce <hi
+rend="italic"
+>scriptor</hi
+> (fig. 9). Mais cette fois le laurier est d’or dans l’écu et hors de l’écu ovale, placé dans un cartouche à enroulements. À l’incipit, la lettrine reprend les trois émaux des armes de Jules : l’azur, le gueules et l’or, discrète référence héraldique.</p
+><p
+xml:id="p10"
+>Les <hi
+rend="italic"
+>Lettres</hi
+> d’Hildebert, évêque du Mans puis archevêque de Tours (1056-1135), aussi datées de 1551<note
+n="9"
+place="foot"
+xml:id="ftn43"
+><p
+>Mandat de paiement de la part du cardinal bibliothécaire Marcello Cervini dans BAV, Vat. lat. 3965, fol. 29r-v.</p
+></note
+>, donnent un plein développement à la formule sur le premier folio du manuscrit (Vat. lat. 3841). Cette fois il ne s’agit pas seulement d’extraire un meuble pour en faire un support de l’écu, mais de multiplier les deux meubles afin de créer le décor d’encadrement de la page entière (fig. 10). L’écu a pris la forme d’un bouclier à pointe arrondie. Dans les marges alternent la branche de laurier et les trois monts (en italien <hi
+rend="italic"
+>trimonzi</hi
+>). Sur la droite, les branches de laurier se referment gracieusement sur elles-mêmes de façon à mieux rappeler le meuble armorial. Dans le reste du manuscrit alternent de petites initiales d’or au fond, tantôt d’azur, tantôt de gueules, rappelant les couleurs des armoiries.</p
+><p
+xml:id="p11"
+>Enfin, la même manière d’utiliser des meubles pour constituer le décor est reprise au titre de l’<hi
+rend="italic"
+>Exposition sur les Psaumes</hi
+> de saint Jérôme datée de 1554, mais avec de considérables variations (Vat. lat. 317). Dans un cartouche pourpre à enroulements, le titre en capitales est entouré de trois <hi
+rend="italic"
+>trimonzi</hi
+> d’or directement extraits de la bande des armoiries de Jules III (fig. 11). Deux épis couronnent le tout. On est d’abord tenté de les interpréter simplement comme des symboles d’abondance, mais il s’agit en fait d’une allusion héraldique à Marcello Cervini, premier cardinal bibliothécaire nommé par Jules III en 1550. Ses armes parlantes représentaient un cervidé, mais aussi des épis de blé, comme on peut le voir, par exemple, dans un manuscrit du fonds Barberiniani graeci (Barb. gr. 265). Le principe d’emprunter des meubles au blason pour décorer la page reste le même, mais cette fois l’allusion héraldique se dédouble.</p
+><p
+xml:id="p12"
+>Dans les quatre manuscrits examinés, outre la représentation des armoiries complètes, Ferdinando Ruano est resté fidèle à un même procédé qui consistait à en extraire les meubles pour constituer le décor de la page. Dans un cas il est même allé jusqu’à combiner les allusions héraldiques à ses deux protecteurs, le pape Jules III et le cardinal bibliothécaire Marcello Cervini.</p
+></div
+><div
+type="section2"
+xml:id="div04"
+><head
+>Le fonds Vatican de la chapelle Sixtine</head
+><p
+xml:id="p13"
+>La bibliothèque Vaticane conserve trois manuscrits à décor héraldique de Jules III dans le fonds de la chapelle Sixtine. Juan Maria Llorens attribue ce décor en totalité à Vincent Raymond<note
+n="10"
+place="foot"
+xml:id="ftn44"
+><p
+>Juan Maria Llorens, « Miniaturas de Vincent Raymond en los manuscritos musicales de la Capilla Sixtina », dans <hi
+rend="italic"
+>Miscelànea Homenaje a Mons. Higinio Anglès</hi
+>, Barcelone, Consejo Superior de Investigaciones científicas, 1958-1961, 2 vol., t. 1, p. 475-494.</p
+></note
+>, Emilia Anna Talamo n’y reconnaît pas sa main partout et l’associe à son atelier<note
+n="11"
+place="foot"
+xml:id="ftn45"
+><p
+>Emilia Anna Talamo, <hi
+rend="italic"
+>Codices cantorum,</hi
+> <hi
+rend="italic"
+>miniature e disegni nei codici della Cappella Sistina</hi
+>, Florence, Officine del Novecento, 1997, p. 132.</p
+></note
+>. Alors qu’il était jeune, sous Léon X ou Clément VII, cet artiste avait été amené à Rome par le cardinal de Clermont-Lodève qui avait été ambassadeur de Louis XII auprès de Jules II<note
+n="12"
+place="foot"
+xml:id="ftn46"
+><p
+>Personnage qui apparaît dans l’article d’Emmanuel Moureau du présent volume : « La collégiale Saint-Jean-Baptiste puis Saint-Louis de Castelnau-Bretenoux : un lien étroit et discret avec la papauté ».</p
+></note
+>. En 1549, un <hi
+rend="italic"
+>motu proprio</hi
+> de Paul III l’avait créé enlumineur officiel de la chapelle Sixtine, titre qu’il avait conservé sous Jules III<note
+n="13"
+place="foot"
+xml:id="ftn47"
+><p
+>Maria Francesca Saffiotti Dale, « Raymond de Lodève, Vincent », <hi
+rend="italic"
+>Dizionario biografico dei miniatori italiani</hi
+>, Milan, Sylvestre Bonnard, 2004, p. 899-902.</p
+></note
+>.</p
+><p
+xml:id="p14"
+>À la différence de Ferdinando Ruano qui se contente de déployer les meubles héraldiques tels quels, Vincent Raymond recourt volontiers au genre de la devise. Inventée au Moyen Âge comme une image personnelle distincte du blason, souvent accompagnée d’une inscription, celle-ci connut ses premiers traités imprimés dans l’orbite de la papauté à l’époque dont nous traitons. Alors, en théorie comme en pratique, plutôt que de se différencier complètement du blason, elle tendait à lui emprunter ses meubles<note
+n="14"
+place="foot"
+xml:id="ftn48"
+><p
+>Pour un développement sur ce point, voir notre introduction aux actes du colloque de l’École française de Rome (juin 2016), Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique et papauté. Moyen Âge-Temps modernes</hi
+>, Mont-Saint-Aignan, PURH, 2020.</p
+></note
+>. Paolo Giovio, protégé des papes Médicis, Léon X et Clément VII, puis de Paul III Farnèse, publie en 1555, année de la mort de Jules III, le premier traité imprimé du genre, le <hi
+rend="italic"
+>Dialogo dell’imprese militari et amorose</hi
+>. Il signale les exemples de princes qui tirèrent leur devise de leurs armoiries<note
+n="15"
+place="foot"
+xml:id="ftn49"
+><p
+>Paolo Giovio,<hi
+rend="italic"
+> Dialogo dell’imprese militari et amorose di Monsignor Paolo Giouio Vescouo di Nucera</hi
+>, In Roma, Appresso Antonio Barre, 1555, p. 130-132.</p
+></note
+>. En 1556, Girolamo Ruscelli, originaire de Viterbe, fondateur à Rome, en 1541, de l’<hi
+rend="italic"
+>Accademia dei Sdegnati </hi
+>alors qu’il est attaché au cardinal Grimani, publie à son tour un traité. Il y évoque les liens du genre avec le blason<note
+n="16"
+place="foot"
+xml:id="ftn50"
+><p
+>Paolo Giovio, <hi
+rend="italic"
+>Ragionamento di Mons. Paolo Giouio sopra i motti, &amp; disegni d’arme, &amp; d’amore, che communemente chiamano imprese, con vn discorso di Girolamo Ruscelli intorno allo stesso soggetto</hi
+>, In Venetia, Appresso Giordano Ziletti, 1556, p. 230.</p
+></note
+>. Dix ans plus tard, il développe cette conception dans un recueil de devises gravées sous lesquelles figurent les armes de leur possesseur :</p
+><cit
+xml:id="cit02"
+><quote
+>En ce qui regarde les figures, se trouvent très belles les devises qui se tirent ou se forment des armes, ou des insignes propres à la maison ou à celui-là même par qui elles sont faites, ajoutant ou retranchant, et les modifiant selon les besoins de son intention, assortissant les mots avec règle et beauté<note
+n="17"
+place="foot"
+xml:id="ftn51"
+><p
+>Girolamo Ruscelli,<hi
+rend="italic"
+> Le imprese illustri con espositioni, et discorsi del S.or Ieronimo Ruscelli</hi
+>, Venise, [Damiano Zenaro], 1566, p. 14 : « <hi
+rend="italic"
+>CHE inquanto alle figure, riescono bellissime quelle Imprese, che si traggono, ò si formano dall’Arme, ò dall’Insegne proprie della casa, ò di colui stesso, da chi si fanno, aggiungendoui, ò togliendone, &amp; mutandole secondo il bisogno dell’intention sua, accomodandoui le parole regolatamente, &amp; con leggiadria</hi
+> ».</p
+></note
+>.</quote
+></cit
+><p
+xml:id="p15"
+>C’est effectivement ce qui s’était pratiqué pour Jules III.</p
+><p
+xml:id="p16"
+>Commençons par le plus simple, le missel coté Cappella Sistina 154. Au début (fol. 3v), figurent les armes du pape (fig. 12). Comme avait procédé Ferdinando Ruano, les branches de laurier ont été extraites de l’écu pour lui servir de support, cependant, elles ne sont pas recourbées en couronne, mais disposées en sautoir. Par ailleurs elles ont été traitées en sinople, différemment de celles de l’écu qui sont d’or. Ruano avait, lui, choisi la même couleur. Le folio suivant montre une devise dans un cartouche d’or ovale à enroulements (fig. 13). Sur un champ de gueules se détache le <hi
+rend="italic"
+>trimonzio</hi
+> d’où surgissent des fleurs et des fruits suggérant l’abondance du pontificat, motif présent de manière accessoire sur deux médailles, celle de l’<hi
+rend="italic"
+>Hilaritas publica </hi
+>et celle de Bologne<note
+n="18"
+place="foot"
+xml:id="ftn52"
+><p
+>Adolfo Modesti, <hi
+rend="italic"
+>Corpus numismatum omnium romanorum pontificum</hi
+>, Rome, Adolfo Modesti, 2003, vol. 2, n<hi
+rend="sup"
+>o</hi
+> 398, p. 290 et n<hi
+rend="sup"
+>o</hi
+> 414, p. 322.</p
+></note
+>. Le mot dit que ses fondements sont sur les saints monts : <hi
+rend="italic"
+>Fundamenta eius in montibus sanctis</hi
+> (psaume 86, v. 1). Alessandro Nova a montré combien le thème du « mont », en référence au nom et au blason du pontife, dominait sa célébration<note
+n="19"
+place="foot"
+xml:id="ftn53"
+><p
+><hi
+rend="italic"
+>The Artistic Patronage of Pope Julius III (1550-1555), Profane Imagery and Buildings for the De Monte Family in Rome</hi
+>, New York-Londres, Garland Publishing, 1988, p. 28.</p
+></note
+>. Au centre de la villa Giulia comme des appartements de Jules III au Vatican, décorés pour l’essentiel par l’atelier de Prospero Fontana, se trouve la salle des sept monts de Rome, chacun étant représenté dans la frise. Par ailleurs, le verset des Psaumes que nous venons de citer constitue un topos de la littérature encomiastique. Le docteur juif converti Andrea de Monte<note
+n="20"
+place="foot"
+xml:id="ftn54"
+><p
+>Les Juifs convertis prenaient parfois le nom et les armes du pape qui avait patronné leur conversion. Sous Grégoire XIII Boncompagni, voir le cas des financiers Corcos dans Yvan Loskoutoff, « Concessions héraldiques à la fin de la Renaissance d’après les recueils de brefs de saint Pie V (1566-1572), Grégoire XIII (1572-1585) et Sixte-Quint (1585-1590) conservés aux Archives du Vatican », dans Yvan Loskoutoff (dir.), <hi
+rend="italic"
+>Héraldique et papauté. Moyen Âge-Temps modernes</hi
+>, <hi
+rend="italic"
+>op. cit.</hi
+>, p. 179-196. Sur les Corcos voir Isabelle Poutrin, <hi
+rend="italic"
+>Les convertis du pape. Une famille de banquiers juifs à Rome au </hi
+><hi
+rend="small-caps italic"
+>xvi</hi
+><hi
+rend="italic sup"
+>e</hi
+><hi
+rend="italic"
+> siècle</hi
+>, Paris, Seuil, 2023.</p
+></note
+>, dans un discours prononcé devant le pape où il entend montrer que les armoiries de celui-ci étaient annoncées par la sainte Écriture, en commente divers passages relatifs à des monts. Dans celui du psaume 86, il considère qu’ils sont le fondement de l’Église<note
+n="21"
+place="foot"
+xml:id="ftn55"
+><p
+>Vat. lat. 3561, sans titre, sans date, fol. 8. Le texte a été publié par Antonio Blado, sans date, sous le titre : <hi
+rend="italic"
+>Oratio habita apud S. D. N. Iulium diuina prouidentia Papam Tertium per Andream de Monte doctorem, quondam Haebreum iam vero sacro baptismate initiatum, ex hebreo in latinum versa, in qua suadetur summum Pontificem ex illustri familia montis &amp; illius insignia in sacris literis fuisse praenunciata</hi
+>. </p
+></note
+>. Mariano Cavense, dans son poème de cent folios en six livres, <hi
+rend="italic"
+>Triumphus montium,</hi
+> daté de mai 1551, s’inspire plusieurs fois du premier verset du psaume 86 qu’il relie aux armoiries du pape. Pour lui c’est aussi l’Église qui est fondée sur les monts : « <hi
+rend="italic"
+>Fundamenta eius sanctis in montibus aedis</hi
+> » [Les fondements du sanctuaire sont sur les saints monts<note
+n="22"
+place="foot"
+xml:id="ftn56"
+><p
+>Biblioteca Angelica, Rome, ms. 928, fol. 32v, voir aussi fol. 18v, 20v, 21, 83 et 83v.</p
+></note
+>]. C’était un lieu commun de la célébration pontificale. Une médaille lui fut consacrée en 1553 montrant une église imaginaire sur les trois monts avec le verset du psaume pour légende<note
+n="23"
+place="foot"
+xml:id="ftn57"
+><p
+>Adolfo Modesti, <hi
+rend="italic"
+>op. cit.</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 435, p. 364.</p
+></note
+>.</p
+><p
+xml:id="p17"
+>L’<hi
+rend="italic"
+>Officium ad Tertiam </hi
+>coté Cappella Sistina 67, écrit par Galeazzo Herculano, se révèle intéressant pour ses lettrines. Au début du volume, quatre initiales O de <hi
+rend="italic"
+>Os lingua</hi
+> contiennent une devise. Au folio 4v nous retrouvons les trois monts porteurs de fleurs et de fruits, cette fois munis de l’inscription : <hi
+rend="italic"
+>Fructiferi</hi
+> (fig. 14). Au-dessous, un autre O contient une targe suspendue où se lit le nom du pape : <hi
+rend="italic"
+>Iulius III Pont. M</hi
+>. Au folio 5, le <hi
+rend="italic"
+>trimonzio</hi
+> reparaît supportant cette fois une triple lampe, gage non plus d’abondance, mais d’enseignement, la légende énonce qu’elle luit pour tous : <hi
+rend="italic"
+>Omnibus lucet</hi
+>. Plus bas dans le folio, le même <hi
+rend="italic"
+>trimonzio</hi
+> disposé sur trois marches supporte une église sous laquelle se lit l’inscription rencontrée dans le précédent manuscrit pour l’image des fleurs et des fruits. Elle paraît plus appropriée ici : <hi
+rend="italic"
+>Fundamenta eius in montibus sanctis</hi
+> (fig. 15). Emilia Anna Talamo suppose que les trois portes font « avec bonne probabilité » allusion au jubilé de 1550 et en tire argument pour dater le manuscrit de cette année-là<note
+n="24"
+place="foot"
+xml:id="ftn58"
+><p
+>Emilia Anna Talamo,<hi
+rend="italic"
+> op. cit</hi
+>., p. 132.</p
+></note
+>. Au folio 7, reparaît dans une lettrine « A » la devise de la triple lampe sur les monts avec la même légende, un phylactère ajoutant le mot : <hi
+rend="italic"
+>Supra</hi
+>. Enfin, comme pour clore cette suite symbolique au folio 7v, une grande lettrine « L » inclut les armes du pape dont le nom est inscrit sur le jambage vertical (fig. 16). Outre cette suite de devises, on constate aussi que certaines initiales contiennent le <hi
+rend="italic"
+>trimonzio</hi
+> en creux ou en relief dans leur corps même (fig. 17). Parfois il est remplacé par le lys de Paul III Farnèse. C’était le pape qui avait créé Giovanni Maria del Monte cardinal en 1536, c’était aussi celui auquel Vincent Raymond devait son office d’enlumineur de la chapelle Sixtine. Un lien évident existe entre les manuscrits Cappella Sistina 154 et 67, le second utilisant une devise présente dans le premier avec une variante pour l’inscription qui passe à une autre devise.</p
+><p
+xml:id="p18"
+>Le lectionnaire coté Cappella Sistina 213 présente le même jeu de lettrines que Cappella Sistina 67, incluant dans les jambages tantôt le <hi
+rend="italic"
+>trimonzio</hi
+> de Jules III tantôt le lys de Paul III. Les couleurs sont celles du blason de Jules : or, azur et gueules. Le premier folio est entièrement décoré (fig. 18). Emilia Anna Talamo voit là le fruit d’une collaboration entre Vincent Raymond et son adjoint Apollonio de’ Bonfratelli<note
+n="25"
+place="foot"
+xml:id="ftn59"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 135.</p
+></note
+>. Les armoiries sont placées en bas sur un linge rappelant celui de sainte Véronique, le texte étant consacré à la Passion selon saint Matthieu. De part et d’autre un <hi
+rend="italic"
+>putto</hi
+> en vol couronne de laurier le <hi
+rend="italic"
+>trimonzio</hi
+>, motif repris en haut de la page, au-dessus du titre. Même sans inscription, c’était une devise présente dans les décors des résidences de Jules III attribués à Prospero Fontana. Dans les appartements du Vatican elle orne les angles de la salle des sept monts de Rome. À la villa Giulia, aux angles de la salle correspondante, elle fait l’objet d’une variante, non pas couronnée, mais entourée de laurier, motif multiplié dans le décor à grotesques du portique (fig. 19). Dans la salle des sept monts, la vue de l’Esquilin inclut en bas à gauche une fontaine montrant le <hi
+rend="italic"
+>trimonzio</hi
+> couronné de lauriers d’où l’eau jaillit. Il faut l’interpréter comme une signature ingénieuse de Fontana. La parenté entre décor architectural et décor de manuscrit n’est pas surprenante, un même motif symbolique pouvant servir à différents supports.</p
+></div
+><div
+type="section2"
+xml:id="div05"
+><head
+>La Bibliothèque capitulaire de Tolède</head
+><p
+xml:id="p19"
+>En 1798, l’occupation des troupes françaises causa la dispersion des manuscrits de la chapelle Sixtine, dont les miniatures ou les folios découpés alimentèrent diverses collections. Le cardinal Antonio de Lorenzana y Buitròn parvint à sauver quelques volumes, aujourd’hui à la Bibliothèque capitulaire de Tolède ou à la Bibliothèque nationale d’Espagne<note
+n="26"
+place="foot"
+xml:id="ftn60"
+><p
+>Elena De Laurentiis et Emilia Anna Talamo, <hi
+rend="italic"
+>The Lost Manuscripts from the Sistine Chapel, An Epic Journey from Rome to Toledo</hi
+>, catalogue d’exposition, Dallas, Meadows Museum-Southern Methodist University, 2010.</p
+></note
+>. Le dernier folio ajouté dans un pontifical du cardinal Pietro Barbo (1400-1450) est le premier folio d’un évangéliaire de Jules III attribué à Vincent Raymond. On peut y voir les armoiries de ce pape disposées dans un cercle au bas de l’encadrement (fig. 20).</p
+><p
+xml:id="p20"
+>La Bibliothèque capitulaire de Tolède conserve un autre manuscrit intéressant : le missel du cardinal Girolamo Dandini, élevé à la pourpre par Jules III en 1551. Son écu figure au bas du folio d’incipit parti avec celui de ce pape (fig. 21). Il était effectivement fréquent qu’un cardinal associât ses armes à celles du pontife qui l’avait promu. Cela pouvait se faire de plusieurs manières sur l’écu : en chef, coupé, parti ou écartelé. Il semble que la disposition partie ait joui d’un certain succès. Outre le présent exemple, elle fut aussi choisie par le cardinal Ricci de Montepulciano, de la même promotion de 1551, pour le décor de ses appartements du Vatican<note
+n="27"
+place="foot"
+xml:id="ftn61"
+><p
+>Maria Giulia Aurigemma, <hi
+rend="italic"
+>Palazzo Firenze in Campo Marzio</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, illustration p. 111.</p
+></note
+> comme pour sa chapelle à San Pietro in Montorio, en face de celle de la famille del Monte<note
+n="28"
+place="foot"
+xml:id="ftn62"
+><p
+>Alessandro Zuccari (dir.),<hi
+rend="italic"
+> La Spagna sul Gianicolo</hi
+>, Rome, Eurografica, 2004, t. 1, <hi
+rend="italic"
+>San Pietro in Montorio</hi
+>, fig. 35, p. 137 et fig. 42, p. 145.</p
+></note
+>. Par ailleurs, la lettrine G de <hi
+rend="italic"
+>Gaudete</hi
+> associe dans une disposition écartelée la couronne de laurier de Jules III avec les trois étoiles et les trois lys de Dandini.</p
+><p
+xml:id="p21"
+>Que ce soit chez Ferdinando Ruano ou chez Vincent Raymond le décor héraldique du manuscrit obéit aux mêmes principes : figuration des armes complètes au bas de la première page et extraction des meubles, soit pour créer des supports, soit pour remplir les encadrements, soit pour illustrer les lettrines. Vincent Raymond se distingue par l’emploi d’une suite de devises, elles aussi inspirées du blason, comme c’était devenu la règle au temps de Jules III. On constate des rapports avec les décors monumentaux qui obéissaient aux mêmes principes : armoiries au centre et diffusion des meubles, fréquemment sous la forme des devises.</p
+></div
+></div
+><div
+type="section1"
+xml:id="div06"
+><head
+>L’ornement du livre imprimé</head
+><p
+xml:id="p22"
+>Au temps de Jules III, les grands centres d’édition sont Venise et Florence. L’héraldique pontificale n’y apparaît guère dans le décor des livres où dominent les marques de libraires. C’est à Rome, centre d’édition d’importance moindre, qu’elle se développe, mais sans excès. On n’y trouve ni frontispices, ni bandeaux, ni culs-de-lampe. Nous avons rencontré un titre gravé et trois lettrines. Elle se résume presque entièrement aux vignettes de titre. Comment les armoiries y sont-elles représentées ? Nous commencerons par Rome, puis traiterons de Venise, Florence et Bologne, petit centre d’édition dans les États pontificaux, ainsi que de Rimini.</p
+><div
+type="section2"
+xml:id="div07"
+><head
+>Rome</head
+><p
+xml:id="p23"
+>À Rome domine Antonio Blado, l’éditeur des textes officiels de la papauté, qui crée des types de vignettes héraldiques largement utilisés. Les petits éditeurs créent aussi parfois les leurs qui sont souvent des hapax. Nous commencerons par les armoiries simples, puis représentées dans une couronne ou plus rarement munies de tenants, pour terminer par le seul cas de titre gravé.</p
+><div
+type="section3"
+xml:id="div08"
+><head
+>Les armoiries simples</head
+><p
+xml:id="p24"
+>Les cas d’armoiries représentées simplement dans un cartouche ou même sans cartouche sont peu fréquents, on préfère les orner. Chez les frères Valerio et Luigi Dorico on voit paraître une élégante vignette ovale datable de 1550 pour le <hi
+rend="italic"
+>De exercitatione iurisperitorum</hi
+> d’Antonio Massa (fig. 22). Elle est reprise en 1551 pour la <hi
+rend="italic"
+>Genealogia d’imperatori romani et constantinopolitani</hi
+> d’Andrea Angelo Commeno, en 1552 pour les <hi
+rend="italic"
+>Commentariorum de bello Aphrodisiensi libri quinque</hi
+> d’Orazio Nucula et en 1554 pour la <hi
+rend="italic"
+>Copia delle lettere del Serenissimo Re d’Inghilterra, &amp; del Reuerendissimo Card. Polo Legato della S. Sede Apostolica alla Santità di N. S. Iulio Papa III. sopra la reduttione di quel Regno alla vnione della Santa Madre Chiesa ; &amp; obedienza della Sede Apostolica</hi
+>. C’est la vignette propre de la maison. En 1553, une version plus élaborée est créée dans un format plus grand pour la <hi
+rend="italic"
+>Erudita atque luculenta disputatio</hi
+> de Giovanni Girolamo Albani. Un rang de perles a été ajouté au bord et des étoiles au fond, un cartouche bordé de masques entoure l’écu en forme de bouclier à pointe arrondie (fig. 23).</p
+><p
+xml:id="p25"
+>Une autre formule simple représente les armoiries dans un carré, nous la trouvons chez le même éditeur en 1550 pour le <hi
+rend="italic"
+>De iobileo et indulgentiis</hi
+> de Giovanni Battista Poiana (fig. 24) et la même année dans une version légèrement différente chez Antonio Blado pour les <hi
+rend="italic"
+>Regulae tres S. D. N. D. Iulii diuina prouidentia Papae. III </hi
+>(fig. 25). On assiste dans ce dernier cas à une tentative de créer l’illusion des couleurs dans le noir et blanc de la gravure : la bande a été hachurée. C’est aussi le cas pour le <hi
+rend="italic"
+>De concordia servanda</hi
+> de Silvestro Sigonio publié la même année par Antonio Blado avec la sous-traitance de Stefano Nicolini, dont nous ne connaissons que ce seul exemple en hapax (fig. 26). Les armes ovales sont figurées dans un cartouche ajouré. Toujours chez Antonio Blado, un autre hapax, présentant un cartouche ajouré, cherche aussi à rendre sensible la couleur de la bande pour un édit de grand format contre les Juifs détenant des livres hostiles à la foi catholique, datable de 1554 (vignette : 16 × 17 cm) (fig. 27). L’effort pour exprimer la différence de couleur de la bande par des hachures est fréquent dans les autres cas étudiés, il domine même très largement. On le remarque dans quinze figures sur vingt concernées (notamment fig. 25 à 33 sans interruption). Les <hi
+rend="italic"
+>trimonzi</hi
+> sont aussi souvent hachurés, mais partiellement pour rendre le volume autant que la couleur (fig. 23, 26-28, 31, 34, 38-40 et 42), il en est de même pour le champ de l’écu (fig. 38 à 41). La critique situe l’apparition des hachures héraldiques dans les cartes géographiques anversoises à « l’extrême fin du <hi
+rend="small-caps"
+>xvi</hi
+><hi
+rend="sup"
+>e</hi
+> siècle<note
+n="29"
+place="foot"
+xml:id="ftn63"
+><p
+>Voir Michel Pastoureau, « Aux origines des hachures héraldiques (<hi
+rend="small-caps"
+>xv</hi
+><hi
+rend="sup"
+>e</hi
+>-<hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle) », <hi
+rend="italic"
+>Revue française d’héraldique et de sigillographie</hi
+>, t. 65, 1995, p. 21-31, ici p. 26, « Les premières hachures ». </p
+></note
+> ». Une cinquantaine d’années plus tôt, il semble que le livre romain annonce cette systématisation. Certes, les hachures ne désignent pas encore des couleurs précises, mais on a manifestement cherché à matérialiser leurs différences tout autant que les effets de volume. Dès lors, il n’est pas surprenant que cette invention soit attribuée à un jésuite romain, le père Pietrasanta, dans la première moitié du <hi
+rend="small-caps"
+>xvii</hi
+><hi
+rend="sup"
+>e</hi
+> siècle.</p
+></div
+><div
+type="section3"
+xml:id="div09"
+><head
+>Les armoiries dans une couronne</head
+><p
+xml:id="p26"
+>Nous avons déjà rencontré les armoiries ceintes d’une couronne dans les manuscrits, nous les retrouvons dans les imprimés. Un premier exemple est offert par l’édition grecque du commentaire d’Eustathius sur l’<hi
+rend="italic"
+>Iliade</hi
+>. L’entreprise de vaste envergure en quatre volumes in-folio avait commencé sous Paul III chez Antonio Blado. Le quatrième volume fut publié au début du pontificat de Jules III en 1550. Le titre porte la marque de l’éditeur, c’est le privilège qui est orné des armes du pontife (fig. 29). Néanmoins, la couronne qui sert d’encadrement n’est pas de laurier ou d’olivier, mais de fruits divers en signe d’abondance. Cela s’explique, car il s’agit de la reprise d’une pièce largement utilisée sous Paul III chez le même éditeur, par exemple en 1544 pour le <hi
+rend="italic"
+>De nova christiani orbis pace oratio</hi
+> de Filippo Archinto. La même année 1550, Antonio Blado pratiqua aussi la réutilisation pour la <hi
+rend="italic"
+>Bulla confirmationis priuilegiorum militum sancti Pauli</hi
+> dont le même modèle de couronne fruitière avait souvent servi sous Paul III, par exemple pour la <hi
+rend="italic"
+>Bulla indulgentiarum et facultatum pro erectione Ecclesiae, &amp; Monasterii S. Tholemaei in Vrbae Nepesina</hi
+>.</p
+><p
+xml:id="p27"
+>Cependant, Antonio Blado ne se limita pas à la récupération pour Jules III. Il créa une autre couronne fruitière employée pour le discours dédié en 1553 au pontife par Uberto Foglietta à l’occasion de la Toussaint, <hi
+rend="italic"
+>In festo omnium Beatorum </hi
+>mais aussi pour diverses pièces officielles. Elle servit assez souvent et elle est reconnaissable aux fissures du bois en haut et en bas (fig. 29).</p
+><p
+xml:id="p28"
+>Il existe en revanche une couronne, non de fruits, mais de laurier, créée sous le pontificat de Jules III par Antonio Blado. Elle est attachée par un ruban où se déroule une inscription de vœu de longue prospérité : « <hi
+rend="italic"
+>Diu felix</hi
+> ». On la trouve pour les <hi
+rend="italic"
+>Enarrationes in quinque priora capita libri geneseos</hi
+> d’Ambrosio Catharino publiées sous la direction de Lancelotto Politi en 1552 non sans luxe, la vignette étant dans ce cas encadrée d’une bordure. On peut la considérer comme la pièce classique par excellence du pontificat de Jules III. Elle fut très largement utilisée. Donnons l’exemple, la même année, des <hi
+rend="italic"
+>Novae regvlae cancellariae apostolicae</hi
+> (fig. 30). Antonio Blado la reprit avec changement des armoiries pour les papes qui suivirent : Pie IV (1559-1565), saint Pie V (1566-1572) et jusqu’à Grégoire XIII (1572-1585<note
+n="30"
+place="foot"
+xml:id="ftn64"
+><p
+>Pour les références, voir Yvan Loskoutoff, <hi
+rend="italic"
+>Un art de la Réforme catholique</hi
+>, vol. 2, <hi
+rend="italic"
+>La symbolique du pape Grégoire XIII (1572-1585) et des Boncompagni</hi
+>, Paris, Honoré Champion, 2018, p. 157.</p
+></note
+>).</p
+><p
+xml:id="p29"
+>À la première page des <hi
+rend="italic"
+>Enarrationes</hi
+>, au début de la dédicace à Jules III, on remarque une lettrine pour le « L » de <hi
+rend="italic"
+>Legitur</hi
+> (fig. 31). Elle aussi fut remployée. On la trouve la même année au début du <hi
+rend="italic"
+>Libellus vere Christiana lectione dignus diuersas res Turcharum</hi
+> de Bartolomej Georgijevic et du <hi
+rend="italic"
+>Rimedio delle podagre</hi
+> d’Andrès Laguna, ou encore en 1553 au <hi
+rend="italic"
+>proemium</hi
+> du <hi
+rend="italic"
+>Trattato di Scientia d’Arme</hi
+> de Camillo Agrippa. La lettre « L » s’inscrit devant les armoiries placées sur le fond hachuré de la vignette, créant un effet de profondeur à trois plans successifs. Nous connaissons une autre lettrine datant du début du pontificat, mais en une seule occurrence dans le recueil des <hi
+rend="italic"
+>Bullae diuersorum pontificum</hi
+> publié chez une petite éditrice, Girolama Cartolari, en 1550. Chaque pape bénéficie d’une pièce d’incipit montrant ses armes, dont Jules III, qui conclut l’ouvrage (fig. 32).</p
+></div
+><div
+type="section3"
+xml:id="div10"
+><head
+>Les armoiries à tenants</head
+><p
+xml:id="p30"
+>Les tenants des armoiries papales sont traditionnellement des <hi
+rend="italic"
+>putti</hi
+> ou des anges. Nous n’en avons trouvé que deux exemples parmi les vignettes de titre romaines, l’une largement employée, l’autre une seule fois. La première revient à Antonio Blado. Elle orne plusieurs textes officiels. On y voit deux <hi
+rend="italic"
+>putti</hi
+> dans des positions asymétriques, l’un accroupi de face, l’autre debout de dos, tenir la couronne de feuillage qui entoure les armoiries. Son emploi se révèle intéressant à la fin du <hi
+rend="italic"
+>Libellus</hi
+> de Bartolomej Georgijevic (fig. 33), déjà rencontré pour la lettrine « L ». Elle sert en effet d’illustration à une épigramme latine commentant les armes de Jules : « Regarde comme l’olivier entoure les trois monts verdoyants / Et comme un seul sommet s’élève en trois. / De très grands mystères viennent à l’esprit, Jules entoure / De la même paix l’Europe, l’Asie et la Lybie. » La pointe finale fait référence à Jules César pour évoquer Jules qui concluait la paix avec Parme l’année de la publication de l’ouvrage en 1552. Il s’agit bien ici de rameaux d’olivier. La vignette de titre est devenue l’illustration d’un texte poétique, formule qui ne resta pas réservée à Jules III. Nous en connaissons au moins un autre exemple pour Grégoire XIII dans un recueil de vers sur la victoire contre les Turcs publié en 1572<note
+n="31"
+place="foot"
+xml:id="ftn65"
+><p
+><hi
+rend="italic"
+>Ibid</hi
+>., p. 136, fig. 34.</p
+></note
+>.</p
+><p
+xml:id="p31"
+>L’occurrence unique revient à un petit éditeur, Giovanni Maria Viotti, qui dirigeait les presses de Sainte Brigitte, fondées par deux Suédois, les frères Magnus, pour exalter l’histoire catholique de leur nation<note
+n="32"
+place="foot"
+xml:id="ftn66"
+><p
+>Valentino Romani, « Per la storia dell’editoria italiana del Cinquecento: le edizioni romane “In aedibus sanctae Brigidae (1553-1557)” », <hi
+rend="italic"
+>Rara Volumina</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 1, 1998, p. 23-36.</p
+></note
+>. L’un d’eux, Iohannes, archevêque d’Uppsala, était l’auteur de cette <hi
+rend="italic"
+>Historia de omnibus Gothorum Sueonumque regibus</hi
+> in-folio, datée de 1554. Comme dans l’exemple précédent, la vignette est mise en rapport avec un texte, une inscription qui la domine et qui développe aussi le thème de la paix : « <hi
+rend="italic"
+>Suscipiant montes pacem populo</hi
+> » [Les monts produisent la paix pour le peuple] (fig. 34). Les armes sont tenues par deux <hi
+rend="italic"
+>putti</hi
+>, cette fois symétriques, brandissant chacun une couronne qui rappelle celles de l’écu. Le <hi
+rend="italic"
+>putto</hi
+> porte couronne n’est pas absent des décors de Jules III. Dans les appartements du Vatican il suffit de penser à la salle des <hi
+rend="italic"
+>putti</hi
+>, où plusieurs de ceux qui jouent sur la frise autour du nom du pape sont munis de cet accessoire. Mais nous ne saurions dire s’il s’agit de laurier ou d’olivier.</p
+></div
+><div
+type="section3"
+xml:id="div11"
+><head
+>Le <hi
+rend="italic"
+>Missarum liber primus</hi
+> de Palestrina</head
+><p
+xml:id="p32"
+>L’ornement héraldique le plus complet pour le livre imprimé sous Jules III se trouve dans le grand in-folio du <hi
+rend="italic"
+>Missarum liber primus</hi
+> de Palestrina, publié par les frères Dorico en 1554. Il offre en effet le seul exemple de titre gravé blasonnant sous ce pontificat (fig. 35). Palestrina jouissait de la faveur du pape, ce que laisse transparaître le luxe du volume. Le cadre est composé d’instruments de musique. On voit en bas la marque du libraire, Pégase faisant jaillir la source Hippocrène. Cette marque est entourée d’Orphée charmant les créatures sauvages à gauche et du châtiment de Marsyas à droite. Au centre de la page, le compositeur présente son ouvrage à son bienfaiteur assis dans un fauteuil dont le dossier et l’accoudoir portent le <hi
+rend="italic"
+>trimonzio</hi
+>. Ce genre de fauteuil héraldique était devenu de rigueur dans le portrait pontifical au moins depuis celui de Léon X, où Raphaël avait introduit la <hi
+rend="italic"
+>palla</hi
+> des Médicis. Mais ce titre, aussi magnifique soit-il, n’est que l’adaptation de celui qui avait été créé par les mêmes éditeurs pour le deuxième volume des <hi
+rend="italic"
+>Messes</hi
+> de Cristobal de Morales, dédié à Paul III Farnèse en 1544. Les visages ont été changés et les <hi
+rend="italic"
+>trimonzi</hi
+> sont venus remplacer sur le fauteuil des boules portant les lys des Farnèse. En bas se trouvait une composition aux armes de Paul III. Celle que nous voyons pour Jules III provient du premier volume des <hi
+rend="italic"
+>Messes</hi
+> de Morales dédié en 1544 à Cosme de Médicis.</p
+><p
+xml:id="p33"
+>Là ne s’arrête pas le décor blasonnant. Le volume de Palestrina contient cinq messes. Chacune est pourvue d’une grande initiale ornée d’une scène religieuse, sauf la première qui inclut le portrait du pape et ses armes pour la messe <hi
+rend="italic"
+>Ecce sacerdos magnus</hi
+> (fig. 36). Le lion n’est pas tout à fait dans la symbolique de Jules III, mais l’écu qu’il supporte est bien le sien, ceint d’une couronne de feuillage. Il s’agit du <hi
+rend="italic"
+>marzocco</hi
+> florentin et sa présence s’explique, car nous avons là le remaniement d’une initiale du volume dédié à Cosme de Médicis qui portait ses armes. Enfin, seulement dans cette première messe, les Dorico ont ponctué le début de certaines portées de leur élégante vignette ovale (fig. 22). Ce volume paraît une tentative de transposer l’art du manuscrit dans l’imprimé.</p
+></div
+></div
+><div
+type="section2"
+xml:id="div12"
+><head
+>Hors de Rome</head
+><p
+xml:id="p34"
+>À Venise, Florence, Bologne et Rimini, les vignettes héraldiques de Jules III se révèlent très exceptionnelles, les éditeurs utilisant plutôt leurs marques.</p
+><p
+xml:id="p35"
+>À Venise, dès l’élection du pontife en 1550, l’éditeur Prospero Danza publie un livret décrivant les cérémonies : <hi
+rend="italic"
+>La elettion del beatissimo &amp; summo pontifice Iulio tertio</hi
+> (fig. 37). La vignette carrée spécialement conçue pour l’occasion est curieuse : elle montre les armes Farnèse coupées de celles de del Monte (avec une erreur sur la bande aux trois monts qui est devenue une barre), le futur Jules III avait en effet été élevé à la pourpre par Paul III Farnèse dans la promotion du 22 décembre 1536. Les cardinaux portaient fréquemment leurs armes coupées de celles du pape qui les avait créés. Néanmoins, les pièces extérieures sont celles de la papauté : la tiare et les clefs. Il semble que l’on ait voulu montrer le moment intermédiaire où le cardinal accède au pontificat. Nous ne connaissons pas d’autre exemple où Jules III ait brisé ses armes de celles de Paul III. Cette pièce présente donc une iconographie héraldique d’une certaine rareté.</p
+><p
+xml:id="p36"
+>Deux autres pièces vénitiennes datent de 1553. L’une illustre l’œuvre d’un ecclésiastique, Giacomo Nacchiante, les <hi
+rend="italic"
+>Enarrationes piae, doctae, et catholicae : in epistolam Pauli ad Ephesios</hi
+> (fig. 38). Les armes sont présentées dans un ovale grisé, incluses dans un cartouche à tête de lion au sommet et bustes d’angelots sur les côtés. L’autre ouvrage est celui d’un philologue de Ravenne, Tommaso Giannotti Rangoni, et explique comment prolonger la vie de l’homme au-delà de 120 ans, <hi
+rend="italic"
+>De vita hominis ultra CXX. annos protrahenda</hi
+>. Les armes ovales sont présentées sur une tête d’angelot dans un cartouche à enroulements (fig. 39).</p
+><p
+xml:id="p37"
+>À Florence, en 1550, ce sont deux ouvrages d’un même auteur, le père Lorenzo Davidico<note
+n="33"
+place="foot"
+xml:id="ftn67"
+><p
+>Voir Carlo von Flüe, « Davidico, Lorenzo », <hi
+rend="italic"
+>DBI</hi
+>, Rome, Istituto della Enciclopedia italiana, vol. 33, 1987, p. 157-160.</p
+></note
+>, qui portent la même vignette héraldique : <hi
+rend="italic"
+>Il vittorioso trionfo di Maria V. Contra Luterani, </hi
+>dédié au Sacré Collège et l’<hi
+rend="italic"
+>Anotomia delli vitii, </hi
+>dédiée au pape (fig. 40). Les armes sont présentées dans un cartouche à enroulement sur fond de tenture. Le choix de la vignette s’est évidemment fait en lien avec la dédicace, peut-être sur intervention de l’auteur, car nous n’avons pas trouvé d’autre exemple de vignette papale dans cette ville.</p
+><p
+xml:id="p38"
+>À Bologne, on remarque chez l’éditeur Anselmo Giaccarello une vignette à supports de <hi
+rend="italic"
+>putti</hi
+> utilisée pour deux ouvrages : en 1550, le <hi
+rend="italic"
+>De nothis spuriisque filiis liber </hi
+>de Gabriele Paleotti, et en 1551, le <hi
+rend="italic"
+>De concilio liber I</hi
+> de Lorenzo Dal Gambaro Sclarici, dédié au cardinal Innocenzo del Monte, neveu adoptif de Jules III (fig. 41). Les armes de celui-ci reparaissent à la toute fin du pontificat en 1554 sur deux brefs dans une composition dominée par les armes du pontife. Enfin, dans cette même ville, Bartolomeo Maggi publia en 1552 chez Bartholomeo Bonardi un traité <hi
+rend="italic"
+>De vulnerum sclopetorum et bombardarum curatione</hi
+>, dédié au frère aîné de Jules III, Baldovino del Monte. En lien avec cette dédicace une vaste pièce de titre fut conçue montrant les armes de Baldovino, une femme en cimier tenant un phylactère inscrit du mot <hi
+rend="italic"
+>Merito</hi
+> (fig. 42). En 1497, Fabiano del Monte, oncle de Jules III, fut accueilli dans la noblesse d’Arezzo en récompense de ses talents de juriste. Il se choisit alors la devise de Pallas avec le mot <hi
+rend="italic"
+>Pro merito</hi
+> qui aurait été abrégé par Jules III en <hi
+rend="italic"
+>Merito</hi
+><note
+n="34"
+place="foot"
+xml:id="ftn68"
+><p
+>Agostino Fortunio, <hi
+rend="italic"
+>Cronichetta del Monte San Savino di Toscana</hi
+>,<hi
+rend="italic"
+> op. cit.</hi
+>, p. 38, cité par Alessandro Nova, « Bartolomeo Ammannati e Prospero Fontana a Palazzo Firenze. Architettura e emblemi per Giulio III Del Monte », <hi
+rend="italic"
+>Ricerche di Storia dell’arte</hi
+>, n<hi
+rend="sup"
+>o</hi
+> 21, 1983, p. 53-76, ici p. 74, n. 59.</p
+></note
+>. On est tenté d’en déduire que la femme représentée en cimier pourrait être la déesse de la sagesse.</p
+><p
+xml:id="p39"
+>À Rimini, en 1552, chez Erasmo Virginio, le chanoine Publio Francesco Modesti consacra sa <hi
+rend="italic"
+>Christiana pietas</hi
+> à la louange de Jules III. La pièce de titre est une copie fidèle de celle qui avait été utilisée à Bologne par Anselmo Giaccarello en 1550 pour le <hi
+rend="italic"
+>De nothis spuriisque filiis liber </hi
+>de Gabriele Paleotti et en 1551 pour le <hi
+rend="italic"
+>De concilio liber I </hi
+>de Lorenzo Dal Gambaro Sclarici (fig. 41). Seule a changé la disposition des <hi
+rend="italic"
+>trimonzii</hi
+>, dans le sens de la bande à Bologne, sur le bord gauche de la bande à Rimini. Cette similitude n’est pas surprenante, Rimini étant voisine de Bologne. Il pourrait s’agir du même instrument dont un détail a été modifié. Nous avons peut-être ici la trace du changement de disposition des monts qui aurait été voulu par le pontife selon le témoignage cité au début de cette étude. Un texte latin a été ajouté autour de la vignette disant : « Les choses que tu vois dépeintes ici vivent dans mon cœur. Si ce sont des signes, à qui appartiennent ces signes importe encore plus ». L’exemplaire conservé à la bibliothèque Vaticane présente l’une des rares reliures connues aux armes de Jules III<note
+n="35"
+place="foot"
+xml:id="ftn69"
+><p
+>BAV, Stamp. De Marinis 82.</p
+></note
+>.</p
+><p
+xml:id="p40"
+>À Rome, en ce qui regarde l’art du manuscrit, deux artistes se sont distingués dans l’ornement héraldique en l’honneur de Jules III : Ferdinando Ruano et Vincent Raymond. Le premier a pratiqué l’extraction et la diffusion des meubles, le second a exploité la devise suivant des modes similaires à ceux du décor monumental. En ce qui regarde l’art de l’imprimé, deux éditeurs romains se remarquent : Antonio Blado et les frères Dorico. Eux seuls ont conçu des vignettes qui ont servi pour plusieurs ouvrages au point de devenir des classiques, l’ovale des Dorico et la couronne de laurier « <hi
+rend="italic"
+>Diu felix</hi
+> » de Blado qui durera plus d’un siècle, jusqu’à Grégoire XIII. La présence de l’héraldique s’explique chez Blado par le caractère officiel de la plupart des pièces et chez les Dorico par une intention dédicatoire. Pour le reste, à Rome et hors de Rome, des vignettes ont servi pour une, parfois deux éditions généralement en lien avec des stratégies de dédicace au pontife. Dans la plupart, on remarque une tentative de rendre la différence des couleurs par les hachures de la gravure, procédé qui se systématisera plus tard. Après le manuscrit et son héritage médiéval, le livre imprimé demeure un support de l’image héraldique même si elle se trouve en concurrence avec les marques de libraires.</p
+><figure
+xml:id="figure01"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig9.jpg"
+></graphic
+><head
+>Figure 8. Ferdinando Ruano, <hi
+rend="italic"
+>Registre des dépenses</hi
+>, BAV, Vat. lat. 3968, fol. 1r.</head
+></figure
+><figure
+xml:id="figure02"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig10.jpg"
+></graphic
+><head
+>Figure 9. Ferdinando Ruano, <hi
+rend="italic"
+>Lettres de Léon IX</hi
+>, 1551, BAV, Vat. lat. 3790, fol. 3v.</head
+></figure
+><figure
+xml:id="figure03"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig11.jpg"
+></graphic
+><head
+>Figure 10. Ferdinando Ruano, <hi
+rend="italic"
+>Lettres d’Hildebert, évêque du Mans</hi
+>, 1551, BAV, Vat. lat. 3841, fol. 1r.</head
+></figure
+><figure
+xml:id="figure04"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig12.jpg"
+></graphic
+><head
+>Figure 11. Ferdinando Ruano, saint Jérôme, <hi
+rend="italic"
+>Exposition sur les Psaumes</hi
+>, 1554, BAV, Vat. lat. 317, fol. 2v.</head
+></figure
+><figure
+xml:id="figure05"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig13.jpg"
+></graphic
+><head
+>Figure 12. Missel, BAV, ms. Capp.Sist.154, fol. 3v (détail).</head
+></figure
+><figure
+xml:id="figure06"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig14.jpg"
+></graphic
+><head
+>Figure 13. Missel, BAV, ms. Capp.Sist.154, fol. 4r (détail).</head
+></figure
+><figure
+xml:id="figure07"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig15.jpg"
+></graphic
+><head
+>Figure 14. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, BAV, ms. Capp.Sist.67, fol. 4v (détail).</head
+></figure
+><figure
+xml:id="figure08"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig16.jpg"
+></graphic
+><head
+>Figure 15. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, BAV, ms. Capp.Sist.67, fol. 5r (détail).</head
+></figure
+><figure
+xml:id="figure09"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig17_9-cappsist67-7v.jpg"
+></graphic
+><head
+>Figure 16. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, BAV, ms. Capp.Sist.67, fol. 7v (détail).</head
+></figure
+><figure
+xml:id="figure10"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig18_10-cappsist67-6v.jpg"
+></graphic
+><head
+>Figure 17. <hi
+rend="italic"
+>Officium ad Tertiam</hi
+>, BAV, ms. Capp.Sist.67, fol. 6v (détail).</head
+></figure
+><figure
+xml:id="figure11"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig19_11-cappsist213.jpg"
+></graphic
+><head
+>Figure 18. Vincent Raymond et Apollonio de’ Bonfratelli, Lectionnaire, BAV, ms. Capp.Sist.213, folio de titre.</head
+></figure
+><figure
+xml:id="figure12"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig20.jpg"
+></graphic
+><head
+>Figure 19. Prospero Fontana et atelier, devise de Jules III, portique de la villa Giulia.</head
+></figure
+><figure
+xml:id="figure13"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig21.jpg"
+></graphic
+><head
+>Figure 20. Vincent Raymond (attribué à), <hi
+rend="italic"
+>Évangéliaire de Jules III</hi
+>, Bibliothèque capitulaire de Tolède, premier folio.</head
+></figure
+><figure
+xml:id="figure14"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig22.jpg"
+></graphic
+><head
+>Figure 21. Missel du cardinal Girolamo Dandini, Bibliothèque capitulaire de Tolède, premier folio.</head
+></figure
+><figure
+xml:id="figure15"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig23.jpg"
+></graphic
+><head
+>Figure 22. Vignette de titre pour Antonio Massa,<hi
+rend="italic"
+> De exercitatione iurisperitorum</hi
+>, Rome, 1550, BNF.</head
+></figure
+><figure
+xml:id="figure16"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig24.jpg"
+></graphic
+><head
+>Figure 23. Vignette de titre pour Giovanni Girolamo Albani, <hi
+rend="italic"
+>Erudita atque luculenta disputatio, </hi
+>Rome, 1553, Biblioteca General Histórica de la Universidad de Salamanca (Espagne).</head
+></figure
+><figure
+xml:id="figure17"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig25.jpg"
+></graphic
+><head
+>Figure 24. Vignette de titre pour Giovanni Battista Poiana, <hi
+rend="italic"
+>De iobileo et indulgentiis</hi
+>, Rome, 1550, bibliothèque Casanatense.</head
+></figure
+><figure
+xml:id="figure18"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig26.jpg"
+></graphic
+><head
+>Figure 25. Vignette de titre pour les <hi
+rend="italic"
+>Regulae tres S. D. N. D. Iulii diuina prouidentia Papae. III, </hi
+>Rome, 1550, BNCR.</head
+></figure
+><figure
+xml:id="figure19"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig27.jpg"
+></graphic
+><head
+>Figure 26. Vignette de titre pour Silvestro Sigonio,<hi
+rend="italic"
+> De concordia servanda,</hi
+> Rome, 1550, BNCR.</head
+></figure
+><figure
+xml:id="figure20"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig28.jpg"
+></graphic
+><head
+>Figure 27. Vignette de titre pour <hi
+rend="italic"
+>Contra hebreos</hi
+>…, Rome, 1554, bibliothèque Casanatense.</head
+></figure
+><figure
+xml:id="figure21"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig29.jpg"
+></graphic
+><head
+>Figure 28. Vignette pour le privilège du commentaire d’Eustathius sur l’<hi
+rend="italic"
+>Iliade, </hi
+>vol. IV, Rome, 1550, bibliothèque Sainte-Geneviève, FOL Y 7 INV 11 RES.</head
+></figure
+><figure
+xml:id="figure22"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig30.jpg"
+></graphic
+><head
+>Figure 29. Vignette de titre pour Uberto Foglietta, <hi
+rend="italic"
+>In festo omnium Beatorum, </hi
+>Rome, 1553, Université de Turin.</head
+></figure
+><figure
+xml:id="figure23"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig31.png"
+></graphic
+><head
+>Figure 30. Vignette de titre pour les <hi
+rend="italic"
+>Novae regvlae cancellariae apostolicae, </hi
+>Rome, 1552, BNCR.</head
+></figure
+><figure
+xml:id="figure24"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig32.jpg"
+></graphic
+><head
+>Figure 31. Lettrine pour Ambrosio Catharino, <hi
+rend="italic"
+>Enarrationes in quinque priora capita libri geneseos</hi
+>, Rome, 1552, National Central Library of Rome.</head
+></figure
+><figure
+xml:id="figure25"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig33.jpg"
+></graphic
+><head
+>Figure 32. Vignette pour <hi
+rend="italic"
+>Bullae diuersorum pontificum</hi
+>, Rome, 1550, BNCR.</head
+></figure
+><figure
+xml:id="figure26"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig34.jpg"
+></graphic
+><head
+>Figure 33. Vignette pour Bartolomej Georgijevic, <hi
+rend="italic"
+>Libellus vere Christiana lectione…, </hi
+>Rome, 1552, BNCR.</head
+></figure
+><figure
+xml:id="figure27"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig35.jpg"
+></graphic
+><head
+>Figure 34. Ioannes Magnus, <hi
+rend="italic"
+>Historia de omnibus Gothorum Sueonumque regibus,</hi
+> Rome, 1554, BNF.</head
+></figure
+><figure
+xml:id="figure28"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig36.jpg"
+></graphic
+><head
+>Figure 35. Page de titre pour Palestrina, <hi
+rend="italic"
+>Missarum liber primus</hi
+>, Rome, 1554, Museo internazionale e biblioteca della musica, Bologne.</head
+></figure
+><figure
+xml:id="figure29"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig37.jpg"
+></graphic
+><head
+>Figure 36. Lettrine pour Palestrina, <hi
+rend="italic"
+>Missarum liber primus</hi
+>, Rome, 1554, Bibliothèque du conservatoire de Sainte-Cécile.</head
+></figure
+><figure
+xml:id="figure30"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig38.jpg"
+></graphic
+><head
+>Figure 37. Vignette de titre pour Prospero Danza, <hi
+rend="italic"
+>La elettion del beatissimo &amp; summo pontifice Iulio tertio</hi
+>, Venise, 1550, BAV.</head
+></figure
+><figure
+xml:id="figure31"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig39.png"
+></graphic
+><head
+>Figure 38. Vignette de titre pour Giacomo Naccchiante, <hi
+rend="italic"
+>Enarrationes piae, doctae, et catholicae : in epistolam Pauli ad Ephesios, </hi
+>Venise, 1553, Biblioteca civica Bertoliana.</head
+></figure
+><figure
+xml:id="figure32"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig40.jpg"
+></graphic
+><head
+>Figure 39. Vignette de titre pour Tommaso Giannoti Rangoni, <hi
+rend="italic"
+>De vita hominis ultra CXX. annos protrahenda, </hi
+>Venise, 1553, BNF.</head
+></figure
+><figure
+xml:id="figure33"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig41.jpg"
+></graphic
+><head
+>Figure 40. Vignette de titre pour Lorenzo Davidico, <hi
+rend="italic"
+>Anotomia delli vitii, </hi
+>Florence, 1550, bibliothèque Casanatense.</head
+></figure
+><figure
+xml:id="figure34"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig42.jpg"
+></graphic
+><head
+>Figure 41. Vignette de titre pour Lorenzo Dal Gambaro Sclarici, <hi
+rend="italic"
+>De concilio liber I, </hi
+>Bologne, 1551, bibliothèque Casanatense.</head
+></figure
+><figure
+xml:id="figure35"
+><graphic
+url="../icono/br/Ch03_Loskoutoff_1/fig43.png"
+></graphic
+><head
+>Figure 42. Vignette de titre pour Bartolomeo Maggi, <hi
+rend="italic"
+>De vulnerum sclopetorum et bombardarum curatione, </hi
+>Bologne, 1552, BNCR.</head
+></figure
+></div
+></div
+></body
+></text
+></TEI
+>
