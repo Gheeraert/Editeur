@@ -1,0 +1,6 @@
+INTRODUCTION
+
+Voici  un  exemple:mal ponctué.
+Une phrase "avec guillemets droits"   et   espaces.
+
+Nom, Prénom, Titre de l'ouvrage, Paris, 2020.
