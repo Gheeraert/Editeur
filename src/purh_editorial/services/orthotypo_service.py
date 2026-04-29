@@ -81,18 +81,19 @@ def _build_rules() -> list[TypoRule]:
         description="Guillemets droits → guillemets français",
     ))
 
-    # 4. Espace fine insécable après «
+    # 4. Espace fine insécable après « — absorbe tout type d'espace (NNBSP, NBSP, ordinaire)
+    #    Pattern sans lookahead pour être idempotent et gérer les NBSP auteur (U+00A0)
     rules.append(TypoRule(
         rule_id="purh.guillemets.espace_apres_ouvrant",
-        pattern=re.compile(LQUOT + r"(?!" + NNBSP + r")[ \t]?"),
+        pattern=re.compile(LQUOT + r"[   \t]*"),
         replacement=LQUOT + NNBSP,
         description="Espace fine insécable après «",
     ))
 
-    # 5. Espace fine insécable avant »
+    # 5. Espace fine insécable avant » — absorbe tout type d'espace
     rules.append(TypoRule(
         rule_id="purh.guillemets.espace_avant_fermant",
-        pattern=re.compile(r"(?<!" + NNBSP + r")[ \t]?" + RQUOT),
+        pattern=re.compile(r"[   \t]*" + RQUOT),
         replacement=NNBSP + RQUOT,
         description="Espace fine insécable avant »",
     ))

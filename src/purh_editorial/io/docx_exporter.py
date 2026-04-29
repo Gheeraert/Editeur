@@ -10,6 +10,7 @@ from docx import Document as DocxDoc
 from docx.enum.text import WD_COLOR_INDEX
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from docx.shared import Cm
 
 from purh_editorial.model import Document, InlineSpan, Note
 
@@ -40,6 +41,30 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
     "biblio":    WD_COLOR_INDEX.TURQUOISE,
     "ai":        WD_COLOR_INDEX.PINK,
 }
+
+# ── Polices PURH (substituts des polices InDesign) ───────────────────────────
+# Corps du texte → Garamond (empattement, analogue Chaparral Pro)
+# Titraille      → Calibri  (sans empattement, analogue Josefin Sans)
+_FONT_BODY = "Garamond"
+_FONT_HEAD = "Calibri"
+
+# Styles de corps (reçoivent Garamond)
+_BODY_STYLE_NAMES: frozenset[str] = frozenset({
+    "Normal", "footnote text", "endnote text",
+    "TEI_quote", "TEI_quote2", "TEI_quote_nested", "TEI_quote_continuation",
+    "TEI_bibl_reference", "TEI_epigraph", "TEI_acknowledgment",
+    "TEI_dedication", "TEI_paragraph_lead", "TEI_paragraph_consecutive",
+    "TEI_abstract", "TEI_keywords", "TEI_verse", "TEI_figure_caption",
+    "TEI_figure_credits", "TEI_figure_alternative", "TEI_aut:",
+    "TEI_note:", "TEI_localpara",
+})
+
+# Styles de titre (reçoivent Calibri)
+_HEAD_STYLE_NAMES: frozenset[str] = frozenset({
+    "Heading 1", "Heading 2", "Heading 3", "Heading 4", "Heading 5",
+    "heading 1", "heading 2", "heading 3", "heading 4", "heading 5",
+    "TEI_bibl_start", "TEI_appendix_start",
+})
 
 
 # ── Conversion .dotm → flux .docx ────────────────────────────────────────────
@@ -120,6 +145,11 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
     except (KeyError, ValueError):
         para = doc.add_paragraph(style="Normal")
 
+    # Retrait suspendu pour les entrées bibliographiques (≈ 5 mm, charte PURH)
+    if style_name == "TEI_bibl_reference":
+        para.paragraph_format.left_indent = Cm(0.5)
+        para.paragraph_format.first_line_indent = Cm(-0.5)
+
     if block.inlines:
         for span in block.inlines:
             if span.kind == "note_call" and span.note_ref:
@@ -155,12 +185,22 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
     pstyle = ET.SubElement(ppr, f"{{{W}}}pStyle")
     pstyle.set(f"{{{W}}}val", "Notedebasdepage")
 
-    # Marqueur footnoteRef (renvoi numéroté automatique)
+    # Marqueur footnoteRef — superscript + espace insécable après le numéro
     r_ref = ET.SubElement(p, f"{{{W}}}r")
     rpr_ref = ET.SubElement(r_ref, f"{{{W}}}rPr")
     rstyle_ref = ET.SubElement(rpr_ref, f"{{{W}}}rStyle")
     rstyle_ref.set(f"{{{W}}}val", "NotedebasdepageCar")
+    vert = ET.SubElement(rpr_ref, f"{{{W}}}vertAlign")
+    vert.set(f"{{{W}}}val", "superscript")
     ET.SubElement(r_ref, f"{{{W}}}footnoteRef")
+    # Espace insécable après le numéro de note
+    r_sp = ET.SubElement(p, f"{{{W}}}r")
+    rpr_sp = ET.SubElement(r_sp, f"{{{W}}}rPr")
+    rstyle_sp = ET.SubElement(rpr_sp, f"{{{W}}}rStyle")
+    rstyle_sp.set(f"{{{W}}}val", "NotedebasdepageCar")
+    t_sp = ET.SubElement(r_sp, f"{{{W}}}t")
+    t_sp.text = " "
+    t_sp.set(f"{{{XML}}}space", "preserve")
 
     # Contenu de la note — rendu span par span si disponible (préserve les surlignages)
     if note.inlines:
@@ -242,6 +282,20 @@ def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[st
             z.writestr(name, data)
 
 
+# ── Application des polices PURH sur les styles du document ──────────────────
+
+def _apply_purh_fonts(doc: DocxDoc) -> None:
+    """Remplace les polices du gabarit Métopes par les substituts PURH.
+
+    Corps → Garamond (empattement)   |   Titraille → Calibri (sans empattement)
+    """
+    for style in doc.styles:
+        if style.name in _BODY_STYLE_NAMES:
+            style.font.name = _FONT_BODY
+        elif style.name in _HEAD_STYLE_NAMES:
+            style.font.name = _FONT_HEAD
+
+
 # ── Exporteur principal ───────────────────────────────────────────────────────
 
 class DocxExporter:
@@ -260,6 +314,7 @@ class DocxExporter:
         template_buf = _dotm_to_docx_bytes(self.template_path)
         doc = DocxDoc(template_buf)
         self._clear_body(doc)
+        _apply_purh_fonts(doc)
 
         # Carte note_id → entier (IDs numériques Word des footnotes)
         note_id_map: dict[str, int] = {
