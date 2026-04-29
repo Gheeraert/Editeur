@@ -13,6 +13,8 @@ if str(SRC) not in sys.path:
 from purh_editorial.io.tei_xml_exporter import TEI_NS, TeiXmlExporter
 from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
 
+XML_NS = "http://www.w3.org/XML/1998/namespace"
+
 
 def _q(local_name: str) -> str:
     return f"{{{TEI_NS}}}{local_name}"
@@ -48,7 +50,10 @@ class TeiXmlExporterTests(unittest.TestCase):
         xml_text = self.exporter.export_document(document)
         root = ET.fromstring(xml_text)
         body = root.find(f"./{_q('text')}/{_q('body')}")
-        head = body.find(_q("head"))
+        div = body.find(_q("div"))
+        self.assertIsNotNone(div)
+        self.assertEqual(div.attrib.get("type"), "section1")
+        head = div.find(_q("head"))
         self.assertIsNotNone(head)
         self.assertEqual(head.text, "Titre section")
 
@@ -62,11 +67,11 @@ class TeiXmlExporterTests(unittest.TestCase):
         xml_text = self.exporter.export_document(document)
         root = ET.fromstring(xml_text)
         body = root.find(f"./{_q('text')}/{_q('body')}")
-        quote = body.find(_q("quote"))
+        cit = body.find(_q("cit"))
+        self.assertIsNotNone(cit)
+        quote = cit.find(_q("quote"))
         self.assertIsNotNone(quote)
-        p = quote.find(_q("p"))
-        self.assertIsNotNone(p)
-        self.assertEqual(p.text, "Citation longue.")
+        self.assertEqual(quote.text, "Citation longue.")
 
     def test_export_inline_styles(self) -> None:
         document = Document(
@@ -116,6 +121,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             notes=[
                 Note(
                     note_id="ftn1",
+                    label="1",
                     text="",
                     inlines=[
                         InlineSpan(text="note "),
@@ -131,6 +137,8 @@ class TeiXmlExporterTests(unittest.TestCase):
         note = p.find(_q("note"))
         self.assertIsNotNone(note)
         self.assertEqual(note.attrib.get("place"), "foot")
+        self.assertEqual(note.attrib.get("n"), "1")
+        self.assertEqual(note.attrib.get(f"{{{XML_NS}}}id"), "ftn1")
         hi = note.find(_q("hi"))
         self.assertIsNotNone(hi)
         self.assertEqual(hi.attrib.get("rend"), "italic")
@@ -147,7 +155,137 @@ class TeiXmlExporterTests(unittest.TestCase):
         parsed = ET.fromstring(xml_text)
         self.assertEqual(parsed.tag, _q("TEI"))
 
+    def test_export_combined_italic_small_caps_in_single_hi(self) -> None:
+        document = Document(
+            document_id="doc7",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(
+                    block_id="p1",
+                    text="",
+                    inlines=[
+                        InlineSpan(
+                            text="texte",
+                            style=InlineStyle(italic=True, small_caps=True),
+                        )
+                    ],
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        hi = root.find(f"./{_q('text')}/{_q('body')}/{_q('p')}/{_q('hi')}")
+        self.assertIsNotNone(hi)
+        self.assertEqual(hi.attrib.get("rend"), "italic small-caps")
+        self.assertEqual(hi.text, "texte")
+
+    def test_export_combined_bold_superscript_in_single_hi(self) -> None:
+        document = Document(
+            document_id="doc8",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(
+                    block_id="p1",
+                    text="",
+                    inlines=[
+                        InlineSpan(
+                            text="x",
+                            style=InlineStyle(bold=True, superscript=True),
+                        )
+                    ],
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        hi = root.find(f"./{_q('text')}/{_q('body')}/{_q('p')}/{_q('hi')}")
+        self.assertIsNotNone(hi)
+        self.assertEqual(hi.attrib.get("rend"), "bold sup")
+        self.assertEqual(hi.text, "x")
+
+    def test_heading_level_1_opens_section1_div(self) -> None:
+        document = Document(
+            document_id="doc9",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Heading(block_id="h1", text="Titre 1"),
+                Paragraph(block_id="p1", text="Paragraphe."),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        div = body.find(_q("div"))
+        self.assertIsNotNone(div)
+        self.assertEqual(div.attrib.get("type"), "section1")
+        self.assertEqual(div.find(_q("head")).text, "Titre 1")
+        self.assertEqual(div.find(_q("p")).text, "Paragraphe.")
+
+    def test_heading_level_1_then_2_nests_section2(self) -> None:
+        document = Document(
+            document_id="doc10",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Heading(block_id="h1", text="Titre 1", attributes={"heading_level": 1}),
+                Paragraph(block_id="p1", text="Texte 1"),
+                Heading(block_id="h2", text="Titre 2", attributes={"heading_level": 2}),
+                Paragraph(block_id="p2", text="Texte 2"),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        div1 = body.find(_q("div"))
+        self.assertIsNotNone(div1)
+        div2 = div1.find(_q("div"))
+        self.assertIsNotNone(div2)
+        self.assertEqual(div1.attrib.get("type"), "section1")
+        self.assertEqual(div2.attrib.get("type"), "section2")
+        self.assertEqual(div2.find(_q("head")).text, "Titre 2")
+
+    def test_two_headings_same_level_create_two_sibling_divs(self) -> None:
+        document = Document(
+            document_id="doc11",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Heading(block_id="h1", text="Titre A", attributes={"heading_level": 1}),
+                Paragraph(block_id="p1", text="Texte A"),
+                Heading(block_id="h2", text="Titre B", attributes={"heading_level": 1}),
+                Paragraph(block_id="p2", text="Texte B"),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        divs = body.findall(_q("div"))
+        self.assertEqual(len(divs), 2)
+        self.assertEqual(divs[0].find(_q("head")).text, "Titre A")
+        self.assertEqual(divs[1].find(_q("head")).text, "Titre B")
+
+    def test_paragraph_before_first_heading_stays_directly_under_body(self) -> None:
+        document = Document(
+            document_id="doc12",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(block_id="p0", text="Avant titre"),
+                Heading(block_id="h1", text="Titre"),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        children = list(body)
+        self.assertGreaterEqual(len(children), 2)
+        self.assertEqual(children[0].tag, _q("p"))
+        self.assertEqual(children[0].text, "Avant titre")
+        self.assertEqual(children[1].tag, _q("div"))
+
 
 if __name__ == "__main__":
     unittest.main()
-

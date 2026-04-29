@@ -12,3 +12,4 @@ class PipelineResult:
     styled_document: Document
     report: ProcessingReport
     pivot_payload: dict = field(default_factory=dict)
+    tei_xml: str | None = None

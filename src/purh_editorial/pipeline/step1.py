@@ -6,6 +6,7 @@ from pathlib import Path
 from purh_editorial.config import AppSettings
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
+from purh_editorial.io.tei_xml_exporter import TeiXmlExporter
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
 from purh_editorial.serialization import to_plain_data
@@ -181,6 +182,20 @@ class Step1Pipeline:
                 summary={"output": str(output_docx)},
             ))
 
+        tei_xml: str | None = None
+        try:
+            t0 = utc_now_iso()
+            tei_xml = TeiXmlExporter().export_document(document)
+            report.add_module_run(ModuleRun(
+                module_name="tei_xml_export",
+                version=self.version,
+                started_at=t0,
+                finished_at=utc_now_iso(),
+                summary={"generated": tei_xml is not None},
+            ))
+        except Exception as exc:  # noqa: BLE001
+            report.warnings.append(f"TEI export skipped: {exc}")
+
         pivot = {
             "document": to_plain_data(document),
             "report":   to_plain_data(report),
@@ -190,5 +205,6 @@ class Step1Pipeline:
             styled_document=document,
             report=report,
             pivot_payload=pivot,
+            tei_xml=tei_xml,
         )
         return Step1Result(pipeline_result=pipeline_result, output_docx=output_docx)
