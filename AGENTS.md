@@ -165,3 +165,14 @@ toujours choisir :
 - clart√©,
 - contr√¥le humain,
 - tra√ßabilit√©.
+
+---
+
+## Gouvernance pipeline
+
+Pour toute t‚che touchant au pipeline Èditorial, le document de cadrage prioritaire est docs/EDITORIAL_PIPELINE.md.
+
+Rappel de cible :
+- la sortie de production visÈe est l'XML-TEI MÈtopes ;
+- le DOCX reste une sortie de relecture humaine.
+

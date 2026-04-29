@@ -1,58 +1,40 @@
-# PURH Editorial Studio V1 (consolidation)
+# PURH Editorial Studio
 
-Chaine modulaire de preparation editoriale pour les Presses universitaires de Rouen et du Havre (PURH).
+Chaîne modulaire de préparation éditoriale pour les Presses universitaires de Rouen et du Havre (PURH).
 
-## Ce que cette version couvre
+## Philosophie actuelle (recentrage)
 
-- ingestion modulaire (`.docx`, `.xml`, `.txt`, `.md`) ;
-- modele interne en dataclasses ;
-- diagnostics formels + transformations sures et tracables ;
-- suggestions IA prudentes (provider effectif: **Groq**) ;
-- export texte + JSON ;
-- interface desktop de comparaison gauche/droite.
+Le projet n'est plus pensé comme une simple chaîne "DOCX auteur -> DOCX final".
 
-## Consolidation ajoutee dans cette passe
+Pipeline cible:
 
-### 1) DOCX enrichi (priorite haute)
+```text
+DOCX auteur
+  -> import riche
+  -> modèle Python interne structuré
+  -> normalisations/suggestions/structuration
+  -> sorties multiples:
+       1) JSON (contrôle, debug, traçabilité, tests)
+       2) DOCX (relecture humaine)
+       3) XML-TEI Métopes (sortie principale de production)
+```
 
-L'import DOCX preserve maintenant, en plus du texte brut:
-- runs inline ;
-- style de paragraphe (id + nom) ;
-- styles inline:
-  - italique ;
-  - gras ;
-  - petites capitales ;
-  - indice ;
-  - exposant ;
-- appels de notes dans le corps ;
-- contenu des notes de bas de page ;
-- styles inline a l'interieur des notes.
+Le pivot réel est le modèle Python interne (`Document`, `Block`, `InlineSpan`, `Note`, `Diagnostic`, `Transformation`, `ProcessingReport`).
 
-Modele enrichi:
-- `InlineStyle`
-- `InlineSpan`
-- `Block.inlines`
-- `Block.note_refs`
-- `Note.inlines`
+## Rôle des sorties
 
-Le pivot JSON inclut ces donnees.
+- `JSON`: sérialisation du pivot interne, utile pour debug, tests, traçabilité et échanges techniques.
+- `DOCX`: sortie de relecture humaine, avec styles visibles et corrections localisées.
+- `XML-TEI Métopes`: cible de production éditoriale.
 
-### 2) UI plus editoriale (sans refonte)
+Important: styles Word Métopes et structure TEI Métopes ne sont pas équivalents. Les styles Word servent la relecture; la TEI porte la structure documentaire de production.
 
-L'UI Tkinter reste sobre mais ajoute:
-- panneaux gauche/droite en **lecture seule explicite** ;
-- rendu inline (gras/italique/petites caps/superscript/subscript/note call) ;
-- surlignage des blocs modifies ;
-- navigation depuis diagnostics/suggestions/transformations vers le bloc cible.
+## Principes de prudence
 
-### 3) Groq plus defensif
-
-Le provider Groq est durci:
-- gestion des reponses vides ;
-- gestion JSON API invalide ;
-- extraction JSON depuis reponse "bruitee" ou markdown ;
-- gestion payload partiel ;
-- non crash global: un passage en erreur est saute, avec avertissement.
+- corrections localisées et motivées;
+- pas de réécriture massive;
+- en cas de doute: produire un diagnostic plutot qu'une transformation automatique;
+- IA optionnelle: elle suggère et assiste, sans imposer silencieusement.
 
 ## Lancement rapide
 
@@ -65,29 +47,16 @@ python main.py
 
 ## Configuration IA (Groq)
 
-Le provider effectif de cette V1 est **Groq**.
-
 1. Copier `.env.example` vers `.env`.
 2. Renseigner `GROQ_API_KEY`.
 
 Variables:
-- `PURH_AI_PROVIDER` (defaut: `groq`)
+- `PURH_AI_PROVIDER` (défaut: `groq`)
 - `GROQ_API_KEY`
-- `GROQ_MODEL` (defaut: `llama-3.3-70b-versatile`)
-- `GROQ_BASE_URL` (defaut: `https://api.groq.com/openai/v1`)
+- `GROQ_MODEL` (défaut: `llama-3.3-70b-versatile`)
+- `GROQ_BASE_URL` (défaut: `https://api.groq.com/openai/v1`)
 - `GROQ_TIMEOUT_SECONDS`
 - `GROQ_MAX_BLOCKS`
-
-Comportement sans cle:
-- application fonctionnelle ;
-- module IA desactive proprement ;
-- message explicite dans les avertissements.
-
-## CLI
-
-```bash
-python cli.py <chemin_fichier> --out-dir out --disable-ai
-```
 
 ## Tests
 
@@ -95,15 +64,16 @@ python cli.py <chemin_fichier> --out-dir out --disable-ai
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
-Les tests couvrent notamment:
-- import DOCX enrichi (inline + notes) ;
-- serialisation JSON du modele enrichi ;
-- preservation inline dans le pipeline ;
-- robustesse Groq (cle absente, reponse vide, JSON invalide, payload partiel).
+## Risques connus
 
-## Limites connues
+- gestion des espaces insécables (NBSP/NNBSP) et de l'encodage;
+- détection des citations longues (heuristiques à fiabiliser);
+- gestion des notes de bas de page (liaison appel/contenu à stabiliser);
+- export DOCX techniquement fragile (post-traitements XML/ZIP);
+- documentation historique parfois trop centrée sur le DOCX.
 
-- les styles inline sont recuperes principalement via proprietes Word des runs et styles de caractere disponibles ;
-- la resolution complete de tous les heritages de style Word reste partielle ;
-- la normalisation inline reste prudente (preserve la structure inline, sans strategie de diff complexe) ;
-- pas encore de conversion Metopes complete a ce stade (pivot prepare pour la suite).
+## Documentation complémentaire
+
+- [Architecture](ARCHITECTURE.md)
+- [Data Model](DATA_MODEL.md)
+- [Pipeline Editorial](docs/EDITORIAL_PIPELINE.md)

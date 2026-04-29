@@ -1,77 +1,64 @@
-# ARCHITECTURE (V1 consolidee)
+# ARCHITECTURE (recentrage progressif)
 
-## 1. Principes conserves
+## 1. Principes directeurs
 
-- modularite stricte ;
-- logique metier hors interface ;
-- dataclasses comme representation canonique ;
-- JSON pour inspection/debug/export pivot ;
-- transformations tracables et reversibles ;
+- modularité stricte;
+- logique métier hors interface;
+- dataclasses Python comme représentation canonique;
+- transformations traçables et explicables;
 - IA optionnelle et prudente.
 
-## 2. Chaine de traitement
+## 2. Pivot architectural
+
+Le pivot réel est le modèle Python interne (`Document`, blocs, inlines, notes, diagnostics, transformations, rapports).
+
+Le JSON n'est pas le pivot souverain: c'est une sérialisation utile pour:
+- debug;
+- traçabilité;
+- tests;
+- éventuels échanges techniques (dont IA).
+
+## 3. Pipeline cible
 
 ```text
-Entree (docx/xml/txt)
-  -> ingestion (io)
-  -> Document (model)
-  -> diagnostics formels (services)
-  -> normalisation sure (services)
-  -> preparation structurelle (services)
-  -> suggestions IA (services + provider)
-  -> ProcessingReport + payload pivot JSON
-  -> UI gauche/droite + exports
+DOCX auteur (prioritaire) / autres formats source
+  -> import riche (io)
+  -> modèle interne (model)
+  -> services de correction/structuration (services)
+  -> sorties multiples:
+       - JSON de contrôle
+       - DOCX de relecture humaine
+       - XML-TEI Métopes (sortie principale de production)
 ```
 
-## 3. Enrichissement documentaire inline
+## 4. Etat actuel du code (sans rupture)
 
-Le modele documentaire est enrichi sans casser la structure existante:
-- `InlineStyle` (bold/italic/small_caps/subscript/superscript)
-- `InlineSpan` (texte inline + style + note_ref + kind)
-- `Block.inlines`
-- `Block.note_refs`
-- `Note.inlines`
+- import DOCX riche déjà en place (`io/docx_importer.py`);
+- traitements de normalisation orthotypographique et note/biblio déjà amorcés, à fiabiliser par des tests ciblés;
+- mapping Métopes présent mais encore orienté styles Word (`services/metopes_mapper.py`);
+- export DOCX de relecture en place (`io/docx_exporter.py`);
+- sérialisation JSON en place (`serialization/json_serializer.py`).
 
-Les objets historiques (`Document`, `Block`, `Paragraph`, `Heading`, `QuoteBlock`, `Note`) restent en place.
+Le recentrage demande une évolution progressive, sans refonte: conserver la chaîne existante et ajouter/renforcer la sortie TEI.
 
-## 4. Import DOCX
+## 5. Styles Word Métopes vs structure TEI Métopes
 
-`io/docx_importer.py` recupere maintenant:
-- style de paragraphe ;
-- runs inline ;
-- flags de style inline ;
-- appels de notes dans le corps ;
-- contenu de notes de bas de page ;
-- styles inline dans les notes.
+- Styles Word Métopes: convention de présentation pour relecture humaine.
+- Structure TEI Métopes: structuration sémantique/éditoriale pour la production.
 
-## 5. Normalisation et preservation inline
+Conclusion: un style Word appliqué sur un paragraphe n'équivaut pas automatiquement à une balise TEI correcte.
 
-`services/normalization_service.py`:
-- conserve les spans inline ;
-- applique les regles auto sur le texte des spans sans aplatir la structure ;
-- trace les transformations avec `attributes.preserved_inline_styles=true`.
+## 6. Principes de prudence applicative
 
-## 6. Provider IA Groq
+- correction locale avant tout;
+- pas de réécriture massive;
+- en cas d'incertitude, produire un diagnostic plutôt qu'une auto-correction;
+- IA sous contrôle humain (suggestion, jamais normalisation silencieuse globale).
 
-`style_ai/providers/groq_provider.py`:
-- parsing defensif de la reponse API ;
-- extraction JSON robuste (direct, markdown, reponse bruitee) ;
-- gestion payload partiel ;
-- erreurs propres via `ProviderError`.
+## 7. Risques connus
 
-`services/ai_service.py`:
-- en cas d'erreur provider sur un passage, warning cible et continuation.
-
-## 7. UI
-
-`ui/app.py`:
-- vue gauche/droite en lecture seule ;
-- rendu inline des styles ;
-- surlignage des blocs modifies ;
-- navigation vers blocs cibles depuis les onglets de resultat.
-
-## 8. Extensibilite preservee
-
-- ajout futur de providers IA sans refonte ;
-- enrichissement progressif des regles PURH ;
-- preparation vers metopisation en conservant l'information inline/note.
+- espaces insécables et encodages;
+- citations longues (heuristiques);
+- notes de bas de page (appel/portée/cible);
+- fragilité technique de l'export DOCX;
+- ancien biais documentaire centré DOCX.

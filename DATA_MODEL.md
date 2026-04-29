@@ -1,9 +1,15 @@
-# DATA MODEL (etat reel V1 consolidee)
+# DATA MODEL (pivot interne)
 
-## 1. Objectif
+## 1. Objectif et statut
 
-Le coeur metier repose sur des dataclasses Python.
-La serialisation JSON est l'image transportable de ces objets.
+Le cœur métier repose sur des dataclasses Python.
+Ce modèle est le pivot réel du pipeline éditorial.
+
+La sérialisation JSON est l'image transportable de ces objets:
+- debug;
+- traçabilité;
+- tests;
+- échanges techniques éventuels.
 
 ## 2. Objets documentaires
 
@@ -18,6 +24,8 @@ La serialisation JSON est l'image transportable de ces objets.
 - `annotations`
 - `history`
 - `original_text`
+
+Note: dans la documentation fonctionnelle, ce pivot peut être désigné comme "EditorialDocument". Dans le code actuel, la classe concrète est `Document`.
 
 ### `Metadata`
 - `title`
@@ -47,7 +55,7 @@ La serialisation JSON est l'image transportable de ces objets.
 - `block_type`
 - `text`
 - `inlines` (liste de `InlineSpan`)
-- `note_refs` (liste d'ids de notes appelees)
+- `note_refs` (liste d'ids de notes appelées)
 - `children`
 - `attributes`
 - `source_span`
@@ -144,3 +152,9 @@ Sous-types en place:
 - `styled_document`
 - `report`
 - `pivot_payload`
+
+## 5. Relation avec les sorties
+
+- sortie JSON: dérivée de ce modèle (sérialisation);
+- sortie DOCX: vue de relecture humaine basée sur ce modèle;
+- sortie XML-TEI Métopes: cible de production à produire depuis ce modèle.
