@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -22,10 +22,10 @@ from purh_editorial.utils import make_id
 @dataclass
 class Step1Options:
     enable_ai: bool = True
-    max_ai_calls: int = 6               # appels Groq max (modération)
+    max_ai_calls: int = 6               # appels Groq max (modÃ©ration)
     output_path: Path | None = None
     template_path: Path | None = None
-
+    tei_output_path: Path | None = None
 
 @dataclass
 class Step1Result:
@@ -35,19 +35,19 @@ class Step1Result:
 
 class Step1Pipeline:
     """
-    Étape 1 — Préparation éditoriale d'un manuscrit auteur.
+    Ã‰tape 1 â€” PrÃ©paration Ã©ditoriale d'un manuscrit auteur.
 
-    Passe 1 (déterministe) :
-      orthotypo → structure → notes → bibliographie → styles Métopes
+    Passe 1 (dÃ©terministe) :
+      orthotypo â†’ structure â†’ notes â†’ bibliographie â†’ styles MÃ©topes
 
     Passe 2 (IA, optionnelle) :
-      corrections IA ciblées (2-12 mots, Groq llama-3.3-70b, max MAX_AI_CALLS appels)
+      corrections IA ciblÃ©es (2-12 mots, Groq llama-3.3-70b, max MAX_AI_CALLS appels)
 
     Surlignages :
-      jaune   → orthotypographie
-      vert    → notes de bas de page
-      turquoise → bibliographie
-      rose    → suggestions IA appliquées
+      jaune   â†’ orthotypographie
+      vert    â†’ notes de bas de page
+      turquoise â†’ bibliographie
+      rose    â†’ suggestions IA appliquÃ©es
     """
 
     version = "2.0.0"
@@ -73,7 +73,7 @@ class Step1Pipeline:
             document_id="",
         )
 
-        # ── 1. Ingestion ──────────────────────────────────────────────────────
+        # â”€â”€ 1. Ingestion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         registry = ImporterRegistry()
         document = registry.load_document(source_path)
@@ -86,7 +86,7 @@ class Step1Pipeline:
             summary={"blocks": len(document.blocks), "notes": len(document.notes)},
         ))
 
-        # ── 2. Orthotypographie (déterministe) ────────────────────────────────
+        # â”€â”€ 2. Orthotypographie (dÃ©terministe) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
         report.transformations.extend(typo_tr)
@@ -98,7 +98,7 @@ class Step1Pipeline:
             summary={"corrections": len(typo_tr)},
         ))
 
-        # ── 3. Reconnaissance de structure ────────────────────────────────────
+        # â”€â”€ 3. Reconnaissance de structure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         struct_diags, struct_tr = self.structure.process(document)
         report.diagnostics.extend(struct_diags)
@@ -114,7 +114,7 @@ class Step1Pipeline:
             },
         ))
 
-        # ── 4. Normalisation des notes de bas de page ─────────────────────────
+        # â”€â”€ 4. Normalisation des notes de bas de page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
         report.transformations.extend(note_tr)
@@ -126,7 +126,7 @@ class Step1Pipeline:
             summary={"corrections": len(note_tr)},
         ))
 
-        # ── 5. Normalisation bibliographique ──────────────────────────────────
+        # â”€â”€ 5. Normalisation bibliographique â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         document, bib_tr = self.bibliography.apply(document)
         report.transformations.extend(bib_tr)
@@ -138,7 +138,7 @@ class Step1Pipeline:
             summary={"corrections": len(bib_tr)},
         ))
 
-        # ── 6. Corrections IA ciblées (optionnelles) ──────────────────────────
+        # â”€â”€ 6. Corrections IA ciblÃ©es (optionnelles) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if options.enable_ai and self.settings.ai.enabled:
             t0 = utc_now_iso()
             document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
@@ -156,7 +156,7 @@ class Step1Pipeline:
                 },
             ))
 
-        # ── 7. Application des styles Métopes ─────────────────────────────────
+        # â”€â”€ 7. Application des styles MÃ©topes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         document, mapper_tr = self.mapper.apply(document)
         report.transformations.extend(mapper_tr)
@@ -168,7 +168,7 @@ class Step1Pipeline:
             summary={"styles_assigned": len(mapper_tr)},
         ))
 
-        # ── 8. Export DOCX ────────────────────────────────────────────────────
+        # â”€â”€ 8. Export DOCX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         output_docx: Path | None = None
         if options.output_path:
             t0 = utc_now_iso()
@@ -196,6 +196,21 @@ class Step1Pipeline:
         except Exception as exc:  # noqa: BLE001
             report.warnings.append(f"TEI export skipped: {exc}")
 
+        if options.tei_output_path and tei_xml is not None:
+            try:
+                t0 = utc_now_iso()
+                options.tei_output_path.parent.mkdir(parents=True, exist_ok=True)
+                options.tei_output_path.write_text(tei_xml, encoding="utf-8")
+                report.add_module_run(ModuleRun(
+                    module_name="tei_xml_write",
+                    version=self.version,
+                    started_at=t0,
+                    finished_at=utc_now_iso(),
+                    summary={"output": str(options.tei_output_path)},
+                ))
+            except Exception as exc:  # noqa: BLE001
+                report.warnings.append(f"TEI write skipped: {exc}")
+
         pivot = {
             "document": to_plain_data(document),
             "report":   to_plain_data(report),
@@ -208,3 +223,4 @@ class Step1Pipeline:
             tei_xml=tei_xml,
         )
         return Step1Result(pipeline_result=pipeline_result, output_docx=output_docx)
+

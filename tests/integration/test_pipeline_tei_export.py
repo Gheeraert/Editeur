@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 import unittest
+import uuid
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -31,7 +32,29 @@ class Step1PipelineTeiExportTests(unittest.TestCase):
         body = root.find(f"./{{{TEI_NS}}}text/{{{TEI_NS}}}body")
         self.assertIsNotNone(body)
 
+    def test_pipeline_writes_tei_xml_file_when_output_path_is_provided(self) -> None:
+        settings = load_settings()
+        pipeline = Step1Pipeline(settings=settings)
+        source_path = ROOT / "tests" / "fixtures" / "minimal_source.txt"
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        tei_output_path = runtime_dir / f"pipeline_tei_{uuid.uuid4().hex}.xml"
+
+        result = pipeline.run(
+            source_path,
+            Step1Options(
+                enable_ai=False,
+                output_path=None,
+                tei_output_path=tei_output_path,
+            ),
+        )
+
+        self.assertIsNotNone(result.pipeline_result.tei_xml)
+        self.assertTrue(tei_output_path.exists())
+        xml_text = tei_output_path.read_text(encoding="utf-8")
+        root = ET.fromstring(xml_text)
+        self.assertEqual(root.tag, f"{{{TEI_NS}}}TEI")
+
 
 if __name__ == "__main__":
     unittest.main()
-
