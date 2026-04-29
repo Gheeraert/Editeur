@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from xml.etree import ElementTree as ET
 
-from purh_editorial.model import Document, InlineSpan, Note
+from purh_editorial.model import Document, InlineSpan, InlineStyle, Note
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
+XML_NS = "http://www.w3.org/XML/1998/namespace"
 
 
 class TeiXmlExporter:
@@ -19,17 +20,25 @@ class TeiXmlExporter:
         body_el = ET.SubElement(text_el, self._q("body"))
 
         note_by_id = {note.note_id: note for note in document.notes}
-
+        section_stack: list[ET.Element] = []
         for block in document.blocks:
             if block.block_type == "heading":
-                container = ET.SubElement(body_el, self._q("head"))
-                self._append_block_content(container, block.text, block.inlines, note_by_id)
+                level = self._heading_level(block.attributes.get("heading_level"))
+                while len(section_stack) >= level:
+                    section_stack.pop()
+                parent = section_stack[-1] if section_stack else body_el
+                div_el = ET.SubElement(parent, self._q("div"), {"type": f"section{level}"})
+                head_el = ET.SubElement(div_el, self._q("head"))
+                self._append_block_content(head_el, block.text, block.inlines, note_by_id)
+                section_stack.append(div_el)
             elif block.block_type == "quote_block":
-                quote_el = ET.SubElement(body_el, self._q("quote"))
-                p_el = ET.SubElement(quote_el, self._q("p"))
-                self._append_block_content(p_el, block.text, block.inlines, note_by_id)
+                parent = section_stack[-1] if section_stack else body_el
+                cit_el = ET.SubElement(parent, self._q("cit"))
+                quote_el = ET.SubElement(cit_el, self._q("quote"))
+                self._append_block_content(quote_el, block.text, block.inlines, note_by_id)
             else:
-                p_el = ET.SubElement(body_el, self._q("p"))
+                parent = section_stack[-1] if section_stack else body_el
+                p_el = ET.SubElement(parent, self._q("p"))
                 self._append_block_content(p_el, block.text, block.inlines, note_by_id)
 
         return ET.tostring(root, encoding="unicode")
@@ -75,7 +84,10 @@ class TeiXmlExporter:
                 if note is None:
                     # Comportement conservateur: ignorer sans planter.
                     continue
-                note_el = ET.SubElement(parent, self._q("note"), {"place": "foot"})
+                note_attrs = {"place": "foot"}
+                note_attrs[f"{{{XML_NS}}}id"] = note.note_id
+                note_attrs["n"] = note.label if note.label else note.note_id
+                note_el = ET.SubElement(parent, self._q("note"), note_attrs)
                 self._append_note_content(note_el, note, note_by_id)
                 last_node = note_el
                 continue
@@ -99,20 +111,25 @@ class TeiXmlExporter:
             note_el.text = note.text
 
     def _wrap_with_style_if_needed(self, parent: ET.Element, span: InlineSpan) -> ET.Element:
-        style = span.style
-        # Minimalisme: on privilégie un seul rendu à la fois pour éviter une complexité
-        # de nesting dans cette première passe.
-        if style.italic:
-            return ET.SubElement(parent, self._q("hi"), {"rend": "italic"})
-        if style.bold:
-            return ET.SubElement(parent, self._q("hi"), {"rend": "bold"})
-        if style.small_caps:
-            return ET.SubElement(parent, self._q("hi"), {"rend": "small-caps"})
-        if style.superscript:
-            return ET.SubElement(parent, self._q("hi"), {"rend": "sup"})
-        if style.subscript:
-            return ET.SubElement(parent, self._q("hi"), {"rend": "sub"})
+        rend_values = self._rend_values_for_style(span.style)
+        if rend_values:
+            return ET.SubElement(parent, self._q("hi"), {"rend": " ".join(rend_values)})
         return parent
+
+    @staticmethod
+    def _rend_values_for_style(style: InlineStyle) -> list[str]:
+        values: list[str] = []
+        if style.italic:
+            values.append("italic")
+        if style.bold:
+            values.append("bold")
+        if style.small_caps:
+            values.append("small-caps")
+        if style.superscript:
+            values.append("sup")
+        if style.subscript:
+            values.append("sub")
+        return values
 
     @staticmethod
     def _append_text(target: ET.Element, last_node: ET.Element | None, text: str) -> None:
@@ -138,3 +155,17 @@ class TeiXmlExporter:
     def _q(local_name: str) -> str:
         return f"{{{TEI_NS}}}{local_name}"
 
+    @staticmethod
+    def _heading_level(raw_level: object) -> int:
+        if isinstance(raw_level, int):
+            value = raw_level
+        else:
+            try:
+                value = int(raw_level)  # type: ignore[arg-type]
+            except (TypeError, ValueError):
+                value = 1
+        if value < 1:
+            return 1
+        if value > 3:
+            return 3
+        return value
