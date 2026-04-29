@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import copy
 import io
+import re
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -22,6 +22,13 @@ _DEFAULT_TEMPLATE = Path(__file__).parent.parent.parent.parent / (
 _CT_DOTM = b"application/vnd.ms-word.template.macroEnabledTemplate.main+xml"
 _CT_DOCX = b"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
 
+# Fichiers VBA à exclure lors de la conversion
+_VBA_FILES = frozenset({"word/vbaProject.bin", "word/vbaData.xml", "word/_rels/vbaProject.bin.rels"})
+# Retire les entrées <Override> VBA dans [Content_Types].xml
+_VBA_CT_RE = re.compile(rb'<Override[^>]+/word/vba[^>]+/>')
+# Retire les relations vbaProject dans *.rels
+_VBA_REL_RE = re.compile(rb'<Relationship[^>]+vbaProject[^>]+/>')
+
 # Namespaces OOXML
 W  = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 XML = "http://www.w3.org/XML/1998/namespace"
@@ -38,14 +45,19 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
 # ── Conversion .dotm → flux .docx ────────────────────────────────────────────
 
 def _dotm_to_docx_bytes(dotm_path: Path) -> io.BytesIO:
-    """Retourne le contenu du .dotm avec le content-type corrigé pour .docx."""
+    """Retourne le contenu du .dotm converti en .docx sans macros."""
     buf = io.BytesIO()
     with zipfile.ZipFile(dotm_path, "r") as src, \
          zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as dst:
         for item in src.infolist():
+            if item.filename in _VBA_FILES:
+                continue
             data = src.read(item.filename)
             if item.filename == "[Content_Types].xml":
                 data = data.replace(_CT_DOTM, _CT_DOCX)
+                data = _VBA_CT_RE.sub(b"", data)
+            elif item.filename.endswith(".rels"):
+                data = _VBA_REL_RE.sub(b"", data)
             dst.writestr(item, data)
     buf.seek(0)
     return buf
