@@ -40,20 +40,20 @@ Le catalogue détaillé est dans `docs/RULES_CATALOG.md`.
 Cette section résume les familles demandées et les IDs prioritaires.
 
 ### 4.1 Espaces et ponctuation
-- `R-SP-001` espace fine insécable avant `: ; ? !` (`A1`)
+- `R-SP-001` espace fine insécable avant `: ; ? !` en phrase simple uniquement ; ignorer URL, heures, ratios, chemins, références techniques (`A1` restreint, risque moyen)
 - `R-SP-002` suppression espace avant `, .` (`A1`)
 - `R-SP-003` réduction des doubles espaces (`A1`)
 - `R-SP-004` séparateur des milliers en espace fine insécable (`A1`)
 
 ### 4.2 Guillemets
-- `R-GQ-001` guillemets français pour texte français (`A1`)
+- `R-GQ-001` guillemets français pour texte français (`A2` par défaut ; `A1` seulement en cas très simple)
 - `R-GQ-002` espaces insécables à l’intérieur de `« »` (`A1`)
 - `R-GQ-003` guillemets anglais pour citation de second niveau (`A3`)
 - `R-GQ-004` position ponctuation / guillemet fermant selon type de citation (`A3`)
 
 ### 4.3 Appels de note
 - `R-AN-001` appel en exposant arabe (`A3`)
-- `R-AN-002` appel avant ponctuation et avant guillemet fermant (`A2/A3`)
+- `R-AN-002` appel avant ponctuation et avant guillemet fermant (commencer en diagnostic robuste `A3`)
 - `R-AN-003` appel non précédé d’espace, non rejeté en début de ligne (`A3`)
 
 ### 4.4 Notes de bas de page
@@ -62,7 +62,7 @@ Cette section résume les familles demandées et les IDs prioritaires.
 - `R-FN-003` abréviations latines usuelles normalisées (`ibid.`, `op. cit.`, `loc. cit.`) (`A1/A2`)
 
 ### 4.5 Siècles, ordinaux, exposants
-- `R-SO-001` siècles en chiffres romains + `e` (petites capitales côté mise en forme) (`A1/A2`)
+- `R-SO-001` siècles en chiffres romains + `e` ; la normalisation textuelle seule est insuffisante, cible éditoriale = petites capitales + exposant si le modèle de spans le permet (`A2`)
 - `R-SO-002` ordinaux `1re`, `5e` (pas `1ère`, `5ème`) (`A1`)
 - `R-SO-003` `nᵒ`, `rᵒ`, `vᵒ` (o en exposant : diagnostic si style absent) (`A3`)
 
@@ -134,3 +134,20 @@ Cette section résume les familles demandées et les IDs prioritaires.
 ## 7. Prochaine étape recommandée
 
 Implémenter d’abord les tests des règles `A1` déjà couvertes et sécuriser les zones à faux positifs (`R-AN-002`, `R-GQ-004`, `R-SO-001`), avant d’ajouter de nouvelles corrections automatiques.
+
+## 8. Premières règles à implémenter en sécurité
+
+### Tests de garde-fous
+- `R-SP-001` : vérifier exclusion URL / heures / ratios / chemins / références techniques.
+- `R-GQ-001` : vérifier exclusion des cas imbriqués et ambigus.
+- `R-SO-001` : vérifier non-régression sur contextes non-sècles.
+
+### Corrections A1 vraiment sûres
+- `R-SP-002` suppression espace avant `, .`
+- `R-SP-003` réduction doubles espaces
+- `R-AB-001` normalisation `etc.`
+
+### Diagnostics A3 prioritaires
+- `R-AN-002` appel de note vs ponctuation/guillemets
+- `R-GQ-004` ponctuation de citation
+- `R-BI-002` cohérence de modèle bibliographique

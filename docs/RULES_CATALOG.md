@@ -12,7 +12,7 @@ Légende `Auto` :
 
 | Rule ID | Source observée | Description | Fautif | Attendu | Auto | Risque FP | État code actuel | Tests à prévoir |
 |---|---|---|---|---|---|---|---|---|
-| R-SP-001 | PURH p.10 + Lexique (espaces fines) | Espace fine insécable avant `: ; ? !` | `Bonjour: oui?` | `Bonjour : oui ?` | A1 | Faible | Couvert `purh.espaces.avant_ponct_forte` | phrase simple, URL, décimaux |
+| R-SP-001 | PURH p.10 + Lexique (espaces fines) | Espace fine insécable avant `: ; ? !` **en phrase simple** ; ignorer URL, heures, ratios, chemins de fichiers, références techniques | `Bonjour: oui?` | `Bonjour : oui ?` | A1 (restreint) | Moyen | Couvert `purh.espaces.avant_ponct_forte` | phrase simple + garde-fous (URL/heure/ratio/path) |
 | R-SP-002 | PURH + usage FR | Supprimer espace avant `,` et `.` | `mot , mot .` | `mot, mot.` | A1 | Faible | Couvert `purh.espaces.avant_ponct_faible` | cas décimaux, ellipses |
 | R-SP-003 | PURH (homogénéité) | Réduire doubles espaces | `mot  mot` | `mot mot` | A1 | Faible | Couvert `purh.espaces.double` | espaces mixtes tab/NBSP |
 | R-SP-004 | Lexique + IN/PURH | Séparateur des milliers en espace fine insécable | `10 000` | `10 000` | A1 | Moyen | Couvert `purh.nombres.milliers` | années, codes, numéros |
@@ -21,7 +21,7 @@ Légende `Auto` :
 
 | Rule ID | Source observée | Description | Fautif | Attendu | Auto | Risque FP | État code actuel | Tests à prévoir |
 |---|---|---|---|---|---|---|---|---|
-| R-GQ-001 | PURH p.12 | Pour texte FR, préférer `« »` | `"texte"` | `« texte »` | A1 | Moyen | Couvert `purh.guillemets.droits` | guillemets imbriqués |
+| R-GQ-001 | PURH p.12 | Pour texte FR, préférer `« »` ; conversion des guillemets droits **non toujours sûre** | `"texte"` | `« texte »` | A2 (défaut) / A1 (cas très simples) | Moyen | Couvert `purh.guillemets.droits` | cas simples vs imbriqués/techniques |
 | R-GQ-002 | PURH p.12 | Espaces insécables internes des guillemets FR | `«texte»` | `« texte »` | A1 | Faible | Couvert `purh.guillemets.espace_*` | idempotence |
 | R-GQ-003 | PURH p.12 + Lexique | Second niveau en guillemets anglais sans espaces | `« « texte » »` | `« “texte” »` | A3 | Élevé | Non couvert | détection imbrication |
 | R-GQ-004 | PURH p.12 + Lexique | Ponctuation avant/après guillemet selon citation fondue/non fondue | `« texte ». (cas bloc)` | `« texte. »` | A3 | Élevé | Non couvert | corpus de citations |
@@ -31,7 +31,7 @@ Légende `Auto` :
 | Rule ID | Source observée | Description | Fautif | Attendu | Auto | Risque FP | État code actuel | Tests à prévoir |
 |---|---|---|---|---|---|---|---|---|
 | R-AN-001 | PURH p.11 | Appel de note en exposant arabe | `(1)` en ligne | `¹` (ou footnote auto Word) | A3 | Moyen | Partiel (import/export garde superscript) | import DOCX notes |
-| R-AN-002 | PURH p.11 + Lexique | Appel avant ponctuation/guillemet fermant | `mot.¹` | `mot¹.` | A2/A3 | Élevé | Non couvert | fin phrase + citation |
+| R-AN-002 | PURH p.11 + Lexique | Appel avant ponctuation/guillemet fermant ; démarrer en **diagnostic robuste** | `mot.¹` | `mot¹.` | A3 (prioritaire) | Élevé | Non couvert | fin phrase + citation |
 | R-AN-003 | PURH p.11 + Lexique | Pas d’espace avant appel; pas de rejet ligne | `mot ¹` | `mot¹` | A3 | Moyen | Non couvert | détection whitespace |
 
 ## 4) Notes de bas de page
@@ -47,7 +47,7 @@ Légende `Auto` :
 
 | Rule ID | Source observée | Description | Fautif | Attendu | Auto | Risque FP | État code actuel | Tests à prévoir |
 |---|---|---|---|---|---|---|---|---|
-| R-SO-001 | PURH p.10 | Siècles en romain + `e` (petites caps côté style) | `19ème` | `XIXe` | A1/A2 | Moyen | Couvert partiel `purh.siecles` (pas smallcaps) | XIXe, XXIe, faux positifs |
+| R-SO-001 | PURH p.10 | Siècles en romain + `e` ; la normalisation textuelle seule est insuffisante : cible éditoriale = petites capitales + exposant quand le modèle de spans le permet | `19ème` | `XIXe` (+ style petites caps/exposant si disponible) | A2 | Moyen | Couvert partiel `purh.siecles` (pas smallcaps/exposant) | XIXe, XXIe, faux positifs + style inline |
 | R-SO-002 | PURH p.10 | Ordinaux courts (`1re`, `5e`) | `1ère`, `5ème` | `1re`, `5e` | A1 | Moyen | Partiel via `purh.siecles` | 1er/1re/2de |
 | R-SO-003 | PURH p.10 + IN | `nᵒ`, `rᵒ`, `vᵒ` (o exposant) | `no`, `ro` | `nᵒ`, `rᵒ` | A3 | Élevé | Non couvert | contexte bibliographique |
 
@@ -108,3 +108,20 @@ Légende `Auto` :
 3. `R-SO-002` (ordinaux `1re/5e`) avec tests anti-faux positifs.
 4. `R-AB-003` extension espaces insécables `s. l.`, `s. d.`.
 5. `R-BI-002` diagnostic de cohérence de modèle bibliographique.
+
+## Premières règles à implémenter en sécurité
+
+### Tests de garde-fous (d'abord)
+- `R-SP-001` : ne pas toucher URL, heures (`12:30`), ratios (`16:9`), chemins (`C:\...`), refs techniques (`RFC 1234:5`).
+- `R-GQ-001` : ne pas convertir automatiquement les guillemets imbriqués ou mixtes.
+- `R-SO-001` : vérifier qu'on n'altère pas les contextes non-sècles.
+
+### Corrections A1 vraiment sûres
+- `R-SP-002` (espace avant `, .`)
+- `R-SP-003` (doubles espaces)
+- `R-AB-001` (`etc...` -> `etc.`)
+
+### Diagnostics A3 prioritaires
+- `R-AN-002` (appel de note vs ponctuation/guillemet)
+- `R-GQ-004` (ponctuation de citation)
+- `R-BI-002` (cohérence du modèle bibliographique)

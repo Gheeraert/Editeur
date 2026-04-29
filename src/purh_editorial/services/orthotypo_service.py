@@ -101,10 +101,42 @@ def _build_rules() -> list[TypoRule]:
     # 6. Espace fine insécable avant ponctuation forte : ; ? !
     #    [ \t  ]* = tout type d'espace (ou rien)
     _any_space = r"[ \t  ]*"
+    def _is_technical_token(text: str, punct_pos: int) -> bool:
+        token_start = punct_pos
+        while token_start > 0 and not text[token_start - 1].isspace():
+            token_start -= 1
+        token_end = punct_pos + 1
+        while token_end < len(text) and not text[token_end].isspace():
+            token_end += 1
+        token = text[token_start:token_end]
+        lowered = token.lower()
+        if "http://" in lowered or "https://" in lowered or "ftp://" in lowered:
+            return True
+        if "/" in token or "\\" in token:
+            return True
+        return False
+
+    def _replace_strong_punct(m: re.Match) -> str:
+        text = m.string
+        punct = m.group(1)
+        punct_pos = m.start(1)
+
+        # Garde-fous R-SP-001 : ne pas corriger les tokens techniques.
+        if _is_technical_token(text, punct_pos):
+            return m.group(0)
+        if punct == ":":
+            prev_char = text[punct_pos - 1] if punct_pos > 0 else ""
+            next_char = text[punct_pos + 1] if punct_pos + 1 < len(text) else ""
+            # Heures, ratios, références techniques numériques : 10:30, 16:9, 1234:5
+            if prev_char.isdigit() and next_char.isdigit():
+                return m.group(0)
+
+        return NNBSP + punct
+
     rules.append(TypoRule(
         rule_id="purh.espaces.avant_ponct_forte",
         pattern=re.compile(_any_space + r"([:;?!])"),
-        replacement=NNBSP + r"\1",
+        replacement=_replace_strong_punct,
         description="Espace fine insécable avant : ; ? !",
     ))
 
@@ -162,9 +194,11 @@ def _build_rules() -> list[TypoRule]:
     ))
 
     # 12. etc... ou etc… → etc.
+    #     Après normalisation des points de suspension, on rencontre surtout "etc…"
+    #     (éventuellement suivi d'un ou plusieurs points parasites).
     rules.append(TypoRule(
         rule_id="purh.abreviations.etc",
-        pattern=re.compile(r"etc[" + ELLIP + r"\.]{2,}"),
+        pattern=re.compile(r"etc(?:" + ELLIP + r"\.*|\.{2,})"),
         replacement="etc.",
         description="etc… → etc.",
     ))
