@@ -192,8 +192,16 @@ class FootnoteNormalizer:
 
         # R4. Espace fine insécable dans op. cit. / art. cit. / loc. cit.
         text = re.sub(
-            r"\b(op|art|loc)\.\s+(cit)\.",
+            r"\b(op|art|loc)\.[ \t\u00A0\u202F]+(cit)\.",
             r"\1." + NNBSP + r"\2.",
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        # R4b. Espace fine insécable dans s. l. / s. d.
+        text = re.sub(
+            r"\bs\.[ \t\u00A0\u202F]+([ld])\.",
+            r"s." + NNBSP + r"\1.",
             text,
             flags=re.IGNORECASE,
         )
