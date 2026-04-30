@@ -78,10 +78,10 @@ class MetopesMapper:
     def apply(self, document: Document) -> tuple[Document, list[Transformation]]:
         doc = deepcopy(document)
         transformations: list[Transformation] = []
-        prev_was_heading = False
+        prev_block_type: str | None = None
 
         for block in doc.blocks:
-            style = self._resolve_style(block, prev_was_heading)
+            style = self._resolve_style(block, prev_block_type)
             block.attributes["metopes_style"] = style
             transformations.append(Transformation(
                 transformation_id=make_id("tr"),
@@ -93,7 +93,7 @@ class MetopesMapper:
                 rule_id="metopes.style_mapping",
                 applied=True,
             ))
-            prev_was_heading = (block.block_type == "heading")
+            prev_block_type = block.block_type
 
         if transformations:
             doc.history.append(
@@ -101,7 +101,7 @@ class MetopesMapper:
             )
         return doc, transformations
 
-    def _resolve_style(self, block, prev_was_heading: bool) -> str:
+    def _resolve_style(self, block, prev_block_type: str | None) -> str:
         btype = block.block_type
         text  = block.text.strip()
 
@@ -128,7 +128,7 @@ class MetopesMapper:
                 return METOPES_STYLES["keywords"]
             if _RE_ACKNOWLEDGMENT.match(text):
                 return METOPES_STYLES["acknowledgment"]
-            if prev_was_heading:
+            if prev_block_type == "quote_block":
                 return METOPES_STYLES["paragraph_lead"]
             return METOPES_STYLES["paragraph"]
 
