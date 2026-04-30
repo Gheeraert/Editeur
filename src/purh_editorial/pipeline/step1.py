@@ -22,7 +22,7 @@ from purh_editorial.utils import make_id
 @dataclass
 class Step1Options:
     enable_ai: bool = True
-    max_ai_calls: int = 6               # appels Groq max (modÃ©ration)
+    max_ai_calls: int = 6               # appels Groq max (modération)
     output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
@@ -35,19 +35,19 @@ class Step1Result:
 
 class Step1Pipeline:
     """
-    Ã‰tape 1 â€” PrÃ©paration Ã©ditoriale d'un manuscrit auteur.
+    Étape 1 — Préparation éditoriale d'un manuscrit auteur.
 
-    Passe 1 (dÃ©terministe) :
-      orthotypo â†’ structure â†’ notes â†’ bibliographie â†’ styles MÃ©topes
+    Passe 1 (déterministe) :
+      orthotypo → structure → notes → bibliographie → styles Métopes
 
     Passe 2 (IA, optionnelle) :
-      corrections IA ciblÃ©es (2-12 mots, Groq llama-3.3-70b, max MAX_AI_CALLS appels)
+      corrections IA ciblées (2-12 mots, Groq llama-3.3-70b, max MAX_AI_CALLS appels)
 
     Surlignages :
-      jaune   â†’ orthotypographie
-      vert    â†’ notes de bas de page
-      turquoise â†’ bibliographie
-      rose    â†’ suggestions IA appliquÃ©es
+      jaune   → orthotypographie
+      vert    → notes de bas de page
+      turquoise → bibliographie
+      rose    → suggestions IA appliquées
     """
 
     version = "2.0.0"
@@ -73,7 +73,7 @@ class Step1Pipeline:
             document_id="",
         )
 
-        # â”€â”€ 1. Ingestion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 1. Ingestion ──────────────────────────────────────────────────────
         t0 = utc_now_iso()
         registry = ImporterRegistry()
         document = registry.load_document(source_path)
@@ -86,7 +86,7 @@ class Step1Pipeline:
             summary={"blocks": len(document.blocks), "notes": len(document.notes)},
         ))
 
-        # â”€â”€ 2. Orthotypographie (dÃ©terministe) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 2. Orthotypographie (déterministe) ────────────────────────────────
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
         report.transformations.extend(typo_tr)
@@ -98,7 +98,7 @@ class Step1Pipeline:
             summary={"corrections": len(typo_tr)},
         ))
 
-        # â”€â”€ 3. Reconnaissance de structure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 3. Reconnaissance de structure ────────────────────────────────────
         t0 = utc_now_iso()
         struct_diags, struct_tr = self.structure.process(document)
         report.diagnostics.extend(struct_diags)
@@ -114,7 +114,7 @@ class Step1Pipeline:
             },
         ))
 
-        # â”€â”€ 4. Normalisation des notes de bas de page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 4. Normalisation des notes de bas de page ─────────────────────────
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
         note_diags = self.footnotes.analyze_note_call_placement(document)
@@ -131,7 +131,7 @@ class Step1Pipeline:
             },
         ))
 
-        # â”€â”€ 5. Normalisation bibliographique â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 5. Normalisation bibliographique ──────────────────────────────────
         t0 = utc_now_iso()
         document, bib_tr = self.bibliography.apply(document)
         report.transformations.extend(bib_tr)
@@ -143,7 +143,7 @@ class Step1Pipeline:
             summary={"corrections": len(bib_tr)},
         ))
 
-        # â”€â”€ 6. Corrections IA ciblÃ©es (optionnelles) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 6. Corrections IA ciblées (optionnelles) ──────────────────────────
         if options.enable_ai and self.settings.ai.enabled:
             t0 = utc_now_iso()
             document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
@@ -161,7 +161,7 @@ class Step1Pipeline:
                 },
             ))
 
-        # â”€â”€ 7. Application des styles MÃ©topes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 7. Application des styles Métopes ─────────────────────────────────
         t0 = utc_now_iso()
         document, mapper_tr = self.mapper.apply(document)
         report.transformations.extend(mapper_tr)
@@ -173,7 +173,7 @@ class Step1Pipeline:
             summary={"styles_assigned": len(mapper_tr)},
         ))
 
-        # â”€â”€ 8. Export DOCX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ── 8. Export DOCX ─────────────────────────────────────────────────────
         output_docx: Path | None = None
         if options.output_path:
             t0 = utc_now_iso()
