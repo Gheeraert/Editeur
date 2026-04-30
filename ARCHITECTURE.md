@@ -2,63 +2,55 @@
 
 ## 1. Principes directeurs
 
-- modularité stricte;
-- logique métier hors interface;
-- dataclasses Python comme représentation canonique;
-- transformations traçables et explicables;
-- IA optionnelle et prudente.
+- modularite stricte
+- logique metier hors UI
+- dataclasses Python comme pivot
+- transformations tracables
+- IA optionnelle et prudente
 
 ## 2. Pivot architectural
 
-Le pivot réel est le modèle Python interne (`Document`, blocs, inlines, notes, diagnostics, transformations, rapports).
+Pivot reel: modele Python interne (`Document`, blocs, inlines, notes, diagnostics, transformations, report).
 
-Le JSON n'est pas le pivot souverain: c'est une sérialisation utile pour:
-- debug;
-- traçabilité;
-- tests;
-- éventuels échanges techniques (dont IA).
+JSON:
+- derive du pivot
+- utile pour debug/tests/tracabilite
+- non souverain
 
 ## 3. Pipeline cible
 
 ```text
-DOCX auteur (prioritaire) / autres formats source
-  -> import riche (io)
-  -> modèle interne (model)
-  -> services de correction/structuration (services)
-  -> sorties multiples:
-       - JSON de contrôle
-       - DOCX de relecture humaine
-       - XML-TEI Métopes (sortie principale de production)
+DOCX auteur
+  -> import riche
+  -> modele interne
+  -> services de correction/structuration
+  -> sorties:
+       - JSON de controle
+       - DOCX de relecture
+       - XML-TEI Metopes (production)
 ```
 
-## 4. Etat actuel du code (sans rupture)
+## 4. Niveaux de decision editoriale
 
-- import DOCX riche déjà en place (`io/docx_importer.py`);
-- traitements de normalisation orthotypographique et note/biblio déjà amorcés, à fiabiliser par des tests ciblés;
-- mapping Métopes présent mais encore orienté styles Word (`services/metopes_mapper.py`);
-- export DOCX de relecture en place (`io/docx_exporter.py`);
-- sérialisation JSON en place (`serialization/json_serializer.py`).
+1. Vetos structurels (prioritaires): bloquent la transformation.
+2. Deterministe sur: auto-corrections locales robustes.
+3. Heuristique scoree: score + decision + evidence + veto_reasons + ai_candidate.
+4. IA locale (zone grise): cible future proche, sans override des vetos.
+5. IA exploratoire future: desactivee par defaut, suggestions uniquement.
 
-Le recentrage demande une évolution progressive, sans refonte: conserver la chaîne existante et ajouter/renforcer la sortie TEI.
+## 5. Existant vs futur
 
-## 5. Styles Word Métopes vs structure TEI Métopes
+- Existant:
+  - vetos et heuristiques scorees en structure (heading/poesie)
+  - regles deterministes orthotypographiques
+  - diagnostics structurés
+- Futur:
+  - activation locale explicite de l'IA sur zones grises
+  - mode IA exploratoire parametre
 
-- Styles Word Métopes: convention de présentation pour relecture humaine.
-- Structure TEI Métopes: structuration sémantique/éditoriale pour la production.
+## 6. Metopes: style Word vs structure TEI
 
-Conclusion: un style Word appliqué sur un paragraphe n'équivaut pas automatiquement à une balise TEI correcte.
+- style Word Metopes: relecture/mise en forme
+- structure TEI Metopes: semantique de production
 
-## 6. Principes de prudence applicative
-
-- correction locale avant tout;
-- pas de réécriture massive;
-- en cas d'incertitude, produire un diagnostic plutôt qu'une auto-correction;
-- IA sous contrôle humain (suggestion, jamais normalisation silencieuse globale).
-
-## 7. Risques connus
-
-- espaces insécables et encodages;
-- citations longues (heuristiques);
-- notes de bas de page (appel/portée/cible);
-- fragilité technique de l'export DOCX;
-- ancien biais documentaire centré DOCX.
+Conclusion: style Word != structure TEI.
