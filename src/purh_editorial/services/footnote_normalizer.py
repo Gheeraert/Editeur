@@ -4,7 +4,7 @@ import copy
 import re
 from dataclasses import dataclass
 
-from purh_editorial.model import Document, InlineSpan, Note, Transformation
+from purh_editorial.model import Diagnostic, Document, Evidence, InlineSpan, Note, Transformation
 from purh_editorial.services.orthotypo_service import (
     COLOR_FOOTNOTE, NNBSP, APOS, _find_changed_regions,
 )
@@ -22,6 +22,8 @@ _VERSE_END_RE = re.compile(r"[»›’]\s*$")
 
 # Tirets en liste dans les notes → pas de correction
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")
+_FINAL_PUNCT = {".", ",", ";", ":", "?", "!"}
+_CLOSING_QUOTES = {"»", '"', "”", "›"}
 
 
 def _looks_like_url_or_verse(text: str) -> bool:
@@ -54,12 +56,75 @@ class FootnoteNormalizer:
             )
         return doc, transformations
 
+    def analyze_note_call_placement(self, document: Document) -> list[Diagnostic]:
+        """
+        R-AN-002 (A3): diagnostic seulement sur placement suspect des appels de note.
+        Ne modifie ni texte, ni spans, ni notes.
+        """
+        diagnostics: list[Diagnostic] = []
+        for block in document.blocks:
+            if not block.inlines:
+                continue
+            diagnostics.extend(self._diagnose_block_note_calls(block.block_id, block.inlines))
+        return diagnostics
+
     # ── Traitement d'une note ─────────────────────────────────────────────────
 
     def _process_note(self, note: Note) -> list[Transformation]:
         if note.inlines:
             return self._process_note_inlines(note)
         return self._process_note_flat(note)
+
+    def _diagnose_block_note_calls(
+        self,
+        block_id: str,
+        inlines: list[InlineSpan],
+    ) -> list[Diagnostic]:
+        diagnostics: list[Diagnostic] = []
+        for index, span in enumerate(inlines):
+            if span.kind != "note_call":
+                continue
+            previous_char = self._previous_visible_char(inlines, index)
+            if previous_char is None:
+                continue
+            if previous_char in _FINAL_PUNCT or previous_char in _CLOSING_QUOTES:
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="warning",
+                        category="footnote_call_placement",
+                        message=(
+                            "Appel de note probablement mal placé : il devrait précéder la "
+                            "ponctuation finale ou le guillemet fermant."
+                        ),
+                        target_ref=block_id,
+                        evidence=Evidence(
+                            excerpt=self._context_excerpt(inlines, index),
+                        ),
+                        rule_id="R-AN-002",
+                        attributes={
+                            "note_ref": span.note_ref,
+                            "note_call_index": index,
+                            "preceding_char": previous_char,
+                        },
+                    )
+                )
+        return diagnostics
+
+    @staticmethod
+    def _previous_visible_char(inlines: list[InlineSpan], index: int) -> str | None:
+        for i in range(index - 1, -1, -1):
+            text = inlines[i].text.rstrip()
+            if text:
+                return text[-1]
+        return None
+
+    @staticmethod
+    def _context_excerpt(inlines: list[InlineSpan], index: int, window: int = 1) -> str:
+        start = max(0, index - window)
+        end = min(len(inlines), index + window + 1)
+        return "".join(span.text for span in inlines[start:end])
 
     def _process_note_inlines(self, note: Note) -> list[Transformation]:
         original = "".join(s.text for s in note.inlines)
