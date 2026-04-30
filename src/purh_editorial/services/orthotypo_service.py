@@ -36,6 +36,9 @@ _VALID_CENTURIES: frozenset[str] = frozenset({
     "xx", "xxi", "xxii", "xxiii",
 })
 
+_CENTURY_TOKEN_RE = re.compile(r"\b([IVXLCDMivxlcdm]{1,8})e\b", re.UNICODE | re.IGNORECASE)
+_CENTURY_CONTEXT_RE = re.compile(r"^\s*(si[eè]cles?|s\.)\b", re.IGNORECASE | re.UNICODE)
+
 # ── Règle typographique ───────────────────────────────────────────────────────
 
 @dataclass
@@ -374,6 +377,7 @@ class OrthotypoService:
             target_ref=block.block_id,
             update_text=lambda t: setattr(block, "text", t),
             update_color=lambda: block.attributes.update({"highlight_color": self.color}),
+            update_inlines=lambda spans: setattr(block, "inlines", spans),
         )
 
     def _process_note(self, note) -> list[Transformation]:
@@ -388,46 +392,180 @@ class OrthotypoService:
             target_ref=note.note_id,
             update_text=lambda t: setattr(note, "text", t),
             update_color=lambda: None,
+            update_inlines=lambda spans: setattr(note, "inlines", spans),
         )
 
     def _process_inlines_owner(self, inlines, *, target_ref, update_text) -> list[Transformation]:
         original = "".join(s.text for s in inlines)
         corrected = self._apply_all_rules(original)
         if corrected == original:
+            styled_inlines, century_styled = self._style_centuries_in_inlines(inlines)
+            if century_styled:
+                inlines[:] = styled_inlines
+                styled_text = "".join(span.text for span in styled_inlines)
+                update_text(styled_text)
+                regions = _find_changed_regions(original, styled_text)
+                return [Transformation(
+                    transformation_id=make_id("tr"),
+                    module=self.module_name,
+                    target_ref=target_ref,
+                    operation="orthotypo",
+                    before=original,
+                    after=styled_text,
+                    rule_id="purh.orthotypo.batch",
+                    applied=True,
+                    attributes={
+                        "highlight_regions": regions,
+                        "color": self.color,
+                        "century_styling": True,
+                        "rule_id": "R-SO-001",
+                    },
+                )]
             return []
-        regions = _find_changed_regions(original, corrected)
-        new_inlines = self._rebuild_inlines(inlines, original, corrected, regions)
+
+        new_inlines = self._rebuild_inlines(
+            inlines,
+            original,
+            corrected,
+            _find_changed_regions(original, corrected),
+        )
+        new_inlines, century_styled = self._style_centuries_in_inlines(new_inlines)
+        final_text = "".join(span.text for span in new_inlines)
+        regions = _find_changed_regions(original, final_text)
         inlines[:] = new_inlines
-        update_text(corrected)
+        update_text(final_text)
         return [Transformation(
             transformation_id=make_id("tr"),
             module=self.module_name,
             target_ref=target_ref,
             operation="orthotypo",
             before=original,
-            after=corrected,
+            after=final_text,
             rule_id="purh.orthotypo.batch",
             applied=True,
-            attributes={"highlight_regions": regions, "color": self.color},
+            attributes={
+                "highlight_regions": regions,
+                "color": self.color,
+                "century_styling": century_styled,
+                "rule_id": "R-SO-001" if century_styled else None,
+            },
         )]
 
-    def _process_flat(self, text, *, target_ref, update_text, update_color) -> list[Transformation]:
+    def _process_flat(
+        self,
+        text,
+        *,
+        target_ref,
+        update_text,
+        update_color,
+        update_inlines,
+    ) -> list[Transformation]:
         corrected = self._apply_all_rules(text)
-        if corrected == text:
+        inlines = [InlineSpan(text=corrected)]
+        styled_inlines, century_styled = self._style_centuries_in_inlines(inlines)
+        final_text = "".join(span.text for span in styled_inlines)
+
+        if final_text == text:
             return []
-        update_text(corrected)
+        update_text(final_text)
         update_color()
+        if century_styled:
+            update_inlines(styled_inlines)
         return [Transformation(
             transformation_id=make_id("tr"),
             module=self.module_name,
             target_ref=target_ref,
             operation="orthotypo",
             before=text,
-            after=corrected,
+            after=final_text,
             rule_id="purh.orthotypo.batch",
             applied=True,
-            attributes={"color": self.color},
+            attributes={
+                "color": self.color,
+                "century_styling": century_styled,
+                "rule_id": "R-SO-001" if century_styled else None,
+            },
         )]
+
+    @staticmethod
+    def _is_century_context(full_text: str, match_end: int) -> bool:
+        lookahead = full_text[match_end: match_end + 32]
+        return bool(_CENTURY_CONTEXT_RE.match(lookahead))
+
+    def _style_centuries_in_inlines(self, inlines: list[InlineSpan]) -> tuple[list[InlineSpan], bool]:
+        if not inlines:
+            return inlines, False
+
+        full_text = "".join(span.text for span in inlines)
+        roman_positions: set[int] = set()
+        exponent_positions: set[int] = set()
+        for match in _CENTURY_TOKEN_RE.finditer(full_text):
+            roman = match.group(1)
+            if roman.lower() not in _VALID_CENTURIES:
+                continue
+            if not self._is_century_context(full_text, match.end()):
+                continue
+            roman_start = match.start(1)
+            roman_end = match.end(1)
+            roman_positions.update(range(roman_start, roman_end))
+            exponent_positions.add(roman_end)
+
+        if not roman_positions and not exponent_positions:
+            return inlines, False
+
+        changed = False
+        result: list[InlineSpan] = []
+        absolute_index = 0
+        for span in inlines:
+            if span.kind != "text" or not span.text:
+                result.append(copy.deepcopy(span))
+                absolute_index += len(span.text)
+                continue
+
+            for ch in span.text:
+                new_span = copy.deepcopy(span)
+                new_span.text = ch
+                if absolute_index in roman_positions:
+                    lowered = ch.lower()
+                    if lowered != ch or not new_span.style.small_caps:
+                        changed = True
+                    new_span.text = lowered
+                    new_span.style.small_caps = True
+                elif absolute_index in exponent_positions:
+                    if ch != "e" or not new_span.style.superscript:
+                        changed = True
+                    new_span.text = "e"
+                    new_span.style.superscript = True
+                result.append(new_span)
+                absolute_index += 1
+
+        if not changed:
+            return inlines, False
+        return self._merge_adjacent_spans(result), True
+
+    @staticmethod
+    def _merge_adjacent_spans(inlines: list[InlineSpan]) -> list[InlineSpan]:
+        if not inlines:
+            return inlines
+
+        merged: list[InlineSpan] = []
+        for span in inlines:
+            if not span.text:
+                continue
+            if not merged:
+                merged.append(span)
+                continue
+            last = merged[-1]
+            if (
+                last.kind == span.kind
+                and last.note_ref == span.note_ref
+                and last.style == span.style
+                and last.attributes == span.attributes
+            ):
+                last.text += span.text
+            else:
+                merged.append(span)
+        return merged
 
     # ── Application des règles ────────────────────────────────────────────────
 
