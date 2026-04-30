@@ -65,6 +65,7 @@ _HEAD_STYLE_NAMES: frozenset[str] = frozenset({
     "heading 1", "heading 2", "heading 3", "heading 4", "heading 5",
     "TEI_bibl_start", "TEI_appendix_start",
 })
+_FIRST_LINE_INDENT_CM = 0.5
 
 
 # ── Conversion .dotm → flux .docx ────────────────────────────────────────────
@@ -144,6 +145,9 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         para = doc.add_paragraph(style=style_name)
     except (KeyError, ValueError):
         para = doc.add_paragraph(style="Normal")
+
+    if style_name == "Normal":
+        para.paragraph_format.first_line_indent = Cm(_FIRST_LINE_INDENT_CM)
 
     # Retrait suspendu pour les entrées bibliographiques (≈ 5 mm, charte PURH)
     if style_name == "TEI_bibl_reference":

@@ -13,7 +13,8 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.docx_exporter import DocxExporter
-from purh_editorial.model import Document, InlineSpan, InlineStyle, Paragraph
+from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Paragraph, QuoteBlock
+from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -57,6 +58,22 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
             if text:
                 runs.append((text, run))
         return runs
+
+    @staticmethod
+    def _paragraphs_with_text(root: ET.Element) -> list[tuple[str, ET.Element]]:
+        paragraphs: list[tuple[str, ET.Element]] = []
+        for paragraph in root.findall(f".//{_q('p')}"):
+            text = "".join((node.text or "") for node in paragraph.findall(f".//{_q('t')}"))
+            if text:
+                paragraphs.append((text, paragraph))
+        return paragraphs
+
+    @staticmethod
+    def _first_line_attr(paragraph: ET.Element) -> str | None:
+        ind = paragraph.find(f"./{_q('pPr')}/{_q('ind')}")
+        if ind is None:
+            return None
+        return ind.attrib.get(_q("firstLine"))
 
     def test_ooxml_century_styles_with_real_metopes_template(self) -> None:
         source = Document(
@@ -140,6 +157,75 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
             has_custom_ui = any(name.startswith("customUI/") for name in names)
             # customUI n'est pas supprimé ici: on le suit explicitement pour signaler un risque potentiel.
             self.assertIsInstance(has_custom_ui, bool)
+
+
+    def test_regular_paragraphs_are_first_line_indented(self) -> None:
+        source = Document(
+            document_id="doc-indent-1",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Paragraph(block_id="p1", text="Premier paragraphe."),
+                Paragraph(block_id="p2", text="Second paragraphe."),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 2)
+        self.assertTrue(all(self._first_line_attr(p) is not None for _text, p in paragraphs))
+
+    def test_heading_not_indented_and_following_paragraph_is_indented(self) -> None:
+        source = Document(
+            document_id="doc-indent-2",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Heading(block_id="h1", text="Titre"),
+                Paragraph(block_id="p1", text="Paragraphe courant."),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 2)
+        self.assertIsNone(self._first_line_attr(paragraphs[0][1]))
+        self.assertIsNotNone(self._first_line_attr(paragraphs[1][1]))
+
+    def test_quote_block_is_not_indented(self) -> None:
+        source = Document(
+            document_id="doc-indent-quote",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[QuoteBlock(block_id="q1", text="Citation longue.")],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 1)
+        self.assertIsNone(self._first_line_attr(paragraphs[0][1]))
+
+    def test_paragraph_after_quote_block_uses_no_indent_style(self) -> None:
+        source = Document(
+            document_id="doc-indent-3",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                QuoteBlock(block_id="q1", text="Citation longue."),
+                Paragraph(block_id="p1", text="Paragraphe apres citation."),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        self.assertEqual(mapped.blocks[1].attributes.get("metopes_style"), "TEI_paragraph_consecutive")
+
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 2)
+        self.assertIsNone(self._first_line_attr(paragraphs[1][1]))
 
 
 if __name__ == "__main__":

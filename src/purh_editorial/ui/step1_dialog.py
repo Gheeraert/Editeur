@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -17,6 +18,72 @@ DISCLAIMER_TEXT = (
     "Cette interface ne propose pas encore de diff complet avant/apres. "
     "Les diagnostics signalent des points a verifier et ne sont pas des corrections automatiques."
 )
+CONFIG_VERSION = 1
+
+
+def build_config_dict(
+    source_path: str,
+    output_docx_path: str,
+    tei_output_path: str,
+    enable_ai: bool,
+    max_ai_calls: int,
+) -> dict[str, object]:
+    return {
+        "version": CONFIG_VERSION,
+        "source_path": source_path,
+        "output_docx_path": output_docx_path,
+        "tei_output_path": tei_output_path,
+        "enable_ai": bool(enable_ai),
+        "max_ai_calls": max(1, int(max_ai_calls)),
+    }
+
+
+def apply_config_dict(
+    current: dict[str, object],
+    loaded: dict[str, object],
+) -> dict[str, object]:
+    merged = {
+        "version": CONFIG_VERSION,
+        "source_path": str(current.get("source_path", "")),
+        "output_docx_path": str(current.get("output_docx_path", "")),
+        "tei_output_path": str(current.get("tei_output_path", "")),
+        "enable_ai": bool(current.get("enable_ai", False)),
+        "max_ai_calls": max(1, int(current.get("max_ai_calls", Step1Options().max_ai_calls))),
+    }
+    if not isinstance(loaded, dict):
+        return merged
+    if "source_path" in loaded:
+        merged["source_path"] = str(loaded.get("source_path") or "")
+    if "output_docx_path" in loaded:
+        merged["output_docx_path"] = str(loaded.get("output_docx_path") or "")
+    if "tei_output_path" in loaded:
+        merged["tei_output_path"] = str(loaded.get("tei_output_path") or "")
+    if "enable_ai" in loaded:
+        merged["enable_ai"] = bool(loaded.get("enable_ai"))
+    if "max_ai_calls" in loaded:
+        try:
+            merged["max_ai_calls"] = max(1, int(loaded.get("max_ai_calls")))
+        except (TypeError, ValueError):
+            pass
+    return merged
+
+
+def load_config_file(path: Path) -> dict[str, object]:
+    try:
+        raw = path.read_text(encoding="utf-8")
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"JSON invalide: {exc}") from exc
+    except OSError as exc:
+        raise ValueError(f"Lecture impossible: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ValueError("JSON invalide: objet attendu en racine.")
+    return data
+
+
+def save_config_file(path: Path, config: dict[str, object]) -> None:
+    payload = apply_config_dict({}, config)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def format_diagnostics(diagnostics: list[Diagnostic]) -> str:
@@ -168,15 +235,25 @@ class Step1Dialog(tk.Tk):
         actions_frame.grid(row=3, column=0, sticky="ew", pady=(0, p))
         actions_frame.columnconfigure(0, weight=1)
         self._progress = ttk.Progressbar(actions_frame, mode="indeterminate")
-        self._progress.grid(row=0, column=0, sticky="ew", padx=(0, p))
+        self._progress.grid(row=0, column=0, columnspan=4, sticky="ew", pady=(0, 6))
+        ttk.Button(
+            actions_frame,
+            text="Charger configuration...",
+            command=self._on_load_config,
+        ).grid(row=1, column=0, sticky="w")
+        ttk.Button(
+            actions_frame,
+            text="Enregistrer configuration...",
+            command=self._on_save_config,
+        ).grid(row=1, column=1, padx=(p, p), sticky="w")
         self._run_btn = ttk.Button(
             actions_frame,
             text="Lancer l'analyse editoriale",
             command=self._on_run,
             state="disabled",
         )
-        self._run_btn.grid(row=0, column=1)
-        ttk.Label(actions_frame, textvariable=self._status, anchor="w").grid(row=1, column=0, columnspan=2, sticky="ew", pady=(6, 0))
+        self._run_btn.grid(row=1, column=3, sticky="e")
+        ttk.Label(actions_frame, textvariable=self._status, anchor="w").grid(row=2, column=0, columnspan=4, sticky="ew", pady=(6, 0))
 
         result_frame = ttk.LabelFrame(root, text="5. Resultats", padding=p)
         result_frame.grid(row=4, column=0, sticky="nsew")
@@ -258,6 +335,40 @@ class Step1Dialog(tk.Tk):
         self._set_running(True)
         threading.Thread(target=self._run_pipeline, args=(source, options), daemon=True).start()
 
+    def _on_save_config(self) -> None:
+        path_str = filedialog.asksaveasfilename(
+            title="Enregistrer configuration Step 1",
+            defaultextension=".json",
+            filetypes=[("JSON", "*.json"), ("Tous les fichiers", "*.*")],
+            initialdir=str(self.settings.exports_dir),
+        )
+        if not path_str:
+            return
+        try:
+            config = self._current_config_dict()
+            save_config_file(Path(path_str), config)
+            self._status.set(f"Configuration enregistree: {path_str}")
+        except Exception as exc:  # noqa: BLE001
+            messagebox.showerror("Erreur configuration", str(exc))
+
+    def _on_load_config(self) -> None:
+        path_str = filedialog.askopenfilename(
+            title="Charger configuration Step 1",
+            filetypes=[("JSON", "*.json"), ("Tous les fichiers", "*.*")],
+            initialdir=str(self.settings.exports_dir),
+        )
+        if not path_str:
+            return
+        try:
+            loaded = load_config_file(Path(path_str))
+            merged = apply_config_dict(self._current_config_dict(), loaded)
+            self._apply_config_to_ui(merged)
+            self._status.set(f"Configuration chargee: {path_str}")
+        except ValueError as exc:
+            messagebox.showerror("Configuration invalide", str(exc))
+        except Exception as exc:  # noqa: BLE001
+            messagebox.showerror("Erreur configuration", str(exc))
+
     def _run_pipeline(self, source: Path, options: Step1Options) -> None:
         try:
             if self._pipeline is None:
@@ -292,6 +403,22 @@ class Step1Dialog(tk.Tk):
         self._result_text.delete("1.0", tk.END)
         self._result_text.insert("1.0", text)
         self._result_text.configure(state="disabled")
+
+    def _current_config_dict(self) -> dict[str, object]:
+        return build_config_dict(
+            source_path=self._input_path.get().strip(),
+            output_docx_path=self._output_docx_path.get().strip(),
+            tei_output_path=self._output_tei_path.get().strip(),
+            enable_ai=self._enable_ai.get(),
+            max_ai_calls=self._max_ai_calls.get(),
+        )
+
+    def _apply_config_to_ui(self, config: dict[str, object]) -> None:
+        self._input_path.set(str(config.get("source_path", "")))
+        self._output_docx_path.set(str(config.get("output_docx_path", "")))
+        self._output_tei_path.set(str(config.get("tei_output_path", "")))
+        self._enable_ai.set(bool(config.get("enable_ai", False)))
+        self._max_ai_calls.set(max(1, int(config.get("max_ai_calls", Step1Options().max_ai_calls))))
 
     @staticmethod
     def _optional_path(raw_value: str, extension: str) -> Path | None:

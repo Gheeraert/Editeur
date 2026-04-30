@@ -30,6 +30,7 @@ _NAME_PAIR_RE         = re.compile(
     re.UNICODE,
 )
 _ROMAN_ONLY_RE        = re.compile(r"^[IVXLCDMivxlcdm]{1,5}$")
+_PASSAGE_TOKEN_RE     = re.compile(r"^(?:[IVXLCDM]+|\d+|[A-Za-z]{1,4})$", re.IGNORECASE)
 # Entrée de glossaire/abréviations : SIGLE : développement
 _ABBREV_ENTRY_RE      = re.compile(r"^[A-ZÀÂÉÈÊËÙÛÜ]{2,6}[  ]?\s*:")
 # Institution : Université, École, Institut, CNRS, Laboratoire…
@@ -58,6 +59,9 @@ _BIBLIO_HEURISTIC_RE = re.compile(
     r"\s*\d{4}",
     re.UNICODE,
 )
+
+
+_HEADING_STYLE_LEVEL_RE = re.compile(r"(?:heading|titre)\s*([1-6])", re.IGNORECASE)
 
 
 class StructurePreparationService:
@@ -95,6 +99,7 @@ class StructurePreparationService:
             text = block.text.strip()
             if not text:
                 continue
+            has_blocking_heading_signals = self._has_blocking_heading_signals(block, text)
 
             # ── Titre de section bibliographique ──────────────────────────────
             if block.block_type == "heading" and _SECTION_BIBLIO_RE.match(text):
@@ -108,10 +113,25 @@ class StructurePreparationService:
                 heading_count += 1
                 continue
 
+            source_heading_level = self._source_heading_level(block)
+            if (block.block_type == "paragraph"
+                    and source_heading_level is not None
+                    and not has_blocking_heading_signals):
+                self._promote_heading(
+                    block,
+                    level=source_heading_level,
+                    rule="structure.source_style.heading",
+                    transformations=transformations,
+                )
+                in_bib_section = False
+                heading_count += 1
+                continue
+
             # ── Normal + ALL CAPS → titre (peut arriver si l'ingestion a raté) ──
             if (block.block_type == "paragraph"
                     and text.isupper()
-                    and 4 < len(text) < 140):
+                    and 4 < len(text) < 140
+                    and not has_blocking_heading_signals):
                 self._promote_heading(block, level=1, rule="structure.allcaps.heading",
                                       transformations=transformations)
                 in_bib_section = False
@@ -122,7 +142,7 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_bold")
                     and not block.attributes.get("all_runs_italic")
-                    and self._is_heading_candidate(text)):
+                    and self._is_heading_candidate(text, block)):
                 level = self._bold_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.bold.heading",
                                       transformations=transformations)
@@ -134,7 +154,7 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_italic")
                     and not block.attributes.get("all_runs_bold")):
-                result = self._classify_italic_block(text, block.attributes)
+                result = self._classify_italic_block(text, block.attributes, block)
                 if result == "author":
                     block.block_type = "author"
                     transformations.append(self._make_tr(
@@ -214,7 +234,7 @@ class StructurePreparationService:
 
             # Promotion de titre si heuristique (titre non-stylé court)
             if (block.block_type == "paragraph"
-                    and self._looks_like_heading_heuristic(text)):
+                    and self._looks_like_heading_heuristic(text, block)):
                 level = self._heuristic_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.heading.heuristic",
                                       transformations=transformations)
@@ -263,12 +283,108 @@ class StructurePreparationService:
 
     # ── Classifieurs ─────────────────────────────────────────────────────────
 
+    @staticmethod
+    def _source_heading_level(block) -> int | None:
+        explicit_level = block.attributes.get("heading_level")
+        if isinstance(explicit_level, int) and 1 <= explicit_level <= 6:
+            return explicit_level
+
+        style_values = (
+            str(block.attributes.get("style_id", "")),
+            str(block.attributes.get("style_name", "")),
+        )
+        for style_value in style_values:
+            if not style_value:
+                continue
+            match = _HEADING_STYLE_LEVEL_RE.search(style_value)
+            if match:
+                return int(match.group(1))
+        return None
+
     @classmethod
-    def _is_heading_candidate(cls, text: str) -> bool:
+    def _has_blocking_heading_signals(cls, block, text: str) -> bool:
+        return (
+            cls._looks_like_reference_or_caption(text)
+            or cls._looks_like_passage_reference(text)
+            or cls._looks_like_list_item(text)
+            or cls._looks_like_bibliography_reference(text)
+            or cls._looks_like_poetry_line_candidate(block, text)
+        )
+
+    @staticmethod
+    def _looks_like_reference_or_caption(text: str) -> bool:
+        stripped = text.strip()
+        lower = stripped.lower()
+        if lower.startswith("p.") or lower.startswith("page"):
+            return True
+        blocked_fragments = (
+            "accolade",
+            "souligné",
+            "soulignee",
+            "soulignée",
+            "face à",
+            "face a",
+            "voir ",
+            "cf.",
+        )
+        return any(fragment in lower for fragment in blocked_fragments)
+
+    @staticmethod
+    def _looks_like_passage_reference(text: str) -> bool:
+        stripped = text.strip().strip(",;:.")
+        if "," not in stripped:
+            return False
+        tokens = [token.strip().strip(".") for token in stripped.split(",") if token.strip()]
+        if len(tokens) < 2:
+            return False
+        if not all(_PASSAGE_TOKEN_RE.match(token) for token in tokens):
+            return False
+        return any(re.search(r"\d|[IVXLCDM]", token, re.IGNORECASE) for token in tokens)
+
+    @staticmethod
+    def _looks_like_list_item(text: str) -> bool:
+        stripped = text.lstrip()
+        if re.match(r"^[-–—•]\s+", stripped):
+            return True
+        if re.match(r"^\d+\s*[\.\)]\s+", stripped):
+            return True
+        if re.match(r"^[A-Za-z]\)\s+", stripped):
+            return True
+        return False
+
+    @staticmethod
+    def _looks_like_bibliography_reference(text: str) -> bool:
+        lower = text.lower()
+        markers = (" éd.", " ed.", " p.", " pp.", " vol.", " t.", " n°", " no.")
+        if any(marker in lower for marker in markers):
+            return True
+        if "doi.org" in lower or "http://" in lower or "https://" in lower:
+            return True
+        return bool(re.search(r",\s*\d{4}\b", text))
+
+    @staticmethod
+    def _looks_like_poetry_line_candidate(block, text: str) -> bool:
+        if not block.attributes.get("all_runs_italic"):
+            return False
+        stripped = text.strip()
+        if not (20 <= len(stripped) <= 160):
+            return False
+        if not stripped[:1].isupper():
+            return False
+        if stripped.endswith((";", ",", ".", "?", "!", ":")):
+            return True
+        return False
+
+    @classmethod
+    def _is_heading_candidate(cls, text: str, block=None) -> bool:
         """Vrai si le texte ressemble à un titre (court, sans ponctuation de phrase)."""
         if len(text) > 180:
             return False
         stripped = text.strip()
+        if block is not None and cls._has_blocking_heading_signals(block, stripped):
+            return False
+        if stripped[-1:] in ".?!,":
+            return False
         # Entrée bibliographique : virgule + année
         if re.search(r",\s*\d{4}", stripped):
             return False
@@ -323,7 +439,7 @@ class StructurePreparationService:
         return 1
 
     @staticmethod
-    def _classify_italic_block(text: str, attrs: dict) -> str:
+    def _classify_italic_block(text: str, attrs: dict, block=None) -> str:
         """
         Pour un paragraphe tout-italique :
         - 'author'  → nom d'auteur (court, < 5 mots, pas de chiffres ni virgule)
@@ -331,6 +447,8 @@ class StructurePreparationService:
         - ''        → laisser tel quel (biblio, traduction, citation, etc.)
         """
         stripped = text.strip()
+        if block is not None and StructurePreparationService._has_blocking_heading_signals(block, stripped):
+            return ""
         words = stripped.split()
         # Trop court (1 mot)
         if len(words) < 2:
@@ -373,12 +491,14 @@ class StructurePreparationService:
         return False
 
     @classmethod
-    def _looks_like_heading_heuristic(cls, text: str) -> bool:
+    def _looks_like_heading_heuristic(cls, text: str, block=None) -> bool:
         """
         Heuristique très conservatrice — seulement pour des cas structurels non ambigus.
         On évite les faux positifs au prix de quelques manqués.
         """
         stripped = text.strip()
+        if block is not None and cls._has_blocking_heading_signals(block, stripped):
+            return False
         words = stripped.split()
         # Taille : 2-8 mots, longueur ≤ 70 chars
         if not (2 <= len(words) <= 8 and len(stripped) <= 70):
@@ -446,3 +566,4 @@ class StructurePreparationService:
         if counter:
             return counter.most_common(1)[0][0]
         return 0
+
