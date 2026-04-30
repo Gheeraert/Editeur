@@ -524,6 +524,7 @@ class StructurePreparationService:
         text = block.text.strip()
         source_level = cls._source_heading_level(block)
         veto_reasons = cls._heading_veto_reasons(block)
+        bold_title_fastpath = False
 
         if source_level is not None:
             score = 1.0
@@ -551,6 +552,15 @@ class StructurePreparationService:
             )
             if heuristic_title_component:
                 score = max(score, 0.90)
+            bold_title_fastpath = (
+                bool(block.attributes.get("all_runs_bold"))
+                and not bool(block.attributes.get("all_runs_italic"))
+                and 8 <= length <= 120
+                and len(words) <= 14
+                and not veto_reasons
+            )
+            if bold_title_fastpath:
+                score = max(score, settings.heading_transform_threshold)
             score = round(max(0.0, min(1.0, score)), 3)
 
         ai_candidate = settings.heading_ai_min_score <= score < settings.heading_ai_max_score
@@ -578,6 +588,7 @@ class StructurePreparationService:
                 "all_runs_italic": bool(block.attributes.get("all_runs_italic")),
                 "word_count": len(text.split()),
                 "char_count": len(text),
+                "bold_title_fastpath": bold_title_fastpath,
             },
             veto_reasons=veto_reasons,
             ai_candidate=ai_candidate,
