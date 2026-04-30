@@ -2,49 +2,113 @@
 
 ## 1. Finalite
 
-Le projet prépare des manuscrits auteur pour la production PURH.
-Le recentrage architectural conserve l'existant et clarifie la cible.
+Le projet prepare des manuscrits auteur pour la production PURH.
+Le pivot est le modele Python interne (`Document`, blocs, inlines, notes, diagnostics, transformations).
 
 ## 2. Pipeline cible
 
 ```text
 DOCX auteur
   -> import riche
-  -> modèle Python interne structuré
-  -> corrections et structuration éditoriale
+  -> modele Python interne structure
+  -> corrections / structuration editoriale
   -> sorties:
-       1) JSON (contrôle/debug/traçabilité/tests)
+       1) JSON (controle, debug, tracabilite, tests)
        2) DOCX (relecture humaine)
-       3) XML-TEI Métopes (production principale)
+       3) XML-TEI Metopes (production principale)
 ```
 
-## 3. Roles explicites
+## 3. Niveaux de decision editoriale
 
-- Pivot interne: dataclasses métier (`Document`, blocs, inlines, notes, diagnostics, transformations).
-- JSON: format dérivé, pas pivot souverain.
-- DOCX: support de vérification humaine, avec corrections localisées visibles.
-- XML-TEI Métopes: sortie éditoriale de référence pour la production.
+### 3.1 Vetos structurels (prioritaires)
 
-## 4. Point d'attention Metopes
+Role: bloquer une transformation meme si un score est eleve.
 
-Les styles Word Métopes sont utiles pour la relecture et la mise en forme.
-Ils ne remplacent pas la structuration TEI Métopes.
+Exemples:
+- reference de passage (`VI, I, 52`, `VIII, Pr., 18`)
+- legende/reference (`page 305`, `p. 390`, `accolade`, `face a`, `souligne`)
+- liste (`1. ...`, puces)
+- bibliographie probable
+- code/balise technique
+- heading explicite (selon contexte)
 
-Le mapping Métopes doit évoluer progressivement:
-- d'une logique "assigner un style Word";
-- vers une logique "identifier un rôle éditorial structurable en TEI".
+Statut:
+- Existant: oui (structure et scoring actuel)
+- Futur: extension progressive selon corpus
 
-## 5. Principes de prudence
+### 3.2 Deterministe sur
 
-- correction locale et motivée;
-- pas de réécriture massive;
-- en cas de doute: diagnostic explicite plutôt qu'automatisation;
-- IA d'assistance seulement, sans imposition silencieuse.
+Role: transformation locale automatique quand la regle est sure.
 
-## 6. Risques connus a surveiller
+Exemples:
+- `etc...` -> `etc.`
+- `1ere`/`1ere` variantes -> `1re` (selon regle en place)
+- espaces typographiques avec garde-fous
+- siecles styles quand contexte juge sur
 
-- espaces insécables (NBSP/NNBSP) et encodage;
-- détection des citations longues;
-- gestion des notes de bas de page;
-- fragilité technique de certains post-traitements DOCX;
-- traces de documentation historique centrée DOCX.
+Statut:
+- Existant: oui (plusieurs regles orthotypo)
+- Futur: durcissement par tests de garde-fous
+
+### 3.3 Heuristique scoree
+
+Role: arbitrer quand plusieurs indices sont necessaires.
+
+Exemples:
+- titraille
+- candidats citations poetiques
+- certains cas de structuration citation longue
+
+Sortie attendue:
+- `score`
+- `decision` (`transform` / `diagnostic` / `ignore`)
+- `evidence`
+- `veto_reasons`
+- `ai_candidate`
+
+Statut:
+- Existant: oui (titraille + candidats poesie)
+- Futur: calibration progressive des seuils
+
+### 3.4 IA locale (zone grise)
+
+Role: assistance sur zones grises uniquement, jamais sur tout le document.
+
+Contraintes:
+- reponse structuree
+- pas d'override des vetos (etat actuel)
+- pas de correction silencieuse globale
+
+Statut:
+- Existant: partiel (cadre de prudence present)
+- Futur: branchement explicite sur segments `ai_candidate`
+
+### 3.5 IA exploratoire future
+
+Role: suggestions plus ouvertes, controlees, desactivees par defaut.
+
+Contraintes cibles:
+- niveau de liberte parametrique
+- suggestions uniquement, jamais corrections silencieuses
+
+Statut:
+- Existant: non
+- Futur: oui (hors perimetre actuel)
+
+## 4. Roles des sorties
+
+- JSON: derive du pivot, utile pour debug/tests/tracabilite.
+- DOCX: sortie de relecture humaine.
+- XML-TEI Metopes: sortie de production principale.
+
+## 5. Point d'attention Metopes
+
+Les styles Word Metopes ne remplacent pas la structure TEI Metopes.
+Le mapping evolue d'une logique "style Word" vers une logique "role editorial structurable".
+
+## 6. Principes de prudence
+
+- correction locale et motivee
+- pas de reecriture massive
+- en cas de doute: diagnostic plutot qu'automatisation
+- IA d'assistance sous controle humain
