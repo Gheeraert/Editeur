@@ -15,17 +15,37 @@ from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 from purh_editorial.services.structure_service import StructurePreparationService
+from purh_editorial.services.structure_ai_arbitrator import (
+    GroqStructureAiProvider,
+    StructureAiArbitrationSettings,
+    StructureAiArbitrator,
+    StructureAiProvider,
+)
 from purh_editorial.services.ai_editorial_service import AIEditorialService
 from purh_editorial.utils import make_id
 
 
 @dataclass
 class Step1Options:
-    enable_ai: bool = True
+    # Legacy flag kept for backward compatibility with existing callers.
+    # It now controls only editorial AI, never structure AI arbitration.
+    enable_ai: bool = False
+    enable_structure_ai: bool = False
+    enable_editorial_ai: bool = False
     max_ai_calls: int = 6               # appels Groq max (modération)
+    max_structure_ai_calls: int = 6
     output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
+
+    def structure_ai_enabled(self) -> bool:
+        return bool(self.enable_structure_ai)
+
+    def editorial_ai_enabled(self) -> bool:
+        if self.enable_editorial_ai:
+            return True
+        # Backward-compatibility: legacy flag enables editorial AI only.
+        return bool(self.enable_ai)
 
 @dataclass
 class Step1Result:
@@ -52,7 +72,12 @@ class Step1Pipeline:
 
     version = "2.0.0"
 
-    def __init__(self, settings: AppSettings) -> None:
+    def __init__(
+        self,
+        settings: AppSettings,
+        *,
+        structure_ai_provider: StructureAiProvider | None = None,
+    ) -> None:
         self.settings     = settings
         self.orthotypo    = OrthotypoService()
         self.structure    = StructurePreparationService()
@@ -64,6 +89,17 @@ class Step1Pipeline:
             model    = settings.ai.model,
             base_url = settings.ai.base_url,
             timeout  = settings.ai.timeout_seconds,
+        )
+        if structure_ai_provider is None and settings.ai.enabled:
+            structure_ai_provider = GroqStructureAiProvider(
+                api_key=settings.ai.api_key or "",
+                model=settings.ai.model,
+                base_url=settings.ai.base_url,
+                timeout=settings.ai.timeout_seconds,
+            )
+        self.structure_ai = StructureAiArbitrator(
+            provider=structure_ai_provider,
+            settings=StructureAiArbitrationSettings(model=settings.ai.model),
         )
 
     def run(self, source_path: Path, options: Step1Options | None = None) -> Step1Result:
@@ -119,6 +155,30 @@ class Step1Pipeline:
             },
         ))
 
+        # ── 3b. Arbitrage IA local des zones grises structurelles ────────────
+        t0 = utc_now_iso()
+        ai_local_enabled = bool(options.structure_ai_enabled() and self.settings.ai.enabled)
+        local_diags, local_warnings, ai_calls = self.structure_ai.arbitrate_from_diagnostics(
+            document=document,
+            diagnostics=struct_diags,
+            enable_ai=ai_local_enabled,
+            max_calls=options.max_structure_ai_calls,
+        )
+        report.diagnostics.extend(local_diags)
+        report.warnings.extend(local_warnings)
+        report.add_module_run(ModuleRun(
+            module_name="structure_ai_arbitration",
+            version=self.version,
+            started_at=t0,
+            finished_at=utc_now_iso(),
+            status="success",
+            summary={
+                "enabled": ai_local_enabled,
+                "ai_calls": ai_calls,
+                "diagnostics": len(local_diags),
+            },
+        ))
+
         # ── 4. Normalisation des notes de bas de page ─────────────────────────
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
@@ -149,7 +209,8 @@ class Step1Pipeline:
         ))
 
         # ── 6. Corrections IA ciblées (optionnelles) ──────────────────────────
-        if options.enable_ai and self.settings.ai.enabled:
+        editorial_ai_enabled = bool(options.editorial_ai_enabled() and self.settings.ai.enabled)
+        if editorial_ai_enabled:
             t0 = utc_now_iso()
             document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
             report.transformations.extend(ai_tr)
