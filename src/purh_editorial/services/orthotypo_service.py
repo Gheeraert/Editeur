@@ -224,20 +224,19 @@ def _build_rules() -> list[TypoRule]:
 
     # 15. Séparateur de milliers : espace ordinaire entre groupes de chiffres
     #     1 000 → 1 000, 1 500 000 → 1 500 000
-    #     (appliqué 2 fois pour couvrir les millions)
     _thousands_re = re.compile(r"(\d{1,3}) (\d{3})(?!\d)")
     def _fix_thousands(text: str) -> str:
-        # Deux passages pour couvrir 1 000 000
+        # Plusieurs passages pour couvrir tous les groupes (milliers, millions, etc.)
         prev = None
         while prev != text:
             prev = text
             text = _thousands_re.sub(r"\1" + NNBSP + r"\2", text)
         return text
-    # Encapsulé comme callable
+
     rules.append(TypoRule(
         rule_id="purh.nombres.milliers",
-        pattern=re.compile(r"(\d{1,3}) (\d{3})(?!\d)"),
-        replacement=r"\1" + NNBSP + r"\2",
+        pattern=re.compile(r"\b\d{1,3}(?: \d{3})+\b"),
+        replacement=lambda m: _fix_thousands(m.group(0)),
         description="Espace fine insécable dans les nombres (milliers)",
     ))
 
