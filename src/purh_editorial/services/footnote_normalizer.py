@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import copy
 import re
@@ -10,17 +10,17 @@ from purh_editorial.services.orthotypo_service import (
 )
 from purh_editorial.utils import make_id
 
-# Abréviations latines devant toujours apparaître en italique dans les notes
+# Abreviations latines reperees dans les notes (normalisation locale de casse/espaces).
 _LATIN_ABBR_RE = re.compile(
     r"\b(ibid|id|op\.?\s*cit|art\.?\s*cit|loc\.?\s*cit|cf|supra|infra|idem)\b\.?",
     re.IGNORECASE,
 )
 
-# URLs et fins de ligne qui acceptent légitimement l'absence de point final
+# URLs et fins de ligne qui acceptent legitimement l'absence de point final.
 _URL_RE = re.compile(r"https?://\S+$")
 _VERSE_END_RE = re.compile(r"[»›’]\s*$")
 
-# Tirets en liste dans les notes → pas de correction
+# Tirets en liste dans les notes -> pas de correction.
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")
 _FINAL_PUNCT = {".", ",", ";", ":", "?", "!"}
 _CLOSING_QUOTES = {"»", '"', "”", "›"}
@@ -34,10 +34,10 @@ def _looks_like_url_or_verse(text: str) -> bool:
 class FootnoteNormalizer:
     """
     Normalise le contenu des notes de bas de page :
-    - Supprime l'espace de tête parasite (après le marqueur de note)
+    - Supprime l'espace de tete parasite (apres le marqueur de note)
     - Ajoute un point final si absent (hors URL, vers, etc.)
-    - Normalise les abréviations de référence (Ibid. → ibid.)
-    - Corrige op. cit. / art. cit. (espace insécable)
+    - Normalise les abreviations de reference (Ibid. -> ibid.)
+    - Corrige op. cit. / art. cit. (espace insecable)
     Surlignage : vert (COLOR_FOOTNOTE)
     """
 
@@ -68,7 +68,7 @@ class FootnoteNormalizer:
             diagnostics.extend(self._diagnose_block_note_calls(block.block_id, block.inlines))
         return diagnostics
 
-    # ── Traitement d'une note ─────────────────────────────────────────────────
+    # -- Traitement d'une note ------------------------------------------------
 
     def _process_note(self, note: Note) -> list[Transformation]:
         if note.inlines:
@@ -95,7 +95,7 @@ class FootnoteNormalizer:
                         severity="warning",
                         category="footnote_call_placement",
                         message=(
-                            "Appel de note probablement mal placé : il devrait précéder la "
+                            "Appel de note probablement mal placÃ© : il devrait prÃ©cÃ©der la "
                             "ponctuation finale ou le guillemet fermant."
                         ),
                         target_ref=block_id,
@@ -166,22 +166,22 @@ class FootnoteNormalizer:
             attributes={"color": self.color},
         )]
 
-    # ── Règles ────────────────────────────────────────────────────────────────
+    # -- Regles ----------------------------------------------------------------
 
     @staticmethod
     def _apply_rules(text: str) -> str:
-        # R1. Supprimer l'espace de tête parasite (issu du marqueur de note Word)
+        # R1. Supprimer l'espace de tete parasite (issu du marqueur de note Word)
         text = text.lstrip(" \t")
 
-        # R2. Majuscule en début de note
+        # R2. Majuscule en debut de note
         if text and text[0].islower():
             text = text[0].upper() + text[1:]
 
-        # R3. Normalisation Ibid. / Idem / Id. → ibid. / idem / id. (minuscule)
-        #     Sauf en début de note (déjà traité en R2)
+        # R3. Normalisation Ibid. / Idem / Id. -> ibid. / idem / id. (minuscule)
+        #     Sauf en debut de note (deja traite en R2)
         def _lower_latin(m: re.Match) -> str:
             w = m.group(0)
-            # En début de note après R2, la première lettre est en majuscule → on la laisse
+            # En debut de note apres R2, la premiere lettre est en majuscule -> on la laisse
             return w  # on normalise uniquement si ce n'est pas le premier mot
         text = re.sub(
             r"(?<!^)\b(Ibid|Id|Idem|Op\.\s*cit|Art\.\s*cit|Loc\.\s*cit)\b\.?",
@@ -190,7 +190,7 @@ class FootnoteNormalizer:
             flags=re.IGNORECASE,
         )
 
-        # R4. Espace fine insécable dans op. cit. / art. cit. / loc. cit.
+        # R4. Espace fine insecable dans op. cit. / art. cit. / loc. cit.
         text = re.sub(
             r"\b(op|art|loc)\.[ \t\u00A0\u202F]+(cit)\.",
             r"\1." + NNBSP + r"\2.",
@@ -198,7 +198,7 @@ class FootnoteNormalizer:
             flags=re.IGNORECASE,
         )
 
-        # R4b. Espace fine insécable dans s. l. / s. d.
+        # R4b. Espace fine insecable dans s. l. / s. d.
         text = re.sub(
             r"\bs\.[ \t\u00A0\u202F]+([ld])\.",
             r"s." + NNBSP + r"\1.",
@@ -213,7 +213,7 @@ class FootnoteNormalizer:
 
         return text
 
-    # ── Reconstruction inlines avec surlignage ────────────────────────────────
+    # -- Reconstruction inlines avec surlignage --------------------------------
 
     @staticmethod
     def _apply_highlights(
@@ -222,11 +222,11 @@ class FootnoteNormalizer:
         corrected_text: str,
         regions: list[tuple[int, int]],
     ) -> list[InlineSpan]:
-        """Marque les spans modifiés en vert (COLOR_FOOTNOTE)."""
+        """Marque les spans modifies en vert (COLOR_FOOTNOTE)."""
         if not inlines:
             return inlines
 
-        # Carte char original → span source
+        # Carte char original -> span source
         span_for_char: list[InlineSpan] = []
         for span in inlines:
             for _ in span.text:
@@ -277,3 +277,4 @@ class FootnoteNormalizer:
         flush()
 
         return result if result else inlines
+
