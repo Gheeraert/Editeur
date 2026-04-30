@@ -314,19 +314,28 @@ class StructurePreparationService:
 
         poetry_decisions = self.analyze_poetry_candidates(document)
         for poetry_decision in poetry_decisions:
-            if poetry_decision.decision != "diagnostic":
+            if poetry_decision.decision not in {"diagnostic", "transform"}:
                 continue
             excerpt = poetry_decision.evidence.get("excerpt", "")
+            if poetry_decision.decision == "transform":
+                severity = "warning"
+                message = (
+                    "Candidat citation poetique a score eleve detecte, mais aucune "
+                    "transformation automatique n'est appliquee dans cette passe."
+                )
+            else:
+                severity = "info"
+                message = (
+                    "Candidate citation poetique detectee: verifier manuellement "
+                    "avant toute structuration."
+                )
             diagnostics.append(
                 Diagnostic(
                     diagnostic_id=make_id("diag"),
                     module=self.module_name,
-                    severity="info",
+                    severity=severity,
                     category=_POETRY_CATEGORY,
-                    message=(
-                        "Candidate citation poetique detectee: verifier manuellement "
-                        "avant toute structuration."
-                    ),
+                    message=message,
                     target_ref=poetry_decision.target_refs[0] if poetry_decision.target_refs else "",
                     rule_id=_POETRY_RULE_ID,
                     evidence=Evidence(excerpt=excerpt),
