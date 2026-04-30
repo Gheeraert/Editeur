@@ -72,6 +72,18 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("ISBN 978 2 1234 5678 9"), "ISBN 978 2 1234 5678 9")
         self.assertEqual(_apply_orthotypo(f"1{NNBSP}000"), f"1{NNBSP}000")
 
+    def test_r_so_002_ordinaux_simples(self) -> None:
+        self.assertEqual(_apply_orthotypo("la 1ère partie"), "la 1re partie")
+        self.assertEqual(_apply_orthotypo("la 1ere partie"), "la 1re partie")
+        self.assertEqual(_apply_orthotypo("le 1er chapitre"), "le 1er chapitre")
+        self.assertEqual(_apply_orthotypo("la 2ème partie"), "la 2e partie")
+        self.assertEqual(_apply_orthotypo("le 5ème chapitre"), "le 5e chapitre")
+        self.assertEqual(_apply_orthotypo("le 5eme chapitre"), "le 5e chapitre")
+
+    def test_r_so_002_guardrails(self) -> None:
+        self.assertEqual(_apply_orthotypo("version 2.0"), "version 2.0")
+        self.assertEqual(_apply_orthotypo("5e chapitre"), "5e chapitre")
+
 
 if __name__ == "__main__":
     unittest.main()
