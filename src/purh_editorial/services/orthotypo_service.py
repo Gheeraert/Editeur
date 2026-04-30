@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from typing import Callable
 
-from purh_editorial.model import Document, InlineSpan, Transformation
+from purh_editorial.model import Diagnostic, Document, Evidence, InlineSpan, Transformation
 from purh_editorial.utils import make_id
 
 # ── Couleurs de surlignage ────────────────────────────────────────────────────
@@ -37,6 +37,9 @@ _VALID_CENTURIES: frozenset[str] = frozenset({
 })
 
 _CENTURY_TOKEN_RE = re.compile(r"\b([IVXLCDMivxlcdm]{1,8})e\b", re.UNICODE | re.IGNORECASE)
+_QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
+_QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
+_TECHNICAL_TEXT_RE = re.compile(r"<[^>]+>|[\w:-]+\s*=\s*\"[^\"]*\"")
 _CENTURY_CONTEXT_RE = re.compile(r"^\s*(si[eè]cles?|s\.)\b", re.IGNORECASE | re.UNICODE)
 
 # ── Règle typographique ───────────────────────────────────────────────────────
@@ -363,6 +366,21 @@ class OrthotypoService:
             )
         return doc, transformations
 
+    def analyze_quote_punctuation(self, document: Document) -> list[Diagnostic]:
+        """
+        R-GQ-004 (A3): diagnostic prudent sur ponctuation autour des guillemets.
+        Ne modifie pas le texte.
+        """
+        diagnostics: list[Diagnostic] = []
+        for block in document.blocks:
+            if block.block_type == "quote_block":
+                continue
+            text = "".join(span.text for span in block.inlines) if block.inlines else block.text
+            if not text or _TECHNICAL_TEXT_RE.search(text):
+                continue
+            diagnostics.extend(self._diagnose_quote_punctuation(block.block_id, text))
+        return diagnostics
+
     # ── Bloc ─────────────────────────────────────────────────────────────────
 
     def _process_block(self, block) -> list[Transformation]:
@@ -394,6 +412,45 @@ class OrthotypoService:
             update_color=lambda: None,
             update_inlines=lambda spans: setattr(note, "inlines", spans),
         )
+
+    def _diagnose_quote_punctuation(self, block_id: str, text: str) -> list[Diagnostic]:
+        diagnostics: list[Diagnostic] = []
+        for match in _QUOTE_PUNCT_SUSPECT_RE.finditer(text):
+            inside = match.group(1).strip()
+            if not inside:
+                continue
+            if any(q in inside for q in ("“", "”", "\"", "«", "»")):
+                continue
+
+            suspicious = False
+            if inside[-1] in _QUOTE_STRONG_PUNCT:
+                suspicious = True
+            before_open = text[:match.start()].rstrip()
+            if before_open.endswith(":"):
+                suspicious = True
+
+            if not suspicious:
+                continue
+
+            diagnostics.append(
+                Diagnostic(
+                    diagnostic_id=make_id("diag"),
+                    module=self.module_name,
+                    severity="warning",
+                    category="quote_punctuation",
+                    message=(
+                        "Vérifier la ponctuation autour du guillemet fermant selon le type de citation."
+                    ),
+                    target_ref=block_id,
+                    evidence=Evidence(excerpt=match.group(0)),
+                    rule_id="R-GQ-004",
+                    attributes={
+                        "pattern": "closing_quote_followed_by_dot",
+                        "match_text": match.group(0),
+                    },
+                )
+            )
+        return diagnostics
 
     def _process_inlines_owner(self, inlines, *, target_ref, update_text) -> list[Transformation]:
         original = "".join(s.text for s in inlines)

@@ -89,13 +89,18 @@ class Step1Pipeline:
         # ── 2. Orthotypographie (déterministe) ────────────────────────────────
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
+        quote_punctuation_diags = self.orthotypo.analyze_quote_punctuation(document)
+        report.diagnostics.extend(quote_punctuation_diags)
         report.transformations.extend(typo_tr)
         report.add_module_run(ModuleRun(
             module_name="orthotypo",
             version=self.version,
             started_at=t0,
             finished_at=utc_now_iso(),
-            summary={"corrections": len(typo_tr)},
+            summary={
+                "corrections": len(typo_tr),
+                "quote_punctuation_diagnostics": len(quote_punctuation_diags),
+            },
         ))
 
         # ── 3. Reconnaissance de structure ────────────────────────────────────
