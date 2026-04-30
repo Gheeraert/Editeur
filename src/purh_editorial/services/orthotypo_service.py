@@ -185,7 +185,24 @@ def _build_rules() -> list[TypoRule]:
         description="Normalisation des siècles (XIXe)",
     ))
 
-    # 11. Double tiret → tiret demi-cadratin
+    # 11. Ordinaux simples — 1ère/1ere → 1re, nème/neme → ne
+    def _fix_ordinal(m: re.Match) -> str:
+        number = m.group(1)
+        suffix = m.group(2).lower()
+        if suffix in {"ère", "ere"} and number == "1":
+            return "1re"
+        if suffix in {"ème", "eme"}:
+            return f"{number}e"
+        return m.group(0)
+
+    rules.append(TypoRule(
+        rule_id="purh.ordinaux",
+        pattern=re.compile(r"\b(\d+)(ère|ere|ème|eme)\b", re.UNICODE),
+        replacement=_fix_ordinal,
+        description="Normalisation prudente des ordinaux simples (1re, 5e)",
+    ))
+
+    # 12. Double tiret → tiret demi-cadratin
     rules.append(TypoRule(
         rule_id="purh.tiret.double",
         pattern=re.compile(r"--"),
@@ -193,7 +210,7 @@ def _build_rules() -> list[TypoRule]:
         description="Double tiret → –",
     ))
 
-    # 12. etc... ou etc… → etc.
+    # 13. etc... ou etc… → etc.
     #     Après normalisation des points de suspension, on rencontre surtout "etc…"
     #     (éventuellement suivi d'un ou plusieurs points parasites).
     rules.append(TypoRule(
@@ -203,7 +220,7 @@ def _build_rules() -> list[TypoRule]:
         description="etc… → etc.",
     ))
 
-    # 13. Espace fine insécable après abréviations de pagination
+    # 14. Espace fine insécable après abréviations de pagination
     #     p. 3, pp. 3-5, vol. II, t. I, f. 12, n° 5, fig. 2, art. cit., chap. 4
     #     On cible uniquement quand ce qui suit est un chiffre ou numéral romain
     _abbr = r"\b(pp?|vol|t|f|fol|fig|chap|cat|pl|ms|Ms|n°|N°|col)\."
@@ -214,7 +231,7 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable après abréviations de pagination",
     ))
 
-    # 14. Espace fine insécable dans les numéros (n° 3, N° 12)
+    # 15. Espace fine insécable dans les numéros (n° 3, N° 12)
     rules.append(TypoRule(
         rule_id="purh.numero",
         pattern=re.compile(r"\b([Nn]°)\s+(?=\d)"),
@@ -222,7 +239,7 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable après n°",
     ))
 
-    # 15. Séparateur de milliers : espace ordinaire entre groupes de chiffres
+    # 16. Séparateur de milliers : espace ordinaire entre groupes de chiffres
     #     1 000 → 1 000, 1 500 000 → 1 500 000
     _thousands_re = re.compile(r"(\d{1,3}) (\d{3})(?!\d)")
     def _fix_thousands(text: str) -> str:
@@ -240,7 +257,7 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable dans les nombres (milliers)",
     ))
 
-    # 16. Tiret cadratin dans les incises : " - " entre mots → " — "
+    # 17. Tiret cadratin dans les incises : " - " entre mots → " — "
     #     (seulement quand entouré d'espaces et pas en début de ligne)
     rules.append(TypoRule(
         rule_id="purh.tiret.incise",
