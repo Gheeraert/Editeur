@@ -57,10 +57,21 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
         block, _, _ = _process_one(Paragraph(block_id="p1", text="La réception du modèle tragique", attributes={"all_runs_bold": True}))
         self.assertEqual(block.block_type, "heading")
 
+    def test_bold_short_sentence_like_not_promoted(self) -> None:
+        block, diagnostics, _ = _process_one(
+            Paragraph(block_id="p1", text="Il faut conclure rapidement.", attributes={"all_runs_bold": True})
+        )
+        self.assertNotEqual(block.block_type, "heading")
+        self.assertFalse(any(d.rule_id == "R-STRUCT-HEADING-001" for d in diagnostics))
+
     def test_short_sentence_not_heading(self) -> None:
         block, diagnostics, _ = _process_one(Paragraph(block_id="p1", text="Il faut conclure rapidement."))
         self.assertNotEqual(block.block_type, "heading")
         self.assertFalse(any(d.rule_id == "R-STRUCT-HEADING-001" for d in diagnostics))
+
+    def test_nominal_intertitle_without_bold_keeps_prudent_behavior(self) -> None:
+        block, _, _ = _process_one(Paragraph(block_id="p1", text="La réception du modèle tragique"))
+        self.assertEqual(block.block_type, "epigraph")
 
     def test_numbered_list_veto(self) -> None:
         block, _, _ = _process_one(Paragraph(block_id="p1", text="1. Élément de liste", attributes={"all_runs_bold": True}))
@@ -83,7 +94,7 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
             document_id="doc-heading-grey",
             source_path="tests/fixtures/minimal_source.txt",
             source_format="txt",
-            blocks=[Paragraph(block_id="p1", text="La réception des formes", attributes={"all_runs_bold": True})],
+            blocks=[Paragraph(block_id="p1", text="Cadre théorique")],
         )
         diagnostics, _ = service.process(doc)
         diag = next(d for d in diagnostics if d.rule_id == "R-STRUCT-HEADING-001")
@@ -93,4 +104,3 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
