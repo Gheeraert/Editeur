@@ -71,14 +71,62 @@ def _build_rules() -> list[TypoRule]:
         description="Points de suspension … ",
     ))
 
-    # 3. Guillemets français depuis guillemets droits/anglais — "..." → « ... »
-    _gq_open  = "[" + _OPEN_QUOTES  + "]"
-    _gq_close = "[" + _CLOSE_QUOTES + "]"
+    # 3. Guillemets droits (prudence) :
+    #    - texte courant: "..." -> « ... »
+    #    - second niveau dans « ... »: "..." -> “...”
+    #    - contextes techniques: inchangés (print("x"), attributs XML/HTML, etc.)
+    _technical_attr_re = re.compile(r"\b[\w:-]+\s*=\s*$")
+
+    def _is_technical_quote_context(text: str, quote_start: int, quote_end: int) -> bool:
+        before = text[max(0, quote_start - 48):quote_start]
+        after = text[quote_end:min(len(text), quote_end + 48)]
+        quoted_content = text[quote_start + 1:quote_end - 1]
+
+        before_stripped = before.rstrip()
+        if _technical_attr_re.search(before_stripped):
+            return True
+        if before_stripped.endswith("("):
+            return True
+        if "<" in before_stripped and ">" not in before_stripped:
+            return True
+        if before_stripped.endswith(",") and "(" in before_stripped:
+            return True
+        if "\\" in quoted_content:
+            return True
+        if re.match(r"^\s*[)\],;:]", after):
+            return True
+        return False
+
+    def _is_inside_french_quotes(text: str, quote_start: int, quote_end: int) -> bool:
+        last_open = text.rfind(LQUOT, 0, quote_start)
+        if last_open < 0:
+            return False
+        last_close_before = text.rfind(RQUOT, 0, quote_start)
+        if last_close_before > last_open:
+            return False
+        next_close = text.find(RQUOT, quote_end)
+        return next_close >= 0
+
+    def _replace_straight_quotes(m: re.Match) -> str:
+        full = m.group(0)
+        content = m.group(1)
+        text = m.string
+        quote_start = m.start(0)
+        quote_end = m.end(0)
+
+        if _is_technical_quote_context(text, quote_start, quote_end):
+            return full
+
+        if _is_inside_french_quotes(text, quote_start, quote_end):
+            return "“" + content.strip() + "”"
+
+        return LQUOT + NNBSP + content.strip() + NNBSP + RQUOT
+
     rules.append(TypoRule(
         rule_id="purh.guillemets.droits",
-        pattern=re.compile(_gq_open + r"(.*?)" + _gq_close, re.DOTALL),
-        replacement=lambda m: LQUOT + NNBSP + m.group(1).strip() + NNBSP + RQUOT,
-        description="Guillemets droits → guillemets français",
+        pattern=re.compile(r'"([^"\n]+)"'),
+        replacement=_replace_straight_quotes,
+        description="Guillemets droits -> guillemets français ou second niveau",
     ))
 
     # 4. Espace fine insécable après « — absorbe tout type d'espace (NNBSP, NBSP, ordinaire)
