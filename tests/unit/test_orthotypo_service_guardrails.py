@@ -61,6 +61,31 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("etc…"), "etc.")
         self.assertEqual(_apply_orthotypo("etc...."), "etc.")
 
+    def test_guillemets_droits_cas_simple(self) -> None:
+        self.assertEqual(_apply_orthotypo('Il dit "bonjour".'), f"Il dit «{NNBSP}bonjour{NNBSP}».")
+
+    def test_guillemets_second_niveau_dans_guillemets_francais(self) -> None:
+        self.assertEqual(
+            _apply_orthotypo('« Il dit "bonjour" puis se tut. »'),
+            f"«{NNBSP}Il dit “bonjour” puis se tut.{NNBSP}»",
+        )
+
+    def test_guillemets_second_niveau_deja_typographiques_reste_inchange(self) -> None:
+        text = "« Il dit “bonjour” puis se tut. »"
+        self.assertEqual(_apply_orthotypo(text), f"«{NNBSP}Il dit “bonjour” puis se tut.{NNBSP}»")
+
+    def test_guillemets_second_niveau_sans_espaces_internes(self) -> None:
+        result = _apply_orthotypo('« "bonjour" »')
+        self.assertIn("“bonjour”", result)
+        self.assertNotIn(f"“{NNBSP}", result)
+        self.assertNotIn(f"{NNBSP}”", result)
+
+    def test_guillemets_droits_contextes_techniques_inchanges(self) -> None:
+        self.assertEqual(_apply_orthotypo('print("hello")'), 'print("hello")')
+        self.assertEqual(_apply_orthotypo('class="note"'), 'class="note"')
+        self.assertEqual(_apply_orthotypo('<hi rend="italic">'), '<hi rend="italic">')
+        self.assertEqual(_apply_orthotypo('data-value="x"'), 'data-value="x"')
+
     def test_r_sp_004_thousands_separator(self) -> None:
         self.assertEqual(_apply_orthotypo("1 000"), f"1{NNBSP}000")
         self.assertEqual(_apply_orthotypo("10 000"), f"10{NNBSP}000")
