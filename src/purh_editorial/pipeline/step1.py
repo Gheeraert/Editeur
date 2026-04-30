@@ -117,13 +117,18 @@ class Step1Pipeline:
         # â”€â”€ 4. Normalisation des notes de bas de page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
+        note_diags = self.footnotes.analyze_note_call_placement(document)
+        report.diagnostics.extend(note_diags)
         report.transformations.extend(note_tr)
         report.add_module_run(ModuleRun(
             module_name="footnotes",
             version=self.version,
             started_at=t0,
             finished_at=utc_now_iso(),
-            summary={"corrections": len(note_tr)},
+            summary={
+                "corrections": len(note_tr),
+                "note_call_diagnostics": len(note_diags),
+            },
         ))
 
         # â”€â”€ 5. Normalisation bibliographique â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
