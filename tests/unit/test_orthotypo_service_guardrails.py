@@ -61,6 +61,17 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("etc…"), "etc.")
         self.assertEqual(_apply_orthotypo("etc...."), "etc.")
 
+    def test_r_sp_004_thousands_separator(self) -> None:
+        self.assertEqual(_apply_orthotypo("1 000"), f"1{NNBSP}000")
+        self.assertEqual(_apply_orthotypo("10 000"), f"10{NNBSP}000")
+        self.assertEqual(_apply_orthotypo("1 500 000"), f"1{NNBSP}500{NNBSP}000")
+        self.assertEqual(_apply_orthotypo("12 345 678"), f"12{NNBSP}345{NNBSP}678")
+
+    def test_r_sp_004_guardrails(self) -> None:
+        self.assertEqual(_apply_orthotypo("en 2025"), "en 2025")
+        self.assertEqual(_apply_orthotypo("ISBN 978 2 1234 5678 9"), "ISBN 978 2 1234 5678 9")
+        self.assertEqual(_apply_orthotypo(f"1{NNBSP}000"), f"1{NNBSP}000")
+
 
 if __name__ == "__main__":
     unittest.main()
