@@ -152,6 +152,34 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
         self.assertTrue(decision.ai_candidate)
         self.assertFalse(self.service.heuristic_settings.allow_ai_for_poetry_candidates)
 
+    def test_transform_decision_is_not_silent_in_process(self) -> None:
+        service = StructurePreparationService(
+            heuristic_settings=HeuristicSettings(
+                poetry_transform_threshold=0.75,
+                poetry_diagnostic_threshold=0.65,
+                poetry_ai_min_score=0.65,
+                poetry_ai_max_score=0.90,
+            )
+        )
+        document = _doc_from_lines(
+            [
+                "Je marche encor, dans la brume qui se leve,",
+                "Tu cherches l'aube, au bord du meme quai,",
+                "Nous voyons l'eau qui tremble et se releve,",
+                "Le vent rejoint nos pas, puis se defait.",
+            ]
+        )
+
+        diagnostics, transformations = service.process(document)
+
+        poetry_diag = next(d for d in diagnostics if d.rule_id == "R-CI-POETRY-001")
+        self.assertEqual(poetry_diag.attributes.get("decision"), "transform")
+        self.assertEqual(poetry_diag.category, "poetry_quote_candidate")
+        self.assertIn("score", poetry_diag.attributes)
+        self.assertIn("veto_reasons", poetry_diag.attributes)
+        self.assertIn("ai_candidate", poetry_diag.attributes)
+        self.assertEqual(transformations, [])
+
 
 if __name__ == "__main__":
     unittest.main()
