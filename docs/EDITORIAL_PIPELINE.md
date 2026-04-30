@@ -78,6 +78,10 @@ Contraintes:
 - reponse structuree
 - pas d'override des vetos (etat actuel)
 - pas de correction silencieuse globale
+- appel limite aux candidats heuristiques `ai_candidate=true`
+- aucun appel si `veto_reasons` non vide
+- aucun appel si `enable_ai=false`
+- arbitrage de classification locale uniquement (pas de reecriture du texte)
 
 Statut:
 - Existant: partiel (cadre de prudence present)
