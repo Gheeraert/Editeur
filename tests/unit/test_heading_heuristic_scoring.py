@@ -10,7 +10,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.model import Document, Paragraph
-from purh_editorial.services.structure_service import HeuristicSettings, StructurePreparationService
+from purh_editorial.services.structure_service import HeuristicSettings, StructurePreparationService, _SECTION_BIBLIO_RE
 
 
 def _process_one(block: Paragraph):
@@ -77,6 +77,15 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
         block, _, _ = _process_one(Paragraph(block_id="p1", text="1. Élément de liste", attributes={"all_runs_bold": True}))
         self.assertNotEqual(block.block_type, "heading")
 
+    def test_dash_en_list_item_is_detected(self) -> None:
+        self.assertTrue(StructurePreparationService._looks_like_list_item("– Élément"))
+
+    def test_dash_em_list_item_is_detected(self) -> None:
+        self.assertTrue(StructurePreparationService._looks_like_list_item("— Élément"))
+
+    def test_bullet_list_item_is_detected(self) -> None:
+        self.assertTrue(StructurePreparationService._looks_like_list_item("• Élément"))
+
     def test_bibliography_like_veto(self) -> None:
         block, _, _ = _process_one(Paragraph(block_id="p1", text="Dupont, 2018, Histoire des formes", attributes={"all_runs_bold": True}))
         self.assertNotEqual(block.block_type, "heading")
@@ -100,6 +109,42 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
         diag = next(d for d in diagnostics if d.rule_id == "R-STRUCT-HEADING-001")
         self.assertEqual(diag.category, "heading_candidate")
         self.assertTrue(diag.attributes.get("ai_candidate"))
+
+    def test_transform_decision_not_applied_is_reported(self) -> None:
+        service = StructurePreparationService(
+            heuristic_settings=HeuristicSettings(
+                heading_transform_threshold=0.10,
+                heading_diagnostic_threshold=0.05,
+                heading_ai_min_score=0.05,
+                heading_ai_max_score=0.10,
+            )
+        )
+        doc = Document(
+            document_id="doc-heading-transform-not-applied",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Paragraph(block_id="h0", text="Titre de section", block_type="heading"),
+                Paragraph(block_id="p1", text="Cadre theorique pour analyse comparee des formes narratives et argumentatives"),
+            ],
+        )
+
+        diagnostics, _ = service.process(doc)
+
+        diag = next(d for d in diagnostics if d.rule_id == "R-STRUCT-HEADING-001")
+        self.assertEqual(diag.attributes.get("decision"), "transform")
+        self.assertEqual(diag.attributes.get("reason"), "transform_not_applied")
+        self.assertIn("score", diag.attributes)
+        self.assertIn("evidence", diag.attributes)
+        self.assertIn("veto_reasons", diag.attributes)
+        self.assertIn("ai_candidate", diag.attributes)
+        self.assertNotEqual(doc.blocks[1].block_type, "heading")
+
+    def test_reference_section_and_guillemets_and_numero_markers_remain_detectable(self) -> None:
+        service = StructurePreparationService()
+        self.assertTrue(service._looks_like_block_quote("\u00ab " + "texte " * 30 + "\u00bb"))
+        self.assertTrue(service._looks_like_bibliography_reference("Dupont, \u00e9d., t. II, n\u00b0 4, 2025"))
+        self.assertTrue(bool(_SECTION_BIBLIO_RE.match("r\u00e9f\u00e9rences bibliographiques")))
 
 
 if __name__ == "__main__":

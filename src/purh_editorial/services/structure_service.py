@@ -9,54 +9,54 @@ import unicodedata
 from purh_editorial.model import BibliographyItem, Diagnostic, Document, Evidence, Transformation
 from purh_editorial.utils import make_id
 
-# â”€â”€ Constantes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Constantes
 
 _SECTION_BIBLIO_RE = re.compile(
-    r"^(sources?|bibliographie|rÃ©fÃ©rences\s*bibliographiques?|bibliography|"
-    r"travaux\s*citÃ©s?|works?\s*cited)",
+    r"^(sources?|bibliographie|r(?:\u00e9|e)f(?:\u00e9|e)rences\s*bibliographiques?|bibliography|"
+    r"travaux\s*cit(?:\u00e9|e)s?|works?\s*cited)",
     re.IGNORECASE | re.UNICODE,
 )
-_EPIGRAPH_MAX_CHARS   = 350
-_PUNCT_ENDINGS        = set(".!?â€¦,")
-_NUMBERED_SECTION_RE  = re.compile(r"^(\d+)\s*[-\.]\s*")
-_CREDIT_START_RE      = re.compile(
-    r"^(Sous|Dans|Pour|Avec|Sur|Par|Textes?|Ã‰tudes?|Articles?|Ouvrage|Actes?)\s+",
+_EPIGRAPH_MAX_CHARS = 350
+_PUNCT_ENDINGS = {".", "!", "?", ",", "\u2026"}
+_NUMBERED_SECTION_RE = re.compile(r"^(\d+)\s*[-\.]\s*")
+_CREDIT_START_RE = re.compile(
+    r"^(Sous|Dans|Pour|Avec|Sur|Par|Textes?|\u00c9tudes?|Articles?|Ouvrage|Actes?)\s+",
     re.IGNORECASE | re.UNICODE,
 )
-# Verbe conjuguÃ© EN TÃŠTE de phrase (imparfait 3sg, conditionnel, prÃ©sent 3e pl.)
-_VERB_LEAD_RE         = re.compile(
+# Verbe conjugu? EN T?TE de phrase (imparfait 3sg, conditionnel, pr?sent 3e pl.)
+_VERB_LEAD_RE = re.compile(
     r"^[A-Z][A-Za-z]*(ait|aient|ront|raient|rait|ions|iez)\b",
     re.UNICODE,
 )
-# Paire de noms propres : "PrÃ©nom NOM et PrÃ©nom NOM" â†’ crÃ©dit Ã©ditorial, pas titre
-_NAME_PAIR_RE         = re.compile(
+# Paire de noms propres : "Pr?nom NOM et Pr?nom NOM" -> cr?dit ?ditorial, pas titre
+_NAME_PAIR_RE = re.compile(
     r"^[A-Z][A-Za-z\-]+(\s+[A-Za-z\-]+)+\s+et\s+[A-Z]",
     re.UNICODE,
 )
-_ROMAN_ONLY_RE        = re.compile(r"^[IVXLCDMivxlcdm]{1,5}$")
-_PASSAGE_TOKEN_RE     = re.compile(r"^(?:[IVXLCDM]+|\d+|[A-Za-z]{1,4})$", re.IGNORECASE)
-# EntrÃ©e de glossaire/abrÃ©viations : SIGLE : dÃ©veloppement
-_ABBREV_ENTRY_RE      = re.compile(r"^[A-Z]{2,6}[ ]?\s*:")
-# Institution : UniversitÃ©, Ã‰cole, Institut, CNRS, Laboratoireâ€¦
-_INSTITUTION_RE       = re.compile(
-    r"^(Universit[eÃ©]|Ã‰cole|Institut|CNRS|UMR|Laboratoire|Centre|Facult[eÃ©]|UFR"
-    r"|Acad[eÃ©]mie|Fondation|Museum|MusÃ©e|Biblioth[eÃ¨]que)",
+_ROMAN_ONLY_RE = re.compile(r"^[IVXLCDMivxlcdm]{1,5}$")
+_PASSAGE_TOKEN_RE = re.compile(r"^(?:[IVXLCDM]+|\d+|[A-Za-z]{1,4})$", re.IGNORECASE)
+# Entr?e de glossaire/abr?viations : SIGLE : d?veloppement
+_ABBREV_ENTRY_RE = re.compile(r"^[A-Z]{2,6}[ ]?\s*:")
+# Institution : Universit?, ?cole, Institut, CNRS, Laboratoire
+_INSTITUTION_RE = re.compile(
+    r"^(Universit[\u00e9e]|\u00c9cole|Institut|CNRS|UMR|Laboratoire|Centre|Facult[\u00e9e]|UFR"
+    r"|Acad[\u00e9e]mie|Fondation|Museum|Mus\u00e9e|Biblioth[\u00e8e]que)",
     re.IGNORECASE | re.UNICODE,
 )
 
 # Noms d'auteur en italique : 2-4 mots, pas de chiffres, pas de ponctuation sauf tiret
 _AUTHOR_NAME_RE = re.compile(
-    r"^[A-Z][a-z\-]+"       # PrÃ©nom ou Nom majuscule
-    r"(\s+[A-Za-z\.\-']+){0,3}$",     # 0 Ã  3 mots supplÃ©mentaires
+    r"^[A-Z][a-z\-]+"       # Pr?nom ou Nom majuscule
+    r"(\s+[A-Za-z\.\-']+){0,3}$",     # 0 ? 3 mots suppl?mentaires
     re.UNICODE,
 )
 
-# Seuil d'indentation gauche (twips) au-delÃ  duquel on considÃ¨re un bloc-citation
-# (Ne s'applique que si ind_first_line est absent/nul â€” retrait bloc, pas alinÃ©a)
+# Seuil d'indentation gauche (twips) au-del? duquel on consid?re un bloc-citation
+# (Ne s'applique que si ind_first_line est absent/nul : retrait bloc, pas alin?a)
 _BLOCK_QUOTE_IND_LEFT_THRESHOLD = 400
 _BLOCK_QUOTE_MIN_LEN = 60
 
-# Bibliographie heuristique (hors section dÃ©diÃ©e)
+# Bibliographie heuristique (hors section d?di?e)
 _BIBLIO_HEURISTIC_RE = re.compile(
     r"^[A-Z\(][A-Za-z\'\-\s]{1,40},"
     r".{5,},"
@@ -102,16 +102,16 @@ class HeuristicDecision:
 
 class StructurePreparationService:
     """
-    DÃ©tecte et annote la structure d'un document dont l'auteur
-    n'a pas utilisÃ© les styles Word de faÃ§on normative.
+    D?tecte et annote la structure d'un document dont l'auteur
+    n'a pas utilis? les styles Word de fa?on normative.
 
-    Patterns dÃ©tectÃ©s :
-    - Normal + gras seul â†’ titre (pattern Dissimuler)
-    - Normal + tout-italique â†’ titre de chapitre OU nom d'auteur (pattern HÃ©raldique)
-    - Normal + retrait gauche > 400 twips (sans alinÃ©a) â†’ citation longue
-    - Normal + ALL CAPS court â†’ titre structurant (dÃ©jÃ  partiellement gÃ©rÃ© Ã  l'ingestion)
-    - Titres numÃ©rotÃ©s "1- Titre" â†’ intertitre de niveau 2
-    - Section bibliographique â†’ TEI_bibl_reference
+    Patterns d?tect?s :
+    - Normal + gras seul -> titre (pattern Dissimuler)
+    - Normal + tout-italique -> titre de chapitre OU nom d'auteur (pattern H?raldique)
+    - Normal + retrait gauche > 400 twips (sans alin?a) -> citation longue
+    - Normal + ALL CAPS court -> titre structurant (d?j? partiellement g?r? ? l'ingestion)
+    - Titres num?rot?s "1- Titre" -> intertitre de niveau 2
+    - Section bibliographique -> TEI_bibl_reference
     """
 
     module_name = "structure"
@@ -123,33 +123,33 @@ class StructurePreparationService:
         diagnostics: list[Diagnostic] = []
         transformations: list[Transformation] = []
 
-        # PrÃ©-calcul de l'indentation dominante du document
+        # Pré-calcul de l'indentation dominante du document
         # (permet de distinguer le retrait standard du retrait de citation)
         dominant_ind_left = self._dominant_ind_left(document)
 
         bib_index      = len(document.bibliography) + 1
         in_bib_section = False
-        # Initialiser le compteur avec les titres dÃ©jÃ  dÃ©tectÃ©s Ã  l'ingestion
-        # (ALLCAPS, styles Titre1/2/3â€¦) pour que l'Ã©pigraphe ne s'applique pas
-        # Ã  tout le texte avant le premier titre heuristique.
+        # Initialiser le compteur avec les titres déjà détectés à l'ingestion
+        # (ALLCAPS, styles Titre1/2/3) pour que l'épigraphe ne s'applique pas
+        # à tout le texte avant le premier titre heuristique.
         heading_count = sum(1 for b in document.blocks if b.block_type == "heading")
 
         for block in document.blocks:
             text = block.text.strip()
             if not text:
                 continue
-            has_blocking_heading_signals = self._has_blocking_heading_signals(block, text)
+            heading_applied = False
             heading_decision = None
             if block.block_type == "paragraph":
                 heading_decision = self._score_heading_candidate(block=block, settings=self.heuristic_settings)
 
-            # â”€â”€ Titre de section bibliographique â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Titre de section bibliographique 
             if block.block_type == "heading" and _SECTION_BIBLIO_RE.match(text):
                 in_bib_section = True
                 heading_count += 1
                 continue
 
-            # â”€â”€ Sortie de mode biblio sur tout titre â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Sortie de mode biblio sur tout titre 
             if block.block_type == "heading" and in_bib_section:
                 in_bib_section = False
                 heading_count += 1
@@ -166,11 +166,12 @@ class StructurePreparationService:
                     rule="structure.source_style.heading",
                     transformations=transformations,
                 )
+                heading_applied = True
                 in_bib_section = False
                 heading_count += 1
                 continue
 
-            # â”€â”€ Normal + ALL CAPS â†’ titre (peut arriver si l'ingestion a ratÃ©) â”€â”€
+            #  Normal + ALL CAPS  titre (peut arriver si l'ingestion a raté) 
             if (block.block_type == "paragraph"
                     and text.isupper()
                     and 4 < len(text) < 140
@@ -178,11 +179,12 @@ class StructurePreparationService:
                     and heading_decision.decision == "transform"):
                 self._promote_heading(block, level=1, rule="structure.allcaps.heading",
                                       transformations=transformations)
+                heading_applied = True
                 in_bib_section = False
                 heading_count += 1
                 continue
 
-            # â”€â”€ Normal + GRAS seul â†’ titre (pattern Dissimuler) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Normal + GRAS seul  titre (pattern Dissimuler) 
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_bold")
                     and not block.attributes.get("all_runs_italic")
@@ -192,11 +194,12 @@ class StructurePreparationService:
                 level = self._bold_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.bold.heading",
                                       transformations=transformations)
+                heading_applied = True
                 in_bib_section = False
                 heading_count += 1
                 continue
 
-            # â”€â”€ Normal + ITALIQUE seul â†’ titre OU auteur (pattern HÃ©raldique) â”€
+            #  Normal + ITALIQUE seul  titre OU auteur (pattern Héraldique) 
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_italic")
                     and not block.attributes.get("all_runs_bold")):
@@ -213,11 +216,12 @@ class StructurePreparationService:
                     if heading_decision is not None and heading_decision.decision == "transform":
                         self._promote_heading(block, level=level, rule="structure.italic.heading",
                                               transformations=transformations)
+                        heading_applied = True
                         in_bib_section = False
                         heading_count += 1
                         continue
 
-            # â”€â”€ Ã‰pigraphe (avant le 1er titre, court, pas de ponctuation finale) â”€
+            #  pigraphe (avant le 1er titre, court, pas de ponctuation finale) 
             if (heading_count == 0
                     and block.block_type == "paragraph"
                     and len(text) <= _EPIGRAPH_MAX_CHARS
@@ -230,19 +234,19 @@ class StructurePreparationService:
                 ))
                 continue
 
-            # â”€â”€ Section biblio â†’ entrÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Section biblio  entrées 
             if in_bib_section and block.block_type == "paragraph" and text:
                 self._mark_biblio(block, document, bib_index, transformations, rule="structure.bibliography.section")
                 bib_index += 1
                 continue
 
-            # â”€â”€ Retrait gauche > seuil â†’ citation bloc (HÃ©raldique) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Retrait gauche > seuil  citation bloc (Héraldique) 
             ind_left     = block.attributes.get("ind_left", 0)
             ind_fl       = block.attributes.get("ind_first_line", 0)
-            # Un retrait purement Ã  gauche (pas un alinÃ©a de 1e ligne) = bloc-citation
+            # Un retrait purement à gauche (pas un alinéa de 1e ligne) = bloc-citation
             if (block.block_type == "paragraph"
                     and ind_left > _BLOCK_QUOTE_IND_LEFT_THRESHOLD
-                    and not ind_fl                   # pas d'alinÃ©a de 1e ligne
+                    and not ind_fl                   # pas d'alinéa de 1e ligne
                     and ind_left != dominant_ind_left # pas le retrait dominant du doc
                     and len(text) >= _BLOCK_QUOTE_MIN_LEN):
                 block.block_type = "quote_block"
@@ -252,7 +256,7 @@ class StructurePreparationService:
                 ))
                 continue
 
-            # â”€â”€ Heuristique biblio hors section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Heuristique biblio hors section 
             if (not in_bib_section
                     and block.block_type in {"paragraph", "quote_block"}
                     and _BIBLIO_HEURISTIC_RE.match(text)):
@@ -264,14 +268,14 @@ class StructurePreparationService:
                     module=self.module_name,
                     severity="info",
                     category="structure",
-                    message="EntrÃ©e bibliographique potentielle dÃ©tectÃ©e hors section.",
+                    message="Entrée bibliographique potentielle détectée hors section.",
                     target_ref=block.block_id,
                     rule_id="structure.bibliography.heuristic",
                     evidence=Evidence(excerpt=text[:180]),
                 ))
                 continue
 
-            # â”€â”€ Citation longue via guillemets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            #  Citation longue via guillemets 
             if block.block_type == "paragraph" and self._looks_like_block_quote(text):
                 block.block_type = "quote_block"
                 transformations.append(self._make_tr(
@@ -279,7 +283,7 @@ class StructurePreparationService:
                     "structure.quote.guillemets",
                 ))
 
-            # Promotion de titre si heuristique (titre non-stylÃ© court)
+            # Promotion de titre si heuristique (titre non-stylé court)
             if (block.block_type == "paragraph"
                     and heading_decision is not None
                     and heading_decision.decision == "transform"
@@ -287,6 +291,7 @@ class StructurePreparationService:
                 level = self._heuristic_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.heading.heuristic",
                                       transformations=transformations)
+                heading_applied = True
                 heading_count += 1
 
             if (block.block_type == "paragraph"
@@ -308,6 +313,35 @@ class StructurePreparationService:
                             "evidence": heading_decision.evidence,
                             "veto_reasons": heading_decision.veto_reasons,
                             "ai_candidate": heading_decision.ai_candidate,
+                        },
+                    )
+                )
+            elif (
+                block.block_type == "paragraph"
+                and heading_decision is not None
+                and heading_decision.decision == "transform"
+                and not heading_applied
+            ):
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="warning",
+                        category=_HEADING_CATEGORY,
+                        message=(
+                            "Candidat titre score 'transform' non applique automatiquement: "
+                            "verification manuelle recommandee."
+                        ),
+                        target_ref=block.block_id,
+                        rule_id=_HEADING_RULE_ID,
+                        evidence=Evidence(excerpt=text[:180]),
+                        attributes={
+                            "score": heading_decision.score,
+                            "decision": heading_decision.decision,
+                            "evidence": heading_decision.evidence,
+                            "veto_reasons": heading_decision.veto_reasons,
+                            "ai_candidate": heading_decision.ai_candidate,
+                            "reason": "transform_not_applied",
                         },
                     )
                 )
@@ -351,7 +385,7 @@ class StructurePreparationService:
 
         return diagnostics, transformations
 
-    # â”€â”€ Helpers de promotion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    #  Helpers de promotion 
 
     def _promote_heading(self, block, *, level: int, rule: str,
                           transformations: list) -> None:
@@ -390,7 +424,7 @@ class StructurePreparationService:
             attributes=attributes or {},
         )
 
-    # â”€â”€ Classifieurs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    #  Classifieurs 
 
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
@@ -443,7 +477,7 @@ class StructurePreparationService:
             sum(
                 1
                 for text in texts
-                if re.search(r"\b(?:dit|ecrit|écrit|chant|poeme|poème|vers)\b", text.lower())
+                if re.search(r"\b(?:dit|ecrit|\u00e9crit|chant|poeme|po\u00e8me|vers)\b", text.lower())
                 or text.rstrip().endswith(":")
             )
             / line_count
@@ -687,7 +721,7 @@ class StructurePreparationService:
     @staticmethod
     def _looks_like_list_item(text: str) -> bool:
         stripped = text.lstrip()
-        if re.match(r"^[-â€“â€”â€¢]\s+", stripped):
+        if re.match(r"^[-\u2013\u2014\u2022]\s+", stripped):
             return True
         if re.match(r"^\d+\s*[\.\)]\s+", stripped):
             return True
@@ -698,7 +732,7 @@ class StructurePreparationService:
     @staticmethod
     def _looks_like_bibliography_reference(text: str) -> bool:
         lower = text.lower()
-        markers = (" Ã©d.", " ed.", " p.", " pp.", " vol.", " t.", " nÂ°", " no.")
+        markers = (" éd.", " ed.", " p.", " pp.", " vol.", " t.", " n°", " no.")
         if any(marker in lower for marker in markers):
             return True
         if "doi.org" in lower or "http://" in lower or "https://" in lower:
@@ -720,7 +754,7 @@ class StructurePreparationService:
 
     @classmethod
     def _is_heading_candidate(cls, text: str, block=None) -> bool:
-        """Vrai si le texte ressemble Ã  un titre (court, sans ponctuation de phrase)."""
+        """Vrai si le texte ressemble à un titre (court, sans ponctuation de phrase)."""
         if len(text) > 180:
             return False
         stripped = text.strip()
@@ -728,39 +762,39 @@ class StructurePreparationService:
             return False
         if stripped[-1:] in ".?!,":
             return False
-        # EntrÃ©e bibliographique : virgule + annÃ©e
+        # Entrée bibliographique : virgule + année
         if re.search(r",\s*\d{4}", stripped):
             return False
-        # Phrase avec clause subordonÃ©e aprÃ¨s virgule
+        # Phrase avec clause subordonée après virgule
         if re.search(r",\s+[a-z]{4,}", stripped):
             return False
-        # Point final sans Ãªtre une abrÃ©viation â†’ phrase terminÃ©e
+        # Point final sans être une abréviation  phrase terminée
         if stripped[-1:] == "." and len(stripped) > 60:
             return False
-        # Commence par un mot de crÃ©dit Ã©ditorial
+        # Commence par un mot de crédit éditorial
         if _CREDIT_START_RE.match(stripped):
             return False
-        # Se termine par une prÃ©position (ligne de crÃ©dit : "Textes rÃ©unis par")
+        # Se termine par une préposition (ligne de crédit : "Textes réunis par")
         last_word = stripped.rsplit()[-1].lower() if stripped else ""
-        if last_word in {"par", "de", "du", "des", "au", "aux", "en", "Ã "}:
+        if last_word in {"par", "de", "du", "des", "au", "aux", "en", "à"}:
             return False
-        # Fragment verbal en tÃªte de phrase â†’ pas un titre
+        # Fragment verbal en tête de phrase  pas un titre
         if _VERB_LEAD_RE.match(stripped):
             return False
-        # Paire de noms propres â†’ crÃ©dit Ã©ditorial
+        # Paire de noms propres  crédit éditorial
         if _NAME_PAIR_RE.match(stripped):
             return False
-        # EntrÃ©e abrÃ©viation (SIGLE : dÃ©veloppement)
+        # Entrée abréviation (SIGLE : développement)
         if _ABBREV_ENTRY_RE.match(stripped):
             return False
-        # Institution â†’ pas un titre structurant
+        # Institution  pas un titre structurant
         if _INSTITUTION_RE.match(stripped):
             return False
         return True
 
     @staticmethod
     def _bold_heading_level(text: str) -> int:
-        """DÃ©termine le niveau d'un titre formatÃ© en gras."""
+        """Détermine le niveau d'un titre formaté en gras."""
         stripped = text.strip()
         if stripped.isupper():
             return 1
@@ -773,7 +807,7 @@ class StructurePreparationService:
 
     @staticmethod
     def _italic_heading_level(text: str) -> int:
-        """DÃ©termine le niveau d'un titre formatÃ© en italique."""
+        """Détermine le niveau d'un titre formaté en italique."""
         stripped = text.strip()
         if _NUMBERED_SECTION_RE.match(stripped):
             return 2
@@ -785,9 +819,9 @@ class StructurePreparationService:
     def _classify_italic_block(text: str, attrs: dict, block=None) -> str:
         """
         Pour un paragraphe tout-italique :
-        - 'author'  â†’ nom d'auteur (court, < 5 mots, pas de chiffres ni virgule)
-        - 'heading' â†’ titre de chapitre ou section
-        - ''        â†’ laisser tel quel (biblio, traduction, citation, etc.)
+        - 'author'   nom d'auteur (court, < 5 mots, pas de chiffres ni virgule)
+        - 'heading'  titre de chapitre ou section
+        - ''         laisser tel quel (biblio, traduction, citation, etc.)
         """
         stripped = text.strip()
         if block is not None and StructurePreparationService._has_blocking_heading_signals(block, stripped):
@@ -796,28 +830,28 @@ class StructurePreparationService:
         # Trop court (1 mot)
         if len(words) < 2:
             return ""
-        # EntrÃ©e bibliographique : virgule + annÃ©e
+        # Entrée bibliographique : virgule + année
         if re.search(r",\s*\d{4}", stripped):
             return ""
-        # EntrÃ©e bibliographique : prÃ©sence d'un DOI ou URL
+        # Entrée bibliographique : présence d'un DOI ou URL
         if "http" in stripped or "doi.org" in stripped:
             return ""
-        # Texte trop long â†’ passage citÃ©, traduction
+        # Texte trop long  passage cité, traduction
         if len(stripped) > 250:
             return ""
         # Nom d'auteur : 2-4 mots, pas de chiffres, pas de guillemets, pas de virgule
         if (2 <= len(words) <= 4
                 and not re.search(r"\d", stripped)
                 and "," not in stripped
-                and "Â«" not in stripped
+                and "«" not in stripped
                 and "(" not in stripped):
-            # Heuristique complÃ©mentaire : les noms propres commencent par une majuscule
+            # Heuristique complémentaire : les noms propres commencent par une majuscule
             if all(w[0].isupper() for w in words if w and w[0].isalpha()):
                 return "author"
-        # Titre numÃ©rotÃ© â†’ heading
+        # Titre numéroté  heading
         if _NUMBERED_SECTION_RE.match(stripped):
             return "heading"
-        # Titre de chapitre : 4-25 mots, pas de virgule-clause, pas d'annÃ©e
+        # Titre de chapitre : 4-25 mots, pas de virgule-clause, pas d'année
         if (4 <= len(words) <= 25
                 and len(stripped) <= 200
                 and not re.search(r",\s+[a-z]{4,}", stripped)):
@@ -826,62 +860,62 @@ class StructurePreparationService:
 
     @staticmethod
     def _looks_like_block_quote(text: str) -> bool:
-        """DÃ©tecte une citation longue entre guillemets ou avec tiret."""
-        if len(text) > 180 and text.startswith("Â«"):
+        """Détecte une citation longue entre guillemets ou avec tiret."""
+        if len(text) > 180 and text.startswith("«"):
             return True
-        if len(text) > 120 and text.startswith("Â«") and text.endswith("Â»"):
+        if len(text) > 120 and text.startswith("«") and text.endswith("»"):
             return True
         return False
 
     @classmethod
     def _looks_like_heading_heuristic(cls, text: str, block=None) -> bool:
         """
-        Heuristique trÃ¨s conservatrice â€” seulement pour des cas structurels non ambigus.
-        On Ã©vite les faux positifs au prix de quelques manquÃ©s.
+        Heuristique très conservatrice  seulement pour des cas structurels non ambigus.
+        On évite les faux positifs au prix de quelques manqués.
         """
         stripped = text.strip()
         if block is not None and cls._has_blocking_heading_signals(block, stripped):
             return False
         words = stripped.split()
-        # Taille : 2-8 mots, longueur â‰¤ 70 chars
+        # Taille : 2-8 mots, longueur  70 chars
         if not (2 <= len(words) <= 8 and len(stripped) <= 70):
             return False
         # Pas de ponctuation finale de phrase
-        if stripped[-1:] in ".!?â€¦,":
+        if stripped[-1:] in ".!?,":
             return False
         # Commence par une majuscule
         if not stripped[:1].isupper():
             return False
-        # Roman numeral seul (I, II, Vâ€¦) â†’ pas un titre heuristique
+        # Roman numeral seul (I, II, V)  pas un titre heuristique
         if _ROMAN_ONLY_RE.match(stripped):
             return False
         # Pas un item de liste
-        if re.match(r"^[-â€“â€”â€¢]\s", stripped):
+        if re.match(r"^[-]\s", stripped):
             return False
-        # Pas une entrÃ©e bibliographique
+        # Pas une entrée bibliographique
         if re.search(r",\s*\d{4}", stripped):
             return False
-        # Pas une clause subordonnÃ©e
+        # Pas une clause subordonnée
         if re.search(r",\s+[a-z]{4,}", stripped):
             return False
-        if re.search(r"\s(qui|que|dont|oÃ¹|car|mais|avec|dans|pour|sur)\s", stripped):
+        if re.search(r"\s(qui|que|dont|où|car|mais|avec|dans|pour|sur)\s", stripped):
             return False
-        # Pas un crÃ©dit Ã©ditorial
+        # Pas un crédit éditorial
         if _CREDIT_START_RE.match(stripped):
             return False
         last_word = stripped.rsplit()[-1].lower() if stripped else ""
-        if last_word in {"par", "de", "du", "des", "au", "aux", "en", "Ã "}:
+        if last_word in {"par", "de", "du", "des", "au", "aux", "en", "à"}:
             return False
-        # Fragment verbal en tÃªte â†’ pas un titre
+        # Fragment verbal en tête  pas un titre
         if _VERB_LEAD_RE.match(stripped):
             return False
-        # Paire de noms propres â†’ crÃ©dit Ã©ditorial
+        # Paire de noms propres  crédit éditorial
         if _NAME_PAIR_RE.match(stripped):
             return False
-        # EntrÃ©e abrÃ©viation (SIGLE : dÃ©veloppement)
+        # Entrée abréviation (SIGLE : développement)
         if _ABBREV_ENTRY_RE.match(stripped):
             return False
-        # Institution â†’ pas un titre structurant
+        # Institution  pas un titre structurant
         if _INSTITUTION_RE.match(stripped):
             return False
         return True
@@ -899,7 +933,7 @@ class StructurePreparationService:
 
     @staticmethod
     def _dominant_ind_left(document: Document) -> int:
-        """Retourne le retrait gauche le plus frÃ©quent dans le document (ou 0)."""
+        """Retourne le retrait gauche le plus fréquent dans le document (ou 0)."""
         from collections import Counter
         counter: Counter = Counter()
         for block in document.blocks:

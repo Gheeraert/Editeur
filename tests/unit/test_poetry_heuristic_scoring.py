@@ -152,6 +152,28 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
         self.assertTrue(decision.ai_candidate)
         self.assertFalse(self.service.heuristic_settings.allow_ai_for_poetry_candidates)
 
+    def test_intro_context_ratio_detects_ecrit_accented(self) -> None:
+        document = _doc_from_lines(
+            [
+                "Il écrit :",
+                "La nuit descend sur les toits,",
+                "Le fleuve emporte nos voix.",
+            ]
+        )
+        decision = self.service.analyze_poetry_candidates(document)[0]
+        self.assertGreater(decision.evidence.get("intro_context_ratio", 0.0), 0.0)
+
+    def test_intro_context_ratio_detects_poeme_accented(self) -> None:
+        document = _doc_from_lines(
+            [
+                "Ce poème ouvre la section :",
+                "La nuit descend sur les toits,",
+                "Le fleuve emporte nos voix.",
+            ]
+        )
+        decision = self.service.analyze_poetry_candidates(document)[0]
+        self.assertGreater(decision.evidence.get("intro_context_ratio", 0.0), 0.0)
+
     def test_transform_decision_is_not_silent_in_process(self) -> None:
         service = StructurePreparationService(
             heuristic_settings=HeuristicSettings(
