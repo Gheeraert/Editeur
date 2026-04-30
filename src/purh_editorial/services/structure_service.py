@@ -71,6 +71,8 @@ _TECHNICAL_TAG_RE = re.compile(r"<[^>]+>")
 _TECHNICAL_CODE_RE = re.compile(r"\b(print|class|def|return)\s*\(", re.IGNORECASE)
 _POETRY_RULE_ID = "R-CI-POETRY-001"
 _POETRY_CATEGORY = "poetry_quote_candidate"
+_HEADING_RULE_ID = "R-STRUCT-HEADING-001"
+_HEADING_CATEGORY = "heading_candidate"
 
 
 @dataclass(slots=True)
@@ -80,6 +82,10 @@ class HeuristicSettings:
     poetry_ai_min_score: float = 0.65
     poetry_ai_max_score: float = 0.90
     allow_ai_for_poetry_candidates: bool = False
+    heading_transform_threshold: float = 0.85
+    heading_diagnostic_threshold: float = 0.60
+    heading_ai_min_score: float = 0.60
+    heading_ai_max_score: float = 0.85
 
 
 @dataclass(slots=True)
@@ -133,6 +139,9 @@ class StructurePreparationService:
             if not text:
                 continue
             has_blocking_heading_signals = self._has_blocking_heading_signals(block, text)
+            heading_decision = None
+            if block.block_type == "paragraph":
+                heading_decision = self._score_heading_candidate(block=block, settings=self.heuristic_settings)
 
             # â”€â”€ Titre de section bibliographique â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             if block.block_type == "heading" and _SECTION_BIBLIO_RE.match(text):
@@ -149,7 +158,8 @@ class StructurePreparationService:
             source_heading_level = self._source_heading_level(block)
             if (block.block_type == "paragraph"
                     and source_heading_level is not None
-                    and not has_blocking_heading_signals):
+                    and heading_decision is not None
+                    and heading_decision.decision == "transform"):
                 self._promote_heading(
                     block,
                     level=source_heading_level,
@@ -164,7 +174,8 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and text.isupper()
                     and 4 < len(text) < 140
-                    and not has_blocking_heading_signals):
+                    and heading_decision is not None
+                    and heading_decision.decision == "transform"):
                 self._promote_heading(block, level=1, rule="structure.allcaps.heading",
                                       transformations=transformations)
                 in_bib_section = False
@@ -175,6 +186,8 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_bold")
                     and not block.attributes.get("all_runs_italic")
+                    and heading_decision is not None
+                    and heading_decision.decision == "transform"
                     and self._is_heading_candidate(text, block)):
                 level = self._bold_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.bold.heading",
@@ -197,11 +210,12 @@ class StructurePreparationService:
                     continue
                 if result == "heading":
                     level = self._italic_heading_level(text)
-                    self._promote_heading(block, level=level, rule="structure.italic.heading",
-                                          transformations=transformations)
-                    in_bib_section = False
-                    heading_count += 1
-                    continue
+                    if heading_decision is not None and heading_decision.decision == "transform":
+                        self._promote_heading(block, level=level, rule="structure.italic.heading",
+                                              transformations=transformations)
+                        in_bib_section = False
+                        heading_count += 1
+                        continue
 
             # â”€â”€ Ã‰pigraphe (avant le 1er titre, court, pas de ponctuation finale) â”€
             if (heading_count == 0
@@ -267,11 +281,36 @@ class StructurePreparationService:
 
             # Promotion de titre si heuristique (titre non-stylÃ© court)
             if (block.block_type == "paragraph"
+                    and heading_decision is not None
+                    and heading_decision.decision == "transform"
                     and self._looks_like_heading_heuristic(text, block)):
                 level = self._heuristic_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.heading.heuristic",
                                       transformations=transformations)
                 heading_count += 1
+
+            if (block.block_type == "paragraph"
+                    and heading_decision is not None
+                    and heading_decision.decision == "diagnostic"):
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="info",
+                        category=_HEADING_CATEGORY,
+                        message="Candidat titre detecte: verifier manuellement la promotion en heading.",
+                        target_ref=block.block_id,
+                        rule_id=_HEADING_RULE_ID,
+                        evidence=Evidence(excerpt=text[:180]),
+                        attributes={
+                            "score": heading_decision.score,
+                            "decision": heading_decision.decision,
+                            "evidence": heading_decision.evidence,
+                            "veto_reasons": heading_decision.veto_reasons,
+                            "ai_candidate": heading_decision.ai_candidate,
+                        },
+                    )
+                )
 
         poetry_decisions = self.analyze_poetry_candidates(document)
         for poetry_decision in poetry_decisions:
@@ -479,6 +518,92 @@ class StructurePreparationService:
         if _TECHNICAL_CODE_RE.search(stripped):
             return True
         return False
+
+    @classmethod
+    def _score_heading_candidate(cls, *, block, settings: HeuristicSettings) -> HeuristicDecision:
+        text = block.text.strip()
+        source_level = cls._source_heading_level(block)
+        veto_reasons = cls._heading_veto_reasons(block)
+
+        if source_level is not None:
+            score = 1.0
+        else:
+            length = len(text)
+            words = text.split()
+            short_len_component = 1.0 if 8 <= length <= 90 else 0.35 if 4 <= length <= 120 else 0.0
+            no_final_punct_component = 1.0 if not text.endswith((".", "!", "?", ";", ":")) else 0.0
+            nominal_component = 0.0 if _VERB_LEAD_RE.match(text) else 1.0
+            all_caps_component = 1.0 if text.isupper() and 4 < len(text) < 140 else 0.0
+            bold_component = 1.0 if block.attributes.get("all_runs_bold") and not block.attributes.get("all_runs_italic") else 0.0
+            numbered_component = 1.0 if re.match(r"^(?:\d+|[IVXLCDM]+)\s*[\.\-]\s+\S+", text, re.IGNORECASE) else 0.0
+            title_case_component = 1.0 if words and words[0][:1].isupper() else 0.0
+            heuristic_title_component = 1.0 if cls._looks_like_heading_heuristic(text, block) else 0.0
+
+            score = (
+                0.15 * short_len_component
+                + 0.15 * no_final_punct_component
+                + 0.10 * nominal_component
+                + 0.10 * all_caps_component
+                + 0.15 * bold_component
+                + 0.10 * numbered_component
+                + 0.05 * title_case_component
+                + 0.20 * heuristic_title_component
+            )
+            if heuristic_title_component:
+                score = max(score, 0.90)
+            score = round(max(0.0, min(1.0, score)), 3)
+
+        ai_candidate = settings.heading_ai_min_score <= score < settings.heading_ai_max_score
+        if veto_reasons:
+            decision_name = "ignore"
+        elif source_level is not None:
+            decision_name = "transform"
+        elif score >= settings.heading_transform_threshold:
+            decision_name = "transform"
+        elif score >= settings.heading_diagnostic_threshold:
+            decision_name = "diagnostic"
+        else:
+            decision_name = "ignore"
+
+        return HeuristicDecision(
+            rule_id=_HEADING_RULE_ID,
+            category=_HEADING_CATEGORY,
+            target_refs=[block.block_id],
+            score=score,
+            decision=decision_name,
+            evidence={
+                "text": text[:180],
+                "source_heading_level": source_level,
+                "all_runs_bold": bool(block.attributes.get("all_runs_bold")),
+                "all_runs_italic": bool(block.attributes.get("all_runs_italic")),
+                "word_count": len(text.split()),
+                "char_count": len(text),
+            },
+            veto_reasons=veto_reasons,
+            ai_candidate=ai_candidate,
+        )
+
+    @classmethod
+    def _heading_veto_reasons(cls, block) -> list[str]:
+        text = block.text.strip()
+        reasons: set[str] = set()
+        if cls._looks_like_passage_reference(text):
+            reasons.add("passage_reference")
+        if cls._looks_like_reference_or_caption(text):
+            reasons.add("caption_or_reference")
+        if cls._looks_like_list_item(text):
+            reasons.add("list_like")
+        if cls._looks_like_bibliography_reference(text):
+            reasons.add("bibliography_like")
+        if cls._looks_like_technical_markup(text):
+            reasons.add("technical_markup")
+        if cls._looks_like_poetry_line_candidate(block, text):
+            reasons.add("poetry_line_candidate")
+        if text.endswith((".", "!", "?")) or _VERB_LEAD_RE.match(text):
+            reasons.add("sentence_like")
+        if cls._source_heading_level(block) is None and len(text.split()) <= 1:
+            reasons.add("too_short_fragment")
+        return sorted(reasons)
     
     @staticmethod
     def _source_heading_level(block) -> int | None:
