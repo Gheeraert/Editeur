@@ -55,6 +55,19 @@ class Step1PipelineTeiExportTests(unittest.TestCase):
         root = ET.fromstring(xml_text)
         self.assertEqual(root.tag, f"{{{TEI_NS}}}TEI")
 
+    def test_pipeline_reports_r_gq_004_quote_punctuation_diagnostic(self) -> None:
+        settings = load_settings()
+        pipeline = Step1Pipeline(settings=settings)
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        source_path = runtime_dir / f"quote_diag_{uuid.uuid4().hex}.txt"
+        source_path.write_text("Il écrit : « La question est ouverte ».", encoding="utf-8")
+
+        result = pipeline.run(source_path, Step1Options(enable_ai=False, output_path=None))
+        diagnostics = result.pipeline_result.report.diagnostics
+
+        self.assertTrue(any(d.rule_id == "R-GQ-004" for d in diagnostics))
+
 
 if __name__ == "__main__":
     unittest.main()

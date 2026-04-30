@@ -24,6 +24,7 @@ _VERSE_END_RE = re.compile(r"[»›’]\s*$")
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")
 _FINAL_PUNCT = {".", ",", ";", ":", "?", "!"}
 _CLOSING_QUOTES = {"»", '"', "”", "›"}
+_SPACING_CHARS = {" ", "\u00A0", "\u202F"}
 
 
 def _looks_like_url_or_verse(text: str) -> bool:
@@ -87,6 +88,27 @@ class FootnoteNormalizer:
             previous_char = self._previous_visible_char(inlines, index)
             if previous_char is None:
                 continue
+            if previous_char in _SPACING_CHARS:
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="warning",
+                        category="footnote_call_spacing",
+                        message="Appel de note précédé d'une espace parasite.",
+                        target_ref=block_id,
+                        evidence=Evidence(
+                            excerpt=self._context_excerpt(inlines, index),
+                        ),
+                        rule_id="R-AN-003",
+                        attributes={
+                            "note_ref": span.note_ref,
+                            "note_call_index": index,
+                            "preceding_char": previous_char,
+                            "preceding_space_kind": self._space_kind(previous_char),
+                        },
+                    )
+                )
             if previous_char in _FINAL_PUNCT or previous_char in _CLOSING_QUOTES:
                 diagnostics.append(
                     Diagnostic(
@@ -113,9 +135,19 @@ class FootnoteNormalizer:
         return diagnostics
 
     @staticmethod
+    def _space_kind(char: str) -> str:
+        if char == " ":
+            return "space"
+        if char == "\u00A0":
+            return "nbsp"
+        if char == "\u202F":
+            return "nnbsp"
+        return "unknown"
+
+    @staticmethod
     def _previous_visible_char(inlines: list[InlineSpan], index: int) -> str | None:
         for i in range(index - 1, -1, -1):
-            text = inlines[i].text.rstrip()
+            text = inlines[i].text
             if text:
                 return text[-1]
         return None

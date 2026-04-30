@@ -73,6 +73,67 @@ class FootnoteNoteCallDiagnosticsTests(unittest.TestCase):
         diagnostics_without_note_call = FootnoteNormalizer().analyze_note_call_placement(without_note_call)
         self.assertEqual(diagnostics_without_note_call, [])
 
+    def test_note_call_after_regular_space_produces_r_an_003_diagnostic(self) -> None:
+        document = _build_document_with_inlines(
+            [
+                InlineSpan(text="mot "),
+                InlineSpan(text="1", kind="note_call", note_ref="ftn1"),
+            ]
+        )
+        diagnostics = FootnoteNormalizer().analyze_note_call_placement(document)
+        r_an_003 = [d for d in diagnostics if d.rule_id == "R-AN-003"]
+        self.assertEqual(len(r_an_003), 1)
+        self.assertEqual(r_an_003[0].category, "footnote_call_spacing")
+        self.assertEqual(r_an_003[0].attributes.get("preceding_space_kind"), "space")
+
+    def test_note_call_after_nbsp_produces_r_an_003_diagnostic(self) -> None:
+        document = _build_document_with_inlines(
+            [
+                InlineSpan(text="mot\u00A0"),
+                InlineSpan(text="1", kind="note_call", note_ref="ftn1"),
+            ]
+        )
+        diagnostics = FootnoteNormalizer().analyze_note_call_placement(document)
+        r_an_003 = [d for d in diagnostics if d.rule_id == "R-AN-003"]
+        self.assertEqual(len(r_an_003), 1)
+        self.assertEqual(r_an_003[0].attributes.get("preceding_space_kind"), "nbsp")
+
+    def test_note_call_after_nnbsp_produces_r_an_003_diagnostic(self) -> None:
+        document = _build_document_with_inlines(
+            [
+                InlineSpan(text="mot\u202F"),
+                InlineSpan(text="1", kind="note_call", note_ref="ftn1"),
+            ]
+        )
+        diagnostics = FootnoteNormalizer().analyze_note_call_placement(document)
+        r_an_003 = [d for d in diagnostics if d.rule_id == "R-AN-003"]
+        self.assertEqual(len(r_an_003), 1)
+        self.assertEqual(r_an_003[0].attributes.get("preceding_space_kind"), "nnbsp")
+
+    def test_note_call_directly_after_word_has_no_r_an_003_diagnostic(self) -> None:
+        document = _build_document_with_inlines(
+            [
+                InlineSpan(text="mot"),
+                InlineSpan(text="1", kind="note_call", note_ref="ftn1"),
+            ]
+        )
+        diagnostics = FootnoteNormalizer().analyze_note_call_placement(document)
+        self.assertFalse(any(d.rule_id == "R-AN-003" for d in diagnostics))
+
+    def test_note_call_isolated_or_at_block_start_has_no_r_an_003_diagnostic(self) -> None:
+        isolated = _build_document_with_inlines([InlineSpan(text="1", kind="note_call", note_ref="ftn1")])
+        isolated_diags = FootnoteNormalizer().analyze_note_call_placement(isolated)
+        self.assertFalse(any(d.rule_id == "R-AN-003" for d in isolated_diags))
+
+        start_then_text = _build_document_with_inlines(
+            [
+                InlineSpan(text="1", kind="note_call", note_ref="ftn1"),
+                InlineSpan(text=" mot"),
+            ]
+        )
+        start_diags = FootnoteNormalizer().analyze_note_call_placement(start_then_text)
+        self.assertFalse(any(d.rule_id == "R-AN-003" for d in start_diags))
+
 
 if __name__ == "__main__":
     unittest.main()
