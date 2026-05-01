@@ -18,6 +18,8 @@ from purh_editorial.ui.step1_dialog import (
     load_config_file,
     normalize_ai_aggressiveness,
     normalize_decision_mode,
+    normalize_heuristic_profile,
+    normalize_optional_threshold,
     save_config_file,
 )
 
@@ -35,6 +37,11 @@ class Step1DialogConfigTests(unittest.TestCase):
             output_docx_path="C:/out.docx",
             tei_output_path="C:/out.xml",
             decision_mode="heuristic",
+            heuristic_profile="conservative",
+            heading_transform_threshold=None,
+            heading_diagnostic_threshold=None,
+            poetry_transform_threshold=None,
+            poetry_diagnostic_threshold=None,
             ai_aggressiveness="conservative",
             ai_provider="groq",
             ai_api_key="secret-key",
@@ -51,6 +58,7 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(config["output_docx_path"], "C:/out.docx")
         self.assertEqual(config["tei_output_path"], "C:/out.xml")
         self.assertEqual(config["decision_mode"], "heuristic")
+        self.assertEqual(config["heuristic_profile"], "conservative")
         self.assertEqual(config["ai_aggressiveness"], "conservative")
         self.assertEqual(config["ai_provider"], "groq")
         self.assertEqual(config["ai_api_key"], "secret-key")
@@ -63,12 +71,13 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(config["max_structure_ai_calls"], 6)
 
     def test_apply_config_dict_minimal_keeps_defaults(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
         merged = apply_config_dict(current, {"version": 1, "source_path": "C:/a.docx"})
         self.assertEqual(merged["source_path"], "C:/a.docx")
         self.assertEqual(merged["output_docx_path"], "")
         self.assertEqual(merged["tei_output_path"], "")
         self.assertEqual(merged["decision_mode"], "heuristic")
+        self.assertEqual(merged["heuristic_profile"], "conservative")
         self.assertEqual(merged["ai_aggressiveness"], "conservative")
         self.assertEqual(merged["ai_provider"], "groq")
         self.assertEqual(merged["ai_api_key"], "")
@@ -79,7 +88,7 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(merged["max_structure_ai_calls"], 6)
 
     def test_apply_config_dict_preserves_enable_ai_and_max_ai_calls(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
         merged = apply_config_dict(current, {"enable_ai": True, "max_ai_calls": 12})
         self.assertEqual(merged["enable_ai"], True)
         self.assertEqual(merged["max_ai_calls"], 12)
@@ -97,6 +106,11 @@ class Step1DialogConfigTests(unittest.TestCase):
             output_docx_path="C:/sortie.docx",
             tei_output_path="C:/sortie.xml",
             decision_mode="heuristic",
+            heuristic_profile="balanced",
+            heading_transform_threshold=0.85,
+            heading_diagnostic_threshold=0.60,
+            poetry_transform_threshold=0.90,
+            poetry_diagnostic_threshold=0.65,
             ai_aggressiveness="balanced",
             ai_provider="groq",
             ai_api_key="api-key-clear",
@@ -118,38 +132,69 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(loaded["output_docx_path"], "C:/sortie.docx")
 
     def test_decision_mode_heuristic_ai_local_sets_structure_ai_only(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
         merged = apply_config_dict(current, {"decision_mode": "heuristic_ai_local"})
         self.assertEqual(merged["enable_structure_ai"], True)
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
 
     def test_decision_mode_heuristic_disables_ais(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", True, True, True, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", True, True, True, 6, 6)
         merged = apply_config_dict(current, {"decision_mode": "heuristic"})
         self.assertEqual(merged["enable_structure_ai"], False)
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
 
     def test_decision_mode_deterministic_disables_ais(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", True, True, True, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", True, True, True, 6, 6)
         merged = apply_config_dict(current, {"decision_mode": "deterministic"})
         self.assertEqual(merged["enable_structure_ai"], False)
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
 
     def test_decision_mode_ai_exploratory_keeps_safe_fallback(self) -> None:
-        current = build_config_dict("", "", "", "heuristic", "conservative", "groq", "", "", "", True, True, True, 6, 6)
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", True, True, True, 6, 6)
         merged = apply_config_dict(current, {"decision_mode": "ai_exploratory"})
         self.assertEqual(merged["enable_structure_ai"], False)
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
+
+    def test_heuristic_profile_and_overrides_are_kept(self) -> None:
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        merged = apply_config_dict(
+            current,
+            {
+                "heuristic_profile": "exploratory",
+                "heading_transform_threshold": 0.77,
+                "heading_diagnostic_threshold": 0.52,
+                "poetry_transform_threshold": 0.83,
+                "poetry_diagnostic_threshold": 0.57,
+            },
+        )
+        self.assertEqual(merged["heuristic_profile"], "exploratory")
+        self.assertEqual(merged["heading_transform_threshold"], 0.77)
+        self.assertEqual(merged["heading_diagnostic_threshold"], 0.52)
+        self.assertEqual(merged["poetry_transform_threshold"], 0.83)
+        self.assertEqual(merged["poetry_diagnostic_threshold"], 0.57)
 
     def test_ai_aggressiveness_normalization(self) -> None:
         self.assertEqual(normalize_ai_aggressiveness("conservative"), "conservative")
         self.assertEqual(normalize_ai_aggressiveness("balanced"), "balanced")
         self.assertEqual(normalize_ai_aggressiveness("aggressive"), "aggressive")
         self.assertEqual(normalize_ai_aggressiveness("weird"), "conservative")
+
+    def test_heuristic_profile_normalization(self) -> None:
+        self.assertEqual(normalize_heuristic_profile("conservative"), "conservative")
+        self.assertEqual(normalize_heuristic_profile("balanced"), "balanced")
+        self.assertEqual(normalize_heuristic_profile("exploratory"), "exploratory")
+        self.assertEqual(normalize_heuristic_profile("weird"), "conservative")
+
+    def test_optional_threshold_normalization(self) -> None:
+        self.assertEqual(normalize_optional_threshold(""), None)
+        self.assertEqual(normalize_optional_threshold(None), None)
+        self.assertEqual(normalize_optional_threshold(0.8), 0.8)
+        self.assertEqual(normalize_optional_threshold(2.0), 1.0)
+        self.assertEqual(normalize_optional_threshold(-1.0), 0.0)
 
     def test_decision_mode_normalization(self) -> None:
         self.assertEqual(normalize_decision_mode("heuristic"), "heuristic")
@@ -170,6 +215,11 @@ class Step1DialogConfigTests(unittest.TestCase):
             output_docx_path="",
             tei_output_path="",
             decision_mode="heuristic",
+            heuristic_profile="conservative",
+            heading_transform_threshold=None,
+            heading_diagnostic_threshold=None,
+            poetry_transform_threshold=None,
+            poetry_diagnostic_threshold=None,
             ai_aggressiveness="conservative",
             ai_provider="groq",
             ai_api_key="clear-text-key",

@@ -26,6 +26,7 @@ ALLOWED_DECISION_MODES = {
     "ai_exploratory",
 }
 ALLOWED_AI_AGGRESSIVENESS = {"conservative", "balanced", "aggressive"}
+ALLOWED_HEURISTIC_PROFILES = {"conservative", "balanced", "exploratory"}
 
 
 def normalize_decision_mode(value: str | None) -> str:
@@ -46,6 +47,27 @@ def normalize_ai_aggressiveness(value: str | None) -> str:
     return "conservative"
 
 
+def normalize_heuristic_profile(value: str | None) -> str:
+    if not value:
+        return "conservative"
+    profile = str(value).strip().lower()
+    if profile in ALLOWED_HEURISTIC_PROFILES:
+        return profile
+    return "conservative"
+
+
+def normalize_optional_threshold(value: object) -> float | None:
+    if value is None:
+        return None
+    if isinstance(value, str) and not value.strip():
+        return None
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return None
+    return max(0.0, min(1.0, numeric))
+
+
 def derive_ai_flags_from_decision_mode(decision_mode: str) -> tuple[bool, bool]:
     mode = normalize_decision_mode(decision_mode)
     if mode == "heuristic_ai_local":
@@ -60,6 +82,11 @@ def build_config_dict(
     output_docx_path: str,
     tei_output_path: str,
     decision_mode: str,
+    heuristic_profile: str,
+    heading_transform_threshold: float | None,
+    heading_diagnostic_threshold: float | None,
+    poetry_transform_threshold: float | None,
+    poetry_diagnostic_threshold: float | None,
     ai_aggressiveness: str,
     ai_provider: str,
     ai_api_key: str,
@@ -77,6 +104,11 @@ def build_config_dict(
         "output_docx_path": output_docx_path,
         "tei_output_path": tei_output_path,
         "decision_mode": normalize_decision_mode(decision_mode),
+        "heuristic_profile": normalize_heuristic_profile(heuristic_profile),
+        "heading_transform_threshold": normalize_optional_threshold(heading_transform_threshold),
+        "heading_diagnostic_threshold": normalize_optional_threshold(heading_diagnostic_threshold),
+        "poetry_transform_threshold": normalize_optional_threshold(poetry_transform_threshold),
+        "poetry_diagnostic_threshold": normalize_optional_threshold(poetry_diagnostic_threshold),
         "ai_aggressiveness": normalize_ai_aggressiveness(ai_aggressiveness),
         "ai_provider": str(ai_provider or "groq"),
         "ai_api_key": str(ai_api_key or ""),
@@ -100,6 +132,11 @@ def apply_config_dict(
         "output_docx_path": str(current.get("output_docx_path", "")),
         "tei_output_path": str(current.get("tei_output_path", "")),
         "decision_mode": normalize_decision_mode(str(current.get("decision_mode", "heuristic"))),
+        "heuristic_profile": normalize_heuristic_profile(str(current.get("heuristic_profile", "conservative"))),
+        "heading_transform_threshold": normalize_optional_threshold(current.get("heading_transform_threshold")),
+        "heading_diagnostic_threshold": normalize_optional_threshold(current.get("heading_diagnostic_threshold")),
+        "poetry_transform_threshold": normalize_optional_threshold(current.get("poetry_transform_threshold")),
+        "poetry_diagnostic_threshold": normalize_optional_threshold(current.get("poetry_diagnostic_threshold")),
         "ai_aggressiveness": normalize_ai_aggressiveness(str(current.get("ai_aggressiveness", "conservative"))),
         "ai_provider": str(current.get("ai_provider", "groq")),
         "ai_api_key": str(current.get("ai_api_key", "")),
@@ -124,6 +161,16 @@ def apply_config_dict(
         merged["tei_output_path"] = str(loaded.get("tei_output_path") or "")
     if "decision_mode" in loaded:
         merged["decision_mode"] = normalize_decision_mode(str(loaded.get("decision_mode")))
+    if "heuristic_profile" in loaded:
+        merged["heuristic_profile"] = normalize_heuristic_profile(str(loaded.get("heuristic_profile")))
+    if "heading_transform_threshold" in loaded:
+        merged["heading_transform_threshold"] = normalize_optional_threshold(loaded.get("heading_transform_threshold"))
+    if "heading_diagnostic_threshold" in loaded:
+        merged["heading_diagnostic_threshold"] = normalize_optional_threshold(loaded.get("heading_diagnostic_threshold"))
+    if "poetry_transform_threshold" in loaded:
+        merged["poetry_transform_threshold"] = normalize_optional_threshold(loaded.get("poetry_transform_threshold"))
+    if "poetry_diagnostic_threshold" in loaded:
+        merged["poetry_diagnostic_threshold"] = normalize_optional_threshold(loaded.get("poetry_diagnostic_threshold"))
     if "ai_aggressiveness" in loaded:
         merged["ai_aggressiveness"] = normalize_ai_aggressiveness(str(loaded.get("ai_aggressiveness")))
     if "ai_provider" in loaded:
@@ -278,6 +325,11 @@ class Step1Dialog(tk.Tk):
         self._enable_ai = tk.BooleanVar(value=False)
         self._max_ai_calls = tk.IntVar(value=Step1Options().max_ai_calls)
         self._decision_mode = tk.StringVar(value="")
+        self._heuristic_profile = tk.StringVar(value="conservative")
+        self._heading_transform_threshold = tk.StringVar(value="")
+        self._heading_diagnostic_threshold = tk.StringVar(value="")
+        self._poetry_transform_threshold = tk.StringVar(value="")
+        self._poetry_diagnostic_threshold = tk.StringVar(value="")
         self._ai_aggressiveness = tk.StringVar(value="conservative")
         self._ai_provider = tk.StringVar(value="groq")
         self._ai_api_key = tk.StringVar(value="")
@@ -429,6 +481,7 @@ class Step1Dialog(tk.Tk):
         max_structure_ai_calls = max(1, int(self._max_structure_ai_calls.get()))
         raw_decision_mode = self._decision_mode.get().strip()
         decision_mode = normalize_decision_mode(raw_decision_mode) if raw_decision_mode else None
+        heuristic_profile = normalize_heuristic_profile(self._heuristic_profile.get())
         ai_aggressiveness = normalize_ai_aggressiveness(self._ai_aggressiveness.get())
         # Keep current UI behavior: checkbox still toggles editorial AI.
         enable_editorial_ai = bool(self._enable_ai.get() or self._enable_editorial_ai.get())
@@ -437,6 +490,11 @@ class Step1Dialog(tk.Tk):
             enable_structure_ai=self._enable_structure_ai.get(),
             enable_editorial_ai=enable_editorial_ai,
             decision_mode=decision_mode,
+            heuristic_profile=heuristic_profile,
+            heading_transform_threshold=normalize_optional_threshold(self._heading_transform_threshold.get()),
+            heading_diagnostic_threshold=normalize_optional_threshold(self._heading_diagnostic_threshold.get()),
+            poetry_transform_threshold=normalize_optional_threshold(self._poetry_transform_threshold.get()),
+            poetry_diagnostic_threshold=normalize_optional_threshold(self._poetry_diagnostic_threshold.get()),
             ai_aggressiveness=ai_aggressiveness,
             ai_provider=self._ai_provider.get().strip() or "groq",
             ai_api_key=self._ai_api_key.get().strip() or None,
@@ -526,6 +584,11 @@ class Step1Dialog(tk.Tk):
             output_docx_path=self._output_docx_path.get().strip(),
             tei_output_path=self._output_tei_path.get().strip(),
             decision_mode=self._decision_mode.get(),
+            heuristic_profile=self._heuristic_profile.get(),
+            heading_transform_threshold=normalize_optional_threshold(self._heading_transform_threshold.get()),
+            heading_diagnostic_threshold=normalize_optional_threshold(self._heading_diagnostic_threshold.get()),
+            poetry_transform_threshold=normalize_optional_threshold(self._poetry_transform_threshold.get()),
+            poetry_diagnostic_threshold=normalize_optional_threshold(self._poetry_diagnostic_threshold.get()),
             ai_aggressiveness=self._ai_aggressiveness.get(),
             ai_provider=self._ai_provider.get(),
             ai_api_key=self._ai_api_key.get(),
@@ -543,6 +606,19 @@ class Step1Dialog(tk.Tk):
         self._output_docx_path.set(str(config.get("output_docx_path", "")))
         self._output_tei_path.set(str(config.get("tei_output_path", "")))
         self._decision_mode.set(str(config.get("decision_mode", "")))
+        self._heuristic_profile.set(normalize_heuristic_profile(str(config.get("heuristic_profile", "conservative"))))
+        self._heading_transform_threshold.set(
+            "" if config.get("heading_transform_threshold") is None else str(config.get("heading_transform_threshold"))
+        )
+        self._heading_diagnostic_threshold.set(
+            "" if config.get("heading_diagnostic_threshold") is None else str(config.get("heading_diagnostic_threshold"))
+        )
+        self._poetry_transform_threshold.set(
+            "" if config.get("poetry_transform_threshold") is None else str(config.get("poetry_transform_threshold"))
+        )
+        self._poetry_diagnostic_threshold.set(
+            "" if config.get("poetry_diagnostic_threshold") is None else str(config.get("poetry_diagnostic_threshold"))
+        )
         self._ai_aggressiveness.set(
             normalize_ai_aggressiveness(str(config.get("ai_aggressiveness", "conservative")))
         )

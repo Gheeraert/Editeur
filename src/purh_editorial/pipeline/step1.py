@@ -15,6 +15,7 @@ from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 from purh_editorial.services.structure_service import StructurePreparationService
+from purh_editorial.services.structure_service import settings_for_heuristic_profile
 from purh_editorial.services.structure_ai_arbitrator import (
     GroqStructureAiProvider,
     StructureAiArbitrationSettings,
@@ -41,6 +42,11 @@ class Step1Options:
     ai_base_url: str | None = None
     max_ai_calls: int = 6               # appels Groq max (modération)
     max_structure_ai_calls: int = 6
+    heuristic_profile: str = "conservative"
+    heading_transform_threshold: float | None = None
+    heading_diagnostic_threshold: float | None = None
+    poetry_transform_threshold: float | None = None
+    poetry_diagnostic_threshold: float | None = None
     output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
@@ -147,6 +153,39 @@ class Step1Pipeline:
                 "Decision mode 'ai_exploratory' is not implemented yet; falling back to heuristic mode without AI."
             )
 
+        heuristics_enabled = options.normalized_decision_mode() != "deterministic"
+        structure_settings, structure_setting_warnings = settings_for_heuristic_profile(
+            options.heuristic_profile,
+            heading_transform_threshold=options.heading_transform_threshold,
+            heading_diagnostic_threshold=options.heading_diagnostic_threshold,
+            poetry_transform_threshold=options.poetry_transform_threshold,
+            poetry_diagnostic_threshold=options.poetry_diagnostic_threshold,
+            enable_scored_heuristics=heuristics_enabled,
+        )
+        report.warnings.extend(structure_setting_warnings)
+        self.structure.heuristic_settings = structure_settings
+
+        structure_ai_requested = bool(options.structure_ai_enabled())
+        requested_provider = str(options.ai_provider or "groq").strip().lower()
+        if (
+            structure_ai_requested
+            and self.structure_ai.provider is None
+            and options.ai_api_key
+        ):
+            if requested_provider != "groq":
+                report.warnings.append(
+                    f"Unsupported ai_provider '{options.ai_provider}' for current runtime; structure AI provider not created."
+                )
+            else:
+                self.structure_ai.provider = GroqStructureAiProvider(
+                    api_key=options.ai_api_key,
+                    model=options.ai_model or self.settings.ai.model,
+                    base_url=options.ai_base_url or self.settings.ai.base_url,
+                    timeout=self.settings.ai.timeout_seconds,
+                )
+                # Keep editorial AI settings aligned when session options provide explicit values.
+                self.ai.api_key = options.ai_api_key
+
         if isinstance(self.structure_ai.provider, GroqStructureAiProvider):
             if options.ai_provider and str(options.ai_provider).lower() != "groq":
                 report.warnings.append(
@@ -194,7 +233,8 @@ class Step1Pipeline:
 
         # ── 3. Reconnaissance de structure ────────────────────────────────────
         t0 = utc_now_iso()
-        struct_diags, struct_tr = self.structure.process(document)
+        structure_mode = "deterministic" if options.normalized_decision_mode() == "deterministic" else "heuristic"
+        struct_diags, struct_tr = self.structure.process(document, mode=structure_mode)
         report.diagnostics.extend(struct_diags)
         report.transformations.extend(struct_tr)
         report.add_module_run(ModuleRun(
@@ -205,6 +245,13 @@ class Step1Pipeline:
             summary={
                 "annotations": len(struct_tr),
                 "bibliography_items": len(document.bibliography),
+                "structure_mode": structure_mode,
+                "heuristic_profile": options.heuristic_profile,
+                "heuristics_enabled": heuristics_enabled,
+                "heading_transform_threshold": structure_settings.heading_transform_threshold,
+                "heading_diagnostic_threshold": structure_settings.heading_diagnostic_threshold,
+                "poetry_transform_threshold": structure_settings.poetry_transform_threshold,
+                "poetry_diagnostic_threshold": structure_settings.poetry_diagnostic_threshold,
             },
         ))
 
@@ -216,7 +263,7 @@ class Step1Pipeline:
             base_max_structure_ai_calls=options.max_structure_ai_calls,
         )
         self.structure_ai.settings = structure_ai_settings
-        ai_local_enabled = bool(options.structure_ai_enabled() and self.settings.ai.enabled)
+        ai_local_enabled = bool(structure_ai_requested)
         local_diags, local_warnings, ai_calls = self.structure_ai.arbitrate_from_diagnostics(
             document=document,
             diagnostics=struct_diags,

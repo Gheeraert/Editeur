@@ -13,6 +13,14 @@
 - `heuristic_ai_local`: heuristiques + arbitrage IA local uniquement.
 - `ai_exploratory`: reserve; fallback prudent sans activation automatique.
 
+Profils heuristiques structurels (sans IA par defaut):
+- `conservative`
+- `balanced`
+- `exploratory`
+
+Ces profils regissent les seuils heading/poesie et peuvent etre surcharges
+par des valeurs explicites dans la configuration de session.
+
 ## 3. Garde-fous obligatoires
 
 - Un veto structurel bloque toute tentative IA locale.
@@ -35,4 +43,3 @@ Dans tous les cas:
 
 Le champ `ai_api_key` peut etre enregistre en clair dans le JSON de configuration de session.
 Ce comportement est provisoire et doit etre considere comme sensible.
-
