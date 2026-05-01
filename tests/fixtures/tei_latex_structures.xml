@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Volume de test structuré</title>
+        <editor>Éditeur Exemple</editor>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <div type="introduction">
+        <head>Avant-propos</head>
+        <p>Texte liminaire.</p>
+      </div>
+    </front>
+    <body>
+      <div type="chapter">
+        <head>Chapitre A</head>
+        <p>
+          Paragraphe principal avec une
+          <note place="foot">note avec <hi rend="italic">italique</hi></note>.
+        </p>
+        <cit>
+          <quote>
+            <p>Citation longue en prose, sur plusieurs syntagmes.</p>
+          </quote>
+        </cit>
+        <lg>
+          <l>Premier vers</l>
+          <l>Second vers</l>
+        </lg>
+      </div>
+      <div type="conclusion">
+        <head>Conclusion</head>
+        <p>Conclusion générale.</p>
+      </div>
+    </body>
+    <back>
+      <div type="bibliography">
+        <head>Bibliographie</head>
+        <listBibl>
+          <bibl>Nom, <hi rend="italic">Titre</hi>, 2024.</bibl>
+        </listBibl>
+      </div>
+    </back>
+  </text>
+</TEI>

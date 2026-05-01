@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import TypeAlias
 
 
@@ -48,9 +49,60 @@ class Paragraph:
 
 
 @dataclass(slots=True)
+class QuoteBlock:
+    paragraphs: list[Paragraph] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class VerseLine:
+    content: list[InlineNode] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class VerseBlock:
+    lines: list[VerseLine] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class ListItem:
+    content: list[InlineNode] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class ListBlock:
+    ordered: bool
+    items: list[ListItem] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class BibliographyItem:
+    content: list[InlineNode] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class BibliographyBlock:
+    items: list[BibliographyItem] = field(default_factory=list)
+
+
+BlockNode: TypeAlias = Paragraph | QuoteBlock | VerseBlock | ListBlock | BibliographyBlock
+
+
+class DivisionKind(str, Enum):
+    FRONT = "front"
+    INTRODUCTION = "introduction"
+    CHAPTER = "chapter"
+    CONCLUSION = "conclusion"
+    BIBLIOGRAPHY = "bibliography"
+    APPENDIX = "appendix"
+    BACK = "back"
+    OTHER = "other"
+
+
+@dataclass(slots=True)
 class Division:
     title: str
-    paragraphs: list[Paragraph] = field(default_factory=list)
+    kind: DivisionKind = DivisionKind.OTHER
+    blocks: list[BlockNode] = field(default_factory=list)
 
 
 @dataclass(slots=True)
