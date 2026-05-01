@@ -128,8 +128,8 @@ def settings_for_heuristic_profile(
         normalized = "conservative"
 
     profile_values = {
-        "conservative": (0.90, 0.70, 0.90, 0.70),
-        "balanced": (0.85, 0.60, 0.85, 0.62),
+        "conservative": (0.90, 0.70, 0.92, 0.70),
+        "balanced": (0.85, 0.60, 0.90, 0.65),
         "exploratory": (0.75, 0.50, 0.80, 0.55),
     }
     h_t, h_d, p_t, p_d = profile_values[normalized]
@@ -587,12 +587,126 @@ class StructurePreparationService:
 
     #  Classifieurs 
 
+    def _merge_short_poetry_sequences(self, document: Document) -> list[Transformation]:
+        transformations: list[Transformation] = []
+        sequences = self._short_poetry_candidate_sequences(document)
+        if not sequences:
+            return transformations
+
+        consumed_ids: set[str] = set()
+        replacement_by_id: dict[str, Any] = {}
+
+        for sequence in sequences:
+            first_block = sequence[0]
+            merged_from = [block.block_id for block in sequence]
+            merged_text = "\n".join(block.text.strip() for block in sequence)
+            first_block.block_type = "quote_block"
+            first_block.text = merged_text
+            first_block.inlines = []
+            first_block.attributes["quote_kind"] = "poetry"
+            first_block.attributes["protected_zone"] = "poetry"
+            first_block.attributes["alignment"] = "left"
+            first_block.attributes["ind_left"] = max(
+                int(first_block.attributes.get("ind_left", 0) or 0),
+                _BLOCK_QUOTE_IND_LEFT_THRESHOLD,
+            )
+            first_block.attributes["merged_from"] = merged_from
+
+            transformations.append(
+                self._make_tr(
+                    first_block.block_id,
+                    "paragraph",
+                    "quote_block",
+                    "structure.poetry.short_sequence.merge",
+                    attributes={
+                        "quote_kind": "poetry",
+                        "protected_zone": "poetry",
+                        "merged_from": merged_from,
+                    },
+                )
+            )
+
+            for block in sequence[1:]:
+                consumed_ids.add(block.block_id)
+            replacement_by_id[first_block.block_id] = first_block
+
+        if not consumed_ids:
+            return transformations
+
+        rebuilt_blocks: list = []
+        for block in document.blocks:
+            if block.block_id in consumed_ids:
+                continue
+            replacement = replacement_by_id.get(block.block_id)
+            if replacement is not None:
+                rebuilt_blocks.append(replacement)
+            else:
+                rebuilt_blocks.append(block)
+        document.blocks = rebuilt_blocks
+        return transformations
+
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
         decisions: list[HeuristicDecision] = []
         for sequence in self._poetry_candidate_sequences(document):
             decisions.append(self._score_poetry_candidate(sequence=sequence, settings=settings))
         return decisions
+
+    @classmethod
+    def _short_poetry_candidate_sequences(cls, document: Document) -> list[list]:
+        sequences: list[list] = []
+        current: list = []
+
+        for block in document.blocks:
+            if cls._is_short_poetry_line_candidate(block):
+                current.append(block)
+                continue
+            if cls._is_valid_short_poetry_sequence(current):
+                sequences.append(current.copy())
+            current.clear()
+
+        if cls._is_valid_short_poetry_sequence(current):
+            sequences.append(current.copy())
+        return sequences
+
+    @classmethod
+    def _is_short_poetry_line_candidate(cls, block) -> bool:
+        if block.block_type != "paragraph":
+            return False
+        text = block.text.strip()
+        if not text:
+            return False
+        if len(text.split()) >= 10:
+            return False
+        if block.attributes.get("all_runs_bold"):
+            return False
+        if block.attributes.get("list_level") is not None:
+            return False
+        if cls._looks_like_list_item(text):
+            return False
+        return True
+
+    @classmethod
+    def _is_valid_short_poetry_sequence(cls, sequence: list) -> bool:
+        if len(sequence) < 3:
+            return False
+        if cls._poetry_veto_reasons(sequence):
+            return False
+
+        punctuated_count = sum(
+            1 for block in sequence if cls._line_has_poetry_punctuation(block.text)
+        )
+        if len(sequence) == 3:
+            return punctuated_count >= 1
+        minimum_punctuated = max(1.0, len(sequence) / 3.0)
+        return punctuated_count >= minimum_punctuated
+
+    @staticmethod
+    def _line_has_poetry_punctuation(text: str) -> bool:
+        stripped = text.strip()
+        if not stripped:
+            return False
+        return stripped.endswith((".", ",", ";", ":", "!", "?", "...", "\u2026"))
 
     @staticmethod
     def _poetry_candidate_sequences(document: Document) -> list[list]:
@@ -707,6 +821,8 @@ class StructurePreparationService:
         reasons: set[str] = set()
         for block in sequence:
             text = block.text.strip()
+            if block.block_type == "heading" or cls._source_heading_level(block) is not None:
+                reasons.add("heading_explicit")
             if cls._looks_like_passage_reference(text):
                 reasons.add("passage_reference")
             if cls._looks_like_reference_or_caption(text):
