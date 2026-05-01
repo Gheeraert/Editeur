@@ -202,6 +202,7 @@ class StructureAiArbitrator:
 
         results: list[Diagnostic] = []
         warnings: list[str] = []
+        # Number of attempted provider calls (successful or not).
         calls = 0
         cap = max_calls if max_calls is None else max(0, int(max_calls))
 
@@ -217,9 +218,9 @@ class StructureAiArbitrator:
                 continue
 
             prompt = build_structure_ai_prompt(candidate)
+            calls += 1
             try:
                 raw = self.provider.complete(prompt)
-                calls += 1
                 parsed = parse_structure_ai_json(raw)
             except Exception as exc:  # noqa: BLE001
                 results.append(
