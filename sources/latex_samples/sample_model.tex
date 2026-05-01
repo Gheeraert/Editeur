@@ -1,0 +1,296 @@
+\documentclass[12pt,twoside,final,openright]{book}
+\usepackage{fontspec}
+\usepackage{microtype}
+\usepackage{ulem} % soulignement
+\normalem % pour éviter
+% certains comportements d'ulem (emph=soulignement)
+
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% Personnalisation de la mise en forme des citations longues "displayquote" avec csnotes
+\makeatletter
+\renewenvironment*{displayquote}
+{\begingroup\setlength{\leftmargini}{1cm}\csq@getcargs{\csq@bdquote{}{}}}
+{\csq@edquote\endgroup}
+\makeatother
+\renewcommand{\mkbegdispquote}
+{\fontsize{12pt}{11pt}\selectfont\textooquote}
+
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\usepackage{enumitem} % gérer des listes à puces complexes
+\usepackage{hyperref} % pour les hypertextes
+\hypersetup{hidelinks} % pour cacher les liens
+
+\setmainfont{Chaparral Pro}[
+UprightFont = * Regular,
+ItalicFont  = * Italic,
+BoldFont    = * Semibold,
+BoldItalicFont = * Semiboldit,
+Scale=1
+]
+
+\newfontfamily\JosefinSans{Josefin Sans}[
+UprightFont = * Bold,
+ItalicFont  = * Italic
+]
+
+\usepackage{anyfontsize}
+
+\usepackage{titlesec}
+\titleformat{\chapter}
+{\JosefinSans\LARGE\bfseries}{\thechapter}{1em}{}
+\titleformat{\section}
+{\JosefinSans\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+{\JosefinSans\large\bfseries}{\thesubsection}{1em}{}
+
+\usepackage[paperwidth=152mm, paperheight=229mm, top=25mm, bottom=25mm, inner=20mm, outer=20mm]{geometry}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % Vide les en-têtes et pieds de page
+\fancyhead[LE]{\textit{Petit guide méthodologique}}  % Titre en en-tête
+\fancyhead[RO]{\textit{\leftmark}}  % Nom du chapitre en en-tête
+\fancyfoot[LE,RO]{\thepage}  % Gauche pour les pages paires, Droite pour les impaires
+\renewcommand{\headrulewidth}{0.4pt} % Ajoute une ligne sous l'en-tête
+\renewcommand{\footrulewidth}{0pt}   % Pas de ligne sous le pied de page
+
+\fancypagestyle{plain}{
+	\fancyhf{} % Supprime les en-têtes et pieds par défaut
+	\fancyfoot[LE,RO]{\thepage} % Remet la numérotation en pied de page
+	\renewcommand{\headrulewidth}{0pt} % Pas de ligne en-tête
+}
+
+\usepackage{emptypage}
+
+\usepackage{afterpage}
+\afterpage{\clearpage}
+
+\usepackage[
+backend=biber,
+style=ext-verbose-inote, % ou "verbose-trad1"
+citereset=chapter,
+autopunct=false % appel de note avant la ponctuation
+]{biblatex}
+
+\addbibresource{bibli_exemple.bib}
+
+\usepackage{perpage} % pour remettre les compteurs à zéro à chaque page
+\MakePerPage{footnote} % note paga par page
+
+% Paramètres du corps de texte
+\renewcommand{\baselinestretch}{1}
+\setlength{\parindent}{5mm} % indentation standard
+\setlength{\footnotesep}{2mm} % espace vertical entre les notes
+\usepackage[marginal]{footmisc}
+
+% Optimisation de la césure et de la justification
+\pretolerance=100
+\tolerance=500
+\hyphenpenalty=500
+\exhyphenpenalty=500
+\emergencystretch=3em
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% listes numérotées avec tiret
+\renewcommand{\labelitemi}{--}
+
+\usepackage{setspace}
+\usepackage{graphicx}
+
+\usepackage[center, cam, cross]{crop} % hirondelles
+
+\begin{document}
+
+\fontsize{13pt}{15pt}\selectfont % pour agrandir la police, avec le paquet anyfont
+
+\title{Petit guide méthodologique} % Abrégé pour l'en-tête
+
+\newpage
+\thispagestyle{empty} % Supprime l'en-tête et le pied de page
+\vspace*{1cm} % Ajuste la hauteur du titre
+\begin{center}
+	\onehalfspacing
+	{\LARGE\textsc{Petit guide méthodologique de la recherche en lettres}} % Mets ton titre
+\end{center}
+\newpage
+
+\begin{titlepage}
+	\centering
+	 \vspace*{3cm} % Essaie avec une valeur plus grande
+	{\huge\bfseries Petit guide méthodologique de la recherche en lettres \par}
+	\vspace{2cm}
+	{\Large Tony Gheeraert\par}
+	\vfill
+	{\Large Presses Universitaires de Rouen et du Havre \par}
+	\vspace{0.5cm}
+	{\large 2025}
+\end{titlepage}
+
+\thispagestyle{empty}
+La rédaction d’un mémoire de master est un travail personnel de longue haleine, qui s’étend sur deux années. Trouver et approfondir un sujet, constituer un corpus, acquérir et mobiliser la méthodologie scientifique sont des tâches qui exigent du temps, ainsi que des efforts continus et réguliers. Le présent document a pour but de vous aider à établir un calendrier de travail, et à envisager des points d’étape de manière à pouvoir rendre dans les temps un mémoire parfaitement construit et rédigé. Il contient aussi quelques indications méthodologiques minimales, en complément des formations à la recherche qui vous sont dispensées.
+
+Les indications concernent d’abord les étudiant(e)s inscrit(e)s en master de Lettres à l’Université de Rouen Normandie, mais peuvent servir de façon plus générale, au prix des adaptations nécessaires.
+
+Ce document est distribué sous la licence libre Creative Commons CC BY-NC-ND (Attribution - Pas d’Utilisation Commerciale - Pas de Modification)
+
+\chapter{La recherche en dix étapes}
+\setcounter{page}{1}
+\section {La définition du sujet et la construction du corpus}
+Il est préférable que l’étudiant(e) ait une idée personnelle de sujet avant de rencontrer son directeur pour la première fois, de préférence au cours du printemps qui précède la première année d’inscription.
+Plusieurs types de sujet sont envisageables :
+
+\begin{itemize}
+\item \textit{thématique} ("les personnages féminins dans les contes de fées de l’âge classique",  "l’anthropologie baroque chez Pascal")
+\item \textit{formel} ("la métaphore dans les poèmes de Jean de Sponde").
+\item il peut aussi prendre la forme d’une \textit{édition critique} d’une œuvre oubliée (avec choix de variantes, introduction et annotation)
+\end{itemize}
+
+Le sujet peut porter : 
+\begin{itemize}
+	\item sur une œuvre (\textit{Phèdre} de Racine, les \textit{Contes} de Perrault, les \textit{Pensées} de Pascal) ; 
+	\item sur un ensemble d’œuvres d’un même auteur (« les comédies de Molière », « les tragédies de Racine », « l’\oe uvre de Pascal ») ;
+	\item ou sur un ensemble cohérent d’œuvres d’auteurs différents ("les contes de fées des années 1690", "les \textit{Phèdre} composées au XVIIe siècle").
+\end{itemize}
+
+La proposition sera affinée avec l’aide du directeur de recherche. Un bon sujet est original, et en lien avec les problématiques actuelles de la critique relatives au corpus envisagé. La fréquentation assidue des tables de librairies universitaires, la lecture des comptes rendus d’ouvrages récents, et l’écoute attentive de l’actualité littéraire et culturelle, permettront de choisir un sujet qui s’intègre dans ce que les Américains appellent "la conversation", c’est-à-dire le dialogue académique entre les chercheurs.
+
+\section{La recherche documentaire}
+\subsection{Le choix des éditions de référence}
+Une fois votre corpus délimité, vous déciderez de l’édition à laquelle vous vous référerez, en accord avec votre Directeur : vous disposerez alors du texte de référence sur lequel vous appuierez votre démonstration. Ce corpus constitue la pièce essentielle de votre travail. Il pourra s’agir d’une édition courante établie par un universitaire et pourvue d’un apparat critique (ex. \textit{Athalie }en Folio, édition de Georges Forestier), ou d’une édition originale d’époque, disponible par exemple en PDF sur Gallica.
+
+Si votre mémoire prend la forme d’une édition critique, vous choisirez avec un soin encore plus grand votre édition de base: édition princeps? dernier état contrôlé par l’auteur? Chaque cas est particulier, aussi ferez-vous valider votre choix par votre Directeur avant toute saisie.
+
+\subsection{Les outils de recherche et Zotero}
+Un mémoire de recherche s’appuie nécessairement sur une recherche documentaire riche et abondante, de première main, récente, portant sur tous les aspects du sujet choisi. 
+Des \textit{moteurs de recherche} spécialisés vous permettront d’entamer une recherche, en première intention.
+
+\begin{itemize}
+	\item Isidore, « l’assistant de recherche en sciences humaines », \url{https://isidore.science/}
+	\item Google Scholar (\url{https://scholar.google.com/}), devenu indispensable au fil du temps, et bien plus pertinent que le moteur Google généraliste que vous utilisez habituellement.
+\end{itemize}
+
+Les principaux catalogues bibliographiques en ligne sont les suivants :
+
+\begin{itemize}
+	\item Le catalogue de la Bibliothèque universitaire : https://odin.univ-rouen.fr/. Son usage exige un temps d’auto-formation, ou de formation auprès du personnel de la Bibliothèque.
+	\item Le catalogue des Bibliothèques universitaires de France (qui intègre bien sûr celui de Rouen) : http://sudoc.abes.fr 
+	\item Les ressources de la Bibliothèque universitaire, accessibles sur le site https://documentation.univ-rouen.fr/ 
+	\item Le catalogue de la Bibliothèque Nationale de France : \url{https://catalogue.bnf.fr/}
+	\item Catalogue des bibliothèques municipales de France : \url{https://ccfr.bnf.fr/}
+\end{itemize}
+
+Au terme de cette première recherche, vous aurez en principe accumulé une grande quantité de références. Il est facile de s’y perdre, ou d’oublier au cours de la recherche de noter certaines des métadonnées importantes qui vous permettront ensuite de mettre la main sur le document repéré (nom de l’auteur, année, titre de la revue, cote, etc.). Pour gérer et organiser votre recherche bibliographique, il est donc vivement conseillé d’utiliser le logiciel libre Zotero : \url{https://www.zotero.org/}. Une fois installé et intégré à votre navigateur web habituel, un clic de souris vous suffira à archiver l’ensemble des métadonnées depuis la plupart des sites académiques, de façon cohérente et structurée. J’ai réalisé deux tutoriaux sur Zotero :
+
+\begin{itemize}
+	\item \href{https://youtu.be/6HwqukdCk3Y}{Premiers pas avec Zotero}
+	\item \href{https://youtu.be/xw4vFE-kgUM}{Tagger des références}
+\end{itemize}
+
+\subsection{Les ressources : en ligne et en bibliothèque}
+Une fois une liste d’ouvrages et d’articles établie, il conviendra de se procurer d’une façon ou d’une autre ces documents. Excepté pour les oeuvres du corpus primaire, l’achat est rarement la bonne solution : les ouvrages dont vous aurez besoin seront trop nombreux, trop rares et trop chers; l’acquisition en est réservée en pratique aux institutions universitaires et aux laboratoires de recherche. En revanche, et heureusement, vous pourrez les consulter en bibliothèque, ou sur Internet.
+
+De nombreuses ressources sont en effet accessibles directement en ligne.
+
+\subsubsection{Usuels et outils de recherche}
+\begin{itemize}
+	\item Dictionnaires et usuels (Grand Robert, Encyclopedia Universalis…) sur le site de la Documentation de l’Université : \url{https://documentation.univ-rouen.fr/}
+	\item La base Frantext pour explorer de gros corpus. Accessible avec authentification universitaire : \url{https://frantext.ezproxy.normandie-univ.fr/} 
+	\item Dictionnaires du français classique : \url{https://www.lexilogos.com/francais_classique.htm}. Il est indispensable de se référer aux acceptions des mots contemporaines des textes étudiés.
+	
+\end{itemize}
+
+N.B. Le site de la Documentation de l’Université est à explorer de fond en comble. Certaines ressources importantes ne sont toutefois accessibles que par l’onglet "Bibliothèque" de l’Espace Numérique de Travail (ENT).
+
+\medskip
+De nombreux ouvrages anciens sont désormais disponibles au format PDF (mode image ou texte) sur des sites institutionnels. Vous explorerez en particulier : 
+
+\begin{itemize}
+	\item Le fonds d'ouvrages numérisés de la Bibliothèque Nationale de France: \url{https://gallica.bnf.fr/};
+	\item Le fonds d'ouvrages numérisés européens: \url{https://www.europeana.eu/fr} ;
+	\item Le gigantesque fonds numérisé par Google Books (accès gratuit pour les ouvrages libres de droits, dont les livres anciens font partie): \url{https://books.google.fr/};
+	\item Des ressources libres sont également disponibles sur \url{https://books.openedition.org/} ou sur le site du projet Gutenberg (\url{https://www.gutenberg.org/} ).
+\end{itemize}
+
+\subsubsection {Ouvrages critiques}
+La lecture d’articles et d’ouvrages spécialisés constitue bien sûr une part essentielle du travail de recherche en littérature. L’accès physique à la Bibliothèque universitaire reste donc indispensable. On fréquentera donc assidûment: 
+
+\begin{itemize}
+	\item 	Le Pôle lettres (rez-de-chaussée du bâtiment 3, ex-bâtiment A);
+	\item La Bibliothèque Universitaire Lettres-Sciences, au cœur du campus de Mont-Saint-Aignan;
+	\item Le service de prêt inter-bibliothèque (PEB), lorsqu'un ouvrage papier n'est pas disponible à Rouen. \textit{Ce service est gratuit pour les étudiants}. Renseignements à la BU. La procédure est simple et rapide.
+\end{itemize}
+
+De nombreux commentaires, analyses, documents divers circulent certes
+sur Internet, mais tous ne sont pas de même qualité. Vous veillerez à
+contrôler l'origine et la fiabilité de vos sources. Parmi les
+principales bases reconnues pour leur scientificité, on peut retenir:
+
+\begin{itemize}
+	\item CAIRN: accès intégral gratuit via l'authentification universitaire. CAIRN contient les archives complètes de plusieurs revues 	indispensables (\textit{Littératures classiques}, etc.). Accès par \url{https://www.cairn.info/} ou via l'ENT.
+	\item Open Edition (ex-~revues.org): \url{https://www.openedition.org/}. Vous y trouverez, comme sur CAIRN, des revues de grande qualité scientifique (par exemple les \textit{Études Épistémè}), mais l'accès	est ici complètement gratuit, et respectueux des principes de l'Open Access.
+	\item \url{https://www.erudit.org/fr/}: équivalent canadien d'Open
+	Editions. De nombreuses ressources de qualité sont disponibles;
+	\item \url{https://www.academia.edu/} est un entrepôt de données sur lequel les chercheurs publient des contributions généralement déjà parues ailleurs;
+	\item \url{https://hal.science/} est un entrepôt du même type, mais il
+	s'agit d'une initiative publique française, respectueuse de la Science
+	Ouverte.
+	\item On pourra se référer à des conférences universitaires enregistrées et disponibles sur des sites institutionnels, sur Canal Académie, (\url{https://www.canalacademies.com/}) ou parfois sur Youtube.
+\end{itemize}
+
+Il existe aussi des ressources plus confidentielles, dissimulées dans
+les entrailles du \textit{dark web}. Il est évidemment formellement
+défendu de divulguer les \oe uvres que vous pourrez y trouver, et leur
+accès peut vous causer des problèmes de sécurité informatique. Trois
+adresses à retenir (deux d'entre elles exigent un VPN et un point
+d'accès situé en suisse, et/ou le logiciel TOR), \textit{à vos risques et
+	périls}.
+
+\begin{itemize}
+	\item La Z-Library contient des fichiers .epub ou .pdf de nombreux ouvrages universitaires. \url{https://z-lib.gs/}. Il faut au préalable
+	créer un compte: éviter d'utiliser votre adresse courriel habituelle.
+	Interdit en France, le site est accessible depuis la Suisse grâce à un
+	VPN. Il est aussi accessible via TOR au prix de quelques
+	manipulations.
+	\item PDF Drive: accessible pour l'instant librement sans compte ni
+	précaution particulière \url{https://www.pdfdrive.com/}. Attention
+	aux publicités qui vous attirent sur des sites tiers.
+	\item Sci-Hub: l'une des bases parallèles les plus complètes. Adresse
+	actuelle: \url{https://sci-hub.hkvisa.net/} (susceptible de changer).
+	Site également interdit en France: le VPN est donc obligatoire, avec
+	point d'accès en Suisse par exemple.
+\end{itemize}
+
+\section{L'hypothèse de recherche}
+Un travail de recherche consiste non pas en un exposé statique, ni en la simple synthèse de connaissances déjà existantes. Le mémoire obéit au contraire à la \textit{dynamique d’une démonstration visant à produire un savoir nouveau} sur l’objet que vous aurez défini. Au terme des deux années de travail, vous devrez être en mesure de \textit{soutenir une thèse}, c’est-à-dire d’affirmer sur votre sujet et votre corpus une position neuve, non encore formulée auparavant, solidement argumentée et prouvée par des références aux textes, sous l’éclairage des travaux critiques les plus avisés.
+Cette perspective implique \textit{l’élaboration d’une hypothèse de recherche}, nécessairement originale, éventuellement paradoxale, sans être pour autant farfelue. Vous ferez valider cette hypothèse par votre Directeur. Il pourra vous aider à la construire avec vous.
+
+Cette hypothèse vous amènera à privilégier une perspective épistémologique et à user des méthodes habituellement associées à ce courant critique : l’aide du Directeur sera ici cruciale pour vous aider à cheminer sur la voie théorique que vous emprunterez. Ces routes peuvent être très diverses : théorie de la réception, traductologie, poétique, études de genre, philologie, rhétorique, anthropologie culturelle, études postcoloniales, etc.
+
+Au cours de votre travail, vous pourrez être amené(e) à corriger, à reformuler, voire à changer d’hypothèse de lecture, s’il apparaît au fil de vos avancées que la route initialement choisie était une fausse piste. Dans ce dernier cas de figure, qui n’est pas nécessairement anormal dans le cadre d’un travail de recherche aux résultats nécessairement incertains, un rendez-vous urgent avec votre Directeur s’impose.
+
+[...]
+
+Les citations longues (plus de deux lignes) seront isolées typographiquement (retrait d’1 cm à gauche, corps d’un point plus petit que le corps du développement, interligne simple). Exemple de citation longue\footnote{Exemple de note de bas de page.} :
+
+\begin{displayquote}
+La médecine classique des humeurs, en insistant au \textsc{xvii}\textsuperscript{e}  et au \textsc{xviii}\textsuperscript{e} siècle sur la nosologie mélancolique et sur ses thérapeutiques, laïcisait en quelque sorte l’\textit{acedia} et posait les prémisses d’une psychothérapie qui, tout empirique qu’elle fût, avait de grands mérites. \footcite{Mesnard1990}
+
+\end{displayquote}
+
+\clearpage
+\printbibliography
+\clearpage
+
+\clearpage
+\tableofcontents
+\clearpage
+
+
+
+
+\end{document}
