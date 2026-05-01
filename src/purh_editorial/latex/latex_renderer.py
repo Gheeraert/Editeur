@@ -3,16 +3,21 @@ from __future__ import annotations
 from pathlib import Path
 
 from purh_editorial.latex.semantic_model import (
+    BibliographyBlock,
     Bold,
     Book,
+    DivisionKind,
     FootnoteRef,
     InlineNode,
     Italic,
+    ListBlock,
     Paragraph,
+    QuoteBlock,
     SmallCaps,
     Subscript,
     Superscript,
     TextRun,
+    VerseBlock,
 )
 
 
@@ -33,10 +38,12 @@ class LatexRenderer:
         lines.extend([r"\maketitle", ""])
 
         for division in book.divisions:
-            lines.append(rf"\chapter*{{{self._escape(division.title)}}}")
-            lines.append(rf"\addcontentsline{{toc}}{{chapter}}{{{self._escape(division.title)}}}")
-            for paragraph in division.paragraphs:
-                rendered = self._render_paragraph(paragraph)
+            chapter_command = r"\chapter" if division.kind == DivisionKind.CHAPTER else r"\chapter*"
+            lines.append(rf"{chapter_command}{{{self._escape(division.title)}}}")
+            if division.kind != DivisionKind.CHAPTER:
+                lines.append(rf"\addcontentsline{{toc}}{{chapter}}{{{self._escape(division.title)}}}")
+            for block in division.blocks:
+                rendered = self._render_block(block)
                 if rendered:
                     lines.append(rendered)
                     lines.append("")
@@ -51,6 +58,32 @@ class LatexRenderer:
 
     def _render_paragraph(self, paragraph: Paragraph) -> str:
         return self._render_inline_nodes(paragraph.content)
+
+    def _render_block(self, block) -> str:
+        if isinstance(block, Paragraph):
+            return self._render_paragraph(block)
+        if isinstance(block, QuoteBlock):
+            paragraphs: list[str] = []
+            for paragraph in block.paragraphs:
+                rendered = self._render_paragraph(paragraph)
+                if rendered:
+                    paragraphs.append(rendered)
+            if not paragraphs:
+                return ""
+            return "\n".join([r"\begin{quote}", *paragraphs, r"\end{quote}"])
+        if isinstance(block, VerseBlock):
+            lines = [self._render_inline_nodes(line.content) + r"\\" for line in block.lines]
+            return "\n".join([r"\begin{verse}", *lines, r"\end{verse}"])
+        if isinstance(block, ListBlock):
+            env = "enumerate" if block.ordered else "itemize"
+            entries = [rf"\item {self._render_inline_nodes(item.content)}" for item in block.items]
+            return "\n".join([rf"\begin{{{env}}}", *entries, rf"\end{{{env}}}"])
+        if isinstance(block, BibliographyBlock):
+            lines = [r"\section*{Bibliographie}", r"\addcontentsline{toc}{section}{Bibliographie}"]
+            for item in block.items:
+                lines.append(rf"\noindent {self._render_inline_nodes(item.content)}\par")
+            return "\n".join(lines)
+        return ""
 
     def _render_inline_nodes(self, nodes: list[InlineNode]) -> str:
         return "".join(self._render_inline_node(node) for node in nodes)
