@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Histoire éditoriale et humanités</title>
+        <title type="sub">Études pour une fabrique savante</title>
+        <editor>Claire Martin</editor>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <div type="introduction">
+        <head>Liminaires</head>
+        <p>Ce volume propose un cadre de lecture pour la collection.</p>
+      </div>
+    </front>
+    <body>
+      <div type="chapter">
+        <head>Chapitre 1. Méthodes</head>
+        <div type="section1">
+          <head>Sources et corpus</head>
+          <p>
+            Les archives de la maison éditoriale comportent des mentions en
+            <hi rend="small-caps">petites capitales</hi> et des datations du
+            XIX<hi rend="sup">e</hi> siècle.
+          </p>
+          <p>
+            L'analyse impose une note critique
+            <note place="foot">Voir l'édition <hi rend="italic">princeps</hi> et ses variantes.</note>
+            pour situer le témoin.
+          </p>
+          <cit>
+            <quote>
+              <p>
+                Cette citation longue en prose sert de bloc de démonstration
+                pour la future épreuve de composition.
+              </p>
+            </quote>
+          </cit>
+          <lg>
+            <l>Le texte se plie au rythme</l>
+            <l>Et la page retient le vers</l>
+          </lg>
+        </div>
+      </div>
+      <div type="conclusion">
+        <head>Conclusion</head>
+        <p>La chaîne TEI vers LaTeX doit rester explicable et traçable.</p>
+      </div>
+    </body>
+    <back>
+      <div type="bibliography">
+        <head>Bibliographie</head>
+        <listBibl>
+          <bibl>Martin, Claire, <hi rend="italic">Composer le savoir</hi>, Rouen, 2022.</bibl>
+          <bibl>Durand, Paul, <hi rend="italic">Éditer les sources</hi>, Paris, 2019.</bibl>
+        </listBibl>
+      </div>
+    </back>
+  </text>
+</TEI>

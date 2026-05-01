@@ -28,8 +28,21 @@ class LatexRenderer:
             r"\usepackage{fontspec}",
             r"\usepackage{polyglossia}",
             r"\setmainlanguage{french}",
+            r"\setmainfont{TeX Gyre Pagella}",
+            r"\setsansfont{TeX Gyre Heros}",
+            r"\setmonofont{Latin Modern Mono}",
+            r"\usepackage[final]{microtype}",
             r"\usepackage{csquotes}",
             r"\usepackage{hyperref}",
+            r"\usepackage{verse}",
+            r"\setstocksize{230mm}{155mm}",
+            r"\settrimmedsize{\stockheight}{\stockwidth}{*}",
+            r"\setlrmarginsandblock{23mm}{22mm}{*}",
+            r"\setulmarginsandblock{24mm}{22mm}{*}",
+            r"\checkandfixthelayout",
+            r"\setlength{\parindent}{1.25em}",
+            r"\setlength{\parskip}{0pt}",
+            r"\renewcommand{\footnotesize}{\small}",
             r"\begin{document}",
             rf"\title{{{self._escape(book.metadata.title)}}}",
         ]
@@ -70,7 +83,7 @@ class LatexRenderer:
                     paragraphs.append(rendered)
             if not paragraphs:
                 return ""
-            return "\n".join([r"\begin{quote}", *paragraphs, r"\end{quote}"])
+            return "\n".join([r"\begin{quote}\small", *paragraphs, r"\end{quote}"])
         if isinstance(block, VerseBlock):
             lines = [self._render_inline_nodes(line.content) + r"\\" for line in block.lines]
             return "\n".join([r"\begin{verse}", *lines, r"\end{verse}"])
