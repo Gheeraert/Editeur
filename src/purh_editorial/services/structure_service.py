@@ -23,11 +23,18 @@ _CREDIT_START_RE = re.compile(
     r"^(Sous|Dans|Pour|Avec|Sur|Par|Textes?|\u00c9tudes?|Articles?|Ouvrage|Actes?)\s+",
     re.IGNORECASE | re.UNICODE,
 )
-# Verbe conjugu? EN T?TE de phrase (imparfait 3sg, conditionnel, pr?sent 3e pl.)
+# Verbe conjugué EN T?TE de phrase (imparfait 3sg, conditionnel, pr?sent 3e pl.)
 _VERB_LEAD_RE = re.compile(
     r"^[A-Z][A-Za-z]*(ait|aient|ront|raient|rait|ions|iez)\b",
     re.UNICODE,
 )
+
+# Début de vers différent de début de titre: conjonctions de coordination
+_SENTENCE_CONNECTOR_RE = re.compile(
+    r"^(Et|Mais|Or|Car|Puis|Alors|Ainsi|Enfin|Cependant|Tandis)\b",
+    re.IGNORECASE | re.UNICODE,
+)
+
 # Paire de noms propres : "Pr?nom NOM et Pr?nom NOM" -> cr?dit ?ditorial, pas titre
 _NAME_PAIR_RE = re.compile(
     r"^[A-Z][A-Za-z\-]+(\s+[A-Za-z\-]+)+\s+et\s+[A-Z]",
@@ -75,6 +82,18 @@ _HEADING_RULE_ID = "R-STRUCT-HEADING-001"
 _HEADING_CATEGORY = "heading_candidate"
 _ALLOWED_HEURISTIC_PROFILES = {"conservative", "balanced", "exploratory"}
 
+_PROFILE_ALIASES = {
+    "prudent": "conservative",
+    "conservateur": "conservative",
+    "conservative": "conservative",
+
+    "équilibré": "balanced",
+    "equilibre": "balanced",
+    "balanced": "balanced",
+
+    "exploratoire": "exploratory",
+    "exploratory": "exploratory",
+}
 
 @dataclass(slots=True)
 class HeuristicSettings:
@@ -99,15 +118,18 @@ def settings_for_heuristic_profile(
     poetry_diagnostic_threshold: float | None = None,
     enable_scored_heuristics: bool = True,
 ) -> tuple[HeuristicSettings, list[str]]:
-    normalized = str(profile or "conservative").strip().lower()
+    raw = str(profile or "conservative").strip().lower()
+    raw = unicodedata.normalize("NFKD", raw)
+    raw = "".join(ch for ch in raw if not unicodedata.combining(ch))
+    normalized = _PROFILE_ALIASES.get(raw, raw)
     warnings: list[str] = []
     if normalized not in _ALLOWED_HEURISTIC_PROFILES:
         warnings.append(f"Unknown heuristic profile '{profile}', falling back to 'conservative'.")
         normalized = "conservative"
 
     profile_values = {
-        "conservative": (0.90, 0.70, 0.92, 0.70),
-        "balanced": (0.85, 0.60, 0.90, 0.65),
+        "conservative": (0.90, 0.70, 0.90, 0.70),
+        "balanced": (0.85, 0.60, 0.85, 0.62),
         "exploratory": (0.75, 0.50, 0.80, 0.55),
     }
     h_t, h_d, p_t, p_d = profile_values[normalized]
@@ -214,11 +236,49 @@ class StructurePreparationService:
         poetry_candidate_block_ids: set[str] = set()
         if use_heuristics:
             poetry_decisions = self.analyze_poetry_candidates(document)
+
+            # Zone grise ou transformation : dans les deux cas,
+            # les lignes poétiques doivent neutraliser la promotion en titre.
             for poetry_decision in poetry_decisions:
                 if poetry_decision.veto_reasons:
                     continue
                 if poetry_decision.decision in {"diagnostic", "transform"}:
                     poetry_candidate_block_ids.update(poetry_decision.target_refs)
+
+            # Score élevé : transformation immédiate de la séquence poétique,
+            # avant tout passage du détecteur de titres.
+            blocks_by_id = {block.block_id: block for block in document.blocks}
+
+            for poetry_decision in poetry_decisions:
+                if poetry_decision.decision != "transform":
+                    continue
+                if poetry_decision.veto_reasons:
+                    continue
+
+                for block_id in poetry_decision.target_refs:
+                    block = blocks_by_id.get(block_id)
+                    if block is None:
+                        continue
+
+                    # La poésie peut corriger un faux heading déjà hérité de Word.
+                    if block.block_type not in {"paragraph", "heading"}:
+                        continue
+
+                    before = block.block_type
+                    block.block_type = "quote_block"
+                    block.attributes["quote_kind"] = "poetry"
+                    block.attributes["heuristic_score"] = poetry_decision.score
+
+                    transformations.append(self._make_tr(
+                        block.block_id,
+                        before,
+                        "quote_block",
+                        "structure.poetry.quote",
+                        attributes={
+                            "quote_kind": "poetry",
+                            "score": poetry_decision.score,
+                        },
+                    ))
 
         for block in document.blocks:
             text = block.text.strip()
@@ -453,10 +513,9 @@ class StructurePreparationService:
                     continue
                 excerpt = poetry_decision.evidence.get("excerpt", "")
                 if poetry_decision.decision == "transform":
-                    severity = "warning"
+                    severity = "info"
                     message = (
-                        "Candidat citation poetique a score eleve detecte, mais aucune "
-                        "transformation automatique n'est appliquee dans cette passe."
+                        "Citation poétique détectée avec un score élevé et structurée automatiquement."
                     )
                 else:
                     severity = "info"
@@ -540,7 +599,7 @@ class StructurePreparationService:
         current: list = []
 
         for block in document.blocks:
-            if block.block_type == "paragraph" and block.text.strip():
+            if block.block_type in {"paragraph", "heading"} and block.text.strip():
                 current.append(block)
                 continue
             if len(current) >= 3:
@@ -625,6 +684,11 @@ class StructurePreparationService:
             "punctuation_ratio": round(punctuation_ratio, 3),
             "intro_context_ratio": round(intro_context_ratio, 3),
             "excerpt": " | ".join(texts[:3])[:240],
+            "source_heading_count": sum(
+                1
+                for block in sequence
+                if block.block_type == "heading" or cls._source_heading_level(block) is not None
+            ),
         }
         return HeuristicDecision(
             rule_id=_POETRY_RULE_ID,
@@ -650,8 +714,6 @@ class StructurePreparationService:
                 reasons.add("list_like")
             if cls._looks_like_bibliography_reference(text):
                 reasons.add("bibliography_like")
-            if block.block_type == "heading" or cls._source_heading_level(block) is not None:
-                reasons.add("heading_explicit")
             if cls._looks_like_technical_markup(text):
                 reasons.add("technical_markup")
         return sorted(reasons)
@@ -775,6 +837,8 @@ class StructurePreparationService:
             reasons.add("sentence_like")
         if cls._source_heading_level(block) is None and len(text.split()) <= 1:
             reasons.add("too_short_fragment")
+        if _SENTENCE_CONNECTOR_RE.match(text):
+            reasons.add("sentence_connector")
         return sorted(reasons)
     
     @staticmethod
@@ -1006,6 +1070,9 @@ class StructurePreparationService:
             return False
         # Roman numeral seul (I, II, V)  pas un titre heuristique
         if _ROMAN_ONLY_RE.match(stripped):
+            return False
+        # Absence de conjonction de coordination en début de phrase
+        if _SENTENCE_CONNECTOR_RE.match(stripped):
             return False
         # Pas un item de liste
         if re.match(r"^[-]\s", stripped):
