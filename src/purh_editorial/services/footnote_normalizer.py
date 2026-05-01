@@ -117,7 +117,7 @@ class FootnoteNormalizer:
                         severity="warning",
                         category="footnote_call_placement",
                         message=(
-                            "Appel de note probablement mal placÃ© : il devrait prÃ©cÃ©der la "
+                            "Appel de note probablement mal placé : il devrait précéder la "
                             "ponctuation finale ou le guillemet fermant."
                         ),
                         target_ref=block_id,

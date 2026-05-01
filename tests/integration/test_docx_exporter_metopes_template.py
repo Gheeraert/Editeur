@@ -13,7 +13,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.docx_exporter import DocxExporter
-from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Paragraph, QuoteBlock
+from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 
@@ -51,6 +51,12 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
         return ET.fromstring(xml_bytes)
 
     @staticmethod
+    def _read_footnotes_xml(output_path: Path) -> ET.Element:
+        with zipfile.ZipFile(output_path, "r") as archive:
+            xml_bytes = archive.read("word/footnotes.xml")
+        return ET.fromstring(xml_bytes)
+
+    @staticmethod
     def _runs_with_text(root: ET.Element) -> list[tuple[str, ET.Element]]:
         runs: list[tuple[str, ET.Element]] = []
         for run in root.findall(f".//{_q('r')}"):
@@ -74,6 +80,43 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
         if ind is None:
             return None
         return ind.attrib.get(_q("firstLine"))
+
+    @staticmethod
+    def _left_indent_attr(paragraph: ET.Element) -> str | None:
+        ind = paragraph.find(f"./{_q('pPr')}/{_q('ind')}")
+        if ind is None:
+            return None
+        return ind.attrib.get(_q("left"))
+
+    @staticmethod
+    def _justification_attr(paragraph: ET.Element) -> str | None:
+        jc = paragraph.find(f"./{_q('pPr')}/{_q('jc')}")
+        if jc is None:
+            return None
+        return jc.attrib.get(_q("val"))
+
+    @staticmethod
+    def _line_spacing_attr(paragraph: ET.Element) -> str | None:
+        spacing = paragraph.find(f"./{_q('pPr')}/{_q('spacing')}")
+        if spacing is None:
+            return None
+        return spacing.attrib.get(_q("line"))
+
+    @staticmethod
+    def _run_font_sizes_half_points(paragraph: ET.Element) -> list[int]:
+        values: list[int] = []
+        for run in paragraph.findall(f"./{_q('r')}"):
+            sz = run.find(f"./{_q('rPr')}/{_q('sz')}")
+            if sz is None:
+                continue
+            val = sz.attrib.get(_q("val"))
+            if not val:
+                continue
+            try:
+                values.append(int(val))
+            except ValueError:
+                continue
+        return values
 
     def test_ooxml_century_styles_with_real_metopes_template(self) -> None:
         source = Document(
@@ -226,6 +269,93 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
         paragraphs = self._paragraphs_with_text(root)
         self.assertEqual(len(paragraphs), 2)
         self.assertIsNone(self._first_line_attr(paragraphs[1][1]))
+
+    def test_headings_use_limited_font_sizes_for_review_docx(self) -> None:
+        source = Document(
+            document_id="doc-heading-size",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Heading(block_id="h1", text="Titre niveau 1", attributes={"heading_level": 1}),
+                Heading(block_id="h2", text="Titre niveau 2", attributes={"heading_level": 2}),
+                Heading(block_id="h3", text="Titre niveau 3", attributes={"heading_level": 3}),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 3)
+
+        sizes_h1 = self._run_font_sizes_half_points(paragraphs[0][1])
+        sizes_h2 = self._run_font_sizes_half_points(paragraphs[1][1])
+        sizes_h3 = self._run_font_sizes_half_points(paragraphs[2][1])
+
+        self.assertTrue(sizes_h1 and all(v <= 32 for v in sizes_h1), "Heading 1 > 16pt")
+        self.assertTrue(sizes_h2 and all(v <= 28 for v in sizes_h2), "Heading 2 > 14pt")
+        self.assertTrue(sizes_h3 and all(v <= 26 for v in sizes_h3), "Heading 3 > 13pt")
+
+    def test_quote_blocks_have_review_readability_formatting(self) -> None:
+        source = Document(
+            document_id="doc-quotes-format",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                QuoteBlock(block_id="q1", text="Citation en prose."),
+                QuoteBlock(block_id="q2", text="Vers 1\nVers 2", attributes={"quote_kind": "poetry"}),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_document_xml(output)
+        paragraphs = self._paragraphs_with_text(root)
+        self.assertEqual(len(paragraphs), 2)
+
+        prose_p = paragraphs[0][1]
+        poetry_p = paragraphs[1][1]
+
+        self.assertIsNotNone(self._left_indent_attr(prose_p))
+        self.assertEqual(self._justification_attr(prose_p), "both")
+        self.assertEqual(self._line_spacing_attr(prose_p), "240")
+        self.assertTrue(all(v == 22 for v in self._run_font_sizes_half_points(prose_p)))
+
+        self.assertIsNotNone(self._left_indent_attr(poetry_p))
+        self.assertEqual(self._justification_attr(poetry_p), "left")
+        self.assertEqual(self._line_spacing_attr(poetry_p), "240")
+        self.assertTrue(all(v == 22 for v in self._run_font_sizes_half_points(poetry_p)))
+
+    def test_footnotes_runs_use_garamond(self) -> None:
+        source = Document(
+            document_id="doc-footnote-font",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Paragraph(
+                    block_id="p1",
+                    text="Texte avec note.",
+                    inlines=[
+                        InlineSpan(text="Texte avec note"),
+                        InlineSpan(text="", kind="note_call", note_ref="n1"),
+                        InlineSpan(text="."),
+                    ],
+                )
+            ],
+            notes=[
+                Note(note_id="n1", text="Contenu de note."),
+            ],
+        )
+        mapped, _ = MetopesMapper().apply(source)
+        output = self._export_with_real_template(mapped)
+        root = self._read_footnotes_xml(output)
+
+        garamond_fonts = 0
+        for run in root.findall(f".//{_q('r')}"):
+            rfonts = run.find(f"./{_q('rPr')}/{_q('rFonts')}")
+            if rfonts is None:
+                continue
+            if rfonts.attrib.get(_q("ascii")) == "Garamond" and rfonts.attrib.get(_q("hAnsi")) == "Garamond":
+                garamond_fonts += 1
+        self.assertGreater(garamond_fonts, 0, "Aucun run de note en Garamond détecté.")
 
 
 if __name__ == "__main__":
