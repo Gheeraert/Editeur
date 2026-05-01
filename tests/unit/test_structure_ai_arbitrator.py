@@ -26,6 +26,28 @@ class _FakeProvider:
         return self.response
 
 
+class _RaisingProvider:
+    def __init__(self, message: str = "provider_error") -> None:
+        self.message = message
+        self.calls = 0
+
+    def complete(self, prompt: str) -> str:
+        self.calls += 1
+        raise RuntimeError(self.message)
+
+
+class _SequenceProvider:
+    def __init__(self, responses: list[str]) -> None:
+        self.responses = responses
+        self.calls = 0
+
+    def complete(self, prompt: str) -> str:
+        self.calls += 1
+        if self.calls <= len(self.responses):
+            return self.responses[self.calls - 1]
+        return self.responses[-1]
+
+
 def _doc() -> Document:
     return Document(
         document_id="doc-ai-arbitration",
@@ -199,6 +221,62 @@ class StructureAiArbitratorTests(unittest.TestCase):
         )
         self.assertEqual(calls, 1)
         self.assertEqual(provider.calls, 1)
+
+    def test_non_json_with_max_calls_1_counts_attempt(self) -> None:
+        provider = _FakeProvider("not-json")
+        arbitrator = StructureAiArbitrator(provider=provider)
+        diags, _, calls = arbitrator.arbitrate_from_diagnostics(
+            document=_doc(),
+            diagnostics=[_candidate_diag(rule_id="R-STRUCT-HEADING-001")],
+            enable_ai=True,
+            max_calls=1,
+        )
+        self.assertEqual(provider.calls, 1)
+        self.assertEqual(calls, 1)
+        self.assertEqual(len(diags), 1)
+        self.assertEqual(diags[0].severity, "warning")
+        self.assertEqual(diags[0].rule_id, "R-STRUCT-AI-LOCAL-001")
+
+    def test_provider_exception_with_two_candidates_max_calls_1_counts_one_attempt(self) -> None:
+        provider = _RaisingProvider()
+        arbitrator = StructureAiArbitrator(provider=provider)
+        diags = [
+            _candidate_diag(rule_id="R-STRUCT-HEADING-001", target_ref="p1"),
+            _candidate_diag(rule_id="R-STRUCT-HEADING-001", target_ref="p2"),
+        ]
+        out_diags, _, calls = arbitrator.arbitrate_from_diagnostics(
+            document=_doc(),
+            diagnostics=diags,
+            enable_ai=True,
+            max_calls=1,
+        )
+        self.assertEqual(provider.calls, 1)
+        self.assertEqual(calls, 1)
+        self.assertEqual(len(out_diags), 1)
+        self.assertEqual(out_diags[0].severity, "warning")
+
+    def test_first_invalid_second_valid_max_calls_1_only_first_attempted(self) -> None:
+        provider = _SequenceProvider(
+            [
+                "not-json",
+                '{"classification":"heading","confidence":0.91,"reason":"ok","recommended_action":"diagnostic"}',
+            ]
+        )
+        arbitrator = StructureAiArbitrator(provider=provider)
+        diags = [
+            _candidate_diag(rule_id="R-STRUCT-HEADING-001", target_ref="p1"),
+            _candidate_diag(rule_id="R-STRUCT-HEADING-001", target_ref="p2"),
+        ]
+        out_diags, _, calls = arbitrator.arbitrate_from_diagnostics(
+            document=_doc(),
+            diagnostics=diags,
+            enable_ai=True,
+            max_calls=1,
+        )
+        self.assertEqual(provider.calls, 1)
+        self.assertEqual(calls, 1)
+        self.assertEqual(len(out_diags), 1)
+        self.assertEqual(out_diags[0].severity, "warning")
 
 
 if __name__ == "__main__":
