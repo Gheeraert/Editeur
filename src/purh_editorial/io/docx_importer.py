@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import re
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -23,6 +24,13 @@ NS_CORE = {
     "dc": "http://purl.org/dc/elements/1.1/",
     "cp": "http://schemas.openxmlformats.org/package/2006/metadata/core-properties",
 }
+
+# Reconnaît les niveaux dans les styles Word et Métopes :
+# "Heading 1", "heading1", "Titre-1", "titre_2", "TEI_head3", "head3"
+_HEADING_LEVEL_EXTRACT_RE = re.compile(
+    r"(?:heading|tei_head|tei_titre|titre|head)[_\-\s]*([1-6])",
+    re.IGNORECASE,
+)
 
 
 class DocxImporter(DocumentImporter):
@@ -352,12 +360,6 @@ class DocxImporter(DocumentImporter):
 
     @staticmethod
     def _paragraph_visual_props(paragraph: ET.Element, inlines: list[InlineSpan]) -> dict:
-        """
-        Extrait les propriétés visuelles d'un paragraphe :
-        - all_runs_bold / all_runs_italic : tous les runs texte sont gras/italic
-        - any_run_bold / any_run_italic  : au moins un run l'est
-        - ind_left (twips), ind_first_line (twips) : indentations
-        """
         props: dict = {}
         ppr = paragraph.find("w:pPr", NS_WORD)
         if ppr is not None:
@@ -371,6 +373,27 @@ class DocxImporter(DocumentImporter):
                 if fl:
                     try: props["ind_first_line"] = int(fl)
                     except ValueError: pass
+
+            spacing = ppr.find("w:spacing", NS_WORD)
+            if spacing is not None:
+                for key, attr in (("space_before", "before"), ("space_after", "after")):
+                    val = spacing.get(f"{{{NS_WORD['w']}}}{attr}")
+                    if val:
+                        try: props[key] = int(val)
+                        except ValueError: pass
+
+            jc = ppr.find("w:jc", NS_WORD)
+            if jc is not None:
+                jc_val = jc.get(f"{{{NS_WORD['w']}}}val")
+                if jc_val:
+                    props["jc"] = jc_val
+
+            for tag, key in (("keepNext", "keep_with_next"), ("keepLines", "keep_lines")):
+                node = ppr.find(f"w:{tag}", NS_WORD)
+                if node is not None:
+                    val = node.get(f"{{{NS_WORD['w']}}}val")
+                    props[key] = val is None or val.lower() not in {"0", "false", "off", "no"}
+
         text_spans = [s for s in inlines if s.kind == "text" and s.text.strip()]
         if text_spans:
             props["all_runs_bold"]   = all(s.style.bold   for s in text_spans)
@@ -396,7 +419,10 @@ class DocxImporter(DocumentImporter):
         if visual:
             attributes.update(visual)
 
-        if any(token in style_ref for token in ("heading", "titre", "title", "chapter")):
+        if any(token in style_ref for token in ("heading", "titre", "title", "chapter", "head")):
+            level = DocxImporter._extract_heading_level(style_name, style_id)
+            if level is not None:
+                attributes["heading_level"] = level
             return Heading(block_id=block_id, text=text, inlines=inlines,
                            note_refs=note_refs, attributes=attributes)
         if any(token in style_ref for token in ("quote", "citation", "epigraphe")):
@@ -408,6 +434,14 @@ class DocxImporter(DocumentImporter):
                            note_refs=note_refs, attributes=attributes)
         return Paragraph(block_id=block_id, text=text, inlines=inlines,
                          note_refs=note_refs, attributes=attributes)
+
+    @staticmethod
+    def _extract_heading_level(style_name: str, style_id: str | None) -> int | None:
+        for value in (style_name, style_id or ""):
+            m = _HEADING_LEVEL_EXTRACT_RE.search(value)
+            if m:
+                return int(m.group(1))
+        return None
 
     @staticmethod
     def _local_name(tag: str) -> str:

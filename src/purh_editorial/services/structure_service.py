@@ -63,6 +63,10 @@ _AUTHOR_NAME_RE = re.compile(
 _BLOCK_QUOTE_IND_LEFT_THRESHOLD = 400
 _BLOCK_QUOTE_MIN_LEN = 60
 
+# Séquences poétiques : taille maximale et seuil de rupture entre strophes
+_POETRY_SEQUENCE_MAX_LINES = 20
+_POETRY_STANZA_SPACE_THRESHOLD = 240  # twips — environ 1 interligne à 12pt
+
 # Bibliographie heuristique (hors section d?di?e)
 _BIBLIO_HEURISTIC_RE = re.compile(
     r"^[A-Z\(][A-Za-z\'\-\s]{1,40},"
@@ -72,7 +76,10 @@ _BIBLIO_HEURISTIC_RE = re.compile(
 )
 
 
-_HEADING_STYLE_LEVEL_RE = re.compile(r"(?:heading|titre)\s*([1-6])", re.IGNORECASE)
+_HEADING_STYLE_LEVEL_RE = re.compile(
+    r"(?:heading|tei_head|tei_titre|titre|head)[_\-\s]*([1-6])",
+    re.IGNORECASE,
+)
 _TECHNICAL_ATTR_RE = re.compile(r"\b[\w:-]+\s*=\s*\"[^\"]*\"")
 _TECHNICAL_TAG_RE = re.compile(r"<[^>]+>")
 _TECHNICAL_CODE_RE = re.compile(r"\b(print|class|def|return)\s*\(", re.IGNORECASE)
@@ -714,14 +721,30 @@ class StructurePreparationService:
         current: list = []
 
         for block in document.blocks:
-            if block.block_type in {"paragraph", "heading"} and block.text.strip():
-                current.append(block)
+            # Un titre (heading) brise toujours la séquence
+            is_candidate = (block.block_type == "paragraph" and block.text.strip())
+            if not is_candidate:
+                if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
+                    sequences.append(current.copy())
+                current.clear()
                 continue
-            if len(current) >= 3:
-                sequences.append(current.copy())
-            current.clear()
 
-        if len(current) >= 3:
+            # Rupture de strophe : écart vertical significatif entre blocs
+            if current:
+                prev_after  = current[-1].attributes.get("space_after",  0) or 0
+                curr_before = block.attributes.get("space_before", 0) or 0
+                if max(prev_after, curr_before) > _POETRY_STANZA_SPACE_THRESHOLD:
+                    if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
+                        sequences.append(current.copy())
+                    current.clear()
+
+            # Dépassement de taille : la séquence est trop longue pour être de la poésie
+            if len(current) >= _POETRY_SEQUENCE_MAX_LINES:
+                current.clear()
+
+            current.append(block)
+
+        if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
             sequences.append(current.copy())
         return sequences
 
@@ -740,6 +763,9 @@ class StructurePreparationService:
         line_count = len(texts)
         avg_length = (sum(lengths) / line_count) if line_count else 0.0
         length_cv = (pstdev(lengths) / avg_length) if line_count > 1 and avg_length else 0.0
+
+        word_counts = [len(text.split()) for text in texts]
+        avg_word_count = (sum(word_counts) / line_count) if line_count else 0.0
 
         initial_upper_ratio = (
             sum(1 for text in texts if text[:1].isupper()) / line_count if line_count else 0.0
@@ -766,13 +792,20 @@ class StructurePreparationService:
         initial_component = min(1.0, initial_upper_ratio)
         punctuation_component = min(1.0, punctuation_ratio)
         intro_component = min(1.0, intro_context_ratio)
+        # Un vers type : 3-9 mots ; la prose courte en a g\u00e9n\u00e9ralement plus
+        word_count_component = (
+            1.0 if 3 <= avg_word_count <= 9 else
+            0.5 if 2 <= avg_word_count <= 12 else
+            0.0
+        )
 
         score = (
-            0.20 * line_count_component
-            + 0.18 * length_component
-            + 0.16 * homogeneity_component
-            + 0.18 * initial_component
-            + 0.18 * punctuation_component
+            0.18 * line_count_component
+            + 0.15 * length_component
+            + 0.14 * homogeneity_component
+            + 0.15 * initial_component
+            + 0.15 * punctuation_component
+            + 0.13 * word_count_component
             + 0.10 * intro_component
         )
         score = round(max(0.0, min(1.0, score)), 3)
@@ -794,10 +827,12 @@ class StructurePreparationService:
         evidence = {
             "line_count": line_count,
             "avg_length": round(avg_length, 2),
+            "avg_word_count": round(avg_word_count, 2),
             "length_cv": round(length_cv, 3),
             "initial_upper_ratio": round(initial_upper_ratio, 3),
             "punctuation_ratio": round(punctuation_ratio, 3),
             "intro_context_ratio": round(intro_context_ratio, 3),
+            "word_count_component": round(word_count_component, 3),
             "excerpt": " | ".join(texts[:3])[:240],
             "source_heading_count": sum(
                 1
