@@ -381,6 +381,46 @@ class Step1PipelineDiagnosticsTests(unittest.TestCase):
         ai_apply_mock.assert_called_once()
         self.assertEqual(provider.calls, 0)
 
+    def test_editorial_ai_enabled_in_heuristic_mode_calls_editorial_service(self) -> None:
+        settings = load_settings()
+        settings.ai.api_key = "dummy-key"
+        pipeline = Step1Pipeline(settings=settings)
+        document = Document(
+            document_id="doc-editorial-heuristic",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[Paragraph(block_id="p1", text="Texte long " * 20)],
+        )
+        with (
+            patch("purh_editorial.pipeline.step1.ImporterRegistry.load_document", return_value=document),
+            patch.object(pipeline.ai, "apply", return_value=(document, [])) as ai_apply_mock,
+        ):
+            pipeline.run(
+                Path("dummy.txt"),
+                Step1Options(decision_mode="heuristic", enable_editorial_ai=True, output_path=None),
+            )
+        ai_apply_mock.assert_called_once()
+
+    def test_editorial_ai_enabled_in_deterministic_mode_does_not_call_editorial_service(self) -> None:
+        settings = load_settings()
+        settings.ai.api_key = "dummy-key"
+        pipeline = Step1Pipeline(settings=settings)
+        document = Document(
+            document_id="doc-editorial-deterministic",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[Paragraph(block_id="p1", text="Texte long " * 20)],
+        )
+        with (
+            patch("purh_editorial.pipeline.step1.ImporterRegistry.load_document", return_value=document),
+            patch.object(pipeline.ai, "apply", return_value=(document, [])) as ai_apply_mock,
+        ):
+            pipeline.run(
+                Path("dummy.txt"),
+                Step1Options(decision_mode="deterministic", enable_editorial_ai=True, output_path=None),
+            )
+        ai_apply_mock.assert_not_called()
+
     def test_both_ai_disabled_by_default(self) -> None:
         settings = load_settings()
         settings.ai.api_key = "dummy-key"

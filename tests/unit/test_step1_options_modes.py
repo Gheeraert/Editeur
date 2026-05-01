@@ -18,18 +18,25 @@ class Step1OptionsDecisionModeTests(unittest.TestCase):
         self.assertTrue(options.structure_ai_enabled())
         self.assertFalse(options.editorial_ai_enabled())
 
-    def test_heuristic_mode_disables_ia(self) -> None:
+    def test_heuristic_mode_keeps_structure_ai_disabled(self) -> None:
         options = Step1Options(decision_mode="heuristic")
         self.assertFalse(options.structure_ai_enabled())
-        self.assertFalse(options.editorial_ai_enabled())
+
+    def test_heuristic_mode_respects_explicit_editorial_ai_checkbox(self) -> None:
+        options = Step1Options(decision_mode="heuristic", enable_editorial_ai=True)
+        self.assertTrue(options.editorial_ai_enabled())
+
+    def test_heuristic_ai_local_mode_respects_explicit_editorial_ai_checkbox(self) -> None:
+        options = Step1Options(decision_mode="heuristic_ai_local", enable_editorial_ai=True)
+        self.assertTrue(options.editorial_ai_enabled())
 
     def test_deterministic_mode_disables_ia(self) -> None:
-        options = Step1Options(decision_mode="deterministic")
+        options = Step1Options(decision_mode="deterministic", enable_editorial_ai=True)
         self.assertFalse(options.structure_ai_enabled())
         self.assertFalse(options.editorial_ai_enabled())
 
     def test_ai_exploratory_mode_keeps_safe_fallback(self) -> None:
-        options = Step1Options(decision_mode="ai_exploratory")
+        options = Step1Options(decision_mode="ai_exploratory", enable_editorial_ai=True)
         self.assertFalse(options.structure_ai_enabled())
         self.assertFalse(options.editorial_ai_enabled())
         self.assertTrue(options.exploratory_mode_requested())
@@ -42,4 +49,3 @@ class Step1OptionsDecisionModeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

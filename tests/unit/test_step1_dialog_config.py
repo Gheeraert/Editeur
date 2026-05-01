@@ -13,9 +13,16 @@ if str(SRC) not in sys.path:
 
 from purh_editorial.ui.step1_dialog import (
     apply_config_dict,
+    build_step1_options_from_form,
     build_config_dict,
+    decision_mode_from_label,
+    decision_mode_to_label,
     derive_ai_flags_from_decision_mode,
+    heuristic_profile_from_label,
+    heuristic_profile_to_label,
     load_config_file,
+    ai_aggressiveness_from_label,
+    ai_aggressiveness_to_label,
     normalize_ai_aggressiveness,
     normalize_decision_mode,
     normalize_heuristic_profile,
@@ -138,16 +145,26 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
 
-    def test_decision_mode_heuristic_disables_ais(self) -> None:
+    def test_decision_mode_heuristic_keeps_existing_editorial_toggle_when_not_explicit(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", True, True, True, 6, 6)
         merged = apply_config_dict(current, {"decision_mode": "heuristic"})
         self.assertEqual(merged["enable_structure_ai"], False)
-        self.assertEqual(merged["enable_editorial_ai"], False)
+        self.assertEqual(merged["enable_editorial_ai"], True)
+        self.assertEqual(merged["enable_ai"], False)
+
+    def test_decision_mode_heuristic_preserves_explicit_editorial_ai(self) -> None:
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        merged = apply_config_dict(
+            current,
+            {"decision_mode": "heuristic", "enable_editorial_ai": True},
+        )
+        self.assertEqual(merged["enable_structure_ai"], False)
+        self.assertEqual(merged["enable_editorial_ai"], True)
         self.assertEqual(merged["enable_ai"], False)
 
     def test_decision_mode_deterministic_disables_ais(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", True, True, True, 6, 6)
-        merged = apply_config_dict(current, {"decision_mode": "deterministic"})
+        merged = apply_config_dict(current, {"decision_mode": "deterministic", "enable_editorial_ai": True})
         self.assertEqual(merged["enable_structure_ai"], False)
         self.assertEqual(merged["enable_editorial_ai"], False)
         self.assertEqual(merged["enable_ai"], False)
@@ -232,6 +249,88 @@ class Step1DialogConfigTests(unittest.TestCase):
             max_structure_ai_calls=6,
         )
         self.assertEqual(cfg["ai_api_key"], "clear-text-key")
+
+    def test_label_mappings_roundtrip(self) -> None:
+        self.assertEqual(decision_mode_from_label("Déterministe strict"), "deterministic")
+        self.assertEqual(decision_mode_to_label("heuristic_ai_local"), "Heuristique + IA locale")
+        self.assertEqual(heuristic_profile_from_label("Équilibré"), "balanced")
+        self.assertEqual(heuristic_profile_to_label("exploratory"), "Exploratoire")
+        self.assertEqual(ai_aggressiveness_from_label("Conservatrice"), "conservative")
+        self.assertEqual(ai_aggressiveness_to_label("aggressive"), "Agressive")
+
+    def test_build_step1_options_from_form_heuristic_ai_local(self) -> None:
+        options = build_step1_options_from_form(
+            decision_mode_label="Heuristique + IA locale",
+            heuristic_profile_label="Prudent",
+            heading_transform_threshold="",
+            heading_diagnostic_threshold="",
+            poetry_transform_threshold="",
+            poetry_diagnostic_threshold="",
+            ai_aggressiveness_label="Conservatrice",
+            ai_provider="groq",
+            ai_api_key="",
+            ai_model="",
+            ai_base_url="",
+            enable_editorial_ai=False,
+            max_ai_calls=6,
+            max_structure_ai_calls=6,
+            output_path=None,
+            tei_output_path=None,
+        )
+        self.assertEqual(options.decision_mode, "heuristic_ai_local")
+        self.assertTrue(options.enable_structure_ai)
+        self.assertFalse(options.enable_editorial_ai)
+        self.assertIsNone(options.heading_transform_threshold)
+
+    def test_build_step1_options_from_form_editorial_toggle(self) -> None:
+        options = build_step1_options_from_form(
+            decision_mode_label="Heuristique",
+            heuristic_profile_label="Équilibré",
+            heading_transform_threshold="0.82",
+            heading_diagnostic_threshold="0.55",
+            poetry_transform_threshold="0.88",
+            poetry_diagnostic_threshold="0.57",
+            ai_aggressiveness_label="Équilibrée",
+            ai_provider="groq",
+            ai_api_key="secret",
+            ai_model="model-x",
+            ai_base_url="https://example.test",
+            enable_editorial_ai=True,
+            max_ai_calls=7,
+            max_structure_ai_calls=5,
+            output_path=None,
+            tei_output_path=None,
+        )
+        self.assertEqual(options.decision_mode, "heuristic")
+        self.assertFalse(options.enable_structure_ai)
+        self.assertTrue(options.enable_editorial_ai)
+        self.assertEqual(options.heading_transform_threshold, 0.82)
+        self.assertEqual(options.heading_diagnostic_threshold, 0.55)
+        self.assertEqual(options.poetry_transform_threshold, 0.88)
+        self.assertEqual(options.poetry_diagnostic_threshold, 0.57)
+
+    def test_build_step1_options_from_form_deterministic_disables_ias(self) -> None:
+        options = build_step1_options_from_form(
+            decision_mode_label="Déterministe strict",
+            heuristic_profile_label="Prudent",
+            heading_transform_threshold="",
+            heading_diagnostic_threshold="",
+            poetry_transform_threshold="",
+            poetry_diagnostic_threshold="",
+            ai_aggressiveness_label="Conservatrice",
+            ai_provider="groq",
+            ai_api_key="",
+            ai_model="",
+            ai_base_url="",
+            enable_editorial_ai=False,
+            max_ai_calls=6,
+            max_structure_ai_calls=6,
+            output_path=None,
+            tei_output_path=None,
+        )
+        self.assertEqual(options.decision_mode, "deterministic")
+        self.assertFalse(options.enable_structure_ai)
+        self.assertFalse(options.enable_editorial_ai)
 
 
 if __name__ == "__main__":
