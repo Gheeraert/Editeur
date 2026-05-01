@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Titre de test PURH</title>
+        <author>Auteur Exemple</author>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="chapter">
+        <head>Chapitre 1</head>
+        <p>
+          Un paragraphe avec
+          <hi rend="italic">italique</hi>,
+          <hi rend="small-caps">petites capitales</hi>,
+          <hi rend="sup">exposant</hi>
+          et une note
+          <note place="foot">Contenu de note</note>.
+        </p>
+      </div>
+    </body>
+  </text>
+</TEI>
