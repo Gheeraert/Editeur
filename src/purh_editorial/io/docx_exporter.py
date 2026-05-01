@@ -4,10 +4,12 @@ import io
 import re
 import zipfile
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 from xml.etree import ElementTree as ET
 
 from docx import Document as DocxDoc
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_COLOR_INDEX
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.enum.text import WD_COLOR_INDEX
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
@@ -23,12 +25,20 @@ _DEFAULT_TEMPLATE = Path(__file__).parent.parent.parent.parent / (
 _CT_DOTM = b"application/vnd.ms-word.template.macroEnabledTemplate.main+xml"
 _CT_DOCX = b"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
 
-# Fichiers VBA à exclure lors de la conversion
+# Fichiers VBA à exclure lors de la conversion .dotm -> .docx.
 _VBA_FILES = frozenset({"word/vbaProject.bin", "word/vbaData.xml", "word/_rels/vbaProject.bin.rels"})
-# Retire les entrées <Override> VBA dans [Content_Types].xml
+# Le ruban Métopes appelle des callbacks VBA : il faut le retirer avec les macros.
+_CUSTOM_UI_PREFIXES = ("customUI/",)
+
+# Retire les entrées VBA dans [Content_Types].xml.
 _VBA_CT_RE = re.compile(rb'<Override[^>]+/word/vba[^>]+/>')
-# Retire les relations vbaProject dans *.rels
-_VBA_REL_RE = re.compile(rb'<Relationship[^>]+vbaProject[^>]+/>')
+_VBA_DEFAULT_CT_RE = re.compile(
+    rb'<Default\b(?=[^>]*\bExtension="bin")'
+    rb'(?=[^>]*\bContentType="application/vnd\.ms-office\.vbaProject")[^>]*/>'
+)
+# Retire les relations vers le projet VBA ou vers le ruban customUI.
+_VBA_REL_RE = re.compile(rb'<Relationship[^>]+vbaProject[^>]*/>')
+_CUSTOM_UI_REL_RE = re.compile(rb'<Relationship[^>]+(?:customUI|ui/extensibility)[^>]*/>')
 
 # Namespaces OOXML
 W  = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -47,12 +57,13 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
 # Titraille      → Calibri  (sans empattement, analogue Josefin Sans)
 _FONT_BODY = "Garamond"
 _FONT_HEAD = "Calibri"
+_HEADING_FONT_SIZES_PT: dict[int, int] = {1: 16, 2: 14, 3: 13}
+_QUOTE_FONT_SIZE_PT = 11
+_QUOTE_LEFT_INDENT_CM = 0.7
 
 # Styles de corps (reçoivent Garamond)
 _BODY_STYLE_NAMES: frozenset[str] = frozenset({
     "Normal", "footnote text", "endnote text",
-    # Style caractère réellement utilisé lors de l'injection OOXML des notes.
-    "Note de bas de page Car",
     "TEI_quote", "TEI_quote2", "TEI_quote_nested", "TEI_quote_continuation",
     "TEI_bibl_reference", "TEI_epigraph", "TEI_acknowledgment",
     "TEI_dedication", "TEI_paragraph_lead", "TEI_paragraph_consecutive",
@@ -67,57 +78,27 @@ _HEAD_STYLE_NAMES: frozenset[str] = frozenset({
     "heading 1", "heading 2", "heading 3", "heading 4", "heading 5",
     "TEI_bibl_start", "TEI_appendix_start",
 })
-
-# Réglages de confort pour le DOCX de correction : on garde les noms Métopes,
-# mais on évite les tailles de titraille prévues pour la maquette finale.
-# Les tailles sont en points Word, donc 16 = 16 pt.
-_HEADING_STYLE_SPECS: dict[str, tuple[float, float, float]] = {
-    "heading 1": (16, 12, 8),
-    "Heading 1": (16, 12, 8),
-    "heading 2": (14, 10, 6),
-    "Heading 2": (14, 10, 6),
-    "heading 3": (12.5, 8, 4),
-    "Heading 3": (12.5, 8, 4),
-    "heading 4": (11.5, 6, 3),
-    "Heading 4": (11.5, 6, 3),
-    "heading 5": (11, 6, 3),
-    "Heading 5": (11, 6, 3),
-    "TEI_bibl_start": (14, 10, 6),
-    "TEI_appendix_start": (14, 10, 6),
-}
-
-_BODY_STYLE_SPECS: dict[str, dict[str, object]] = {
-    "Normal": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_paragraph_consecutive": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_paragraph_lead": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_quote": {"size": 10, "line_spacing": 1.0, "space_before": 6, "space_after": 6, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_quote2": {"size": 10, "line_spacing": 1.0, "space_before": 6, "space_after": 6, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_quote_nested": {"size": 10, "line_spacing": 1.0, "space_before": 3, "space_after": 3, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_quote_continuation": {"size": 10, "line_spacing": 1.0, "space_before": 0, "space_after": 0, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
-    "TEI_verse": {"size": 10, "line_spacing": 1.0, "space_before": 3, "space_after": 0, "alignment": WD_ALIGN_PARAGRAPH.LEFT},
-    "footnote text": {"size": 10, "line_spacing": 1.0, "alignment": WD_ALIGN_PARAGRAPH.LEFT},
-    "Note de bas de page Car": {"size": 10},
-}
-
 _FIRST_LINE_INDENT_CM = 0.5
 
 
 # ── Conversion .dotm → flux .docx ────────────────────────────────────────────
 
 def _dotm_to_docx_bytes(dotm_path: Path) -> io.BytesIO:
-    """Retourne le contenu du .dotm converti en .docx sans macros."""
+    """Retourne le contenu du .dotm converti en .docx sans macros ni ruban VBA."""
     buf = io.BytesIO()
     with zipfile.ZipFile(dotm_path, "r") as src, \
          zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as dst:
         for item in src.infolist():
-            if item.filename in _VBA_FILES:
+            if item.filename in _VBA_FILES or item.filename.startswith(_CUSTOM_UI_PREFIXES):
                 continue
             data = src.read(item.filename)
             if item.filename == "[Content_Types].xml":
                 data = data.replace(_CT_DOTM, _CT_DOCX)
                 data = _VBA_CT_RE.sub(b"", data)
+                data = _VBA_DEFAULT_CT_RE.sub(b"", data)
             elif item.filename.endswith(".rels"):
                 data = _VBA_REL_RE.sub(b"", data)
+                data = _CUSTOM_UI_REL_RE.sub(b"", data)
             dst.writestr(item, data)
     buf.seek(0)
     return buf
@@ -149,6 +130,8 @@ def _add_run_with_style(
     superscript: bool = False,
     subscript: bool = False,
     highlight: WD_COLOR_INDEX | None = None,
+    font_name: str | None = None,
+    font_size_pt: int | None = None,
 ) -> None:
     if not text:
         return
@@ -165,6 +148,10 @@ def _add_run_with_style(
         run.font.subscript = True
     if highlight is not None:
         run.font.highlight_color = highlight
+    if font_name:
+        run.font.name = font_name
+    if font_size_pt is not None:
+        run.font.size = Pt(font_size_pt)
 
 
 def _inline_highlight(span: InlineSpan) -> WD_COLOR_INDEX | None:
@@ -188,6 +175,26 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         para.paragraph_format.left_indent = Cm(0.5)
         para.paragraph_format.first_line_indent = Cm(-0.5)
 
+    heading_level = 0
+    if block.block_type == "heading":
+        raw_level = block.attributes.get("heading_level", 0)
+        try:
+            heading_level = int(raw_level or 0)
+        except (TypeError, ValueError):
+            heading_level = 1
+    heading_size = _HEADING_FONT_SIZES_PT.get(min(max(heading_level, 1), 3)) if heading_level else None
+    quote_kind = str(block.attributes.get("quote_kind", "")).lower()
+    protected_zone = str(block.attributes.get("protected_zone", "")).lower()
+    is_poetry_quote = block.block_type == "quote_block" and (
+        quote_kind == "poetry" or protected_zone == "poetry"
+    )
+    is_quote_block = block.block_type == "quote_block"
+    if is_quote_block:
+        para.paragraph_format.left_indent = Cm(_QUOTE_LEFT_INDENT_CM)
+        para.paragraph_format.first_line_indent = None
+        para.paragraph_format.line_spacing = 1.0
+        para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_poetry_quote else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
     if block.inlines:
         for span in block.inlines:
             if span.kind == "note_call" and span.note_ref:
@@ -204,117 +211,160 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                     superscript=span.style.superscript,
                     subscript=span.style.subscript,
                     highlight=_inline_highlight(span),
+                    font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        _add_run_with_style(para, block.text, highlight=hl)
+        _add_run_with_style(
+            para,
+            block.text,
+            highlight=hl,
+            font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
+        )
 
 
 # ── Injection des notes de bas de page (post-sauvegarde) ─────────────────────
 
-def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
-    """Construit l'élément XML <w:footnote> pour une note."""
-    ftn = ET.Element(f"{{{W}}}footnote")
-    ftn.set(f"{{{W}}}type", "normal")
-    ftn.set(f"{{{W}}}id", str(footnote_id))
+_HL_TO_WVAL = {
+    "orthotypo": "yellow",
+    "footnote":  "green",
+    "biblio":    "cyan",
+    "ai":        "magenta",
+}
 
-    p = ET.SubElement(ftn, f"{{{W}}}p")
-    ppr = ET.SubElement(p, f"{{{W}}}pPr")
-    pstyle = ET.SubElement(ppr, f"{{{W}}}pStyle")
-    pstyle.set(f"{{{W}}}val", "Notedebasdepage")
+_FOOTNOTES_XML_DECL = b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
+_FOOTNOTES_FALLBACK_ROOT = (
+    '<w:footnotes '
+    'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" '
+    'xmlns:xml="http://www.w3.org/XML/1998/namespace">'
+    '<w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>'
+    '<w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>'
+    '</w:footnotes>'
+).encode("utf-8")
 
-    # Marqueur footnoteRef — superscript + espace insécable après le numéro
-    r_ref = ET.SubElement(p, f"{{{W}}}r")
-    rpr_ref = ET.SubElement(r_ref, f"{{{W}}}rPr")
-    rstyle_ref = ET.SubElement(rpr_ref, f"{{{W}}}rStyle")
-    rstyle_ref.set(f"{{{W}}}val", "NotedebasdepageCar")
-    vert = ET.SubElement(rpr_ref, f"{{{W}}}vertAlign")
-    vert.set(f"{{{W}}}val", "superscript")
-    ET.SubElement(r_ref, f"{{{W}}}footnoteRef")
-    # Espace insécable après le numéro de note
-    r_sp = ET.SubElement(p, f"{{{W}}}r")
-    rpr_sp = ET.SubElement(r_sp, f"{{{W}}}rPr")
-    rstyle_sp = ET.SubElement(rpr_sp, f"{{{W}}}rStyle")
-    rstyle_sp.set(f"{{{W}}}val", "NotedebasdepageCar")
-    t_sp = ET.SubElement(r_sp, f"{{{W}}}t")
-    t_sp.text = " "
-    t_sp.set(f"{{{XML}}}space", "preserve")
 
-    # Contenu de la note — rendu span par span si disponible (préserve les surlignages)
+def _xml_text(value: str) -> str:
+    return xml_escape(value, {"\r": "&#13;"})
+
+
+def _xml_attr(value: object) -> str:
+    return xml_escape(str(value), {'"': '&quot;', "'": '&apos;'})
+
+
+def _note_rpr_xml(
+    *,
+    superscript: bool = False,
+    bold: bool = False,
+    italic: bool = False,
+    small_caps: bool = False,
+    highlight_key: str | None = None,
+) -> str:
+    parts = [
+        '<w:rPr>',
+        '<w:rStyle w:val="NotedebasdepageCar"/>',
+        f'<w:rFonts w:ascii="{_xml_attr(_FONT_BODY)}" w:hAnsi="{_xml_attr(_FONT_BODY)}"/>',
+    ]
+    if bold:
+        parts.append('<w:b/>')
+    if italic:
+        parts.append('<w:i/>')
+    if small_caps:
+        parts.append('<w:smallCaps w:val="true"/>')
+    if superscript:
+        parts.append('<w:vertAlign w:val="superscript"/>')
+    hl_val = _HL_TO_WVAL.get(highlight_key or "")
+    if hl_val:
+        parts.append(f'<w:highlight w:val="{_xml_attr(hl_val)}"/>')
+    parts.append('</w:rPr>')
+    return "".join(parts)
+
+
+def _note_text_run_xml(
+    text: str,
+    *,
+    bold: bool = False,
+    italic: bool = False,
+    small_caps: bool = False,
+    highlight_key: str | None = None,
+) -> str:
+    if not text:
+        return ""
+    return (
+        '<w:r>'
+        + _note_rpr_xml(
+            bold=bold,
+            italic=italic,
+            small_caps=small_caps,
+            highlight_key=highlight_key,
+        )
+        + f'<w:t xml:space="preserve">{_xml_text(text)}</w:t>'
+        + '</w:r>'
+    )
+
+
+def _build_footnote_xml(note: Note, footnote_id: int) -> str:
+    """Construit un fragment OOXML <w:footnote> sans re-sérialiser tout footnotes.xml."""
+    parts = [
+        f'<w:footnote w:type="normal" w:id="{_xml_attr(footnote_id)}">',
+        '<w:p>',
+        '<w:pPr><w:pStyle w:val="Notedebasdepage"/></w:pPr>',
+        '<w:r>',
+        _note_rpr_xml(superscript=True),
+        '<w:footnoteRef/>',
+        '</w:r>',
+        '<w:r>',
+        _note_rpr_xml(),
+        '<w:t xml:space="preserve">&#160;</w:t>',
+        '</w:r>',
+    ]
+
     if note.inlines:
         for span in note.inlines:
-            if span.kind == "note_call":
+            if span.kind == "note_call" or not span.text:
                 continue
-            if not span.text:
-                continue
-            r = ET.SubElement(p, f"{{{W}}}r")
-            rpr = ET.SubElement(r, f"{{{W}}}rPr")
-            rstyle = ET.SubElement(rpr, f"{{{W}}}rStyle")
-            rstyle.set(f"{{{W}}}val", "NotedebasdepageCar")
-            if span.style.bold:
-                ET.SubElement(rpr, f"{{{W}}}b")
-            if span.style.italic:
-                ET.SubElement(rpr, f"{{{W}}}i")
-            if span.style.small_caps:
-                sc_el = ET.SubElement(rpr, f"{{{W}}}smallCaps")
-                sc_el.set(f"{{{W}}}val", "true")
-            # Surlignage de correction dans les notes
-            hl_key = span.attributes.get("highlight_color")
-            if hl_key:
-                _HL_TO_WVAL = {
-                    "orthotypo": "yellow",
-                    "footnote":  "green",
-                    "biblio":    "cyan",
-                    "ai":        "magenta",
-                }
-                hl_val = _HL_TO_WVAL.get(hl_key)
-                if hl_val:
-                    hl_el = ET.SubElement(rpr, f"{{{W}}}highlight")
-                    hl_el.set(f"{{{W}}}val", hl_val)
-            t = ET.SubElement(r, f"{{{W}}}t")
-            t.text = span.text
-            t.set(f"{{{XML}}}space", "preserve")
+            parts.append(
+                _note_text_run_xml(
+                    span.text,
+                    bold=span.style.bold,
+                    italic=span.style.italic,
+                    small_caps=span.style.small_caps,
+                    highlight_key=span.attributes.get("highlight_color"),
+                )
+            )
     elif note.text:
-        r_txt = ET.SubElement(p, f"{{{W}}}r")
-        rpr_txt = ET.SubElement(r_txt, f"{{{W}}}rPr")
-        rstyle_txt = ET.SubElement(rpr_txt, f"{{{W}}}rStyle")
-        rstyle_txt.set(f"{{{W}}}val", "NotedebasdepageCar")
-        t = ET.SubElement(r_txt, f"{{{W}}}t")
-        t.text = note.text
-        t.set(f"{{{XML}}}space", "preserve")
+        parts.append(_note_text_run_xml(note.text))
 
-    return ftn
+    parts.extend(['</w:p>', '</w:footnote>'])
+    return "".join(parts)
 
 
 def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[str, int]) -> None:
     """
-    Post-traitement : injecte le contenu des notes dans word/footnotes.xml
-    du DOCX déjà sauvegardé.  Reécrit le zip en conservant tous les autres fichiers.
+    Injecte les notes dans word/footnotes.xml sans re-sérialiser le fichier entier.
+
+    On préserve ainsi les déclarations XML, les namespaces et les attributs mc:Ignorable
+    du gabarit Métopes. C'est plus robuste que ElementTree.tostring(root), qui renomme
+    les préfixes w14/w15/wp14 en ns1/ns2 et peut déclencher la réparation de Word.
     """
-    # Lire le zip existant
     with zipfile.ZipFile(output_path, "r") as z:
         all_files = {name: z.read(name) for name in z.namelist()}
 
-    # Parser footnotes.xml existant (contient déjà les séparateurs -1 et 0)
-    ET.register_namespace("w", W)
-    ET.register_namespace("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships")
-    ET.register_namespace("xml", XML)
-    fn_xml = all_files.get("word/footnotes.xml", b"")
-    if fn_xml:
-        root = ET.fromstring(fn_xml)
-    else:
-        root = ET.Element(f"{{{W}}}footnotes")
+    fn_xml = all_files.get("word/footnotes.xml") or (_FOOTNOTES_XML_DECL + _FOOTNOTES_FALLBACK_ROOT)
+    closing_tag = b"</w:footnotes>"
+    if closing_tag not in fn_xml:
+        raise ValueError("word/footnotes.xml ne contient pas de balise </w:footnotes> reconnaissable")
 
-    # Ajouter les entrées de notes
+    fragments: list[str] = []
     for note in notes:
         fn_id = note_id_map.get(note.note_id)
         if fn_id is None:
             continue
-        root.append(_build_footnote_element(note, fn_id))
+        fragments.append(_build_footnote_xml(note, fn_id))
 
-    all_files["word/footnotes.xml"] = ET.tostring(root, encoding="unicode").encode("utf-8")
+    insertion = "".join(fragments).encode("utf-8")
+    all_files["word/footnotes.xml"] = fn_xml.replace(closing_tag, insertion + closing_tag, 1)
 
-    # Réécrire le zip
     with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as z:
         for name, data in all_files.items():
             z.writestr(name, data)
@@ -322,67 +372,16 @@ def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[st
 
 # ── Application des polices PURH sur les styles du document ──────────────────
 
-def _set_style_font_name(style, font_name: str) -> None:
-    """Applique une police au style, y compris dans les attributs OOXML utiles.
-
-    ``style.font.name`` ne renseigne pas toujours tous les champs ``rFonts`` du
-    gabarit. On force donc ascii/hAnsi/cs pour éviter les retours à Calibri
-    Light/Minion selon les versions de Word.
-    """
-    style.font.name = font_name
-    rpr = style.element.get_or_add_rPr()
-    rfonts = rpr.find(qn("w:rFonts"))
-    if rfonts is None:
-        rfonts = OxmlElement("w:rFonts")
-        rpr.insert(0, rfonts)
-    for attr in ("w:ascii", "w:hAnsi", "w:cs"):
-        rfonts.set(qn(attr), font_name)
-
-
-def _apply_paragraph_style_spec(style, spec: dict[str, object]) -> None:
-    """Applique les réglages visuels du DOCX de correction à un style Word."""
-    size = spec.get("size")
-    if size is not None:
-        style.font.size = Pt(float(size))
-
-    paragraph_format = getattr(style, "paragraph_format", None)
-    if paragraph_format is None:
-        return
-
-    if "line_spacing" in spec:
-        paragraph_format.line_spacing = float(spec["line_spacing"])
-    if "space_before" in spec:
-        paragraph_format.space_before = Pt(float(spec["space_before"]))
-    if "space_after" in spec:
-        paragraph_format.space_after = Pt(float(spec["space_after"]))
-    if "alignment" in spec:
-        paragraph_format.alignment = spec["alignment"]
-
-
 def _apply_purh_fonts(doc: DocxDoc) -> None:
     """Remplace les polices du gabarit Métopes par les substituts PURH.
 
     Corps → Garamond (empattement)   |   Titraille → Calibri (sans empattement)
-
-    Cette passe règle aussi l'apparence du fichier Word de correction, sans
-    changer les noms de styles Métopes appliqués aux paragraphes.
     """
     for style in doc.styles:
         if style.name in _BODY_STYLE_NAMES:
-            _set_style_font_name(style, _FONT_BODY)
+            style.font.name = _FONT_BODY
         elif style.name in _HEAD_STYLE_NAMES:
-            _set_style_font_name(style, _FONT_HEAD)
-
-        if style.name in _HEADING_STYLE_SPECS:
-            size, before, after = _HEADING_STYLE_SPECS[style.name]
-            _apply_paragraph_style_spec(style, {
-                "size": size,
-                "line_spacing": 1.0,
-                "space_before": before,
-                "space_after": after,
-            })
-        elif style.name in _BODY_STYLE_SPECS:
-            _apply_paragraph_style_spec(style, _BODY_STYLE_SPECS[style.name])
+            style.font.name = _FONT_HEAD
 
 
 # ── Exporteur principal ───────────────────────────────────────────────────────
