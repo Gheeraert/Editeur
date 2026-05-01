@@ -12,6 +12,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.model import Diagnostic, Document, Evidence, Paragraph
 from purh_editorial.services.structure_ai_arbitrator import (
     StructureAiArbitrator,
+    settings_for_ai_aggressiveness,
     parse_structure_ai_json,
 )
 
@@ -277,6 +278,27 @@ class StructureAiArbitratorTests(unittest.TestCase):
         self.assertEqual(calls, 1)
         self.assertEqual(len(out_diags), 1)
         self.assertEqual(out_diags[0].severity, "warning")
+
+    def test_ai_aggressiveness_profiles(self) -> None:
+        conservative_settings, conservative_calls = settings_for_ai_aggressiveness(
+            "conservative",
+            base_max_structure_ai_calls=6,
+        )
+        balanced_settings, balanced_calls = settings_for_ai_aggressiveness(
+            "balanced",
+            base_max_structure_ai_calls=6,
+        )
+        aggressive_settings, aggressive_calls = settings_for_ai_aggressiveness(
+            "aggressive",
+            base_max_structure_ai_calls=6,
+        )
+
+        self.assertEqual(conservative_settings.confidence_threshold, 0.90)
+        self.assertEqual(balanced_settings.confidence_threshold, 0.85)
+        self.assertEqual(aggressive_settings.confidence_threshold, 0.75)
+        self.assertEqual(conservative_calls, 3)
+        self.assertEqual(balanced_calls, 6)
+        self.assertEqual(aggressive_calls, 6)
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ ALLOWED_CLASSIFICATIONS = {
 }
 
 ALLOWED_RECOMMENDED_ACTIONS = {"transform", "diagnostic", "ignore"}
+ALLOWED_AI_AGGRESSIVENESS = {"conservative", "balanced", "aggressive"}
 
 _ARBITRATION_RULE_ID = "R-STRUCT-AI-LOCAL-001"
 _ARBITRATION_CATEGORY = "structure_ai_arbitration"
@@ -53,6 +54,50 @@ class StructureAiArbitrationSettings:
     model: str = "llama-3.3-70b-versatile"
     temperature: float = 0.0
     max_tokens: int = 180
+
+
+def normalize_ai_aggressiveness(level: str | None) -> str:
+    if not level:
+        return "conservative"
+    value = str(level).strip().lower()
+    if value in ALLOWED_AI_AGGRESSIVENESS:
+        return value
+    return "conservative"
+
+
+def settings_for_ai_aggressiveness(
+    level: str | None,
+    *,
+    base_model: str = "llama-3.3-70b-versatile",
+    base_max_structure_ai_calls: int = 6,
+) -> tuple[StructureAiArbitrationSettings, int]:
+    normalized = normalize_ai_aggressiveness(level)
+    base_calls = max(1, int(base_max_structure_ai_calls))
+    if normalized == "balanced":
+        return (
+            StructureAiArbitrationSettings(
+                confidence_threshold=0.85,
+                model=base_model,
+            ),
+            base_calls,
+        )
+    if normalized == "aggressive":
+        # Aggressive means lower confidence for enriched diagnostics only.
+        return (
+            StructureAiArbitrationSettings(
+                confidence_threshold=0.75,
+                model=base_model,
+            ),
+            base_calls,
+        )
+    # conservative
+    return (
+        StructureAiArbitrationSettings(
+            confidence_threshold=0.90,
+            model=base_model,
+        ),
+        max(1, base_calls // 2),
+    )
 
 
 class StructureAiProvider(Protocol):
