@@ -31,6 +31,23 @@ from purh_editorial.latex.semantic_model import (
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 NS = {"tei": TEI_NS}
 WS_RE = re.compile(r"\s+")
+INLINE_CONTAINER_TAGS = {
+    "bibl",
+    "biblScope",
+    "citedRange",
+    "ref",
+    "seg",
+    "abbr",
+    "name",
+    "persName",
+    "placeName",
+    "orgName",
+    "date",
+    "num",
+    "term",
+    "foreign",
+    "quote",
+}
 
 
 def parse_tei_to_semantic(input_xml: Path) -> Book:
@@ -253,9 +270,28 @@ def _parse_inline_element(element: etree._Element) -> list[InlineNode]:
         if "sub" in tokens:
             return [Subscript(children=children)]
         return children
+    if local == "title":
+        children = _parse_inline_children(element)
+        rend = (element.get("rend") or "").lower()
+        tokens = set(rend.replace("-", " ").replace("_", " ").split())
+        if "bold" in tokens or "gras" in tokens:
+            return [Bold(children=children)]
+        if "small" in tokens and "caps" in tokens:
+            return [SmallCaps(children=children)]
+        if "sup" in tokens:
+            return [Superscript(children=children)]
+        if "sub" in tokens:
+            return [Subscript(children=children)]
+        # Default behavior for inline title in bibliographic notes.
+        return [Italic(children=children)]
     if local == "note":
-        content = _parse_inline_children(element)
+        content = _trim_boundary_text_runs(_parse_inline_children(element))
         return [FootnoteRef(content=content)] if content else []
+    if local == "ptr":
+        target = (element.get("target") or "").strip()
+        return [TextRun(text=target)] if target else []
+    if local in INLINE_CONTAINER_TAGS:
+        return _parse_inline_children(element)
     return _parse_inline_children(element)
 
 
@@ -267,6 +303,29 @@ def _merge_text_runs(nodes: list[InlineNode]) -> list[InlineNode]:
         else:
             merged.append(node)
     return merged
+
+
+def _trim_boundary_text_runs(nodes: list[InlineNode]) -> list[InlineNode]:
+    if not nodes:
+        return nodes
+    trimmed = list(nodes)
+    first = trimmed[0]
+    if isinstance(first, TextRun):
+        first_text = first.text.lstrip()
+        if first_text:
+            trimmed[0] = TextRun(text=first_text)
+        else:
+            trimmed = trimmed[1:]
+    if not trimmed:
+        return []
+    last = trimmed[-1]
+    if isinstance(last, TextRun):
+        last_text = last.text.rstrip()
+        if last_text:
+            trimmed[-1] = TextRun(text=last_text)
+        else:
+            trimmed = trimmed[:-1]
+    return trimmed
 
 
 def _normalize(text: str) -> str:

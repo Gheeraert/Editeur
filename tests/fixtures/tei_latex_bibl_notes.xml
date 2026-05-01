@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Test notes bibliographiques</title>
+        <author>Auteur Test</author>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="chapter">
+        <head>Chapitre test</head>
+        <p>Premier appel de note<note>42-46. <title>Ibid.</title>, p. <biblScope unit="page">147</biblScope></note> dans le texte.</p>
+        <p>Deuxième appel<note>Voir aussi Corneille, III, 1987, p. <biblScope unit="page">1313</biblScope>. <title>Le Mercure galant</title>, janvier-mars 1677, Paris, Barbin, 1677, p. <biblScope unit="page">147</biblScope>. <title>Œuvres complètes</title>, éd. Georges Couton, Paris, Gallimard, Bibliothèque de la Pléiade.</note> en contexte.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
