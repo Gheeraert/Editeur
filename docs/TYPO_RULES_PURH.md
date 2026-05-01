@@ -58,7 +58,7 @@ Statut:
 
 ### Espaces / ponctuation
 
-- `R-SP-001` espace avant `: ; ? !` en phrase simple + garde-fous
+- `R-SP-001` espace avant `: ; ?!` en phrase simple + garde-fous
 - `R-SP-002` suppression espace avant `, .`
 - `R-SP-003` doubles espaces
 - `R-SP-004` milliers

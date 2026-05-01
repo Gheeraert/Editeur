@@ -41,6 +41,24 @@ _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
 _QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
 _TECHNICAL_TEXT_RE = re.compile(r"<[^>]+>|[\w:-]+\s*=\s*\"[^\"]*\"")
 _CENTURY_CONTEXT_RE = re.compile(r"^\s*(si[eè]cles?|s\.)\b", re.IGNORECASE | re.UNICODE)
+_OE_LIGATURE_FORMS: dict[str, str] = {
+    "boeuf": "bœuf",
+    "boeufs": "bœufs",
+    "oeuf": "œuf",
+    "oeufs": "œufs",
+    "soeur": "sœur",
+    "soeurs": "sœurs",
+    "coeur": "cœur",
+    "coeurs": "cœurs",
+    "oeuvre": "œuvre",
+    "oeuvres": "œuvres",
+    "oeil": "œil",
+    "voeu": "vœu",
+    "voeux": "vœux",
+    "noeud": "nœud",
+    "noeuds": "nœuds",
+    "moeurs": "mœurs",
+}
 
 # ── Règle typographique ───────────────────────────────────────────────────────
 
@@ -77,7 +95,7 @@ def _build_rules() -> list[TypoRule]:
         description="Points de suspension … ",
     ))
 
-    # 3. Guillemets droits (prudence) :
+    # 3. Guillemets droits ou anglais typographiques (prudence) :
     #    - texte courant: "..." -> « ... »
     #    - second niveau dans « ... »: "..." -> “...”
     #    - contextes techniques: inchangés (print("x"), attributs XML/HTML, etc.)
@@ -115,7 +133,7 @@ def _build_rules() -> list[TypoRule]:
 
     def _replace_straight_quotes(m: re.Match) -> str:
         full = m.group(0)
-        content = m.group(1)
+        content = m.group(2) if m.lastindex and m.lastindex >= 2 else m.group(1)
         text = m.string
         quote_start = m.start(0)
         quote_end = m.end(0)
@@ -130,9 +148,33 @@ def _build_rules() -> list[TypoRule]:
 
     rules.append(TypoRule(
         rule_id="purh.guillemets.droits",
-        pattern=re.compile(r'"([^"\n]+)"'),
+        pattern=re.compile(r'(["“])([^"\n”]+)(["”])'),
         replacement=_replace_straight_quotes,
         description="Guillemets droits -> guillemets français ou second niveau",
+    ))
+
+    # 3b. Ligatures françaises courantes en oe (table fermée)
+    _oe_pattern = re.compile(
+        r"\b(" + "|".join(sorted(_OE_LIGATURE_FORMS.keys(), key=len, reverse=True)) + r")\b",
+        re.IGNORECASE,
+    )
+
+    def _replace_oe_ligature(m: re.Match) -> str:
+        original = m.group(1)
+        replacement = _OE_LIGATURE_FORMS.get(original.lower())
+        if replacement is None:
+            return original
+        if original.isupper():
+            return replacement.upper()
+        if original[:1].isupper():
+            return replacement[:1].upper() + replacement[1:]
+        return replacement
+
+    rules.append(TypoRule(
+        rule_id="R-ORTHO-LIGATURE-OE-001",
+        pattern=_oe_pattern,
+        replacement=_replace_oe_ligature,
+        description="Ligatures en œ sur formes lexicales courantes",
     ))
 
     # 4. Espace fine insécable après « — absorbe tout type d'espace (NNBSP, NBSP, ordinaire)
@@ -152,7 +194,7 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable avant »",
     ))
 
-    # 6. Espace fine insécable avant ponctuation forte : ; ? !
+    # 6. Espace fine insécable avant ponctuation forte : ; ?!
     #    [ \t  ]* = tout type d'espace (ou rien)
     _any_space = r"[ \t  ]*"
     def _is_technical_token(text: str, punct_pos: int) -> bool:
@@ -191,7 +233,7 @@ def _build_rules() -> list[TypoRule]:
         rule_id="purh.espaces.avant_ponct_forte",
         pattern=re.compile(_any_space + r"([:;?!])"),
         replacement=_replace_strong_punct,
-        description="Espace fine insécable avant : ; ? !",
+        description="Espace fine insécable avant : ; ?!",
     ))
 
     # 7. Suppression d'espace avant virgule ou point (hors décimaux)

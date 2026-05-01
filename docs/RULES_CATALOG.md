@@ -87,7 +87,7 @@ Etat:
 
 ### Espaces et ponctuation
 
-- `R-SP-001` espaces avant `: ; ? !` avec garde-fous (URL/heures/ratios/paths/refs)
+- `R-SP-001` espaces avant `: ; ?!` avec garde-fous (URL/heures/ratios/paths/refs)
 - `R-SP-002` suppression espace avant `, .`
 - `R-SP-003` reduction doubles espaces
 - `R-SP-004` separateur des milliers

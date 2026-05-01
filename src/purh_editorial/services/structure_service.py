@@ -23,7 +23,7 @@ _CREDIT_START_RE = re.compile(
     r"^(Sous|Dans|Pour|Avec|Sur|Par|Textes?|\u00c9tudes?|Articles?|Ouvrage|Actes?)\s+",
     re.IGNORECASE | re.UNICODE,
 )
-# Verbe conjugué EN T?TE de phrase (imparfait 3sg, conditionnel, pr?sent 3e pl.)
+# Verbe conjugué EN TÊTE de phrase (imparfait 3sg, conditionnel, présent 3e pl.)
 _VERB_LEAD_RE = re.compile(
     r"^[A-Z][A-Za-z]*(ait|aient|ront|raient|rait|ions|iez)\b",
     re.UNICODE,
@@ -35,16 +35,16 @@ _SENTENCE_CONNECTOR_RE = re.compile(
     re.IGNORECASE | re.UNICODE,
 )
 
-# Paire de noms propres : "Pr?nom NOM et Pr?nom NOM" -> cr?dit ?ditorial, pas titre
+# Paire de noms propres : "Prénom NOM et Prénom NOM" -> crédit éditorial, pas titre
 _NAME_PAIR_RE = re.compile(
     r"^[A-Z][A-Za-z\-]+(\s+[A-Za-z\-]+)+\s+et\s+[A-Z]",
     re.UNICODE,
 )
 _ROMAN_ONLY_RE = re.compile(r"^[IVXLCDMivxlcdm]{1,5}$")
 _PASSAGE_TOKEN_RE = re.compile(r"^(?:[IVXLCDM]+|\d+|[A-Za-z]{1,4})$", re.IGNORECASE)
-# Entr?e de glossaire/abr?viations : SIGLE : d?veloppement
+# Entrée de glossaire/abréviations : SIGLE : développement
 _ABBREV_ENTRY_RE = re.compile(r"^[A-Z]{2,6}[ ]?\s*:")
-# Institution : Universit?, ?cole, Institut, CNRS, Laboratoire
+# Institution : Université, École, Institut, CNRS, Laboratoire
 _INSTITUTION_RE = re.compile(
     r"^(Universit[\u00e9e]|\u00c9cole|Institut|CNRS|UMR|Laboratoire|Centre|Facult[\u00e9e]|UFR"
     r"|Acad[\u00e9e]mie|Fondation|Museum|Mus\u00e9e|Biblioth[\u00e8e]que)",
@@ -53,13 +53,13 @@ _INSTITUTION_RE = re.compile(
 
 # Noms d'auteur en italique : 2-4 mots, pas de chiffres, pas de ponctuation sauf tiret
 _AUTHOR_NAME_RE = re.compile(
-    r"^[A-Z][a-z\-]+"       # Pr?nom ou Nom majuscule
-    r"(\s+[A-Za-z\.\-']+){0,3}$",     # 0 ? 3 mots suppl?mentaires
+    r"^[A-Z][a-z\-]+"       # Prénom ou Nom majuscule
+    r"(\s+[A-Za-z\.\-']+){0,3}$",     # 0 à 3 mots supplémentaires
     re.UNICODE,
 )
 
-# Seuil d'indentation gauche (twips) au-del? duquel on consid?re un bloc-citation
-# (Ne s'applique que si ind_first_line est absent/nul : retrait bloc, pas alin?a)
+# Seuil d'indentation gauche (twips) au-delà duquel on considère un bloc-citation
+# (Ne s'applique que si ind_first_line est absent/nul : retrait bloc, pas alinéa)
 _BLOCK_QUOTE_IND_LEFT_THRESHOLD = 400
 _BLOCK_QUOTE_MIN_LEN = 60
 
@@ -67,7 +67,7 @@ _BLOCK_QUOTE_MIN_LEN = 60
 _POETRY_SEQUENCE_MAX_LINES = 20
 _POETRY_STANZA_SPACE_THRESHOLD = 240  # twips — environ 1 interligne à 12pt
 
-# Bibliographie heuristique (hors section d?di?e)
+# Bibliographie heuristique (hors section dédiée)
 _BIBLIO_HEURISTIC_RE = re.compile(
     r"^[A-Z\(][A-Za-z\'\-\s]{1,40},"
     r".{5,},"
@@ -201,15 +201,15 @@ class HeuristicDecision:
 
 class StructurePreparationService:
     """
-    D?tecte et annote la structure d'un document dont l'auteur
-    n'a pas utilis? les styles Word de fa?on normative.
+    Détecte et annote la structure d'un document dont l'auteur
+    n'a pas utilisé les styles Word de façon normative.
 
-    Patterns d?tect?s :
+    Patterns détectés :
     - Normal + gras seul -> titre (pattern Dissimuler)
     - Normal + tout-italique -> titre de chapitre OU nom d'auteur (pattern H?raldique)
-    - Normal + retrait gauche > 400 twips (sans alin?a) -> citation longue
-    - Normal + ALL CAPS court -> titre structurant (d?j? partiellement g?r? ? l'ingestion)
-    - Titres num?rot?s "1- Titre" -> intertitre de niveau 2
+    - Normal + retrait gauche > 400 twips (sans alinéa) -> citation longue
+    - Normal + ALL CAPS court -> titre structurant (déjà partiellement géré à l'ingestion)
+    - Titres numérotés "1- Titre" -> intertitre de niveau 2
     - Section bibliographique -> TEI_bibl_reference
     """
 
@@ -1280,4 +1280,3 @@ class StructurePreparationService:
         if counter:
             return counter.most_common(1)[0][0]
         return 0
-

@@ -7,10 +7,11 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from docx import Document as DocxDoc
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.text import WD_COLOR_INDEX
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Cm
+from docx.shared import Cm, Pt
 
 from purh_editorial.model import Document, InlineSpan, Note
 
@@ -47,6 +48,9 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
 # Titraille      → Calibri  (sans empattement, analogue Josefin Sans)
 _FONT_BODY = "Garamond"
 _FONT_HEAD = "Calibri"
+_HEADING_FONT_SIZES_PT: dict[int, int] = {1: 16, 2: 14, 3: 13}
+_QUOTE_FONT_SIZE_PT = 11
+_QUOTE_LEFT_INDENT_CM = 0.7
 
 # Styles de corps (reçoivent Garamond)
 _BODY_STYLE_NAMES: frozenset[str] = frozenset({
@@ -115,6 +119,8 @@ def _add_run_with_style(
     superscript: bool = False,
     subscript: bool = False,
     highlight: WD_COLOR_INDEX | None = None,
+    font_name: str | None = None,
+    font_size_pt: int | None = None,
 ) -> None:
     if not text:
         return
@@ -131,6 +137,10 @@ def _add_run_with_style(
         run.font.subscript = True
     if highlight is not None:
         run.font.highlight_color = highlight
+    if font_name:
+        run.font.name = font_name
+    if font_size_pt is not None:
+        run.font.size = Pt(font_size_pt)
 
 
 def _inline_highlight(span: InlineSpan) -> WD_COLOR_INDEX | None:
@@ -154,6 +164,26 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         para.paragraph_format.left_indent = Cm(0.5)
         para.paragraph_format.first_line_indent = Cm(-0.5)
 
+    heading_level = 0
+    if block.block_type == "heading":
+        raw_level = block.attributes.get("heading_level", 0)
+        try:
+            heading_level = int(raw_level or 0)
+        except (TypeError, ValueError):
+            heading_level = 1
+    heading_size = _HEADING_FONT_SIZES_PT.get(min(max(heading_level, 1), 3)) if heading_level else None
+    quote_kind = str(block.attributes.get("quote_kind", "")).lower()
+    protected_zone = str(block.attributes.get("protected_zone", "")).lower()
+    is_poetry_quote = block.block_type == "quote_block" and (
+        quote_kind == "poetry" or protected_zone == "poetry"
+    )
+    is_quote_block = block.block_type == "quote_block"
+    if is_quote_block:
+        para.paragraph_format.left_indent = Cm(_QUOTE_LEFT_INDENT_CM)
+        para.paragraph_format.first_line_indent = None
+        para.paragraph_format.line_spacing = 1.0
+        para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_poetry_quote else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
     if block.inlines:
         for span in block.inlines:
             if span.kind == "note_call" and span.note_ref:
@@ -170,10 +200,16 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                     superscript=span.style.superscript,
                     subscript=span.style.subscript,
                     highlight=_inline_highlight(span),
+                    font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        _add_run_with_style(para, block.text, highlight=hl)
+        _add_run_with_style(
+            para,
+            block.text,
+            highlight=hl,
+            font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
+        )
 
 
 # ── Injection des notes de bas de page (post-sauvegarde) ─────────────────────
@@ -194,6 +230,9 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
     rpr_ref = ET.SubElement(r_ref, f"{{{W}}}rPr")
     rstyle_ref = ET.SubElement(rpr_ref, f"{{{W}}}rStyle")
     rstyle_ref.set(f"{{{W}}}val", "NotedebasdepageCar")
+    rfonts_ref = ET.SubElement(rpr_ref, f"{{{W}}}rFonts")
+    rfonts_ref.set(f"{{{W}}}ascii", _FONT_BODY)
+    rfonts_ref.set(f"{{{W}}}hAnsi", _FONT_BODY)
     vert = ET.SubElement(rpr_ref, f"{{{W}}}vertAlign")
     vert.set(f"{{{W}}}val", "superscript")
     ET.SubElement(r_ref, f"{{{W}}}footnoteRef")
@@ -202,6 +241,9 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
     rpr_sp = ET.SubElement(r_sp, f"{{{W}}}rPr")
     rstyle_sp = ET.SubElement(rpr_sp, f"{{{W}}}rStyle")
     rstyle_sp.set(f"{{{W}}}val", "NotedebasdepageCar")
+    rfonts_sp = ET.SubElement(rpr_sp, f"{{{W}}}rFonts")
+    rfonts_sp.set(f"{{{W}}}ascii", _FONT_BODY)
+    rfonts_sp.set(f"{{{W}}}hAnsi", _FONT_BODY)
     t_sp = ET.SubElement(r_sp, f"{{{W}}}t")
     t_sp.text = " "
     t_sp.set(f"{{{XML}}}space", "preserve")
@@ -217,6 +259,9 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
             rpr = ET.SubElement(r, f"{{{W}}}rPr")
             rstyle = ET.SubElement(rpr, f"{{{W}}}rStyle")
             rstyle.set(f"{{{W}}}val", "NotedebasdepageCar")
+            rfonts = ET.SubElement(rpr, f"{{{W}}}rFonts")
+            rfonts.set(f"{{{W}}}ascii", _FONT_BODY)
+            rfonts.set(f"{{{W}}}hAnsi", _FONT_BODY)
             if span.style.bold:
                 ET.SubElement(rpr, f"{{{W}}}b")
             if span.style.italic:
@@ -245,6 +290,9 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
         rpr_txt = ET.SubElement(r_txt, f"{{{W}}}rPr")
         rstyle_txt = ET.SubElement(rpr_txt, f"{{{W}}}rStyle")
         rstyle_txt.set(f"{{{W}}}val", "NotedebasdepageCar")
+        rfonts_txt = ET.SubElement(rpr_txt, f"{{{W}}}rFonts")
+        rfonts_txt.set(f"{{{W}}}ascii", _FONT_BODY)
+        rfonts_txt.set(f"{{{W}}}hAnsi", _FONT_BODY)
         t = ET.SubElement(r_txt, f"{{{W}}}t")
         t.text = note.text
         t.set(f"{{{XML}}}space", "preserve")

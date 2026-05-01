@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import sys
 import unittest
@@ -31,14 +31,8 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("Pourquoi?"), f"Pourquoi{NNBSP}?")
 
     def test_r_sp_001_does_not_change_technical_tokens(self) -> None:
-        self.assertEqual(
-            _apply_orthotypo("http://exemple.org:8080/test"),
-            "http://exemple.org:8080/test",
-        )
-        self.assertEqual(
-            _apply_orthotypo("https://exemple.org/a:b"),
-            "https://exemple.org/a:b",
-        )
+        self.assertEqual(_apply_orthotypo("http://exemple.org:8080/test"), "http://exemple.org:8080/test")
+        self.assertEqual(_apply_orthotypo("https://exemple.org/a:b"), "https://exemple.org/a:b")
         self.assertEqual(_apply_orthotypo("10:30"), "10:30")
         self.assertEqual(_apply_orthotypo("1:2"), "1:2")
         self.assertEqual(_apply_orthotypo("format 16:9"), "format 16:9")
@@ -85,6 +79,22 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo('class="note"'), 'class="note"')
         self.assertEqual(_apply_orthotypo('<hi rend="italic">'), '<hi rend="italic">')
         self.assertEqual(_apply_orthotypo('data-value="x"'), 'data-value="x"')
+
+    def test_guillemets_anglais_typographiques_suivent_la_meme_chaine(self) -> None:
+        self.assertEqual(
+            _apply_orthotypo("\u201cD\u2019une secr\u00e8te horreur je me sens frissonner.\u201d"),
+            f"\u00ab{NNBSP}D\u2019une secr\u00e8te horreur je me sens frissonner.{NNBSP}\u00bb",
+        )
+
+    def test_r_ortho_ligature_oe_001(self) -> None:
+        self.assertEqual(_apply_orthotypo("boeuf boeufs oeuf oeufs"), "bœuf bœufs œuf œufs")
+        self.assertEqual(_apply_orthotypo("soeur soeurs coeur coeurs"), "sœur sœurs cœur cœurs")
+        self.assertEqual(_apply_orthotypo("oeuvre oeuvres oeil"), "œuvre œuvres œil")
+        self.assertEqual(_apply_orthotypo("voeu voeux noeud noeuds moeurs"), "vœu vœux nœud nœuds mœurs")
+        self.assertEqual(_apply_orthotypo("Boeuf Oeuvre"), "Bœuf Œuvre")
+
+    def test_ligature_oe_ne_remplace_pas_hors_table(self) -> None:
+        self.assertEqual(_apply_orthotypo("coelacanthe"), "coelacanthe")
 
     def test_r_sp_004_thousands_separator(self) -> None:
         self.assertEqual(_apply_orthotypo("1 000"), f"1{NNBSP}000")
