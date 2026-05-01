@@ -45,17 +45,17 @@ class Block:
     source_span: dict[str, Any] = field(default_factory=dict)
 
 
-@dataclass(slots=True)
+@dataclass
 class Paragraph(Block):
     block_type: str = "paragraph"
 
 
-@dataclass(slots=True)
+@dataclass
 class Heading(Block):
     block_type: str = "heading"
 
 
-@dataclass(slots=True)
+@dataclass
 class QuoteBlock(Block):
     block_type: str = "quote_block"
 
