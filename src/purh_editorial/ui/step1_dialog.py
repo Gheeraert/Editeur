@@ -450,10 +450,25 @@ class Step1Dialog(tk.Tk):
 
     def _build_ui(self) -> None:
         p = self._PAD
-        root = ttk.Frame(self, padding=p)
-        root.grid(row=0, column=0, sticky="nsew")
+        outer = ttk.Frame(self)
+        outer.grid(row=0, column=0, sticky="nsew")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+        outer.columnconfigure(0, weight=1)
+        outer.rowconfigure(0, weight=1)
+
+        self._main_canvas = tk.Canvas(outer, highlightthickness=0)
+        self._main_canvas.grid(row=0, column=0, sticky="nsew")
+        self._main_scrollbar = ttk.Scrollbar(outer, orient="vertical", command=self._main_canvas.yview)
+        self._main_scrollbar.grid(row=0, column=1, sticky="ns")
+        self._main_canvas.configure(yscrollcommand=self._main_scrollbar.set)
+
+        root = ttk.Frame(self._main_canvas, padding=p)
+        self._main_window_id = self._main_canvas.create_window((0, 0), window=root, anchor="nw")
+        root.bind("<Configure>", self._on_main_frame_configure)
+        self._main_canvas.bind("<Configure>", self._on_main_canvas_configure)
+        self._bind_mousewheel(self._main_canvas)
+
         root.columnconfigure(0, weight=1)
         root.rowconfigure(6, weight=1)
 
@@ -596,6 +611,30 @@ class Step1Dialog(tk.Tk):
         scrollbar = ttk.Scrollbar(result_frame, orient="vertical", command=self._result_text.yview)
         scrollbar.grid(row=1, column=1, sticky="ns")
         self._result_text.configure(yscrollcommand=scrollbar.set)
+
+    def _on_main_frame_configure(self, _event: tk.Event) -> None:
+        self._main_canvas.configure(scrollregion=self._main_canvas.bbox("all"))
+
+    def _on_main_canvas_configure(self, event: tk.Event) -> None:
+        self._main_canvas.itemconfigure(self._main_window_id, width=event.width)
+
+    def _bind_mousewheel(self, widget: tk.Widget) -> None:
+        widget.bind_all("<MouseWheel>", self._on_mousewheel)      # Windows / macOS
+        widget.bind_all("<Button-4>", self._on_mousewheel_linux)  # Linux up
+        widget.bind_all("<Button-5>", self._on_mousewheel_linux)  # Linux down
+
+    def _on_mousewheel(self, event: tk.Event) -> None:
+        delta = getattr(event, "delta", 0)
+        if delta:
+            step = int(-delta / 120) if delta % 120 == 0 else (-1 if delta > 0 else 1)
+            self._main_canvas.yview_scroll(step, "units")
+
+    def _on_mousewheel_linux(self, event: tk.Event) -> None:
+        num = getattr(event, "num", 0)
+        if num == 4:
+            self._main_canvas.yview_scroll(-1, "units")
+        elif num == 5:
+            self._main_canvas.yview_scroll(1, "units")
 
     def _browse_input(self) -> None:
         initial = (
