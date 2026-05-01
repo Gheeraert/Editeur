@@ -383,6 +383,52 @@ def format_outputs(result: Step1Result) -> str:
     return "\n".join(lines)
 
 
+def extract_output_paths(result: Step1Result) -> tuple[Path | None, Path | None]:
+    docx_path = result.output_docx
+    tei_path: Path | None = None
+    for module_run in result.pipeline_result.report.module_runs:
+        if module_run.module_name != "tei_xml_write":
+            continue
+        output = module_run.summary.get("output")
+        if isinstance(output, str) and output.strip():
+            tei_path = Path(output)
+            break
+    return docx_path, tei_path
+
+
+def output_folders_to_open(result: Step1Result) -> list[Path]:
+    docx_path, tei_path = extract_output_paths(result)
+    folders: list[Path] = []
+    seen: set[str] = set()
+
+    def _append_parent(path: Path | None) -> None:
+        if path is None:
+            return
+        parent = path.parent
+        key = str(parent).lower()
+        if key in seen:
+            return
+        seen.add(key)
+        folders.append(parent)
+
+    _append_parent(docx_path)
+    _append_parent(tei_path)
+    return folders
+
+
+def build_completion_message(result: Step1Result) -> str:
+    report = result.pipeline_result.report
+    docx_path, tei_path = extract_output_paths(result)
+    return (
+        "Analyse terminée.\n"
+        f"- Transformations: {len(report.transformations)}\n"
+        f"- Diagnostics: {len(report.diagnostics)}\n"
+        f"- Warnings: {len(report.warnings)}\n"
+        f"- DOCX: {docx_path if docx_path else 'non produit'}\n"
+        f"- XML-TEI: {tei_path if tei_path else 'non écrit sur disque'}"
+    )
+
+
 def build_result_text(result: Step1Result) -> str:
     report = result.pipeline_result.report
     sections = [
@@ -758,6 +804,20 @@ class Step1Dialog(tk.Tk):
         self._set_running(False)
         self._status.set("Analyse terminee.")
         self._set_result_text(build_result_text(result))
+        completion_message = build_completion_message(result)
+        folders = output_folders_to_open(result)
+        if not folders:
+            messagebox.showinfo("Analyse terminée", completion_message)
+            return
+        if messagebox.askyesno(
+            "Analyse terminée",
+            completion_message + "\n\nOuvrir le dossier de sortie ?",
+        ):
+            for folder in folders:
+                try:
+                    self._open_folder(folder)
+                except Exception as exc:  # noqa: BLE001
+                    messagebox.showerror("Ouverture impossible", f"Impossible d'ouvrir {folder}: {exc}")
 
     def _on_error(self, exc: Exception) -> None:
         self._set_running(False)
@@ -853,6 +913,15 @@ class Step1Dialog(tk.Tk):
 
     @staticmethod
     def _open_file(path: Path) -> None:
+        if sys.platform == "win32":
+            os.startfile(path)  # type: ignore[attr-defined]
+        elif sys.platform == "darwin":
+            subprocess.run(["open", str(path)], check=False)
+        else:
+            subprocess.run(["xdg-open", str(path)], check=False)
+
+    @staticmethod
+    def _open_folder(path: Path) -> None:
         if sys.platform == "win32":
             os.startfile(path)  # type: ignore[attr-defined]
         elif sys.platform == "darwin":

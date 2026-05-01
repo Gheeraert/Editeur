@@ -12,11 +12,14 @@ if str(SRC) not in sys.path:
 from purh_editorial.model import Diagnostic, Document, Evidence, ModuleRun, Paragraph, PipelineResult, ProcessingReport
 from purh_editorial.pipeline.step1 import Step1Result
 from purh_editorial.ui.step1_dialog import (
+    build_completion_message,
     build_result_text,
+    extract_output_paths,
     format_diagnostics,
     format_module_runs,
     format_outputs,
     format_warnings,
+    output_folders_to_open,
 )
 
 
@@ -60,6 +63,21 @@ class Step1DialogFormattingTests(unittest.TestCase):
         )
         return Step1Result(pipeline_result=pipeline_result, output_docx=Path("out.docx"))
 
+    def _build_result_with_outputs(self, docx: Path | None, tei: Path | None) -> Step1Result:
+        result = self._build_result()
+        result.output_docx = docx
+        if tei is not None:
+            result.pipeline_result.report.module_runs.append(
+                ModuleRun(
+                    module_name="tei_xml_write",
+                    version="2.0.0",
+                    started_at="2026-01-01T00:00:02+00:00",
+                    finished_at="2026-01-01T00:00:03+00:00",
+                    summary={"output": str(tei)},
+                )
+            )
+        return result
+
     def test_format_diagnostics_includes_expected_fields(self) -> None:
         result = self._build_result()
         text = format_diagnostics(result.pipeline_result.report.diagnostics)
@@ -93,6 +111,42 @@ class Step1DialogFormattingTests(unittest.TestCase):
         self.assertEqual(format_diagnostics([]), "Aucun diagnostic.")
         self.assertEqual(format_warnings([]), "Aucun warning.")
         self.assertEqual(format_module_runs([]), "Aucun module execute.")
+
+    def test_output_folders_no_file_outputs(self) -> None:
+        result = self._build_result_with_outputs(None, None)
+        self.assertEqual(output_folders_to_open(result), [])
+
+    def test_output_folders_docx_only(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), None)
+        self.assertEqual(output_folders_to_open(result), [Path("C:/out")])
+
+    def test_output_folders_xml_only(self) -> None:
+        result = self._build_result_with_outputs(None, Path("C:/tei/sortie.xml"))
+        self.assertEqual(output_folders_to_open(result), [Path("C:/tei")])
+
+    def test_output_folders_deduplicate_same_folder(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/out/sortie.xml"))
+        self.assertEqual(output_folders_to_open(result), [Path("C:/out")])
+
+    def test_output_folders_stable_order_docx_then_xml(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/tei/sortie.xml"))
+        self.assertEqual(output_folders_to_open(result), [Path("C:/out"), Path("C:/tei")])
+
+    def test_extract_output_paths(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/tei/sortie.xml"))
+        docx_path, tei_path = extract_output_paths(result)
+        self.assertEqual(docx_path, Path("C:/out/relecture.docx"))
+        self.assertEqual(tei_path, Path("C:/tei/sortie.xml"))
+
+    def test_build_completion_message_contains_summary_fields(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), None)
+        message = build_completion_message(result)
+        self.assertIn("Analyse terminée.", message)
+        self.assertIn("Transformations:", message)
+        self.assertIn("Diagnostics:", message)
+        self.assertIn("Warnings:", message)
+        self.assertIn("DOCX:", message)
+        self.assertIn("XML-TEI:", message)
 
 
 if __name__ == "__main__":
