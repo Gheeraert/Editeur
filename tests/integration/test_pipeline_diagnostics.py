@@ -520,6 +520,10 @@ class Step1PipelineDiagnosticsTests(unittest.TestCase):
         structure_run = next(m for m in report.module_runs if m.module_name == "structure")
         self.assertEqual(structure_run.summary.get("structure_mode"), "heuristic")
         self.assertEqual(structure_run.summary.get("heuristics_enabled"), True)
+        self.assertEqual(structure_run.summary.get("heading_ai_min_score"), 0.60)
+        self.assertEqual(structure_run.summary.get("heading_ai_max_score"), 0.85)
+        self.assertEqual(structure_run.summary.get("poetry_ai_min_score"), 0.65)
+        self.assertEqual(structure_run.summary.get("poetry_ai_max_score"), 0.90)
 
 
 if __name__ == "__main__":
