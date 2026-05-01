@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Test espaces inline</title>
+        <author>Auteur Test</author>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="chapter">
+        <head>Chapitre inline</head>
+        <p>mentions en <hi rend="small-caps">petites capitales</hi> et des datations du XIX<hi rend="sup">e</hi> siècle.</p>
+        <p>L’analyse impose une note critique<note>note avec <hi rend="italic">italique</hi> interne</note> pour situer le témoin.</p>
+        <p>Un mot en <hi rend="italic">italique</hi>, puis en <hi rend="bold">gras</hi>.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
