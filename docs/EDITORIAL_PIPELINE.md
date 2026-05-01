@@ -20,6 +20,20 @@ DOCX auteur
 
 ## 3. Niveaux de decision editoriale
 
+### 3.0 Modes de decision (configuration)
+
+Le pipeline prepare quatre modes de decision:
+- `deterministic`
+- `heuristic`
+- `heuristic_ai_local`
+- `ai_exploratory` (reserve, non implemente)
+
+Comportement actuel:
+- `deterministic`: aucun appel IA; certaines heuristiques structurelles peuvent encore rester actives selon les limites actuelles du pipeline.
+- `heuristic`: heuristiques scorees + diagnostics; aucun appel IA.
+- `heuristic_ai_local`: heuristiques scorees + arbitrage IA structurel local sur zones grises uniquement.
+- `ai_exploratory`: fallback prudent vers heuristique sans IA + warning.
+
 ### 3.1 Vetos structurels (prioritaires)
 
 Role: bloquer une transformation meme si un score est eleve.
@@ -80,8 +94,9 @@ Contraintes:
 - pas de correction silencieuse globale
 - appel limite aux candidats heuristiques `ai_candidate=true`
 - aucun appel si `veto_reasons` non vide
-- aucun appel si `enable_ai=false`
+- aucun appel si `enable_structure_ai=false`
 - arbitrage de classification locale uniquement (pas de reecriture du texte)
+- vetos prioritaires, jamais surcharges
 
 Statut:
 - Existant: partiel (cadre de prudence present)
@@ -98,6 +113,29 @@ Contraintes cibles:
 Statut:
 - Existant: non
 - Futur: oui (hors perimetre actuel)
+
+## 3.6 IA editoriale vs IA locale
+
+- IA structurelle locale: arbitre un candidat heuristique local (heading/poesie), sans modifier le texte.
+- IA editoriale: corrections ciblees pouvant modifier le texte.
+- Les deux families sont configurees separement.
+
+## 3.7 Agressivite IA locale
+
+Niveaux prepares:
+- `conservative`
+- `balanced`
+- `aggressive`
+
+Etat actuel:
+- agit sur le seuil de confiance et le plafond local d'appels,
+- ne desactive jamais les vetos,
+- n'autorise aucune transformation automatique free style.
+
+## 3.8 Securite configuration
+
+Le JSON de configuration de session peut contenir `ai_api_key` en clair.
+Attention: ce stockage est local et non chiffre dans cette passe.
 
 ## 4. Roles des sorties
 

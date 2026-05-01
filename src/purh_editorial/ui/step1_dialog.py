@@ -19,22 +19,74 @@ DISCLAIMER_TEXT = (
     "Les diagnostics signalent des points a verifier et ne sont pas des corrections automatiques."
 )
 CONFIG_VERSION = 1
+ALLOWED_DECISION_MODES = {
+    "deterministic",
+    "heuristic",
+    "heuristic_ai_local",
+    "ai_exploratory",
+}
+ALLOWED_AI_AGGRESSIVENESS = {"conservative", "balanced", "aggressive"}
+
+
+def normalize_decision_mode(value: str | None) -> str:
+    if not value:
+        return "heuristic"
+    mode = str(value).strip().lower()
+    if mode in ALLOWED_DECISION_MODES:
+        return mode
+    return "heuristic"
+
+
+def normalize_ai_aggressiveness(value: str | None) -> str:
+    if not value:
+        return "conservative"
+    mode = str(value).strip().lower()
+    if mode in ALLOWED_AI_AGGRESSIVENESS:
+        return mode
+    return "conservative"
+
+
+def derive_ai_flags_from_decision_mode(decision_mode: str) -> tuple[bool, bool]:
+    mode = normalize_decision_mode(decision_mode)
+    if mode == "heuristic_ai_local":
+        return True, False
+    if mode in {"deterministic", "heuristic", "ai_exploratory"}:
+        return False, False
+    return False, False
 
 
 def build_config_dict(
     source_path: str,
     output_docx_path: str,
     tei_output_path: str,
+    decision_mode: str,
+    ai_aggressiveness: str,
+    ai_provider: str,
+    ai_api_key: str,
+    ai_model: str,
+    ai_base_url: str,
+    enable_structure_ai: bool,
+    enable_editorial_ai: bool,
     enable_ai: bool,
     max_ai_calls: int,
+    max_structure_ai_calls: int,
 ) -> dict[str, object]:
     return {
         "version": CONFIG_VERSION,
         "source_path": source_path,
         "output_docx_path": output_docx_path,
         "tei_output_path": tei_output_path,
+        "decision_mode": normalize_decision_mode(decision_mode),
+        "ai_aggressiveness": normalize_ai_aggressiveness(ai_aggressiveness),
+        "ai_provider": str(ai_provider or "groq"),
+        "ai_api_key": str(ai_api_key or ""),
+        "ai_model": str(ai_model or ""),
+        "ai_base_url": str(ai_base_url or ""),
+        "enable_structure_ai": bool(enable_structure_ai),
+        "enable_editorial_ai": bool(enable_editorial_ai),
         "enable_ai": bool(enable_ai),
         "max_ai_calls": max(1, int(max_ai_calls)),
+        "max_structure_ai_calls": max(1, int(max_structure_ai_calls)),
     }
 
 
@@ -47,8 +99,20 @@ def apply_config_dict(
         "source_path": str(current.get("source_path", "")),
         "output_docx_path": str(current.get("output_docx_path", "")),
         "tei_output_path": str(current.get("tei_output_path", "")),
+        "decision_mode": normalize_decision_mode(str(current.get("decision_mode", "heuristic"))),
+        "ai_aggressiveness": normalize_ai_aggressiveness(str(current.get("ai_aggressiveness", "conservative"))),
+        "ai_provider": str(current.get("ai_provider", "groq")),
+        "ai_api_key": str(current.get("ai_api_key", "")),
+        "ai_model": str(current.get("ai_model", "")),
+        "ai_base_url": str(current.get("ai_base_url", "")),
+        "enable_structure_ai": bool(current.get("enable_structure_ai", False)),
+        "enable_editorial_ai": bool(current.get("enable_editorial_ai", False)),
         "enable_ai": bool(current.get("enable_ai", False)),
         "max_ai_calls": max(1, int(current.get("max_ai_calls", Step1Options().max_ai_calls))),
+        "max_structure_ai_calls": max(
+            1,
+            int(current.get("max_structure_ai_calls", Step1Options().max_structure_ai_calls)),
+        ),
     }
     if not isinstance(loaded, dict):
         return merged
@@ -58,6 +122,22 @@ def apply_config_dict(
         merged["output_docx_path"] = str(loaded.get("output_docx_path") or "")
     if "tei_output_path" in loaded:
         merged["tei_output_path"] = str(loaded.get("tei_output_path") or "")
+    if "decision_mode" in loaded:
+        merged["decision_mode"] = normalize_decision_mode(str(loaded.get("decision_mode")))
+    if "ai_aggressiveness" in loaded:
+        merged["ai_aggressiveness"] = normalize_ai_aggressiveness(str(loaded.get("ai_aggressiveness")))
+    if "ai_provider" in loaded:
+        merged["ai_provider"] = str(loaded.get("ai_provider") or "groq")
+    if "ai_api_key" in loaded:
+        merged["ai_api_key"] = str(loaded.get("ai_api_key") or "")
+    if "ai_model" in loaded:
+        merged["ai_model"] = str(loaded.get("ai_model") or "")
+    if "ai_base_url" in loaded:
+        merged["ai_base_url"] = str(loaded.get("ai_base_url") or "")
+    if "enable_structure_ai" in loaded:
+        merged["enable_structure_ai"] = bool(loaded.get("enable_structure_ai"))
+    if "enable_editorial_ai" in loaded:
+        merged["enable_editorial_ai"] = bool(loaded.get("enable_editorial_ai"))
     if "enable_ai" in loaded:
         merged["enable_ai"] = bool(loaded.get("enable_ai"))
     if "max_ai_calls" in loaded:
@@ -65,6 +145,18 @@ def apply_config_dict(
             merged["max_ai_calls"] = max(1, int(loaded.get("max_ai_calls")))
         except (TypeError, ValueError):
             pass
+    if "max_structure_ai_calls" in loaded:
+        try:
+            merged["max_structure_ai_calls"] = max(1, int(loaded.get("max_structure_ai_calls")))
+        except (TypeError, ValueError):
+            pass
+
+    if "decision_mode" in loaded:
+        # Decision mode is authoritative when explicitly provided in config.
+        structure_ai, editorial_ai = derive_ai_flags_from_decision_mode(str(merged["decision_mode"]))
+        merged["enable_structure_ai"] = structure_ai
+        merged["enable_editorial_ai"] = editorial_ai
+        merged["enable_ai"] = False
     return merged
 
 
@@ -185,6 +277,15 @@ class Step1Dialog(tk.Tk):
         self._output_tei_path = tk.StringVar()
         self._enable_ai = tk.BooleanVar(value=False)
         self._max_ai_calls = tk.IntVar(value=Step1Options().max_ai_calls)
+        self._decision_mode = tk.StringVar(value="")
+        self._ai_aggressiveness = tk.StringVar(value="conservative")
+        self._ai_provider = tk.StringVar(value="groq")
+        self._ai_api_key = tk.StringVar(value="")
+        self._ai_model = tk.StringVar(value=self.settings.ai.model)
+        self._ai_base_url = tk.StringVar(value=self.settings.ai.base_url)
+        self._enable_structure_ai = tk.BooleanVar(value=False)
+        self._enable_editorial_ai = tk.BooleanVar(value=False)
+        self._max_structure_ai_calls = tk.IntVar(value=Step1Options().max_structure_ai_calls)
         self._status = tk.StringVar(value="Selectionnez un DOCX source puis lancez l'analyse.")
 
         self._input_path.trace_add("write", self._on_input_changed)
@@ -325,9 +426,24 @@ class Step1Dialog(tk.Tk):
             return
 
         max_ai_calls = max(1, int(self._max_ai_calls.get()))
+        max_structure_ai_calls = max(1, int(self._max_structure_ai_calls.get()))
+        raw_decision_mode = self._decision_mode.get().strip()
+        decision_mode = normalize_decision_mode(raw_decision_mode) if raw_decision_mode else None
+        ai_aggressiveness = normalize_ai_aggressiveness(self._ai_aggressiveness.get())
+        # Keep current UI behavior: checkbox still toggles editorial AI.
+        enable_editorial_ai = bool(self._enable_ai.get() or self._enable_editorial_ai.get())
         options = Step1Options(
             enable_ai=self._enable_ai.get(),
+            enable_structure_ai=self._enable_structure_ai.get(),
+            enable_editorial_ai=enable_editorial_ai,
+            decision_mode=decision_mode,
+            ai_aggressiveness=ai_aggressiveness,
+            ai_provider=self._ai_provider.get().strip() or "groq",
+            ai_api_key=self._ai_api_key.get().strip() or None,
+            ai_model=self._ai_model.get().strip() or None,
+            ai_base_url=self._ai_base_url.get().strip() or None,
             max_ai_calls=max_ai_calls,
+            max_structure_ai_calls=max_structure_ai_calls,
             output_path=self._optional_path(self._output_docx_path.get(), ".docx"),
             tei_output_path=self._optional_path(self._output_tei_path.get(), ".xml"),
         )
@@ -409,16 +525,38 @@ class Step1Dialog(tk.Tk):
             source_path=self._input_path.get().strip(),
             output_docx_path=self._output_docx_path.get().strip(),
             tei_output_path=self._output_tei_path.get().strip(),
+            decision_mode=self._decision_mode.get(),
+            ai_aggressiveness=self._ai_aggressiveness.get(),
+            ai_provider=self._ai_provider.get(),
+            ai_api_key=self._ai_api_key.get(),
+            ai_model=self._ai_model.get(),
+            ai_base_url=self._ai_base_url.get(),
+            enable_structure_ai=self._enable_structure_ai.get(),
+            enable_editorial_ai=self._enable_editorial_ai.get(),
             enable_ai=self._enable_ai.get(),
             max_ai_calls=self._max_ai_calls.get(),
+            max_structure_ai_calls=self._max_structure_ai_calls.get(),
         )
 
     def _apply_config_to_ui(self, config: dict[str, object]) -> None:
         self._input_path.set(str(config.get("source_path", "")))
         self._output_docx_path.set(str(config.get("output_docx_path", "")))
         self._output_tei_path.set(str(config.get("tei_output_path", "")))
+        self._decision_mode.set(str(config.get("decision_mode", "")))
+        self._ai_aggressiveness.set(
+            normalize_ai_aggressiveness(str(config.get("ai_aggressiveness", "conservative")))
+        )
+        self._ai_provider.set(str(config.get("ai_provider", "groq")))
+        self._ai_api_key.set(str(config.get("ai_api_key", "")))
+        self._ai_model.set(str(config.get("ai_model", self.settings.ai.model)))
+        self._ai_base_url.set(str(config.get("ai_base_url", self.settings.ai.base_url)))
+        self._enable_structure_ai.set(bool(config.get("enable_structure_ai", False)))
+        self._enable_editorial_ai.set(bool(config.get("enable_editorial_ai", False)))
         self._enable_ai.set(bool(config.get("enable_ai", False)))
         self._max_ai_calls.set(max(1, int(config.get("max_ai_calls", Step1Options().max_ai_calls))))
+        self._max_structure_ai_calls.set(
+            max(1, int(config.get("max_structure_ai_calls", Step1Options().max_structure_ai_calls)))
+        )
 
     @staticmethod
     def _optional_path(raw_value: str, extension: str) -> Path | None:

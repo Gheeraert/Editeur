@@ -20,6 +20,7 @@ from purh_editorial.services.structure_ai_arbitrator import (
     StructureAiArbitrationSettings,
     StructureAiArbitrator,
     StructureAiProvider,
+    settings_for_ai_aggressiveness,
 )
 from purh_editorial.services.ai_editorial_service import AIEditorialService
 from purh_editorial.utils import make_id
@@ -32,20 +33,52 @@ class Step1Options:
     enable_ai: bool = False
     enable_structure_ai: bool = False
     enable_editorial_ai: bool = False
+    decision_mode: str | None = None
+    ai_aggressiveness: str = "conservative"
+    ai_provider: str = "groq"
+    ai_api_key: str | None = None
+    ai_model: str | None = None
+    ai_base_url: str | None = None
     max_ai_calls: int = 6               # appels Groq max (modération)
     max_structure_ai_calls: int = 6
     output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
 
+    _ALLOWED_DECISION_MODES = {
+        "deterministic",
+        "heuristic",
+        "heuristic_ai_local",
+        "ai_exploratory",
+    }
+
+    def normalized_decision_mode(self) -> str:
+        if not self.decision_mode:
+            return "heuristic"
+        mode = str(self.decision_mode).strip().lower()
+        if mode in self._ALLOWED_DECISION_MODES:
+            return mode
+        return "heuristic"
+
     def structure_ai_enabled(self) -> bool:
-        return bool(self.enable_structure_ai)
+        if not self.decision_mode:
+            return bool(self.enable_structure_ai)
+        mode = self.normalized_decision_mode()
+        if mode == "heuristic_ai_local":
+            return True
+        return False
 
     def editorial_ai_enabled(self) -> bool:
+        if self.decision_mode:
+            # Decision modes explicitly control IA families.
+            return False
         if self.enable_editorial_ai:
             return True
         # Backward-compatibility: legacy flag enables editorial AI only.
         return bool(self.enable_ai)
+
+    def exploratory_mode_requested(self) -> bool:
+        return bool(self.decision_mode and self.normalized_decision_mode() == "ai_exploratory")
 
 @dataclass
 class Step1Result:
@@ -109,6 +142,26 @@ class Step1Pipeline:
             document_id="",
         )
 
+        if options.exploratory_mode_requested():
+            report.warnings.append(
+                "Decision mode 'ai_exploratory' is not implemented yet; falling back to heuristic mode without AI."
+            )
+
+        if isinstance(self.structure_ai.provider, GroqStructureAiProvider):
+            if options.ai_provider and str(options.ai_provider).lower() != "groq":
+                report.warnings.append(
+                    f"Unsupported ai_provider '{options.ai_provider}' for current runtime; using Groq provider."
+                )
+            if options.ai_api_key:
+                self.structure_ai.provider.api_key = options.ai_api_key
+                self.ai.api_key = options.ai_api_key
+            if options.ai_base_url:
+                self.structure_ai.provider.base_url = options.ai_base_url.rstrip("/")
+                self.ai.base_url = options.ai_base_url.rstrip("/")
+            if options.ai_model:
+                self.structure_ai.provider.model = options.ai_model
+                self.ai.model = options.ai_model
+
         # ── 1. Ingestion ──────────────────────────────────────────────────────
         t0 = utc_now_iso()
         registry = ImporterRegistry()
@@ -157,12 +210,18 @@ class Step1Pipeline:
 
         # ── 3b. Arbitrage IA local des zones grises structurelles ────────────
         t0 = utc_now_iso()
+        structure_ai_settings, structure_ai_calls_cap = settings_for_ai_aggressiveness(
+            options.ai_aggressiveness,
+            base_model=options.ai_model or self.settings.ai.model,
+            base_max_structure_ai_calls=options.max_structure_ai_calls,
+        )
+        self.structure_ai.settings = structure_ai_settings
         ai_local_enabled = bool(options.structure_ai_enabled() and self.settings.ai.enabled)
         local_diags, local_warnings, ai_calls = self.structure_ai.arbitrate_from_diagnostics(
             document=document,
             diagnostics=struct_diags,
             enable_ai=ai_local_enabled,
-            max_calls=options.max_structure_ai_calls,
+            max_calls=structure_ai_calls_cap,
         )
         report.diagnostics.extend(local_diags)
         report.warnings.extend(local_warnings)
@@ -174,7 +233,11 @@ class Step1Pipeline:
             status="success",
             summary={
                 "enabled": ai_local_enabled,
+                "decision_mode": options.normalized_decision_mode(),
+                "ai_aggressiveness": options.ai_aggressiveness,
                 "ai_calls": ai_calls,
+                "max_structure_ai_calls": structure_ai_calls_cap,
+                "confidence_threshold": structure_ai_settings.confidence_threshold,
                 "diagnostics": len(local_diags),
             },
         ))
