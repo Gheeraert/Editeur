@@ -7,8 +7,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from docx import Document as DocxDoc
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.enum.text import WD_COLOR_INDEX
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_COLOR_INDEX
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
@@ -48,13 +47,12 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
 # Titraille      → Calibri  (sans empattement, analogue Josefin Sans)
 _FONT_BODY = "Garamond"
 _FONT_HEAD = "Calibri"
-_HEADING_FONT_SIZES_PT: dict[int, int] = {1: 16, 2: 14, 3: 13}
-_QUOTE_FONT_SIZE_PT = 11
-_QUOTE_LEFT_INDENT_CM = 0.7
 
 # Styles de corps (reçoivent Garamond)
 _BODY_STYLE_NAMES: frozenset[str] = frozenset({
     "Normal", "footnote text", "endnote text",
+    # Style caractère réellement utilisé lors de l'injection OOXML des notes.
+    "Note de bas de page Car",
     "TEI_quote", "TEI_quote2", "TEI_quote_nested", "TEI_quote_continuation",
     "TEI_bibl_reference", "TEI_epigraph", "TEI_acknowledgment",
     "TEI_dedication", "TEI_paragraph_lead", "TEI_paragraph_consecutive",
@@ -69,6 +67,38 @@ _HEAD_STYLE_NAMES: frozenset[str] = frozenset({
     "heading 1", "heading 2", "heading 3", "heading 4", "heading 5",
     "TEI_bibl_start", "TEI_appendix_start",
 })
+
+# Réglages de confort pour le DOCX de correction : on garde les noms Métopes,
+# mais on évite les tailles de titraille prévues pour la maquette finale.
+# Les tailles sont en points Word, donc 16 = 16 pt.
+_HEADING_STYLE_SPECS: dict[str, tuple[float, float, float]] = {
+    "heading 1": (16, 12, 8),
+    "Heading 1": (16, 12, 8),
+    "heading 2": (14, 10, 6),
+    "Heading 2": (14, 10, 6),
+    "heading 3": (12.5, 8, 4),
+    "Heading 3": (12.5, 8, 4),
+    "heading 4": (11.5, 6, 3),
+    "Heading 4": (11.5, 6, 3),
+    "heading 5": (11, 6, 3),
+    "Heading 5": (11, 6, 3),
+    "TEI_bibl_start": (14, 10, 6),
+    "TEI_appendix_start": (14, 10, 6),
+}
+
+_BODY_STYLE_SPECS: dict[str, dict[str, object]] = {
+    "Normal": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_paragraph_consecutive": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_paragraph_lead": {"size": 11, "line_spacing": 1.15, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_quote": {"size": 10, "line_spacing": 1.0, "space_before": 6, "space_after": 6, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_quote2": {"size": 10, "line_spacing": 1.0, "space_before": 6, "space_after": 6, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_quote_nested": {"size": 10, "line_spacing": 1.0, "space_before": 3, "space_after": 3, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_quote_continuation": {"size": 10, "line_spacing": 1.0, "space_before": 0, "space_after": 0, "alignment": WD_ALIGN_PARAGRAPH.JUSTIFY},
+    "TEI_verse": {"size": 10, "line_spacing": 1.0, "space_before": 3, "space_after": 0, "alignment": WD_ALIGN_PARAGRAPH.LEFT},
+    "footnote text": {"size": 10, "line_spacing": 1.0, "alignment": WD_ALIGN_PARAGRAPH.LEFT},
+    "Note de bas de page Car": {"size": 10},
+}
+
 _FIRST_LINE_INDENT_CM = 0.5
 
 
@@ -119,8 +149,6 @@ def _add_run_with_style(
     superscript: bool = False,
     subscript: bool = False,
     highlight: WD_COLOR_INDEX | None = None,
-    font_name: str | None = None,
-    font_size_pt: int | None = None,
 ) -> None:
     if not text:
         return
@@ -137,10 +165,6 @@ def _add_run_with_style(
         run.font.subscript = True
     if highlight is not None:
         run.font.highlight_color = highlight
-    if font_name:
-        run.font.name = font_name
-    if font_size_pt is not None:
-        run.font.size = Pt(font_size_pt)
 
 
 def _inline_highlight(span: InlineSpan) -> WD_COLOR_INDEX | None:
@@ -164,26 +188,6 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         para.paragraph_format.left_indent = Cm(0.5)
         para.paragraph_format.first_line_indent = Cm(-0.5)
 
-    heading_level = 0
-    if block.block_type == "heading":
-        raw_level = block.attributes.get("heading_level", 0)
-        try:
-            heading_level = int(raw_level or 0)
-        except (TypeError, ValueError):
-            heading_level = 1
-    heading_size = _HEADING_FONT_SIZES_PT.get(min(max(heading_level, 1), 3)) if heading_level else None
-    quote_kind = str(block.attributes.get("quote_kind", "")).lower()
-    protected_zone = str(block.attributes.get("protected_zone", "")).lower()
-    is_poetry_quote = block.block_type == "quote_block" and (
-        quote_kind == "poetry" or protected_zone == "poetry"
-    )
-    is_quote_block = block.block_type == "quote_block"
-    if is_quote_block:
-        para.paragraph_format.left_indent = Cm(_QUOTE_LEFT_INDENT_CM)
-        para.paragraph_format.first_line_indent = None
-        para.paragraph_format.line_spacing = 1.0
-        para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_poetry_quote else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
-
     if block.inlines:
         for span in block.inlines:
             if span.kind == "note_call" and span.note_ref:
@@ -200,16 +204,10 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                     superscript=span.style.superscript,
                     subscript=span.style.subscript,
                     highlight=_inline_highlight(span),
-                    font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        _add_run_with_style(
-            para,
-            block.text,
-            highlight=hl,
-            font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
-        )
+        _add_run_with_style(para, block.text, highlight=hl)
 
 
 # ── Injection des notes de bas de page (post-sauvegarde) ─────────────────────
@@ -230,9 +228,6 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
     rpr_ref = ET.SubElement(r_ref, f"{{{W}}}rPr")
     rstyle_ref = ET.SubElement(rpr_ref, f"{{{W}}}rStyle")
     rstyle_ref.set(f"{{{W}}}val", "NotedebasdepageCar")
-    rfonts_ref = ET.SubElement(rpr_ref, f"{{{W}}}rFonts")
-    rfonts_ref.set(f"{{{W}}}ascii", _FONT_BODY)
-    rfonts_ref.set(f"{{{W}}}hAnsi", _FONT_BODY)
     vert = ET.SubElement(rpr_ref, f"{{{W}}}vertAlign")
     vert.set(f"{{{W}}}val", "superscript")
     ET.SubElement(r_ref, f"{{{W}}}footnoteRef")
@@ -241,9 +236,6 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
     rpr_sp = ET.SubElement(r_sp, f"{{{W}}}rPr")
     rstyle_sp = ET.SubElement(rpr_sp, f"{{{W}}}rStyle")
     rstyle_sp.set(f"{{{W}}}val", "NotedebasdepageCar")
-    rfonts_sp = ET.SubElement(rpr_sp, f"{{{W}}}rFonts")
-    rfonts_sp.set(f"{{{W}}}ascii", _FONT_BODY)
-    rfonts_sp.set(f"{{{W}}}hAnsi", _FONT_BODY)
     t_sp = ET.SubElement(r_sp, f"{{{W}}}t")
     t_sp.text = " "
     t_sp.set(f"{{{XML}}}space", "preserve")
@@ -259,9 +251,6 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
             rpr = ET.SubElement(r, f"{{{W}}}rPr")
             rstyle = ET.SubElement(rpr, f"{{{W}}}rStyle")
             rstyle.set(f"{{{W}}}val", "NotedebasdepageCar")
-            rfonts = ET.SubElement(rpr, f"{{{W}}}rFonts")
-            rfonts.set(f"{{{W}}}ascii", _FONT_BODY)
-            rfonts.set(f"{{{W}}}hAnsi", _FONT_BODY)
             if span.style.bold:
                 ET.SubElement(rpr, f"{{{W}}}b")
             if span.style.italic:
@@ -290,9 +279,6 @@ def _build_footnote_element(note: Note, footnote_id: int) -> ET.Element:
         rpr_txt = ET.SubElement(r_txt, f"{{{W}}}rPr")
         rstyle_txt = ET.SubElement(rpr_txt, f"{{{W}}}rStyle")
         rstyle_txt.set(f"{{{W}}}val", "NotedebasdepageCar")
-        rfonts_txt = ET.SubElement(rpr_txt, f"{{{W}}}rFonts")
-        rfonts_txt.set(f"{{{W}}}ascii", _FONT_BODY)
-        rfonts_txt.set(f"{{{W}}}hAnsi", _FONT_BODY)
         t = ET.SubElement(r_txt, f"{{{W}}}t")
         t.text = note.text
         t.set(f"{{{XML}}}space", "preserve")
@@ -336,16 +322,67 @@ def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[st
 
 # ── Application des polices PURH sur les styles du document ──────────────────
 
+def _set_style_font_name(style, font_name: str) -> None:
+    """Applique une police au style, y compris dans les attributs OOXML utiles.
+
+    ``style.font.name`` ne renseigne pas toujours tous les champs ``rFonts`` du
+    gabarit. On force donc ascii/hAnsi/cs pour éviter les retours à Calibri
+    Light/Minion selon les versions de Word.
+    """
+    style.font.name = font_name
+    rpr = style.element.get_or_add_rPr()
+    rfonts = rpr.find(qn("w:rFonts"))
+    if rfonts is None:
+        rfonts = OxmlElement("w:rFonts")
+        rpr.insert(0, rfonts)
+    for attr in ("w:ascii", "w:hAnsi", "w:cs"):
+        rfonts.set(qn(attr), font_name)
+
+
+def _apply_paragraph_style_spec(style, spec: dict[str, object]) -> None:
+    """Applique les réglages visuels du DOCX de correction à un style Word."""
+    size = spec.get("size")
+    if size is not None:
+        style.font.size = Pt(float(size))
+
+    paragraph_format = getattr(style, "paragraph_format", None)
+    if paragraph_format is None:
+        return
+
+    if "line_spacing" in spec:
+        paragraph_format.line_spacing = float(spec["line_spacing"])
+    if "space_before" in spec:
+        paragraph_format.space_before = Pt(float(spec["space_before"]))
+    if "space_after" in spec:
+        paragraph_format.space_after = Pt(float(spec["space_after"]))
+    if "alignment" in spec:
+        paragraph_format.alignment = spec["alignment"]
+
+
 def _apply_purh_fonts(doc: DocxDoc) -> None:
     """Remplace les polices du gabarit Métopes par les substituts PURH.
 
     Corps → Garamond (empattement)   |   Titraille → Calibri (sans empattement)
+
+    Cette passe règle aussi l'apparence du fichier Word de correction, sans
+    changer les noms de styles Métopes appliqués aux paragraphes.
     """
     for style in doc.styles:
         if style.name in _BODY_STYLE_NAMES:
-            style.font.name = _FONT_BODY
+            _set_style_font_name(style, _FONT_BODY)
         elif style.name in _HEAD_STYLE_NAMES:
-            style.font.name = _FONT_HEAD
+            _set_style_font_name(style, _FONT_HEAD)
+
+        if style.name in _HEADING_STYLE_SPECS:
+            size, before, after = _HEADING_STYLE_SPECS[style.name]
+            _apply_paragraph_style_spec(style, {
+                "size": size,
+                "line_spacing": 1.0,
+                "space_before": before,
+                "space_after": after,
+            })
+        elif style.name in _BODY_STYLE_SPECS:
+            _apply_paragraph_style_spec(style, _BODY_STYLE_SPECS[style.name])
 
 
 # ── Exporteur principal ───────────────────────────────────────────────────────
