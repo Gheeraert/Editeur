@@ -24,6 +24,10 @@ class HeuristicProfileTests(unittest.TestCase):
         self.assertEqual(settings.heading_diagnostic_threshold, 0.70)
         self.assertEqual(settings.poetry_transform_threshold, 0.92)
         self.assertEqual(settings.poetry_diagnostic_threshold, 0.70)
+        self.assertEqual(settings.heading_ai_min_score, 0.70)
+        self.assertEqual(settings.heading_ai_max_score, 0.90)
+        self.assertEqual(settings.poetry_ai_min_score, 0.70)
+        self.assertEqual(settings.poetry_ai_max_score, 0.92)
 
     def test_balanced_profile_thresholds(self) -> None:
         settings, _ = settings_for_heuristic_profile("balanced")
@@ -31,6 +35,10 @@ class HeuristicProfileTests(unittest.TestCase):
         self.assertEqual(settings.heading_diagnostic_threshold, 0.60)
         self.assertEqual(settings.poetry_transform_threshold, 0.90)
         self.assertEqual(settings.poetry_diagnostic_threshold, 0.65)
+        self.assertEqual(settings.heading_ai_min_score, 0.60)
+        self.assertEqual(settings.heading_ai_max_score, 0.85)
+        self.assertEqual(settings.poetry_ai_min_score, 0.65)
+        self.assertEqual(settings.poetry_ai_max_score, 0.90)
 
     def test_exploratory_profile_thresholds(self) -> None:
         settings, _ = settings_for_heuristic_profile("exploratory")
@@ -38,14 +46,33 @@ class HeuristicProfileTests(unittest.TestCase):
         self.assertEqual(settings.heading_diagnostic_threshold, 0.50)
         self.assertEqual(settings.poetry_transform_threshold, 0.80)
         self.assertEqual(settings.poetry_diagnostic_threshold, 0.55)
+        self.assertEqual(settings.heading_ai_min_score, 0.50)
+        self.assertEqual(settings.heading_ai_max_score, 0.75)
+        self.assertEqual(settings.poetry_ai_min_score, 0.55)
+        self.assertEqual(settings.poetry_ai_max_score, 0.80)
 
     def test_override_explicit_threshold(self) -> None:
         settings, warnings = settings_for_heuristic_profile(
             "balanced",
             heading_transform_threshold=0.93,
+            heading_diagnostic_threshold=0.55,
         )
         self.assertEqual(settings.heading_transform_threshold, 0.93)
-        self.assertEqual(settings.heading_diagnostic_threshold, 0.60)
+        self.assertEqual(settings.heading_diagnostic_threshold, 0.55)
+        self.assertEqual(settings.heading_ai_min_score, 0.55)
+        self.assertEqual(settings.heading_ai_max_score, 0.93)
+        self.assertEqual(warnings, [])
+
+    def test_override_poetry_threshold_updates_ai_zone(self) -> None:
+        settings, warnings = settings_for_heuristic_profile(
+            "balanced",
+            poetry_transform_threshold=0.88,
+            poetry_diagnostic_threshold=0.58,
+        )
+        self.assertEqual(settings.poetry_transform_threshold, 0.88)
+        self.assertEqual(settings.poetry_diagnostic_threshold, 0.58)
+        self.assertEqual(settings.poetry_ai_min_score, 0.58)
+        self.assertEqual(settings.poetry_ai_max_score, 0.88)
         self.assertEqual(warnings, [])
 
     def test_out_of_range_threshold_is_clamped(self) -> None:
@@ -64,7 +91,21 @@ class HeuristicProfileTests(unittest.TestCase):
         )
         self.assertEqual(settings.heading_transform_threshold, 0.85)
         self.assertEqual(settings.heading_diagnostic_threshold, 0.60)
+        self.assertEqual(settings.heading_ai_min_score, 0.60)
+        self.assertEqual(settings.heading_ai_max_score, 0.85)
         self.assertTrue(any("Inconsistent heading thresholds" in warning for warning in warnings))
+
+    def test_inconsistent_poetry_thresholds_restore_profile_ai_zone(self) -> None:
+        settings, warnings = settings_for_heuristic_profile(
+            "balanced",
+            poetry_transform_threshold=0.40,
+            poetry_diagnostic_threshold=0.80,
+        )
+        self.assertEqual(settings.poetry_transform_threshold, 0.90)
+        self.assertEqual(settings.poetry_diagnostic_threshold, 0.65)
+        self.assertEqual(settings.poetry_ai_min_score, 0.65)
+        self.assertEqual(settings.poetry_ai_max_score, 0.90)
+        self.assertTrue(any("Inconsistent poetry thresholds" in warning for warning in warnings))
 
     def test_veto_blocks_even_with_exploratory_profile(self) -> None:
         settings, _ = settings_for_heuristic_profile("exploratory")
@@ -176,6 +217,22 @@ class HeuristicProfileTests(unittest.TestCase):
         )
         service.process(doc, mode="heuristic")
         self.assertEqual(doc.blocks[1].block_type, "quote_block")
+
+    def test_ai_candidate_true_only_in_grey_zone_for_heading(self) -> None:
+        settings, _ = settings_for_heuristic_profile("balanced")
+        service = StructurePreparationService(heuristic_settings=settings)
+        block = Paragraph(block_id="p1", text="Cadre theorique")
+        decision = service._score_heading_candidate(block=block, settings=settings)
+        self.assertEqual(settings.heading_ai_min_score, settings.heading_diagnostic_threshold)
+        self.assertEqual(settings.heading_ai_max_score, settings.heading_transform_threshold)
+        self.assertEqual(decision.ai_candidate, settings.heading_ai_min_score <= decision.score < settings.heading_ai_max_score)
+
+    def test_deterministic_scoring_keeps_ai_candidate_false(self) -> None:
+        settings, _ = settings_for_heuristic_profile("balanced", enable_scored_heuristics=False)
+        service = StructurePreparationService(heuristic_settings=settings)
+        block = Paragraph(block_id="p1", text="Cadre theorique")
+        decision = service._score_heading_candidate(block=block, settings=settings)
+        self.assertFalse(decision.ai_candidate)
 
 
 if __name__ == "__main__":

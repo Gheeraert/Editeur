@@ -250,8 +250,12 @@ class Step1Pipeline:
                 "heuristics_enabled": heuristics_enabled,
                 "heading_transform_threshold": structure_settings.heading_transform_threshold,
                 "heading_diagnostic_threshold": structure_settings.heading_diagnostic_threshold,
+                "heading_ai_min_score": structure_settings.heading_ai_min_score,
+                "heading_ai_max_score": structure_settings.heading_ai_max_score,
                 "poetry_transform_threshold": structure_settings.poetry_transform_threshold,
                 "poetry_diagnostic_threshold": structure_settings.poetry_diagnostic_threshold,
+                "poetry_ai_min_score": structure_settings.poetry_ai_min_score,
+                "poetry_ai_max_score": structure_settings.poetry_ai_max_score,
             },
         ))
 

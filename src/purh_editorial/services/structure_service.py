@@ -148,8 +148,12 @@ def settings_for_heuristic_profile(
         enable_scored_heuristics=enable_scored_heuristics,
         heading_transform_threshold=h_t,
         heading_diagnostic_threshold=h_d,
+        heading_ai_min_score=h_d,
+        heading_ai_max_score=h_t,
         poetry_transform_threshold=p_t,
         poetry_diagnostic_threshold=p_d,
+        poetry_ai_min_score=p_d,
+        poetry_ai_max_score=p_t,
     )
     return settings, warnings
 
