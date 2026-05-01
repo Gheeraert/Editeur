@@ -235,6 +235,7 @@ class StructurePreparationService:
         poetry_decisions: list[HeuristicDecision] = []
         poetry_candidate_block_ids: set[str] = set()
         if use_heuristics:
+            transformations.extend(self._merge_short_poetry_sequences(document))
             poetry_decisions = self.analyze_poetry_candidates(document)
 
             # Zone grise ou transformation : dans les deux cas,
