@@ -202,6 +202,54 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
         self.assertIn("ai_candidate", poetry_diag.attributes)
         self.assertEqual(transformations, [])
 
+    def test_poetry_sequence_blocks_heading_promotion_in_heuristic_mode(self) -> None:
+        document = _doc_from_lines(
+            [
+                "Et j'ai vu d'un oeil satisfait",
+                "La piete de sa Princesse,",
+                "Son sang de ma faveur est un trop digne prix,",
+                "Et pour faire paraitre a quel point je l'estime,",
+                "Je la veux pour Pretresse et non pas pour victime,",
+                "Et l'ai deja rendue aux rives de Tauris.",
+            ]
+        )
+
+        diagnostics, _ = self.service.process(document, mode="heuristic")
+
+        self.assertTrue(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
+        self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
+
+    def test_poetry_sequence_in_deterministic_mode_has_no_poetry_diagnostic(self) -> None:
+        document = _doc_from_lines(
+            [
+                "Et j'ai vu d'un oeil satisfait",
+                "La piete de sa Princesse,",
+                "Son sang de ma faveur est un trop digne prix,",
+                "Et pour faire paraitre a quel point je l'estime,",
+                "Je la veux pour Pretresse et non pas pour victime,",
+                "Et l'ai deja rendue aux rives de Tauris.",
+            ]
+        )
+
+        diagnostics, _ = self.service.process(document, mode="deterministic")
+
+        self.assertFalse(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
+        self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
+
+    def test_passage_reference_is_neither_poetry_nor_heading(self) -> None:
+        document = _doc_from_lines(["VI, I, 52"])
+        diagnostics, _ = self.service.process(document, mode="heuristic")
+        self.assertEqual(document.blocks[0].block_type, "paragraph")
+        self.assertFalse(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
+        self.assertFalse(any(d.rule_id == "R-STRUCT-HEADING-001" for d in diagnostics))
+
+    def test_caption_reference_is_neither_poetry_nor_heading(self) -> None:
+        document = _doc_from_lines(["page 305, accolade"])
+        diagnostics, _ = self.service.process(document, mode="heuristic")
+        self.assertEqual(document.blocks[0].block_type, "paragraph")
+        self.assertFalse(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
+        self.assertFalse(any(d.rule_id == "R-STRUCT-HEADING-001" for d in diagnostics))
+
 
 if __name__ == "__main__":
     unittest.main()

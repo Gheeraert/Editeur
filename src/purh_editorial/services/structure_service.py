@@ -210,6 +210,15 @@ class StructurePreparationService:
         # (ALLCAPS, styles Titre1/2/3) pour que l'épigraphe ne s'applique pas
         # à tout le texte avant le premier titre heuristique.
         heading_count = sum(1 for b in document.blocks if b.block_type == "heading")
+        poetry_decisions: list[HeuristicDecision] = []
+        poetry_candidate_block_ids: set[str] = set()
+        if use_heuristics:
+            poetry_decisions = self.analyze_poetry_candidates(document)
+            for poetry_decision in poetry_decisions:
+                if poetry_decision.veto_reasons:
+                    continue
+                if poetry_decision.decision in {"diagnostic", "transform"}:
+                    poetry_candidate_block_ids.update(poetry_decision.target_refs)
 
         for block in document.blocks:
             text = block.text.strip()
@@ -218,7 +227,14 @@ class StructurePreparationService:
             heading_applied = False
             heading_decision = None
             if block.block_type == "paragraph" and use_heuristics:
-                heading_decision = self._score_heading_candidate(block=block, settings=self.heuristic_settings)
+                extra_veto_reasons: list[str] = []
+                if block.block_id in poetry_candidate_block_ids:
+                    extra_veto_reasons.append("poetry_sequence_candidate")
+                heading_decision = self._score_heading_candidate(
+                    block=block,
+                    settings=self.heuristic_settings,
+                    extra_veto_reasons=extra_veto_reasons,
+                )
 
             #  Titre de section bibliographique 
             if block.block_type == "heading" and _SECTION_BIBLIO_RE.match(text):
@@ -432,7 +448,6 @@ class StructurePreparationService:
                 )
 
         if use_heuristics:
-            poetry_decisions = self.analyze_poetry_candidates(document)
             for poetry_decision in poetry_decisions:
                 if poetry_decision.decision not in {"diagnostic", "transform"}:
                     continue
@@ -653,10 +668,18 @@ class StructurePreparationService:
         return False
 
     @classmethod
-    def _score_heading_candidate(cls, *, block, settings: HeuristicSettings) -> HeuristicDecision:
+    def _score_heading_candidate(
+        cls,
+        *,
+        block,
+        settings: HeuristicSettings,
+        extra_veto_reasons: list[str] | None = None,
+    ) -> HeuristicDecision:
         text = block.text.strip()
         source_level = cls._source_heading_level(block)
         veto_reasons = cls._heading_veto_reasons(block)
+        if extra_veto_reasons:
+            veto_reasons = sorted(set(veto_reasons).union(extra_veto_reasons))
         bold_title_fastpath = False
 
         if source_level is not None:
