@@ -1,0 +1,54 @@
+\documentclass[11pt,oneside,openany]{memoir}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{Latin Modern Mono}
+\usepackage[final]{microtype}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{verse}
+\setstocksize{230mm}{155mm}
+\settrimmedsize{\stockheight}{\stockwidth}{*}
+\setlrmarginsandblock{23mm}{22mm}{*}
+\setulmarginsandblock{24mm}{22mm}{*}
+\checkandfixthelayout
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0pt}
+\renewcommand{\footnotesize}{\small}
+\begin{document}
+\title{Histoire éditoriale et humanités}
+\author{Claire Martin}
+\maketitle
+
+\chapter*{Liminaires}
+\addcontentsline{toc}{chapter}{Liminaires}
+Ce volume propose un cadre de lecture pour la collection.
+
+\chapter{Chapitre 1. Méthodes}
+Les archives de la maison éditoriale comportent des mentions en\textsc{petites capitales}et des datations du XIX\textsuperscript{e}siècle.
+
+L'analyse impose une note critique\footnote{Voir l'édition\textit{princeps}et ses variantes.}pour situer le témoin.
+
+\begin{quote}\small
+Cette citation longue en prose sert de bloc de démonstration pour la future épreuve de composition.
+\end{quote}
+
+\begin{verse}
+Le texte se plie au rythme\\
+Et la page retient le vers\\
+\end{verse}
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+La chaîne TEI vers LaTeX doit rester explicable et traçable.
+
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+\section*{Bibliographie}
+\addcontentsline{toc}{section}{Bibliographie}
+\noindent Martin, Claire,\textit{Composer le savoir}, Rouen, 2022.\par
+\noindent Durand, Paul,\textit{Éditer les sources}, Paris, 2019.\par
+
+\end{document}
