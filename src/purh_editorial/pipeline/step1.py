@@ -76,8 +76,11 @@ class Step1Options:
 
     def editorial_ai_enabled(self) -> bool:
         if self.decision_mode:
-            # Decision modes explicitly control IA families.
-            return False
+            mode = self.normalized_decision_mode()
+            if mode in {"deterministic", "ai_exploratory"}:
+                return False
+            # In heuristic modes, explicit checkbox controls editorial AI.
+            return bool(self.enable_editorial_ai)
         if self.enable_editorial_ai:
             return True
         # Backward-compatibility: legacy flag enables editorial AI only.
