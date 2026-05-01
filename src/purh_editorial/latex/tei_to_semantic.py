@@ -224,14 +224,14 @@ def _parse_list_bibl_block(list_bibl: etree._Element) -> BibliographyBlock:
 def _parse_inline_children(element: etree._Element) -> list[InlineNode]:
     nodes: list[InlineNode] = []
     if element.text:
-        text = _normalize(element.text)
-        if text:
+        text = _normalize_inline_text(element.text)
+        if text.strip():
             nodes.append(TextRun(text=text))
     for child in list(element):
         nodes.extend(_parse_inline_element(child))
         if child.tail:
-            tail = _normalize(child.tail)
-            if tail:
+            tail = _normalize_inline_text(child.tail)
+            if tail.strip():
                 nodes.append(TextRun(text=tail))
     return _merge_text_runs(nodes)
 
@@ -263,7 +263,7 @@ def _merge_text_runs(nodes: list[InlineNode]) -> list[InlineNode]:
     merged: list[InlineNode] = []
     for node in nodes:
         if isinstance(node, TextRun) and merged and isinstance(merged[-1], TextRun):
-            merged[-1] = TextRun(text=f"{merged[-1].text} {node.text}".strip())
+            merged[-1] = TextRun(text=f"{merged[-1].text}{node.text}")
         else:
             merged.append(node)
     return merged
@@ -271,6 +271,12 @@ def _merge_text_runs(nodes: list[InlineNode]) -> list[InlineNode]:
 
 def _normalize(text: str) -> str:
     return WS_RE.sub(" ", text).strip()
+
+
+def _normalize_inline_text(text: str) -> str:
+    # Preserve leading/trailing spaces around inline tags while collapsing
+    # excessive whitespace runs to a single space.
+    return WS_RE.sub(" ", text)
 
 
 def _xpath_text(node: etree._Element, expressions: tuple[str, ...]) -> str:
