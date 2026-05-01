@@ -73,10 +73,12 @@ _POETRY_RULE_ID = "R-CI-POETRY-001"
 _POETRY_CATEGORY = "poetry_quote_candidate"
 _HEADING_RULE_ID = "R-STRUCT-HEADING-001"
 _HEADING_CATEGORY = "heading_candidate"
+_ALLOWED_HEURISTIC_PROFILES = {"conservative", "balanced", "exploratory"}
 
 
 @dataclass(slots=True)
 class HeuristicSettings:
+    enable_scored_heuristics: bool = True
     poetry_transform_threshold: float = 0.90
     poetry_diagnostic_threshold: float = 0.65
     poetry_ai_min_score: float = 0.65
@@ -86,6 +88,70 @@ class HeuristicSettings:
     heading_diagnostic_threshold: float = 0.60
     heading_ai_min_score: float = 0.60
     heading_ai_max_score: float = 0.85
+
+
+def settings_for_heuristic_profile(
+    profile: str | None,
+    *,
+    heading_transform_threshold: float | None = None,
+    heading_diagnostic_threshold: float | None = None,
+    poetry_transform_threshold: float | None = None,
+    poetry_diagnostic_threshold: float | None = None,
+    enable_scored_heuristics: bool = True,
+) -> tuple[HeuristicSettings, list[str]]:
+    normalized = str(profile or "conservative").strip().lower()
+    warnings: list[str] = []
+    if normalized not in _ALLOWED_HEURISTIC_PROFILES:
+        warnings.append(f"Unknown heuristic profile '{profile}', falling back to 'conservative'.")
+        normalized = "conservative"
+
+    profile_values = {
+        "conservative": (0.90, 0.70, 0.92, 0.70),
+        "balanced": (0.85, 0.60, 0.90, 0.65),
+        "exploratory": (0.75, 0.50, 0.80, 0.55),
+    }
+    h_t, h_d, p_t, p_d = profile_values[normalized]
+
+    def _resolve(
+        value: float | None,
+        fallback: float,
+        label: str,
+    ) -> float:
+        if value is None:
+            return fallback
+        try:
+            numeric = float(value)
+        except (TypeError, ValueError):
+            warnings.append(f"Invalid threshold for {label}: {value!r}; using profile value.")
+            return fallback
+        if numeric < 0.0 or numeric > 1.0:
+            warnings.append(f"Out-of-range threshold for {label}: {value!r}; clamped to [0.0, 1.0].")
+        return max(0.0, min(1.0, numeric))
+
+    h_t = _resolve(heading_transform_threshold, h_t, "heading_transform_threshold")
+    h_d = _resolve(heading_diagnostic_threshold, h_d, "heading_diagnostic_threshold")
+    p_t = _resolve(poetry_transform_threshold, p_t, "poetry_transform_threshold")
+    p_d = _resolve(poetry_diagnostic_threshold, p_d, "poetry_diagnostic_threshold")
+
+    if h_d > h_t:
+        warnings.append(
+            "Inconsistent heading thresholds (diagnostic > transform); restored profile thresholds."
+        )
+        h_t, h_d = profile_values[normalized][0], profile_values[normalized][1]
+    if p_d > p_t:
+        warnings.append(
+            "Inconsistent poetry thresholds (diagnostic > transform); restored profile thresholds."
+        )
+        p_t, p_d = profile_values[normalized][2], profile_values[normalized][3]
+
+    settings = HeuristicSettings(
+        enable_scored_heuristics=enable_scored_heuristics,
+        heading_transform_threshold=h_t,
+        heading_diagnostic_threshold=h_d,
+        poetry_transform_threshold=p_t,
+        poetry_diagnostic_threshold=p_d,
+    )
+    return settings, warnings
 
 
 @dataclass(slots=True)
@@ -119,9 +185,16 @@ class StructurePreparationService:
     def __init__(self, heuristic_settings: HeuristicSettings | None = None) -> None:
         self.heuristic_settings = heuristic_settings or HeuristicSettings()
 
-    def process(self, document: Document) -> tuple[list[Diagnostic], list[Transformation]]:
+    def process(
+        self,
+        document: Document,
+        *,
+        mode: str = "heuristic",
+    ) -> tuple[list[Diagnostic], list[Transformation]]:
         diagnostics: list[Diagnostic] = []
         transformations: list[Transformation] = []
+        structure_mode = str(mode or "heuristic").strip().lower()
+        use_heuristics = structure_mode != "deterministic"
 
         # Pré-calcul de l'indentation dominante du document
         # (permet de distinguer le retrait standard du retrait de citation)
@@ -140,7 +213,7 @@ class StructurePreparationService:
                 continue
             heading_applied = False
             heading_decision = None
-            if block.block_type == "paragraph":
+            if block.block_type == "paragraph" and use_heuristics:
                 heading_decision = self._score_heading_candidate(block=block, settings=self.heuristic_settings)
 
             #  Titre de section bibliographique 
@@ -158,8 +231,7 @@ class StructurePreparationService:
             source_heading_level = self._source_heading_level(block)
             if (block.block_type == "paragraph"
                     and source_heading_level is not None
-                    and heading_decision is not None
-                    and heading_decision.decision == "transform"):
+            ):
                 self._promote_heading(
                     block,
                     level=source_heading_level,
@@ -175,6 +247,7 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and text.isupper()
                     and 4 < len(text) < 140
+                    and use_heuristics
                     and heading_decision is not None
                     and heading_decision.decision == "transform"):
                 self._promote_heading(block, level=1, rule="structure.allcaps.heading",
@@ -188,6 +261,7 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_bold")
                     and not block.attributes.get("all_runs_italic")
+                    and use_heuristics
                     and heading_decision is not None
                     and heading_decision.decision == "transform"
                     and self._is_heading_candidate(text, block)):
@@ -201,6 +275,7 @@ class StructurePreparationService:
 
             #  Normal + ITALIQUE seul  titre OU auteur (pattern Héraldique) 
             if (block.block_type == "paragraph"
+                    and use_heuristics
                     and block.attributes.get("all_runs_italic")
                     and not block.attributes.get("all_runs_bold")):
                 result = self._classify_italic_block(text, block.attributes, block)
@@ -223,6 +298,7 @@ class StructurePreparationService:
 
             #  pigraphe (avant le 1er titre, court, pas de ponctuation finale) 
             if (heading_count == 0
+                    and use_heuristics
                     and block.block_type == "paragraph"
                     and len(text) <= _EPIGRAPH_MAX_CHARS
                     and text[-1] not in _PUNCT_ENDINGS
@@ -245,6 +321,7 @@ class StructurePreparationService:
             ind_fl       = block.attributes.get("ind_first_line", 0)
             # Un retrait purement à gauche (pas un alinéa de 1e ligne) = bloc-citation
             if (block.block_type == "paragraph"
+                    and use_heuristics
                     and ind_left > _BLOCK_QUOTE_IND_LEFT_THRESHOLD
                     and not ind_fl                   # pas d'alinéa de 1e ligne
                     and ind_left != dominant_ind_left # pas le retrait dominant du doc
@@ -258,6 +335,7 @@ class StructurePreparationService:
 
             #  Heuristique biblio hors section 
             if (not in_bib_section
+                    and use_heuristics
                     and block.block_type in {"paragraph", "quote_block"}
                     and _BIBLIO_HEURISTIC_RE.match(text)):
                 self._mark_biblio(block, document, bib_index, transformations,
@@ -276,7 +354,7 @@ class StructurePreparationService:
                 continue
 
             #  Citation longue via guillemets 
-            if block.block_type == "paragraph" and self._looks_like_block_quote(text):
+            if use_heuristics and block.block_type == "paragraph" and self._looks_like_block_quote(text):
                 block.block_type = "quote_block"
                 transformations.append(self._make_tr(
                     block.block_id, "paragraph", "quote_block",
@@ -285,6 +363,7 @@ class StructurePreparationService:
 
             # Promotion de titre si heuristique (titre non-stylé court)
             if (block.block_type == "paragraph"
+                    and use_heuristics
                     and heading_decision is not None
                     and heading_decision.decision == "transform"
                     and self._looks_like_heading_heuristic(text, block)):
@@ -295,6 +374,7 @@ class StructurePreparationService:
                 heading_count += 1
 
             if (block.block_type == "paragraph"
+                    and use_heuristics
                     and heading_decision is not None
                     and heading_decision.decision == "diagnostic"):
                 diagnostics.append(
@@ -318,6 +398,7 @@ class StructurePreparationService:
                 )
             elif (
                 block.block_type == "paragraph"
+                and use_heuristics
                 and heading_decision is not None
                 and heading_decision.decision == "transform"
                 and not heading_applied
@@ -346,42 +427,43 @@ class StructurePreparationService:
                     )
                 )
 
-        poetry_decisions = self.analyze_poetry_candidates(document)
-        for poetry_decision in poetry_decisions:
-            if poetry_decision.decision not in {"diagnostic", "transform"}:
-                continue
-            excerpt = poetry_decision.evidence.get("excerpt", "")
-            if poetry_decision.decision == "transform":
-                severity = "warning"
-                message = (
-                    "Candidat citation poetique a score eleve detecte, mais aucune "
-                    "transformation automatique n'est appliquee dans cette passe."
+        if use_heuristics:
+            poetry_decisions = self.analyze_poetry_candidates(document)
+            for poetry_decision in poetry_decisions:
+                if poetry_decision.decision not in {"diagnostic", "transform"}:
+                    continue
+                excerpt = poetry_decision.evidence.get("excerpt", "")
+                if poetry_decision.decision == "transform":
+                    severity = "warning"
+                    message = (
+                        "Candidat citation poetique a score eleve detecte, mais aucune "
+                        "transformation automatique n'est appliquee dans cette passe."
+                    )
+                else:
+                    severity = "info"
+                    message = (
+                        "Candidate citation poetique detectee: verifier manuellement "
+                        "avant toute structuration."
+                    )
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity=severity,
+                        category=_POETRY_CATEGORY,
+                        message=message,
+                        target_ref=poetry_decision.target_refs[0] if poetry_decision.target_refs else "",
+                        rule_id=_POETRY_RULE_ID,
+                        evidence=Evidence(excerpt=excerpt),
+                        attributes={
+                            "score": poetry_decision.score,
+                            "decision": poetry_decision.decision,
+                            "evidence": poetry_decision.evidence,
+                            "veto_reasons": poetry_decision.veto_reasons,
+                            "ai_candidate": poetry_decision.ai_candidate,
+                        },
+                    )
                 )
-            else:
-                severity = "info"
-                message = (
-                    "Candidate citation poetique detectee: verifier manuellement "
-                    "avant toute structuration."
-                )
-            diagnostics.append(
-                Diagnostic(
-                    diagnostic_id=make_id("diag"),
-                    module=self.module_name,
-                    severity=severity,
-                    category=_POETRY_CATEGORY,
-                    message=message,
-                    target_ref=poetry_decision.target_refs[0] if poetry_decision.target_refs else "",
-                    rule_id=_POETRY_RULE_ID,
-                    evidence=Evidence(excerpt=excerpt),
-                    attributes={
-                        "score": poetry_decision.score,
-                        "decision": poetry_decision.decision,
-                        "evidence": poetry_decision.evidence,
-                        "veto_reasons": poetry_decision.veto_reasons,
-                        "ai_candidate": poetry_decision.ai_candidate,
-                    },
-                )
-            )
 
         return diagnostics, transformations
 
@@ -502,15 +584,19 @@ class StructurePreparationService:
         )
         score = round(max(0.0, min(1.0, score)), 3)
 
-        ai_candidate = settings.poetry_ai_min_score <= score < settings.poetry_ai_max_score
-        if veto_reasons:
+        if not settings.enable_scored_heuristics:
+            ai_candidate = False
             decision_name = "ignore"
-        elif score >= settings.poetry_transform_threshold:
-            decision_name = "transform"
-        elif score >= settings.poetry_diagnostic_threshold:
-            decision_name = "diagnostic"
         else:
-            decision_name = "ignore"
+            ai_candidate = settings.poetry_ai_min_score <= score < settings.poetry_ai_max_score
+            if veto_reasons:
+                decision_name = "ignore"
+            elif score >= settings.poetry_transform_threshold:
+                decision_name = "transform"
+            elif score >= settings.poetry_diagnostic_threshold:
+                decision_name = "diagnostic"
+            else:
+                decision_name = "ignore"
 
         evidence = {
             "line_count": line_count,
@@ -571,6 +657,8 @@ class StructurePreparationService:
 
         if source_level is not None:
             score = 1.0
+        elif not settings.enable_scored_heuristics:
+            score = 0.0
         else:
             length = len(text)
             words = text.split()
@@ -606,7 +694,10 @@ class StructurePreparationService:
                 score = max(score, settings.heading_transform_threshold)
             score = round(max(0.0, min(1.0, score)), 3)
 
-        ai_candidate = settings.heading_ai_min_score <= score < settings.heading_ai_max_score
+        ai_candidate = (
+            settings.enable_scored_heuristics
+            and settings.heading_ai_min_score <= score < settings.heading_ai_max_score
+        )
         if veto_reasons:
             decision_name = "ignore"
         elif source_level is not None:

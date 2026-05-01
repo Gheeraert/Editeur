@@ -84,6 +84,15 @@ Statut:
 - Existant: oui (titraille + candidats poesie)
 - Futur: calibration progressive des seuils
 
+Configuration actuelle:
+- `heuristic_profile`: `conservative` / `balanced` / `exploratory`
+- overrides optionnels:
+  - `heading_transform_threshold`
+  - `heading_diagnostic_threshold`
+  - `poetry_transform_threshold`
+  - `poetry_diagnostic_threshold`
+- Les vetos restent prioritaires quel que soit le profil.
+
 ### 3.4 IA locale (zone grise)
 
 Role: assistance sur zones grises uniquement, jamais sur tout le document.
