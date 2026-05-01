@@ -12,7 +12,7 @@ from purh_editorial.utils import make_id
 
 METOPES_STYLES: dict[str, str] = {
     "paragraph":             "Normal",
-    "paragraph_lead":        "TEI_paragraph_consecutive",  # 1er § après titre (sans alinéa)
+    "paragraph_lead":        "TEI_paragraph_consecutive",  # § suivant une citation (sans alinéa)
     "heading_1":             "Heading 1",
     "heading_2":             "Heading 2",
     "heading_3":             "Heading 3",
