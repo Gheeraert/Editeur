@@ -130,6 +130,38 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertIn("\n", poetry_block.text)
         self.assertEqual(poetry_block.text.count("\n"), 2)
 
+    def test_diane_iphigenie_sequence_forms_single_poetry_block(self) -> None:
+        document = _document_from_lines(
+            [
+                "DIANE annonce :",
+                "Je sais le respect de la Grece,",
+                "Son dessein me tient lieu d'effet,",
+                "Et j'ai vu d'un oeil satisfait",
+                "La piete de sa Princesse,",
+                "Son sang de ma faveur est un trop digne prix,",
+                "Et pour faire paraitre a quel point je l'estime,",
+                "Je la veux pour Pretresse et non pas pour victime,",
+                "Et l'ai deja rendue aux rives de Tauris.",
+                "1. Cette ligne ne doit pas etre absorbee",
+                "Apres cette adressee, elle disparait.",
+            ]
+        )
+
+        self.service.process(document, mode="heuristic")
+
+        poetry_blocks = [block for block in document.blocks if block.block_type == "quote_block"]
+        self.assertEqual(len(poetry_blocks), 1)
+        poetry = poetry_blocks[0]
+        self.assertEqual(poetry.attributes.get("quote_kind"), "poetry")
+        self.assertEqual(poetry.attributes.get("protected_zone"), "poetry")
+        self.assertEqual(poetry.attributes.get("alignment"), "left")
+        self.assertEqual(poetry.text.count("\n"), 7)
+        self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
+
+        self.assertEqual(document.blocks[0].block_type, "paragraph")
+        self.assertEqual(document.blocks[-2].block_type, "paragraph")
+        self.assertEqual(document.blocks[-1].block_type, "paragraph")
+
 
 if __name__ == "__main__":
     unittest.main()

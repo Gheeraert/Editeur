@@ -66,6 +66,7 @@ _BLOCK_QUOTE_MIN_LEN = 60
 # Séquences poétiques : taille maximale et seuil de rupture entre strophes
 _POETRY_SEQUENCE_MAX_LINES = 20
 _POETRY_STANZA_SPACE_THRESHOLD = 240  # twips — environ 1 interligne à 12pt
+_LIST_MARKER_RE = re.compile(r"^\s*(?:\d+[\.\)]|[A-Za-zÀ-ÿ][\.\)]|[-–—•*])\s+")
 
 # Bibliographie heuristique (hors section dédiée)
 _BIBLIO_HEURISTIC_RE = re.compile(
@@ -244,6 +245,31 @@ class StructurePreparationService:
         if use_heuristics:
             transformations.extend(self._merge_short_poetry_sequences(document))
             poetry_decisions = self.analyze_poetry_candidates(document)
+            for block in document.blocks:
+                if (
+                    block.block_type == "quote_block"
+                    and str(block.attributes.get("quote_kind", "")).lower() == "poetry"
+                    and block.attributes.get("merged_from")
+                ):
+                    diagnostics.append(
+                        Diagnostic(
+                            diagnostic_id=make_id("diag"),
+                            module=self.module_name,
+                            severity="info",
+                            category=_POETRY_CATEGORY,
+                            message="Citation poétique courte fusionnée automatiquement.",
+                            target_ref=block.block_id,
+                            rule_id=_POETRY_RULE_ID,
+                            evidence=Evidence(excerpt=block.text[:180]),
+                            attributes={
+                                "decision": "transform",
+                                "score": 1.0,
+                                "evidence": {"merged_from": block.attributes.get("merged_from", [])},
+                                "veto_reasons": [],
+                                "ai_candidate": False,
+                            },
+                        )
+                    )
 
             # Zone grise ou transformation : dans les deux cas,
             # les lignes poétiques doivent neutraliser la promotion en titre.
@@ -275,6 +301,8 @@ class StructurePreparationService:
                     before = block.block_type
                     block.block_type = "quote_block"
                     block.attributes["quote_kind"] = "poetry"
+                    block.attributes["protected_zone"] = "poetry"
+                    block.attributes["alignment"] = "left"
                     block.attributes["heuristic_score"] = poetry_decision.score
 
                     transformations.append(self._make_tr(
@@ -284,6 +312,8 @@ class StructurePreparationService:
                         "structure.poetry.quote",
                         attributes={
                             "quote_kind": "poetry",
+                            "protected_zone": "poetry",
+                            "alignment": "left",
                             "score": poetry_decision.score,
                         },
                     ))
@@ -388,6 +418,7 @@ class StructurePreparationService:
             if (heading_count == 0
                     and use_heuristics
                     and block.block_type == "paragraph"
+                    and block is document.blocks[0]
                     and len(text) <= _EPIGRAPH_MAX_CHARS
                     and text[-1] not in _PUNCT_ENDINGS
                     and len(text.split()) >= 5):
@@ -655,8 +686,24 @@ class StructurePreparationService:
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
         decisions: list[HeuristicDecision] = []
+        blocks_by_id = {block.block_id: index for index, block in enumerate(document.blocks)}
         for sequence in self._poetry_candidate_sequences(document):
-            decisions.append(self._score_poetry_candidate(sequence=sequence, settings=settings))
+            first_index = blocks_by_id.get(sequence[0].block_id, -1)
+            last_index = blocks_by_id.get(sequence[-1].block_id, -1)
+            previous_block = document.blocks[first_index - 1] if first_index > 0 else None
+            next_block = (
+                document.blocks[last_index + 1]
+                if last_index >= 0 and last_index + 1 < len(document.blocks)
+                else None
+            )
+            decisions.append(
+                self._score_poetry_candidate(
+                    sequence=sequence,
+                    settings=settings,
+                    previous_block=previous_block,
+                    next_block=next_block,
+                )
+            )
         return decisions
 
     @classmethod
@@ -683,7 +730,9 @@ class StructurePreparationService:
         text = block.text.strip()
         if not text:
             return False
-        if len(text.split()) >= 10:
+        if len(text.split()) > 16:
+            return False
+        if text.endswith(":"):
             return False
         if block.attributes.get("all_runs_bold"):
             return False
@@ -754,6 +803,8 @@ class StructurePreparationService:
         *,
         sequence: list,
         settings: HeuristicSettings,
+        previous_block=None,
+        next_block=None,
     ) -> HeuristicDecision:
         texts = [block.text.strip() for block in sequence]
         target_refs = [block.block_id for block in sequence]
@@ -774,15 +825,45 @@ class StructurePreparationService:
         punctuation_ratio = (
             sum(1 for text in texts if text.endswith(poetic_endings)) / line_count if line_count else 0.0
         )
-        intro_context_ratio = (
-            sum(
-                1
-                for text in texts
-                if re.search(r"\b(?:dit|ecrit|\u00e9crit|chant|poeme|po\u00e8me|vers)\b", text.lower())
-                or text.rstrip().endswith(":")
-            )
-            / line_count
-            if line_count
+        intro_hits = 0
+        intro_context_ratio = 0.0
+        if previous_block is not None:
+            prev_text = previous_block.text.strip().lower()
+            prev_text_norm = unicodedata.normalize("NFKD", prev_text)
+            prev_text_norm = "".join(ch for ch in prev_text_norm if not unicodedata.combining(ch))
+            if (
+                previous_block.block_type == "paragraph"
+                and (
+                    previous_block.text.rstrip().endswith(":")
+                    or re.search(
+                        r"\b(?:annonce|dit|repond|chante|recite|declame|ecrit|cite)\b",
+                        prev_text_norm,
+                    )
+                )
+            ):
+                intro_hits += 1
+        intro_hits += sum(
+            1
+            for text in texts
+            if re.search(r"\b(?:dit|ecrit|\u00e9crit|chant|poeme|po\u00e8me|vers)\b", text.lower())
+            or text.rstrip().endswith(":")
+        )
+        intro_context_ratio = min(1.0, intro_hits / max(1, line_count))
+
+        indents = [int(block.attributes.get("ind_left", 0) or 0) for block in sequence]
+        aligns = [str(block.attributes.get("alignment", "")).lower() for block in sequence]
+        same_indent = len(set(indents)) <= 1
+        same_alignment = len(set(align for align in aligns if align)) <= 1
+        visual_homogeneity_component = (
+            1.0 if (same_indent and same_alignment) else 0.65 if (same_indent or same_alignment) else 0.0
+        )
+
+        first_indent = indents[0] if indents else 0
+        prev_indent = int(previous_block.attributes.get("ind_left", 0) or 0) if previous_block is not None else 0
+        next_indent = int(next_block.attributes.get("ind_left", 0) or 0) if next_block is not None else 0
+        indentation_boundary_bonus = (
+            1.0
+            if first_indent > 0 and prev_indent == 0 and (next_block is None or next_indent == 0)
             else 0.0
         )
 
@@ -793,22 +874,27 @@ class StructurePreparationService:
         punctuation_component = min(1.0, punctuation_ratio)
         intro_component = min(1.0, intro_context_ratio)
         # Un vers type : 3-9 mots ; la prose courte en a g\u00e9n\u00e9ralement plus
-        word_count_component = (
-            1.0 if 3 <= avg_word_count <= 9 else
-            0.5 if 2 <= avg_word_count <= 12 else
-            0.0
-        )
+        word_count_component = 1.0 if 3 <= avg_word_count <= 16 else 0.5 if 2 <= avg_word_count <= 18 else 0.0
 
         score = (
-            0.18 * line_count_component
-            + 0.15 * length_component
-            + 0.14 * homogeneity_component
-            + 0.15 * initial_component
-            + 0.15 * punctuation_component
-            + 0.13 * word_count_component
+            0.15 * line_count_component
+            + 0.12 * length_component
+            + 0.12 * homogeneity_component
+            + 0.12 * initial_component
+            + 0.12 * punctuation_component
+            + 0.14 * word_count_component
             + 0.10 * intro_component
+            + 0.08 * visual_homogeneity_component
+            + 0.05 * indentation_boundary_bonus
         )
         score = round(max(0.0, min(1.0, score)), 3)
+
+        in_note_zone = any(cls._is_note_zone_block(block) for block in sequence)
+        transform_threshold = settings.poetry_transform_threshold
+        diagnostic_threshold = settings.poetry_diagnostic_threshold
+        if in_note_zone:
+            transform_threshold = max(transform_threshold, 0.95)
+            diagnostic_threshold = max(diagnostic_threshold, 0.80)
 
         if not settings.enable_scored_heuristics:
             ai_candidate = False
@@ -817,9 +903,9 @@ class StructurePreparationService:
             ai_candidate = settings.poetry_ai_min_score <= score < settings.poetry_ai_max_score
             if veto_reasons:
                 decision_name = "ignore"
-            elif score >= settings.poetry_transform_threshold:
+            elif score >= transform_threshold:
                 decision_name = "transform"
-            elif score >= settings.poetry_diagnostic_threshold:
+            elif score >= diagnostic_threshold:
                 decision_name = "diagnostic"
             else:
                 decision_name = "ignore"
@@ -832,6 +918,9 @@ class StructurePreparationService:
             "initial_upper_ratio": round(initial_upper_ratio, 3),
             "punctuation_ratio": round(punctuation_ratio, 3),
             "intro_context_ratio": round(intro_context_ratio, 3),
+            "visual_homogeneity_component": round(visual_homogeneity_component, 3),
+            "indentation_boundary_bonus": round(indentation_boundary_bonus, 3),
+            "in_note_zone": in_note_zone,
             "word_count_component": round(word_count_component, 3),
             "excerpt": " | ".join(texts[:3])[:240],
             "source_heading_count": sum(
@@ -854,6 +943,8 @@ class StructurePreparationService:
     @classmethod
     def _poetry_veto_reasons(cls, sequence: list) -> list[str]:
         reasons: set[str] = set()
+        in_note_zone = any(cls._is_note_zone_block(block) for block in sequence)
+        bibliography_like_count = 0
         for block in sequence:
             text = block.text.strip()
             if block.block_type == "heading" or cls._source_heading_level(block) is not None:
@@ -865,10 +956,26 @@ class StructurePreparationService:
             if cls._looks_like_list_item(text):
                 reasons.add("list_like")
             if cls._looks_like_bibliography_reference(text):
-                reasons.add("bibliography_like")
+                bibliography_like_count += 1
             if cls._looks_like_technical_markup(text):
                 reasons.add("technical_markup")
+        if in_note_zone and bibliography_like_count > 0:
+            reasons.add("bibliography_like")
+        if bibliography_like_count >= max(2, len(sequence) // 2):
+            reasons.add("bibliography_like")
         return sorted(reasons)
+
+    @staticmethod
+    def _is_note_zone_block(block) -> bool:
+        attrs = block.attributes or {}
+        if attrs.get("is_note") or attrs.get("in_note") or attrs.get("note_zone"):
+            return True
+        style_blob = " ".join(
+            str(attrs.get(key, "")) for key in ("style_name", "style_id", "xml_tag", "source")
+        ).lower()
+        style_norm = unicodedata.normalize("NFKD", style_blob)
+        style_norm = "".join(ch for ch in style_norm if not unicodedata.combining(ch))
+        return any(token in style_norm for token in ("footnote", "endnote", "note de bas", "notedebasdepage"))
 
     @staticmethod
     def _looks_like_technical_markup(text: str) -> bool:
@@ -985,7 +1092,7 @@ class StructurePreparationService:
             reasons.add("technical_markup")
         if cls._looks_like_poetry_line_candidate(block, text):
             reasons.add("poetry_line_candidate")
-        if text.endswith((".", "!", "?")) or _VERB_LEAD_RE.match(text):
+        if text.endswith((".", "!", "?", ":", ";")) or _VERB_LEAD_RE.match(text):
             reasons.add("sentence_like")
         if cls._source_heading_level(block) is None and len(text.split()) <= 1:
             reasons.add("too_short_fragment")
@@ -1054,14 +1161,8 @@ class StructurePreparationService:
 
     @staticmethod
     def _looks_like_list_item(text: str) -> bool:
-        stripped = text.lstrip()
-        if re.match(r"^[-\u2013\u2014\u2022]\s+", stripped):
-            return True
-        if re.match(r"^\d+\s*[\.\)]\s+", stripped):
-            return True
-        if re.match(r"^[A-Za-z]\)\s+", stripped):
-            return True
-        return False
+        normalized = re.sub(r"\s+", " ", text.strip())
+        return bool(_LIST_MARKER_RE.match(normalized))
 
     @staticmethod
     def _looks_like_bibliography_reference(text: str) -> bool:
