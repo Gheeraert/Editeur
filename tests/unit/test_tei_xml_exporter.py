@@ -144,6 +144,50 @@ class TeiXmlExporterTests(unittest.TestCase):
         self.assertEqual(hi.attrib.get("rend"), "italic")
         self.assertEqual(hi.text, "italique")
 
+    def test_note_consecutive_plain_runs_preserve_order(self) -> None:
+        """Régression: runs bruts consécutifs après une italique ne doivent pas
+        remonter dans note.text (avant les enfants <hi>) mais rester dans hi.tail."""
+        document = Document(
+            document_id="doc_reg",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(
+                    block_id="p1",
+                    text="",
+                    inlines=[InlineSpan(text="[1]", kind="note_call", note_ref="ftn1")],
+                )
+            ],
+            notes=[
+                Note(
+                    note_id="ftn1",
+                    label="1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Le Mercure galant", style=InlineStyle(italic=True)),
+                        InlineSpan(text=", janvier-mars 1677, Paris, Barbin, 1677, p."),
+                        InlineSpan(text=" 47 ; voir aussi Corneille, "),
+                        InlineSpan(text="Œuvres complètes", style=InlineStyle(italic=True)),
+                        InlineSpan(text=", éd. Georges Couton, Paris, Gallimard, t."),
+                        InlineSpan(text=" III, 1987, p. 1313."),
+                    ],
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        note = body.find(f".//{_q('note')}")
+        self.assertIsNotNone(note)
+        # note.text doit être vide/None: le premier contenu est un <hi>
+        self.assertFalse(note.text and note.text.strip(), f"note.text ne doit pas contenir de texte: {note.text!r}")
+        his = note.findall(_q("hi"))
+        self.assertEqual(len(his), 2)
+        self.assertEqual(his[0].text, "Le Mercure galant")
+        self.assertIn("47", his[0].tail or "")
+        self.assertEqual(his[1].text, "Œuvres complètes")
+        self.assertIn("1313", his[1].tail or "")
+
     def test_export_produces_well_formed_xml(self) -> None:
         document = Document(
             document_id="doc6",
