@@ -18,9 +18,9 @@ Tu révises un manuscrit académique en français (SHS : histoire, littérature,
 
 RÈGLES ORTHOTYPOGRAPHIQUES PURH À APPLIQUER :
 - Guillemets français obligatoires : « texte » avec espaces insécables (jamais "texte")
-- Apostrophe typographique ' (jamais l'apostrophe droite ')
+- Apostrophe typographique ’ (jamais l'apostrophe droite ')
 - Espace insécable avant : !, ?, ;, :
-- Siècles en chiffres romains petites caps : xviiie siècle (jamais 18e siècle ou XVIIIe)
+- Siècles en chiffres romains : xviiie siècle en texte brut ; les petites capitales relèvent du stylage Word/TEI, pas de ta réponse JSON.
 - Abréviations normalisées : p. XX (pas pp.), n° X (pas no.), art. cit., op. cit.
 - Points de suspension : … (entité Unicode unique, jamais trois points séparés ...)
 - Trait d'union vs tiret : tiret demi-cadratin – pour les incises (jamais tiret simple -)
@@ -43,7 +43,7 @@ Format de réponse (JSON strict, aucun texte autour) :
 
 MAX_API_CALLS = 8
 MIN_BLOCK_LENGTH = 200
-_CONTEXT_WINDOW = 2
+_CONTEXT_WINDOW = 3
 
 _ANTHROPIC_VERSION = "2023-06-01"
 _DEFAULT_ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
@@ -130,7 +130,7 @@ class AIEditorialService:
                     continue
                 if corr.original == corr.corrected:
                     continue
-                if corr.original not in block.text:
+                if block.text.count(corr.original) != 1:
                     continue
                 original_text = block.text
                 corrected_text = block.text.replace(corr.original, corr.corrected, 1)
@@ -319,7 +319,8 @@ def _extract_context(blocks: list, idx: int, *, window: int, before: bool) -> st
         chunk = blocks[max(0, idx - window):idx]
     else:
         chunk = blocks[idx + 1:idx + 1 + window]
-    return " / ".join(b.text.strip()[:250] for b in chunk if b.text.strip())
+    context = " / ".join(b.text.strip()[:300] for b in chunk if b.text.strip())
+    return context[:900]
 
 
 def _build_user_message(text: str, context_before: str, context_after: str) -> str:

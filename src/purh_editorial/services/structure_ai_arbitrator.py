@@ -54,11 +54,11 @@ par un tiret ou un numéro.
    • Peut s'étaler sur plusieurs fragments si l'auteur a coupé.
 
 RÈGLE D'ARBITRAGE
-- confidence ≥ 0.85 → classification fiable pour action automatique
+- confidence ≥ 0.85 → classification exploitable pour revue humaine ou traitement déterministe ultérieur
 - 0.70 ≤ confidence < 0.85 → diagnostic à soumettre à l'éditrice
 - confidence < 0.70 → incertain, conserver le status quo
 
-Tu ne modifies JAMAIS le texte. Tu réponds UNIQUEMENT en JSON strict.\
+Tu ne modifies JAMAIS le texte et tu ne promets JAMAIS une transformation directe. Tu réponds UNIQUEMENT en JSON strict.\
 """
 
 ALLOWED_CLASSIFICATIONS = {
@@ -323,7 +323,17 @@ def parse_structure_ai_json(raw: str) -> AiArbitrationResult:
     text = raw.strip()
     if not text:
         raise ValueError("empty_response")
-    data = json.loads(text)
+    if text.startswith("```"):
+        text = text.removeprefix("```json").removeprefix("```").strip()
+        text = text.removesuffix("```").strip()
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("invalid_json") from exc
+        data = json.loads(text[start:end + 1])
     if not isinstance(data, dict):
         raise ValueError("non_object_json")
 

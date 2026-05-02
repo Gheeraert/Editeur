@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import threading
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 import tkinter as tk
@@ -30,7 +31,7 @@ class ExportRunResult:
     latex_error: str | None = None
 
 
-CONFIG_VERSION = 2
+CONFIG_VERSION = 1
 
 ALLOWED_DECISION_MODES = {
     "deterministic",
@@ -43,19 +44,19 @@ ALLOWED_HEURISTIC_PROFILES = {"conservative", "balanced", "exploratory"}
 ALLOWED_PROVIDERS = {"groq", "anthropic"}
 
 DECISION_MODE_LABELS = {
-    "deterministic": "Deterministe strict",
+    "deterministic": "Déterministe strict",
     "heuristic": "Heuristique",
     "heuristic_ai_local": "Heuristique + IA locale",
     "ai_exploratory": "IA exploratoire future",
 }
 HEURISTIC_PROFILE_LABELS = {
     "conservative": "Prudent",
-    "balanced": "Equilibre",
+    "balanced": "Équilibré",
     "exploratory": "Exploratoire",
 }
 AI_AGGRESSIVENESS_LABELS = {
     "conservative": "Conservatrice",
-    "balanced": "Equilibree",
+    "balanced": "Équilibrée",
     "aggressive": "Agressive",
 }
 PROVIDER_LABELS = {
@@ -76,6 +77,13 @@ PROVIDER_DEFAULTS = {
 
 # ── Fonctions de normalisation ────────────────────────────────────────────────
 
+def _label_key(value: str | None) -> str:
+    """Normalize UI labels for accent- and case-insensitive comparisons."""
+    text = unicodedata.normalize("NFKD", str(value or "").strip())
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    return text.casefold()
+
+
 def normalize_decision_mode(value: str | None) -> str:
     if not value:
         return "heuristic"
@@ -91,8 +99,9 @@ def decision_mode_to_label(value: str | None) -> str:
 
 def decision_mode_from_label(label: str | None) -> str:
     raw = str(label or "").strip()
+    raw_key = _label_key(raw)
     for code, text in DECISION_MODE_LABELS.items():
-        if text == raw:
+        if _label_key(text) == raw_key:
             return code
     return normalize_decision_mode(raw)
 
@@ -112,8 +121,9 @@ def ai_aggressiveness_to_label(value: str | None) -> str:
 
 def ai_aggressiveness_from_label(label: str | None) -> str:
     raw = str(label or "").strip()
+    raw_key = _label_key(raw)
     for code, text in AI_AGGRESSIVENESS_LABELS.items():
-        if text == raw:
+        if _label_key(text) == raw_key:
             return code
     return normalize_ai_aggressiveness(raw)
 
@@ -133,8 +143,9 @@ def heuristic_profile_to_label(value: str | None) -> str:
 
 def heuristic_profile_from_label(label: str | None) -> str:
     raw = str(label or "").strip()
+    raw_key = _label_key(raw)
     for code, text in HEURISTIC_PROFILE_LABELS.items():
-        if text == raw:
+        if _label_key(text) == raw_key:
             return code
     return normalize_heuristic_profile(raw)
 
@@ -152,8 +163,9 @@ def provider_to_label(value: str | None) -> str:
 
 def provider_from_label(label: str | None) -> str:
     raw = str(label or "").strip()
+    raw_key = _label_key(raw)
     for code, text in PROVIDER_LABELS.items():
-        if text == raw:
+        if _label_key(text) == raw_key:
             return code
     return normalize_provider(raw)
 
@@ -256,11 +268,6 @@ def build_step1_options_from_form(
 
 def build_config_dict(
     source_path: str = "",
-    output_dir: str = "",
-    base_name: str = "",
-    export_docx: bool = True,
-    export_tei: bool = True,
-    export_latex: bool = True,
     output_docx_path: str = "",
     tei_output_path: str = "",
     decision_mode: str = "heuristic",
@@ -270,28 +277,38 @@ def build_config_dict(
     poetry_transform_threshold: float | None = None,
     poetry_diagnostic_threshold: float | None = None,
     ai_aggressiveness: str = "conservative",
-    # IA structurelle (nouveaux noms)
-    struct_ai_provider: str = "",
-    struct_ai_api_key: str = "",
-    struct_ai_model: str = "",
-    struct_ai_base_url: str = "",
-    max_structure_ai_calls: int = 6,
-    # IA éditoriale
-    enable_editorial_ai: bool = False,
-    editorial_ai_provider: str = "",
-    editorial_ai_api_key: str = "",
-    editorial_ai_model: str = "",
-    editorial_ai_base_url: str = "",
-    max_ai_calls: int = 6,
-    # Legacy (anciens noms / compatibilité)
     ai_provider: str = "",
     ai_api_key: str = "",
     ai_model: str = "",
     ai_base_url: str = "",
     enable_structure_ai: bool = False,
+    enable_editorial_ai: bool = False,
     enable_ai: bool = False,
+    max_ai_calls: int = 6,
+    max_structure_ai_calls: int = 6,
+    *,
+    output_dir: str = "",
+    base_name: str = "",
+    export_docx: bool = True,
+    export_tei: bool = True,
+    export_latex: bool = True,
+    # IA structurelle (nouveaux noms)
+    struct_ai_provider: str = "",
+    struct_ai_api_key: str = "",
+    struct_ai_model: str = "",
+    struct_ai_base_url: str = "",
+    # IA éditoriale dédiée
+    editorial_ai_provider: str = "",
+    editorial_ai_api_key: str = "",
+    editorial_ai_model: str = "",
+    editorial_ai_base_url: str = "",
 ) -> dict[str, object]:
-    # Résolution anciens → nouveaux
+    """Build a Step 1 dialog config while preserving v1 positional compatibility.
+
+    Older tests and saved-call sites used positional arguments up to
+    ``max_structure_ai_calls``. New v2-like fields are intentionally
+    keyword-only so they cannot shift legacy values.
+    """
     actual_struct_provider = normalize_provider(struct_ai_provider or ai_provider or "groq")
     actual_struct_api_key = str(struct_ai_api_key or ai_api_key or "")
     actual_struct_model = str(struct_ai_model or ai_model or "")
@@ -313,20 +330,20 @@ def build_config_dict(
         "poetry_transform_threshold": normalize_optional_threshold(poetry_transform_threshold),
         "poetry_diagnostic_threshold": normalize_optional_threshold(poetry_diagnostic_threshold),
         "ai_aggressiveness": normalize_ai_aggressiveness(ai_aggressiveness),
-        # Structurelle (v2)
+        # Structurelle (noms dédiés + miroir legacy)
         "struct_ai_provider": actual_struct_provider,
         "struct_ai_api_key": actual_struct_api_key,
         "struct_ai_model": actual_struct_model,
         "struct_ai_base_url": actual_struct_base_url,
         "max_structure_ai_calls": max(1, int(max_structure_ai_calls)),
-        # Éditoriale (v2)
+        # Éditoriale
         "enable_editorial_ai": bool(enable_editorial_ai),
         "editorial_ai_provider": str(editorial_ai_provider or ""),
         "editorial_ai_api_key": str(editorial_ai_api_key or ""),
         "editorial_ai_model": str(editorial_ai_model or ""),
         "editorial_ai_base_url": str(editorial_ai_base_url or ""),
         "max_ai_calls": max(1, int(max_ai_calls)),
-        # Legacy (v1 — rétrocompatibilité)
+        # Legacy v1 — conservé pour compatibilité config/tests
         "enable_structure_ai": bool(enable_structure_ai),
         "enable_ai": bool(enable_ai),
         "ai_provider": actual_struct_provider,
@@ -385,7 +402,7 @@ def apply_config_dict(
         "max_ai_calls": _i(current, "max_ai_calls", Step1Options().max_ai_calls),
         # Legacy
         "enable_structure_ai": _b(current, "enable_structure_ai"),
-        "enable_ai": False,
+        "enable_ai": _b(current, "enable_ai"),
         "ai_provider": _s(current, "ai_provider", "groq"),
         "ai_api_key": _s(current, "ai_api_key"),
         "ai_model": _s(current, "ai_model"),
@@ -446,6 +463,8 @@ def apply_config_dict(
             merged[key] = str(loaded.get(key) or "")
     if "max_ai_calls" in loaded:
         merged["max_ai_calls"] = _i(loaded, "max_ai_calls", Step1Options().max_ai_calls)
+    if "enable_ai" in loaded:
+        merged["enable_ai"] = bool(loaded.get("enable_ai"))
 
     # Decision mode est autoritaire sur l'IA structurelle
     if "decision_mode" in loaded:
@@ -516,9 +535,9 @@ def format_module_runs(module_runs: list[ModuleRun]) -> str:
 def format_outputs(result: Step1Result) -> str:
     lines: list[str] = []
     if result.output_docx:
-        lines.append(f"- DOCX généré : {result.output_docx}")
+        lines.append(f"- DOCX de relecture : {result.output_docx}")
     else:
-        lines.append("- DOCX généré : non produit (option non demandée)")
+        lines.append("- DOCX de relecture : non produit (option non demandée)")
     report = result.pipeline_result.report
     tei_path = None
     for module_run in report.module_runs:
@@ -526,11 +545,11 @@ def format_outputs(result: Step1Result) -> str:
             tei_path = module_run.summary.get("output")
             break
     if tei_path:
-        lines.append(f"- XML-TEI généré : {tei_path}")
+        lines.append(f"- XML-TEI : {tei_path}")
     elif result.pipeline_result.tei_xml:
-        lines.append("- XML-TEI généré : généré en mémoire (pas de fichier écrit)")
+        lines.append("- XML-TEI : généré en mémoire (pas de fichier écrit)")
     else:
-        lines.append("- XML-TEI généré : non produit")
+        lines.append("- XML-TEI : non produit")
     return "\n".join(lines)
 
 

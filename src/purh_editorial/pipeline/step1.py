@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -76,8 +76,12 @@ class Step1Options:
         return "heuristic"
 
     def structure_ai_enabled(self) -> bool:
-        if self.decision_mode and self.normalized_decision_mode() == "deterministic":
-            return False
+        if self.decision_mode:
+            mode = self.normalized_decision_mode()
+            if mode in {"deterministic", "ai_exploratory"}:
+                return False
+            if mode == "heuristic_ai_local":
+                return True
         return bool(self.enable_structure_ai)
 
     def editorial_ai_enabled(self) -> bool:
@@ -379,12 +383,18 @@ class Step1Pipeline:
         ))
 
         # ── 6. Corrections IA ciblées (optionnelles) ──────────────────────────
-        editorial_ai_enabled = bool(options.editorial_ai_enabled() and self.settings.ai.enabled)
-        if editorial_ai_enabled:
+        editorial_ai_requested = bool(options.editorial_ai_enabled())
+        editorial_ai_enabled = bool(editorial_ai_requested and self.ai.available)
+        if editorial_ai_requested:
             t0 = utc_now_iso()
-            document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
-            report.transformations.extend(ai_tr)
-            ai_status = "success" if ai_tr is not None else "degraded"
+            if editorial_ai_enabled:
+                document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
+                report.transformations.extend(ai_tr)
+                ai_status = "success"
+            else:
+                ai_tr = []
+                ai_status = "skipped"
+                report.warnings.append("Editorial AI skipped: no API key configured for selected provider.")
             report.add_module_run(ModuleRun(
                 module_name="ai_editorial",
                 version=self.version,
@@ -392,8 +402,12 @@ class Step1Pipeline:
                 finished_at=utc_now_iso(),
                 status=ai_status,
                 summary={
+                    "enabled": editorial_ai_enabled,
                     "corrections_applied": len(ai_tr),
-                    "model": self.settings.ai.model,
+                    "provider": self.ai.provider,
+                    "model": self.ai.model,
+                    "base_url": self.ai.base_url,
+                    "max_ai_calls": options.max_ai_calls,
                 },
             ))
 
