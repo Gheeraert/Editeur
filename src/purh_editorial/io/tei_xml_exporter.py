@@ -133,19 +133,40 @@ class TeiXmlExporter:
 
     @staticmethod
     def _append_text(target: ET.Element, last_node: ET.Element | None, text: str) -> None:
-        if target is last_node or target is not None and target.tag.endswith("}hi"):
+        # Écriture dans un élément de style (<hi>) : le texte va à l'intérieur.
+        if target is not None and target.tag.endswith("}hi"):
             if target.text is None:
                 target.text = text
             else:
                 target.text += text
             return
 
+        # Texte brut vers l'élément parent.
         if last_node is None:
+            # Rien encore écrit : va dans parent.text.
             if target.text is None:
                 target.text = text
             else:
                 target.text += text
+        elif target is last_node:
+            # Deux runs bruts consécutifs : last_node == parent.
+            # Si l'élément a déjà des enfants, le texte doit aller dans la
+            # queue (tail) du dernier enfant — pas dans parent.text qui
+            # s'affiche avant tous les enfants en XML.
+            children = list(target)
+            if children:
+                last_child = children[-1]
+                if last_child.tail is None:
+                    last_child.tail = text
+                else:
+                    last_child.tail += text
+            else:
+                if target.text is None:
+                    target.text = text
+                else:
+                    target.text += text
         else:
+            # Texte brut après un élément de style : va dans sa queue (tail).
             if last_node.tail is None:
                 last_node.tail = text
             else:
