@@ -138,10 +138,10 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
 
     def test_default_thresholds(self) -> None:
         settings = HeuristicSettings()
-        self.assertEqual(settings.poetry_transform_threshold, 0.90)
-        self.assertEqual(settings.poetry_diagnostic_threshold, 0.65)
-        self.assertEqual(settings.poetry_ai_min_score, 0.65)
-        self.assertEqual(settings.poetry_ai_max_score, 0.90)
+        self.assertEqual(settings.poetry_transform_threshold, 0.82)
+        self.assertEqual(settings.poetry_diagnostic_threshold, 0.60)
+        self.assertEqual(settings.poetry_ai_min_score, 0.60)
+        self.assertEqual(settings.poetry_ai_max_score, 0.82)
         self.assertFalse(settings.allow_ai_for_poetry_candidates)
 
     def test_ai_candidate_is_true_only_in_grey_zone_without_ai_call(self) -> None:

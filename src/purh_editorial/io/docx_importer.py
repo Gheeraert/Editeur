@@ -52,6 +52,7 @@ class DocxImporter(DocumentImporter):
         block_index = 1
         note_call_map: dict[str, list[str]] = {}
         table_count = 0
+        last_was_blank = False
 
         body = document_root.find(".//w:body", NS_WORD)
         if body is None:
@@ -77,6 +78,7 @@ class DocxImporter(DocumentImporter):
                     )
                 )
                 block_index += 1
+                last_was_blank = False
                 continue
             if child_name != "p":
                 continue
@@ -90,6 +92,7 @@ class DocxImporter(DocumentImporter):
             )
             text = "".join(span.text for span in inlines)
             if not text.strip() and not note_refs:
+                last_was_blank = True
                 continue
 
             style_id = self._paragraph_style(paragraph)
@@ -104,6 +107,9 @@ class DocxImporter(DocumentImporter):
                 style_name=style_name,
                 visual=para_visual,
             )
+            if last_was_blank:
+                block.attributes["blank_para_before"] = True
+            last_was_blank = False
             blocks.append(block)
             for note_ref in note_refs:
                 note_call_map.setdefault(note_ref, []).append(block.block_id)

@@ -106,10 +106,10 @@ _PROFILE_ALIASES = {
 @dataclass(slots=True)
 class HeuristicSettings:
     enable_scored_heuristics: bool = True
-    poetry_transform_threshold: float = 0.90
-    poetry_diagnostic_threshold: float = 0.65
-    poetry_ai_min_score: float = 0.65
-    poetry_ai_max_score: float = 0.90
+    poetry_transform_threshold: float = 0.82
+    poetry_diagnostic_threshold: float = 0.60
+    poetry_ai_min_score: float = 0.60
+    poetry_ai_max_score: float = 0.82
     allow_ai_for_poetry_candidates: bool = False
     heading_transform_threshold: float = 0.85
     heading_diagnostic_threshold: float = 0.60
@@ -136,9 +136,9 @@ def settings_for_heuristic_profile(
         normalized = "conservative"
 
     profile_values = {
-        "conservative": (0.90, 0.70, 0.92, 0.70),
-        "balanced": (0.85, 0.60, 0.90, 0.65),
-        "exploratory": (0.75, 0.50, 0.80, 0.55),
+        "conservative": (0.90, 0.70, 0.82, 0.60),
+        "balanced":     (0.85, 0.60, 0.78, 0.55),
+        "exploratory":  (0.75, 0.50, 0.72, 0.48),
     }
     h_t, h_d, p_t, p_d = profile_values[normalized]
 
@@ -245,6 +245,7 @@ class StructurePreparationService:
         if use_heuristics:
             poetry_decisions = self.analyze_poetry_candidates(document)
             transformations.extend(self._annotate_poetry_sequences(document, poetry_decisions))
+            transformations.extend(self._merge_poetry_by_group(document, poetry_decisions))
 
             # Zone grise ou transformation : dans les deux cas,
             # les lignes poétiques doivent neutraliser la promotion en titre.
@@ -673,6 +674,62 @@ class StructurePreparationService:
                 )
         return transformations
 
+    def _merge_poetry_by_group(
+        self,
+        document: Document,
+        poetry_decisions: list[HeuristicDecision],
+    ) -> list[Transformation]:
+        """Fusionne les vers d'une même strophe en un seul bloc (texte séparé par \\n)."""
+        transformations: list[Transformation] = []
+        blocks_by_id = {block.block_id: block for block in document.blocks}
+        consumed_ids: set[str] = set()
+
+        for decision in poetry_decisions:
+            if decision.veto_reasons:
+                continue
+            if decision.decision != "transform":
+                continue
+            target_ids = decision.target_refs
+            if len(target_ids) < 2:
+                continue
+
+            first_block = blocks_by_id.get(target_ids[0])
+            if first_block is None:
+                continue
+
+            lines = [
+                blocks_by_id[bid].text.strip()
+                for bid in target_ids
+                if bid in blocks_by_id and blocks_by_id[bid].text.strip()
+            ]
+            first_block.text = "\n".join(lines)
+            first_block.inlines = []
+            first_block.attributes["merged_from"] = target_ids
+            if first_block.block_type not in {"quote_block"}:
+                first_block.block_type = "quote_block"
+            first_block.attributes.setdefault("quote_kind", "poetry")
+            first_block.attributes.setdefault("protected_zone", "poetry")
+
+            for bid in target_ids[1:]:
+                consumed_ids.add(bid)
+
+            transformations.append(
+                self._make_tr(
+                    first_block.block_id,
+                    "paragraph",
+                    "quote_block",
+                    "structure.poetry.stanza.merge",
+                    attributes={"merged_from": target_ids, "score": decision.score},
+                )
+            )
+
+        if consumed_ids:
+            document.blocks = [
+                b for b in document.blocks if b.block_id not in consumed_ids
+            ]
+
+        return transformations
+
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
         decisions: list[HeuristicDecision] = []
@@ -760,11 +817,14 @@ class StructurePreparationService:
         current: list = []
 
         for block in document.blocks:
-            # Un titre (heading) brise toujours la séquence
             text = block.text.strip()
+            word_count = len(text.split()) if text else 0
+            # Un bloc trop long est de la prose, pas un vers.
+            # Un titre brise toujours la séquence.
             is_candidate = (
                 block.block_type == "paragraph"
                 and text
+                and word_count <= 16
                 and not cls._looks_like_list_item(text)
             )
             if not is_candidate:
@@ -774,18 +834,27 @@ class StructurePreparationService:
                 current.clear()
                 continue
 
-            # Rupture de strophe : écart vertical significatif entre blocs
+            # Rupture de strophe : paragraphe vide dans le source DOCX
+            # ou écart vertical explicite entre blocs
+            blank_before = bool(block.attributes.get("blank_para_before"))
             if current:
                 prev_after  = current[-1].attributes.get("space_after",  0) or 0
                 curr_before = block.attributes.get("space_before", 0) or 0
-                if max(prev_after, curr_before) > _POETRY_STANZA_SPACE_THRESHOLD:
+                stanza_break = (
+                    blank_before
+                    or max(prev_after, curr_before) > _POETRY_STANZA_SPACE_THRESHOLD
+                )
+                if stanza_break:
                     normalized = cls._normalize_poetry_sequence(current)
                     if 3 <= len(normalized) <= _POETRY_SEQUENCE_MAX_LINES:
                         sequences.append(normalized)
                     current.clear()
 
-            # Dépassement de taille : la séquence est trop longue pour être de la poésie
+            # Dépassement de taille : sauvegarder ce qui est valide avant d'effacer
             if len(current) >= _POETRY_SEQUENCE_MAX_LINES:
+                normalized = cls._normalize_poetry_sequence(current)
+                if 3 <= len(normalized) <= _POETRY_SEQUENCE_MAX_LINES:
+                    sequences.append(normalized)
                 current.clear()
 
             current.append(block)
