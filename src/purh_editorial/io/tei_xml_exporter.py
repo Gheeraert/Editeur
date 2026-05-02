@@ -51,8 +51,15 @@ class TeiXmlExporter:
                     quote_el = ET.SubElement(cit_el, self._q("quote"))
                     active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
                     active_poetry_group_id = poetry_group_id
-                l_el = ET.SubElement(active_poetry_lg, self._q("l"))
-                self._append_block_content(l_el, block.text, block.inlines, note_by_id)
+                # Bloc fusionné : le texte contient plusieurs vers séparés par \n
+                if not block.inlines and "\n" in block.text:
+                    for verse_line in block.text.split("\n"):
+                        if verse_line.strip():
+                            l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                            l_el.text = verse_line.strip()
+                else:
+                    l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                    self._append_block_content(l_el, block.text, block.inlines, note_by_id)
             elif block.block_type == "quote_block":
                 parent = section_stack[-1] if section_stack else body_el
                 cit_el = ET.SubElement(parent, self._q("cit"))

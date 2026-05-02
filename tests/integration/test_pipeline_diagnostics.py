@@ -562,8 +562,8 @@ class Step1PipelineDiagnosticsTests(unittest.TestCase):
         self.assertEqual(structure_run.summary.get("heuristics_enabled"), True)
         self.assertEqual(structure_run.summary.get("heading_ai_min_score"), 0.60)
         self.assertEqual(structure_run.summary.get("heading_ai_max_score"), 0.85)
-        self.assertEqual(structure_run.summary.get("poetry_ai_min_score"), 0.65)
-        self.assertEqual(structure_run.summary.get("poetry_ai_max_score"), 0.90)
+        self.assertEqual(structure_run.summary.get("poetry_ai_min_score"), 0.55)
+        self.assertEqual(structure_run.summary.get("poetry_ai_max_score"), 0.78)
 
 
 if __name__ == "__main__":

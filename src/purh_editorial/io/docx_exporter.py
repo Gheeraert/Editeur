@@ -108,6 +108,14 @@ def _dotm_to_docx_bytes(dotm_path: Path) -> io.BytesIO:
 
 # ── Helpers python-docx ───────────────────────────────────────────────────────
 
+def _add_line_break(paragraph) -> None:
+    """Insère un saut de ligne manuel (Shift+Entrée) dans un paragraphe Word."""
+    r = OxmlElement("w:r")
+    br = OxmlElement("w:br")
+    r.append(br)
+    paragraph._p.append(r)
+
+
 def _add_footnote_reference(paragraph, footnote_id: int) -> None:
     """Insère un appel de note (renvoi superscript) dans un paragraphe."""
     r = OxmlElement("w:r")
@@ -217,12 +225,25 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        _add_run_with_style(
-            para,
-            block.text,
-            highlight=hl,
-            font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
-        )
+        if is_poetry_quote and "\n" in block.text:
+            # Strophe fusionnée : insérer un <w:br> entre chaque vers
+            lines = [ln for ln in block.text.split("\n") if ln.strip()]
+            for i, line in enumerate(lines):
+                if i > 0:
+                    _add_line_break(para)
+                _add_run_with_style(
+                    para,
+                    line.strip(),
+                    highlight=hl,
+                    font_size_pt=_QUOTE_FONT_SIZE_PT,
+                )
+        else:
+            _add_run_with_style(
+                para,
+                block.text,
+                highlight=hl,
+                font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
+            )
 
 
 def _insert_body_element(doc: DocxDoc, element) -> None:

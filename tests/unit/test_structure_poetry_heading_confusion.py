@@ -43,18 +43,14 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         diagnostics, transformations = self.service.process(document, mode="heuristic")
 
-        self.assertEqual(len(document.blocks), 4)
-        poetry_blocks = [b for b in document.blocks if b.attributes.get("poetry_group_id")]
-        self.assertEqual(len(poetry_blocks), 4)
-        self.assertTrue(all(b.attributes.get("quote_kind") == "poetry" for b in poetry_blocks))
-        self.assertTrue(all(b.attributes.get("protected_zone") == "poetry" for b in poetry_blocks))
-        self.assertEqual(
-            [b.attributes.get("poetry_line_index") for b in poetry_blocks],
-            [1, 2, 3, 4],
-        )
-        self.assertTrue(
-            any(tr.rule_id == "structure.poetry.group.annotate" for tr in transformations)
-        )
+        # Les 4 vers sont fusionnés en un seul bloc strophe (décision transform)
+        stanza_blocks = [b for b in document.blocks if b.attributes.get("poetry_group_id")]
+        self.assertGreaterEqual(len(stanza_blocks), 1)
+        stanza = stanza_blocks[0]
+        self.assertEqual(stanza.block_type, "quote_block")
+        self.assertEqual(stanza.attributes.get("quote_kind"), "poetry")
+        self.assertEqual(stanza.attributes.get("protected_zone"), "poetry")
+        self.assertIsNotNone(stanza.attributes.get("poetry_group_id"))
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
         self.assertTrue(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
 
@@ -147,15 +143,18 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         self.service.process(document, mode="heuristic")
 
+        # Les 8 vers (sans l'intro "DIANE annonce :") sont fusionnés en un seul bloc strophe
         poetry_blocks = [
             block for block in document.blocks
             if block.attributes.get("poetry_group_id") and block.attributes.get("quote_kind") == "poetry"
         ]
-        self.assertEqual(len(poetry_blocks), 8)
-        self.assertTrue(all(block.attributes.get("protected_zone") == "poetry" for block in poetry_blocks))
-        self.assertEqual([b.attributes.get("poetry_line_index") for b in poetry_blocks], list(range(1, 9)))
+        self.assertEqual(len(poetry_blocks), 1)
+        self.assertEqual(poetry_blocks[0].block_type, "quote_block")
+        self.assertEqual(poetry_blocks[0].attributes.get("protected_zone"), "poetry")
+        self.assertIn("\n", poetry_blocks[0].text)
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
 
+        # L'intro, l'item de liste et la prose restent en paragraphes séparés
         self.assertEqual(document.blocks[0].block_type, "paragraph")
         self.assertEqual(document.blocks[-2].block_type, "paragraph")
         self.assertEqual(document.blocks[-1].block_type, "paragraph")

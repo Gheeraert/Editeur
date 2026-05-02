@@ -110,6 +110,9 @@ class MetopesMapper:
             return METOPES_STYLES.get(f"heading_{level}", "Heading 1")
 
         if btype == "quote_block":
+            quote_kind = str(block.attributes.get("quote_kind", "")).lower()
+            if quote_kind == "poetry":
+                return METOPES_STYLES["verse"]
             return METOPES_STYLES["quote_block"]
 
         if btype == "bibliography_item":
