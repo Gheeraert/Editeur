@@ -300,6 +300,103 @@ class StructureAiArbitratorTests(unittest.TestCase):
         self.assertEqual(balanced_calls, 6)
         self.assertEqual(aggressive_calls, 6)
 
+    def test_apply_cluster_transforms_poetry_quote_blocks(self) -> None:
+        document = Document(
+            document_id="doc-cluster-poetry",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Paragraph(block_id="p1", text="Ligne une"),
+                Paragraph(block_id="p2", text="Ligne deux"),
+                Paragraph(block_id="p3", text="Ligne trois"),
+            ],
+        )
+        cluster_diag = Diagnostic(
+            diagnostic_id="diag_cluster_poetry",
+            module="structure_ai_arbitration",
+            severity="info",
+            category="paragraph_cluster_candidate",
+            message="cluster",
+            target_ref="p1",
+            rule_id="R-STRUCT-CLUSTER-001",
+            evidence=Evidence(excerpt="Ligne une\nLigne deux\nLigne trois"),
+            attributes={
+                "classification": "poetry_quote",
+                "recommended_action": "transform",
+                "confidence": 0.93,
+                "reason": "vers courts homogènes",
+                "block_ids": ["p1", "p2", "p3"],
+            },
+        )
+        arbitrator = StructureAiArbitrator(provider=None)
+
+        transformations, diagnostics, summary = arbitrator.apply_cluster_transformations(
+            document=document,
+            diagnostics=[cluster_diag],
+            enable_ai_transform=True,
+            confidence_threshold=0.85,
+        )
+
+        self.assertEqual(summary["candidates"], 1)
+        self.assertEqual(summary["applied"], 1)
+        self.assertEqual(summary["refused"], 0)
+        self.assertEqual(len(transformations), 3)
+        for block in document.blocks:
+            self.assertEqual(block.block_type, "quote_block")
+            self.assertEqual(block.attributes.get("quote_kind"), "poetry")
+            self.assertEqual(block.attributes.get("highlight_color"), "ai_structure")
+        self.assertTrue(any(d.attributes.get("status") == "applied" for d in diagnostics))
+
+    def test_apply_cluster_refuses_list_item_without_block_type_change(self) -> None:
+        document = Document(
+            document_id="doc-cluster-list",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                Paragraph(block_id="p1", text="Item A"),
+                Paragraph(block_id="p2", text="Item B"),
+                Paragraph(block_id="p3", text="Item C"),
+            ],
+        )
+        cluster_diag = Diagnostic(
+            diagnostic_id="diag_cluster_list",
+            module="structure_ai_arbitration",
+            severity="info",
+            category="paragraph_cluster_candidate",
+            message="cluster",
+            target_ref="p1",
+            rule_id="R-STRUCT-CLUSTER-001",
+            evidence=Evidence(excerpt="Item A\nItem B\nItem C"),
+            attributes={
+                "classification": "list_item",
+                "recommended_action": "transform",
+                "confidence": 0.94,
+                "reason": "items parallèles",
+                "block_ids": ["p1", "p2", "p3"],
+            },
+        )
+        arbitrator = StructureAiArbitrator(provider=None)
+
+        transformations, diagnostics, summary = arbitrator.apply_cluster_transformations(
+            document=document,
+            diagnostics=[cluster_diag],
+            enable_ai_transform=True,
+            confidence_threshold=0.85,
+        )
+
+        self.assertEqual(summary["candidates"], 1)
+        self.assertEqual(summary["applied"], 0)
+        self.assertEqual(summary["refused"], 1)
+        self.assertEqual(summary["refusal_reasons"].get("list_not_supported"), 1)
+        self.assertEqual(len(transformations), 0)
+        self.assertTrue(
+            any(
+                d.message == "transformation refusée : type liste non encore supporté par cette passe"
+                for d in diagnostics
+            )
+        )
+        self.assertTrue(all(block.block_type == "paragraph" for block in document.blocks))
+
 
 if __name__ == "__main__":
     unittest.main()

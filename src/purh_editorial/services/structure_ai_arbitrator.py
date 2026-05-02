@@ -6,7 +6,7 @@ import urllib.request
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from purh_editorial.model import Diagnostic, Document, Evidence
+from purh_editorial.model import Diagnostic, Document, Evidence, Transformation
 from purh_editorial.utils import make_id
 
 # ── Prompt système PURH — contexte éditorial riche ───────────────────────────
@@ -80,6 +80,8 @@ _ARBITRATION_RULE_ID = "R-STRUCT-AI-LOCAL-001"
 _ARBITRATION_CATEGORY = "structure_ai_arbitration"
 _CLUSTER_RULE_ID = "R-STRUCT-CLUSTER-001"
 _CLUSTER_CATEGORY = "paragraph_cluster_candidate"
+_APPLY_RULE_ID = "R-STRUCT-AI-APPLY-001"
+_APPLY_CATEGORY = "structure_ai_apply"
 
 # Rule IDs that are eligible for individual block arbitration.
 _ARBITRATED_RULE_IDS = {"R-STRUCT-HEADING-001", "R-CI-POETRY-001", "structure.bibliography.heuristic"}
@@ -542,6 +544,204 @@ class StructureAiArbitrator:
             )
 
         return results, warnings, calls
+
+    def apply_cluster_transformations(
+        self,
+        *,
+        document: Document,
+        diagnostics: list[Diagnostic],
+        enable_ai_transform: bool,
+        confidence_threshold: float | None = None,
+    ) -> tuple[list[Transformation], list[Diagnostic], dict[str, Any]]:
+        """Apply a minimal set of structural AI actions from cluster diagnostics.
+
+        First pass scope:
+        - apply only poetry_quote clusters when action=transform and confidence >= threshold
+        - refuse list_item transformations with a traceable diagnostic
+        """
+        summary: dict[str, Any] = {
+            "candidates": 0,
+            "applied": 0,
+            "refused": 0,
+            "refusal_reasons": {},
+        }
+        if not enable_ai_transform:
+            return [], [], summary
+
+        threshold = (
+            self.settings.confidence_threshold
+            if confidence_threshold is None
+            else float(confidence_threshold)
+        )
+        transformations: list[Transformation] = []
+        out_diags: list[Diagnostic] = []
+        blocks_by_id = {block.block_id: block for block in document.blocks}
+
+        def _refuse(target_ref: str, message: str, reason_code: str, attrs: dict[str, Any]) -> None:
+            summary["refused"] += 1
+            reasons = summary["refusal_reasons"]
+            reasons[reason_code] = int(reasons.get(reason_code, 0)) + 1
+            out_diags.append(
+                Diagnostic(
+                    diagnostic_id=make_id("diag"),
+                    module=self.module_name,
+                    severity="info",
+                    category=_APPLY_CATEGORY,
+                    message=message,
+                    target_ref=target_ref,
+                    rule_id=_APPLY_RULE_ID,
+                    evidence=Evidence(excerpt=str(attrs.get("excerpt", ""))[:240]),
+                    attributes={
+                        "status": "refused",
+                        "reason_code": reason_code,
+                        **attrs,
+                    },
+                )
+            )
+
+        for diagnostic in diagnostics:
+            if diagnostic.rule_id != _CLUSTER_RULE_ID or diagnostic.category != _CLUSTER_CATEGORY:
+                continue
+            attrs = diagnostic.attributes or {}
+            classification = str(attrs.get("classification", "")).strip()
+            recommended_action = str(attrs.get("recommended_action", "")).strip()
+            reason = str(attrs.get("reason", "")).strip()
+            try:
+                confidence = float(attrs.get("confidence", 0.0))
+            except (TypeError, ValueError):
+                confidence = 0.0
+            block_ids_raw = attrs.get("block_ids", [])
+            block_ids = [str(ref) for ref in block_ids_raw if ref] if isinstance(block_ids_raw, list) else []
+            target_ref = block_ids[0] if block_ids else (diagnostic.target_ref or "")
+            cluster_attrs = {
+                "classification": classification,
+                "recommended_action": recommended_action,
+                "confidence": confidence,
+                "confidence_threshold": threshold,
+                "reason": reason,
+                "block_ids": block_ids,
+                "excerpt": attrs.get("excerpt", diagnostic.evidence.excerpt if diagnostic.evidence else ""),
+            }
+
+            if classification not in {"poetry_quote", "list_item"}:
+                continue
+            summary["candidates"] += 1
+
+            if classification == "list_item":
+                _refuse(
+                    target_ref,
+                    "transformation refusée : type liste non encore supporté par cette passe",
+                    "list_not_supported",
+                    cluster_attrs,
+                )
+                continue
+
+            if recommended_action != "transform":
+                _refuse(
+                    target_ref,
+                    "Transformation refusée : action IA non transformante.",
+                    "action_not_transform",
+                    cluster_attrs,
+                )
+                continue
+            if confidence < threshold:
+                _refuse(
+                    target_ref,
+                    "Transformation refusée : confiance IA sous le seuil configuré.",
+                    "confidence_below_threshold",
+                    cluster_attrs,
+                )
+                continue
+            if not block_ids:
+                _refuse(
+                    target_ref,
+                    "Transformation refusée : cluster sans cibles exploitables.",
+                    "missing_targets",
+                    cluster_attrs,
+                )
+                continue
+
+            blocked_reason: str | None = None
+            for block_id in block_ids:
+                block = blocks_by_id.get(block_id)
+                if block is None:
+                    blocked_reason = "missing_block"
+                    break
+                if block.block_type != "paragraph":
+                    blocked_reason = "block_type_not_supported"
+                    break
+                protected_zone = str(block.attributes.get("protected_zone", "")).strip().lower()
+                if protected_zone and protected_zone != "poetry":
+                    blocked_reason = "protected_zone_veto"
+                    break
+
+            if blocked_reason is not None:
+                _refuse(
+                    target_ref,
+                    "Transformation refusée : veto ou contraintes structurelles.",
+                    blocked_reason,
+                    cluster_attrs,
+                )
+                continue
+
+            applied_block_ids: list[str] = []
+            for block_id in block_ids:
+                block = blocks_by_id[block_id]
+                before = block.block_type
+                block.block_type = "quote_block"
+                block.attributes["quote_kind"] = "poetry"
+                block.attributes["protected_zone"] = "poetry"
+                block.attributes["highlight_color"] = "ai_structure"
+                block.attributes["ai_structure_confidence"] = confidence
+                block.attributes["ai_structure_reason"] = reason
+                block.attributes["ai_structure_source_rule"] = _CLUSTER_RULE_ID
+                transformations.append(
+                    Transformation(
+                        transformation_id=make_id("tr"),
+                        module=self.module_name,
+                        target_ref=block.block_id,
+                        operation="ai_structure_transform",
+                        before=before,
+                        after="quote_block",
+                        rule_id=_APPLY_RULE_ID,
+                        applied=True,
+                        attributes={
+                            "classification": classification,
+                            "recommended_action": recommended_action,
+                            "confidence": confidence,
+                            "confidence_threshold": threshold,
+                            "quote_kind": "poetry",
+                            "reason": reason,
+                            "source_rule_id": _CLUSTER_RULE_ID,
+                        },
+                    )
+                )
+                applied_block_ids.append(block.block_id)
+
+            summary["applied"] += 1
+            out_diags.append(
+                Diagnostic(
+                    diagnostic_id=make_id("diag"),
+                    module=self.module_name,
+                    severity="info",
+                    category=_APPLY_CATEGORY,
+                    message="Transformation IA structurelle appliquée : cluster versifié.",
+                    target_ref=target_ref,
+                    rule_id=_APPLY_RULE_ID,
+                    evidence=Evidence(excerpt=str(cluster_attrs["excerpt"])[:240]),
+                    attributes={
+                        "status": "applied",
+                        "classification": classification,
+                        "recommended_action": recommended_action,
+                        "confidence": confidence,
+                        "confidence_threshold": threshold,
+                        "block_ids": applied_block_ids,
+                        "reason": reason,
+                    },
+                )
+            )
+
+        return transformations, out_diags, summary
 
     @staticmethod
     def _candidate_from_diagnostic(

@@ -362,6 +362,37 @@ class Step1Pipeline:
             },
         ))
 
+        # ── 3d. Application IA structurelle (clusters) ──────────────────────
+        t0 = utc_now_iso()
+        cluster_tr, cluster_apply_diags, cluster_apply_summary = self.structure_ai.apply_cluster_transformations(
+            document=document,
+            diagnostics=cluster_diags,
+            enable_ai_transform=ai_local_enabled,
+            confidence_threshold=structure_ai_settings.confidence_threshold,
+        )
+        report.transformations.extend(cluster_tr)
+        report.diagnostics.extend(cluster_apply_diags)
+        provider_obj = self.structure_ai.provider
+        provider_name = type(provider_obj).__name__ if provider_obj is not None else None
+        provider_model = getattr(provider_obj, "model", None) if provider_obj is not None else None
+        report.add_module_run(ModuleRun(
+            module_name="structure_ai_apply",
+            version=self.version,
+            started_at=t0,
+            finished_at=utc_now_iso(),
+            status="success",
+            summary={
+                "enabled": ai_local_enabled,
+                "provider": provider_name,
+                "model": provider_model,
+                "confidence_threshold": structure_ai_settings.confidence_threshold,
+                "candidates": int(cluster_apply_summary.get("candidates", 0)),
+                "applied": int(cluster_apply_summary.get("applied", 0)),
+                "refused": int(cluster_apply_summary.get("refused", 0)),
+                "refusal_reasons": cluster_apply_summary.get("refusal_reasons", {}),
+            },
+        ))
+
         # ── 4. Normalisation des notes de bas de page ─────────────────────────
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
