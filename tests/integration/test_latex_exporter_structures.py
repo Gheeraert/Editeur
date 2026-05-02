@@ -30,6 +30,29 @@ class LatexExporterStructuresTests(unittest.TestCase):
         self.assertIn(r"\textit{", tex)
         self.assertTrue(r"\section*{Bibliographie}" in tex or "Bibliographie" in tex)
 
+    def test_export_tei_table_as_longtable_without_paragraph_explosion(self) -> None:
+        input_xml = ROOT / "tests" / "fixtures" / "tei_latex_table.xml"
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        output_tex = runtime_dir / f"latex_table_{uuid.uuid4().hex}.tex"
+
+        export_tei_to_latex(input_xml, output_tex)
+        tex = output_tex.read_text(encoding="utf-8")
+
+        self.assertIn(r"\usepackage{longtable}", tex)
+        self.assertIn(r"\begin{longtable}", tex)
+        self.assertIn(r"\end{longtable}", tex)
+        self.assertIn("% table_exported_to_latex rows=2 cols=2", tex)
+        self.assertIn("Avant tableau.", tex)
+        self.assertIn("Après tableau.", tex)
+        self.assertLess(tex.index("Avant tableau."), tex.index(r"\begin{longtable}"))
+        self.assertLess(tex.index(r"\end{longtable}"), tex.index("Après tableau."))
+        self.assertIn("VIII, Pr., \\textit{p. 390} \\& accolade", tex)
+        self.assertIn("VIII, Pr., \\textbf{18}\\footnote{Note cellule}", tex)
+        self.assertIn("\\textsuperscript{2} Il me faut en effet aller...", tex)
+        self.assertIn(" & ", tex)
+        self.assertIn(r"\\", tex)
+
 
 if __name__ == "__main__":
     unittest.main()

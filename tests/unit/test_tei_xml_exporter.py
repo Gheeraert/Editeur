@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.tei_xml_exporter import TEI_NS, TeiXmlExporter
-from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
+from purh_editorial.model import Block, Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
 
 XML_NS = "http://www.w3.org/XML/1998/namespace"
 
@@ -329,6 +329,109 @@ class TeiXmlExporterTests(unittest.TestCase):
         self.assertEqual(children[0].tag, _q("p"))
         self.assertEqual(children[0].text, "Avant titre")
         self.assertEqual(children[1].tag, _q("div"))
+
+    def test_export_table_between_paragraphs_preserves_order(self) -> None:
+        table_ooxml = (
+            '<w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+            "<w:tr>"
+            "<w:tc><w:p><w:r><w:t>A1</w:t></w:r></w:p></w:tc>"
+            "<w:tc><w:p><w:r><w:t>B1</w:t></w:r></w:p></w:tc>"
+            "</w:tr>"
+            "</w:tbl>"
+        )
+        document = Document(
+            document_id="doc_table_order",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(block_id="p1", text="avant"),
+                Block(
+                    block_id="t1",
+                    block_type="table",
+                    attributes={"table_ooxml": table_ooxml, "protected_zone": "table"},
+                ),
+                Paragraph(block_id="p2", text="apres"),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        self.assertIsNotNone(body)
+        children = list(body)
+        self.assertEqual(children[0].tag, _q("p"))
+        self.assertEqual(children[0].text, "avant")
+        self.assertEqual(children[1].tag, _q("table"))
+        self.assertEqual(children[2].tag, _q("p"))
+        self.assertEqual(children[2].text, "apres")
+
+    def test_export_table_2x2_to_tei_rows_and_cells(self) -> None:
+        table_ooxml = (
+            '<w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+            "<w:tr>"
+            "<w:tc><w:p><w:r><w:t>c11</w:t></w:r></w:p></w:tc>"
+            "<w:tc><w:p><w:r><w:t>c12</w:t></w:r></w:p></w:tc>"
+            "</w:tr>"
+            "<w:tr>"
+            "<w:tc><w:p><w:r><w:t>c21</w:t></w:r></w:p></w:tc>"
+            "<w:tc><w:p><w:r><w:t>c22</w:t></w:r></w:p></w:tc>"
+            "</w:tr>"
+            "</w:tbl>"
+        )
+        document = Document(
+            document_id="doc_table_2x2",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[Block(block_id="t1", block_type="table", attributes={"table_ooxml": table_ooxml})],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        table = root.find(f"./{_q('text')}/{_q('body')}/{_q('table')}")
+        self.assertIsNotNone(table)
+        rows = table.findall(_q("row"))
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows[0].findall(_q("cell"))), 2)
+        self.assertEqual(len(rows[1].findall(_q("cell"))), 2)
+        self.assertEqual(rows[0].findall(_q("cell"))[0].text, "c11")
+        self.assertEqual(rows[0].findall(_q("cell"))[1].text, "c12")
+        self.assertEqual(rows[1].findall(_q("cell"))[0].text, "c21")
+        self.assertEqual(rows[1].findall(_q("cell"))[1].text, "c22")
+
+    def test_export_table_records_success_diagnostic(self) -> None:
+        table_ooxml = (
+            '<w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+            "<w:tr><w:tc><w:p><w:r><w:t>x</w:t></w:r></w:p></w:tc></w:tr>"
+            "</w:tbl>"
+        )
+        document = Document(
+            document_id="doc_table_diag",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[Block(block_id="t1", block_type="table", attributes={"table_ooxml": table_ooxml})],
+        )
+        self.exporter.export_document(document)
+        diags = document.annotations.get("tei_table_diagnostics", [])
+        self.assertEqual(len(diags), 1)
+        self.assertEqual(diags[0].get("code"), "table_exported_to_tei")
+        self.assertEqual(diags[0].get("rows"), 1)
+        self.assertEqual(diags[0].get("cells"), 1)
+
+    def test_export_table_never_silent_when_missing_ooxml(self) -> None:
+        document = Document(
+            document_id="doc_table_missing",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[Block(block_id="t1", block_type="table", attributes={})],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        self.assertIsNotNone(body)
+        p = body.find(_q("p"))
+        self.assertIsNotNone(p)
+        self.assertIn("Table not exported", p.text or "")
+        diags = document.annotations.get("tei_table_diagnostics", [])
+        self.assertEqual(len(diags), 1)
+        self.assertEqual(diags[0].get("code"), "table_not_exported_to_tei")
 
 
 if __name__ == "__main__":

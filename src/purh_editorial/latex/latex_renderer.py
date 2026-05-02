@@ -16,6 +16,8 @@ from purh_editorial.latex.semantic_model import (
     SmallCaps,
     Subscript,
     Superscript,
+    TableBlock,
+    TableCell,
     TextRun,
     VerseBlock,
 )
@@ -35,6 +37,8 @@ class LatexRenderer:
             r"\usepackage{csquotes}",
             r"\usepackage{hyperref}",
             r"\usepackage{verse}",
+            r"\usepackage{longtable}",
+            r"\usepackage{array}",
             r"\setstocksize{230mm}{155mm}",
             r"\settrimmedsize{\stockheight}{\stockwidth}{*}",
             r"\setlrmarginsandblock{23mm}{22mm}{*}",
@@ -96,7 +100,45 @@ class LatexRenderer:
             for item in block.items:
                 lines.append(rf"\noindent {self._render_inline_nodes(item.content)}\par")
             return "\n".join(lines)
+        if isinstance(block, TableBlock):
+            return self._render_table_block(block)
         return ""
+
+    def _render_table_block(self, table: TableBlock) -> str:
+        if table.export_comment:
+            return f"% {table.export_comment}"
+
+        row_count = len(table.rows)
+        col_count = max((len(row.cells) for row in table.rows), default=0)
+        if row_count == 0 or col_count == 0:
+            return "% table_export_fallback empty_table"
+
+        if col_count > 8:
+            return f"% table_export_fallback too_many_columns rows={row_count} cols={col_count}"
+
+        col_width = 0.92 / col_count
+        col_spec = " ".join([rf"p{{{col_width:.2f}\textwidth}}"] * col_count)
+        lines = [
+            f"% table_exported_to_latex rows={row_count} cols={col_count}",
+            rf"\begin{{longtable}}{{{col_spec}}}",
+        ]
+        for row in table.rows:
+            rendered_cells: list[str] = []
+            for cell in row.cells:
+                rendered_cells.append(self._render_table_cell(cell))
+            if len(rendered_cells) < col_count:
+                rendered_cells.extend([""] * (col_count - len(rendered_cells)))
+            lines.append(" & ".join(rendered_cells) + r" \\")
+        lines.append(r"\end{longtable}")
+        return "\n".join(lines)
+
+    def _render_table_cell(self, cell: TableCell) -> str:
+        parts: list[str] = []
+        for paragraph in cell.paragraphs:
+            rendered = self._render_paragraph(paragraph).strip()
+            if rendered:
+                parts.append(rendered)
+        return r" \par ".join(parts)
 
     def _render_inline_nodes(self, nodes: list[InlineNode]) -> str:
         return "".join(self._render_inline_node(node) for node in nodes)

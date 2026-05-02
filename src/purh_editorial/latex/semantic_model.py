@@ -84,7 +84,23 @@ class BibliographyBlock:
     items: list[BibliographyItem] = field(default_factory=list)
 
 
-BlockNode: TypeAlias = Paragraph | QuoteBlock | VerseBlock | ListBlock | BibliographyBlock
+@dataclass(slots=True)
+class TableCell:
+    paragraphs: list[Paragraph] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class TableRow:
+    cells: list[TableCell] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class TableBlock:
+    rows: list[TableRow] = field(default_factory=list)
+    export_comment: str | None = None
+
+
+BlockNode: TypeAlias = Paragraph | QuoteBlock | VerseBlock | ListBlock | BibliographyBlock | TableBlock
 
 
 class DivisionKind(str, Enum):
