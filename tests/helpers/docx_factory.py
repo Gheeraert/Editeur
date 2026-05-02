@@ -66,3 +66,46 @@ def create_rich_docx(path: Path) -> Path:
         archive.writestr("word/styles.xml", STYLES_XML)
         archive.writestr("docProps/core.xml", CORE_XML)
     return path
+
+
+TABLE_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Avant tableau</w:t></w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblW w:w="0" w:type="auto"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4000"/>
+        <w:gridCol w:w="4000"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:p><w:r><w:t>VIII,Pr.,</w:t></w:r></w:p>
+        </w:tc>
+        <w:tc>
+          <w:p><w:r><w:t>VIII;Pr.,18</w:t></w:r></w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Après tableau</w:t></w:r>
+    </w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+
+def create_table_docx(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", TABLE_DOC_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path

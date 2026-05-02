@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io import ImporterRegistry
-from tests.helpers.docx_factory import create_rich_docx
+from tests.helpers.docx_factory import create_rich_docx, create_table_docx
 
 
 class RichDocxImporterTests(unittest.TestCase):
@@ -79,6 +79,23 @@ class RichDocxImporterTests(unittest.TestCase):
         self.assertTrue(note_sub.style.subscript)
         self.assertIsNotNone(note_super)
         self.assertTrue(note_super.style.superscript)
+
+    def test_import_docx_preserves_table_as_protected_block(self) -> None:
+        docx_path = self._runtime_docx_path()
+        create_table_docx(docx_path)
+        document = ImporterRegistry().load_document(docx_path)
+
+        self.assertEqual(len(document.blocks), 3)
+        self.assertEqual(document.blocks[0].block_type, "paragraph")
+        self.assertEqual(document.blocks[0].text.strip(), "Avant tableau")
+        self.assertEqual(document.blocks[1].block_type, "table")
+        self.assertEqual(document.blocks[1].attributes.get("protected_zone"), "table")
+        self.assertIn("<", document.blocks[1].attributes.get("table_ooxml", ""))
+        self.assertEqual(document.blocks[2].block_type, "paragraph")
+        self.assertEqual(document.blocks[2].text.strip(), "Après tableau")
+        self.assertTrue(document.annotations.get("table_detected"))
+        self.assertTrue(document.annotations.get("table_preserved"))
+        self.assertTrue(document.annotations.get("table_protected"))
 
 
 if __name__ == "__main__":
