@@ -93,6 +93,23 @@ class DocxImporter(DocumentImporter):
             text = "".join(span.text for span in inlines)
             if not text.strip() and not note_refs:
                 blank_para_count += 1
+                # Conserver le paragraphe vide comme frontière matérielle.
+                # Il ne porte aucun texte éditorial, mais il évite que la
+                # structure visuelle du DOCX soit perdue avant les heuristiques.
+                blocks.append(
+                    Paragraph(
+                        block_id=f"b{block_index}",
+                        text="",
+                        inlines=[],
+                        note_refs=[],
+                        attributes={
+                            "is_blank_para": True,
+                            "blank_para": True,
+                            "blank_para_index": blank_para_count,
+                        },
+                    )
+                )
+                block_index += 1
                 continue
 
             style_id = self._paragraph_style(paragraph)
@@ -107,27 +124,37 @@ class DocxImporter(DocumentImporter):
                 style_name=style_name,
                 visual=para_visual,
             )
-            if blank_para_count:
-                block.attributes["blank_para_before"] = True
-                block.attributes["blank_para_before_count"] = blank_para_count
             blank_para_count = 0
             blocks.append(block)
             for note_ref in note_refs:
                 note_call_map.setdefault(note_ref, []).append(block.block_id)
             block_index += 1
 
-        # Les paragraphes vides du DOCX ne sont pas conservés comme blocs.
-        # On propage donc leur trace sur le bloc précédent afin de rendre
-        # explicite l'encadrement matériel :
-        #   prose [blank_after] / [blank_before] vers / ... / vers [blank_after]
-        # Le service de structure peut ainsi détecter un bloc poétique isolé
-        # sans chercher des paragraphes vides déjà supprimés à l'ingestion.
-        for index in range(len(blocks) - 1):
-            next_attrs = blocks[index + 1].attributes
-            if next_attrs.get("blank_para_before"):
-                blocks[index].attributes["blank_para_after"] = True
-                blocks[index].attributes["blank_para_after_count"] = (
-                    next_attrs.get("blank_para_before_count", 1)
+        # Les paragraphes vides sont conservés comme blocs-frontières et
+        # également projetés sous forme d'attributs before/after sur les
+        # blocs textuels voisins. Cette double représentation rend le modèle
+        # plus robuste : les heuristiques peuvent lire soit le vrai blanc,
+        # soit sa trace attributaire.
+        for index, block in enumerate(blocks):
+            if not block.attributes.get("is_blank_para"):
+                continue
+
+            prev_index = index - 1
+            while prev_index >= 0 and blocks[prev_index].attributes.get("is_blank_para"):
+                prev_index -= 1
+            next_index = index + 1
+            while next_index < len(blocks) and blocks[next_index].attributes.get("is_blank_para"):
+                next_index += 1
+
+            if prev_index >= 0:
+                blocks[prev_index].attributes["blank_para_after"] = True
+                blocks[prev_index].attributes["blank_para_after_count"] = (
+                    int(blocks[prev_index].attributes.get("blank_para_after_count", 0) or 0) + 1
+                )
+            if next_index < len(blocks):
+                blocks[next_index].attributes["blank_para_before"] = True
+                blocks[next_index].attributes["blank_para_before_count"] = (
+                    int(blocks[next_index].attributes.get("blank_para_before_count", 0) or 0) + 1
                 )
 
         for note in notes:

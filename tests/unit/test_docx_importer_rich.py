@@ -106,16 +106,19 @@ class RichDocxImporterTests(unittest.TestCase):
         create_blank_separated_docx(docx_path)
         document = ImporterRegistry().load_document(docx_path)
 
-        # Les deux paragraphes vides du DOCX sont supprimés comme blocs,
-        # mais leur trace doit rester exploitable pour le service de structure.
-        self.assertEqual(len(document.blocks), 6)
+        # Les paragraphes vides du DOCX sont conservés comme blocs-frontières
+        # et projetés en attributs sur les blocs textuels voisins.
+        self.assertEqual(len(document.blocks), 8)
         self.assertEqual(document.blocks[0].text.strip(), "Prose avant le bloc.")
         self.assertTrue(document.blocks[0].attributes.get("blank_para_after"))
-        self.assertTrue(document.blocks[1].attributes.get("blank_para_before"))
-        self.assertEqual(document.blocks[1].attributes.get("blank_para_before_count"), 1)
-        self.assertTrue(document.blocks[4].attributes.get("blank_para_after"))
-        self.assertTrue(document.blocks[5].attributes.get("blank_para_before"))
-        self.assertEqual(document.blocks[4].attributes.get("blank_para_after_count"), 1)
+        self.assertTrue(document.blocks[1].attributes.get("is_blank_para"))
+        self.assertEqual(document.blocks[1].text, "")
+        self.assertTrue(document.blocks[2].attributes.get("blank_para_before"))
+        self.assertEqual(document.blocks[2].attributes.get("blank_para_before_count"), 1)
+        self.assertTrue(document.blocks[5].attributes.get("blank_para_after"))
+        self.assertTrue(document.blocks[6].attributes.get("is_blank_para"))
+        self.assertTrue(document.blocks[7].attributes.get("blank_para_before"))
+        self.assertEqual(document.blocks[5].attributes.get("blank_para_after_count"), 1)
 
 
 if __name__ == "__main__":
