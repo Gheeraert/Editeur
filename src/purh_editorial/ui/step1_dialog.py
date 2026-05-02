@@ -32,6 +32,9 @@ class ExportRunResult:
 
 
 CONFIG_VERSION = 1
+# TODO(config-migration): introduce an explicit v1 -> v2 migration path
+# before bumping CONFIG_VERSION again. Current schema already carries
+# some v2-style fields but keeps version 1 for backward compatibility.
 
 ALLOWED_DECISION_MODES = {
     "deterministic",
@@ -466,7 +469,10 @@ def apply_config_dict(
     if "enable_ai" in loaded:
         merged["enable_ai"] = bool(loaded.get("enable_ai"))
 
-    # Decision mode est autoritaire sur l'IA structurelle
+    # Legacy compatibility rule:
+    # - if decision_mode is present, it is the authoritative switch.
+    # - legacy enable_ai must not silently reactivate AI against decision_mode.
+    # This avoids surprise AI reactivation when loading old config files.
     if "decision_mode" in loaded:
         mode = str(merged["decision_mode"])
         structure_ai, _ = derive_ai_flags_from_decision_mode(mode)
