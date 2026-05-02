@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Table Test</title>
+      </titleStmt>
+      <publicationStmt><p>Test</p></publicationStmt>
+      <sourceDesc><p>Fixture</p></sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="chapter">
+        <head>Chapitre table</head>
+        <p>Avant tableau.</p>
+        <table>
+          <row>
+            <cell>VIII, Pr., <hi rend="italic">p. 390</hi> &amp; accolade</cell>
+            <cell>VIII, Pr., <hi rend="bold">18</hi><note place="foot">Note cellule</note></cell>
+          </row>
+          <row>
+            <cell>Occurram enim necesse est...</cell>
+            <cell><hi rend="sup">2</hi> Il me faut en effet aller...</cell>
+          </row>
+        </table>
+        <p>Après tableau.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
