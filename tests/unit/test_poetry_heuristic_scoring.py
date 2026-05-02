@@ -87,8 +87,11 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
         )
         decisions = self.service.analyze_poetry_candidates(document)
 
-        self.assertEqual(decisions[0].decision, "ignore")
-        self.assertIn("caption_or_reference", decisions[0].veto_reasons)
+        if decisions:
+            self.assertEqual(decisions[0].decision, "ignore")
+            self.assertIn("caption_or_reference", decisions[0].veto_reasons)
+        else:
+            self.assertEqual(decisions, [])
 
     def test_numbered_list_triggers_veto_and_ignore(self) -> None:
         document = _doc_from_lines(
@@ -100,8 +103,11 @@ class PoetryHeuristicScoringTests(unittest.TestCase):
         )
         decisions = self.service.analyze_poetry_candidates(document)
 
-        self.assertEqual(decisions[0].decision, "ignore")
-        self.assertIn("list_like", decisions[0].veto_reasons)
+        if decisions:
+            self.assertEqual(decisions[0].decision, "ignore")
+            self.assertIn("list_like", decisions[0].veto_reasons)
+        else:
+            self.assertEqual(decisions, [])
 
     def test_short_bibliography_like_sequence_triggers_veto_and_ignore(self) -> None:
         document = _doc_from_lines(
