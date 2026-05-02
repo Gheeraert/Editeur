@@ -689,6 +689,7 @@ class Step1Dialog(tk.Tk):
         self._ai_aggressiveness_label = tk.StringVar(value=ai_aggressiveness_to_label("conservative"))
 
         # IA structurelle
+        self._enable_structure_ai = tk.BooleanVar(value=False)
         self._struct_ai_provider_label = tk.StringVar(value=provider_to_label(settings.ai.provider))
         self._struct_ai_api_key = tk.StringVar(value=settings.ai.api_key or "")
         self._struct_ai_model = tk.StringVar(value=settings.ai.model)
@@ -705,7 +706,6 @@ class Step1Dialog(tk.Tk):
 
         # Legacy (compatibilité)
         self._enable_ai = tk.BooleanVar(value=False)
-        self._enable_structure_ai = tk.BooleanVar(value=False)
         self._ai_provider = tk.StringVar(value=settings.ai.provider)
         self._ai_api_key = tk.StringVar(value=settings.ai.api_key or "")
         self._ai_model = tk.StringVar(value=settings.ai.model)
@@ -812,44 +812,50 @@ class Step1Dialog(tk.Tk):
         struct_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
         struct_frame.columnconfigure(1, weight=1)
 
-        ttk.Label(struct_frame, text="Agressivité:").grid(row=0, column=0, sticky="w")
+        ttk.Checkbutton(
+            struct_frame,
+            text="Activer l'IA structurelle (zones grises)",
+            variable=self._enable_structure_ai,
+        ).grid(row=0, column=0, columnspan=2, sticky="w")
+
+        ttk.Label(struct_frame, text="Agressivité:").grid(row=1, column=0, sticky="w", pady=(6, 0))
         ttk.Combobox(
             struct_frame,
             textvariable=self._ai_aggressiveness_label,
             values=list(AI_AGGRESSIVENESS_LABELS.values()),
             state="readonly",
-        ).grid(row=0, column=1, sticky="ew", padx=(8, 0))
+        ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
 
-        ttk.Label(struct_frame, text="Provider:").grid(row=1, column=0, sticky="w", pady=(6, 0))
+        ttk.Label(struct_frame, text="Provider:").grid(row=2, column=0, sticky="w", pady=(6, 0))
         ttk.Combobox(
             struct_frame,
             textvariable=self._struct_ai_provider_label,
             values=list(PROVIDER_LABELS.values()),
             state="readonly",
-        ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
+        ).grid(row=2, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
 
-        ttk.Label(struct_frame, text="API key:").grid(row=2, column=0, sticky="w", pady=(6, 0))
+        ttk.Label(struct_frame, text="API key:").grid(row=3, column=0, sticky="w", pady=(6, 0))
         ttk.Entry(struct_frame, textvariable=self._struct_ai_api_key, show="*").grid(
-            row=2, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
-        )
-        ttk.Label(struct_frame, text="Modèle:").grid(row=3, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(struct_frame, textvariable=self._struct_ai_model).grid(
             row=3, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
         )
-        ttk.Label(struct_frame, text="Base URL:").grid(row=4, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(struct_frame, textvariable=self._struct_ai_base_url).grid(
+        ttk.Label(struct_frame, text="Modèle:").grid(row=4, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(struct_frame, textvariable=self._struct_ai_model).grid(
             row=4, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
         )
-        ttk.Label(struct_frame, text="Max appels:").grid(row=5, column=0, sticky="w", pady=(6, 0))
+        ttk.Label(struct_frame, text="Base URL:").grid(row=5, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(struct_frame, textvariable=self._struct_ai_base_url).grid(
+            row=5, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(struct_frame, text="Max appels:").grid(row=6, column=0, sticky="w", pady=(6, 0))
         ttk.Spinbox(struct_frame, from_=1, to=50, textvariable=self._max_structure_ai_calls, width=6).grid(
-            row=5, column=1, sticky="w", padx=(8, 0), pady=(6, 0)
+            row=6, column=1, sticky="w", padx=(8, 0), pady=(6, 0)
         )
         if not self.settings.ai.enabled:
             ttk.Label(
                 struct_frame,
                 text="(Aucune clé globale chargée depuis .env — saisissez une clé de session ci-dessus.)",
                 foreground="gray",
-            ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
+            ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(6, 0))
 
         # ── Section 6 : IA éditoriale ─────────────────────────────────────────
         edi_frame = ttk.LabelFrame(

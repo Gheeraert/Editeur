@@ -76,12 +76,9 @@ class Step1Options:
         return "heuristic"
 
     def structure_ai_enabled(self) -> bool:
-        if not self.decision_mode:
-            return bool(self.enable_structure_ai)
-        mode = self.normalized_decision_mode()
-        if mode == "heuristic_ai_local":
-            return True
-        return False
+        if self.decision_mode and self.normalized_decision_mode() == "deterministic":
+            return False
+        return bool(self.enable_structure_ai)
 
     def editorial_ai_enabled(self) -> bool:
         if self.decision_mode:
