@@ -243,33 +243,8 @@ class StructurePreparationService:
         poetry_decisions: list[HeuristicDecision] = []
         poetry_candidate_block_ids: set[str] = set()
         if use_heuristics:
-            transformations.extend(self._merge_short_poetry_sequences(document))
             poetry_decisions = self.analyze_poetry_candidates(document)
-            for block in document.blocks:
-                if (
-                    block.block_type == "quote_block"
-                    and str(block.attributes.get("quote_kind", "")).lower() == "poetry"
-                    and block.attributes.get("merged_from")
-                ):
-                    diagnostics.append(
-                        Diagnostic(
-                            diagnostic_id=make_id("diag"),
-                            module=self.module_name,
-                            severity="info",
-                            category=_POETRY_CATEGORY,
-                            message="Citation poétique courte fusionnée automatiquement.",
-                            target_ref=block.block_id,
-                            rule_id=_POETRY_RULE_ID,
-                            evidence=Evidence(excerpt=block.text[:180]),
-                            attributes={
-                                "decision": "transform",
-                                "score": 1.0,
-                                "evidence": {"merged_from": block.attributes.get("merged_from", [])},
-                                "veto_reasons": [],
-                                "ai_candidate": False,
-                            },
-                        )
-                    )
+            transformations.extend(self._annotate_poetry_sequences(document, poetry_decisions))
 
             # Zone grise ou transformation : dans les deux cas,
             # les lignes poétiques doivent neutraliser la promotion en titre.
@@ -278,45 +253,6 @@ class StructurePreparationService:
                     continue
                 if poetry_decision.decision in {"diagnostic", "transform"}:
                     poetry_candidate_block_ids.update(poetry_decision.target_refs)
-
-            # Score élevé : transformation immédiate de la séquence poétique,
-            # avant tout passage du détecteur de titres.
-            blocks_by_id = {block.block_id: block for block in document.blocks}
-
-            for poetry_decision in poetry_decisions:
-                if poetry_decision.decision != "transform":
-                    continue
-                if poetry_decision.veto_reasons:
-                    continue
-
-                for block_id in poetry_decision.target_refs:
-                    block = blocks_by_id.get(block_id)
-                    if block is None:
-                        continue
-
-                    # La poésie peut corriger un faux heading déjà hérité de Word.
-                    if block.block_type not in {"paragraph", "heading"}:
-                        continue
-
-                    before = block.block_type
-                    block.block_type = "quote_block"
-                    block.attributes["quote_kind"] = "poetry"
-                    block.attributes["protected_zone"] = "poetry"
-                    block.attributes["alignment"] = "left"
-                    block.attributes["heuristic_score"] = poetry_decision.score
-
-                    transformations.append(self._make_tr(
-                        block.block_id,
-                        before,
-                        "quote_block",
-                        "structure.poetry.quote",
-                        attributes={
-                            "quote_kind": "poetry",
-                            "protected_zone": "poetry",
-                            "alignment": "left",
-                            "score": poetry_decision.score,
-                        },
-                    ))
 
         for block in document.blocks:
             text = block.text.strip()
@@ -683,6 +619,60 @@ class StructurePreparationService:
         document.blocks = rebuilt_blocks
         return transformations
 
+    def _annotate_poetry_sequences(
+        self,
+        document: Document,
+        poetry_decisions: list[HeuristicDecision],
+    ) -> list[Transformation]:
+        transformations: list[Transformation] = []
+        blocks_by_id = {block.block_id: block for block in document.blocks}
+        group_counter = 0
+
+        for poetry_decision in poetry_decisions:
+            if poetry_decision.veto_reasons:
+                continue
+            if poetry_decision.decision not in {"diagnostic", "transform"}:
+                continue
+
+            group_counter += 1
+            group_id = f"poetry_group_{group_counter:03d}"
+
+            for line_index, block_id in enumerate(poetry_decision.target_refs, start=1):
+                block = blocks_by_id.get(block_id)
+                if block is None:
+                    continue
+                if block.block_type not in {"paragraph", "heading", "quote_block"}:
+                    continue
+
+                before = block.block_type
+                if poetry_decision.decision == "transform" and before in {"paragraph", "heading"}:
+                    block.block_type = "quote_block"
+
+                block.attributes["quote_kind"] = "poetry"
+                block.attributes["protected_zone"] = "poetry"
+                block.attributes["alignment"] = "left"
+                block.attributes["poetry_group_id"] = group_id
+                block.attributes["poetry_line_index"] = line_index
+                block.attributes["heuristic_score"] = poetry_decision.score
+
+                transformations.append(
+                    self._make_tr(
+                        block.block_id,
+                        before,
+                        block.block_type,
+                        "structure.poetry.group.annotate",
+                        attributes={
+                            "quote_kind": "poetry",
+                            "protected_zone": "poetry",
+                            "poetry_group_id": group_id,
+                            "poetry_line_index": line_index,
+                            "score": poetry_decision.score,
+                            "decision": poetry_decision.decision,
+                        },
+                    )
+                )
+        return transformations
+
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
         decisions: list[HeuristicDecision] = []
@@ -764,17 +754,23 @@ class StructurePreparationService:
             return False
         return stripped.endswith((".", ",", ";", ":", "!", "?", "...", "\u2026"))
 
-    @staticmethod
-    def _poetry_candidate_sequences(document: Document) -> list[list]:
+    @classmethod
+    def _poetry_candidate_sequences(cls, document: Document) -> list[list]:
         sequences: list[list] = []
         current: list = []
 
         for block in document.blocks:
             # Un titre (heading) brise toujours la séquence
-            is_candidate = (block.block_type == "paragraph" and block.text.strip())
+            text = block.text.strip()
+            is_candidate = (
+                block.block_type == "paragraph"
+                and text
+                and not cls._looks_like_list_item(text)
+            )
             if not is_candidate:
-                if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
-                    sequences.append(current.copy())
+                normalized = cls._normalize_poetry_sequence(current)
+                if 3 <= len(normalized) <= _POETRY_SEQUENCE_MAX_LINES:
+                    sequences.append(normalized)
                 current.clear()
                 continue
 
@@ -783,8 +779,9 @@ class StructurePreparationService:
                 prev_after  = current[-1].attributes.get("space_after",  0) or 0
                 curr_before = block.attributes.get("space_before", 0) or 0
                 if max(prev_after, curr_before) > _POETRY_STANZA_SPACE_THRESHOLD:
-                    if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
-                        sequences.append(current.copy())
+                    normalized = cls._normalize_poetry_sequence(current)
+                    if 3 <= len(normalized) <= _POETRY_SEQUENCE_MAX_LINES:
+                        sequences.append(normalized)
                     current.clear()
 
             # Dépassement de taille : la séquence est trop longue pour être de la poésie
@@ -793,9 +790,20 @@ class StructurePreparationService:
 
             current.append(block)
 
-        if 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
-            sequences.append(current.copy())
+        normalized = cls._normalize_poetry_sequence(current)
+        if 3 <= len(normalized) <= _POETRY_SEQUENCE_MAX_LINES:
+            sequences.append(normalized)
         return sequences
+
+    @staticmethod
+    def _normalize_poetry_sequence(sequence: list) -> list:
+        if not sequence:
+            return []
+        if len(sequence) >= 4:
+            first_text = sequence[0].text.strip()
+            if first_text.endswith(":") and len(first_text.split()) <= 4:
+                return sequence[1:].copy()
+        return sequence.copy()
 
     @classmethod
     def _score_poetry_candidate(

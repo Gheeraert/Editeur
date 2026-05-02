@@ -43,21 +43,20 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         diagnostics, transformations = self.service.process(document, mode="heuristic")
 
-        self.assertEqual(len(document.blocks), 1)
-        poetry_block = document.blocks[0]
-        self.assertEqual(poetry_block.block_type, "quote_block")
-        self.assertEqual(poetry_block.attributes.get("quote_kind"), "poetry")
-        self.assertEqual(poetry_block.attributes.get("protected_zone"), "poetry")
-        self.assertIn("\n", poetry_block.text)
-        self.assertEqual(len(poetry_block.attributes.get("merged_from", [])), 4)
+        self.assertEqual(len(document.blocks), 4)
+        poetry_blocks = [b for b in document.blocks if b.attributes.get("poetry_group_id")]
+        self.assertEqual(len(poetry_blocks), 4)
+        self.assertTrue(all(b.attributes.get("quote_kind") == "poetry" for b in poetry_blocks))
+        self.assertTrue(all(b.attributes.get("protected_zone") == "poetry" for b in poetry_blocks))
+        self.assertEqual(
+            [b.attributes.get("poetry_line_index") for b in poetry_blocks],
+            [1, 2, 3, 4],
+        )
         self.assertTrue(
-            any(tr.rule_id == "structure.poetry.short_sequence.merge" for tr in transformations)
+            any(tr.rule_id == "structure.poetry.group.annotate" for tr in transformations)
         )
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
-        self.assertTrue(
-            any(tr.rule_id == "structure.poetry.short_sequence.merge" for tr in transformations)
-            or any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics)
-        )
+        self.assertTrue(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
 
     def test_short_poetry_sequence_blocks_heading_promotion(self) -> None:
         document = _document_from_lines(
@@ -74,7 +73,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.service.process(document, mode="heuristic")
 
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
-        self.assertTrue(any(block.block_type == "quote_block" for block in document.blocks))
+        self.assertTrue(any(block.attributes.get("poetry_group_id") for block in document.blocks))
 
     def test_bold_short_heading_still_promoted(self) -> None:
         document = _document_from_lines(
@@ -124,11 +123,10 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         self.service.process(document, mode="heuristic")
 
-        self.assertEqual(len(document.blocks), 1)
-        poetry_block = document.blocks[0]
-        self.assertEqual(poetry_block.block_type, "quote_block")
-        self.assertIn("\n", poetry_block.text)
-        self.assertEqual(poetry_block.text.count("\n"), 2)
+        self.assertEqual(len(document.blocks), 3)
+        for block in document.blocks:
+            self.assertTrue(block.attributes.get("poetry_group_id"))
+            self.assertNotIn("\n", block.text)
 
     def test_diane_iphigenie_sequence_forms_single_poetry_block(self) -> None:
         document = _document_from_lines(
@@ -149,18 +147,36 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         self.service.process(document, mode="heuristic")
 
-        poetry_blocks = [block for block in document.blocks if block.block_type == "quote_block"]
-        self.assertEqual(len(poetry_blocks), 1)
-        poetry = poetry_blocks[0]
-        self.assertEqual(poetry.attributes.get("quote_kind"), "poetry")
-        self.assertEqual(poetry.attributes.get("protected_zone"), "poetry")
-        self.assertEqual(poetry.attributes.get("alignment"), "left")
-        self.assertEqual(poetry.text.count("\n"), 7)
+        poetry_blocks = [
+            block for block in document.blocks
+            if block.attributes.get("poetry_group_id") and block.attributes.get("quote_kind") == "poetry"
+        ]
+        self.assertEqual(len(poetry_blocks), 8)
+        self.assertTrue(all(block.attributes.get("protected_zone") == "poetry" for block in poetry_blocks))
+        self.assertEqual([b.attributes.get("poetry_line_index") for b in poetry_blocks], list(range(1, 9)))
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
 
         self.assertEqual(document.blocks[0].block_type, "paragraph")
         self.assertEqual(document.blocks[-2].block_type, "paragraph")
         self.assertEqual(document.blocks[-1].block_type, "paragraph")
+
+    def test_existing_verse_paragraphs_are_not_merged_or_reordered(self) -> None:
+        original_lines = [
+            "Tu te souviens du jour qu'en Aulide assembles",
+            "Nos vaisseaux par les vents semblaient etre appeles",
+            "Nous partions, et deja par mille cris de joie",
+            "Nous menacions de loin les Rivages de Troie.",
+            "Un prodige etonnant fit taire ce transport :",
+            "Le vent qui nous flattait nous laissa dans le Port.",
+        ]
+        document = _document_from_lines(original_lines)
+
+        self.service.process(document, mode="heuristic")
+
+        self.assertEqual(len(document.blocks), 6)
+        self.assertEqual([b.text for b in document.blocks], original_lines)
+        self.assertTrue(all("\n" not in b.text for b in document.blocks))
+        self.assertTrue(all(b.attributes.get("poetry_group_id") for b in document.blocks))
 
 
 if __name__ == "__main__":

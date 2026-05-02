@@ -23,7 +23,18 @@ class TeiXmlExporter:
         note_by_id = {note.note_id: note for note in document.notes}
         section_stack: list[ET.Element] = []
         table_diagnostics: list[dict[str, object]] = []
+        active_poetry_group_id: str | None = None
+        active_poetry_lg: ET.Element | None = None
         for block in document.blocks:
+            poetry_group_id = str(block.attributes.get("poetry_group_id", "")).strip()
+            is_poetry_line = (
+                poetry_group_id
+                and str(block.attributes.get("quote_kind", "")).lower() == "poetry"
+            )
+            if not is_poetry_line:
+                active_poetry_group_id = None
+                active_poetry_lg = None
+
             if block.block_type == "heading":
                 level = self._heading_level(block.attributes.get("heading_level"))
                 while len(section_stack) >= level:
@@ -33,6 +44,15 @@ class TeiXmlExporter:
                 head_el = ET.SubElement(div_el, self._q("head"))
                 self._append_block_content(head_el, block.text, block.inlines, note_by_id)
                 section_stack.append(div_el)
+            elif is_poetry_line:
+                parent = section_stack[-1] if section_stack else body_el
+                if active_poetry_group_id != poetry_group_id or active_poetry_lg is None:
+                    cit_el = ET.SubElement(parent, self._q("cit"))
+                    quote_el = ET.SubElement(cit_el, self._q("quote"))
+                    active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
+                    active_poetry_group_id = poetry_group_id
+                l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                self._append_block_content(l_el, block.text, block.inlines, note_by_id)
             elif block.block_type == "quote_block":
                 parent = section_stack[-1] if section_stack else body_el
                 cit_el = ET.SubElement(parent, self._q("cit"))

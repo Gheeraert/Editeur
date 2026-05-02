@@ -73,6 +73,40 @@ class TeiXmlExporterTests(unittest.TestCase):
         self.assertIsNotNone(quote)
         self.assertEqual(quote.text, "Citation longue.")
 
+    def test_export_poetry_group_as_lg_l(self) -> None:
+        document = Document(
+            document_id="doc-poetry-group",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                Paragraph(
+                    block_id="p1",
+                    text="Vers 1",
+                    attributes={
+                        "quote_kind": "poetry",
+                        "poetry_group_id": "poetry_group_001",
+                        "poetry_line_index": 1,
+                    },
+                ),
+                Paragraph(
+                    block_id="p2",
+                    text="Vers 2",
+                    attributes={
+                        "quote_kind": "poetry",
+                        "poetry_group_id": "poetry_group_001",
+                        "poetry_line_index": 2,
+                    },
+                ),
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        body = root.find(f"./{_q('text')}/{_q('body')}")
+        lg = body.find(f"./{_q('cit')}/{_q('quote')}/{_q('lg')}")
+        self.assertIsNotNone(lg)
+        lines = lg.findall(_q("l"))
+        self.assertEqual([line.text for line in lines], ["Vers 1", "Vers 2"])
+
     def test_export_inline_styles(self) -> None:
         document = Document(
             document_id="doc4",
