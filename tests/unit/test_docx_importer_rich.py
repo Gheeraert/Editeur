@@ -11,7 +11,11 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io import ImporterRegistry
-from tests.helpers.docx_factory import create_rich_docx, create_table_docx
+from tests.helpers.docx_factory import (
+    create_blank_separated_docx,
+    create_rich_docx,
+    create_table_docx,
+)
 
 
 class RichDocxImporterTests(unittest.TestCase):
@@ -96,6 +100,22 @@ class RichDocxImporterTests(unittest.TestCase):
         self.assertTrue(document.annotations.get("table_detected"))
         self.assertTrue(document.annotations.get("table_preserved"))
         self.assertTrue(document.annotations.get("table_protected"))
+
+    def test_import_docx_marks_blank_paragraph_boundaries(self) -> None:
+        docx_path = self._runtime_docx_path()
+        create_blank_separated_docx(docx_path)
+        document = ImporterRegistry().load_document(docx_path)
+
+        # Les deux paragraphes vides du DOCX sont supprimés comme blocs,
+        # mais leur trace doit rester exploitable pour le service de structure.
+        self.assertEqual(len(document.blocks), 6)
+        self.assertEqual(document.blocks[0].text.strip(), "Prose avant le bloc.")
+        self.assertTrue(document.blocks[0].attributes.get("blank_para_after"))
+        self.assertTrue(document.blocks[1].attributes.get("blank_para_before"))
+        self.assertEqual(document.blocks[1].attributes.get("blank_para_before_count"), 1)
+        self.assertTrue(document.blocks[4].attributes.get("blank_para_after"))
+        self.assertTrue(document.blocks[5].attributes.get("blank_para_before"))
+        self.assertEqual(document.blocks[4].attributes.get("blank_para_after_count"), 1)
 
 
 if __name__ == "__main__":

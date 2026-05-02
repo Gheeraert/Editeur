@@ -17,7 +17,7 @@ _SECTION_BIBLIO_RE = re.compile(
     re.IGNORECASE | re.UNICODE,
 )
 _EPIGRAPH_MAX_CHARS = 350
-_PUNCT_ENDINGS = {".", "!", "?", ",", "\u2026"}
+_PUNCT_ENDINGS = {".", "!", "?", ",", ":", ";", "\u2026"}
 _NUMBERED_SECTION_RE = re.compile(r"^(\d+)\s*[-\.]\s*")
 _CREDIT_START_RE = re.compile(
     r"^(Sous|Dans|Pour|Avec|Sur|Par|Textes?|\u00c9tudes?|Articles?|Ouvrage|Actes?)\s+",
@@ -692,15 +692,45 @@ class StructurePreparationService:
             start = index
             current: list = []
             while index < len(blocks) and cls._is_strong_poetry_line_candidate(blocks[index]):
+                # Un paragraphe vide supprimé à l'import apparaît comme
+                # blank_para_before sur le bloc suivant : il marque une
+                # frontière de séquence et ne doit pas être absorbé dans
+                # le bloc poétique précédent.
+                if current and cls._has_blank_before(blocks, index):
+                    break
                 current.append(blocks[index])
                 index += 1
             end = index - 1
 
-            has_blank_before = start - 1 >= 0 and cls._is_blank_paragraph(blocks[start - 1])
-            has_blank_after = end + 1 < len(blocks) and cls._is_blank_paragraph(blocks[end + 1])
+            has_blank_before = cls._has_blank_before(blocks, start)
+            has_blank_after = cls._has_blank_after(blocks, end)
             if has_blank_before and has_blank_after and 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
                 sequences.append(current.copy())
         return sequences
+
+    @classmethod
+    def _has_blank_before(cls, blocks: list, index: int) -> bool:
+        if not (0 <= index < len(blocks)):
+            return False
+        block = blocks[index]
+        if block.attributes.get("blank_para_before"):
+            return True
+        return index > 0 and cls._is_blank_paragraph(blocks[index - 1])
+
+    @classmethod
+    def _has_blank_after(cls, blocks: list, index: int) -> bool:
+        if not (0 <= index < len(blocks)):
+            return False
+        block = blocks[index]
+        if block.attributes.get("blank_para_after"):
+            return True
+        return (
+            index + 1 < len(blocks)
+            and (
+                bool(blocks[index + 1].attributes.get("blank_para_before"))
+                or cls._is_blank_paragraph(blocks[index + 1])
+            )
+        )
 
     @classmethod
     def _is_strong_poetry_line_candidate(cls, block) -> bool:

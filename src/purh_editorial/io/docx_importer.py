@@ -52,7 +52,7 @@ class DocxImporter(DocumentImporter):
         block_index = 1
         note_call_map: dict[str, list[str]] = {}
         table_count = 0
-        last_was_blank = False
+        blank_para_count = 0
 
         body = document_root.find(".//w:body", NS_WORD)
         if body is None:
@@ -78,7 +78,7 @@ class DocxImporter(DocumentImporter):
                     )
                 )
                 block_index += 1
-                last_was_blank = False
+                blank_para_count = 0
                 continue
             if child_name != "p":
                 continue
@@ -92,7 +92,7 @@ class DocxImporter(DocumentImporter):
             )
             text = "".join(span.text for span in inlines)
             if not text.strip() and not note_refs:
-                last_was_blank = True
+                blank_para_count += 1
                 continue
 
             style_id = self._paragraph_style(paragraph)
@@ -107,13 +107,28 @@ class DocxImporter(DocumentImporter):
                 style_name=style_name,
                 visual=para_visual,
             )
-            if last_was_blank:
+            if blank_para_count:
                 block.attributes["blank_para_before"] = True
-            last_was_blank = False
+                block.attributes["blank_para_before_count"] = blank_para_count
+            blank_para_count = 0
             blocks.append(block)
             for note_ref in note_refs:
                 note_call_map.setdefault(note_ref, []).append(block.block_id)
             block_index += 1
+
+        # Les paragraphes vides du DOCX ne sont pas conservés comme blocs.
+        # On propage donc leur trace sur le bloc précédent afin de rendre
+        # explicite l'encadrement matériel :
+        #   prose [blank_after] / [blank_before] vers / ... / vers [blank_after]
+        # Le service de structure peut ainsi détecter un bloc poétique isolé
+        # sans chercher des paragraphes vides déjà supprimés à l'ingestion.
+        for index in range(len(blocks) - 1):
+            next_attrs = blocks[index + 1].attributes
+            if next_attrs.get("blank_para_before"):
+                blocks[index].attributes["blank_para_after"] = True
+                blocks[index].attributes["blank_para_after_count"] = (
+                    next_attrs.get("blank_para_before_count", 1)
+                )
 
         for note in notes:
             call_refs = note_call_map.get(note.note_id, [])
