@@ -50,6 +50,7 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
     "footnote":  WD_COLOR_INDEX.BRIGHT_GREEN,
     "biblio":    WD_COLOR_INDEX.TURQUOISE,
     "ai":        WD_COLOR_INDEX.PINK,
+    "ai_structure": WD_COLOR_INDEX.VIOLET,
 }
 
 # ── Polices PURH (substituts des polices InDesign) ───────────────────────────
