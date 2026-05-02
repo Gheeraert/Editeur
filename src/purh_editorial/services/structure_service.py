@@ -939,9 +939,15 @@ class StructurePreparationService:
         first_indent = indents[0] if indents else 0
         prev_indent = int(previous_block.attributes.get("ind_left", 0) or 0) if previous_block is not None else 0
         next_indent = int(next_block.attributes.get("ind_left", 0) or 0) if next_block is not None else 0
+        # Isolation structurelle : retrait ou paragraphes vides encadrants (signal fort
+        # que l'auteur a délibérément séparé ce bloc du texte courant).
+        blank_isolated = bool(sequence[0].attributes.get("blank_para_before")) and (
+            next_block is None or bool(next_block.attributes.get("blank_para_before"))
+        )
         indentation_boundary_bonus = (
             1.0
-            if first_indent > 0 and prev_indent == 0 and (next_block is None or next_indent == 0)
+            if (first_indent > 0 and prev_indent == 0 and (next_block is None or next_indent == 0))
+            or blank_isolated
             else 0.0
         )
 
@@ -998,6 +1004,7 @@ class StructurePreparationService:
             "intro_context_ratio": round(intro_context_ratio, 3),
             "visual_homogeneity_component": round(visual_homogeneity_component, 3),
             "indentation_boundary_bonus": round(indentation_boundary_bonus, 3),
+            "blank_isolated": blank_isolated,
             "in_note_zone": in_note_zone,
             "word_count_component": round(word_count_component, 3),
             "excerpt": " | ".join(texts[:3])[:240],
