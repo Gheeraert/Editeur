@@ -96,17 +96,24 @@ class DocxImporter(DocumentImporter):
                 # Conserver le paragraphe vide comme frontière matérielle.
                 # Il ne porte aucun texte éditorial, mais il évite que la
                 # structure visuelle du DOCX soit perdue avant les heuristiques.
+                has_page_break = any(
+                    br.get(f"{{{NS_WORD['w']}}}type") == "page"
+                    for br in paragraph.findall(".//w:br", NS_WORD)
+                )
+                blank_attrs: dict = {
+                    "is_blank_para": True,
+                    "blank_para": True,
+                    "blank_para_index": blank_para_count,
+                }
+                if has_page_break:
+                    blank_attrs["page_break"] = True
                 blocks.append(
                     Paragraph(
                         block_id=f"b{block_index}",
                         text="",
                         inlines=[],
                         note_refs=[],
-                        attributes={
-                            "is_blank_para": True,
-                            "blank_para": True,
-                            "blank_para_index": blank_para_count,
-                        },
+                        attributes=blank_attrs,
                     )
                 )
                 block_index += 1
@@ -156,6 +163,8 @@ class DocxImporter(DocumentImporter):
                 blocks[next_index].attributes["blank_para_before_count"] = (
                     int(blocks[next_index].attributes.get("blank_para_before_count", 0) or 0) + 1
                 )
+                if block.attributes.get("page_break"):
+                    blocks[next_index].attributes["page_break_before"] = True
 
         for note in notes:
             call_refs = note_call_map.get(note.note_id, [])

@@ -116,6 +116,17 @@ def _add_line_break(paragraph) -> None:
     paragraph._p.append(r)
 
 
+def _add_page_break(doc: DocxDoc) -> None:
+    """Insère un saut de page (paragraphe vide avec <w:br w:type='page'>)."""
+    p = OxmlElement("w:p")
+    r = OxmlElement("w:r")
+    br = OxmlElement("w:br")
+    br.set(qn("w:type"), "page")
+    r.append(br)
+    p.append(r)
+    _insert_body_element(doc, p)
+
+
 def _add_footnote_reference(paragraph, footnote_id: int) -> None:
     """Insère un appel de note (renvoi superscript) dans un paragraphe."""
     r = OxmlElement("w:r")
@@ -450,6 +461,8 @@ class DocxExporter:
         }
 
         for block in document.blocks:
+            if block.attributes.get("page_break_before"):
+                _add_page_break(doc)
             if block.block_type == "table":
                 _add_raw_table(doc, block)
             else:
