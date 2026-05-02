@@ -244,6 +244,7 @@ class StructurePreparationService:
         poetry_decisions: list[HeuristicDecision] = []
         poetry_candidate_block_ids: set[str] = set()
         if use_heuristics:
+            transformations.extend(self._merge_blank_bounded_poetry_sequences(document))
             poetry_decisions = self.analyze_poetry_candidates(document)
             transformations.extend(self._annotate_poetry_sequences(document, poetry_decisions))
             transformations.extend(self._merge_poetry_by_group(document, poetry_decisions))
@@ -620,6 +621,107 @@ class StructurePreparationService:
                 rebuilt_blocks.append(block)
         document.blocks = rebuilt_blocks
         return transformations
+
+    def _merge_blank_bounded_poetry_sequences(self, document: Document) -> list[Transformation]:
+        transformations: list[Transformation] = []
+        sequences = self._blank_bounded_poetry_sequences(document)
+        if not sequences:
+            return transformations
+
+        consumed_ids: set[str] = set()
+        replacement_by_id: dict[str, Any] = {}
+
+        for sequence in sequences:
+            first_block = sequence[0]
+            merged_from = [block.block_id for block in sequence]
+            merged_text = "\n".join(block.text.strip() for block in sequence)
+            before = first_block.block_type
+            first_block.block_type = "quote_block"
+            first_block.text = merged_text
+            first_block.inlines = []
+            first_block.attributes["quote_kind"] = "poetry"
+            first_block.attributes["protected_zone"] = "poetry"
+            first_block.attributes["alignment"] = "left"
+            first_block.attributes["merged_from"] = merged_from
+
+            transformations.append(
+                self._make_tr(
+                    first_block.block_id,
+                    before,
+                    "quote_block",
+                    "structure.poetry.blank_bounded.merge",
+                    attributes={
+                        "quote_kind": "poetry",
+                        "protected_zone": "poetry",
+                        "alignment": "left",
+                        "merged_from": merged_from,
+                    },
+                )
+            )
+
+            for block in sequence[1:]:
+                consumed_ids.add(block.block_id)
+            replacement_by_id[first_block.block_id] = first_block
+
+        if not consumed_ids:
+            return transformations
+
+        rebuilt_blocks: list = []
+        for block in document.blocks:
+            if block.block_id in consumed_ids:
+                continue
+            replacement = replacement_by_id.get(block.block_id)
+            if replacement is not None:
+                rebuilt_blocks.append(replacement)
+            else:
+                rebuilt_blocks.append(block)
+        document.blocks = rebuilt_blocks
+        return transformations
+
+    @classmethod
+    def _blank_bounded_poetry_sequences(cls, document: Document) -> list[list]:
+        blocks = document.blocks
+        sequences: list[list] = []
+        index = 0
+        while index < len(blocks):
+            block = blocks[index]
+            if not cls._is_strong_poetry_line_candidate(block):
+                index += 1
+                continue
+
+            start = index
+            current: list = []
+            while index < len(blocks) and cls._is_strong_poetry_line_candidate(blocks[index]):
+                current.append(blocks[index])
+                index += 1
+            end = index - 1
+
+            has_blank_before = start - 1 >= 0 and cls._is_blank_paragraph(blocks[start - 1])
+            has_blank_after = end + 1 < len(blocks) and cls._is_blank_paragraph(blocks[end + 1])
+            if has_blank_before and has_blank_after and 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
+                sequences.append(current.copy())
+        return sequences
+
+    @classmethod
+    def _is_strong_poetry_line_candidate(cls, block) -> bool:
+        if block.block_type != "paragraph":
+            return False
+        text = block.text.strip()
+        if not text:
+            return False
+        if len(text.split()) > 16:
+            return False
+        if cls._looks_like_list_item(text):
+            return False
+        if cls._is_note_zone_block(block):
+            return False
+        if str(block.attributes.get("protected_zone", "")).lower() == "table":
+            return False
+        return True
+
+    @staticmethod
+    def _is_blank_paragraph(block) -> bool:
+        return block.block_type == "paragraph" and not block.text.strip()
 
     def _annotate_poetry_sequences(
         self,
