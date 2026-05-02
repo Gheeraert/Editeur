@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 
 from purh_editorial.io.importer_base import DocumentImporter
 from purh_editorial.model import (
+    Block,
     Document,
     Heading,
     InlineSpan,
@@ -50,8 +51,37 @@ class DocxImporter(DocumentImporter):
         blocks = []
         block_index = 1
         note_call_map: dict[str, list[str]] = {}
+        table_count = 0
 
-        for paragraph in document_root.findall(".//w:body//w:p", NS_WORD):
+        body = document_root.find(".//w:body", NS_WORD)
+        if body is None:
+            body_children: list[ET.Element] = []
+        else:
+            body_children = list(body)
+
+        for body_child in body_children:
+            child_name = self._local_name(body_child.tag)
+            if child_name == "tbl":
+                table_count += 1
+                blocks.append(
+                    Block(
+                        block_id=f"b{block_index}",
+                        block_type="table",
+                        text="",
+                        inlines=[],
+                        note_refs=[],
+                        attributes={
+                            "protected_zone": "table",
+                            "table_ooxml": ET.tostring(body_child, encoding="unicode"),
+                        },
+                    )
+                )
+                block_index += 1
+                continue
+            if child_name != "p":
+                continue
+
+            paragraph = body_child
             inlines, note_refs = self._paragraph_inlines(
                 paragraph,
                 note_labels=note_labels,
@@ -89,6 +119,12 @@ class DocxImporter(DocumentImporter):
             metadata.title = blocks[0].text[:120]
 
         original_text = "\n\n".join(block.text for block in blocks)
+        annotations = {
+            "table_detected": table_count > 0,
+            "table_preserved": table_count > 0,
+            "table_protected": table_count > 0,
+            "table_count": table_count,
+        }
         return Document(
             document_id=make_id("doc"),
             source_path=str(path),
@@ -96,6 +132,7 @@ class DocxImporter(DocumentImporter):
             metadata=metadata,
             blocks=blocks,
             notes=notes,
+            annotations=annotations,
             original_text=original_text,
         )
 

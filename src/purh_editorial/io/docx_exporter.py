@@ -11,6 +11,7 @@ from docx import Document as DocxDoc
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.text import WD_COLOR_INDEX
 from docx.oxml import OxmlElement
+from docx.oxml import parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
@@ -224,6 +225,23 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         )
 
 
+def _insert_body_element(doc: DocxDoc, element) -> None:
+    body = doc.element.body
+    sect_pr = body.find(qn("w:sectPr"))
+    if sect_pr is None:
+        body.append(element)
+        return
+    body.insert(body.index(sect_pr), element)
+
+
+def _add_raw_table(doc: DocxDoc, block) -> None:
+    raw_ooxml = str(block.attributes.get("table_ooxml", "") or "").strip()
+    if not raw_ooxml:
+        return
+    table_element = parse_xml(raw_ooxml.encode("utf-8"))
+    _insert_body_element(doc, table_element)
+
+
 # ── Injection des notes de bas de page (post-sauvegarde) ─────────────────────
 
 _HL_TO_WVAL = {
@@ -411,7 +429,13 @@ class DocxExporter:
         }
 
         for block in document.blocks:
-            _add_paragraph(doc, block, note_id_map)
+            if block.block_type == "table":
+                _add_raw_table(doc, block)
+            else:
+                _add_paragraph(doc, block, note_id_map)
+
+        if not document.blocks:
+            doc.add_paragraph("")
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
         doc.save(str(output_path))
@@ -429,6 +453,3 @@ class DocxExporter:
         to_remove = [c for c in body if c.tag != qn("w:sectPr")]
         for el in to_remove:
             body.remove(el)
-        # Word requiert au moins un paragraphe dans le corps
-        if not body.findall(qn("w:p")):
-            body.insert(0, OxmlElement("w:p"))

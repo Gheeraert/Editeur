@@ -15,8 +15,10 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.docx_exporter import DocxExporter
+from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.model import Document, InlineSpan, InlineStyle, Paragraph
 from purh_editorial.services.orthotypo_service import OrthotypoService
+from tests.helpers.docx_factory import create_table_docx
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
@@ -121,6 +123,36 @@ class DocxExporterCenturyStylesTests(unittest.TestCase):
         runs = self._runs_with_text(root)
         self.assertTrue(any(text == "xix" for text, _ in runs))
         self.assertTrue(any(text == "e" for text, _ in runs))
+
+    def test_export_preserves_table_and_body_order(self) -> None:
+        runtime_input = self._runtime_path(f"table_{uuid.uuid4().hex}.docx")
+        create_table_docx(runtime_input)
+        imported = ImporterRegistry().load_document(runtime_input)
+
+        template = self._minimal_template_docx()
+        output = self._runtime_path(f"export_table_{uuid.uuid4().hex}.docx")
+        DocxExporter(template_path=template).export(imported, output)
+
+        with zipfile.ZipFile(output, "r") as archive:
+            xml_bytes = archive.read("word/document.xml")
+        root = ET.fromstring(xml_bytes)
+        body = root.find(_q("body"))
+        self.assertIsNotNone(body)
+        body_tags = [node.tag for node in list(body) if node.tag != _q("sectPr")]
+        self.assertEqual(body_tags, [_q("p"), _q("tbl"), _q("p")])
+
+        tbl_nodes = body.findall(_q("tbl"))
+        self.assertEqual(len(tbl_nodes), 1)
+        first_cell_text = "".join(t.text or "" for t in tbl_nodes[0].findall(f".//{_q('tc')}//{_q('t')}"))
+        self.assertIn("VIII,Pr.,", first_cell_text)
+        self.assertIn("VIII;Pr.,18", first_cell_text)
+
+    def test_pipeline_structure_does_not_promote_table_content_to_heading(self) -> None:
+        runtime_input = self._runtime_path(f"table_no_heading_{uuid.uuid4().hex}.docx")
+        create_table_docx(runtime_input)
+        imported = ImporterRegistry().load_document(runtime_input)
+        heading_count = sum(1 for block in imported.blocks if block.block_type == "heading")
+        self.assertEqual(heading_count, 0)
 
 
 if __name__ == "__main__":
