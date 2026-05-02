@@ -29,6 +29,7 @@ _VERB_LEAD_RE = re.compile(
     re.UNICODE,
 )
 
+
 # Début de vers différent de début de titre: conjonctions de coordination
 _SENTENCE_CONNECTOR_RE = re.compile(
     r"^(Et|Mais|Or|Car|Puis|Alors|Ainsi|Enfin|Cependant|Tandis)\b",
