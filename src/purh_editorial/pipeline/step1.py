@@ -17,6 +17,7 @@ from purh_editorial.services.orthotypo_service import OrthotypoService
 from purh_editorial.services.structure_service import StructurePreparationService
 from purh_editorial.services.structure_service import settings_for_heuristic_profile
 from purh_editorial.services.structure_ai_arbitrator import (
+    AnthropicStructureAiProvider,
     GroqStructureAiProvider,
     StructureAiArbitrationSettings,
     StructureAiArbitrator,
@@ -133,12 +134,7 @@ class Step1Pipeline:
             timeout  = settings.ai.timeout_seconds,
         )
         if structure_ai_provider is None and settings.ai.enabled:
-            structure_ai_provider = GroqStructureAiProvider(
-                api_key=settings.ai.api_key or "",
-                model=settings.ai.model,
-                base_url=settings.ai.base_url,
-                timeout=settings.ai.timeout_seconds,
-            )
+            structure_ai_provider = _make_structure_provider(settings)
         self.structure_ai = StructureAiArbitrator(
             provider=structure_ai_provider,
             settings=StructureAiArbitrationSettings(model=settings.ai.model),
@@ -170,30 +166,25 @@ class Step1Pipeline:
 
         structure_ai_requested = bool(options.structure_ai_enabled())
         requested_provider = str(options.ai_provider or "groq").strip().lower()
+        _SUPPORTED_PROVIDERS = {"groq", "anthropic"}
         if (
             structure_ai_requested
             and self.structure_ai.provider is None
             and options.ai_api_key
         ):
-            if requested_provider != "groq":
+            if requested_provider not in _SUPPORTED_PROVIDERS:
                 report.warnings.append(
-                    f"Unsupported ai_provider '{options.ai_provider}' for current runtime; structure AI provider not created."
+                    f"Unsupported ai_provider '{options.ai_provider}' for current runtime; "
+                    "structure AI provider not created."
                 )
             else:
-                self.structure_ai.provider = GroqStructureAiProvider(
-                    api_key=options.ai_api_key,
-                    model=options.ai_model or self.settings.ai.model,
-                    base_url=options.ai_base_url or self.settings.ai.base_url,
-                    timeout=self.settings.ai.timeout_seconds,
+                self.structure_ai.provider = _make_structure_provider_from_options(
+                    options, self.settings
                 )
-                # Keep editorial AI settings aligned when session options provide explicit values.
                 self.ai.api_key = options.ai_api_key
 
+        # Propagate session-level overrides to the active provider.
         if isinstance(self.structure_ai.provider, GroqStructureAiProvider):
-            if options.ai_provider and str(options.ai_provider).lower() != "groq":
-                report.warnings.append(
-                    f"Unsupported ai_provider '{options.ai_provider}' for current runtime; using Groq provider."
-                )
             if options.ai_api_key:
                 self.structure_ai.provider.api_key = options.ai_api_key
                 self.ai.api_key = options.ai_api_key
@@ -203,6 +194,11 @@ class Step1Pipeline:
             if options.ai_model:
                 self.structure_ai.provider.model = options.ai_model
                 self.ai.model = options.ai_model
+        elif isinstance(self.structure_ai.provider, AnthropicStructureAiProvider):
+            if options.ai_api_key:
+                self.structure_ai.provider.api_key = options.ai_api_key
+            if options.ai_model:
+                self.structure_ai.provider.model = options.ai_model
 
         # ── 1. Ingestion ──────────────────────────────────────────────────────
         t0 = utc_now_iso()
@@ -293,6 +289,28 @@ class Step1Pipeline:
                 "max_structure_ai_calls": structure_ai_calls_cap,
                 "confidence_threshold": structure_ai_settings.confidence_threshold,
                 "diagnostics": len(local_diags),
+            },
+        ))
+
+        # ── 3c. Analyse IA des clusters de paragraphes courts ────────────────
+        t0 = utc_now_iso()
+        cluster_diags, cluster_warnings, cluster_calls = self.structure_ai.analyze_short_paragraph_clusters(
+            document=document,
+            enable_ai=ai_local_enabled,
+            max_calls=max(0, structure_ai_calls_cap - ai_calls),
+        )
+        report.diagnostics.extend(cluster_diags)
+        report.warnings.extend(cluster_warnings)
+        report.add_module_run(ModuleRun(
+            module_name="structure_ai_clusters",
+            version=self.version,
+            started_at=t0,
+            finished_at=utc_now_iso(),
+            status="success",
+            summary={
+                "enabled": ai_local_enabled,
+                "ai_calls": cluster_calls,
+                "cluster_diagnostics": len(cluster_diags),
             },
         ))
 
@@ -411,4 +429,44 @@ class Step1Pipeline:
             tei_xml=tei_xml,
         )
         return Step1Result(pipeline_result=pipeline_result, output_docx=output_docx)
+
+
+# ── Factories de providers IA ─────────────────────────────────────────────────
+
+def _make_structure_provider(settings: "AppSettings") -> StructureAiProvider:
+    """Crée le provider structurel selon PURH_AI_PROVIDER."""
+    if settings.ai.provider == "anthropic":
+        return AnthropicStructureAiProvider(
+            api_key=settings.ai.anthropic_api_key or "",
+            model=settings.ai.anthropic_model,
+            base_url=settings.ai.anthropic_base_url,
+            timeout=settings.ai.timeout_seconds,
+        )
+    return GroqStructureAiProvider(
+        api_key=settings.ai.api_key or "",
+        model=settings.ai.model,
+        base_url=settings.ai.base_url,
+        timeout=settings.ai.timeout_seconds,
+    )
+
+
+def _make_structure_provider_from_options(
+    options: "Step1Options",
+    settings: "AppSettings",
+) -> StructureAiProvider:
+    """Crée le provider structurel depuis les options de session (UI)."""
+    requested = str(options.ai_provider or "groq").strip().lower()
+    if requested == "anthropic":
+        return AnthropicStructureAiProvider(
+            api_key=options.ai_api_key or settings.ai.anthropic_api_key or "",
+            model=options.ai_model or settings.ai.anthropic_model,
+            base_url=options.ai_base_url or settings.ai.anthropic_base_url,
+            timeout=settings.ai.timeout_seconds,
+        )
+    return GroqStructureAiProvider(
+        api_key=options.ai_api_key or settings.ai.api_key or "",
+        model=options.ai_model or settings.ai.model,
+        base_url=options.ai_base_url or settings.ai.base_url,
+        timeout=settings.ai.timeout_seconds,
+    )
 

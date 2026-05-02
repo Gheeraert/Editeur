@@ -12,23 +12,37 @@ from purh_editorial.model import Document, InlineSpan, Transformation
 from purh_editorial.services.orthotypo_service import COLOR_AI, _find_changed_regions
 from purh_editorial.utils import make_id
 
-# ── Prompt système ────────────────────────────────────────────────────────────
+# ── Prompt système — règles PURH explicites ───────────────────────────────────
 _SYSTEM = """\
 Tu es éditeur scientifique aux Presses universitaires de Rouen et du Havre (PURH).
-Tu révises un manuscrit académique en français.
+Tu révises un manuscrit académique en français (SHS : histoire, littérature, linguistique).
 
-Règles strictes :
+RÈGLES ORTHOTYPOGRAPHIQUES PURH À APPLIQUER :
+- Guillemets français obligatoires : « texte » avec espaces insécables (jamais "texte")
+- Apostrophe typographique ’ (jamais l'apostrophe droite ')
+- Espace insécable avant : !, ?, ;, :
+- Siècles en chiffres romains petites caps : xviiie siècle (jamais 18e siècle ou XVIIIe)
+- Abréviations normalisées : p. XX (pas pp.), n° X (pas no.), art. cit., op. cit.
+- Points de suspension : … (entité Unicode unique, jamais trois points séparés ...)
+- Trait d'union vs tiret : tiret demi-cadratin – pour les incises (jamais tiret simple -)
+
+RÈGLES STRICTES D'INTERVENTION :
 - Tu ne réécris JAMAIS un paragraphe entier.
 - Chaque correction est LOCALE : entre 2 et 12 mots maximum.
 - Tu respectes absolument la voix et le style de l'auteur.
-- Tu ne corriges pas les choix disciplinaires, les archaïsmes savants, les néologismes
-  justifiés, ni les citations.
-- Tu n'interviens que sur ce qui est CLAIREMENT fautif (solécisme, pléonasme lourd,
-  répétition immédiate d'un mot dans la même phrase, incohérence de registre évidente).
+- Tu ne corriges PAS : les choix disciplinaires, archaïsmes savants, néologismes justifiés,
+  citations, noms propres, termes techniques, latinismes.
+- Tu n'interviens QUE sur ce qui est CLAIREMENT fautif :
+  • guillemets droits au lieu de guillemets français,
+  • apostrophe droite au lieu de typographique,
+  • trois points séparés au lieu de …,
+  • répétition immédiate du même mot dans la même phrase,
+  • solécisme ou incohérence de registre évidente.
 - Si aucune correction ne s'impose, retourne {"corrections": []}.
+- Propose au maximum 2 corrections par passage.
 
 Format de réponse (JSON strict, aucun texte autour) :
-{"corrections": [{"original": "texte exact à remplacer", "corrected": "texte corrigé", "raison": "..."}]}
+{"corrections": [{"original": "texte exact à remplacer", "corrected": "texte corrigé", "raison": "règle PURH concernée"}]}
 """
 
 # Nombre maximum d'appels API par document
@@ -36,6 +50,9 @@ MAX_API_CALLS = 8
 
 # Longueur minimale d'un paragraphe pour mériter une analyse IA
 MIN_BLOCK_LENGTH = 200
+
+# Nombre de paragraphes de contexte fournis à l'IA
+_CONTEXT_WINDOW = 2
 
 
 @dataclass
@@ -47,7 +64,7 @@ class AICorrection:
 
 class AIEditorialService:
     """
-    Applique des corrections éditoriales ciblées via Groq (très modérément).
+    Applique des corrections éditoriales ciblées via LLM (très modérément).
     Chaque correction remplace 2-12 mots et est surlignée en rose.
     """
 
@@ -78,16 +95,24 @@ class AIEditorialService:
 
         # Sélection des blocs candidats (paragraphes longs du corps)
         candidates = [
-            b for b in doc.blocks
+            (i, b) for i, b in enumerate(doc.blocks)
             if b.block_type == "paragraph"
             and len(b.text.strip()) >= MIN_BLOCK_LENGTH
         ]
 
-        for block in candidates:
+        for idx, block in candidates:
             if calls_used >= max_calls:
                 break
+
+            context_before = _extract_context(doc.blocks, idx, window=_CONTEXT_WINDOW, before=True)
+            context_after = _extract_context(doc.blocks, idx, window=_CONTEXT_WINDOW, before=False)
+
             try:
-                corrections = self._call_api(block.text)
+                corrections = self._call_api(
+                    block.text,
+                    context_before=context_before,
+                    context_after=context_after,
+                )
                 calls_used += 1
             except Exception:
                 continue
@@ -97,10 +122,8 @@ class AIEditorialService:
                     continue
                 if corr.original == corr.corrected:
                     continue
-                # Vérifier que l'original est bien présent dans le texte du bloc
                 if corr.original not in block.text:
                     continue
-                # Appliquer la correction
                 original_text = block.text
                 corrected_text = block.text.replace(corr.original, corr.corrected, 1)
                 if corrected_text == original_text:
@@ -113,7 +136,6 @@ class AIEditorialService:
                     new_inlines = OrthotypoService._rebuild_inlines(
                         block.inlines, original_text, corrected_text, regions
                     )
-                    # Forcer la couleur AI sur les régions modifiées
                     for span in new_inlines:
                         if span.attributes.get("highlight_color") == "orthotypo":
                             span.attributes["highlight_color"] = self.color
@@ -148,21 +170,34 @@ class AIEditorialService:
 
     # ── Appel API ─────────────────────────────────────────────────────────────
 
-    def _call_api(self, text: str) -> list[AICorrection]:
+    def _call_api(
+        self,
+        text: str,
+        *,
+        context_before: str = "",
+        context_after: str = "",
+    ) -> list[AICorrection]:
+        # Construire le message utilisateur avec contexte optionnel
+        parts: list[str] = []
+        if context_before:
+            parts.append(f"[Contexte précédent]\n{context_before}\n")
+        parts.append(f"[Passage à analyser]\n{text[:1400]}")
+        if context_after:
+            parts.append(f"\n[Contexte suivant]\n{context_after}")
+        parts.append(
+            "\n\nAnalyse ce passage et propose au plus 2 corrections locales "
+            "(2-12 mots chacune, règles PURH). "
+            "Si rien ne s'impose, retourne {\"corrections\": []}."
+        )
+        user_content = "\n".join(parts)
+
         payload = {
             "model": self.model,
             "temperature": 0.05,
-            "max_tokens": 400,
+            "max_tokens": 500,
             "messages": [
                 {"role": "system", "content": _SYSTEM},
-                {
-                    "role": "user",
-                    "content": (
-                        "Analyse ce passage et propose au plus 2 corrections locales "
-                        "(2-12 mots chacune). Si rien ne s'impose, retourne {\"corrections\": []}.\n\n"
-                        f"Passage :\n{text[:1200]}"
-                    ),
-                },
+                {"role": "user", "content": user_content},
             ],
         }
         data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -184,7 +219,7 @@ class AIEditorialService:
             detail = exc.read().decode("utf-8", errors="replace")
             raise RuntimeError(f"Groq HTTP {exc.code}: {detail[:200]}") from exc
         except Exception as exc:
-            raise RuntimeError(f"Groq error: {exc}") from exc
+            raise RuntimeError(f"API error: {exc}") from exc
 
         content = (
             body.get("choices", [{}])[0]
@@ -225,7 +260,18 @@ class AIEditorialService:
             corr = str(item.get("corrected", "")).strip()
             raison = str(item.get("raison", "")).strip()
             if orig and corr and orig != corr:
-                # Vérifier que la correction est locale (pas trop longue)
                 if len(orig.split()) <= 15 and len(corr.split()) <= 15:
                     result.append(AICorrection(original=orig, corrected=corr, raison=raison))
         return result
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _extract_context(blocks: list, idx: int, *, window: int, before: bool) -> str:
+    """Extrait les `window` paragraphes avant ou après idx, concaténés."""
+    if before:
+        chunk = blocks[max(0, idx - window):idx]
+    else:
+        chunk = blocks[idx + 1:idx + 1 + window]
+    texts = [b.text.strip()[:250] for b in chunk if b.text.strip()]
+    return " / ".join(texts)

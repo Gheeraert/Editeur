@@ -44,16 +44,45 @@ def _parse_int(name: str, default: int) -> int:
 
 @dataclass(slots=True)
 class AISettings:
+    # Provider actif : "groq" (défaut) ou "anthropic"
     provider: str = "groq"
+
+    # Groq / OpenAI-compatible
     base_url: str = "https://api.groq.com/openai/v1"
     api_key: str | None = None
     model: str = "llama-3.3-70b-versatile"
+
+    # Anthropic natif
+    anthropic_api_key: str | None = None
+    anthropic_model: str = "claude-haiku-4-5-20251001"
+    anthropic_base_url: str = "https://api.anthropic.com/v1"
+
     timeout_seconds: int = 20
     max_blocks: int = 3
 
     @property
     def enabled(self) -> bool:
+        if self.provider == "anthropic":
+            return bool(self.anthropic_api_key)
         return bool(self.api_key)
+
+    @property
+    def active_api_key(self) -> str | None:
+        if self.provider == "anthropic":
+            return self.anthropic_api_key
+        return self.api_key
+
+    @property
+    def active_model(self) -> str:
+        if self.provider == "anthropic":
+            return self.anthropic_model
+        return self.model
+
+    @property
+    def active_base_url(self) -> str:
+        if self.provider == "anthropic":
+            return self.anthropic_base_url
+        return self.base_url
 
 
 @dataclass(slots=True)
@@ -76,6 +105,9 @@ def load_settings() -> AppSettings:
         base_url=os.environ.get("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
         api_key=os.environ.get("GROQ_API_KEY"),
         model=os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile"),
+        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        anthropic_model=os.environ.get("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001"),
+        anthropic_base_url=os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1"),
         timeout_seconds=_parse_int("GROQ_TIMEOUT_SECONDS", 20),
         max_blocks=_parse_int("GROQ_MAX_BLOCKS", 3),
     )
