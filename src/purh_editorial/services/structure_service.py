@@ -41,6 +41,9 @@ _NAME_PAIR_RE = re.compile(
     r"^[A-Z][A-Za-z\-]+(\s+[A-Za-z\-]+)+\s+et\s+[A-Z]",
     re.UNICODE,
 )
+
+# Liste de 3+ noms propres séparés par virgules : "A B, C D, E F[, G H]"
+_COMMA_NAME_LIST_MIN_PARTS = 3
 _ROMAN_ONLY_RE = re.compile(r"^[IVXLCDMivxlcdm]{1,5}$")
 _PASSAGE_TOKEN_RE = re.compile(r"^(?:[IVXLCDM]+|\d+|[A-Za-z]{1,4})$", re.IGNORECASE)
 # Entrée de glossaire/abréviations : SIGLE : développement
@@ -1313,6 +1316,8 @@ class StructurePreparationService:
             reasons.add("technical_markup")
         if cls._looks_like_poetry_line_candidate(block, text):
             reasons.add("poetry_line_candidate")
+        if cls._looks_like_name_list(text):
+            reasons.add("name_list")
         if text.endswith((".", "!", "?", ":", ";")) or _VERB_LEAD_RE.match(text):
             reasons.add("sentence_like")
         if cls._source_heading_level(block) is None and len(text.split()) <= 1:
@@ -1407,6 +1412,27 @@ class StructurePreparationService:
         if stripped.endswith((";", ",", ".", "?", "!", ":")):
             return True
         return False
+
+    @staticmethod
+    def _looks_like_name_list(text: str) -> bool:
+        """Vrai si le texte est une liste d'au moins 3 noms propres séparés par virgules.
+
+        Exemples : 'Tony Gheeraert, Victoire Malenfer, Caroline Labrune, Servane L'Hopital'
+                   'A. Dupont, B. Martin et C. Durand'
+        """
+        normalized = re.sub(r",?\s+et\s+", ",", text.strip())
+        parts = [p.strip() for p in normalized.split(",") if p.strip()]
+        if len(parts) < _COMMA_NAME_LIST_MIN_PARTS:
+            return False
+        for part in parts:
+            words = part.split()
+            if len(words) < 2:
+                return False
+            if re.search(r"\d|[()[\]{}<>]", part):
+                return False
+            if not words[0][:1].isupper():
+                return False
+        return True
 
     @classmethod
     def _is_heading_candidate(cls, text: str, block=None) -> bool:
@@ -1504,6 +1530,9 @@ class StructurePreparationService:
             # Heuristique complémentaire : les noms propres commencent par une majuscule
             if all(w[0].isupper() for w in words if w and w[0].isalpha()):
                 return "author"
+        # Liste de 3+ noms propres  signature éditoriale, pas un titre
+        if StructurePreparationService._looks_like_name_list(stripped):
+            return ""
         # Titre numéroté  heading
         if _NUMBERED_SECTION_RE.match(stripped):
             return "heading"
@@ -1570,6 +1599,9 @@ class StructurePreparationService:
             return False
         # Paire de noms propres  crédit éditorial
         if _NAME_PAIR_RE.match(stripped):
+            return False
+        # Liste de 3+ noms propres séparés par virgules  signature, pas un titre
+        if cls._looks_like_name_list(stripped):
             return False
         # Entrée abréviation (SIGLE : développement)
         if _ABBREV_ENTRY_RE.match(stripped):
