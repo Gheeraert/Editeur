@@ -177,6 +177,35 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertTrue(all("\n" not in b.text for b in document.blocks))
         self.assertTrue(all(b.attributes.get("poetry_group_id") for b in document.blocks))
 
+    def test_blank_bounded_poetry_sequence_is_merged_into_single_block(self) -> None:
+        document = _document_from_lines(
+            [
+                "Paragraphe de prose avant.",
+                "",
+                "Tu te souviens du jour qu'en Aulide assembles",
+                "Nos vaisseaux par les vents semblaient etre appeles",
+                "Nous partions, et deja par mille cris de joie",
+                "Nous menacions de loin les Rivages de Troie.",
+                "Un prodige etonnant fit taire ce transport :",
+                "Le vent qui nous flattait nous laissa dans le Port.",
+                "",
+                "Paragraphe de prose apres.",
+            ]
+        )
+
+        self.service.process(document, mode="heuristic")
+
+        merged_blocks = [
+            b for b in document.blocks
+            if b.block_type == "quote_block" and b.attributes.get("quote_kind") == "poetry"
+        ]
+        self.assertEqual(len(merged_blocks), 1)
+        merged = merged_blocks[0]
+        self.assertEqual(merged.attributes.get("protected_zone"), "poetry")
+        self.assertEqual(merged.attributes.get("alignment"), "left")
+        self.assertEqual(merged.text.count("\n"), 5)
+        self.assertEqual(len(merged.attributes.get("merged_from", [])), 6)
+
 
 if __name__ == "__main__":
     unittest.main()
