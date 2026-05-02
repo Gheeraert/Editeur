@@ -177,34 +177,65 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertTrue(all("\n" not in b.text for b in document.blocks))
         self.assertTrue(all(b.attributes.get("poetry_group_id") for b in document.blocks))
 
-    def test_blank_bounded_poetry_sequence_is_merged_into_single_block(self) -> None:
-        document = _document_from_lines(
-            [
-                "Paragraphe de prose avant.",
-                "",
-                "Tu te souviens du jour qu'en Aulide assembles",
-                "Nos vaisseaux par les vents semblaient etre appeles",
-                "Nous partions, et deja par mille cris de joie",
-                "Nous menacions de loin les Rivages de Troie.",
-                "Un prodige etonnant fit taire ce transport :",
-                "Le vent qui nous flattait nous laissa dans le Port.",
-                "",
-                "Paragraphe de prose apres.",
-            ]
+    def test_docx_blank_para_attributes_trigger_poetry_merge(self) -> None:
+        document = Document(
+            document_id="doc-import-like-blank-poetry",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="docx",
+            blocks=[
+                Paragraph(block_id="b1", text="Ainsi le commentaire introduit le passage."),
+                Paragraph(
+                    block_id="b2",
+                    text="C'est moi qui si longtemps le plaisir de vos yeux,",
+                    attributes={"blank_para_before": True, "blank_para_before_count": 1},
+                ),
+                Paragraph(block_id="b3", text="Vous ai fait de ce nom remercier les Dieux,"),
+                Paragraph(block_id="b4", text="Et pour qui tant de fois prodiguant vos caresses,"),
+                Paragraph(
+                    block_id="b5",
+                    text="Vous n'avez point du sang dedaigne les faiblesses.",
+                    attributes={"blank_para_after": True, "blank_para_after_count": 1},
+                ),
+                Paragraph(
+                    block_id="b6",
+                    text="La syntaxe elle-même s'en voit transgressée.",
+                    attributes={"blank_para_before": True, "blank_para_before_count": 1},
+                ),
+            ],
         )
 
         self.service.process(document, mode="heuristic")
 
-        merged_blocks = [
-            b for b in document.blocks
-            if b.block_type == "quote_block" and b.attributes.get("quote_kind") == "poetry"
-        ]
-        self.assertEqual(len(merged_blocks), 1)
-        merged = merged_blocks[0]
-        self.assertEqual(merged.attributes.get("protected_zone"), "poetry")
-        self.assertEqual(merged.attributes.get("alignment"), "left")
-        self.assertEqual(merged.text.count("\n"), 5)
-        self.assertEqual(len(merged.attributes.get("merged_from", [])), 6)
+        self.assertEqual(len(document.blocks), 3)
+        self.assertEqual(document.blocks[0].text, "Ainsi le commentaire introduit le passage.")
+        self.assertEqual(document.blocks[1].block_type, "quote_block")
+        self.assertEqual(document.blocks[1].attributes.get("quote_kind"), "poetry")
+        self.assertEqual(document.blocks[1].attributes.get("protected_zone"), "poetry")
+        self.assertEqual(document.blocks[1].attributes.get("merged_from"), ["b2", "b3", "b4", "b5"])
+        self.assertEqual(document.blocks[1].text.count("\n"), 3)
+        self.assertEqual(document.blocks[2].text, "La syntaxe elle-même s'en voit transgressée.")
+
+    def test_blank_before_on_following_short_prose_is_a_boundary_not_a_line(self) -> None:
+        document = Document(
+            document_id="doc-short-prose-after-blank",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="docx",
+            blocks=[
+                Paragraph(block_id="b1", text="Intro."),
+                Paragraph(block_id="b2", text="Premier vers de la citation,", attributes={"blank_para_before": True}),
+                Paragraph(block_id="b3", text="Deuxième vers de la citation,"),
+                Paragraph(block_id="b4", text="Troisième vers de la citation,"),
+                Paragraph(block_id="b5", text="Quatrième vers de la citation.", attributes={"blank_para_after": True}),
+                Paragraph(block_id="b6", text="Bref retour au commentaire.", attributes={"blank_para_before": True}),
+            ],
+        )
+
+        self.service.process(document, mode="heuristic")
+
+        self.assertEqual(len(document.blocks), 3)
+        self.assertEqual(document.blocks[1].block_type, "quote_block")
+        self.assertNotIn("Bref retour", document.blocks[1].text)
+        self.assertEqual(document.blocks[2].text, "Bref retour au commentaire.")
 
 
 if __name__ == "__main__":

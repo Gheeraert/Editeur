@@ -109,3 +109,29 @@ def create_table_docx(path: Path) -> Path:
         archive.writestr("word/styles.xml", STYLES_XML)
         archive.writestr("docProps/core.xml", CORE_XML)
     return path
+
+
+BLANK_SEPARATED_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>Prose avant le bloc.</w:t></w:r></w:p>
+    <w:p/>
+    <w:p><w:r><w:t>C'est moi qui si longtemps le plaisir de vos yeux,</w:t></w:r></w:p>
+    <w:p><w:r><w:t>Vous ai fait de ce nom remercier les Dieux,</w:t></w:r></w:p>
+    <w:p><w:r><w:t>Et pour qui tant de fois prodiguant vos caresses,</w:t></w:r></w:p>
+    <w:p><w:r><w:t>Vous n'avez point du sang dedaigne les faiblesses.</w:t></w:r></w:p>
+    <w:p/>
+    <w:p><w:r><w:t>La prose reprend après le bloc.</w:t></w:r></w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+
+def create_blank_separated_docx(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", BLANK_SEPARATED_DOC_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path
