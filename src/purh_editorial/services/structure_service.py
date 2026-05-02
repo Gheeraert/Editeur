@@ -257,6 +257,10 @@ class StructurePreparationService:
                 if poetry_decision.decision in {"diagnostic", "transform"}:
                     poetry_candidate_block_ids.update(poetry_decision.target_refs)
 
+        # Retire les blocs vides préservés à l'import pour les heuristiques de frontière.
+        # Les attributs blank_para_before/after sur les voisins restent disponibles.
+        document.blocks = [b for b in document.blocks if not b.attributes.get("is_blank_para")]
+
         for block in document.blocks:
             text = block.text.strip()
             if not text:

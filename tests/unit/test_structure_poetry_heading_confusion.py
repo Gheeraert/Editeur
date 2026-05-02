@@ -215,6 +215,37 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertEqual(document.blocks[1].text.count("\n"), 3)
         self.assertEqual(document.blocks[2].text, "La syntaxe elle-même s'en voit transgressée.")
 
+    def test_real_blank_para_blocks_removed_after_processing(self) -> None:
+        document = Document(
+            document_id="doc-real-blank-para-blocks",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="docx",
+            blocks=[
+                Paragraph(block_id="b0", text="Texte introductif qui precede le poeme."),
+                Paragraph(block_id="b1", text="", attributes={"is_blank_para": True, "blank_para": True}),
+                Paragraph(block_id="b2", text="Je marche encor dans la brume,",
+                          attributes={"blank_para_before": True, "blank_para_before_count": 1}),
+                Paragraph(block_id="b3", text="Tu cherches l'aube au bord du quai,"),
+                Paragraph(block_id="b4", text="Nous voyons l'eau qui tremble,"),
+                Paragraph(block_id="b5", text="Le vent rejoint nos pas et se defait.",
+                          attributes={"blank_para_after": True, "blank_para_after_count": 1}),
+                Paragraph(block_id="b6", text="", attributes={"is_blank_para": True, "blank_para": True}),
+                Paragraph(block_id="b7", text="La suite du texte normal apres le poeme.",
+                          attributes={"blank_para_before": True, "blank_para_before_count": 1}),
+            ],
+        )
+
+        self.service.process(document, mode="heuristic")
+
+        # Les blocs vides (is_blank_para) doivent etre retires du document final.
+        self.assertFalse(any(b.attributes.get("is_blank_para") for b in document.blocks))
+        self.assertEqual(len(document.blocks), 3)
+        self.assertEqual(document.blocks[0].text, "Texte introductif qui precede le poeme.")
+        self.assertEqual(document.blocks[1].block_type, "quote_block")
+        self.assertEqual(document.blocks[1].attributes.get("quote_kind"), "poetry")
+        self.assertEqual(document.blocks[1].text.count("\n"), 3)
+        self.assertEqual(document.blocks[2].text, "La suite du texte normal apres le poeme.")
+
     def test_blank_before_on_following_short_prose_is_a_boundary_not_a_line(self) -> None:
         document = Document(
             document_id="doc-short-prose-after-blank",
