@@ -6,6 +6,7 @@ from purh_editorial.model import Document, InlineSpan, InlineStyle, Note
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 XML_NS = "http://www.w3.org/XML/1998/namespace"
+WORD_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 
 class TeiXmlExporter:
@@ -21,6 +22,7 @@ class TeiXmlExporter:
 
         note_by_id = {note.note_id: note for note in document.notes}
         section_stack: list[ET.Element] = []
+        table_diagnostics: list[dict[str, object]] = []
         for block in document.blocks:
             if block.block_type == "heading":
                 level = self._heading_level(block.attributes.get("heading_level"))
@@ -36,12 +38,87 @@ class TeiXmlExporter:
                 cit_el = ET.SubElement(parent, self._q("cit"))
                 quote_el = ET.SubElement(cit_el, self._q("quote"))
                 self._append_block_content(quote_el, block.text, block.inlines, note_by_id)
+            elif block.block_type == "table":
+                parent = section_stack[-1] if section_stack else body_el
+                table_diag = self._append_table_block(parent, block)
+                table_diagnostics.append(table_diag)
             else:
                 parent = section_stack[-1] if section_stack else body_el
                 p_el = ET.SubElement(parent, self._q("p"))
                 self._append_block_content(p_el, block.text, block.inlines, note_by_id)
 
+        annotations = document.annotations
+        annotations["tei_table_diagnostics"] = table_diagnostics
+        annotations["tei_table_exported_count"] = sum(
+            1 for item in table_diagnostics if item.get("code") == "table_exported_to_tei"
+        )
+        annotations["tei_table_not_exported_count"] = sum(
+            1 for item in table_diagnostics if item.get("code") != "table_exported_to_tei"
+        )
         return ET.tostring(root, encoding="unicode")
+
+    def _append_table_block(self, parent: ET.Element, block) -> dict[str, object]:
+        raw_ooxml = str(block.attributes.get("table_ooxml", "") or "").strip()
+        if not raw_ooxml:
+            ET.SubElement(parent, self._q("p")).text = "[Table not exported: missing OOXML]"
+            return {
+                "code": "table_not_exported_to_tei",
+                "block_id": block.block_id,
+                "reason": "missing_table_ooxml",
+                "rows": 0,
+                "cells": 0,
+            }
+
+        try:
+            table_root = ET.fromstring(raw_ooxml)
+        except ET.ParseError:
+            ET.SubElement(parent, self._q("p")).text = "[Table not exported: invalid OOXML]"
+            return {
+                "code": "table_not_exported_to_tei",
+                "block_id": block.block_id,
+                "reason": "invalid_table_ooxml",
+                "rows": 0,
+                "cells": 0,
+            }
+
+        tr_nodes = table_root.findall(f"./{{{WORD_NS}}}tr")
+        if not tr_nodes:
+            ET.SubElement(parent, self._q("p")).text = "[Table not exported: no rows]"
+            return {
+                "code": "table_export_fallback",
+                "block_id": block.block_id,
+                "reason": "no_rows",
+                "rows": 0,
+                "cells": 0,
+            }
+
+        table_el = ET.SubElement(parent, self._q("table"))
+        row_count = 0
+        cell_count = 0
+        for tr in tr_nodes:
+            row_el = ET.SubElement(table_el, self._q("row"))
+            row_count += 1
+            tc_nodes = tr.findall(f"./{{{WORD_NS}}}tc")
+            for tc in tc_nodes:
+                cell_el = ET.SubElement(row_el, self._q("cell"))
+                cell_count += 1
+                text_parts: list[str] = []
+                for p_node in tc.findall(f"./{{{WORD_NS}}}p"):
+                    paragraph_text = "".join(
+                        t.text or ""
+                        for t in p_node.findall(f".//{{{WORD_NS}}}t")
+                    ).strip()
+                    if paragraph_text:
+                        text_parts.append(paragraph_text)
+                if text_parts:
+                    cell_el.text = "\n".join(text_parts)
+
+        return {
+            "code": "table_exported_to_tei",
+            "block_id": block.block_id,
+            "rows": row_count,
+            "cells": cell_count,
+        }
 
     def _build_header(self, root: ET.Element, document: Document) -> None:
         tei_header = ET.SubElement(root, self._q("teiHeader"))

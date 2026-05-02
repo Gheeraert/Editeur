@@ -23,6 +23,9 @@ from purh_editorial.latex.semantic_model import (
     SmallCaps,
     Subscript,
     Superscript,
+    TableBlock,
+    TableCell,
+    TableRow,
     TextRun,
     VerseBlock,
     VerseLine,
@@ -185,6 +188,10 @@ def _parse_blocks(parent: etree._Element) -> list:
             blocks.append(_parse_list_bibl_block(child))
             i += 1
             continue
+        if local == "table":
+            blocks.append(_parse_table_block(child))
+            i += 1
+            continue
         if local == "bibl":
             items: list[BibliographyItem] = []
             while i < len(children) and etree.QName(children[i]).localname == "bibl":
@@ -236,6 +243,33 @@ def _parse_list_bibl_block(list_bibl: etree._Element) -> BibliographyBlock:
     for bibl in list_bibl.xpath("./tei:bibl", namespaces=NS):
         items.append(BibliographyItem(content=_parse_inline_children(bibl)))
     return BibliographyBlock(items=items)
+
+
+def _parse_table_block(table_el: etree._Element) -> TableBlock:
+    # Complex tables (nested tables) are intentionally downgraded to a controlled
+    # fallback comment to avoid exploding content into unrelated paragraphs.
+    if table_el.xpath(".//tei:table", namespaces=NS):
+        return TableBlock(
+            rows=[],
+            export_comment="table_export_fallback nested_table_not_supported",
+        )
+
+    rows: list[TableRow] = []
+    row_nodes = table_el.xpath("./tei:row", namespaces=NS)
+    for row_el in row_nodes:
+        cells: list[TableCell] = []
+        for cell_el in row_el.xpath("./tei:cell", namespaces=NS):
+            paragraphs: list[Paragraph] = []
+            p_nodes = cell_el.xpath("./tei:p", namespaces=NS)
+            if p_nodes:
+                for p_node in p_nodes:
+                    paragraphs.append(Paragraph(content=_parse_inline_children(p_node)))
+            else:
+                paragraphs.append(Paragraph(content=_parse_inline_children(cell_el)))
+            cells.append(TableCell(paragraphs=paragraphs))
+        rows.append(TableRow(cells=cells))
+
+    return TableBlock(rows=rows)
 
 
 def _parse_inline_children(element: etree._Element) -> list[InlineNode]:
