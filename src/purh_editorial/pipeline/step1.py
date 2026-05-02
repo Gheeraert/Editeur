@@ -212,7 +212,16 @@ class Step1Pipeline:
         # ── Configuration IA éditoriale (provider potentiellement distinct) ───
         # Les champs editorial_ai_* surchargent les champs ai_* quand renseignés.
         edi_provider = (options.editorial_ai_provider or str(options.ai_provider or "groq")).strip().lower()
-        edi_key = options.editorial_ai_api_key or options.ai_api_key or self.settings.ai.active_api_key
+        # API key fallback must follow the effective editorial provider selected
+        # for this session (not the global provider in settings).
+        if options.editorial_ai_api_key:
+            edi_key = options.editorial_ai_api_key
+        elif options.ai_api_key:
+            edi_key = options.ai_api_key
+        elif edi_provider == "anthropic":
+            edi_key = self.settings.ai.anthropic_api_key
+        else:
+            edi_key = self.settings.ai.api_key
         if edi_provider == "anthropic":
             edi_model = (
                 options.editorial_ai_model
@@ -384,7 +393,8 @@ class Step1Pipeline:
 
         # ── 6. Corrections IA ciblées (optionnelles) ──────────────────────────
         editorial_ai_requested = bool(options.editorial_ai_enabled())
-        editorial_ai_enabled = bool(editorial_ai_requested and self.ai.available)
+        editorial_ai_available = bool(self.ai.available)
+        editorial_ai_enabled = bool(editorial_ai_requested and editorial_ai_available)
         if editorial_ai_requested:
             t0 = utc_now_iso()
             if editorial_ai_enabled:
@@ -402,6 +412,9 @@ class Step1Pipeline:
                 finished_at=utc_now_iso(),
                 status=ai_status,
                 summary={
+                    "editorial_ai_requested": editorial_ai_requested,
+                    "editorial_ai_available": editorial_ai_available,
+                    "editorial_ai_enabled": editorial_ai_enabled,
                     "enabled": editorial_ai_enabled,
                     "corrections_applied": len(ai_tr),
                     "provider": self.ai.provider,
@@ -518,4 +531,3 @@ def _make_structure_provider_from_options(
         base_url=options.ai_base_url or settings.ai.base_url,
         timeout=settings.ai.timeout_seconds,
     )
-
