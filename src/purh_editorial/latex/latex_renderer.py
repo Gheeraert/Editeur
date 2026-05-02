@@ -47,6 +47,7 @@ class LatexRenderer:
             r"\setlength{\parindent}{1.25em}",
             r"\setlength{\parskip}{0pt}",
             r"\renewcommand{\footnotesize}{\small}",
+            r"\newcommand{\purhTableSize}{\small}",
             r"\begin{document}",
             rf"\title{{{self._escape(book.metadata.title)}}}",
         ]
@@ -120,6 +121,8 @@ class LatexRenderer:
         col_spec = " ".join([rf"p{{{col_width:.2f}\textwidth}}"] * col_count)
         lines = [
             f"% table_exported_to_latex rows={row_count} cols={col_count}",
+            r"\begingroup",
+            r"\purhTableSize",
             rf"\begin{{longtable}}{{{col_spec}}}",
         ]
         for row in table.rows:
@@ -130,6 +133,7 @@ class LatexRenderer:
                 rendered_cells.extend([""] * (col_count - len(rendered_cells)))
             lines.append(" & ".join(rendered_cells) + r" \\")
         lines.append(r"\end{longtable}")
+        lines.append(r"\endgroup")
         return "\n".join(lines)
 
     def _render_table_cell(self, cell: TableCell) -> str:
