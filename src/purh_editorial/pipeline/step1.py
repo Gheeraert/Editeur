@@ -37,12 +37,20 @@ class Step1Options:
     enable_editorial_ai: bool = False
     decision_mode: str | None = None
     ai_aggressiveness: str = "conservative"
+    # ── IA structurelle (arbitrage zones grises) ──────────────────────────
     ai_provider: str = "groq"
     ai_api_key: str | None = None
     ai_model: str | None = None
     ai_base_url: str | None = None
-    max_ai_calls: int = 6               # appels Groq max (modération)
     max_structure_ai_calls: int = 6
+
+    # ── IA éditoriale (corrections orthotypo) — provider optionnellement distinct
+    # Si vides, on hérite des champs ai_* de l'IA structurelle.
+    editorial_ai_provider: str = ""
+    editorial_ai_api_key: str | None = None
+    editorial_ai_model: str | None = None
+    editorial_ai_base_url: str | None = None
+    max_ai_calls: int = 6
     heuristic_profile: str = "conservative"
     heading_transform_threshold: float | None = None
     heading_diagnostic_threshold: float | None = None
@@ -199,6 +207,36 @@ class Step1Pipeline:
                 self.structure_ai.provider.api_key = options.ai_api_key
             if options.ai_model:
                 self.structure_ai.provider.model = options.ai_model
+
+        # ── Configuration IA éditoriale (provider potentiellement distinct) ───
+        # Les champs editorial_ai_* surchargent les champs ai_* quand renseignés.
+        edi_provider = (options.editorial_ai_provider or str(options.ai_provider or "groq")).strip().lower()
+        edi_key = options.editorial_ai_api_key or options.ai_api_key or self.settings.ai.active_api_key
+        if edi_provider == "anthropic":
+            edi_model = (
+                options.editorial_ai_model
+                or options.ai_model
+                or self.settings.ai.anthropic_model
+            )
+            edi_base_url = (
+                options.editorial_ai_base_url
+                or options.ai_base_url
+                or self.settings.ai.anthropic_base_url
+            )
+        else:
+            edi_model = options.editorial_ai_model or options.ai_model or self.settings.ai.model
+            edi_base_url = (
+                options.editorial_ai_base_url
+                or options.ai_base_url
+                or self.settings.ai.base_url
+            )
+        self.ai.provider = edi_provider
+        if edi_key:
+            self.ai.api_key = edi_key
+        if edi_model:
+            self.ai.model = edi_model
+        if edi_base_url:
+            self.ai.base_url = edi_base_url.rstrip("/")
 
         # ── 1. Ingestion ──────────────────────────────────────────────────────
         t0 = utc_now_iso()

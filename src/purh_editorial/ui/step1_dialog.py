@@ -28,7 +28,10 @@ class ExportRunResult:
     step1_result: Step1Result
     latex_output_path: Path | None = None
     latex_error: str | None = None
-CONFIG_VERSION = 1
+
+
+CONFIG_VERSION = 2
+
 ALLOWED_DECISION_MODES = {
     "deterministic",
     "heuristic",
@@ -37,6 +40,8 @@ ALLOWED_DECISION_MODES = {
 }
 ALLOWED_AI_AGGRESSIVENESS = {"conservative", "balanced", "aggressive"}
 ALLOWED_HEURISTIC_PROFILES = {"conservative", "balanced", "exploratory"}
+ALLOWED_PROVIDERS = {"groq", "anthropic"}
+
 DECISION_MODE_LABELS = {
     "deterministic": "Deterministe strict",
     "heuristic": "Heuristique",
@@ -53,7 +58,23 @@ AI_AGGRESSIVENESS_LABELS = {
     "balanced": "Equilibree",
     "aggressive": "Agressive",
 }
+PROVIDER_LABELS = {
+    "groq": "Groq (llama, OpenAI-compatible)",
+    "anthropic": "Anthropic (Claude)",
+}
+PROVIDER_DEFAULTS = {
+    "groq": {
+        "model": "llama-3.3-70b-versatile",
+        "base_url": "https://api.groq.com/openai/v1",
+    },
+    "anthropic": {
+        "model": "claude-haiku-4-5-20251001",
+        "base_url": "https://api.anthropic.com/v1",
+    },
+}
 
+
+# ── Fonctions de normalisation ────────────────────────────────────────────────
 
 def normalize_decision_mode(value: str | None) -> str:
     if not value:
@@ -118,6 +139,25 @@ def heuristic_profile_from_label(label: str | None) -> str:
     return normalize_heuristic_profile(raw)
 
 
+def normalize_provider(value: str | None) -> str:
+    if not value:
+        return "groq"
+    v = str(value).strip().lower()
+    return v if v in ALLOWED_PROVIDERS else "groq"
+
+
+def provider_to_label(value: str | None) -> str:
+    return PROVIDER_LABELS.get(normalize_provider(value), PROVIDER_LABELS["groq"])
+
+
+def provider_from_label(label: str | None) -> str:
+    raw = str(label or "").strip()
+    for code, text in PROVIDER_LABELS.items():
+        if text == raw:
+            return code
+    return normalize_provider(raw)
+
+
 def normalize_optional_threshold(value: object) -> float | None:
     if value is None:
         return None
@@ -134,10 +174,10 @@ def derive_ai_flags_from_decision_mode(decision_mode: str) -> tuple[bool, bool]:
     mode = normalize_decision_mode(decision_mode)
     if mode == "heuristic_ai_local":
         return True, False
-    if mode in {"deterministic", "heuristic", "ai_exploratory"}:
-        return False, False
     return False, False
 
+
+# ── Construction des options Step1 ────────────────────────────────────────────
 
 def build_step1_options_from_form(
     *,
@@ -148,20 +188,44 @@ def build_step1_options_from_form(
     poetry_transform_threshold: object,
     poetry_diagnostic_threshold: object,
     ai_aggressiveness_label: str,
-    ai_provider: str,
-    ai_api_key: str,
-    ai_model: str,
-    ai_base_url: str,
-    enable_editorial_ai: bool,
-    max_ai_calls: int,
-    max_structure_ai_calls: int,
-    output_path: Path | None,
-    tei_output_path: Path | None,
+    # IA structurelle (nouveaux noms)
+    struct_ai_provider: str = "",
+    struct_ai_api_key: str = "",
+    struct_ai_model: str = "",
+    struct_ai_base_url: str = "",
+    max_structure_ai_calls: int = 6,
+    # IA structurelle (anciens noms — rétrocompatibilité)
+    ai_provider: str = "",
+    ai_api_key: str = "",
+    ai_model: str = "",
+    ai_base_url: str = "",
+    # IA éditoriale
+    enable_editorial_ai: bool = False,
+    editorial_ai_provider: str = "",
+    editorial_ai_api_key: str = "",
+    editorial_ai_model: str = "",
+    editorial_ai_base_url: str = "",
+    max_ai_calls: int = 6,
+    # Sorties
+    output_path: Path | None = None,
+    tei_output_path: Path | None = None,
 ) -> Step1Options:
     decision_mode = decision_mode_from_label(decision_mode_label)
     heuristic_profile = heuristic_profile_from_label(heuristic_profile_label)
     ai_aggressiveness = ai_aggressiveness_from_label(ai_aggressiveness_label)
     enable_structure_ai, _ = derive_ai_flags_from_decision_mode(decision_mode)
+
+    # Résolution : nouveaux noms > anciens noms
+    actual_struct_provider = str(struct_ai_provider or ai_provider or "groq").strip() or "groq"
+    actual_struct_key = str(struct_ai_api_key or ai_api_key or "").strip() or None
+    actual_struct_model = str(struct_ai_model or ai_model or "").strip() or None
+    actual_struct_base_url = str(struct_ai_base_url or ai_base_url or "").strip() or None
+
+    edi_provider = str(editorial_ai_provider or "").strip()
+    edi_key = str(editorial_ai_api_key or "").strip() or None
+    edi_model = str(editorial_ai_model or "").strip() or None
+    edi_base_url = str(editorial_ai_base_url or "").strip() or None
+
     return Step1Options(
         enable_ai=False,
         enable_structure_ai=enable_structure_ai,
@@ -173,43 +237,65 @@ def build_step1_options_from_form(
         poetry_transform_threshold=normalize_optional_threshold(poetry_transform_threshold),
         poetry_diagnostic_threshold=normalize_optional_threshold(poetry_diagnostic_threshold),
         ai_aggressiveness=ai_aggressiveness,
-        ai_provider=str(ai_provider or "groq").strip() or "groq",
-        ai_api_key=str(ai_api_key or "").strip() or None,
-        ai_model=str(ai_model or "").strip() or None,
-        ai_base_url=str(ai_base_url or "").strip() or None,
-        max_ai_calls=max(1, int(max_ai_calls)),
+        ai_provider=actual_struct_provider,
+        ai_api_key=actual_struct_key,
+        ai_model=actual_struct_model,
+        ai_base_url=actual_struct_base_url,
         max_structure_ai_calls=max(1, int(max_structure_ai_calls)),
+        editorial_ai_provider=edi_provider,
+        editorial_ai_api_key=edi_key,
+        editorial_ai_model=edi_model,
+        editorial_ai_base_url=edi_base_url,
+        max_ai_calls=max(1, int(max_ai_calls)),
         output_path=output_path,
         tei_output_path=tei_output_path,
     )
 
 
+# ── Fonctions config dict ─────────────────────────────────────────────────────
+
 def build_config_dict(
-    source_path: str,
-    output_dir: str,
-    base_name: str,
-    export_docx: bool,
-    export_tei: bool,
-    export_latex: bool,
-    output_docx_path: str,
-    tei_output_path: str,
-    decision_mode: str,
-    heuristic_profile: str,
-    heading_transform_threshold: float | None,
-    heading_diagnostic_threshold: float | None,
-    poetry_transform_threshold: float | None,
-    poetry_diagnostic_threshold: float | None,
-    ai_aggressiveness: str,
-    ai_provider: str,
-    ai_api_key: str,
-    ai_model: str,
-    ai_base_url: str,
-    enable_structure_ai: bool,
-    enable_editorial_ai: bool,
-    enable_ai: bool,
-    max_ai_calls: int,
-    max_structure_ai_calls: int,
+    source_path: str = "",
+    output_dir: str = "",
+    base_name: str = "",
+    export_docx: bool = True,
+    export_tei: bool = True,
+    export_latex: bool = True,
+    output_docx_path: str = "",
+    tei_output_path: str = "",
+    decision_mode: str = "heuristic",
+    heuristic_profile: str = "conservative",
+    heading_transform_threshold: float | None = None,
+    heading_diagnostic_threshold: float | None = None,
+    poetry_transform_threshold: float | None = None,
+    poetry_diagnostic_threshold: float | None = None,
+    ai_aggressiveness: str = "conservative",
+    # IA structurelle (nouveaux noms)
+    struct_ai_provider: str = "",
+    struct_ai_api_key: str = "",
+    struct_ai_model: str = "",
+    struct_ai_base_url: str = "",
+    max_structure_ai_calls: int = 6,
+    # IA éditoriale
+    enable_editorial_ai: bool = False,
+    editorial_ai_provider: str = "",
+    editorial_ai_api_key: str = "",
+    editorial_ai_model: str = "",
+    editorial_ai_base_url: str = "",
+    max_ai_calls: int = 6,
+    # Legacy (anciens noms / compatibilité)
+    ai_provider: str = "",
+    ai_api_key: str = "",
+    ai_model: str = "",
+    ai_base_url: str = "",
+    enable_structure_ai: bool = False,
+    enable_ai: bool = False,
 ) -> dict[str, object]:
+    # Résolution anciens → nouveaux
+    actual_struct_provider = normalize_provider(struct_ai_provider or ai_provider or "groq")
+    actual_struct_api_key = str(struct_ai_api_key or ai_api_key or "")
+    actual_struct_model = str(struct_ai_model or ai_model or "")
+    actual_struct_base_url = str(struct_ai_base_url or ai_base_url or "")
     return {
         "version": CONFIG_VERSION,
         "source_path": source_path,
@@ -227,15 +313,26 @@ def build_config_dict(
         "poetry_transform_threshold": normalize_optional_threshold(poetry_transform_threshold),
         "poetry_diagnostic_threshold": normalize_optional_threshold(poetry_diagnostic_threshold),
         "ai_aggressiveness": normalize_ai_aggressiveness(ai_aggressiveness),
-        "ai_provider": str(ai_provider or "groq"),
-        "ai_api_key": str(ai_api_key or ""),
-        "ai_model": str(ai_model or ""),
-        "ai_base_url": str(ai_base_url or ""),
-        "enable_structure_ai": bool(enable_structure_ai),
-        "enable_editorial_ai": bool(enable_editorial_ai),
-        "enable_ai": bool(enable_ai),
-        "max_ai_calls": max(1, int(max_ai_calls)),
+        # Structurelle (v2)
+        "struct_ai_provider": actual_struct_provider,
+        "struct_ai_api_key": actual_struct_api_key,
+        "struct_ai_model": actual_struct_model,
+        "struct_ai_base_url": actual_struct_base_url,
         "max_structure_ai_calls": max(1, int(max_structure_ai_calls)),
+        # Éditoriale (v2)
+        "enable_editorial_ai": bool(enable_editorial_ai),
+        "editorial_ai_provider": str(editorial_ai_provider or ""),
+        "editorial_ai_api_key": str(editorial_ai_api_key or ""),
+        "editorial_ai_model": str(editorial_ai_model or ""),
+        "editorial_ai_base_url": str(editorial_ai_base_url or ""),
+        "max_ai_calls": max(1, int(max_ai_calls)),
+        # Legacy (v1 — rétrocompatibilité)
+        "enable_structure_ai": bool(enable_structure_ai),
+        "enable_ai": bool(enable_ai),
+        "ai_provider": actual_struct_provider,
+        "ai_api_key": actual_struct_api_key,
+        "ai_model": actual_struct_model,
+        "ai_base_url": actual_struct_base_url,
     }
 
 
@@ -243,104 +340,124 @@ def apply_config_dict(
     current: dict[str, object],
     loaded: dict[str, object],
 ) -> dict[str, object]:
-    merged = {
+    def _s(d: dict, key: str, default: str = "") -> str:
+        return str(d.get(key) or default)
+
+    def _b(d: dict, key: str, default: bool = False) -> bool:
+        return bool(d.get(key, default))
+
+    def _i(d: dict, key: str, default: int, *, minimum: int = 1) -> int:
+        try:
+            return max(minimum, int(d.get(key, default)))
+        except (TypeError, ValueError):
+            return default
+
+    # Base from current state
+    merged: dict[str, object] = {
         "version": CONFIG_VERSION,
-        "source_path": str(current.get("source_path", "")),
-        "output_dir": str(current.get("output_dir", "")),
-        "base_name": str(current.get("base_name", "")),
-        "export_docx": bool(current.get("export_docx", True)),
-        "export_tei": bool(current.get("export_tei", True)),
-        "export_latex": bool(current.get("export_latex", True)),
-        "output_docx_path": str(current.get("output_docx_path", "")),
-        "tei_output_path": str(current.get("tei_output_path", "")),
-        "decision_mode": normalize_decision_mode(str(current.get("decision_mode", "heuristic"))),
-        "heuristic_profile": normalize_heuristic_profile(str(current.get("heuristic_profile", "conservative"))),
+        "source_path": _s(current, "source_path"),
+        "output_dir": _s(current, "output_dir"),
+        "base_name": _s(current, "base_name"),
+        "export_docx": _b(current, "export_docx", True),
+        "export_tei": _b(current, "export_tei", True),
+        "export_latex": _b(current, "export_latex", True),
+        "output_docx_path": _s(current, "output_docx_path"),
+        "tei_output_path": _s(current, "tei_output_path"),
+        "decision_mode": normalize_decision_mode(_s(current, "decision_mode", "heuristic")),
+        "heuristic_profile": normalize_heuristic_profile(_s(current, "heuristic_profile", "conservative")),
         "heading_transform_threshold": normalize_optional_threshold(current.get("heading_transform_threshold")),
         "heading_diagnostic_threshold": normalize_optional_threshold(current.get("heading_diagnostic_threshold")),
         "poetry_transform_threshold": normalize_optional_threshold(current.get("poetry_transform_threshold")),
         "poetry_diagnostic_threshold": normalize_optional_threshold(current.get("poetry_diagnostic_threshold")),
-        "ai_aggressiveness": normalize_ai_aggressiveness(str(current.get("ai_aggressiveness", "conservative"))),
-        "ai_provider": str(current.get("ai_provider", "groq")),
-        "ai_api_key": str(current.get("ai_api_key", "")),
-        "ai_model": str(current.get("ai_model", "")),
-        "ai_base_url": str(current.get("ai_base_url", "")),
-        "enable_structure_ai": bool(current.get("enable_structure_ai", False)),
-        "enable_editorial_ai": bool(current.get("enable_editorial_ai", False)),
-        "enable_ai": bool(current.get("enable_ai", False)),
-        "max_ai_calls": max(1, int(current.get("max_ai_calls", Step1Options().max_ai_calls))),
-        "max_structure_ai_calls": max(
-            1,
-            int(current.get("max_structure_ai_calls", Step1Options().max_structure_ai_calls)),
-        ),
+        "ai_aggressiveness": normalize_ai_aggressiveness(_s(current, "ai_aggressiveness", "conservative")),
+        # Structurelle
+        "struct_ai_provider": normalize_provider(_s(current, "struct_ai_provider", _s(current, "ai_provider", "groq"))),
+        "struct_ai_api_key": _s(current, "struct_ai_api_key", _s(current, "ai_api_key")),
+        "struct_ai_model": _s(current, "struct_ai_model", _s(current, "ai_model")),
+        "struct_ai_base_url": _s(current, "struct_ai_base_url", _s(current, "ai_base_url")),
+        "max_structure_ai_calls": _i(current, "max_structure_ai_calls", Step1Options().max_structure_ai_calls),
+        # Éditoriale
+        "enable_editorial_ai": _b(current, "enable_editorial_ai"),
+        "editorial_ai_provider": _s(current, "editorial_ai_provider"),
+        "editorial_ai_api_key": _s(current, "editorial_ai_api_key"),
+        "editorial_ai_model": _s(current, "editorial_ai_model"),
+        "editorial_ai_base_url": _s(current, "editorial_ai_base_url"),
+        "max_ai_calls": _i(current, "max_ai_calls", Step1Options().max_ai_calls),
+        # Legacy
+        "enable_structure_ai": _b(current, "enable_structure_ai"),
+        "enable_ai": False,
+        "ai_provider": _s(current, "ai_provider", "groq"),
+        "ai_api_key": _s(current, "ai_api_key"),
+        "ai_model": _s(current, "ai_model"),
+        "ai_base_url": _s(current, "ai_base_url"),
     }
+
     if not isinstance(loaded, dict):
         return merged
-    if "source_path" in loaded:
-        merged["source_path"] = str(loaded.get("source_path") or "")
-    if "output_dir" in loaded:
-        merged["output_dir"] = str(loaded.get("output_dir") or "")
-    if "base_name" in loaded:
-        merged["base_name"] = str(loaded.get("base_name") or "")
-    if "export_docx" in loaded:
-        merged["export_docx"] = bool(loaded.get("export_docx"))
-    if "export_tei" in loaded:
-        merged["export_tei"] = bool(loaded.get("export_tei"))
-    if "export_latex" in loaded:
-        merged["export_latex"] = bool(loaded.get("export_latex"))
-    if "output_docx_path" in loaded:
-        merged["output_docx_path"] = str(loaded.get("output_docx_path") or "")
-    if "tei_output_path" in loaded:
-        merged["tei_output_path"] = str(loaded.get("tei_output_path") or "")
+
+    # Champs simples
+    for key in ("source_path", "output_dir", "base_name", "output_docx_path", "tei_output_path"):
+        if key in loaded:
+            merged[key] = str(loaded.get(key) or "")
+    for key in ("export_docx", "export_tei", "export_latex"):
+        if key in loaded:
+            merged[key] = bool(loaded.get(key))
+
     if "decision_mode" in loaded:
         merged["decision_mode"] = normalize_decision_mode(str(loaded.get("decision_mode")))
     if "heuristic_profile" in loaded:
         merged["heuristic_profile"] = normalize_heuristic_profile(str(loaded.get("heuristic_profile")))
-    if "heading_transform_threshold" in loaded:
-        merged["heading_transform_threshold"] = normalize_optional_threshold(loaded.get("heading_transform_threshold"))
-    if "heading_diagnostic_threshold" in loaded:
-        merged["heading_diagnostic_threshold"] = normalize_optional_threshold(loaded.get("heading_diagnostic_threshold"))
-    if "poetry_transform_threshold" in loaded:
-        merged["poetry_transform_threshold"] = normalize_optional_threshold(loaded.get("poetry_transform_threshold"))
-    if "poetry_diagnostic_threshold" in loaded:
-        merged["poetry_diagnostic_threshold"] = normalize_optional_threshold(loaded.get("poetry_diagnostic_threshold"))
+    for key in ("heading_transform_threshold", "heading_diagnostic_threshold",
+                "poetry_transform_threshold", "poetry_diagnostic_threshold"):
+        if key in loaded:
+            merged[key] = normalize_optional_threshold(loaded.get(key))
     if "ai_aggressiveness" in loaded:
         merged["ai_aggressiveness"] = normalize_ai_aggressiveness(str(loaded.get("ai_aggressiveness")))
-    if "ai_provider" in loaded:
-        merged["ai_provider"] = str(loaded.get("ai_provider") or "groq")
-    if "ai_api_key" in loaded:
-        merged["ai_api_key"] = str(loaded.get("ai_api_key") or "")
-    if "ai_model" in loaded:
-        merged["ai_model"] = str(loaded.get("ai_model") or "")
-    if "ai_base_url" in loaded:
-        merged["ai_base_url"] = str(loaded.get("ai_base_url") or "")
-    if "enable_structure_ai" in loaded:
-        merged["enable_structure_ai"] = bool(loaded.get("enable_structure_ai"))
+
+    # IA structurelle — supporte v1 (ai_*) et v2 (struct_ai_*)
+    struct_provider_raw = (
+        loaded.get("struct_ai_provider")
+        or loaded.get("ai_provider")
+        or "groq"
+    )
+    if "struct_ai_provider" in loaded or "ai_provider" in loaded:
+        merged["struct_ai_provider"] = normalize_provider(str(struct_provider_raw))
+        merged["ai_provider"] = merged["struct_ai_provider"]
+    for new_key, old_key in (
+        ("struct_ai_api_key", "ai_api_key"),
+        ("struct_ai_model", "ai_model"),
+        ("struct_ai_base_url", "ai_base_url"),
+    ):
+        if new_key in loaded:
+            merged[new_key] = str(loaded.get(new_key) or "")
+            merged[old_key] = merged[new_key]
+        elif old_key in loaded:
+            merged[new_key] = str(loaded.get(old_key) or "")
+            merged[old_key] = merged[new_key]
+
+    if "max_structure_ai_calls" in loaded:
+        merged["max_structure_ai_calls"] = _i(loaded, "max_structure_ai_calls", Step1Options().max_structure_ai_calls)
+
+    # IA éditoriale
     if "enable_editorial_ai" in loaded:
         merged["enable_editorial_ai"] = bool(loaded.get("enable_editorial_ai"))
-    if "enable_ai" in loaded:
-        merged["enable_ai"] = bool(loaded.get("enable_ai"))
+    for key in ("editorial_ai_provider", "editorial_ai_api_key", "editorial_ai_model", "editorial_ai_base_url"):
+        if key in loaded:
+            merged[key] = str(loaded.get(key) or "")
     if "max_ai_calls" in loaded:
-        try:
-            merged["max_ai_calls"] = max(1, int(loaded.get("max_ai_calls")))
-        except (TypeError, ValueError):
-            pass
-    if "max_structure_ai_calls" in loaded:
-        try:
-            merged["max_structure_ai_calls"] = max(1, int(loaded.get("max_structure_ai_calls")))
-        except (TypeError, ValueError):
-            pass
+        merged["max_ai_calls"] = _i(loaded, "max_ai_calls", Step1Options().max_ai_calls)
 
+    # Decision mode est autoritaire sur l'IA structurelle
     if "decision_mode" in loaded:
-        # Decision mode is authoritative for structure AI.
-        mode = normalize_decision_mode(str(merged["decision_mode"]))
+        mode = str(merged["decision_mode"])
         structure_ai, _ = derive_ai_flags_from_decision_mode(mode)
         merged["enable_structure_ai"] = structure_ai
-        # Preserve explicit editorial toggle when mode allows it.
         if mode in {"deterministic", "ai_exploratory"}:
             merged["enable_editorial_ai"] = False
         elif "enable_editorial_ai" in loaded:
             merged["enable_editorial_ai"] = bool(loaded.get("enable_editorial_ai"))
         merged["enable_ai"] = False
+
     return merged
 
 
@@ -362,10 +479,11 @@ def save_config_file(path: Path, config: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+# ── Formatage des résultats ───────────────────────────────────────────────────
+
 def format_diagnostics(diagnostics: list[Diagnostic]) -> str:
     if not diagnostics:
         return "Aucun diagnostic."
-
     lines: list[str] = []
     for diag in diagnostics:
         lines.append(
@@ -401,14 +519,12 @@ def format_outputs(result: Step1Result) -> str:
         lines.append(f"- DOCX généré : {result.output_docx}")
     else:
         lines.append("- DOCX généré : non produit (option non demandée)")
-
     report = result.pipeline_result.report
     tei_path = None
     for module_run in report.module_runs:
         if module_run.module_name == "tei_xml_write":
             tei_path = module_run.summary.get("output")
             break
-
     if tei_path:
         lines.append(f"- XML-TEI généré : {tei_path}")
     elif result.pipeline_result.tei_xml:
@@ -471,18 +587,16 @@ def run_export_bundle(
     step1_result = pipeline.run(source, options)
     latex_path: Path | None = None
     latex_error: str | None = None
-
     if export_latex and latex_output_path is not None:
         _docx_path, tei_path = extract_output_paths(step1_result)
         if tei_path is None or not tei_path.exists():
-            latex_error = "Export LaTeX ignor?: XML-TEI non disponible (?chec export XML)."
+            latex_error = "Export LaTeX ignoré : XML-TEI non disponible."
         else:
             try:
                 latex_output_path.parent.mkdir(parents=True, exist_ok=True)
                 latex_path = export_tei_to_latex(tei_path, latex_output_path)
             except Exception as exc:  # noqa: BLE001
                 latex_error = f"Erreur export LaTeX: {exc}"
-
     return ExportRunResult(
         step1_result=step1_result,
         latex_output_path=latex_path,
@@ -504,8 +618,8 @@ def build_completion_message(
         f"- Diagnostics: {len(report.diagnostics)}\n"
         f"- Warnings: {len(report.warnings)}\n"
         f"- DOCX: {docx_path if docx_path else 'non produit'}\n"
-        f"- XML-TEI gnr : {tei_path if tei_path else 'non écrit sur disque'}\n"
-        f"- LaTeX gnr : {latex_value}"
+        f"- XML-TEI: {tei_path if tei_path else 'non écrit sur disque'}\n"
+        f"- LaTeX: {latex_value}"
     )
 
 
@@ -523,8 +637,8 @@ def build_result_text(result: Step1Result, latex_path: Path | None = None, latex
         "",
         "Sorties",
         format_outputs(result),
-        *(["- LaTeX gnr : " + str(latex_path)] if latex_path else []),
-        *(["- LaTeX gnr : " + latex_error] if latex_error else []),
+        *(["- LaTeX : " + str(latex_path)] if latex_path else []),
+        *(["- LaTeX : " + latex_error] if latex_error else []),
         "",
         "Resume modules",
         format_module_runs(report.module_runs),
@@ -533,6 +647,8 @@ def build_result_text(result: Step1Result, latex_path: Path | None = None, latex
     ]
     return "\n".join(sections)
 
+
+# ── Boîte de dialogue ─────────────────────────────────────────────────────────
 
 class Step1Dialog(tk.Tk):
     """Interface Step 1: collecte options, lance le pipeline, affiche le rapport."""
@@ -544,11 +660,12 @@ class Step1Dialog(tk.Tk):
         self.settings = settings
         self.title("PURH Editorial - Step 1")
         self.resizable(True, True)
-        self.minsize(960, 700)
+        self.minsize(980, 720)
 
         self._pipeline: Step1Pipeline | None = None
         self._running = False
 
+        # Fichiers
         self._input_path = tk.StringVar()
         self._output_dir = tk.StringVar(value=str(self.settings.exports_dir))
         self._base_name = tk.StringVar()
@@ -558,25 +675,42 @@ class Step1Dialog(tk.Tk):
         self._output_docx_path = tk.StringVar()
         self._output_tei_path = tk.StringVar()
         self._output_latex_path = tk.StringVar()
-        self._enable_ai = tk.BooleanVar(value=False)
-        self._max_ai_calls = tk.IntVar(value=Step1Options().max_ai_calls)
+
+        # Politique
         self._decision_mode = tk.StringVar(value="heuristic")
+        self._decision_mode_label = tk.StringVar(value=decision_mode_to_label("heuristic"))
         self._heuristic_profile = tk.StringVar(value="conservative")
-        self._decision_mode_label = tk.StringVar(value=decision_mode_to_label(self._decision_mode.get()))
-        self._heuristic_profile_label = tk.StringVar(value=heuristic_profile_to_label(self._heuristic_profile.get()))
+        self._heuristic_profile_label = tk.StringVar(value=heuristic_profile_to_label("conservative"))
         self._heading_transform_threshold = tk.StringVar(value="")
         self._heading_diagnostic_threshold = tk.StringVar(value="")
         self._poetry_transform_threshold = tk.StringVar(value="")
         self._poetry_diagnostic_threshold = tk.StringVar(value="")
         self._ai_aggressiveness = tk.StringVar(value="conservative")
-        self._ai_aggressiveness_label = tk.StringVar(value=ai_aggressiveness_to_label(self._ai_aggressiveness.get()))
-        self._ai_provider = tk.StringVar(value="groq")
-        self._ai_api_key = tk.StringVar(value="")
-        self._ai_model = tk.StringVar(value=self.settings.ai.model)
-        self._ai_base_url = tk.StringVar(value=self.settings.ai.base_url)
-        self._enable_structure_ai = tk.BooleanVar(value=False)
-        self._enable_editorial_ai = tk.BooleanVar(value=False)
+        self._ai_aggressiveness_label = tk.StringVar(value=ai_aggressiveness_to_label("conservative"))
+
+        # IA structurelle
+        self._struct_ai_provider_label = tk.StringVar(value=provider_to_label(settings.ai.provider))
+        self._struct_ai_api_key = tk.StringVar(value=settings.ai.api_key or "")
+        self._struct_ai_model = tk.StringVar(value=settings.ai.model)
+        self._struct_ai_base_url = tk.StringVar(value=settings.ai.base_url)
         self._max_structure_ai_calls = tk.IntVar(value=Step1Options().max_structure_ai_calls)
+
+        # IA éditoriale
+        self._enable_editorial_ai = tk.BooleanVar(value=False)
+        self._editorial_ai_provider_label = tk.StringVar(value="")
+        self._editorial_ai_api_key = tk.StringVar(value=settings.ai.anthropic_api_key or "")
+        self._editorial_ai_model = tk.StringVar(value=settings.ai.anthropic_model)
+        self._editorial_ai_base_url = tk.StringVar(value=settings.ai.anthropic_base_url)
+        self._max_ai_calls = tk.IntVar(value=Step1Options().max_ai_calls)
+
+        # Legacy (compatibilité)
+        self._enable_ai = tk.BooleanVar(value=False)
+        self._enable_structure_ai = tk.BooleanVar(value=False)
+        self._ai_provider = tk.StringVar(value=settings.ai.provider)
+        self._ai_api_key = tk.StringVar(value=settings.ai.api_key or "")
+        self._ai_model = tk.StringVar(value=settings.ai.model)
+        self._ai_base_url = tk.StringVar(value=settings.ai.base_url)
+
         self._status = tk.StringVar(value="Selectionnez un DOCX source puis lancez l'analyse.")
 
         self._input_path.trace_add("write", self._on_input_changed)
@@ -604,14 +738,16 @@ class Step1Dialog(tk.Tk):
         self._bind_mousewheel(self._main_canvas)
 
         root.columnconfigure(0, weight=1)
-        root.rowconfigure(6, weight=1)
+        root.rowconfigure(8, weight=1)
 
+        # ── Section 1 : Fichier source ────────────────────────────────────────
         src_frame = ttk.LabelFrame(root, text="1. Fichier source", padding=p)
         src_frame.grid(row=0, column=0, sticky="ew", pady=(0, p))
         src_frame.columnconfigure(0, weight=1)
         ttk.Entry(src_frame, textvariable=self._input_path).grid(row=0, column=0, sticky="ew", padx=(0, p))
         ttk.Button(src_frame, text="Choisir...", command=self._browse_input).grid(row=0, column=1)
 
+        # ── Section 2 : Export ────────────────────────────────────────────────
         out_frame = ttk.LabelFrame(root, text="2. Export des fichiers", padding=p)
         out_frame.grid(row=1, column=0, sticky="ew", pady=(0, p))
         out_frame.columnconfigure(1, weight=1)
@@ -627,102 +763,160 @@ class Step1Dialog(tk.Tk):
         ttk.Checkbutton(out_frame, text="Exporter le XML-TEI", variable=self._export_tei).grid(row=3, column=1, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=2, sticky="w", pady=(6, 0))
 
+        # ── Section 3 : Politique ─────────────────────────────────────────────
         opt_frame = ttk.LabelFrame(root, text="3. Politique de traitement", padding=p)
         opt_frame.grid(row=2, column=0, sticky="ew", pady=(0, p))
         opt_frame.columnconfigure(1, weight=1)
         ttk.Label(opt_frame, text="Mode de décision:").grid(row=0, column=0, sticky="w")
-        mode_combo = ttk.Combobox(
+        ttk.Combobox(
             opt_frame,
             textvariable=self._decision_mode_label,
             values=list(DECISION_MODE_LABELS.values()),
             state="readonly",
-        )
-        mode_combo.grid(row=0, column=1, sticky="ew", padx=(8, 0))
+        ).grid(row=0, column=1, sticky="ew", padx=(8, 0))
         ttk.Label(opt_frame, text="Profil heuristique:").grid(row=1, column=0, sticky="w", pady=(6, 0))
-        profile_combo = ttk.Combobox(
+        ttk.Combobox(
             opt_frame,
             textvariable=self._heuristic_profile_label,
             values=list(HEURISTIC_PROFILE_LABELS.values()),
             state="readonly",
-        )
-        profile_combo.grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
+        ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
 
+        # ── Section 4 : Seuils ────────────────────────────────────────────────
         thresh_frame = ttk.LabelFrame(root, text="4. Seuils avancés", padding=p)
         thresh_frame.grid(row=3, column=0, sticky="ew", pady=(0, p))
         thresh_frame.columnconfigure(1, weight=1)
         thresh_frame.columnconfigure(3, weight=1)
-        ttk.Label(thresh_frame, text="Heading transform:").grid(row=0, column=0, sticky="w")
-        ttk.Entry(thresh_frame, textvariable=self._heading_transform_threshold, width=8).grid(row=0, column=1, sticky="w", padx=(6, 16))
-        ttk.Label(thresh_frame, text="Heading diagnostic:").grid(row=0, column=2, sticky="w")
-        ttk.Entry(thresh_frame, textvariable=self._heading_diagnostic_threshold, width=8).grid(row=0, column=3, sticky="w", padx=(6, 0))
-        ttk.Label(thresh_frame, text="Poetry transform:").grid(row=1, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(thresh_frame, textvariable=self._poetry_transform_threshold, width=8).grid(row=1, column=1, sticky="w", padx=(6, 16), pady=(6, 0))
-        ttk.Label(thresh_frame, text="Poetry diagnostic:").grid(row=1, column=2, sticky="w", pady=(6, 0))
-        ttk.Entry(thresh_frame, textvariable=self._poetry_diagnostic_threshold, width=8).grid(row=1, column=3, sticky="w", padx=(6, 0), pady=(6, 0))
+        for (r, lbl, var) in (
+            (0, "Heading transform:", self._heading_transform_threshold),
+            (1, "Poetry transform:", self._poetry_transform_threshold),
+        ):
+            ttk.Label(thresh_frame, text=lbl).grid(row=r, column=0, sticky="w", pady=(0 if r == 0 else 6, 0))
+            ttk.Entry(thresh_frame, textvariable=var, width=8).grid(row=r, column=1, sticky="w", padx=(6, 16), pady=(0 if r == 0 else 6, 0))
+        for (r, lbl, var) in (
+            (0, "Heading diagnostic:", self._heading_diagnostic_threshold),
+            (1, "Poetry diagnostic:", self._poetry_diagnostic_threshold),
+        ):
+            ttk.Label(thresh_frame, text=lbl).grid(row=r, column=2, sticky="w", pady=(0 if r == 0 else 6, 0))
+            ttk.Entry(thresh_frame, textvariable=var, width=8).grid(row=r, column=3, sticky="w", padx=(6, 0), pady=(0 if r == 0 else 6, 0))
         ttk.Label(thresh_frame, text="Vide = valeurs du profil.", foreground="#555555").grid(
             row=2, column=0, columnspan=4, sticky="w", pady=(8, 0)
         )
 
-        ai_frame = ttk.LabelFrame(root, text="5. IA locale et éditoriale", padding=p)
-        ai_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
-        ai_frame.columnconfigure(1, weight=1)
-        ttk.Label(ai_frame, text="Agressivité IA locale:").grid(row=0, column=0, sticky="w")
-        ai_aggr_combo = ttk.Combobox(
-            ai_frame,
+        # ── Section 5 : IA structurelle ───────────────────────────────────────
+        struct_frame = ttk.LabelFrame(
+            root,
+            text="5. IA structurelle — classification des zones grises (Groq recommandé)",
+            padding=p,
+        )
+        struct_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
+        struct_frame.columnconfigure(1, weight=1)
+
+        ttk.Label(struct_frame, text="Agressivité:").grid(row=0, column=0, sticky="w")
+        ttk.Combobox(
+            struct_frame,
             textvariable=self._ai_aggressiveness_label,
             values=list(AI_AGGRESSIVENESS_LABELS.values()),
             state="readonly",
+        ).grid(row=0, column=1, sticky="ew", padx=(8, 0))
+
+        ttk.Label(struct_frame, text="Provider:").grid(row=1, column=0, sticky="w", pady=(6, 0))
+        ttk.Combobox(
+            struct_frame,
+            textvariable=self._struct_ai_provider_label,
+            values=list(PROVIDER_LABELS.values()),
+            state="readonly",
+        ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
+
+        ttk.Label(struct_frame, text="API key:").grid(row=2, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(struct_frame, textvariable=self._struct_ai_api_key, show="*").grid(
+            row=2, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
         )
-        ai_aggr_combo.grid(row=0, column=1, sticky="ew", padx=(8, 0))
-        ttk.Label(ai_frame, text="Provider:").grid(row=1, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(ai_frame, textvariable=self._ai_provider).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
-        ttk.Label(ai_frame, text="API key:").grid(row=2, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(ai_frame, textvariable=self._ai_api_key, show="*").grid(row=2, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
-        ttk.Label(ai_frame, text="Model:").grid(row=3, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(ai_frame, textvariable=self._ai_model).grid(row=3, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
-        ttk.Label(ai_frame, text="Base URL:").grid(row=4, column=0, sticky="w", pady=(6, 0))
-        ttk.Entry(ai_frame, textvariable=self._ai_base_url).grid(row=4, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
-        ttk.Label(ai_frame, text="Max appels IA locale:").grid(row=5, column=0, sticky="w", pady=(6, 0))
-        ttk.Spinbox(ai_frame, from_=1, to=50, textvariable=self._max_structure_ai_calls, width=6).grid(
+        ttk.Label(struct_frame, text="Modèle:").grid(row=3, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(struct_frame, textvariable=self._struct_ai_model).grid(
+            row=3, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(struct_frame, text="Base URL:").grid(row=4, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(struct_frame, textvariable=self._struct_ai_base_url).grid(
+            row=4, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(struct_frame, text="Max appels:").grid(row=5, column=0, sticky="w", pady=(6, 0))
+        ttk.Spinbox(struct_frame, from_=1, to=50, textvariable=self._max_structure_ai_calls, width=6).grid(
             row=5, column=1, sticky="w", padx=(8, 0), pady=(6, 0)
         )
-        ttk.Label(ai_frame, text="Max appels IA éditoriale:").grid(row=6, column=0, sticky="w", pady=(6, 0))
-        ttk.Spinbox(ai_frame, from_=1, to=50, textvariable=self._max_ai_calls, width=6).grid(
-            row=6, column=1, sticky="w", padx=(8, 0), pady=(6, 0)
+        if not self.settings.ai.enabled:
+            ttk.Label(
+                struct_frame,
+                text="(Aucune clé globale chargée depuis .env — saisissez une clé de session ci-dessus.)",
+                foreground="gray",
+            ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
+
+        # ── Section 6 : IA éditoriale ─────────────────────────────────────────
+        edi_frame = ttk.LabelFrame(
+            root,
+            text="6. IA éditoriale — corrections orthotypo (Anthropic/Claude recommandé)",
+            padding=p,
         )
+        edi_frame.grid(row=5, column=0, sticky="ew", pady=(0, p))
+        edi_frame.columnconfigure(1, weight=1)
+
         ttk.Checkbutton(
-            ai_frame,
+            edi_frame,
             text="Activer l'IA éditoriale correctrice",
             variable=self._enable_editorial_ai,
-        ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        ).grid(row=0, column=0, columnspan=2, sticky="w")
+
+        ttk.Label(edi_frame, text="Provider:").grid(row=1, column=0, sticky="w", pady=(6, 0))
+        edi_provider_combo = ttk.Combobox(
+            edi_frame,
+            textvariable=self._editorial_ai_provider_label,
+            values=[""] + list(PROVIDER_LABELS.values()),
+            state="readonly",
+        )
+        edi_provider_combo.grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
+
+        ttk.Label(edi_frame, text="API key:").grid(row=2, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(edi_frame, textvariable=self._editorial_ai_api_key, show="*").grid(
+            row=2, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(edi_frame, text="Modèle:").grid(row=3, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(edi_frame, textvariable=self._editorial_ai_model).grid(
+            row=3, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(edi_frame, text="Base URL:").grid(row=4, column=0, sticky="w", pady=(6, 0))
+        ttk.Entry(edi_frame, textvariable=self._editorial_ai_base_url).grid(
+            row=4, column=1, sticky="ew", padx=(8, 0), pady=(6, 0)
+        )
+        ttk.Label(edi_frame, text="Max appels:").grid(row=5, column=0, sticky="w", pady=(6, 0))
+        ttk.Spinbox(edi_frame, from_=1, to=50, textvariable=self._max_ai_calls, width=6).grid(
+            row=5, column=1, sticky="w", padx=(8, 0), pady=(6, 0)
+        )
         ttk.Label(
-            ai_frame,
-            text="Attention : la clé API est enregistrée en clair dans le fichier JSON local.",
+            edi_frame,
+            text="Laissez Provider/Clé vides pour hériter de l'IA structurelle ci-dessus.",
+            foreground="#555555",
+            wraplength=900,
+            justify="left",
+        ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        ttk.Label(
+            edi_frame,
+            text="Attention : les clés API sont enregistrées en clair dans le fichier JSON local.",
             foreground="#8a5a00",
             wraplength=900,
             justify="left",
-        ).grid(row=8, column=0, columnspan=2, sticky="w", pady=(8, 0))
-        if not self.settings.ai.enabled:
-            ttk.Label(
-                ai_frame,
-                text="(Aucune clé globale chargée : fournissez une clé API de session si nécessaire.)",
-                foreground="gray",
-            ).grid(row=9, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
+        # ── Section 7 : Actions ───────────────────────────────────────────────
         actions_frame = ttk.Frame(root)
-        actions_frame.grid(row=5, column=0, sticky="ew", pady=(0, p))
+        actions_frame.grid(row=6, column=0, sticky="ew", pady=(0, p))
         actions_frame.columnconfigure(0, weight=1)
         self._progress = ttk.Progressbar(actions_frame, mode="indeterminate")
         self._progress.grid(row=0, column=0, columnspan=4, sticky="ew", pady=(0, 6))
         ttk.Button(
-            actions_frame,
-            text="Charger configuration...",
-            command=self._on_load_config,
+            actions_frame, text="Charger configuration...", command=self._on_load_config,
         ).grid(row=1, column=0, sticky="w")
         ttk.Button(
-            actions_frame,
-            text="Enregistrer configuration...",
-            command=self._on_save_config,
+            actions_frame, text="Enregistrer configuration...", command=self._on_save_config,
         ).grid(row=1, column=1, padx=(p, p), sticky="w")
         self._run_btn = ttk.Button(
             actions_frame,
@@ -731,10 +925,13 @@ class Step1Dialog(tk.Tk):
             state="disabled",
         )
         self._run_btn.grid(row=1, column=3, sticky="e")
-        ttk.Label(actions_frame, textvariable=self._status, anchor="w").grid(row=2, column=0, columnspan=4, sticky="ew", pady=(6, 0))
+        ttk.Label(actions_frame, textvariable=self._status, anchor="w").grid(
+            row=2, column=0, columnspan=4, sticky="ew", pady=(6, 0)
+        )
 
-        result_frame = ttk.LabelFrame(root, text="5. Resultats", padding=p)
-        result_frame.grid(row=6, column=0, sticky="nsew")
+        # ── Section 8 : Résultats ─────────────────────────────────────────────
+        result_frame = ttk.LabelFrame(root, text="7. Resultats", padding=p)
+        result_frame.grid(row=8, column=0, sticky="nsew")
         result_frame.columnconfigure(0, weight=1)
         result_frame.rowconfigure(1, weight=1)
         ttk.Label(
@@ -751,6 +948,8 @@ class Step1Dialog(tk.Tk):
         scrollbar.grid(row=1, column=1, sticky="ns")
         self._result_text.configure(yscrollcommand=scrollbar.set)
 
+    # ── Event handlers ────────────────────────────────────────────────────────
+
     def _on_main_frame_configure(self, _event: tk.Event) -> None:
         self._main_canvas.configure(scrollregion=self._main_canvas.bbox("all"))
 
@@ -758,9 +957,9 @@ class Step1Dialog(tk.Tk):
         self._main_canvas.itemconfigure(self._main_window_id, width=event.width)
 
     def _bind_mousewheel(self, widget: tk.Widget) -> None:
-        widget.bind_all("<MouseWheel>", self._on_mousewheel)      # Windows / macOS
-        widget.bind_all("<Button-4>", self._on_mousewheel_linux)  # Linux up
-        widget.bind_all("<Button-5>", self._on_mousewheel_linux)  # Linux down
+        widget.bind_all("<MouseWheel>", self._on_mousewheel)
+        widget.bind_all("<Button-4>", self._on_mousewheel_linux)
+        widget.bind_all("<Button-5>", self._on_mousewheel_linux)
 
     def _on_mousewheel(self, event: tk.Event) -> None:
         delta = getattr(event, "delta", 0)
@@ -791,10 +990,7 @@ class Step1Dialog(tk.Tk):
 
     def _browse_output_dir(self) -> None:
         initial = self._output_dir.get().strip() or str(self.settings.exports_dir)
-        chosen = filedialog.askdirectory(
-            title="Choisir le dossier de sortie",
-            initialdir=initial,
-        )
+        chosen = filedialog.askdirectory(title="Choisir le dossier de sortie", initialdir=initial)
         if chosen:
             self._output_dir.set(chosen)
 
@@ -811,7 +1007,6 @@ class Step1Dialog(tk.Tk):
     def _on_run(self) -> None:
         if self._running:
             return
-
         source = Path(self._input_path.get().strip())
         if not source.is_file() or source.suffix.lower() != ".docx":
             messagebox.showerror("Source invalide", "Veuillez selectionner un fichier DOCX source valide.")
@@ -828,8 +1023,6 @@ class Step1Dialog(tk.Tk):
         self._output_tei_path.set(str(tei_path))
         self._output_latex_path.set(str(tex_path))
 
-        max_ai_calls = max(1, int(self._max_ai_calls.get()))
-        max_structure_ai_calls = max(1, int(self._max_structure_ai_calls.get()))
         options = build_step1_options_from_form(
             decision_mode_label=self._decision_mode_label.get(),
             heuristic_profile_label=self._heuristic_profile_label.get(),
@@ -838,13 +1031,17 @@ class Step1Dialog(tk.Tk):
             poetry_transform_threshold=self._poetry_transform_threshold.get(),
             poetry_diagnostic_threshold=self._poetry_diagnostic_threshold.get(),
             ai_aggressiveness_label=self._ai_aggressiveness_label.get(),
-            ai_provider=self._ai_provider.get(),
-            ai_api_key=self._ai_api_key.get(),
-            ai_model=self._ai_model.get(),
-            ai_base_url=self._ai_base_url.get(),
+            struct_ai_provider=provider_from_label(self._struct_ai_provider_label.get()),
+            struct_ai_api_key=self._struct_ai_api_key.get(),
+            struct_ai_model=self._struct_ai_model.get(),
+            struct_ai_base_url=self._struct_ai_base_url.get(),
+            max_structure_ai_calls=max(1, int(self._max_structure_ai_calls.get())),
             enable_editorial_ai=self._enable_editorial_ai.get(),
-            max_ai_calls=max_ai_calls,
-            max_structure_ai_calls=max_structure_ai_calls,
+            editorial_ai_provider=provider_from_label(self._editorial_ai_provider_label.get()) if self._editorial_ai_provider_label.get().strip() else "",
+            editorial_ai_api_key=self._editorial_ai_api_key.get(),
+            editorial_ai_model=self._editorial_ai_model.get(),
+            editorial_ai_base_url=self._editorial_ai_base_url.get(),
+            max_ai_calls=max(1, int(self._max_ai_calls.get())),
             output_path=docx_path if self._export_docx.get() else None,
             tei_output_path=tei_path if self._export_tei.get() else None,
         )
@@ -917,10 +1114,7 @@ class Step1Dialog(tk.Tk):
         if not folders:
             messagebox.showinfo("Analyse terminée", completion_message)
             return
-        if messagebox.askyesno(
-            "Analyse terminée",
-            completion_message + "\n\nOuvrir le dossier de sortie ?",
-        ):
+        if messagebox.askyesno("Analyse terminée", completion_message + "\n\nOuvrir le dossier de sortie ?"):
             for folder in folders:
                 try:
                     self._open_folder(folder)
@@ -953,6 +1147,8 @@ class Step1Dialog(tk.Tk):
         heuristic_profile = heuristic_profile_from_label(self._heuristic_profile_label.get())
         ai_aggressiveness = ai_aggressiveness_from_label(self._ai_aggressiveness_label.get())
         enable_structure_ai, _ = derive_ai_flags_from_decision_mode(decision_mode)
+        edi_provider_raw = self._editorial_ai_provider_label.get().strip()
+        edi_provider = provider_from_label(edi_provider_raw) if edi_provider_raw else ""
         return build_config_dict(
             source_path=self._input_path.get().strip(),
             output_dir=self._output_dir.get().strip(),
@@ -969,15 +1165,19 @@ class Step1Dialog(tk.Tk):
             poetry_transform_threshold=normalize_optional_threshold(self._poetry_transform_threshold.get()),
             poetry_diagnostic_threshold=normalize_optional_threshold(self._poetry_diagnostic_threshold.get()),
             ai_aggressiveness=ai_aggressiveness,
-            ai_provider=self._ai_provider.get(),
-            ai_api_key=self._ai_api_key.get(),
-            ai_model=self._ai_model.get(),
-            ai_base_url=self._ai_base_url.get(),
-            enable_structure_ai=enable_structure_ai,
-            enable_editorial_ai=self._enable_editorial_ai.get(),
-            enable_ai=False,
-            max_ai_calls=self._max_ai_calls.get(),
+            struct_ai_provider=provider_from_label(self._struct_ai_provider_label.get()),
+            struct_ai_api_key=self._struct_ai_api_key.get(),
+            struct_ai_model=self._struct_ai_model.get(),
+            struct_ai_base_url=self._struct_ai_base_url.get(),
             max_structure_ai_calls=self._max_structure_ai_calls.get(),
+            enable_editorial_ai=self._enable_editorial_ai.get(),
+            editorial_ai_provider=edi_provider,
+            editorial_ai_api_key=self._editorial_ai_api_key.get(),
+            editorial_ai_model=self._editorial_ai_model.get(),
+            editorial_ai_base_url=self._editorial_ai_base_url.get(),
+            max_ai_calls=self._max_ai_calls.get(),
+            enable_structure_ai=enable_structure_ai,
+            enable_ai=False,
         )
 
     def _apply_config_to_ui(self, config: dict[str, object]) -> None:
@@ -993,50 +1193,41 @@ class Step1Dialog(tk.Tk):
         self._decision_mode_label.set(decision_mode_to_label(self._decision_mode.get()))
         self._heuristic_profile.set(normalize_heuristic_profile(str(config.get("heuristic_profile", "conservative"))))
         self._heuristic_profile_label.set(heuristic_profile_to_label(self._heuristic_profile.get()))
-        self._heading_transform_threshold.set(
-            "" if config.get("heading_transform_threshold") is None else str(config.get("heading_transform_threshold"))
-        )
-        self._heading_diagnostic_threshold.set(
-            "" if config.get("heading_diagnostic_threshold") is None else str(config.get("heading_diagnostic_threshold"))
-        )
-        self._poetry_transform_threshold.set(
-            "" if config.get("poetry_transform_threshold") is None else str(config.get("poetry_transform_threshold"))
-        )
-        self._poetry_diagnostic_threshold.set(
-            "" if config.get("poetry_diagnostic_threshold") is None else str(config.get("poetry_diagnostic_threshold"))
-        )
+        for key, var in (
+            ("heading_transform_threshold", self._heading_transform_threshold),
+            ("heading_diagnostic_threshold", self._heading_diagnostic_threshold),
+            ("poetry_transform_threshold", self._poetry_transform_threshold),
+            ("poetry_diagnostic_threshold", self._poetry_diagnostic_threshold),
+        ):
+            val = config.get(key)
+            var.set("" if val is None else str(val))
         self._ai_aggressiveness.set(normalize_ai_aggressiveness(str(config.get("ai_aggressiveness", "conservative"))))
         self._ai_aggressiveness_label.set(ai_aggressiveness_to_label(self._ai_aggressiveness.get()))
-        self._ai_provider.set(str(config.get("ai_provider", "groq")))
-        self._ai_api_key.set(str(config.get("ai_api_key", "")))
-        self._ai_model.set(str(config.get("ai_model", self.settings.ai.model)))
-        self._ai_base_url.set(str(config.get("ai_base_url", self.settings.ai.base_url)))
-        self._enable_structure_ai.set(bool(config.get("enable_structure_ai", False)))
+
+        # IA structurelle (v2 struct_ai_* ou v1 ai_*)
+        struct_provider = str(config.get("struct_ai_provider") or config.get("ai_provider") or "groq")
+        self._struct_ai_provider_label.set(provider_to_label(struct_provider))
+        self._struct_ai_api_key.set(str(config.get("struct_ai_api_key") or config.get("ai_api_key") or ""))
+        self._struct_ai_model.set(str(config.get("struct_ai_model") or config.get("ai_model") or self.settings.ai.model))
+        self._struct_ai_base_url.set(str(config.get("struct_ai_base_url") or config.get("ai_base_url") or self.settings.ai.base_url))
+        self._max_structure_ai_calls.set(max(1, int(config.get("max_structure_ai_calls", Step1Options().max_structure_ai_calls))))
+
+        # IA éditoriale
         self._enable_editorial_ai.set(bool(config.get("enable_editorial_ai", False)))
-        self._enable_ai.set(False)
+        edi_provider_code = str(config.get("editorial_ai_provider") or "")
+        self._editorial_ai_provider_label.set(provider_to_label(edi_provider_code) if edi_provider_code else "")
+        self._editorial_ai_api_key.set(str(config.get("editorial_ai_api_key") or ""))
+        self._editorial_ai_model.set(str(config.get("editorial_ai_model") or self.settings.ai.anthropic_model))
+        self._editorial_ai_base_url.set(str(config.get("editorial_ai_base_url") or self.settings.ai.anthropic_base_url))
         self._max_ai_calls.set(max(1, int(config.get("max_ai_calls", Step1Options().max_ai_calls))))
-        self._max_structure_ai_calls.set(
-            max(1, int(config.get("max_structure_ai_calls", Step1Options().max_structure_ai_calls)))
-        )
 
-    @staticmethod
-    def _optional_path(raw_value: str, extension: str) -> Path | None:
-        value = raw_value.strip()
-        if not value:
-            return None
-        path = Path(value)
-        if path.suffix.lower() != extension:
-            path = path.with_suffix(extension)
-        return path
-
-    @staticmethod
-    def _open_file(path: Path) -> None:
-        if sys.platform == "win32":
-            os.startfile(path)  # type: ignore[attr-defined]
-        elif sys.platform == "darwin":
-            subprocess.run(["open", str(path)], check=False)
-        else:
-            subprocess.run(["xdg-open", str(path)], check=False)
+        # Legacy
+        self._enable_ai.set(False)
+        self._enable_structure_ai.set(bool(config.get("enable_structure_ai", False)))
+        self._ai_provider.set(struct_provider)
+        self._ai_api_key.set(str(config.get("ai_api_key") or ""))
+        self._ai_model.set(str(config.get("ai_model") or self.settings.ai.model))
+        self._ai_base_url.set(str(config.get("ai_base_url") or self.settings.ai.base_url))
 
     @staticmethod
     def _open_folder(path: Path) -> None:
@@ -1054,4 +1245,3 @@ def run_step1_dialog() -> None:
     settings = load_settings()
     app = Step1Dialog(settings=settings)
     app.mainloop()
-

@@ -6,9 +6,8 @@ import copy
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from pathlib import Path
 
-from purh_editorial.model import Document, InlineSpan, Transformation
+from purh_editorial.model import Document, Transformation
 from purh_editorial.services.orthotypo_service import COLOR_AI, _find_changed_regions
 from purh_editorial.utils import make_id
 
@@ -18,11 +17,11 @@ Tu es éditeur scientifique aux Presses universitaires de Rouen et du Havre (PUR
 Tu révises un manuscrit académique en français (SHS : histoire, littérature, linguistique).
 
 RÈGLES ORTHOTYPOGRAPHIQUES PURH À APPLIQUER :
-- Guillemets français obligatoires : « texte » avec espaces insécables (jamais "texte")
-- Apostrophe typographique ’ (jamais l'apostrophe droite ')
+- Guillemets français obligatoires : « texte » avec espaces insécables (jamais "texte")
+- Apostrophe typographique ' (jamais l'apostrophe droite ')
 - Espace insécable avant : !, ?, ;, :
 - Siècles en chiffres romains petites caps : xviiie siècle (jamais 18e siècle ou XVIIIe)
-- Abréviations normalisées : p. XX (pas pp.), n° X (pas no.), art. cit., op. cit.
+- Abréviations normalisées : p. XX (pas pp.), n° X (pas no.), art. cit., op. cit.
 - Points de suspension : … (entité Unicode unique, jamais trois points séparés ...)
 - Trait d'union vs tiret : tiret demi-cadratin – pour les incises (jamais tiret simple -)
 
@@ -33,11 +32,8 @@ RÈGLES STRICTES D'INTERVENTION :
 - Tu ne corriges PAS : les choix disciplinaires, archaïsmes savants, néologismes justifiés,
   citations, noms propres, termes techniques, latinismes.
 - Tu n'interviens QUE sur ce qui est CLAIREMENT fautif :
-  • guillemets droits au lieu de guillemets français,
-  • apostrophe droite au lieu de typographique,
-  • trois points séparés au lieu de …,
-  • répétition immédiate du même mot dans la même phrase,
-  • solécisme ou incohérence de registre évidente.
+  guillemets droits, apostrophe droite, trois points séparés, répétition immédiate du
+  même mot dans la même phrase, solécisme ou incohérence de registre évidente.
 - Si aucune correction ne s'impose, retourne {"corrections": []}.
 - Propose au maximum 2 corrections par passage.
 
@@ -45,14 +41,13 @@ Format de réponse (JSON strict, aucun texte autour) :
 {"corrections": [{"original": "texte exact à remplacer", "corrected": "texte corrigé", "raison": "règle PURH concernée"}]}
 """
 
-# Nombre maximum d'appels API par document
 MAX_API_CALLS = 8
-
-# Longueur minimale d'un paragraphe pour mériter une analyse IA
 MIN_BLOCK_LENGTH = 200
-
-# Nombre de paragraphes de contexte fournis à l'IA
 _CONTEXT_WINDOW = 2
+
+_ANTHROPIC_VERSION = "2023-06-01"
+_DEFAULT_ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
+_DEFAULT_GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 
 @dataclass
@@ -64,16 +59,30 @@ class AICorrection:
 
 class AIEditorialService:
     """
-    Applique des corrections éditoriales ciblées via LLM (très modérément).
-    Chaque correction remplace 2-12 mots et est surlignée en rose.
+    Corrections éditoriales ciblées (2-12 mots, surlignées en rose).
+    Supporte Groq (OpenAI-compatible) et Anthropic (API native).
     """
 
     module_name = "ai_editorial"
     color = COLOR_AI
 
-    def __init__(self, api_key: str | None, model: str, base_url: str, timeout: int = 25) -> None:
+    def __init__(
+        self,
+        api_key: str | None,
+        model: str,
+        base_url: str,
+        timeout: int = 25,
+        provider: str = "groq",
+    ) -> None:
+        self.provider = str(provider or "groq").strip().lower()
         self.api_key = api_key
         self.model = model
+        if not base_url:
+            base_url = (
+                _DEFAULT_ANTHROPIC_BASE_URL
+                if self.provider == "anthropic"
+                else _DEFAULT_GROQ_BASE_URL
+            )
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
 
@@ -93,7 +102,6 @@ class AIEditorialService:
         transformations: list[Transformation] = []
         calls_used = 0
 
-        # Sélection des blocs candidats (paragraphes longs du corps)
         candidates = [
             (i, b) for i, b in enumerate(doc.blocks)
             if b.block_type == "paragraph"
@@ -130,9 +138,7 @@ class AIEditorialService:
                     continue
                 regions = _find_changed_regions(original_text, corrected_text)
                 if block.inlines:
-                    from purh_editorial.services.orthotypo_service import (
-                        OrthotypoService,
-                    )
+                    from purh_editorial.services.orthotypo_service import OrthotypoService
                     new_inlines = OrthotypoService._rebuild_inlines(
                         block.inlines, original_text, corrected_text, regions
                     )
@@ -158,17 +164,18 @@ class AIEditorialService:
                         "corrected_phrase": corr.corrected,
                         "color": self.color,
                         "model": self.model,
+                        "provider": self.provider,
                     },
                 ))
 
         if transformations:
             doc.history.append(
                 f"{self.module_name}: {len(transformations)} correction(s) IA appliquée(s) "
-                f"({calls_used} appel(s) API)."
+                f"({calls_used} appel(s) API, provider={self.provider})."
             )
         return doc, transformations
 
-    # ── Appel API ─────────────────────────────────────────────────────────────
+    # ── Routage provider ──────────────────────────────────────────────────────
 
     def _call_api(
         self,
@@ -177,27 +184,26 @@ class AIEditorialService:
         context_before: str = "",
         context_after: str = "",
     ) -> list[AICorrection]:
-        # Construire le message utilisateur avec contexte optionnel
-        parts: list[str] = []
-        if context_before:
-            parts.append(f"[Contexte précédent]\n{context_before}\n")
-        parts.append(f"[Passage à analyser]\n{text[:1400]}")
-        if context_after:
-            parts.append(f"\n[Contexte suivant]\n{context_after}")
-        parts.append(
-            "\n\nAnalyse ce passage et propose au plus 2 corrections locales "
-            "(2-12 mots chacune, règles PURH). "
-            "Si rien ne s'impose, retourne {\"corrections\": []}."
-        )
-        user_content = "\n".join(parts)
+        if self.provider == "anthropic":
+            return self._call_anthropic_api(text, context_before=context_before, context_after=context_after)
+        return self._call_openai_compat_api(text, context_before=context_before, context_after=context_after)
 
+    # ── Appel OpenAI-compatible (Groq, etc.) ──────────────────────────────────
+
+    def _call_openai_compat_api(
+        self,
+        text: str,
+        *,
+        context_before: str = "",
+        context_after: str = "",
+    ) -> list[AICorrection]:
         payload = {
             "model": self.model,
             "temperature": 0.05,
             "max_tokens": 500,
             "messages": [
                 {"role": "system", "content": _SYSTEM},
-                {"role": "user", "content": user_content},
+                {"role": "user", "content": _build_user_message(text, context_before, context_after)},
             ],
         }
         data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -217,17 +223,58 @@ class AIEditorialService:
                 body = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Groq HTTP {exc.code}: {detail[:200]}") from exc
+            raise RuntimeError(f"HTTP {exc.code}: {detail[:200]}") from exc
         except Exception as exc:
             raise RuntimeError(f"API error: {exc}") from exc
 
-        content = (
+        raw = (
             body.get("choices", [{}])[0]
             .get("message", {})
             .get("content", "")
             .strip()
         )
-        return self._parse_corrections(content)
+        return self._parse_corrections(raw)
+
+    # ── Appel Anthropic Messages API ──────────────────────────────────────────
+
+    def _call_anthropic_api(
+        self,
+        text: str,
+        *,
+        context_before: str = "",
+        context_after: str = "",
+    ) -> list[AICorrection]:
+        payload = {
+            "model": self.model,
+            "max_tokens": 500,
+            "system": _SYSTEM,
+            "messages": [{"role": "user", "content": _build_user_message(text, context_before, context_after)}],
+        }
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        req = urllib.request.Request(
+            url=f"{self.base_url}/messages",
+            data=data,
+            headers={
+                "x-api-key": self.api_key,
+                "anthropic-version": _ANTHROPIC_VERSION,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "purh-editorial/2.0",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Anthropic HTTP {exc.code}: {detail[:200]}") from exc
+        except Exception as exc:
+            raise RuntimeError(f"Anthropic error: {exc}") from exc
+
+        content_blocks = body.get("content", [])
+        raw = str(content_blocks[0].get("text", "")).strip() if content_blocks else ""
+        return self._parse_corrections(raw)
 
     # ── Parsing ───────────────────────────────────────────────────────────────
 
@@ -268,10 +315,23 @@ class AIEditorialService:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _extract_context(blocks: list, idx: int, *, window: int, before: bool) -> str:
-    """Extrait les `window` paragraphes avant ou après idx, concaténés."""
     if before:
         chunk = blocks[max(0, idx - window):idx]
     else:
         chunk = blocks[idx + 1:idx + 1 + window]
-    texts = [b.text.strip()[:250] for b in chunk if b.text.strip()]
-    return " / ".join(texts)
+    return " / ".join(b.text.strip()[:250] for b in chunk if b.text.strip())
+
+
+def _build_user_message(text: str, context_before: str, context_after: str) -> str:
+    parts: list[str] = []
+    if context_before:
+        parts.append(f"[Contexte précédent]\n{context_before}\n")
+    parts.append(f"[Passage à analyser]\n{text[:1400]}")
+    if context_after:
+        parts.append(f"\n[Contexte suivant]\n{context_after}")
+    parts.append(
+        "\n\nAnalyse ce passage et propose au plus 2 corrections locales "
+        "(2-12 mots chacune, règles PURH). "
+        'Si rien ne s\'impose, retourne {"corrections": []}.'
+    )
+    return "\n".join(parts)
