@@ -31,6 +31,15 @@
           <l>Premier vers</l>
           <l>Second vers</l>
         </lg>
+        <cit>
+          <quote>
+            <lg>
+              <l>Vers dans cit un</l>
+              <l>Vers dans cit deux</l>
+              <l>Vers dans cit trois</l>
+            </lg>
+          </quote>
+        </cit>
       </div>
       <div type="conclusion">
         <head>Conclusion</head>

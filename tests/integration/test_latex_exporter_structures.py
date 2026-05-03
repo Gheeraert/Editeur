@@ -29,6 +29,15 @@ class LatexExporterStructuresTests(unittest.TestCase):
         self.assertIn(r"\footnote{", tex)
         self.assertIn(r"\textit{", tex)
         self.assertTrue(r"\section*{Bibliographie}" in tex or "Bibliographie" in tex)
+        # Vers dans <cit><quote><lg> : chaque ligne doit être sur sa propre ligne LaTeX
+        self.assertIn("Vers dans cit un" + r"\\", tex)
+        self.assertIn("Vers dans cit deux" + r"\\", tex)
+        self.assertIn("Vers dans cit trois" + r"\\", tex)
+        cit_un_idx = tex.index("Vers dans cit un")
+        cit_deux_idx = tex.index("Vers dans cit deux")
+        cit_trois_idx = tex.index("Vers dans cit trois")
+        self.assertIn("\n", tex[cit_un_idx:cit_deux_idx])
+        self.assertIn("\n", tex[cit_deux_idx:cit_trois_idx])
 
     def test_export_tei_table_as_longtable_without_paragraph_explosion(self) -> None:
         input_xml = ROOT / "tests" / "fixtures" / "tei_latex_table.xml"
