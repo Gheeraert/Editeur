@@ -274,6 +274,56 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         line_break_count = sum(1 for span in lineated.inlines if span.kind == "line_break")
         self.assertEqual(line_break_count, 1)
 
+    def test_racine_lineated_block_does_not_promote_internal_heading(self) -> None:
+        document = _doc(
+            [
+                Paragraph(block_id="p0", text="Commentaire avant la citation.", attributes={"blank_para_after": True}),
+                Paragraph(
+                    block_id="v1",
+                    text="A peine son sang coule et fait rougir la terre ;",
+                    attributes={"blank_para_before": True, "ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""},
+                ),
+                Paragraph(block_id="v2", text="Les Dieux font sur l'Autel entendre le tonnerre,", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v3", text="Les Vents agitent l'air d'heureux fremissements,", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v4", text="Et la Mer leur repond par ses mugissements.", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v5", text="La Rive au loin gemit blanchissante d'ecume.", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v6", text="La flamme du Bucher d'elle-meme s'allume.", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v7", text="Le Ciel brille d'eclairs, s'entr'ouvre, et parmi nous", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v8", text="Jette une sainte horreur, qui nous rassure tous.", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v9", text="Le soldat etonne dit que dans une nue", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v10", text="Jusque sur le bucher Diane est descendue,", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v11", text="Et croit que s'elevant au travers de ses feux,", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v12", text="Elle portait au ciel notre encens et nos voeux.", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(block_id="v13", text="Tout s'empresse, tout part. La seule Iphigenie", attributes={"ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""}),
+                Paragraph(
+                    block_id="v14",
+                    text="Dans ce commun bonheur pleure son Ennemie.",
+                    attributes={"blank_para_after": True, "ind_left": 708, "jc": "both", "all_runs_bold": False, "any_run_bold": False, "style_name": "", "style_id": ""},
+                ),
+                Paragraph(block_id="p1", text="Commentaire apres la citation.", attributes={"blank_para_before": True}),
+            ]
+        )
+
+        self.service.process(document, mode="heuristic")
+        self.canonicalizer.apply(document)
+
+        lineated_blocks = [b for b in document.blocks if b.block_type == "lineated_block"]
+        self.assertEqual(len(lineated_blocks), 1)
+        lineated = lineated_blocks[0]
+        semantics = read_block_semantics(lineated, allow_legacy_inference=False)
+        self.assertEqual(semantics.role, "lineated_block")
+        self.assertEqual(semantics.layout_kind, "lineated_block")
+        self.assertEqual(semantics.lineation, "lineated")
+        self.assertIn("Le Ciel brille d'eclairs, s'entr'ouvre, et parmi nous", semantics.lines)
+        self.assertNotIn("quote_kind", lineated.attributes.get("semantic", {}))
+
+        matching_blocks = [b for b in document.blocks if "Le Ciel brille d'eclairs, s'entr'ouvre, et parmi nous" in b.text]
+        self.assertTrue(matching_blocks)
+        for block in matching_blocks:
+            self.assertNotEqual(block.block_type, "heading")
+            self.assertNotIn("heading_level", block.attributes)
+            self.assertNotEqual(block.attributes.get("metopes_style"), "Heading 3")
+
 
 if __name__ == "__main__":
     unittest.main()
