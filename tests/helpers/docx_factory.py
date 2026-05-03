@@ -135,3 +135,52 @@ def create_blank_separated_docx(path: Path) -> Path:
         archive.writestr("word/styles.xml", STYLES_XML)
         archive.writestr("docProps/core.xml", CORE_XML)
     return path
+
+
+MINIMAL_BLANK_BOUNDARY_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>Paragraphe A</w:t></w:r></w:p>
+    <w:p/>
+    <w:p><w:r><w:t>Paragraphe B</w:t></w:r></w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+
+POETRY_CANDIDATE_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Je vois </w:t></w:r>
+      <w:r><w:rPr><w:i/></w:rPr><w:t>Phèdre</w:t></w:r>
+      <w:r><w:t> venir.</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Deuxième vers</w:t></w:r>
+    </w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+
+def create_minimal_blank_boundary_docx(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", MINIMAL_BLANK_BOUNDARY_DOC_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path
+
+
+def create_poetry_candidate_docx(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", POETRY_CANDIDATE_DOC_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path

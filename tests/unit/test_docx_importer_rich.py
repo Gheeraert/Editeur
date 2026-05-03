@@ -13,6 +13,8 @@ if str(SRC) not in sys.path:
 from purh_editorial.io import ImporterRegistry
 from tests.helpers.docx_factory import (
     create_blank_separated_docx,
+    create_minimal_blank_boundary_docx,
+    create_poetry_candidate_docx,
     create_rich_docx,
     create_table_docx,
 )
@@ -119,6 +121,40 @@ class RichDocxImporterTests(unittest.TestCase):
         self.assertTrue(document.blocks[6].attributes.get("is_blank_para"))
         self.assertTrue(document.blocks[7].attributes.get("blank_para_before"))
         self.assertEqual(document.blocks[5].attributes.get("blank_para_after_count"), 1)
+
+    def test_import_docx_preserves_inline_italic_span_for_poetry_like_line(self) -> None:
+        docx_path = self._runtime_docx_path()
+        create_poetry_candidate_docx(docx_path)
+        document = ImporterRegistry().load_document(docx_path)
+
+        target = next((b for b in document.blocks if "Phèdre" in b.text), None)
+        self.assertIsNotNone(target)
+        self.assertIn("Je vois Phèdre venir", target.text)
+        self.assertGreaterEqual(len(target.inlines), 3)
+
+        texts = [span.text for span in target.inlines]
+        self.assertIn("Je vois ", texts)
+        self.assertIn("Phèdre", texts)
+        self.assertIn(" venir.", texts)
+        italic_span = next((span for span in target.inlines if span.text == "Phèdre"), None)
+        self.assertIsNotNone(italic_span)
+        self.assertTrue(italic_span.style.italic)
+
+    def test_import_docx_records_blank_paragraph_boundary_evidence_minimal_case(self) -> None:
+        docx_path = self._runtime_docx_path()
+        create_minimal_blank_boundary_docx(docx_path)
+        document = ImporterRegistry().load_document(docx_path)
+
+        self.assertEqual(len(document.blocks), 3)
+        first, blank, last = document.blocks
+        self.assertEqual(first.text, "Paragraphe A")
+        self.assertEqual(last.text, "Paragraphe B")
+        self.assertTrue(blank.attributes.get("is_blank_para"))
+        self.assertEqual(blank.text, "")
+        self.assertTrue(first.attributes.get("blank_para_after"))
+        self.assertEqual(first.attributes.get("blank_para_after_count"), 1)
+        self.assertTrue(last.attributes.get("blank_para_before"))
+        self.assertEqual(last.attributes.get("blank_para_before_count"), 1)
 
 
 if __name__ == "__main__":

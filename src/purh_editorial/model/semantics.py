@@ -9,11 +9,19 @@ from purh_editorial.model.document import Block, InlineSpan
 @dataclass(slots=True)
 class BlockSemantics:
     role: str | None = None
+    layout_kind: str | None = None
     quote_kind: str | None = None
     lineation: str | None = None
     lines: list[str] = field(default_factory=list)
+    genre_hint: str | None = None
+    genre_confidence: float | None = None
+    genre_source: str | None = None
     poetry_group_id: str | None = None
     poetry_line_index: int | None = None
+
+    @property
+    def is_lineated(self) -> bool:
+        return self.lineation == "lineated" and bool(self.lines)
 
 
 def _as_text(value: Any) -> str | None:
@@ -28,6 +36,15 @@ def _as_int(value: Any) -> int | None:
         return None
     try:
         return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _as_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        return float(value)
     except (TypeError, ValueError):
         return None
 
@@ -92,17 +109,25 @@ def read_block_semantics(
     semantic_raw = attributes.get("semantic")
 
     role: str | None = None
+    layout_kind: str | None = None
     quote_kind: str | None = None
     lineation: str | None = None
     lines: list[str] = []
+    genre_hint: str | None = None
+    genre_confidence: float | None = None
+    genre_source: str | None = None
     poetry_group_id: str | None = None
     poetry_line_index: int | None = None
 
     if isinstance(semantic_raw, dict):
         role = _as_text(semantic_raw.get("role"))
+        layout_kind = _as_text(semantic_raw.get("layout_kind"))
         quote_kind = _as_text(semantic_raw.get("quote_kind"))
         lineation = _as_text(semantic_raw.get("lineation"))
         lines = _semantic_lines_from_payload(semantic_raw)
+        genre_hint = _as_text(semantic_raw.get("genre_hint"))
+        genre_confidence = _as_float(semantic_raw.get("genre_confidence"))
+        genre_source = _as_text(semantic_raw.get("genre_source"))
         poetry_group_id = _as_text(semantic_raw.get("poetry_group_id"))
         poetry_line_index = _as_int(semantic_raw.get("poetry_line_index"))
 
@@ -126,24 +151,43 @@ def read_block_semantics(
                 role = "heading"
             elif block.block_type == "quote_block":
                 role = "quote"
+            elif block.block_type == "lineated_block":
+                role = "lineated_block"
             elif block.block_type == "paragraph":
                 role = "paragraph"
 
         if quote_kind == "poetry" and lineation is None:
             lineation = "verse"
-        if lineation == "verse" and not lines:
+        if lineation in {"verse", "lineated"} and not lines:
             lines = extract_verse_lines(block)
-        if role == "quote" and block.block_type == "quote_block":
+        if lineation == "verse":
+            lineation = "lineated"
+            layout_kind = layout_kind or "lineated_block"
+            genre_hint = genre_hint or "poetry"
+            genre_source = genre_source or "legacy"
+        elif lineation == "lineated":
+            layout_kind = layout_kind or "lineated_block"
+
+        if role == "quote" and block.block_type == "quote_block" and lineation != "lineated":
             if quote_kind is None:
                 quote_kind = "prose"
             if lineation is None:
                 lineation = "prose"
+        if role == "lineated_block":
+            lineation = "lineated"
+            layout_kind = layout_kind or "lineated_block"
+            if not lines:
+                lines = extract_verse_lines(block)
 
     return BlockSemantics(
         role=role,
+        layout_kind=layout_kind,
         quote_kind=quote_kind,
         lineation=lineation,
         lines=lines,
+        genre_hint=genre_hint,
+        genre_confidence=genre_confidence,
+        genre_source=genre_source,
         poetry_group_id=poetry_group_id,
         poetry_line_index=poetry_line_index,
     )
@@ -153,15 +197,23 @@ def semantics_to_dict(semantics: BlockSemantics) -> dict[str, Any]:
     payload: dict[str, Any] = {}
     if semantics.role:
         payload["role"] = semantics.role
-    if semantics.quote_kind:
+    if semantics.layout_kind:
+        payload["layout_kind"] = semantics.layout_kind
+    if semantics.quote_kind and semantics.role != "lineated_block":
         payload["quote_kind"] = semantics.quote_kind
     if semantics.lineation:
         payload["lineation"] = semantics.lineation
     if semantics.lines:
         payload["lines"] = semantics.lines
-    if semantics.poetry_group_id:
+    if semantics.genre_hint:
+        payload["genre_hint"] = semantics.genre_hint
+    if semantics.genre_confidence is not None:
+        payload["genre_confidence"] = semantics.genre_confidence
+    if semantics.genre_source:
+        payload["genre_source"] = semantics.genre_source
+    if semantics.poetry_group_id and semantics.role != "lineated_block":
         payload["poetry_group_id"] = semantics.poetry_group_id
-    if semantics.poetry_line_index is not None:
+    if semantics.poetry_line_index is not None and semantics.role != "lineated_block":
         payload["poetry_line_index"] = semantics.poetry_line_index
     return payload
 
@@ -199,12 +251,24 @@ def write_block_semantics(block: Block, semantics: BlockSemantics) -> None:
         block.attributes.pop("poetry_line_index", None)
 
 
+def is_canonical_lineated_block(block: Block) -> bool:
+    semantics = read_block_semantics(block, allow_legacy_inference=False)
+    has_lineated_payload = (
+        semantics.layout_kind == "lineated_block"
+        and semantics.lineation == "lineated"
+        and bool(semantics.lines)
+    )
+    if not has_lineated_payload:
+        return False
+    return (
+        (block.block_type == "lineated_block" and semantics.role == "lineated_block")
+        or (block.block_type == "quote_block" and semantics.role == "quote")
+    )
+
+
 def is_canonical_poetry_block(block: Block) -> bool:
     semantics = read_block_semantics(block, allow_legacy_inference=False)
-    return (
-        block.block_type == "quote_block"
-        and semantics.role == "quote"
-        and semantics.quote_kind == "poetry"
-        and semantics.lineation == "verse"
-        and bool(semantics.lines)
+    return is_canonical_lineated_block(block) and (
+        semantics.genre_hint == "poetry"
+        or (semantics.role == "quote" and semantics.quote_kind == "poetry")
     )

@@ -6,7 +6,16 @@ from statistics import pstdev
 from typing import Any
 import unicodedata
 
-from purh_editorial.model import BibliographyItem, Diagnostic, Document, Evidence, Transformation
+from purh_editorial.model import (
+    BibliographyItem,
+    BlockSemantics,
+    Diagnostic,
+    Document,
+    Evidence,
+    InlineSpan,
+    Transformation,
+    write_block_semantics,
+)
 from purh_editorial.utils import make_id
 
 # Constantes
@@ -584,27 +593,38 @@ class StructurePreparationService:
             first_block = sequence[0]
             merged_from = [block.block_id for block in sequence]
             merged_text = "\n".join(block.text.strip() for block in sequence)
-            first_block.block_type = "quote_block"
+            merged_inlines = self._merged_poetry_inlines(sequence)
+            first_block.block_type = "lineated_block"
             first_block.text = merged_text
-            first_block.inlines = []
-            first_block.attributes["quote_kind"] = "poetry"
-            first_block.attributes["protected_zone"] = "poetry"
+            first_block.inlines = merged_inlines
             first_block.attributes["alignment"] = "left"
             first_block.attributes["ind_left"] = max(
                 int(first_block.attributes.get("ind_left", 0) or 0),
                 _BLOCK_QUOTE_IND_LEFT_THRESHOLD,
             )
             first_block.attributes["merged_from"] = merged_from
+            first_block.attributes.pop("quote_kind", None)
+            first_block.attributes.pop("lineation", None)
+            first_block.attributes.pop("poetry_group_id", None)
+            first_block.attributes.pop("poetry_line_index", None)
+            first_block.attributes.pop("protected_zone", None)
+            write_block_semantics(
+                first_block,
+                BlockSemantics(
+                    role="lineated_block",
+                    layout_kind="lineated_block",
+                    lineation="lineated",
+                    lines=[block.text.strip() for block in sequence if block.text.strip()],
+                ),
+            )
 
             transformations.append(
                 self._make_tr(
                     first_block.block_id,
                     "paragraph",
-                    "quote_block",
-                    "structure.poetry.short_sequence.merge",
+                    "lineated_block",
+                    "structure.lineated.short_sequence.merge",
                     attributes={
-                        "quote_kind": "poetry",
-                        "protected_zone": "poetry",
                         "merged_from": merged_from,
                     },
                 )
@@ -639,29 +659,45 @@ class StructurePreparationService:
         replacement_by_id: dict[str, Any] = {}
 
         for sequence in sequences:
+            veto_reasons = self._poetry_veto_reasons(sequence)
+            if veto_reasons:
+                continue
+
             first_block = sequence[0]
             merged_from = [block.block_id for block in sequence]
             merged_text = "\n".join(block.text.strip() for block in sequence)
+            merged_inlines = self._merged_poetry_inlines(sequence)
             before = first_block.block_type
-            first_block.block_type = "quote_block"
+            first_block.block_type = "lineated_block"
             first_block.text = merged_text
-            first_block.inlines = []
-            first_block.attributes["quote_kind"] = "poetry"
-            first_block.attributes["protected_zone"] = "poetry"
+            first_block.inlines = merged_inlines
             first_block.attributes["alignment"] = "left"
             first_block.attributes["merged_from"] = merged_from
+            first_block.attributes.pop("quote_kind", None)
+            first_block.attributes.pop("lineation", None)
+            first_block.attributes.pop("poetry_group_id", None)
+            first_block.attributes.pop("poetry_line_index", None)
+            first_block.attributes.pop("protected_zone", None)
+            write_block_semantics(
+                first_block,
+                BlockSemantics(
+                    role="lineated_block",
+                    layout_kind="lineated_block",
+                    lineation="lineated",
+                    lines=[block.text.strip() for block in sequence if block.text.strip()],
+                ),
+            )
 
             transformations.append(
                 self._make_tr(
                     first_block.block_id,
                     before,
-                    "quote_block",
-                    "structure.poetry.blank_bounded.merge",
+                    "lineated_block",
+                    "structure.lineated.blank_bounded.merge",
                     attributes={
-                        "quote_kind": "poetry",
-                        "protected_zone": "poetry",
                         "alignment": "left",
                         "merged_from": merged_from,
+                        "layout_evidence": "blank_bounded_short_lines",
                     },
                 )
             )
@@ -711,7 +747,7 @@ class StructurePreparationService:
 
             has_blank_before = cls._has_blank_before(blocks, start)
             has_blank_after = cls._has_blank_after(blocks, end)
-            if has_blank_before and has_blank_after and 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
+            if has_blank_before and has_blank_after and 2 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
                 sequences.append(current.copy())
         return sequences
 
@@ -782,29 +818,36 @@ class StructurePreparationService:
                 block = blocks_by_id.get(block_id)
                 if block is None:
                     continue
-                if block.block_type not in {"paragraph", "heading", "quote_block"}:
+                if block.block_type not in {"paragraph", "heading", "quote_block", "lineated_block"}:
                     continue
 
                 before = block.block_type
-                if poetry_decision.decision == "transform" and before in {"paragraph", "heading"}:
-                    block.block_type = "quote_block"
-
-                block.attributes["quote_kind"] = "poetry"
-                block.attributes["protected_zone"] = "poetry"
-                block.attributes["alignment"] = "left"
-                block.attributes["poetry_group_id"] = group_id
-                block.attributes["poetry_line_index"] = line_index
                 block.attributes["heuristic_score"] = poetry_decision.score
+                if poetry_decision.decision == "transform":
+                    block.block_type = "lineated_block"
+                    block.attributes["alignment"] = "left"
+                    block.attributes["poetry_group_id"] = group_id
+                    block.attributes["poetry_line_index"] = line_index
+                    block.attributes.pop("quote_kind", None)
+                    block.attributes.pop("lineation", None)
+                    block.attributes.pop("protected_zone", None)
+                    write_block_semantics(
+                        block,
+                        BlockSemantics(
+                            role="lineated_block",
+                            layout_kind="lineated_block",
+                            lineation="lineated",
+                            lines=[block.text.strip()] if block.text.strip() else [],
+                        ),
+                    )
 
                 transformations.append(
                     self._make_tr(
                         block.block_id,
                         before,
                         block.block_type,
-                        "structure.poetry.group.annotate",
+                        "structure.lineated.group.annotate",
                         attributes={
-                            "quote_kind": "poetry",
-                            "protected_zone": "poetry",
                             "poetry_group_id": group_id,
                             "poetry_line_index": line_index,
                             "score": poetry_decision.score,
@@ -842,13 +885,25 @@ class StructurePreparationService:
                 for bid in target_ids
                 if bid in blocks_by_id and blocks_by_id[bid].text.strip()
             ]
+            source_blocks = [blocks_by_id[bid] for bid in target_ids if bid in blocks_by_id]
+            merged_inlines = self._merged_poetry_inlines(source_blocks)
             first_block.text = "\n".join(lines)
-            first_block.inlines = []
+            first_block.inlines = merged_inlines
             first_block.attributes["merged_from"] = target_ids
-            if first_block.block_type not in {"quote_block"}:
-                first_block.block_type = "quote_block"
-            first_block.attributes.setdefault("quote_kind", "poetry")
-            first_block.attributes.setdefault("protected_zone", "poetry")
+            first_block.block_type = "lineated_block"
+            first_block.attributes["alignment"] = "left"
+            first_block.attributes.pop("quote_kind", None)
+            first_block.attributes.pop("lineation", None)
+            first_block.attributes.pop("protected_zone", None)
+            write_block_semantics(
+                first_block,
+                BlockSemantics(
+                    role="lineated_block",
+                    layout_kind="lineated_block",
+                    lineation="lineated",
+                    lines=lines,
+                ),
+            )
 
             for bid in target_ids[1:]:
                 consumed_ids.add(bid)
@@ -857,8 +912,8 @@ class StructurePreparationService:
                 self._make_tr(
                     first_block.block_id,
                     "paragraph",
-                    "quote_block",
-                    "structure.poetry.stanza.merge",
+                    "lineated_block",
+                    "structure.lineated.stanza.merge",
                     attributes={"merged_from": target_ids, "score": decision.score},
                 )
             )
@@ -869,6 +924,18 @@ class StructurePreparationService:
             ]
 
         return transformations
+
+    @staticmethod
+    def _merged_poetry_inlines(sequence: list) -> list[InlineSpan]:
+        merged: list[InlineSpan] = []
+        for index, block in enumerate(sequence):
+            if block.inlines:
+                merged.extend(block.inlines)
+            else:
+                merged.append(InlineSpan(text=block.text.strip()))
+            if index < len(sequence) - 1:
+                merged.append(InlineSpan(text="", kind="line_break"))
+        return merged
 
     def analyze_poetry_candidates(self, document: Document) -> list[HeuristicDecision]:
         settings = self.heuristic_settings
@@ -1177,8 +1244,12 @@ class StructurePreparationService:
                 reasons.add("passage_reference")
             if cls._looks_like_reference_or_caption(text):
                 reasons.add("caption_or_reference")
+            if cls._looks_like_heading_heuristic(text, block):
+                reasons.add("heading_like")
             if cls._looks_like_list_item(text):
                 reasons.add("list_like")
+            if cls._looks_like_chronology_line(text):
+                reasons.add("chronology_like")
             if cls._looks_like_bibliography_reference(text):
                 bibliography_like_count += 1
             if cls._looks_like_technical_markup(text):
@@ -1188,6 +1259,13 @@ class StructurePreparationService:
         if bibliography_like_count >= max(2, len(sequence) // 2):
             reasons.add("bibliography_like")
         return sorted(reasons)
+
+    @staticmethod
+    def _looks_like_chronology_line(text: str) -> bool:
+        stripped = text.strip()
+        if not stripped:
+            return False
+        return bool(re.match(r"^\d{3,4}\s*[-–—:]\s+\S+", stripped))
 
     @staticmethod
     def _is_note_zone_block(block) -> bool:

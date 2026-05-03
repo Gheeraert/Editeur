@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.tei_xml_exporter import TEI_NS, TeiXmlExporter
-from purh_editorial.model import Block, Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
+from purh_editorial.model import Block, Document, Heading, InlineSpan, InlineStyle, LineatedBlock, Note, Paragraph, QuoteBlock
 
 XML_NS = "http://www.w3.org/XML/1998/namespace"
 
@@ -79,28 +79,28 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="p1",
                     text="Vers 1",
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Vers 1"],
                             "poetry_group_id": "poetry_group_001",
                             "poetry_line_index": 1,
                         },
                     },
                 ),
-                QuoteBlock(
+                LineatedBlock(
                     block_id="p2",
                     text="Vers 2",
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Vers 2"],
                             "poetry_group_id": "poetry_group_001",
                             "poetry_line_index": 2,
@@ -112,7 +112,36 @@ class TeiXmlExporterTests(unittest.TestCase):
         xml_text = self.exporter.export_document(document)
         root = ET.fromstring(xml_text)
         body = root.find(f"./{_q('text')}/{_q('body')}")
-        lg = body.find(f"./{_q('cit')}/{_q('quote')}/{_q('lg')}")
+        lg = body.find(f"./{_q('lg')}")
+        self.assertIsNotNone(lg)
+        self.assertIsNone(body.find(_q("cit")))
+        lines = lg.findall(_q("l"))
+        self.assertEqual([line.text for line in lines], ["Vers 1", "Vers 2"])
+
+    def test_lineated_quote_still_renders_inside_cit_quote(self) -> None:
+        document = Document(
+            document_id="doc-lineated-quote",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="Vers 1\nVers 2",
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
+                            "lines": ["Vers 1", "Vers 2"],
+                        }
+                    },
+                )
+            ],
+        )
+
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lg = root.find(f".//{_q('cit')}/{_q('quote')}/{_q('lg')}")
         self.assertIsNotNone(lg)
         lines = lg.findall(_q("l"))
         self.assertEqual([line.text for line in lines], ["Vers 1", "Vers 2"])
@@ -123,7 +152,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -134,9 +163,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Je vois Phedre", "Deuxieme vers"],
                         }
                     },
@@ -159,7 +188,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -173,9 +202,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["gras", "petites", "x", "y"],
                         }
                     },
@@ -197,7 +226,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -206,9 +235,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Vers avec note"],
                         }
                     },
@@ -231,7 +260,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -243,9 +272,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Ligne 1", "Ligne 2", "Ligne 3"],
                         }
                     },
@@ -263,14 +292,14 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="Vers 1\nVers 2",
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Vers 1", "Vers 2"],
                         }
                     },
@@ -321,7 +350,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -333,9 +362,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Je vois Phedre venir", "Deuxieme vers"],
                         }
                     },
@@ -361,7 +390,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -371,9 +400,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["Vers suite"],
                         }
                     },
@@ -397,7 +426,7 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                QuoteBlock(
+                LineatedBlock(
                     block_id="q1",
                     text="",
                     inlines=[
@@ -411,9 +440,9 @@ class TeiXmlExporterTests(unittest.TestCase):
                     ],
                     attributes={
                         "semantic": {
-                            "role": "quote",
-                            "quote_kind": "poetry",
-                            "lineation": "verse",
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
                             "lines": ["A B C D E F"],
                         }
                     },
@@ -509,7 +538,7 @@ class TeiXmlExporterTests(unittest.TestCase):
         self.assertEqual(hi.text, "italique")
 
     def test_note_consecutive_plain_runs_preserve_order(self) -> None:
-        """Régression: runs bruts consécutifs après une italique ne doivent pas
+        """RÃ©gression: runs bruts consÃ©cutifs aprÃ¨s une italique ne doivent pas
         remonter dans note.text (avant les enfants <hi>) mais rester dans hi.tail."""
         document = Document(
             document_id="doc_reg",
@@ -531,8 +560,8 @@ class TeiXmlExporterTests(unittest.TestCase):
                         InlineSpan(text="Le Mercure galant", style=InlineStyle(italic=True)),
                         InlineSpan(text=", janvier-mars 1677, Paris, Barbin, 1677, p."),
                         InlineSpan(text=" 47 ; voir aussi Corneille, "),
-                        InlineSpan(text="Œuvres complètes", style=InlineStyle(italic=True)),
-                        InlineSpan(text=", éd. Georges Couton, Paris, Gallimard, t."),
+                        InlineSpan(text="Å’uvres complÃ¨tes", style=InlineStyle(italic=True)),
+                        InlineSpan(text=", Ã©d. Georges Couton, Paris, Gallimard, t."),
                         InlineSpan(text=" III, 1987, p. 1313."),
                     ],
                 )
@@ -543,13 +572,13 @@ class TeiXmlExporterTests(unittest.TestCase):
         body = root.find(f"./{_q('text')}/{_q('body')}")
         note = body.find(f".//{_q('note')}")
         self.assertIsNotNone(note)
-        # note.text doit être vide/None: le premier contenu est un <hi>
+        # note.text doit Ãªtre vide/None: le premier contenu est un <hi>
         self.assertFalse(note.text and note.text.strip(), f"note.text ne doit pas contenir de texte: {note.text!r}")
         his = note.findall(_q("hi"))
         self.assertEqual(len(his), 2)
         self.assertEqual(his[0].text, "Le Mercure galant")
         self.assertIn("47", his[0].tail or "")
-        self.assertEqual(his[1].text, "Œuvres complètes")
+        self.assertEqual(his[1].text, "Å’uvres complÃ¨tes")
         self.assertIn("1313", his[1].tail or "")
 
     def test_export_produces_well_formed_xml(self) -> None:
@@ -800,3 +829,5 @@ class TeiXmlExporterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+

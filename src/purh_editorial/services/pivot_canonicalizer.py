@@ -87,62 +87,114 @@ class PivotCanonicalizer:
         current: BlockSemantics,
     ) -> BlockSemantics:
         role = current.role
+        layout_kind = current.layout_kind
         quote_kind = current.quote_kind
         lineation = current.lineation
         lines = list(current.lines)
+        genre_hint = current.genre_hint
+        genre_confidence = current.genre_confidence
+        genre_source = current.genre_source
         poetry_group_id = current.poetry_group_id
         poetry_line_index = current.poetry_line_index
 
         if block.block_type == "heading":
             role = "heading"
+            layout_kind = None
             quote_kind = None
             lineation = None
             lines = []
+            genre_hint = None
+            genre_confidence = None
+            genre_source = None
             poetry_group_id = None
             poetry_line_index = None
         elif block.block_type == "paragraph":
             role = "paragraph"
+            layout_kind = None
             quote_kind = None
             lineation = None
             lines = []
+            genre_hint = None
+            genre_confidence = None
+            genre_source = None
             poetry_group_id = None
             poetry_line_index = None
         elif block.block_type == "quote_block":
             role = "quote"
+        elif block.block_type == "lineated_block":
+            role = "lineated_block"
+            layout_kind = "lineated_block"
+            lineation = "lineated"
+            quote_kind = None
+            if not lines:
+                lines = extract_verse_lines(block)
+            poetry_group_id = None
+            poetry_line_index = None
         elif block.block_type == "table":
             role = "table"
+            layout_kind = None
             quote_kind = None
             lineation = None
             lines = []
+            genre_hint = None
+            genre_confidence = None
+            genre_source = None
             poetry_group_id = None
             poetry_line_index = None
         else:
             # Unknown block types: avoid inventing rich semantics; drop quote
             # semantics unless this is an explicit quote block.
+            layout_kind = None
             quote_kind = None
             lineation = None
             lines = []
+            genre_hint = None
+            genre_confidence = None
+            genre_source = None
             poetry_group_id = None
             poetry_line_index = None
 
         if block.block_type == "quote_block":
-            if quote_kind == "poetry" or lineation == "verse":
-                quote_kind = "poetry"
-                lineation = "verse"
+            protected_zone = str((block.attributes or {}).get("protected_zone", "") or "").strip().lower()
+            has_legacy_poetry_evidence = (
+                quote_kind == "poetry"
+                or lineation == "verse"
+                or protected_zone == "poetry"
+            )
+            explicit_lineated_quote = (
+                role == "quote"
+                and lineation == "lineated"
+                and layout_kind == "lineated_block"
+            )
+            if has_legacy_poetry_evidence or explicit_lineated_quote:
+                quote_kind = None
+                layout_kind = "lineated_block"
+                lineation = "lineated"
+                if has_legacy_poetry_evidence:
+                    genre_hint = genre_hint or "poetry"
+                    genre_source = genre_source or "legacy"
                 if not lines:
                     lines = extract_verse_lines(block)
             else:
                 quote_kind = "prose"
                 lineation = "prose"
+                layout_kind = None
                 lines = []
+                genre_hint = None
+                genre_confidence = None
+                genre_source = None
                 poetry_group_id = None
                 poetry_line_index = None
 
         return BlockSemantics(
             role=role,
+            layout_kind=layout_kind,
             quote_kind=quote_kind,
             lineation=lineation,
             lines=lines,
+            genre_hint=genre_hint,
+            genre_confidence=genre_confidence,
+            genre_source=genre_source,
             poetry_group_id=poetry_group_id,
             poetry_line_index=poetry_line_index,
         )

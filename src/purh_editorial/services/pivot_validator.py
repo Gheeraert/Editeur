@@ -5,6 +5,7 @@ import re
 from purh_editorial.model import Diagnostic, Document, Evidence
 from purh_editorial.model.semantics import (
     extract_verse_lines,
+    is_canonical_lineated_block,
     is_canonical_poetry_block,
     read_block_semantics,
 )
@@ -20,7 +21,10 @@ class PivotValidator:
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
             semantics = read_block_semantics(block, allow_legacy_inference=False)
+            semantic_payload = (block.attributes or {}).get("semantic")
+            semantic_payload = semantic_payload if isinstance(semantic_payload, dict) else {}
             text_excerpt = (block.text or "")[:220]
+            is_lineated = is_canonical_lineated_block(block)
 
             if block.block_type == "heading":
                 raw_level = block.attributes.get("heading_level")
@@ -36,55 +40,97 @@ class PivotValidator:
                         )
                     )
 
-            if block.block_type != "quote_block" and (semantics.quote_kind or semantics.lineation):
+            if semantics.quote_kind and semantics.role != "quote":
                 diagnostics.append(
                     self._diag(
                         block.block_id,
                         "error",
                         "pivot_invariant",
-                        "Champs de citation presents sur un bloc non quote_block.",
+                        "quote_kind present hors role=quote.",
                         "pivot.semantic.quote_fields_on_non_quote",
                         text_excerpt,
                     )
                 )
 
-            if semantics.lineation == "verse" and not is_canonical_poetry_block(block):
+            if (
+                semantics.role == "lineated_block"
+                and block.block_type != "lineated_block"
+            ):
                 diagnostics.append(
                     self._diag(
                         block.block_id,
                         "error",
                         "pivot_invariant",
-                        "lineation=verse hors poesie canonique.",
-                        "pivot.semantic.verse_on_non_poetry",
+                        "role=lineated_block exige block_type=lineated_block.",
+                        "pivot.semantic.lineated_block_role_mismatch",
                         text_excerpt,
                     )
                 )
 
-            if semantics.quote_kind == "poetry" and semantics.lineation != "verse":
+            if semantics.lineation == "lineated" and not semantics.lines:
                 diagnostics.append(
                     self._diag(
                         block.block_id,
                         "error",
                         "pivot_invariant",
-                        "quote_kind=poetry exige lineation=verse.",
-                        "pivot.poetry.quote_kind.requires_verse",
+                        "lineation=lineated exige des lignes non vides.",
+                        "pivot.semantic.lineation_without_lines",
                         text_excerpt,
                     )
                 )
 
-            if semantics.lines and not is_canonical_poetry_block(block):
+            if semantics.role == "lineated_block" and semantics.lineation != "lineated":
                 diagnostics.append(
                     self._diag(
                         block.block_id,
                         "error",
                         "pivot_invariant",
-                        "Lignes de vers presentes hors poesie canonique.",
+                        "role=lineated_block exige lineation=lineated.",
+                        "pivot.semantic.lineated_block_without_lineation",
+                        text_excerpt,
+                    )
+                )
+
+            if semantics.role == "lineated_block" and not semantics.lines:
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "error",
+                        "pivot_invariant",
+                        "role=lineated_block exige des lignes non vides.",
+                        "pivot.semantic.lineated_block_without_lines",
+                        text_excerpt,
+                    )
+                )
+
+            if semantics.lines and semantics.lineation != "lineated":
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "error",
+                        "pivot_invariant",
+                        "Lignes presentes hors lineation=lineated.",
                         "pivot.semantic.lines_on_non_poetry",
                         text_excerpt,
                     )
                 )
 
-            if is_canonical_poetry_block(block):
+            if (
+                semantics.lineation == "lineated"
+                and block.block_type not in {"lineated_block", "quote_block"}
+            ):
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "error",
+                        "pivot_invariant",
+                        "lineation=lineated hors block_type lineated_block/quote_block.",
+                        "pivot.semantic.verse_on_non_poetry",
+                        text_excerpt,
+                    )
+                )
+
+            if is_lineated:
                 lines = semantics.lines or extract_verse_lines(block)
                 if not lines:
                     diagnostics.append(
@@ -92,12 +138,12 @@ class PivotValidator:
                             block.block_id,
                             "error",
                             "pivot_invariant",
-                            "Bloc poetique canonique sans lignes de vers exploitables.",
+                            "Bloc lineate canonique sans lignes exploitables.",
                             "pivot.poetry.lines.required",
                             text_excerpt,
                         )
                     )
-                elif self._looks_like_chronology(lines):
+                elif is_canonical_poetry_block(block) and self._looks_like_chronology(lines):
                     diagnostics.append(
                         self._diag(
                             block.block_id,
@@ -108,6 +154,25 @@ class PivotValidator:
                             " | ".join(lines[:3])[:220],
                         )
                     )
+
+            raw_quote_kind = semantic_payload.get("quote_kind")
+            raw_lineation = semantic_payload.get("lineation")
+            if (
+                isinstance(raw_quote_kind, str)
+                and raw_quote_kind.strip() == "poetry"
+                and isinstance(raw_lineation, str)
+                and raw_lineation.strip() == "verse"
+            ):
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "warning",
+                        "pivot_legacy",
+                        "Payload semantic legacy quote_kind=poetry + lineation=verse detecte.",
+                        "pivot.semantic.quote_kind_used_as_lineation_legacy",
+                        text_excerpt,
+                    )
+                )
         return diagnostics
 
     @staticmethod

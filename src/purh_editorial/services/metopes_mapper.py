@@ -4,7 +4,7 @@ import re
 from copy import deepcopy
 
 from purh_editorial.model import Document, Transformation
-from purh_editorial.model.semantics import is_canonical_poetry_block
+from purh_editorial.model.semantics import is_canonical_lineated_block
 from purh_editorial.utils import make_id
 
 # ── Table de correspondance block_type → nom de style Métopes ────────────────
@@ -111,9 +111,11 @@ class MetopesMapper:
             return METOPES_STYLES.get(f"heading_{level}", "Heading 1")
 
         if btype == "quote_block":
-            if is_canonical_poetry_block(block):
+            if is_canonical_lineated_block(block):
                 return METOPES_STYLES["verse"]
             return METOPES_STYLES["quote_block"]
+        if btype == "lineated_block":
+            return METOPES_STYLES["verse"]
 
         if btype == "bibliography_item":
             return METOPES_STYLES["bibliography_item"]
@@ -131,7 +133,7 @@ class MetopesMapper:
                 return METOPES_STYLES["keywords"]
             if _RE_ACKNOWLEDGMENT.match(text):
                 return METOPES_STYLES["acknowledgment"]
-            if prev_block_type == "quote_block":
+            if prev_block_type in {"quote_block", "lineated_block"}:
                 return METOPES_STYLES["paragraph_lead"]
             return METOPES_STYLES["paragraph"]
 
