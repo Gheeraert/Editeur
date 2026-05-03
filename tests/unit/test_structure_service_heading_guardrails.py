@@ -115,9 +115,9 @@ class StructureServiceHeadingGuardrailsTests(unittest.TestCase):
         self.assertEqual(document.blocks[1].attributes.get("heading_level"), 2)
         self.assertEqual(document.blocks[2].attributes.get("heading_level"), 3)
 
-    def test_typical_short_intertitle_can_still_use_conservative_heuristic(self) -> None:
+    def test_typical_short_intertitle_without_strong_signal_is_not_auto_promoted(self) -> None:
         block = self._process(Paragraph(block_id="p1", text="Cadre théorique"))
-        self.assertEqual(block.block_type, "heading")
+        self.assertEqual(block.block_type, "paragraph")
 
 
 if __name__ == "__main__":

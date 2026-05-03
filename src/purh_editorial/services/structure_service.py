@@ -1236,6 +1236,7 @@ class StructurePreparationService:
         reasons: set[str] = set()
         in_note_zone = any(cls._is_note_zone_block(block) for block in sequence)
         bibliography_like_count = 0
+        all_caps_count = 0
         for block in sequence:
             text = block.text.strip()
             if block.block_type == "heading" or cls._source_heading_level(block) is not None:
@@ -1244,8 +1245,8 @@ class StructurePreparationService:
                 reasons.add("passage_reference")
             if cls._looks_like_reference_or_caption(text):
                 reasons.add("caption_or_reference")
-            if cls._looks_like_heading_heuristic(text, block):
-                reasons.add("heading_like")
+            if text.isupper() and 4 < len(text) < 140:
+                all_caps_count += 1
             if cls._looks_like_list_item(text):
                 reasons.add("list_like")
             if cls._looks_like_chronology_line(text):
@@ -1254,6 +1255,8 @@ class StructurePreparationService:
                 bibliography_like_count += 1
             if cls._looks_like_technical_markup(text):
                 reasons.add("technical_markup")
+        if all_caps_count == len(sequence) and all_caps_count > 0:
+            reasons.add("heading_all_caps")
         if in_note_zone and bibliography_like_count > 0:
             reasons.add("bibliography_like")
         if bibliography_like_count >= max(2, len(sequence) // 2):
@@ -1344,6 +1347,7 @@ class StructurePreparationService:
                 score = max(score, settings.heading_transform_threshold)
             score = round(max(0.0, min(1.0, score)), 3)
 
+        strong_signal = cls._has_strong_heading_signal(block, text)
         ai_candidate = (
             settings.enable_scored_heuristics
             and settings.heading_ai_min_score <= score < settings.heading_ai_max_score
@@ -1352,7 +1356,7 @@ class StructurePreparationService:
             decision_name = "ignore"
         elif source_level is not None:
             decision_name = "transform"
-        elif score >= settings.heading_transform_threshold:
+        elif strong_signal and score >= settings.heading_transform_threshold:
             decision_name = "transform"
         elif score >= settings.heading_diagnostic_threshold:
             decision_name = "diagnostic"
@@ -1373,10 +1377,27 @@ class StructurePreparationService:
                 "word_count": len(text.split()),
                 "char_count": len(text),
                 "bold_title_fastpath": bold_title_fastpath,
+                "strong_signal": strong_signal,
             },
             veto_reasons=veto_reasons,
             ai_candidate=ai_candidate,
         )
+
+    @staticmethod
+    def _has_strong_heading_signal(block, text: str) -> bool:
+        if StructurePreparationService._source_heading_level(block) is not None:
+            return True
+        if bool(block.attributes.get("all_runs_bold")) and not bool(block.attributes.get("all_runs_italic")):
+            return True
+        if re.match(r"^(?:\d+|[IVXLCDM]+)\s*[\.\-]\s+\S+", text, re.IGNORECASE):
+            return True
+        if text.isupper() and 4 < len(text) < 140:
+            return True
+        try:
+            font_size = float(block.attributes.get("font_size_pt", 0) or 0)
+        except (TypeError, ValueError):
+            font_size = 0.0
+        return font_size >= 14.0
 
     @classmethod
     def _heading_veto_reasons(cls, block) -> list[str]:

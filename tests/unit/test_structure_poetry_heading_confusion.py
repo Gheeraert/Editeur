@@ -31,7 +31,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
     def setUp(self) -> None:
         self.service = StructurePreparationService()
 
-    def test_short_paragraph_sequence_is_poetry_quote(self) -> None:
+    def test_short_paragraph_sequence_is_lineated_block(self) -> None:
         document = _document_from_lines(
             [
                 "Et j'ai vu d'un oeil satisfait",
@@ -43,18 +43,13 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         diagnostics, transformations = self.service.process(document, mode="heuristic")
 
-        # Les 4 vers sont fusionnés en un seul bloc strophe (décision transform)
-        stanza_blocks = [b for b in document.blocks if b.attributes.get("poetry_group_id")]
-        self.assertGreaterEqual(len(stanza_blocks), 1)
-        stanza = stanza_blocks[0]
-        self.assertEqual(stanza.block_type, "quote_block")
-        self.assertEqual(stanza.attributes.get("quote_kind"), "poetry")
-        self.assertEqual(stanza.attributes.get("protected_zone"), "poetry")
-        self.assertIsNotNone(stanza.attributes.get("poetry_group_id"))
+        # Les vers passent en blocs lineated (pas de heading).
+        lineated_blocks = [b for b in document.blocks if b.block_type == "lineated_block"]
+        self.assertGreaterEqual(len(lineated_blocks), 1)
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
         self.assertTrue(any(d.rule_id == "R-CI-POETRY-001" for d in diagnostics))
 
-    def test_short_poetry_sequence_blocks_heading_promotion(self) -> None:
+    def test_short_lineated_sequence_blocks_heading_promotion(self) -> None:
         document = _document_from_lines(
             [
                 "Et j'ai vu d'un oeil satisfait",
@@ -69,7 +64,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.service.process(document, mode="heuristic")
 
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
-        self.assertTrue(any(block.attributes.get("poetry_group_id") for block in document.blocks))
+        self.assertTrue(any(block.block_type == "lineated_block" for block in document.blocks))
 
     def test_bold_short_heading_still_promoted(self) -> None:
         document = _document_from_lines(
@@ -108,7 +103,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         self.assertFalse(any(block.block_type == "quote_block" for block in document.blocks))
 
-    def test_poetry_quote_uses_line_breaks_not_paragraph_breaks(self) -> None:
+    def test_lineated_detection_keeps_paragraph_breaks_without_blank_boundaries(self) -> None:
         document = _document_from_lines(
             [
                 "La nuit recouvre encor la rive,",
@@ -120,11 +115,10 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.service.process(document, mode="heuristic")
 
         self.assertEqual(len(document.blocks), 3)
-        for block in document.blocks:
-            self.assertTrue(block.attributes.get("poetry_group_id"))
-            self.assertNotIn("\n", block.text)
+        self.assertTrue(all(block.block_type != "heading" for block in document.blocks))
+        self.assertTrue(all("\n" not in block.text for block in document.blocks))
 
-    def test_diane_iphigenie_sequence_forms_single_poetry_block(self) -> None:
+    def test_diane_iphigenie_sequence_forms_single_lineated_block(self) -> None:
         document = _document_from_lines(
             [
                 "DIANE annonce :",
@@ -144,14 +138,9 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.service.process(document, mode="heuristic")
 
         # Les 8 vers (sans l'intro "DIANE annonce :") sont fusionnés en un seul bloc strophe
-        poetry_blocks = [
-            block for block in document.blocks
-            if block.attributes.get("poetry_group_id") and block.attributes.get("quote_kind") == "poetry"
-        ]
-        self.assertEqual(len(poetry_blocks), 1)
-        self.assertEqual(poetry_blocks[0].block_type, "quote_block")
-        self.assertEqual(poetry_blocks[0].attributes.get("protected_zone"), "poetry")
-        self.assertIn("\n", poetry_blocks[0].text)
+        lineated_blocks = [block for block in document.blocks if block.block_type == "lineated_block"]
+        self.assertEqual(len(lineated_blocks), 1)
+        self.assertIn("\n", lineated_blocks[0].text)
         self.assertFalse(any(block.block_type == "heading" for block in document.blocks))
 
         # L'intro, l'item de liste et la prose restent en paragraphes séparés
@@ -175,9 +164,9 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertEqual(len(document.blocks), 6)
         self.assertEqual([b.text for b in document.blocks], original_lines)
         self.assertTrue(all("\n" not in b.text for b in document.blocks))
-        self.assertTrue(all(b.attributes.get("poetry_group_id") for b in document.blocks))
+        self.assertFalse(any(b.block_type == "heading" for b in document.blocks))
 
-    def test_docx_blank_para_attributes_trigger_poetry_merge(self) -> None:
+    def test_docx_blank_para_attributes_trigger_lineated_merge(self) -> None:
         document = Document(
             document_id="doc-import-like-blank-poetry",
             source_path="tests/fixtures/minimal_source.txt",
@@ -208,9 +197,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
 
         self.assertEqual(len(document.blocks), 3)
         self.assertEqual(document.blocks[0].text, "Ainsi le commentaire introduit le passage.")
-        self.assertEqual(document.blocks[1].block_type, "quote_block")
-        self.assertEqual(document.blocks[1].attributes.get("quote_kind"), "poetry")
-        self.assertEqual(document.blocks[1].attributes.get("protected_zone"), "poetry")
+        self.assertEqual(document.blocks[1].block_type, "lineated_block")
         self.assertEqual(document.blocks[1].attributes.get("merged_from"), ["b2", "b3", "b4", "b5"])
         self.assertEqual(document.blocks[1].text.count("\n"), 3)
         self.assertEqual(document.blocks[2].text, "La syntaxe elle-même s'en voit transgressée.")
@@ -241,8 +228,8 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.assertFalse(any(b.attributes.get("is_blank_para") for b in document.blocks))
         self.assertEqual(len(document.blocks), 3)
         self.assertEqual(document.blocks[0].text, "Texte introductif qui precede le poeme.")
-        self.assertEqual(document.blocks[1].block_type, "quote_block")
-        self.assertEqual(document.blocks[1].attributes.get("quote_kind"), "poetry")
+        self.assertEqual(document.blocks[1].block_type, "lineated_block")
+        self.assertNotIn("quote_kind", document.blocks[1].attributes)
         self.assertEqual(document.blocks[1].text.count("\n"), 3)
         self.assertEqual(document.blocks[2].text, "La suite du texte normal apres le poeme.")
 
@@ -264,7 +251,7 @@ class StructurePoetryHeadingConfusionTests(unittest.TestCase):
         self.service.process(document, mode="heuristic")
 
         self.assertEqual(len(document.blocks), 3)
-        self.assertEqual(document.blocks[1].block_type, "quote_block")
+        self.assertEqual(document.blocks[1].block_type, "lineated_block")
         self.assertNotIn("Bref retour", document.blocks[1].text)
         self.assertEqual(document.blocks[2].text, "Bref retour au commentaire.")
 
