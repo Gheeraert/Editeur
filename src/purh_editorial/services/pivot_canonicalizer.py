@@ -22,7 +22,8 @@ class PivotCanonicalizer:
             canonical = self._canonical_semantics_for_block(block, inferred)
             before_payload = semantics_to_dict(stored)
             after_payload = semantics_to_dict(canonical)
-            if before_payload == after_payload:
+            needs_legacy_cleanup = self._has_stale_legacy_semantic_keys(block, canonical)
+            if before_payload == after_payload and not needs_legacy_cleanup:
                 continue
 
             write_block_semantics(block, canonical)
@@ -45,6 +46,42 @@ class PivotCanonicalizer:
         return transformations
 
     @staticmethod
+    def _has_stale_legacy_semantic_keys(block, canonical: BlockSemantics) -> bool:
+        attributes = block.attributes
+
+        if canonical.role == "quote":
+            if canonical.quote_kind:
+                if attributes.get("quote_kind") != canonical.quote_kind:
+                    return True
+            elif "quote_kind" in attributes:
+                return True
+
+            if canonical.lineation:
+                if attributes.get("lineation") != canonical.lineation:
+                    return True
+            elif "lineation" in attributes:
+                return True
+
+            if canonical.quote_kind == "poetry":
+                if canonical.poetry_group_id is not None and attributes.get("poetry_group_id") != canonical.poetry_group_id:
+                    return True
+                if canonical.poetry_group_id is None and "poetry_group_id" in attributes:
+                    return True
+                if canonical.poetry_line_index is not None and attributes.get("poetry_line_index") != canonical.poetry_line_index:
+                    return True
+                if canonical.poetry_line_index is None and "poetry_line_index" in attributes:
+                    return True
+            else:
+                if "poetry_group_id" in attributes or "poetry_line_index" in attributes:
+                    return True
+            return False
+
+        return any(
+            key in attributes
+            for key in ("quote_kind", "lineation", "poetry_group_id", "poetry_line_index")
+        )
+
+    @staticmethod
     def _canonical_semantics_for_block(
         block,
         current: BlockSemantics,
@@ -53,13 +90,40 @@ class PivotCanonicalizer:
         quote_kind = current.quote_kind
         lineation = current.lineation
         lines = list(current.lines)
+        poetry_group_id = current.poetry_group_id
+        poetry_line_index = current.poetry_line_index
 
         if block.block_type == "heading":
             role = "heading"
+            quote_kind = None
+            lineation = None
+            lines = []
+            poetry_group_id = None
+            poetry_line_index = None
         elif block.block_type == "paragraph":
             role = "paragraph"
+            quote_kind = None
+            lineation = None
+            lines = []
+            poetry_group_id = None
+            poetry_line_index = None
         elif block.block_type == "quote_block":
             role = "quote"
+        elif block.block_type == "table":
+            role = "table"
+            quote_kind = None
+            lineation = None
+            lines = []
+            poetry_group_id = None
+            poetry_line_index = None
+        else:
+            # Unknown block types: avoid inventing rich semantics; drop quote
+            # semantics unless this is an explicit quote block.
+            quote_kind = None
+            lineation = None
+            lines = []
+            poetry_group_id = None
+            poetry_line_index = None
 
         if block.block_type == "quote_block":
             if quote_kind == "poetry" or lineation == "verse":
@@ -68,19 +132,17 @@ class PivotCanonicalizer:
                 if not lines:
                     lines = extract_verse_lines(block)
             else:
-                quote_kind = quote_kind or "prose"
-                lineation = lineation or "prose"
-                if lineation != "verse":
-                    lines = []
-
-        if quote_kind == "poetry" and lineation is None:
-            lineation = "verse"
+                quote_kind = "prose"
+                lineation = "prose"
+                lines = []
+                poetry_group_id = None
+                poetry_line_index = None
 
         return BlockSemantics(
             role=role,
             quote_kind=quote_kind,
             lineation=lineation,
             lines=lines,
-            poetry_group_id=current.poetry_group_id,
-            poetry_line_index=current.poetry_line_index,
+            poetry_group_id=poetry_group_id,
+            poetry_line_index=poetry_line_index,
         )
