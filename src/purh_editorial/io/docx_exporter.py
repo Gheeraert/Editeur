@@ -16,6 +16,7 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
 from purh_editorial.model import Document, InlineSpan, Note
+from purh_editorial.model.semantics import extract_verse_lines, is_canonical_poetry_block
 
 # ── Gabarit Métopes ───────────────────────────────────────────────────────────
 _DEFAULT_TEMPLATE = Path(__file__).parent.parent.parent.parent / (
@@ -204,11 +205,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         except (TypeError, ValueError):
             heading_level = 1
     heading_size = _HEADING_FONT_SIZES_PT.get(min(max(heading_level, 1), 3)) if heading_level else None
-    quote_kind = str(block.attributes.get("quote_kind", "")).lower()
-    protected_zone = str(block.attributes.get("protected_zone", "")).lower()
-    is_poetry_quote = block.block_type == "quote_block" and (
-        quote_kind == "poetry" or protected_zone == "poetry"
-    )
+    is_poetry_quote = is_canonical_poetry_block(block)
     is_quote_block = block.block_type == "quote_block"
     if is_quote_block:
         para.paragraph_format.left_indent = Cm(_QUOTE_LEFT_INDENT_CM)
@@ -236,9 +233,8 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        if is_poetry_quote and "\n" in block.text:
-            # Strophe fusionnée : insérer un <w:br> entre chaque vers
-            lines = [ln for ln in block.text.split("\n") if ln.strip()]
+        if is_poetry_quote:
+            lines = extract_verse_lines(block)
             for i, line in enumerate(lines):
                 if i > 0:
                     _add_line_break(para)

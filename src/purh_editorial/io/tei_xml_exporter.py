@@ -3,6 +3,11 @@ from __future__ import annotations
 from xml.etree import ElementTree as ET
 
 from purh_editorial.model import Document, InlineSpan, InlineStyle, Note
+from purh_editorial.model.semantics import (
+    extract_verse_lines,
+    is_canonical_poetry_block,
+    read_block_semantics,
+)
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 XML_NS = "http://www.w3.org/XML/1998/namespace"
@@ -26,11 +31,11 @@ class TeiXmlExporter:
         active_poetry_group_id: str | None = None
         active_poetry_lg: ET.Element | None = None
         for block in document.blocks:
-            poetry_group_id = str(block.attributes.get("poetry_group_id", "")).strip()
-            is_poetry_line = str(block.attributes.get("quote_kind", "")).lower() == "poetry"
-            # Blocs sans poetry_group_id (fusion blank-bounded) : chaque bloc crée son propre <lg>
-            effective_group_id = poetry_group_id or (block.block_id if is_poetry_line else "")
-            if not is_poetry_line:
+            semantics = read_block_semantics(block, allow_legacy_inference=False)
+            is_poetry_block = is_canonical_poetry_block(block)
+            poetry_group_id = (semantics.poetry_group_id or "").strip()
+            effective_group_id = poetry_group_id or (block.block_id if is_poetry_block else "")
+            if not is_poetry_block:
                 active_poetry_group_id = None
                 active_poetry_lg = None
 
@@ -43,22 +48,23 @@ class TeiXmlExporter:
                 head_el = ET.SubElement(div_el, self._q("head"))
                 self._append_block_content(head_el, block.text, block.inlines, note_by_id)
                 section_stack.append(div_el)
-            elif is_poetry_line:
+            elif is_poetry_block:
                 parent = section_stack[-1] if section_stack else body_el
                 if active_poetry_group_id != effective_group_id or active_poetry_lg is None:
                     cit_el = ET.SubElement(parent, self._q("cit"))
                     quote_el = ET.SubElement(cit_el, self._q("quote"))
                     active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
                     active_poetry_group_id = effective_group_id
-                # Bloc fusionné : le texte contient plusieurs vers séparés par \n
-                if not block.inlines and "\n" in block.text:
-                    for verse_line in block.text.split("\n"):
-                        if verse_line.strip():
-                            l_el = ET.SubElement(active_poetry_lg, self._q("l"))
-                            l_el.text = verse_line.strip()
-                else:
+                verse_lines = semantics.lines or extract_verse_lines(block)
+                if not verse_lines:
                     l_el = ET.SubElement(active_poetry_lg, self._q("l"))
                     self._append_block_content(l_el, block.text, block.inlines, note_by_id)
+                else:
+                    for verse_line in verse_lines:
+                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        # TODO(pivot-poetry-inline): Preserve inline formatting per verse
+                        # line; plain text assignment drops inline spans/styles.
+                        l_el.text = verse_line
             elif block.block_type == "quote_block":
                 parent = section_stack[-1] if section_stack else body_el
                 cit_el = ET.SubElement(parent, self._q("cit"))

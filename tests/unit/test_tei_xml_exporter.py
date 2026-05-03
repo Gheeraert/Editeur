@@ -79,22 +79,32 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_path="source.docx",
             source_format="docx",
             blocks=[
-                Paragraph(
+                QuoteBlock(
                     block_id="p1",
                     text="Vers 1",
                     attributes={
-                        "quote_kind": "poetry",
-                        "poetry_group_id": "poetry_group_001",
-                        "poetry_line_index": 1,
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Vers 1"],
+                            "poetry_group_id": "poetry_group_001",
+                            "poetry_line_index": 1,
+                        },
                     },
                 ),
-                Paragraph(
+                QuoteBlock(
                     block_id="p2",
                     text="Vers 2",
                     attributes={
-                        "quote_kind": "poetry",
-                        "poetry_group_id": "poetry_group_001",
-                        "poetry_line_index": 2,
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Vers 2"],
+                            "poetry_group_id": "poetry_group_001",
+                            "poetry_line_index": 2,
+                        },
                     },
                 ),
             ],
