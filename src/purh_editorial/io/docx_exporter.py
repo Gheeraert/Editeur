@@ -232,7 +232,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                     superscript=span.style.superscript,
                     subscript=span.style.subscript,
                     highlight=_inline_highlight(span),
-                    font_size_pt=_QUOTE_FONT_SIZE_PT if is_quote_block else heading_size,
+                    font_size_pt=_QUOTE_FONT_SIZE_PT if (is_quote_block or is_lineated_block) else heading_size,
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)

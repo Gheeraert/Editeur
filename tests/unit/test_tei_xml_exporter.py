@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import sys
 import unittest
@@ -538,7 +538,7 @@ class TeiXmlExporterTests(unittest.TestCase):
         self.assertEqual(hi.text, "italique")
 
     def test_note_consecutive_plain_runs_preserve_order(self) -> None:
-        """RÃ©gression: runs bruts consÃ©cutifs aprÃ¨s une italique ne doivent pas
+        """Régression: runs bruts consécutifs après une italique ne doivent pas
         remonter dans note.text (avant les enfants <hi>) mais rester dans hi.tail."""
         document = Document(
             document_id="doc_reg",
@@ -560,8 +560,8 @@ class TeiXmlExporterTests(unittest.TestCase):
                         InlineSpan(text="Le Mercure galant", style=InlineStyle(italic=True)),
                         InlineSpan(text=", janvier-mars 1677, Paris, Barbin, 1677, p."),
                         InlineSpan(text=" 47 ; voir aussi Corneille, "),
-                        InlineSpan(text="Å’uvres complÃ¨tes", style=InlineStyle(italic=True)),
-                        InlineSpan(text=", Ã©d. Georges Couton, Paris, Gallimard, t."),
+                        InlineSpan(text="Œuvres complètes", style=InlineStyle(italic=True)),
+                        InlineSpan(text=", éd. Georges Couton, Paris, Gallimard, t."),
                         InlineSpan(text=" III, 1987, p. 1313."),
                     ],
                 )
@@ -572,13 +572,13 @@ class TeiXmlExporterTests(unittest.TestCase):
         body = root.find(f"./{_q('text')}/{_q('body')}")
         note = body.find(f".//{_q('note')}")
         self.assertIsNotNone(note)
-        # note.text doit Ãªtre vide/None: le premier contenu est un <hi>
+        # note.text doit être vide/None: le premier contenu est un <hi>
         self.assertFalse(note.text and note.text.strip(), f"note.text ne doit pas contenir de texte: {note.text!r}")
         his = note.findall(_q("hi"))
         self.assertEqual(len(his), 2)
         self.assertEqual(his[0].text, "Le Mercure galant")
         self.assertIn("47", his[0].tail or "")
-        self.assertEqual(his[1].text, "Å’uvres complÃ¨tes")
+        self.assertEqual(his[1].text, "Œuvres complètes")
         self.assertIn("1313", his[1].tail or "")
 
     def test_export_produces_well_formed_xml(self) -> None:
@@ -829,5 +829,6 @@ class TeiXmlExporterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
 
 
