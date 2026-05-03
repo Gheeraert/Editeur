@@ -117,6 +117,326 @@ class TeiXmlExporterTests(unittest.TestCase):
         lines = lg.findall(_q("l"))
         self.assertEqual([line.text for line in lines], ["Vers 1", "Vers 2"])
 
+    def test_poetry_l_preserves_italic_inline(self) -> None:
+        document = Document(
+            document_id="doc-poetry-italic",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Je vois "),
+                        InlineSpan(text="Phedre", style=InlineStyle(italic=True)),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="Deuxieme vers"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Je vois Phedre", "Deuxieme vers"],
+                        }
+                    },
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual(len(lines), 2)
+        hi = lines[0].find(_q("hi"))
+        self.assertIsNotNone(hi)
+        self.assertEqual(hi.attrib.get("rend"), "italic")
+        self.assertEqual(hi.text, "Phedre")
+        self.assertEqual(lines[1].text, "Deuxieme vers")
+
+    def test_poetry_l_preserves_multiple_inline_styles(self) -> None:
+        document = Document(
+            document_id="doc-poetry-styles",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="gras", style=InlineStyle(bold=True)),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="petites", style=InlineStyle(small_caps=True)),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="x", style=InlineStyle(superscript=True)),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="y", style=InlineStyle(subscript=True)),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["gras", "petites", "x", "y"],
+                        }
+                    },
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual(len(lines), 4)
+        self.assertEqual(lines[0].find(_q("hi")).attrib.get("rend"), "bold")
+        self.assertEqual(lines[1].find(_q("hi")).attrib.get("rend"), "small-caps")
+        self.assertEqual(lines[2].find(_q("hi")).attrib.get("rend"), "sup")
+        self.assertEqual(lines[3].find(_q("hi")).attrib.get("rend"), "sub")
+
+    def test_poetry_l_preserves_note_call(self) -> None:
+        document = Document(
+            document_id="doc-poetry-note",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Vers avec note"),
+                        InlineSpan(text="[1]", kind="note_call", note_ref="n1"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Vers avec note"],
+                        }
+                    },
+                )
+            ],
+            notes=[Note(note_id="n1", label="1", text="Texte de note")],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        line = root.find(f".//{_q('lg')}/{_q('l')}")
+        self.assertIsNotNone(line)
+        note = line.find(_q("note"))
+        self.assertIsNotNone(note)
+        self.assertEqual(note.attrib.get("place"), "foot")
+        self.assertEqual(note.attrib.get(f"{{{XML_NS}}}id"), "n1")
+
+    def test_poetry_l_splits_on_inline_line_breaks(self) -> None:
+        document = Document(
+            document_id="doc-poetry-breaks",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Ligne 1"),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="Ligne 2"),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="Ligne 3"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Ligne 1", "Ligne 2", "Ligne 3"],
+                        }
+                    },
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual(len(lines), 3)
+
+    def test_poetry_plain_text_fallback_still_works(self) -> None:
+        document = Document(
+            document_id="doc-poetry-fallback",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="Vers 1\nVers 2",
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Vers 1", "Vers 2"],
+                        }
+                    },
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual([line.text for line in lines], ["Vers 1", "Vers 2"])
+
+    def test_non_poetry_quote_inline_behavior_unchanged(self) -> None:
+        document = Document(
+            document_id="doc-prose-quote-inline",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Une citation "),
+                        InlineSpan(text="italique", style=InlineStyle(italic=True)),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "prose",
+                            "lineation": "prose",
+                        }
+                    },
+                )
+            ],
+        )
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        self.assertEqual(len(root.findall(f".//{_q('lg')}")), 0)
+        quote = root.find(f".//{_q('cit')}/{_q('quote')}")
+        self.assertIsNotNone(quote)
+        hi = quote.find(_q("hi"))
+        self.assertIsNotNone(hi)
+        self.assertEqual(hi.attrib.get("rend"), "italic")
+        self.assertEqual(hi.text, "italique")
+
+    def test_poetry_l_preserves_tail_after_inline_style(self) -> None:
+        document = Document(
+            document_id="doc-poetry-tail-style",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Je vois "),
+                        InlineSpan(text="Phedre", style=InlineStyle(italic=True)),
+                        InlineSpan(text=" venir"),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="Deuxieme vers"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Je vois Phedre venir", "Deuxieme vers"],
+                        }
+                    },
+                )
+            ],
+        )
+
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(lines[0].text, "Je vois ")
+        hi = lines[0].find(_q("hi"))
+        self.assertIsNotNone(hi)
+        self.assertEqual(hi.attrib.get("rend"), "italic")
+        self.assertEqual(hi.text, "Phedre")
+        self.assertEqual(hi.tail, " venir")
+        self.assertEqual(lines[1].text, "Deuxieme vers")
+
+    def test_poetry_l_preserves_tail_after_note_call(self) -> None:
+        document = Document(
+            document_id="doc-poetry-tail-note",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="Vers"),
+                        InlineSpan(text="[1]", kind="note_call", note_ref="n1"),
+                        InlineSpan(text=" suite"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["Vers suite"],
+                        }
+                    },
+                )
+            ],
+            notes=[Note(note_id="n1", label="1", text="Note")],
+        )
+
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        line = root.find(f".//{_q('lg')}/{_q('l')}")
+        self.assertIsNotNone(line)
+        self.assertEqual(line.text, "Vers")
+        note = line.find(_q("note"))
+        self.assertIsNotNone(note)
+        self.assertEqual(note.tail, " suite")
+
+    def test_poetry_l_preserves_style_note_style_sequence_order(self) -> None:
+        document = Document(
+            document_id="doc-poetry-mixed-order",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[
+                QuoteBlock(
+                    block_id="q1",
+                    text="",
+                    inlines=[
+                        InlineSpan(text="A "),
+                        InlineSpan(text="B", style=InlineStyle(italic=True)),
+                        InlineSpan(text=" C "),
+                        InlineSpan(text="[1]", kind="note_call", note_ref="n1"),
+                        InlineSpan(text=" D "),
+                        InlineSpan(text="E", style=InlineStyle(small_caps=True)),
+                        InlineSpan(text=" F"),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "quote",
+                            "quote_kind": "poetry",
+                            "lineation": "verse",
+                            "lines": ["A B C D E F"],
+                        }
+                    },
+                )
+            ],
+            notes=[Note(note_id="n1", label="1", text="Note")],
+        )
+
+        xml_text = self.exporter.export_document(document)
+        root = ET.fromstring(xml_text)
+        line = root.find(f".//{_q('lg')}/{_q('l')}")
+        self.assertIsNotNone(line)
+        self.assertEqual(line.text, "A ")
+        his = line.findall(_q("hi"))
+        self.assertEqual(len(his), 2)
+        self.assertEqual(his[0].text, "B")
+        self.assertEqual(his[0].tail, " C ")
+        note = line.find(_q("note"))
+        self.assertIsNotNone(note)
+        self.assertEqual(note.tail, " D ")
+        self.assertEqual(his[1].text, "E")
+        self.assertEqual(his[1].tail, " F")
+
     def test_export_inline_styles(self) -> None:
         document = Document(
             document_id="doc4",
