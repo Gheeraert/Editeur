@@ -76,6 +76,8 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(config["enable_ai"], False)
         self.assertEqual(config["max_ai_calls"], 6)
         self.assertEqual(config["max_structure_ai_calls"], 6)
+        self.assertEqual(config["export_json"], True)
+        self.assertEqual(config["pivot_json_output_path"], "")
 
     def test_apply_config_dict_minimal_keeps_defaults(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
@@ -93,6 +95,8 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(merged["enable_ai"], False)
         self.assertEqual(merged["max_ai_calls"], 6)
         self.assertEqual(merged["max_structure_ai_calls"], 6)
+        self.assertEqual(merged["export_json"], True)
+        self.assertEqual(merged["pivot_json_output_path"], "")
 
     def test_apply_config_dict_preserves_enable_ai_and_max_ai_calls(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
@@ -137,6 +141,44 @@ class Step1DialogConfigTests(unittest.TestCase):
 
         loaded = load_config_file(path)
         self.assertEqual(loaded["output_docx_path"], "C:/sortie.docx")
+
+    def test_apply_config_dict_backward_compat_without_export_json(self) -> None:
+        current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)
+        loaded = {"version": 1, "source_path": "C:/a.docx", "export_docx": True, "export_tei": True}
+        merged = apply_config_dict(current, loaded)
+        self.assertEqual(merged["export_json"], True)
+        self.assertEqual(merged["pivot_json_output_path"], "")
+
+    def test_config_roundtrip_preserves_export_json_and_pivot_json_output_path(self) -> None:
+        path = self._runtime_path("step1_config_json_pivot")
+        cfg = build_config_dict(
+            source_path="C:/src.docx",
+            output_docx_path="C:/out.docx",
+            tei_output_path="C:/out.xml",
+            decision_mode="heuristic",
+            heuristic_profile="conservative",
+            heading_transform_threshold=None,
+            heading_diagnostic_threshold=None,
+            poetry_transform_threshold=None,
+            poetry_diagnostic_threshold=None,
+            ai_aggressiveness="conservative",
+            ai_provider="groq",
+            ai_api_key="",
+            ai_model="",
+            ai_base_url="",
+            enable_structure_ai=False,
+            enable_editorial_ai=False,
+            enable_ai=False,
+            max_ai_calls=6,
+            max_structure_ai_calls=6,
+            export_json=False,
+            pivot_json_output_path="C:/out/pivot.json",
+        )
+        save_config_file(path, cfg)
+        loaded = load_config_file(path)
+        merged = apply_config_dict(build_config_dict(), loaded)
+        self.assertEqual(merged["export_json"], False)
+        self.assertEqual(merged["pivot_json_output_path"], "C:/out/pivot.json")
 
     def test_decision_mode_heuristic_ai_local_sets_structure_ai_only(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)

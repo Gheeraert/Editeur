@@ -78,7 +78,7 @@ PROVIDER_DEFAULTS = {
 }
 
 
-# ── Fonctions de normalisation ────────────────────────────────────────────────
+#  Fonctions de normalisation 
 
 def _label_key(value: str | None) -> str:
     """Normalize UI labels for accent- and case-insensitive comparisons."""
@@ -192,7 +192,7 @@ def derive_ai_flags_from_decision_mode(decision_mode: str) -> tuple[bool, bool]:
     return False, False
 
 
-# ── Construction des options Step1 ────────────────────────────────────────────
+#  Construction des options Step1 
 
 def build_step1_options_from_form(
     *,
@@ -224,6 +224,7 @@ def build_step1_options_from_form(
     # Sorties
     output_path: Path | None = None,
     tei_output_path: Path | None = None,
+    pivot_json_output_path: Path | None = None,
 ) -> Step1Options:
     decision_mode = decision_mode_from_label(decision_mode_label)
     heuristic_profile = heuristic_profile_from_label(heuristic_profile_label)
@@ -264,10 +265,11 @@ def build_step1_options_from_form(
         max_ai_calls=max(1, int(max_ai_calls)),
         output_path=output_path,
         tei_output_path=tei_output_path,
+        pivot_json_output_path=pivot_json_output_path,
     )
 
 
-# ── Fonctions config dict ─────────────────────────────────────────────────────
+#  Fonctions config dict 
 
 def build_config_dict(
     source_path: str = "",
@@ -294,6 +296,7 @@ def build_config_dict(
     base_name: str = "",
     export_docx: bool = True,
     export_tei: bool = True,
+    export_json: bool = True,
     export_latex: bool = True,
     # IA structurelle (nouveaux noms)
     struct_ai_provider: str = "",
@@ -305,6 +308,7 @@ def build_config_dict(
     editorial_ai_api_key: str = "",
     editorial_ai_model: str = "",
     editorial_ai_base_url: str = "",
+    pivot_json_output_path: str = "",
 ) -> dict[str, object]:
     """Build a Step 1 dialog config while preserving v1 positional compatibility.
 
@@ -323,9 +327,11 @@ def build_config_dict(
         "base_name": base_name,
         "export_docx": bool(export_docx),
         "export_tei": bool(export_tei),
+        "export_json": bool(export_json),
         "export_latex": bool(export_latex),
         "output_docx_path": output_docx_path,
         "tei_output_path": tei_output_path,
+        "pivot_json_output_path": pivot_json_output_path,
         "decision_mode": normalize_decision_mode(decision_mode),
         "heuristic_profile": normalize_heuristic_profile(heuristic_profile),
         "heading_transform_threshold": normalize_optional_threshold(heading_transform_threshold),
@@ -380,9 +386,11 @@ def apply_config_dict(
         "base_name": _s(current, "base_name"),
         "export_docx": _b(current, "export_docx", True),
         "export_tei": _b(current, "export_tei", True),
+        "export_json": _b(current, "export_json", True),
         "export_latex": _b(current, "export_latex", True),
         "output_docx_path": _s(current, "output_docx_path"),
         "tei_output_path": _s(current, "tei_output_path"),
+        "pivot_json_output_path": _s(current, "pivot_json_output_path"),
         "decision_mode": normalize_decision_mode(_s(current, "decision_mode", "heuristic")),
         "heuristic_profile": normalize_heuristic_profile(_s(current, "heuristic_profile", "conservative")),
         "heading_transform_threshold": normalize_optional_threshold(current.get("heading_transform_threshold")),
@@ -416,10 +424,10 @@ def apply_config_dict(
         return merged
 
     # Champs simples
-    for key in ("source_path", "output_dir", "base_name", "output_docx_path", "tei_output_path"):
+    for key in ("source_path", "output_dir", "base_name", "output_docx_path", "tei_output_path", "pivot_json_output_path"):
         if key in loaded:
             merged[key] = str(loaded.get(key) or "")
-    for key in ("export_docx", "export_tei", "export_latex"):
+    for key in ("export_docx", "export_tei", "export_json", "export_latex"):
         if key in loaded:
             merged[key] = bool(loaded.get(key))
 
@@ -504,7 +512,7 @@ def save_config_file(path: Path, config: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-# ── Formatage des résultats ───────────────────────────────────────────────────
+#  Formatage des résultats 
 
 def format_diagnostics(diagnostics: list[Diagnostic]) -> str:
     if not diagnostics:
@@ -538,42 +546,68 @@ def format_module_runs(module_runs: list[ModuleRun]) -> str:
     )
 
 
+def build_output_paths(source: Path, output_dir: Path, base_name: str) -> tuple[Path, Path, Path]:
+    normalized_base = base_name.strip() or source.stem
+    safe_base = normalized_base.replace(" ", "_")
+    docx_path = output_dir / f"{safe_base}_purh.docx"
+    tei_path = output_dir / f"{safe_base}_tei.xml"
+    tex_path = output_dir / f"{safe_base}_latex.tex"
+    return docx_path, tei_path, tex_path
+
+
+def build_json_output_path(source: Path, output_dir: Path, base_name: str) -> Path:
+    normalized_base = base_name.strip() or source.stem
+    safe_base = normalized_base.replace(" ", "_")
+    return output_dir / f"{safe_base}_pivot.json"
+
+
 def format_outputs(result: Step1Result) -> str:
     lines: list[str] = []
     if result.output_docx:
         lines.append(f"- DOCX de relecture : {result.output_docx}")
     else:
         lines.append("- DOCX de relecture : non produit (option non demandée)")
+
     report = result.pipeline_result.report
-    tei_path = None
+    tei_path: str | None = None
+    json_path: str | None = None
     for module_run in report.module_runs:
         if module_run.module_name == "tei_xml_write":
-            tei_path = module_run.summary.get("output")
-            break
+            tei_path = str(module_run.summary.get("output") or "")
+        elif module_run.module_name == "pivot_json_write":
+            json_path = str(module_run.summary.get("output") or "")
+
     if tei_path:
         lines.append(f"- XML-TEI : {tei_path}")
     elif result.pipeline_result.tei_xml:
         lines.append("- XML-TEI : généré en mémoire (pas de fichier écrit)")
     else:
         lines.append("- XML-TEI : non produit")
+
+    if json_path:
+        lines.append(f"- JSON pivot : {json_path}")
+    else:
+        lines.append("- JSON pivot : non produit")
     return "\n".join(lines)
 
 
-def extract_output_paths(result: Step1Result) -> tuple[Path | None, Path | None]:
+def extract_output_paths(result: Step1Result) -> tuple[Path | None, Path | None, Path | None]:
     docx_path = result.output_docx
     tei_path: Path | None = None
+    json_path: Path | None = None
     for module_run in result.pipeline_result.report.module_runs:
-        if module_run.module_name != "tei_xml_write":
-            continue
         output = module_run.summary.get("output")
-        if isinstance(output, str) and output.strip():
+        if not (isinstance(output, str) and output.strip()):
+            continue
+        if module_run.module_name == "tei_xml_write":
             tei_path = Path(output)
-            break
-    return docx_path, tei_path
+        elif module_run.module_name == "pivot_json_write":
+            json_path = Path(output)
+    return docx_path, tei_path, json_path
 
 
 def output_folders_to_open(result: Step1Result) -> list[Path]:
-    docx_path, tei_path = extract_output_paths(result)
+    docx_path, tei_path, json_path = extract_output_paths(result)
     folders: list[Path] = []
     seen: set[str] = set()
 
@@ -589,16 +623,8 @@ def output_folders_to_open(result: Step1Result) -> list[Path]:
 
     _append_parent(docx_path)
     _append_parent(tei_path)
+    _append_parent(json_path)
     return folders
-
-
-def build_output_paths(source: Path, output_dir: Path, base_name: str) -> tuple[Path, Path, Path]:
-    normalized_base = base_name.strip() or source.stem
-    safe_base = normalized_base.replace(" ", "_")
-    docx_path = output_dir / f"{safe_base}_purh.docx"
-    tei_path = output_dir / f"{safe_base}_tei.xml"
-    tex_path = output_dir / f"{safe_base}_latex.tex"
-    return docx_path, tei_path, tex_path
 
 
 def run_export_bundle(
@@ -613,7 +639,7 @@ def run_export_bundle(
     latex_path: Path | None = None
     latex_error: str | None = None
     if export_latex and latex_output_path is not None:
-        _docx_path, tei_path = extract_output_paths(step1_result)
+        _docx_path, tei_path, _json_path = extract_output_paths(step1_result)
         if tei_path is None or not tei_path.exists():
             latex_error = "Export LaTeX ignoré : XML-TEI non disponible."
         else:
@@ -635,7 +661,7 @@ def build_completion_message(
     latex_error: str | None = None,
 ) -> str:
     report = result.pipeline_result.report
-    docx_path, tei_path = extract_output_paths(result)
+    docx_path, tei_path, json_path = extract_output_paths(result)
     latex_value = str(latex_path) if latex_path else ("erreur" if latex_error else "non produit")
     return (
         "Analyse terminée.\n"
@@ -644,6 +670,7 @@ def build_completion_message(
         f"- Warnings: {len(report.warnings)}\n"
         f"- DOCX: {docx_path if docx_path else 'non produit'}\n"
         f"- XML-TEI: {tei_path if tei_path else 'non écrit sur disque'}\n"
+        f"- JSON pivot: {json_path if json_path else 'non produit'}\n"
         f"- LaTeX: {latex_value}"
     )
 
@@ -673,7 +700,7 @@ def build_result_text(result: Step1Result, latex_path: Path | None = None, latex
     return "\n".join(sections)
 
 
-# ── Boîte de dialogue ─────────────────────────────────────────────────────────
+#  Boîte de dialogue 
 
 class Step1Dialog(tk.Tk):
     """Interface Step 1: collecte options, lance le pipeline, affiche le rapport."""
@@ -696,9 +723,11 @@ class Step1Dialog(tk.Tk):
         self._base_name = tk.StringVar()
         self._export_docx = tk.BooleanVar(value=True)
         self._export_tei = tk.BooleanVar(value=True)
+        self._export_json = tk.BooleanVar(value=True)
         self._export_latex = tk.BooleanVar(value=True)
         self._output_docx_path = tk.StringVar()
         self._output_tei_path = tk.StringVar()
+        self._output_json_path = tk.StringVar()
         self._output_latex_path = tk.StringVar()
 
         # Politique
@@ -736,7 +765,7 @@ class Step1Dialog(tk.Tk):
         self._ai_model = tk.StringVar(value=settings.ai.model)
         self._ai_base_url = tk.StringVar(value=settings.ai.base_url)
 
-        self._status = tk.StringVar(value="Selectionnez un DOCX source puis lancez l'analyse.")
+        self._status = tk.StringVar(value="Sélectionnez un DOCX source puis lancez l'analyse.")
 
         self._input_path.trace_add("write", self._on_input_changed)
         self._build_ui()
@@ -765,14 +794,14 @@ class Step1Dialog(tk.Tk):
         root.columnconfigure(0, weight=1)
         root.rowconfigure(8, weight=1)
 
-        # ── Section 1 : Fichier source ────────────────────────────────────────
+        #  Section 1 : Fichier source 
         src_frame = ttk.LabelFrame(root, text="1. Fichier source", padding=p)
         src_frame.grid(row=0, column=0, sticky="ew", pady=(0, p))
         src_frame.columnconfigure(0, weight=1)
         ttk.Entry(src_frame, textvariable=self._input_path).grid(row=0, column=0, sticky="ew", padx=(0, p))
         ttk.Button(src_frame, text="Choisir...", command=self._browse_input).grid(row=0, column=1)
 
-        # ── Section 2 : Export ────────────────────────────────────────────────
+        #  Section 2 : Export 
         out_frame = ttk.LabelFrame(root, text="2. Export des fichiers", padding=p)
         out_frame.grid(row=1, column=0, sticky="ew", pady=(0, p))
         out_frame.columnconfigure(1, weight=1)
@@ -781,14 +810,15 @@ class Step1Dialog(tk.Tk):
         ttk.Button(out_frame, text="Choisir...", command=self._browse_output_dir).grid(row=0, column=2)
         ttk.Label(out_frame, text="Nom de base").grid(row=1, column=0, sticky="w", padx=(0, p), pady=(6, 0))
         ttk.Entry(out_frame, textvariable=self._base_name).grid(row=1, column=1, sticky="ew", padx=(0, p), pady=(6, 0))
-        ttk.Label(out_frame, text="(par défaut: nom du fichier source)", foreground="#555555").grid(
+        ttk.Label(out_frame, text="(par défaut : nom du fichier source)", foreground="#555555").grid(
             row=2, column=1, sticky="w"
         )
         ttk.Checkbutton(out_frame, text="Exporter le DOCX corrigé", variable=self._export_docx).grid(row=3, column=0, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le XML-TEI", variable=self._export_tei).grid(row=3, column=1, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=2, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Exporter le JSON pivot", variable=self._export_json).grid(row=3, column=2, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=3, sticky="w", pady=(6, 0))
 
-        # ── Section 3 : Politique ─────────────────────────────────────────────
+        #  Section 3 : Politique 
         opt_frame = ttk.LabelFrame(root, text="3. Politique de traitement", padding=p)
         opt_frame.grid(row=2, column=0, sticky="ew", pady=(0, p))
         opt_frame.columnconfigure(1, weight=1)
@@ -807,7 +837,7 @@ class Step1Dialog(tk.Tk):
             state="readonly",
         ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
 
-        # ── Section 4 : Seuils ────────────────────────────────────────────────
+        #  Section 4 : Seuils 
         thresh_frame = ttk.LabelFrame(root, text="4. Seuils avancés", padding=p)
         thresh_frame.grid(row=3, column=0, sticky="ew", pady=(0, p))
         thresh_frame.columnconfigure(1, weight=1)
@@ -828,10 +858,10 @@ class Step1Dialog(tk.Tk):
             row=2, column=0, columnspan=4, sticky="w", pady=(8, 0)
         )
 
-        # ── Section 5 : IA structurelle ───────────────────────────────────────
+        #  Section 5 : IA structurelle 
         struct_frame = ttk.LabelFrame(
             root,
-            text="5. IA structurelle — classification des zones grises (Groq recommandé)",
+            text="5. IA structurelle  classification des zones grises (Groq recommandé)",
             padding=p,
         )
         struct_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
@@ -878,14 +908,14 @@ class Step1Dialog(tk.Tk):
         if not self.settings.ai.enabled:
             ttk.Label(
                 struct_frame,
-                text="(Aucune clé globale chargée depuis .env — saisissez une clé de session ci-dessus.)",
+                text="(Aucune clé globale chargée depuis .env  saisissez une clé de session ci-dessus.)",
                 foreground="gray",
             ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(6, 0))
 
-        # ── Section 6 : IA éditoriale ─────────────────────────────────────────
+        #  Section 6 : IA éditoriale 
         edi_frame = ttk.LabelFrame(
             root,
-            text="6. IA éditoriale — corrections orthotypo (Anthropic/Claude recommandé)",
+            text="6. IA éditoriale  corrections orthotypo (Anthropic/Claude recommandé)",
             padding=p,
         )
         edi_frame.grid(row=5, column=0, sticky="ew", pady=(0, p))
@@ -937,7 +967,7 @@ class Step1Dialog(tk.Tk):
             justify="left",
         ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
-        # ── Section 7 : Actions ───────────────────────────────────────────────
+        #  Section 7 : Actions 
         actions_frame = ttk.Frame(root)
         actions_frame.grid(row=6, column=0, sticky="ew", pady=(0, p))
         actions_frame.columnconfigure(0, weight=1)
@@ -960,8 +990,8 @@ class Step1Dialog(tk.Tk):
             row=2, column=0, columnspan=4, sticky="ew", pady=(6, 0)
         )
 
-        # ── Section 8 : Résultats ─────────────────────────────────────────────
-        result_frame = ttk.LabelFrame(root, text="7. Resultats", padding=p)
+        #  Section 8 : Résultats 
+        result_frame = ttk.LabelFrame(root, text="7. Résultats", padding=p)
         result_frame.grid(row=8, column=0, sticky="nsew")
         result_frame.columnconfigure(0, weight=1)
         result_frame.rowconfigure(1, weight=1)
@@ -979,7 +1009,7 @@ class Step1Dialog(tk.Tk):
         scrollbar.grid(row=1, column=1, sticky="ns")
         self._result_text.configure(yscrollcommand=scrollbar.set)
 
-    # ── Event handlers ────────────────────────────────────────────────────────
+    #  Event handlers 
 
     def _on_main_frame_configure(self, _event: tk.Event) -> None:
         self._main_canvas.configure(scrollregion=self._main_canvas.bbox("all"))
@@ -1012,7 +1042,7 @@ class Step1Dialog(tk.Tk):
             else self.settings.sources_dir
         )
         path_str = filedialog.askopenfilename(
-            title="Selectionner le manuscrit DOCX",
+            title="Sélectionnez le manuscrit DOCX",
             filetypes=[("Document Word", "*.docx"), ("Tous les fichiers", "*.*")],
             initialdir=str(initial),
         )
@@ -1040,7 +1070,7 @@ class Step1Dialog(tk.Tk):
             return
         source = Path(self._input_path.get().strip())
         if not source.is_file() or source.suffix.lower() != ".docx":
-            messagebox.showerror("Source invalide", "Veuillez selectionner un fichier DOCX source valide.")
+            messagebox.showerror("Source invalide", "Veuillez sélectionner un fichier DOCX source valide.")
             return
         output_dir_value = self._output_dir.get().strip()
         if not output_dir_value:
@@ -1050,8 +1080,10 @@ class Step1Dialog(tk.Tk):
         output_dir.mkdir(parents=True, exist_ok=True)
 
         docx_path, tei_path, tex_path = build_output_paths(source, output_dir, self._base_name.get())
+        json_path = build_json_output_path(source, output_dir, self._base_name.get())
         self._output_docx_path.set(str(docx_path))
         self._output_tei_path.set(str(tei_path))
+        self._output_json_path.set(str(json_path))
         self._output_latex_path.set(str(tex_path))
 
         options = build_step1_options_from_form(
@@ -1075,6 +1107,7 @@ class Step1Dialog(tk.Tk):
             max_ai_calls=max(1, int(self._max_ai_calls.get())),
             output_path=docx_path if self._export_docx.get() else None,
             tei_output_path=tei_path if self._export_tei.get() else None,
+            pivot_json_output_path=json_path if self._export_json.get() else None,
         )
 
         self._set_running(True)
@@ -1136,7 +1169,7 @@ class Step1Dialog(tk.Tk):
     def _on_success(self, bundle: ExportRunResult) -> None:
         result = bundle.step1_result
         self._set_running(False)
-        self._status.set("Analyse terminee." if not bundle.latex_error else bundle.latex_error)
+        self._status.set("Analyse terminée." if not bundle.latex_error else bundle.latex_error)
         self._set_result_text(build_result_text(result, bundle.latex_output_path, bundle.latex_error))
         completion_message = build_completion_message(result, bundle.latex_output_path, bundle.latex_error)
         folders = output_folders_to_open(result)
@@ -1145,7 +1178,7 @@ class Step1Dialog(tk.Tk):
         if not folders:
             messagebox.showinfo("Analyse terminée", completion_message)
             return
-        if messagebox.askyesno("Analyse terminée", completion_message + "\n\nOuvrir le dossier de sortie ?"):
+        if messagebox.askyesno("Analyse terminée", completion_message + "\n\nOuvrir le dossier de sortie "):
             for folder in folders:
                 try:
                     self._open_folder(folder)
@@ -1186,9 +1219,11 @@ class Step1Dialog(tk.Tk):
             base_name=self._base_name.get().strip(),
             export_docx=self._export_docx.get(),
             export_tei=self._export_tei.get(),
+            export_json=self._export_json.get(),
             export_latex=self._export_latex.get(),
             output_docx_path=self._output_docx_path.get().strip(),
             tei_output_path=self._output_tei_path.get().strip(),
+            pivot_json_output_path=self._output_json_path.get().strip(),
             decision_mode=decision_mode,
             heuristic_profile=heuristic_profile,
             heading_transform_threshold=normalize_optional_threshold(self._heading_transform_threshold.get()),
@@ -1217,9 +1252,11 @@ class Step1Dialog(tk.Tk):
         self._base_name.set(str(config.get("base_name", "")))
         self._export_docx.set(bool(config.get("export_docx", True)))
         self._export_tei.set(bool(config.get("export_tei", True)))
+        self._export_json.set(bool(config.get("export_json", True)))
         self._export_latex.set(bool(config.get("export_latex", True)))
         self._output_docx_path.set(str(config.get("output_docx_path", "")))
         self._output_tei_path.set(str(config.get("tei_output_path", "")))
+        self._output_json_path.set(str(config.get("pivot_json_output_path", "")))
         self._decision_mode.set(normalize_decision_mode(str(config.get("decision_mode", "heuristic"))))
         self._decision_mode_label.set(decision_mode_to_label(self._decision_mode.get()))
         self._heuristic_profile.set(normalize_heuristic_profile(str(config.get("heuristic_profile", "conservative"))))

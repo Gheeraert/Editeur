@@ -12,6 +12,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.model import Diagnostic, Document, Evidence, ModuleRun, Paragraph, PipelineResult, ProcessingReport
 from purh_editorial.pipeline.step1 import Step1Result
 from purh_editorial.ui.step1_dialog import (
+    build_json_output_path,
     build_completion_message,
     build_result_text,
     extract_output_paths,
@@ -24,6 +25,17 @@ from purh_editorial.ui.step1_dialog import (
 
 
 class Step1DialogFormattingTests(unittest.TestCase):
+    def test_step1_dialog_source_has_no_mojibake_markers(self) -> None:
+        source = (ROOT / "src" / "purh_editorial" / "ui" / "step1_dialog.py").read_text(encoding="utf-8")
+        for marker in ("Ã", "â€”", "â”", "Ã©", "Ã¨", "Ãª", "Ã ", "Â"):
+            self.assertNotIn(marker, source)
+        self.assertIn("Exporter le DOCX corrigé", source)
+        self.assertIn("Mode de décision", source)
+        self.assertIn("Agressivité", source)
+        self.assertIn("Modèle", source)
+        self.assertIn("Analyse terminée", source)
+        self.assertIn("par défaut", source)
+
     def _build_result(self) -> Step1Result:
         doc = Document(
             document_id="doc-ui",
@@ -74,6 +86,25 @@ class Step1DialogFormattingTests(unittest.TestCase):
                     started_at="2026-01-01T00:00:02+00:00",
                     finished_at="2026-01-01T00:00:03+00:00",
                     summary={"output": str(tei)},
+                )
+            )
+        return result
+
+    def _build_result_with_outputs_and_json(
+        self,
+        docx: Path | None,
+        tei: Path | None,
+        pivot_json: Path | None,
+    ) -> Step1Result:
+        result = self._build_result_with_outputs(docx, tei)
+        if pivot_json is not None:
+            result.pipeline_result.report.module_runs.append(
+                ModuleRun(
+                    module_name="pivot_json_write",
+                    version="2.0.0",
+                    started_at="2026-01-01T00:00:04+00:00",
+                    finished_at="2026-01-01T00:00:05+00:00",
+                    summary={"output": str(pivot_json)},
                 )
             )
         return result
@@ -133,10 +164,36 @@ class Step1DialogFormattingTests(unittest.TestCase):
         self.assertEqual(output_folders_to_open(result), [Path("C:/out"), Path("C:/tei")])
 
     def test_extract_output_paths(self) -> None:
-        result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/tei/sortie.xml"))
-        docx_path, tei_path = extract_output_paths(result)
+        result = self._build_result_with_outputs_and_json(
+            Path("C:/out/relecture.docx"),
+            Path("C:/tei/sortie.xml"),
+            Path("C:/json/pivot.json"),
+        )
+        docx_path, tei_path, json_path = extract_output_paths(result)
         self.assertEqual(docx_path, Path("C:/out/relecture.docx"))
         self.assertEqual(tei_path, Path("C:/tei/sortie.xml"))
+        self.assertEqual(json_path, Path("C:/json/pivot.json"))
+
+    def test_extract_output_paths_returns_docx_tei_json(self) -> None:
+        result = self._build_result_with_outputs_and_json(
+            Path("C:/out/relecture.docx"),
+            Path("C:/tei/sortie.xml"),
+            Path("C:/json/pivot.json"),
+        )
+        docx_path, tei_path, json_path = extract_output_paths(result)
+        self.assertEqual(docx_path, Path("C:/out/relecture.docx"))
+        self.assertEqual(tei_path, Path("C:/tei/sortie.xml"))
+        self.assertEqual(json_path, Path("C:/json/pivot.json"))
+
+    def test_format_outputs_has_clean_french_strings(self) -> None:
+        result = self._build_result_with_outputs(None, None)
+        output = format_outputs(result)
+        self.assertIn("non demandée", output)
+        self.assertIn("non produit", output)
+        result_in_memory = self._build_result_with_outputs(Path("C:/out/relecture.docx"), None)
+        output_in_memory = format_outputs(result_in_memory)
+        self.assertIn("généré en mémoire", output_in_memory)
+        self.assertIn("pas de fichier écrit", output_in_memory)
 
     def test_build_completion_message_contains_summary_fields(self) -> None:
         result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), None)
@@ -147,6 +204,13 @@ class Step1DialogFormattingTests(unittest.TestCase):
         self.assertIn("Warnings:", message)
         self.assertIn("DOCX:", message)
         self.assertIn("XML-TEI:", message)
+        self.assertIn("JSON pivot:", message)
+
+    def test_build_json_output_path_suffix(self) -> None:
+        source = Path("Mon fichier.docx")
+        output_dir = Path("out")
+        path = build_json_output_path(source, output_dir, "base")
+        self.assertTrue(str(path).endswith("base_pivot.json"))
 
 
 if __name__ == "__main__":
