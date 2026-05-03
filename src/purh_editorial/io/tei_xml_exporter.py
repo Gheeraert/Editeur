@@ -55,16 +55,23 @@ class TeiXmlExporter:
                     quote_el = ET.SubElement(cit_el, self._q("quote"))
                     active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
                     active_poetry_group_id = effective_group_id
-                verse_lines = semantics.lines or extract_verse_lines(block)
-                if not verse_lines:
-                    l_el = ET.SubElement(active_poetry_lg, self._q("l"))
-                    self._append_block_content(l_el, block.text, block.inlines, note_by_id)
-                else:
-                    for verse_line in verse_lines:
+                if block.inlines:
+                    inline_lines = self._split_inlines_on_line_break(block.inlines)
+                    if not inline_lines:
                         l_el = ET.SubElement(active_poetry_lg, self._q("l"))
-                        # TODO(pivot-poetry-inline): Preserve inline formatting per verse
-                        # line; plain text assignment drops inline spans/styles.
-                        l_el.text = verse_line
+                        self._append_block_content(l_el, block.text, block.inlines, note_by_id)
+                    for line_inlines in inline_lines:
+                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        self._append_inline_sequence(l_el, line_inlines, note_by_id)
+                else:
+                    verse_lines = semantics.lines or extract_verse_lines(block)
+                    if not verse_lines:
+                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        self._append_block_content(l_el, block.text, block.inlines, note_by_id)
+                    else:
+                        for verse_line in verse_lines:
+                            l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                            l_el.text = verse_line
             elif block.block_type == "quote_block":
                 parent = section_stack[-1] if section_stack else body_el
                 cit_el = ET.SubElement(parent, self._q("cit"))
@@ -299,3 +306,18 @@ class TeiXmlExporter:
         if value > 3:
             return 3
         return value
+
+    @staticmethod
+    def _split_inlines_on_line_break(inlines: list[InlineSpan]) -> list[list[InlineSpan]]:
+        lines: list[list[InlineSpan]] = []
+        current: list[InlineSpan] = []
+        for span in inlines:
+            if span.kind == "line_break":
+                if current:
+                    lines.append(current)
+                current = []
+                continue
+            current.append(span)
+        if current:
+            lines.append(current)
+        return lines
