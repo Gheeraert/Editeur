@@ -1,4 +1,4 @@
-# SPECS.md
+# Spécifications fonctionnelles
 
 ## 1. Objet
 
@@ -10,7 +10,8 @@ Cette chaîne doit permettre :
 - de produire des diagnostics structurés ;
 - d'offrir des suggestions stylistiques prudentes ;
 - de préparer le texte à une structuration Métopes / XML ;
-- d'exploiter ou transformer un XML Métopes vers HTML et PDF ;
+- de produire un pivot Python‑JSON stable ;
+- d'exporter ce pivot vers DOCX, XML‑TEI, LaTeX, HTML ou PDF ;
 - de documenter les décisions éditoriales prises par le système.
 
 ---
@@ -25,9 +26,10 @@ Il a pour but :
 - d'assister ce qui relève d'un jugement prudent ;
 - de rendre plus fluide le passage du manuscrit vers une forme structurée et publiable ;
 - de rendre visibles les conflits d'interprétation documentaire ;
+- de stabiliser un modèle pivot réutilisable ;
 - de préserver la validation humaine.
 
-Le système doit distinguer : diagnostic, suggestion, correction locale proposée, transformation structurelle et validation humaine.
+Le système doit distinguer : diagnostic, suggestion, correction locale proposée, transformation structurelle, canonicalisation du pivot, export et validation humaine.
 
 ---
 
@@ -50,15 +52,34 @@ mais :
 décision :
   protéger la séquence poétique
   ne pas promouvoir le vers isolé en titre
+  canonicaliser en citation en vers si le score le permet
 ```
 
 Cette doctrine est définie dans `docs/EDITORIAL_DECISION_MODEL.md`.
 
 ---
 
-## 4. Modules fonctionnels
+## 4. Principe du pivot
 
-### 4.1 Module A — Ingestion et normalisation initiale
+Le pivot Python‑JSON est la source de vérité du pipeline.
+
+```text
+Python dataclasses  <=>  JSON canonique
+```
+
+Les exports ne doivent pas compenser un pivot incomplet. Ils ne doivent faire que représenter l'état canonicalisé.
+
+Objectif :
+
+```text
+un même pivot doit produire des sorties cohérentes : DOCX, XML‑TEI, LaTeX.
+```
+
+---
+
+## 5. Modules fonctionnels
+
+### 5.1 Module A — Ingestion et normalisation initiale
 
 Rôle : recevoir un document source et produire une représentation interne exploitable.
 
@@ -68,7 +89,7 @@ Sorties : `Document` interne, journal d'ingestion, diagnostics de lecture, conse
 
 Hors périmètre actuel : import exhaustif de tous les objets Word complexes, conversion universelle parfaite, interprétation immédiate de tous les styles Word comme structures éditoriales.
 
-### 4.2 Module B — Contrôle orthotypographique
+### 5.2 Module B — Contrôle orthotypographique
 
 Rôle : détecter des anomalies ou écarts à des règles formelles explicites.
 
@@ -78,13 +99,13 @@ Règle : aucune correction silencieuse. Toute correction doit être localisée, 
 
 Le module doit respecter les zones protégées : code, transcription linguistique, citation ancienne, poésie, tableau, formule, bibliographie spécialisée.
 
-### 4.3 Module C — Suggestions stylistiques assistées par IA
+### 5.3 Module C — Suggestions stylistiques assistées par IA
 
 Rôle : repérer localement des formulations perfectibles.
 
 L'IA stylistique ne produit pas une réécriture du livre. Elle ne doit pas lisser la voix de l'auteur, imposer un registre, corriger des choix savants non fautifs ou transformer automatiquement le texte source.
 
-### 4.4 Module D — Reconnaissance / préparation de structures
+### 5.4 Module D — Reconnaissance / préparation de structures
 
 Rôle : identifier ou normaliser des structures utiles à la conversion Métopes / XML.
 
@@ -92,31 +113,48 @@ Structures potentielles : titre, sous-titre, intertitre, paragraphe, note, citat
 
 Règle d'ordre : les zones protégées doivent être repérées avant les promotions structurelles concurrentes. Une séquence poétique doit bloquer la promotion d'un vers en titre.
 
-### 4.5 Module E — Passage vers un XML de travail compatible Métopes
+### 5.5 Module E — Canonicalisation et validation du pivot
+
+Rôle : transformer les décisions en représentation stable et vérifier les invariants.
+
+Exemples :
+
+- une citation en vers reçoit `quote_kind=poetry`, `lineation=verse` et des lignes exploitables ;
+- un titre reçoit un `heading_level` cohérent ;
+- une table conserve un modèle tabulaire ou un OOXML protégé ;
+- une zone protégée ne reste pas un simple attribut flottant si elle implique une structure.
+
+Sorties : pivot Python‑JSON validé, diagnostics d'incohérence, éventuellement blocage d'export de production.
+
+### 5.6 Module F — Passage vers un XML de travail compatible Métopes
 
 Rôle : produire, enrichir ou contrôler une représentation XML conforme au périmètre retenu.
 
 Les mappings réels devront être fondés sur des exemples XML réels, les usages Métopes retenus, les pratiques PURH et des fixtures ciblées.
 
-### 4.6 Module F — Visualisation XML → HTML / PDF
+Le XML est produit depuis le pivot validé. Il ne doit pas redétecter localement les structures.
 
-Rôle : transformer un XML Métopes en rendus lisibles pour vérification, circulation interne, publication de travail et contrôle de structure.
+### 5.7 Module G — Visualisation XML / HTML / PDF / LaTeX
 
-Un mauvais rendu est souvent le symptôme d'une décision structurelle mal posée.
+Rôle : transformer le pivot ou le XML validé en rendus lisibles pour vérification, circulation interne, publication de travail et contrôle de structure.
+
+Un mauvais rendu est souvent le symptôme d'une décision structurelle mal posée. La première vérification doit porter sur le pivot.
 
 ---
 
-## 5. Régimes d'action
+## 6. Régimes d'action
 
 - Diagnostic : signalement d'un point à examiner.
 - Suggestion : proposition facultative, non imposée.
 - Correction locale proposée : transformation déterministe possible sur règle explicite.
 - Transformation structurelle : modification du type ou des attributs d'un bloc, seulement si les règles et vetos le permettent.
+- Canonicalisation : inscription stable de la décision dans le pivot.
 - Validation humaine : décision finale d'acceptation, de rejet ou de correction.
+- Export : représentation du pivot dans un format cible.
 
 ---
 
-## 6. Pipeline cible
+## 7. Pipeline cible
 
 1. ingestion ;
 2. extraction des faits documentaires ;
@@ -125,33 +163,48 @@ Un mauvais rendu est souvent le symptôme d'une décision structurelle mal posé
 5. contrôle orthotypographique ;
 6. reconnaissance / préparation structurelle ;
 7. suggestions stylistiques prudentes ;
-8. production ou contrôle XML ;
-9. visualisation HTML / PDF.
+8. canonicalisation du pivot ;
+9. validation des invariants Python‑JSON ;
+10. production JSON canonique ;
+11. exports DOCX, XML‑TEI, LaTeX, HTML/PDF.
 
 L'architecture doit permettre l'exécution d'un seul module, la réutilisation indépendante de certains modules, le saut volontaire d'étapes et la désactivation complète de l'IA.
 
 ---
 
-## 7. Formats et échanges
+## 8. Formats et échanges
 
 - Modèle interne : dataclasses Python.
-- Format d'échange : JSON documenté, dérivé du modèle interne.
+- Format pivot sérialisé : JSON documenté, versionné, relisible.
 - Journalisation : diagnostics, suggestions, transformations, décisions, vetos, scores et métadonnées de traitement.
+- Exports : vues spécialisées du pivot.
 
 ---
 
-## 8. Critères de réussite
+## 9. Critères de réussite
 
-Le projet sera satisfaisant si les règles orthotypographiques sont testées, les suggestions IA restent prudentes, l'IA sait s'abstenir, les zones protégées empêchent les faux positifs destructeurs, le passage vers XML est intelligible et les cas réels PURH peuvent être intégrés sans refonte brutale.
+Le projet sera satisfaisant si :
+
+- le pivot Python‑JSON est stable et relisible ;
+- les règles orthotypographiques sont testées ;
+- les suggestions IA restent prudentes ;
+- l'IA sait s'abstenir ;
+- les zones protégées empêchent les faux positifs destructeurs ;
+- le passage vers XML est intelligible ;
+- les exports ne contiennent plus d'heuristiques structurelles concurrentes ;
+- un même pivot produit des sorties cohérentes ;
+- les cas réels PURH peuvent être intégrés sans refonte brutale.
 
 ---
 
-## 9. Hors périmètre provisoire
+## 10. Hors périmètre provisoire
 
 Ne pas inclure d'emblée : correction grammaticale massive, réécriture complète, gestion exhaustive de tous les objets Word complexes, PAO complète, import automatisé InDesign, IA freestyle activée par défaut, transformation automatique de cas interprétatifs non testés.
 
+Ne pas résoudre les incohérences du pivot par des patches locaux dans les exporteurs.
+
 ---
 
-## 10. Dépendances documentaires nécessaires
+## 11. Dépendances documentaires nécessaires
 
 Guide typographique PURH, couples manuscrit auteur / manuscrit stylé, exemples XML Métopes réels, rendus HTML/PDF, exemples de cas ambigus, éventuellement CSL bibliographique.

@@ -9,11 +9,13 @@ from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.io.tei_xml_exporter import TeiXmlExporter
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
-from purh_editorial.serialization import to_plain_data
+from purh_editorial.serialization import build_pivot_payload
 from purh_editorial.services.bibliography_normalizer import BibliographyNormalizer
 from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
+from purh_editorial.services.pivot_canonicalizer import PivotCanonicalizer
+from purh_editorial.services.pivot_validator import PivotValidator
 from purh_editorial.services.structure_service import StructurePreparationService
 from purh_editorial.services.structure_service import settings_for_heuristic_profile
 from purh_editorial.services.structure_ai_arbitrator import (
@@ -135,6 +137,8 @@ class Step1Pipeline:
         self.structure    = StructurePreparationService()
         self.footnotes    = FootnoteNormalizer()
         self.bibliography = BibliographyNormalizer()
+        self.pivot_canonicalizer = PivotCanonicalizer()
+        self.pivot_validator = PivotValidator()
         self.mapper       = MetopesMapper()
         self.ai           = AIEditorialService(
             api_key  = settings.ai.api_key,
@@ -457,6 +461,32 @@ class Step1Pipeline:
 
         # ── 7. Application des styles Métopes ─────────────────────────────────
         t0 = utc_now_iso()
+        canonicalization_tr = self.pivot_canonicalizer.apply(document)
+        report.transformations.extend(canonicalization_tr)
+        report.add_module_run(ModuleRun(
+            module_name="pivot_canonicalizer",
+            version=self.version,
+            started_at=t0,
+            finished_at=utc_now_iso(),
+            summary={"semantic_updates": len(canonicalization_tr)},
+        ))
+
+        t0 = utc_now_iso()
+        pivot_diagnostics = self.pivot_validator.validate(document)
+        report.diagnostics.extend(pivot_diagnostics)
+        report.add_module_run(ModuleRun(
+            module_name="pivot_validator",
+            version=self.version,
+            started_at=t0,
+            finished_at=utc_now_iso(),
+            summary={
+                "diagnostics": len(pivot_diagnostics),
+                "errors": sum(1 for diag in pivot_diagnostics if diag.severity == "error"),
+                "warnings": sum(1 for diag in pivot_diagnostics if diag.severity == "warning"),
+            },
+        ))
+
+        t0 = utc_now_iso()
         document, mapper_tr = self.mapper.apply(document)
         report.transformations.extend(mapper_tr)
         report.add_module_run(ModuleRun(
@@ -510,10 +540,7 @@ class Step1Pipeline:
             except Exception as exc:  # noqa: BLE001
                 report.warnings.append(f"TEI write skipped: {exc}")
 
-        pivot = {
-            "document": to_plain_data(document),
-            "report":   to_plain_data(report),
-        }
+        pivot = build_pivot_payload(document, report=report)
         pipeline_result = PipelineResult(
             source_document=document,
             styled_document=document,

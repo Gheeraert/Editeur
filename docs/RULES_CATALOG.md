@@ -1,100 +1,121 @@
-# RULES_CATALOG (SHS, version operationnelle)
+# Catalogue de règles SHS — version opérationnelle
 
-Ce catalogue organise les regles selon un mecanisme de decision editorial a 5 niveaux.
+## 1. Statut
 
-## Legende automatisation
+Ce catalogue organise les règles selon un mécanisme de décision éditoriale compatible avec le pivot Python‑JSON.
 
-- `A1` auto-correction sure
-- `A2` suggestion localisee
-- `A3` diagnostic seulement
-- `A4` hors perimetre initial
+Une règle ne doit pas seulement produire un effet visible. Elle doit produire, selon son régime :
 
-## Niveaux de decision (transversal)
+- un diagnostic ;
+- une suggestion ;
+- une transformation ;
+- une décision structurelle ;
+- une canonicalisation du pivot ;
+- un veto.
 
-### 1) Vetos structurels (prioritaires)
+---
 
-Un veto bloque la transformation, meme si le score est eleve.
+## 2. Légende automatisation
 
-Vetos types:
+- `A1` auto-correction sûre ;
+- `A2` suggestion localisée ;
+- `A3` diagnostic seulement ;
+- `A4` hors périmètre initial ;
+- `P1` invariant du pivot obligatoire ;
+- `P2` canonicalisation requise avant export.
+
+---
+
+## 3. Niveaux de décision transversaux
+
+### 3.1 Vetos structurels
+
+Un veto bloque la transformation, même si le score est élevé.
+
+Vetos types :
+
 - `passage_reference`
 - `caption_or_reference`
 - `list_like`
 - `bibliography_like`
 - `technical_markup`
 - `poetry_line_candidate`
-- `heading_explicit` (selon contexte)
+- `table_zone`
+- `heading_explicit` selon contexte
 
-Etat:
-- Existant: oui (structure/titraille/poesie)
-- Futur: enrichissement des cas limites
+### 3.2 Déterministe sûr
 
-### 2) Deterministe sur
+Règles locales et testables, appliquées automatiquement quand le contexte est stable.
 
-Regles locales et testables, appliquees automatiquement quand le contexte est stable.
+Exemples :
 
-Exemples:
 - `R-AB-001` (`etc...` -> `etc.`)
 - `R-SO-002` ordinaux simples (`1re`, `5e`)
-- `R-SP-002`, `R-SP-003` (espaces locaux)
-- siecles styles quand contexte robuste
+- `R-SP-002`, `R-SP-003` espaces locaux
+- siècles stylés quand contexte robuste
 
-Etat:
-- Existant: oui (partiel selon regles)
-- Futur: extension avec garde-fous
+### 3.3 Heuristique scorée
 
-### 3) Heuristique scoree
+Utilisée quand plusieurs indices doivent être combinés.
 
-Utilisee quand plusieurs indices doivent etre combines.
+Sortie attendue :
 
-Sortie attendue:
-- score
-- decision (`transform` / `diagnostic` / `ignore`)
-- evidence
-- veto_reasons
-- ai_candidate
+- score ;
+- décision (`transform` / `diagnostic` / `ignore`) ;
+- evidence ;
+- veto_reasons ;
+- ai_candidate.
 
-Exemples:
-- `R-STRUCT-HEADING-001` (candidats heading)
-- `R-CI-POETRY-001` (candidats citation poetique)
+Exemples :
 
-Etat:
-- Existant: oui
-- Futur: recalibrage seuils sur corpus reel
+- `R-STRUCT-HEADING-001` candidats heading ;
+- `R-CI-POETRY-001` candidats citation poétique.
 
-### 4) IA locale (zone grise)
+### 3.4 Canonicalisation du pivot
 
-Usage cible:
-- uniquement sur segments `ai_candidate`
-- sortie structuree
-- pas d'override des vetos
+Une règle structurelle appliquée doit produire un état pivot stable.
 
-Etat:
-- Existant: cadre de prudence, pas de generalisation automatique
-- Futur: branchement local par type de decision
+Exemple :
 
-### 5) IA exploratoire future
+```text
+R-CI-POETRY-001 transform
+  -> block_type=quote_block
+  -> quote_kind=poetry
+  -> lineation=verse
+  -> protected_zone=poetry
+```
 
-Usage cible:
-- desactivee par defaut
-- suggestions uniquement
-- niveau de liberte parametrique
+### 3.5 IA locale
 
-Etat:
-- Existant: non
-- Futur: oui
+Usage cible :
 
-## Extraits de regles prioritaires (rappel)
+- uniquement sur segments `ai_candidate` ;
+- sortie structurée ;
+- pas d'override des vetos ;
+- pas de transformation sans passage par le pivot.
+
+### 3.6 IA exploratoire future
+
+Usage cible :
+
+- désactivée par défaut ;
+- suggestions uniquement ;
+- niveau de liberté paramétrique.
+
+---
+
+## 4. Extraits de règles prioritaires
 
 ### Espaces et ponctuation
 
-- `R-SP-001` espaces avant `: ; ?!` avec garde-fous (URL/heures/ratios/paths/refs)
+- `R-SP-001` espaces avant `: ; ? !` avec garde-fous (URL/heures/ratios/paths/refs)
 - `R-SP-002` suppression espace avant `, .`
-- `R-SP-003` reduction doubles espaces
-- `R-SP-004` separateur des milliers
+- `R-SP-003` réduction doubles espaces
+- `R-SP-004` séparateur des milliers
 
 ### Guillemets
 
-- `R-GQ-001` conversion prudente des guillemets droits (`A2` par defaut)
+- `R-GQ-001` conversion prudente des guillemets droits (`A2` par défaut)
 - `R-GQ-004` ponctuation autour des guillemets (`A3`)
 
 ### Notes
@@ -104,12 +125,46 @@ Etat:
 
 ### Structuration
 
-- `R-TI-001` hierarchie de titres
-- `R-STRUCT-HEADING-001` decision scoree heading + vetos
-- `R-CI-POETRY-001` decision scoree candidats poesie + vetos
+- `R-TI-001` hiérarchie de titres
+- `R-STRUCT-HEADING-001` décision scorée heading + vetos
+- `R-CI-POETRY-001` décision scorée candidats poésie + vetos
+- `R-PIVOT-POETRY-001` invariant citation en vers (`P1`)
+- `R-PIVOT-EXPORT-001` interdiction d'heuristique structurelle dans les exporteurs (`P1`)
 
-## Points explicitement futurs
+---
 
-- IA locale active sur zones grises (non generalisee aujourd'hui)
-- IA exploratoire (desactivee par defaut)
-- normalisation bibliographique exhaustive multi-modeles
+## 5. Règles pivot prioritaires
+
+### `R-PIVOT-ROUNDTRIP-001`
+
+Un document pivot doit supporter le round‑trip :
+
+```text
+Python -> JSON -> Python -> JSON
+```
+
+### `R-PIVOT-POETRY-001`
+
+Si `quote_kind=poetry`, alors `lineation=verse` et des lignes exploitables doivent exister.
+
+### `R-PIVOT-HEADING-001`
+
+Si `block_type=heading`, alors `heading_level` doit exister et être valide.
+
+### `R-PIVOT-TABLE-001`
+
+Si `block_type=table`, alors la structure tabulaire ou l'OOXML source doit être conservé. Pas d'aplatissement silencieux.
+
+### `R-PIVOT-PROTECTED-ZONE-001`
+
+Une zone protégée n'est pas une structure canonique complète. Elle doit bloquer ou déclencher une canonicalisation, mais non être directement interprétée par l'exporteur.
+
+---
+
+## 6. Points explicitement futurs
+
+- IA locale active sur zones grises, sans généralisation automatique ;
+- IA exploratoire, désactivée par défaut ;
+- normalisation bibliographique exhaustive multi-modèles ;
+- remplacement progressif des attributs non typés par des structures dédiées ;
+- validation complète du JSON pivot par schéma.

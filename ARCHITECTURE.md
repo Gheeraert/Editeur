@@ -1,25 +1,28 @@
-# ARCHITECTURE.md
+# Architecture
 
 ## 1. Principes directeurs
 
 - Modularité stricte.
 - Logique métier hors interface.
-- Dataclasses Python comme pivot réel.
+- Dataclasses Python comme représentation vivante du pivot.
+- JSON canonique comme représentation stable, versionnée et testable du pivot.
 - Transformations traçables.
 - Diagnostics explicites.
 - IA optionnelle, encadrée et désactivable.
 - Validation humaine pour toute décision interprétative.
+- Exporteurs limités à leur rôle de rendu.
 
-Le projet ne doit pas être compris comme une simple chaîne `DOCX auteur -> DOCX final`, mais comme une chaîne de préparation éditoriale capable de produire un état structuré, contrôlable et exportable vers Métopes / XML-TEI.
+Le projet ne doit pas être compris comme une simple chaîne `DOCX auteur -> DOCX final`, mais comme une chaîne de préparation éditoriale capable de produire un état structuré, contrôlable et exportable vers Métopes / XML‑TEI.
 
 ---
 
 ## 2. Pivot architectural
 
-Le pivot réel est le modèle Python interne :
+Le pivot réel est le modèle Python interne, avec sérialisation JSON canonique.
 
 ```text
 Document
+  -> Metadata
   -> Block
   -> InlineSpan
   -> Note
@@ -29,7 +32,14 @@ Document
   -> ProcessingReport
 ```
 
-Le JSON est dérivé de ce pivot. Il sert au debug, aux fixtures, à la traçabilité et aux comparaisons de tests. Il n'est pas souverain.
+Le JSON est dérivé du modèle Python, mais il n'est pas un simple fichier de debug. Il constitue le **contrat sérialisé** du pivot : il doit être versionné, relisible, diffable et exploitable comme fixture.
+
+Formule :
+
+```text
+Python = représentation vivante
+JSON   = représentation contractuelle sérialisée
+```
 
 ---
 
@@ -38,21 +48,74 @@ Le JSON est dérivé de ce pivot. Il sert au debug, aux fixtures, à la traçabi
 ```text
 DOCX auteur
   -> import riche
-  -> modèle interne
   -> extraction des faits documentaires
+  -> modèle Python initial
   -> décisions éditoriales graduées
-  -> services de correction / structuration
+  -> canonicalisation du pivot
+  -> validation des invariants Python‑JSON
   -> sorties :
-       - JSON de contrôle
+       - JSON canonique de contrôle
        - DOCX de relecture humaine
-       - XML-TEI Métopes de production
+       - XML‑TEI Métopes de production
+       - LaTeX / HTML / PDF selon modules
 ```
 
-Le DOCX reste une sortie de relecture. La sortie de production visée est l'XML-TEI Métopes.
+Le DOCX reste une sortie de relecture. La sortie de production visée est l'XML‑TEI Métopes. Le JSON sert de pivot observable et testable.
 
 ---
 
-## 4. Faits Word, indices, candidats, décisions
+## 4. Séparation des responsabilités
+
+### 4.1 Importeurs
+
+Les importeurs lisent les sources et conservent les faits matériels : styles, inlines, notes, tableaux, sauts, retraits, listes, objets utiles.
+
+Ils peuvent signaler certains faits évidents, mais ne doivent pas confondre style source et structure éditoriale.
+
+### 4.2 Services de décision
+
+Les services de décision interprètent les faits source, calculent des candidats, posent des vetos, produisent diagnostics et transformations.
+
+C'est ici que doivent vivre les heuristiques de structure : titres, citations, vers, listes, bibliographie, tableaux, code, transcriptions.
+
+### 4.3 Canonicalisation du pivot
+
+La canonicalisation transforme des décisions ou indices en représentation stable.
+
+Exemple :
+
+```text
+séquence détectée comme poésie
+  -> quote_block canonique
+  -> quote_kind = poetry
+  -> lineation = verse
+  -> lignes exploitables
+```
+
+Cette étape doit empêcher les attributs flottants de devenir des vérités concurrentes.
+
+### 4.4 Validation du pivot
+
+La validation contrôle les invariants avant export.
+
+Exemples :
+
+```text
+quote_kind == poetry => lineation == verse
+heading => heading_level présent
+lineation == verse => lignes exploitables
+protected_zone == table => pas d'aplatissement silencieux
+```
+
+### 4.5 Exporteurs
+
+Les exporteurs ne décident pas. Ils rendent.
+
+Ils ne doivent pas redétecter les vers, titres, listes ou citations à partir de la mise en forme. Ils consomment le pivot canonicalisé.
+
+---
+
+## 5. Faits Word, indices, candidats, décisions
 
 Un fichier Word ne donne pas directement des structures éditoriales fiables. Il donne des faits matériels : styles, gras, italique, retraits, puces, notes, tableaux, objets, ruptures de ligne, etc.
 
@@ -67,20 +130,20 @@ faits documentaires
   -> conflits éventuels
   -> vetos
   -> décision ou diagnostic
-  -> transformation éventuelle
+  -> canonicalisation éventuelle
 ```
 
 Le détail de cette doctrine est décrit dans `docs/EDITORIAL_DECISION_MODEL.md`.
 
 ---
 
-## 5. Niveaux de décision éditoriale
+## 6. Niveaux de décision éditoriale
 
-### 5.1 Déterministe
+### 6.1 Déterministe
 
 Règles locales, explicites, testables : espaces, guillemets, siècles, abréviations, corrections sûres. Toute transformation déterministe doit être localisée, réversible et tracée.
 
-### 5.2 Heuristique scorée
+### 6.2 Heuristique scorée
 
 Reconnaissance probable, avec score, indices et vetos : candidat titre, citation longue, poésie, bibliographie, code, transcription linguistique.
 
@@ -92,17 +155,17 @@ Une heuristique doit produire :
 - `veto_reasons` ;
 - éventuellement `ai_candidate`.
 
-### 5.3 IA locale encadrée
+### 6.3 IA locale encadrée
 
 L'IA locale intervient seulement en zone grise, sur une question fermée. Elle ne réécrit pas, ne transforme pas directement et ne passe pas outre les vetos.
 
-### 5.4 IA exploratoire ou freestyle
+### 6.4 IA exploratoire ou freestyle
 
 L'IA exploratoire est désactivée par défaut. Elle peut aider à comprendre un cas rare, mais ne doit jamais modifier automatiquement le texte source. C'est une solution de dernier recours.
 
 ---
 
-## 6. Vetos et zones protégées
+## 7. Vetos et zones protégées
 
 Certaines zones doivent être protégées avant toute transformation concurrente :
 
@@ -123,22 +186,7 @@ Une zone protégée peut bloquer :
 - une suggestion stylistique ;
 - une normalisation d'espaces ou de ponctuation.
 
-Exemple : une séquence poétique doit être reconnue avant les titres. Un vers isolé ne doit pas devenir `heading` parce qu'il est court, commence par une majuscule ou possède un style Word accidentel.
-
----
-
-## 7. Ordre recommandé des traitements structurels
-
-1. Importer les faits Word.
-2. Identifier les zones protégées évidentes ou probables.
-3. Poser les vetos structurels.
-4. Calculer les candidats concurrents.
-5. Appliquer les transformations déterministes sûres.
-6. Produire des diagnostics pour les zones grises.
-7. Soumettre éventuellement les zones grises à une IA locale encadrée.
-8. Réserver l'IA exploratoire à l'analyse non automatique.
-
-Ne jamais promouvoir un bloc en titre avant d'avoir vérifié qu'il n'appartient pas à une zone protégée.
+Une zone protégée ne remplace pas une structure canonique. Elle signale un régime de prudence et de veto.
 
 ---
 
@@ -147,25 +195,44 @@ Ne jamais promouvoir un bloc en titre avant d'avoir vérifié qu'il n'appartient
 Il faut distinguer :
 
 - le style Word Métopes, utile pour la relecture et la préparation humaine ;
-- la structure TEI Métopes, qui porte la sémantique documentaire de production.
+- la structure TEI Métopes, qui porte la sémantique documentaire de production ;
+- le pivot Python‑JSON, qui doit gouverner les deux.
 
 Conclusion :
 
 ```text
 style Word != structure éditoriale
 style Word != structure TEI
+rendu DOCX correct != pivot validé
 ```
 
 La conversion vers Métopes doit passer par le modèle interne et par des décisions documentées.
 
 ---
 
-## 9. Documents de référence
+## 9. Règle pour les branches de refactorisation
+
+Le développement reste incrémental, mais une refactorisation de fond est légitime lorsque le contrat de données est instable.
+
+Dans ce cas :
+
+- créer une branche dédiée ;
+- documenter les invariants avant de coder ;
+- ajouter des tests de pivot avant de réparer les sorties ;
+- supprimer les heuristiques locales concurrentes ;
+- conserver les comportements stabilisés par fixtures.
+
+---
+
+## 10. Documents de référence
 
 - `README.md`
 - `SPECS.md`
 - `DATA_MODEL.md`
+- `docs/PIVOT_JSON_CONTRACT.md`
+- `docs/EXPORTERS_CONTRACT.md`
 - `docs/EDITORIAL_DECISION_MODEL.md`
+- `docs/EDITORIAL_PIPELINE.md`
 - `AI_STYLE_POLICY_V1.md`
 - `TEST_STRATEGY.md`
 - `FIXTURES.md`
