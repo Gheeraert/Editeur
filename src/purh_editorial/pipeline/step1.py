@@ -8,7 +8,7 @@ from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
-from purh_editorial.serialization import build_pivot_payload
+from purh_editorial.serialization import build_pivot_payload, pivot_to_json
 from purh_editorial.services.bibliography_normalizer import BibliographyNormalizer
 from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
@@ -61,6 +61,7 @@ class Step1Options:
     output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
+    pivot_json_output_path: Path | None = None
 
     _ALLOWED_DECISION_MODES = {
         "deterministic",
@@ -549,6 +550,27 @@ class Step1Pipeline:
                 ))
             except Exception as exc:  # noqa: BLE001
                 report.warnings.append(f"TEI write skipped: {exc}")
+
+        if options.pivot_json_output_path is not None:
+            pivot_json_module_run: ModuleRun | None = None
+            try:
+                t0 = utc_now_iso()
+                options.pivot_json_output_path.parent.mkdir(parents=True, exist_ok=True)
+                pivot_json_module_run = ModuleRun(
+                    module_name="pivot_json_write",
+                    version=self.version,
+                    started_at=t0,
+                    finished_at=utc_now_iso(),
+                    status="success",
+                    summary={"output": str(options.pivot_json_output_path)},
+                )
+                report.add_module_run(pivot_json_module_run)
+                pivot_json_text = pivot_to_json(document, report=report)
+                options.pivot_json_output_path.write_text(pivot_json_text, encoding="utf-8")
+            except Exception as exc:  # noqa: BLE001
+                if pivot_json_module_run is not None and report.module_runs and report.module_runs[-1] is pivot_json_module_run:
+                    report.module_runs.pop()
+                report.warnings.append(f"Pivot JSON write skipped: {exc}")
 
         pivot = build_pivot_payload(document, report=report)
         pipeline_result = PipelineResult(
