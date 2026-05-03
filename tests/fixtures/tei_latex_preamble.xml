@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title type="main">Test avant-propos sans titre</title>
+      </titleStmt>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <!-- Paragraphes orphelins avant tout <div> : avant-propos sans titre de section -->
+      <p>Premier paragraphe de l'avant-propos.</p>
+      <p>Deuxième paragraphe de l'avant-propos.</p>
+      <!-- Premier vrai chapitre : crée un <div> -->
+      <div type="section1">
+        <head>Chapitre 1</head>
+        <p>Contenu du chapitre 1.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
