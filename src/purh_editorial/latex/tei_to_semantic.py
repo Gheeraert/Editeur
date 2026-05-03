@@ -191,7 +191,12 @@ def _parse_block_list(children: list[etree._Element]) -> list:
             i += 1
             continue
         if local == "cit":
-            blocks.append(_parse_cit_block(child))
+            lg_nodes = child.xpath("./tei:quote/tei:lg", namespaces=NS)
+            if lg_nodes:
+                for lg in lg_nodes:
+                    blocks.append(_parse_verse_block(lg))
+            else:
+                blocks.append(_parse_cit_block(child))
             i += 1
             continue
         if local == "quote":

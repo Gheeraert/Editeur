@@ -27,10 +27,9 @@ class TeiXmlExporter:
         active_poetry_lg: ET.Element | None = None
         for block in document.blocks:
             poetry_group_id = str(block.attributes.get("poetry_group_id", "")).strip()
-            is_poetry_line = (
-                poetry_group_id
-                and str(block.attributes.get("quote_kind", "")).lower() == "poetry"
-            )
+            is_poetry_line = str(block.attributes.get("quote_kind", "")).lower() == "poetry"
+            # Blocs sans poetry_group_id (fusion blank-bounded) : chaque bloc crée son propre <lg>
+            effective_group_id = poetry_group_id or (block.block_id if is_poetry_line else "")
             if not is_poetry_line:
                 active_poetry_group_id = None
                 active_poetry_lg = None
@@ -46,11 +45,11 @@ class TeiXmlExporter:
                 section_stack.append(div_el)
             elif is_poetry_line:
                 parent = section_stack[-1] if section_stack else body_el
-                if active_poetry_group_id != poetry_group_id or active_poetry_lg is None:
+                if active_poetry_group_id != effective_group_id or active_poetry_lg is None:
                     cit_el = ET.SubElement(parent, self._q("cit"))
                     quote_el = ET.SubElement(cit_el, self._q("quote"))
                     active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
-                    active_poetry_group_id = poetry_group_id
+                    active_poetry_group_id = effective_group_id
                 # Bloc fusionné : le texte contient plusieurs vers séparés par \n
                 if not block.inlines and "\n" in block.text:
                     for verse_line in block.text.split("\n"):
