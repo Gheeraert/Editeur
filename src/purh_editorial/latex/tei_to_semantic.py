@@ -120,6 +120,22 @@ def _parse_container_divisions(container: etree._Element, container_kind: Divisi
             divisions.append(Division(title=title, kind=container_kind, blocks=blocks))
         return divisions
 
+    # Collect preamble blocks: direct children that appear before the first <div>.
+    # The TEI exporter places content without a heading directly in the container
+    # (e.g. an avant-propos with no heading block), and they must not be silently
+    # dropped when later sections do create <div> wrappers.
+    first_div = divs[0]
+    preamble_children: list[etree._Element] = []
+    for child in container:
+        if child is first_div:
+            break
+        preamble_children.append(child)
+    if preamble_children:
+        preamble_blocks = _parse_block_list(preamble_children)
+        if preamble_blocks:
+            title = _first_child_head_text(container) or container_kind.value.capitalize()
+            divisions.append(Division(title=title, kind=container_kind, blocks=preamble_blocks))
+
     for div in divs:
         kind = _map_division_kind(div.get("type"), container_kind)
         title = _first_child_head_text(div) or kind.value.capitalize()
@@ -148,11 +164,18 @@ def _first_child_head_text(node: etree._Element) -> str | None:
 
 
 def _parse_blocks(parent: etree._Element) -> list:
+    return _parse_block_list(list(parent))
+
+
+def _parse_block_list(children: list[etree._Element]) -> list:
     blocks: list = []
-    children = list(parent)
     i = 0
     while i < len(children):
         child = children[i]
+        # Skip comment and PI nodes (lxml includes them; their .tag is callable)
+        if callable(child.tag):
+            i += 1
+            continue
         local = etree.QName(child).localname
         if local == "head":
             i += 1

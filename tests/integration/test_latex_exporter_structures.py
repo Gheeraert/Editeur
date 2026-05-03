@@ -67,5 +67,23 @@ class LatexExporterStructuresTests(unittest.TestCase):
         self.assertIn(r"\\", tex)
 
 
+    def test_preamble_paragraphs_before_first_div_are_not_lost(self) -> None:
+        """Régression : paragraphes orphelins (avant-propos sans heading) perdus quand des <div> existent."""
+        input_xml = ROOT / "tests" / "fixtures" / "tei_latex_preamble.xml"
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        output_tex = runtime_dir / f"latex_preamble_{uuid.uuid4().hex}.tex"
+
+        export_tei_to_latex(input_xml, output_tex)
+        tex = output_tex.read_text(encoding="utf-8")
+
+        self.assertIn("Premier paragraphe de l'avant-propos.", tex)
+        self.assertIn("Deuxième paragraphe de l'avant-propos.", tex)
+        self.assertIn("Chapitre 1", tex)
+        self.assertIn("Contenu du chapitre 1.", tex)
+        # L'avant-propos doit précéder le chapitre 1
+        self.assertLess(tex.index("avant-propos"), tex.index("Chapitre 1"))
+
+
 if __name__ == "__main__":
     unittest.main()
