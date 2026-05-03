@@ -6,7 +6,6 @@ from pathlib import Path
 from purh_editorial.config import AppSettings
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
-from purh_editorial.io.tei_xml_exporter import TeiXmlExporter
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
 from purh_editorial.serialization import build_pivot_payload
@@ -15,6 +14,7 @@ from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 from purh_editorial.services.pivot_canonicalizer import PivotCanonicalizer
+from purh_editorial.services.pivot_export_gate import PivotValidationError, export_tei_for_production
 from purh_editorial.services.pivot_validator import PivotValidator
 from purh_editorial.services.structure_service import StructurePreparationService
 from purh_editorial.services.structure_service import settings_for_heuristic_profile
@@ -514,14 +514,24 @@ class Step1Pipeline:
         tei_xml: str | None = None
         try:
             t0 = utc_now_iso()
-            tei_xml = TeiXmlExporter().export_document(document)
+            tei_xml, gate_diagnostics = export_tei_for_production(
+                document,
+                fail_on_pivot_error=True,
+                run_canonicalization=False,
+            )
             report.add_module_run(ModuleRun(
                 module_name="tei_xml_export",
                 version=self.version,
                 started_at=t0,
                 finished_at=utc_now_iso(),
-                summary={"generated": tei_xml is not None},
+                summary={
+                    "generated": tei_xml is not None,
+                    "pivot_errors": sum(1 for diag in gate_diagnostics if diag.severity == "error"),
+                },
             ))
+        except PivotValidationError as exc:
+            report.warnings.append(f"TEI export blocked: {exc}")
+            report.diagnostics.extend(exc.diagnostics)
         except Exception as exc:  # noqa: BLE001
             report.warnings.append(f"TEI export skipped: {exc}")
 
