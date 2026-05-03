@@ -18,10 +18,13 @@ from purh_editorial.model import (
     Heading,
     InlineSpan,
     InlineStyle,
+    LineatedBlock,
     Metadata,
     Paragraph,
     ProcessingReport,
     QuoteBlock,
+    is_canonical_lineated_block,
+    is_canonical_poetry_block,
     read_block_semantics,
     write_block_semantics,
 )
@@ -62,11 +65,218 @@ class PivotSemanticContractTests(unittest.TestCase):
             semantic_payload,
             {
                 "role": "quote",
-                "quote_kind": "poetry",
-                "lineation": "verse",
+                "layout_kind": "lineated_block",
+                "lineation": "lineated",
                 "lines": ["Premier vers", "Deuxieme vers"],
+                "genre_hint": "poetry",
+                "genre_source": "legacy",
             },
         )
+
+    def test_lineated_block_semantic_round_trip(self) -> None:
+        block = LineatedBlock(block_id="lb1", text="A\nB")
+        write_block_semantics(
+            block,
+            BlockSemantics(
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
+                lines=["A", "B"],
+            ),
+        )
+        document = Document(
+            document_id="doc-lineated-roundtrip",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[block],
+        )
+        report = ProcessingReport(report_id="report-lineated-roundtrip", document_id=document.document_id)
+
+        payload = build_pivot_payload(document, report=report)
+        self.assertEqual(payload["schema_version"], "pivot-1.0")
+
+        json_text = pivot_to_json(document, report=report)
+        reconstructed_document, _ = parse_pivot_payload(json_text)
+        semantics = read_block_semantics(reconstructed_document.blocks[0], allow_legacy_inference=False)
+        self.assertEqual(semantics.role, "lineated_block")
+        self.assertEqual(semantics.layout_kind, "lineated_block")
+        self.assertEqual(semantics.lineation, "lineated")
+        self.assertEqual(semantics.lines, ["A", "B"])
+        self.assertIsNone(semantics.quote_kind)
+
+    def test_lineated_block_does_not_require_genre_hint(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-no-genre",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        document = Document(
+            document_id="doc-lineated-no-genre",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[block],
+        )
+
+        diagnostics = PivotValidator().validate(document)
+        self.assertFalse(any(diag.rule_id == "pivot.semantic.lineated_block_without_lines" for diag in diagnostics))
+        self.assertFalse(any(diag.rule_id == "pivot.semantic.quote_fields_on_non_quote" for diag in diagnostics))
+
+    def test_lineated_block_validator_accepts_non_quote(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-validator-ok",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        document = Document(
+            document_id="doc-lineated-validator-ok",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[block],
+        )
+
+        diagnostics = PivotValidator().validate(document)
+        rule_ids = {diag.rule_id for diag in diagnostics}
+        self.assertNotIn("pivot.semantic.quote_fields_on_non_quote", rule_ids)
+
+    def test_lineated_block_survives_canonicalizer(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-canon",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        document = Document(
+            document_id="doc-lineated-canon",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[block],
+        )
+
+        PivotCanonicalizer().apply(document)
+        semantics = read_block_semantics(document.blocks[0], allow_legacy_inference=False)
+        self.assertEqual(semantics.role, "lineated_block")
+        self.assertEqual(semantics.lineation, "lineated")
+        self.assertIsNone(semantics.quote_kind)
+
+    def test_legacy_poetry_canonicalizes_to_lineated_semantics(self) -> None:
+        block = QuoteBlock(
+            block_id="q-legacy-poetry-lineated",
+            text="Premier vers\nDeuxieme vers",
+            attributes={
+                "quote_kind": "poetry",
+                "lineation": "verse",
+                "protected_zone": "poetry",
+            },
+        )
+        document = Document(
+            document_id="doc-legacy-lineated",
+            source_path="source.docx",
+            source_format="docx",
+            blocks=[block],
+        )
+
+        PivotCanonicalizer().apply(document)
+        semantic_payload = document.blocks[0].attributes.get("semantic")
+        self.assertEqual(semantic_payload.get("lineation"), "lineated")
+        self.assertEqual(semantic_payload.get("layout_kind"), "lineated_block")
+        self.assertTrue(semantic_payload.get("lines"))
+        self.assertNotIn("quote_kind", semantic_payload)
+
+    def test_strict_semantic_read_does_not_infer_legacy_poetry(self) -> None:
+        block = QuoteBlock(
+            block_id="q-legacy-strict-read",
+            text="Premier vers\nDeuxieme vers",
+            attributes={
+                "quote_kind": "poetry",
+                "lineation": "verse",
+            },
+        )
+        semantics = read_block_semantics(block, allow_legacy_inference=False)
+        self.assertIsNone(semantics.role)
+        self.assertIsNone(semantics.lineation)
+        self.assertEqual(semantics.lines, [])
+
+    def test_lineated_block_predicate_is_not_poetry_predicate(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-predicate",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+
+        self.assertTrue(is_canonical_lineated_block(block))
+        self.assertFalse(is_canonical_poetry_block(block))
+
+    def test_paragraph_with_lineated_semantic_is_not_canonical_lineated(self) -> None:
+        block = Paragraph(
+            block_id="p-not-canonical-lineated",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        self.assertFalse(is_canonical_lineated_block(block))
+
+    def test_lineated_block_role_is_canonical_lineated(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-canonical-lineated",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "lineated_block",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        self.assertTrue(is_canonical_lineated_block(block))
+
+    def test_lineated_quote_role_is_canonical_lineated(self) -> None:
+        block = QuoteBlock(
+            block_id="q-canonical-lineated",
+            text="A\nB",
+            attributes={
+                "semantic": {
+                    "role": "quote",
+                    "layout_kind": "lineated_block",
+                    "lineation": "lineated",
+                    "lines": ["A", "B"],
+                }
+            },
+        )
+        self.assertTrue(is_canonical_lineated_block(block))
 
     def test_export_requires_canonical_semantic(self) -> None:
         block = QuoteBlock(
@@ -205,8 +415,8 @@ class PivotSemanticContractTests(unittest.TestCase):
         diagnostics = PivotValidator().validate(document)
         rule_ids = {diag.rule_id for diag in diagnostics}
         self.assertIn("pivot.semantic.quote_fields_on_non_quote", rule_ids)
-        self.assertIn("pivot.semantic.verse_on_non_poetry", rule_ids)
         self.assertIn("pivot.semantic.lines_on_non_poetry", rule_ids)
+        self.assertIn("pivot.semantic.quote_kind_used_as_lineation_legacy", rule_ids)
 
     def test_canonical_payload_still_cleans_stale_legacy_quote_keys(self) -> None:
         block = Paragraph(
@@ -260,16 +470,16 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertNotIn("lineation", document.blocks[0].attributes)
 
     def test_json_round_trip_preserves_canonical_semantics(self) -> None:
-        poetry_block = QuoteBlock(
+        poetry_block = LineatedBlock(
             block_id="q-poetry",
             text="Premier vers\nDeuxieme vers",
         )
         write_block_semantics(
             poetry_block,
             BlockSemantics(
-                role="quote",
-                quote_kind="poetry",
-                lineation="verse",
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
                 lines=["Premier vers", "Deuxieme vers"],
             ),
         )
@@ -323,19 +533,20 @@ class PivotSemanticContractTests(unittest.TestCase):
 
         reconstructed_poetry = reconstructed_document.blocks[3]
         poetry_semantics = read_block_semantics(reconstructed_poetry)
-        self.assertEqual(poetry_semantics.role, "quote")
-        self.assertEqual(poetry_semantics.quote_kind, "poetry")
-        self.assertEqual(poetry_semantics.lineation, "verse")
+        self.assertEqual(poetry_semantics.role, "lineated_block")
+        self.assertEqual(poetry_semantics.layout_kind, "lineated_block")
+        self.assertIsNone(poetry_semantics.quote_kind)
+        self.assertEqual(poetry_semantics.lineation, "lineated")
         self.assertEqual(poetry_semantics.lines, ["Premier vers", "Deuxieme vers"])
 
     def test_poetry_invariant_exports_to_lg_l(self) -> None:
-        block = QuoteBlock(block_id="q1", text="Premier vers\nDeuxieme vers")
+        block = LineatedBlock(block_id="q1", text="Premier vers\nDeuxieme vers")
         write_block_semantics(
             block,
             BlockSemantics(
-                role="quote",
-                quote_kind="poetry",
-                lineation="verse",
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
                 lines=["Premier vers", "Deuxieme vers"],
             ),
         )
@@ -373,13 +584,13 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertEqual(len(root.findall(f".//{_q('lg')}")), 0)
 
     def test_docx_xml_consistency_from_same_canonical_poetry_semantics(self) -> None:
-        poetry_block = QuoteBlock(block_id="q1", text="Vers 1\nVers 2")
+        poetry_block = LineatedBlock(block_id="q1", text="Vers 1\nVers 2")
         write_block_semantics(
             poetry_block,
             BlockSemantics(
-                role="quote",
-                quote_kind="poetry",
-                lineation="verse",
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
                 lines=["Vers 1", "Vers 2"],
             ),
         )
@@ -414,7 +625,7 @@ class PivotSemanticContractTests(unittest.TestCase):
         PivotCanonicalizer().apply(document)
         diagnostics = PivotValidator().validate(document)
 
-        self.assertFalse(any(read_block_semantics(block).quote_kind == "poetry" for block in document.blocks))
+        self.assertFalse(any(read_block_semantics(block).role == "lineated_block" for block in document.blocks))
         self.assertFalse(any(diag.rule_id == "pivot.poetry.lines.required" for diag in diagnostics))
 
         xml_text = TeiXmlExporter().export_document(document)

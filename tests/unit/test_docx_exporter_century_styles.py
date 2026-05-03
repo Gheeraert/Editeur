@@ -16,7 +16,7 @@ if str(SRC) not in sys.path:
 
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
-from purh_editorial.model import Document, InlineSpan, InlineStyle, Paragraph
+from purh_editorial.model import Document, InlineSpan, InlineStyle, LineatedBlock, Paragraph
 from purh_editorial.services.orthotypo_service import OrthotypoService
 from tests.helpers.docx_factory import create_table_docx
 
@@ -153,6 +153,43 @@ class DocxExporterCenturyStylesTests(unittest.TestCase):
         imported = ImporterRegistry().load_document(runtime_input)
         heading_count = sum(1 for block in imported.blocks if block.block_type == "heading")
         self.assertEqual(heading_count, 0)
+
+    def test_lineated_block_inlines_preserve_word_line_break_and_italic(self) -> None:
+        document = Document(
+            document_id="doc-lineated-inline-break",
+            source_path="tests/fixtures/minimal_source.txt",
+            source_format="txt",
+            blocks=[
+                LineatedBlock(
+                    block_id="lb1",
+                    text="Je vois Phèdre venir.\nDeuxième vers.",
+                    inlines=[
+                        InlineSpan(text="Je vois "),
+                        InlineSpan(text="Phèdre", style=InlineStyle(italic=True)),
+                        InlineSpan(text=" venir."),
+                        InlineSpan(text="", kind="line_break"),
+                        InlineSpan(text="Deuxième vers."),
+                    ],
+                    attributes={
+                        "semantic": {
+                            "role": "lineated_block",
+                            "layout_kind": "lineated_block",
+                            "lineation": "lineated",
+                            "lines": ["Je vois Phèdre venir.", "Deuxième vers."],
+                        }
+                    },
+                )
+            ],
+        )
+        root = self._export_and_read_document_xml(document)
+        br_nodes = root.findall(f".//{_q('br')}")
+        self.assertTrue(br_nodes)
+
+        runs = self._runs_with_text(root)
+        phedre_run = next((run for text, run in runs if "Phèdre" in text), None)
+        self.assertIsNotNone(phedre_run)
+        italic = phedre_run.find(f"./{_q('rPr')}/{_q('i')}")
+        self.assertIsNotNone(italic)
 
 
 if __name__ == "__main__":

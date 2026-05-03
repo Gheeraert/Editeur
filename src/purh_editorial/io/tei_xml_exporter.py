@@ -5,7 +5,7 @@ from xml.etree import ElementTree as ET
 from purh_editorial.model import Document, InlineSpan, InlineStyle, Note
 from purh_editorial.model.semantics import (
     extract_verse_lines,
-    is_canonical_poetry_block,
+    is_canonical_lineated_block,
     read_block_semantics,
 )
 
@@ -28,16 +28,19 @@ class TeiXmlExporter:
         note_by_id = {note.note_id: note for note in document.notes}
         section_stack: list[ET.Element] = []
         table_diagnostics: list[dict[str, object]] = []
-        active_poetry_group_id: str | None = None
-        active_poetry_lg: ET.Element | None = None
+        active_lineated_group_id: str | None = None
+        active_lineated_context: str | None = None
+        active_lineated_lg: ET.Element | None = None
         for block in document.blocks:
             semantics = read_block_semantics(block, allow_legacy_inference=False)
-            is_poetry_block = is_canonical_poetry_block(block)
+            is_lineated_block = is_canonical_lineated_block(block)
             poetry_group_id = (semantics.poetry_group_id or "").strip()
-            effective_group_id = poetry_group_id or (block.block_id if is_poetry_block else "")
-            if not is_poetry_block:
-                active_poetry_group_id = None
-                active_poetry_lg = None
+            effective_group_id = poetry_group_id or (block.block_id if is_lineated_block else "")
+            lineated_context = "quote" if semantics.role == "quote" else "lineated_block"
+            if not is_lineated_block:
+                active_lineated_group_id = None
+                active_lineated_context = None
+                active_lineated_lg = None
 
             if block.block_type == "heading":
                 level = self._heading_level(block.attributes.get("heading_level"))
@@ -48,29 +51,37 @@ class TeiXmlExporter:
                 head_el = ET.SubElement(div_el, self._q("head"))
                 self._append_block_content(head_el, block.text, block.inlines, note_by_id)
                 section_stack.append(div_el)
-            elif is_poetry_block:
+            elif is_lineated_block:
                 parent = section_stack[-1] if section_stack else body_el
-                if active_poetry_group_id != effective_group_id or active_poetry_lg is None:
-                    cit_el = ET.SubElement(parent, self._q("cit"))
-                    quote_el = ET.SubElement(cit_el, self._q("quote"))
-                    active_poetry_lg = ET.SubElement(quote_el, self._q("lg"))
-                    active_poetry_group_id = effective_group_id
+                if (
+                    active_lineated_group_id != effective_group_id
+                    or active_lineated_lg is None
+                    or active_lineated_context != lineated_context
+                ):
+                    if lineated_context == "quote":
+                        cit_el = ET.SubElement(parent, self._q("cit"))
+                        quote_el = ET.SubElement(cit_el, self._q("quote"))
+                        active_lineated_lg = ET.SubElement(quote_el, self._q("lg"))
+                    else:
+                        active_lineated_lg = ET.SubElement(parent, self._q("lg"))
+                    active_lineated_group_id = effective_group_id
+                    active_lineated_context = lineated_context
                 if block.inlines:
                     inline_lines = self._split_inlines_on_line_break(block.inlines)
                     if not inline_lines:
-                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        l_el = ET.SubElement(active_lineated_lg, self._q("l"))
                         self._append_block_content(l_el, block.text, block.inlines, note_by_id)
                     for line_inlines in inline_lines:
-                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        l_el = ET.SubElement(active_lineated_lg, self._q("l"))
                         self._append_inline_sequence(l_el, line_inlines, note_by_id)
                 else:
                     verse_lines = semantics.lines or extract_verse_lines(block)
                     if not verse_lines:
-                        l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                        l_el = ET.SubElement(active_lineated_lg, self._q("l"))
                         self._append_block_content(l_el, block.text, block.inlines, note_by_id)
                     else:
                         for verse_line in verse_lines:
-                            l_el = ET.SubElement(active_poetry_lg, self._q("l"))
+                            l_el = ET.SubElement(active_lineated_lg, self._q("l"))
                             l_el.text = verse_line
             elif block.block_type == "quote_block":
                 parent = section_stack[-1] if section_stack else body_el

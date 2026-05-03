@@ -60,6 +60,11 @@ class QuoteBlock(Block):
     block_type: str = "quote_block"
 
 
+@dataclass
+class LineatedBlock(Block):
+    block_type: str = "lineated_block"
+
+
 @dataclass(slots=True)
 class Note:
     note_id: str

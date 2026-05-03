@@ -16,7 +16,7 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
 from purh_editorial.model import Document, InlineSpan, Note
-from purh_editorial.model.semantics import extract_verse_lines, is_canonical_poetry_block
+from purh_editorial.model.semantics import extract_verse_lines, is_canonical_lineated_block
 
 # ── Gabarit Métopes ───────────────────────────────────────────────────────────
 _DEFAULT_TEMPLATE = Path(__file__).parent.parent.parent.parent / (
@@ -205,16 +205,19 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         except (TypeError, ValueError):
             heading_level = 1
     heading_size = _HEADING_FONT_SIZES_PT.get(min(max(heading_level, 1), 3)) if heading_level else None
-    is_poetry_quote = is_canonical_poetry_block(block)
+    is_lineated_block = is_canonical_lineated_block(block)
     is_quote_block = block.block_type == "quote_block"
-    if is_quote_block:
+    if is_quote_block or block.block_type == "lineated_block":
         para.paragraph_format.left_indent = Cm(_QUOTE_LEFT_INDENT_CM)
         para.paragraph_format.first_line_indent = None
         para.paragraph_format.line_spacing = 1.0
-        para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_poetry_quote else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+        para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_lineated_block else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
     if block.inlines:
         for span in block.inlines:
+            if span.kind == "line_break":
+                _add_line_break(para)
+                continue
             if span.kind == "note_call" and span.note_ref:
                 fn_id = note_id_map.get(span.note_ref)
                 if fn_id is not None:
@@ -233,7 +236,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                 )
     else:
         hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
-        if is_poetry_quote:
+        if is_lineated_block:
             lines = extract_verse_lines(block)
             for i, line in enumerate(lines):
                 if i > 0:

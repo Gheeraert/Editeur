@@ -76,7 +76,6 @@ class PivotExportGateTests(unittest.TestCase):
         self.assertEqual(error.document_id, "doc-invalid-semantic")
         rule_ids = {diag.rule_id for diag in error.diagnostics}
         self.assertIn("pivot.semantic.quote_fields_on_non_quote", rule_ids)
-        self.assertIn("pivot.semantic.verse_on_non_poetry", rule_ids)
         self.assertIn("pivot.semantic.lines_on_non_poetry", rule_ids)
 
     def test_debug_tei_export_can_still_run_without_gate(self) -> None:
