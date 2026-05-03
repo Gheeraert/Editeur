@@ -190,6 +190,9 @@ class DocxExporterCenturyStylesTests(unittest.TestCase):
         self.assertIsNotNone(phedre_run)
         italic = phedre_run.find(f"./{_q('rPr')}/{_q('i')}")
         self.assertIsNotNone(italic)
+        size = phedre_run.find(f"./{_q('rPr')}/{_q('sz')}")
+        self.assertIsNotNone(size)
+        self.assertEqual(size.attrib.get(_q("val")), "22")
 
 
 if __name__ == "__main__":
