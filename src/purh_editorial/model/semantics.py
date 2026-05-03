@@ -166,22 +166,37 @@ def semantics_to_dict(semantics: BlockSemantics) -> dict[str, Any]:
     return payload
 
 
+def _set_or_pop(attributes: dict[str, Any], key: str, value: Any) -> None:
+    if value is None:
+        attributes.pop(key, None)
+        return
+    if isinstance(value, str) and not value.strip():
+        attributes.pop(key, None)
+        return
+    attributes[key] = value
+
+
 def write_block_semantics(block: Block, semantics: BlockSemantics) -> None:
     payload = semantics_to_dict(semantics)
     block.attributes["semantic"] = payload
 
-    if semantics.role:
-        block.attributes["semantic_role"] = semantics.role
+    # TODO(pivot-legacy-keys): keep temporary legacy sync for compatibility,
+    # but canonical truth remains block.attributes["semantic"] only.
+    _set_or_pop(block.attributes, "semantic_role", semantics.role)
 
-    if semantics.quote_kind:
-        block.attributes["quote_kind"] = semantics.quote_kind
-    if semantics.lineation:
-        block.attributes["lineation"] = semantics.lineation
+    if semantics.role == "quote":
+        _set_or_pop(block.attributes, "quote_kind", semantics.quote_kind)
+        _set_or_pop(block.attributes, "lineation", semantics.lineation)
+    else:
+        block.attributes.pop("quote_kind", None)
+        block.attributes.pop("lineation", None)
 
-    if semantics.poetry_group_id:
-        block.attributes["poetry_group_id"] = semantics.poetry_group_id
-    if semantics.poetry_line_index is not None:
-        block.attributes["poetry_line_index"] = semantics.poetry_line_index
+    if semantics.role == "quote" and semantics.quote_kind == "poetry":
+        _set_or_pop(block.attributes, "poetry_group_id", semantics.poetry_group_id)
+        _set_or_pop(block.attributes, "poetry_line_index", semantics.poetry_line_index)
+    else:
+        block.attributes.pop("poetry_group_id", None)
+        block.attributes.pop("poetry_line_index", None)
 
 
 def is_canonical_poetry_block(block: Block) -> bool:

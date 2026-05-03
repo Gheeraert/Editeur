@@ -3,7 +3,11 @@ from __future__ import annotations
 import re
 
 from purh_editorial.model import Diagnostic, Document, Evidence
-from purh_editorial.model.semantics import extract_verse_lines, is_canonical_poetry_block, read_block_semantics
+from purh_editorial.model.semantics import (
+    extract_verse_lines,
+    is_canonical_poetry_block,
+    read_block_semantics,
+)
 from purh_editorial.utils import make_id
 
 _CHRONOLOGY_LINE_RE = re.compile(r"^\s*(?:\d{1,4}|[IVXLCDM]+)\s*(?:[-–—.:)]|\b)", re.IGNORECASE)
@@ -15,7 +19,7 @@ class PivotValidator:
     def validate(self, document: Document) -> list[Diagnostic]:
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            semantics = read_block_semantics(block)
+            semantics = read_block_semantics(block, allow_legacy_inference=False)
             text_excerpt = (block.text or "")[:220]
 
             if block.block_type == "heading":
@@ -32,14 +36,26 @@ class PivotValidator:
                         )
                     )
 
+            if block.block_type != "quote_block" and (semantics.quote_kind or semantics.lineation):
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "error",
+                        "pivot_invariant",
+                        "Champs de citation presents sur un bloc non quote_block.",
+                        "pivot.semantic.quote_fields_on_non_quote",
+                        text_excerpt,
+                    )
+                )
+
             if semantics.lineation == "verse" and not is_canonical_poetry_block(block):
                 diagnostics.append(
                     self._diag(
                         block.block_id,
                         "error",
                         "pivot_invariant",
-                        "lineation=verse exige une citation poétique canonique.",
-                        "pivot.poetry.lineation.requires_canonical_poetry",
+                        "lineation=verse hors poesie canonique.",
+                        "pivot.semantic.verse_on_non_poetry",
                         text_excerpt,
                     )
                 )
@@ -56,6 +72,18 @@ class PivotValidator:
                     )
                 )
 
+            if semantics.lines and not is_canonical_poetry_block(block):
+                diagnostics.append(
+                    self._diag(
+                        block.block_id,
+                        "error",
+                        "pivot_invariant",
+                        "Lignes de vers presentes hors poesie canonique.",
+                        "pivot.semantic.lines_on_non_poetry",
+                        text_excerpt,
+                    )
+                )
+
             if is_canonical_poetry_block(block):
                 lines = semantics.lines or extract_verse_lines(block)
                 if not lines:
@@ -64,7 +92,7 @@ class PivotValidator:
                             block.block_id,
                             "error",
                             "pivot_invariant",
-                            "Bloc poétique canonique sans lignes de vers exploitables.",
+                            "Bloc poetique canonique sans lignes de vers exploitables.",
                             "pivot.poetry.lines.required",
                             text_excerpt,
                         )
@@ -75,7 +103,7 @@ class PivotValidator:
                             block.block_id,
                             "warning",
                             "pivot_suspicion",
-                            "Bloc poétique canonique ressemblant à une chronologie/liste datée.",
+                            "Bloc poetique canonique ressemblant a une chronologie/liste datee.",
                             "pivot.poetry.suspicious_chronology",
                             " | ".join(lines[:3])[:220],
                         )
