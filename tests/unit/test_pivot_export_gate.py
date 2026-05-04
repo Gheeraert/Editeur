@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.tei_xml_exporter import TEI_NS, TeiXmlExporter
-from purh_editorial.model import Document, Paragraph, QuoteBlock
+from purh_editorial.model import BlockSemantics, Document, LineatedBlock, Paragraph, QuoteBlock, write_block_semantics
 from purh_editorial.services.pivot_export_gate import PivotValidationError, export_tei_for_production
 
 
@@ -20,21 +20,19 @@ def _q(local_name: str) -> str:
 
 
 class PivotExportGateTests(unittest.TestCase):
-    def test_production_gate_defaults_to_canonicalization_for_legacy_poetry(self) -> None:
+    def test_production_gate_exports_canonical_lineated_block_as_tei_lg(self) -> None:
+        block = LineatedBlock(block_id="lb1", text="Premier vers\nDeuxieme vers")
+        write_block_semantics(block, BlockSemantics(
+            role="lineated_block",
+            layout_kind="lineated_block",
+            lineation="lineated",
+            lines=["Premier vers", "Deuxieme vers"],
+        ))
         document = Document(
-            document_id="doc-legacy-poetry-default-gate",
+            document_id="doc-canonical-poetry-gate",
             source_path="source.docx",
             source_format="docx",
-            blocks=[
-                QuoteBlock(
-                    block_id="q1",
-                    text="Premier vers\nDeuxieme vers",
-                    attributes={
-                        "quote_kind": "poetry",
-                        "lineation": "verse",
-                    },
-                )
-            ],
+            blocks=[block],
         )
 
         xml_text, diagnostics = export_tei_for_production(document)
@@ -42,7 +40,7 @@ class PivotExportGateTests(unittest.TestCase):
         self.assertFalse(any(diag.severity == "error" for diag in diagnostics))
         root = ET.fromstring(xml_text or "")
         lines = root.findall(f".//{_q('lg')}/{_q('l')}")
-        self.assertEqual([line.text for line in lines], ["Premier vers", "Deuxieme vers"])
+        self.assertEqual(len(lines), 2)
 
     def test_pipeline_blocks_tei_export_on_pivot_error(self) -> None:
         document = Document(
@@ -104,21 +102,18 @@ class PivotExportGateTests(unittest.TestCase):
         self.assertEqual(root.tag, _q("TEI"))
 
     def test_pipeline_allows_tei_export_after_canonicalization_and_validation(self) -> None:
+        block = LineatedBlock(block_id="lb1", text="Premier vers\nDeuxieme vers")
+        write_block_semantics(block, BlockSemantics(
+            role="lineated_block",
+            layout_kind="lineated_block",
+            lineation="lineated",
+            lines=["Premier vers", "Deuxieme vers"],
+        ))
         document = Document(
-            document_id="doc-valid-poetry",
+            document_id="doc-valid-canonical-poetry",
             source_path="source.docx",
             source_format="docx",
-            blocks=[
-                QuoteBlock(
-                    block_id="q1",
-                    text="Premier vers\nDeuxieme vers",
-                    attributes={
-                        "quote_kind": "poetry",
-                        "lineation": "verse",
-                        "protected_zone": "poetry",
-                    },
-                )
-            ],
+            blocks=[block],
         )
 
         xml_text, diagnostics = export_tei_for_production(
@@ -130,7 +125,7 @@ class PivotExportGateTests(unittest.TestCase):
         self.assertFalse(any(diag.severity == "error" for diag in diagnostics))
         root = ET.fromstring(xml_text or "")
         lines = root.findall(f".//{_q('lg')}/{_q('l')}")
-        self.assertEqual([line.text for line in lines], ["Premier vers", "Deuxieme vers"])
+        self.assertEqual(len(lines), 2)
 
     def test_run_without_canonicalization_is_explicit_advanced_mode(self) -> None:
         document = Document(

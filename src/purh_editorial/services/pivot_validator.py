@@ -20,7 +20,7 @@ class PivotValidator:
     def validate(self, document: Document) -> list[Diagnostic]:
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            semantics = read_block_semantics(block, allow_legacy_inference=False)
+            semantics = read_block_semantics(block)
             semantic_payload = (block.attributes or {}).get("semantic")
             semantic_payload = semantic_payload if isinstance(semantic_payload, dict) else {}
             text_excerpt = (block.text or "")[:220]

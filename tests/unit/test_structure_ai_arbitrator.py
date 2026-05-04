@@ -340,11 +340,15 @@ class StructureAiArbitratorTests(unittest.TestCase):
         self.assertEqual(summary["candidates"], 1)
         self.assertEqual(summary["applied"], 1)
         self.assertEqual(summary["refused"], 0)
-        self.assertEqual(len(transformations), 3)
-        for block in document.blocks:
-            self.assertEqual(block.block_type, "quote_block")
-            self.assertEqual(block.attributes.get("quote_kind"), "poetry")
-            self.assertEqual(block.attributes.get("highlight_color"), "ai_structure")
+        self.assertEqual(len(transformations), 1)
+        self.assertEqual(len(document.blocks), 1)
+        merged = document.blocks[0]
+        self.assertEqual(merged.block_type, "lineated_block")
+        self.assertEqual(merged.attributes.get("highlight_color"), "ai_structure")
+        self.assertEqual(merged.attributes.get("merged_from"), ["p1", "p2", "p3"])
+        semantic = merged.attributes.get("semantic", {})
+        self.assertEqual(semantic.get("lineation"), "lineated")
+        self.assertEqual(semantic.get("lines"), ["Ligne une", "Ligne deux", "Ligne trois"])
         self.assertTrue(any(d.attributes.get("status") == "applied" for d in diagnostics))
 
     def test_apply_cluster_refuses_list_item_without_block_type_change(self) -> None:

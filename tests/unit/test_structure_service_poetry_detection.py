@@ -53,7 +53,7 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         lineated_blocks = [b for b in document.blocks if b.block_type == "lineated_block" and "Phèdre" in b.text]
         self.assertTrue(lineated_blocks)
         lineated = lineated_blocks[0]
-        semantics = read_block_semantics(lineated, allow_legacy_inference=False)
+        semantics = read_block_semantics(lineated, )
         self.assertEqual(semantics.role, "lineated_block")
         self.assertEqual(semantics.layout_kind, "lineated_block")
         self.assertEqual(semantics.lineation, "lineated")
@@ -180,7 +180,7 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         self.canonicalizer.apply(document)
         lineated = next((b for b in document.blocks if b.block_type == "lineated_block"), None)
         self.assertIsNotNone(lineated)
-        semantics = read_block_semantics(lineated, allow_legacy_inference=False)
+        semantics = read_block_semantics(lineated, )
         self.assertEqual(semantics.role, "lineated_block")
         self.assertEqual(semantics.layout_kind, "lineated_block")
         self.assertEqual(semantics.lineation, "lineated")
@@ -310,7 +310,7 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         lineated_blocks = [b for b in document.blocks if b.block_type == "lineated_block"]
         self.assertEqual(len(lineated_blocks), 1)
         lineated = lineated_blocks[0]
-        semantics = read_block_semantics(lineated, allow_legacy_inference=False)
+        semantics = read_block_semantics(lineated, )
         self.assertEqual(semantics.role, "lineated_block")
         self.assertEqual(semantics.layout_kind, "lineated_block")
         self.assertEqual(semantics.lineation, "lineated")

@@ -826,8 +826,6 @@ class StructurePreparationService:
                 if poetry_decision.decision == "transform":
                     block.block_type = "lineated_block"
                     block.attributes["alignment"] = "left"
-                    block.attributes["poetry_group_id"] = group_id
-                    block.attributes["poetry_line_index"] = line_index
                     block.attributes.pop("quote_kind", None)
                     block.attributes.pop("lineation", None)
                     block.attributes.pop("protected_zone", None)

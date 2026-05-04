@@ -13,7 +13,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from purh_editorial.io.docx_exporter import DocxExporter
-from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, Note, Paragraph, QuoteBlock
+from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, LineatedBlock, Note, Paragraph, QuoteBlock
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 
@@ -302,7 +302,9 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
             source_format="txt",
             blocks=[
                 QuoteBlock(block_id="q1", text="Citation en prose."),
-                QuoteBlock(block_id="q2", text="Vers 1\nVers 2", attributes={"quote_kind": "poetry"}),
+                LineatedBlock(block_id="q2", text="Vers 1\nVers 2", attributes={
+                    "semantic": {"role": "lineated_block", "layout_kind": "lineated_block", "lineation": "lineated", "lines": ["Vers 1", "Vers 2"]},
+                }),
             ],
         )
         mapped, _ = MetopesMapper().apply(source)
