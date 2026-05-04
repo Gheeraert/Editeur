@@ -32,7 +32,7 @@ class TeiXmlExporter:
         active_lineated_context: str | None = None
         active_lineated_lg: ET.Element | None = None
         for block in document.blocks:
-            semantics = read_block_semantics(block, allow_legacy_inference=False)
+            semantics = read_block_semantics(block)
             is_lineated_block = is_canonical_lineated_block(block)
             poetry_group_id = (semantics.poetry_group_id or "").strip()
             effective_group_id = poetry_group_id or (block.block_id if is_lineated_block else "")

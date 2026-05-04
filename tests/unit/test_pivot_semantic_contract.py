@@ -40,17 +40,19 @@ def _q(local_name: str) -> str:
 
 
 class PivotSemanticContractTests(unittest.TestCase):
-    def test_legacy_poetry_is_written_to_canonical_semantic(self) -> None:
-        block = QuoteBlock(
-            block_id="q-legacy-poetry",
-            text="Premier vers\nDeuxieme vers",
-            attributes={
-                "quote_kind": "poetry",
-                "protected_zone": "poetry",
-            },
+    def test_lineated_block_semantic_survives_canonicalization(self) -> None:
+        block = LineatedBlock(block_id="lb-verse", text="Premier vers\nDeuxieme vers")
+        write_block_semantics(
+            block,
+            BlockSemantics(
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
+                lines=["Premier vers", "Deuxieme vers"],
+            ),
         )
         document = Document(
-            document_id="doc-legacy-poetry",
+            document_id="doc-lineated-survives",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
@@ -58,20 +60,13 @@ class PivotSemanticContractTests(unittest.TestCase):
 
         transformations = PivotCanonicalizer().apply(document)
 
-        self.assertTrue(transformations)
+        self.assertFalse(transformations)
         semantic_payload = document.blocks[0].attributes.get("semantic")
         self.assertIsInstance(semantic_payload, dict)
-        self.assertEqual(
-            semantic_payload,
-            {
-                "role": "quote",
-                "layout_kind": "lineated_block",
-                "lineation": "lineated",
-                "lines": ["Premier vers", "Deuxieme vers"],
-                "genre_hint": "poetry",
-                "genre_source": "legacy",
-            },
-        )
+        self.assertEqual(semantic_payload.get("lineation"), "lineated")
+        self.assertEqual(semantic_payload.get("layout_kind"), "lineated_block")
+        self.assertEqual(semantic_payload.get("lines"), ["Premier vers", "Deuxieme vers"])
+        self.assertNotIn("quote_kind", semantic_payload)
 
     def test_lineated_block_semantic_round_trip(self) -> None:
         block = LineatedBlock(block_id="lb1", text="A\nB")
@@ -97,7 +92,7 @@ class PivotSemanticContractTests(unittest.TestCase):
 
         json_text = pivot_to_json(document, report=report)
         reconstructed_document, _ = parse_pivot_payload(json_text)
-        semantics = read_block_semantics(reconstructed_document.blocks[0], allow_legacy_inference=False)
+        semantics = read_block_semantics(reconstructed_document.blocks[0], )
         self.assertEqual(semantics.role, "lineated_block")
         self.assertEqual(semantics.layout_kind, "lineated_block")
         self.assertEqual(semantics.lineation, "lineated")
@@ -173,23 +168,27 @@ class PivotSemanticContractTests(unittest.TestCase):
         )
 
         PivotCanonicalizer().apply(document)
-        semantics = read_block_semantics(document.blocks[0], allow_legacy_inference=False)
+        semantics = read_block_semantics(document.blocks[0], )
         self.assertEqual(semantics.role, "lineated_block")
         self.assertEqual(semantics.lineation, "lineated")
         self.assertIsNone(semantics.quote_kind)
 
-    def test_legacy_poetry_canonicalizes_to_lineated_semantics(self) -> None:
-        block = QuoteBlock(
-            block_id="q-legacy-poetry-lineated",
+    def test_lineated_block_canonicalizes_to_lineated_semantics(self) -> None:
+        block = LineatedBlock(
+            block_id="lb-canonical-lineated",
             text="Premier vers\nDeuxieme vers",
-            attributes={
-                "quote_kind": "poetry",
-                "lineation": "verse",
-                "protected_zone": "poetry",
-            },
+        )
+        write_block_semantics(
+            block,
+            BlockSemantics(
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
+                lines=["Premier vers", "Deuxieme vers"],
+            ),
         )
         document = Document(
-            document_id="doc-legacy-lineated",
+            document_id="doc-canonical-lineated",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
@@ -202,16 +201,13 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertTrue(semantic_payload.get("lines"))
         self.assertNotIn("quote_kind", semantic_payload)
 
-    def test_strict_semantic_read_does_not_infer_legacy_poetry(self) -> None:
+    def test_block_without_semantic_payload_returns_empty_semantics(self) -> None:
         block = QuoteBlock(
-            block_id="q-legacy-strict-read",
+            block_id="q-no-semantic",
             text="Premier vers\nDeuxieme vers",
-            attributes={
-                "quote_kind": "poetry",
-                "lineation": "verse",
-            },
+            attributes={"quote_kind": "poetry", "lineation": "verse"},
         )
-        semantics = read_block_semantics(block, allow_legacy_inference=False)
+        semantics = read_block_semantics(block)
         self.assertIsNone(semantics.role)
         self.assertIsNone(semantics.lineation)
         self.assertEqual(semantics.lines, [])
@@ -279,44 +275,44 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertTrue(is_canonical_lineated_block(block))
 
     def test_export_requires_canonical_semantic(self) -> None:
-        block = QuoteBlock(
-            block_id="q-legacy-only",
+        prose_block = QuoteBlock(
+            block_id="q-prose",
+            text="Citation en prose.",
+        )
+        lineated_block = LineatedBlock(
+            block_id="lb-verse",
             text="Premier vers\nDeuxieme vers",
-            attributes={
-                "quote_kind": "poetry",
-                "protected_zone": "poetry",
-            },
+        )
+        write_block_semantics(
+            lineated_block,
+            BlockSemantics(
+                role="lineated_block",
+                layout_kind="lineated_block",
+                lineation="lineated",
+                lines=["Premier vers", "Deuxieme vers"],
+            ),
         )
         document = Document(
             document_id="doc-export-strict",
             source_path="source.docx",
             source_format="docx",
-            blocks=[block],
+            blocks=[prose_block, lineated_block],
         )
 
-        xml_without_canonicalization = TeiXmlExporter().export_document(document)
-        root_without = ET.fromstring(xml_without_canonicalization)
-        self.assertEqual(len(root_without.findall(f".//{_q('lg')}")), 0)
+        xml_text = TeiXmlExporter().export_document(document)
+        root = ET.fromstring(xml_text)
+        self.assertEqual(len(root.findall(f".//{_q('lg')}")), 1)
+        lines = root.findall(f".//{_q('lg')}/{_q('l')}")
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(len(root.findall(f".//{_q('cit')}")), 1)
 
-        PivotCanonicalizer().apply(document)
-        xml_with_canonicalization = TeiXmlExporter().export_document(document)
-        root_with = ET.fromstring(xml_with_canonicalization)
-        lines = root_with.findall(f".//{_q('lg')}/{_q('l')}")
-        self.assertEqual([line.text for line in lines], ["Premier vers", "Deuxieme vers"])
-
-    def test_paragraph_legacy_poetry_markers_are_not_canonical(self) -> None:
+    def test_paragraph_without_semantic_gets_canonical_role(self) -> None:
         block = Paragraph(
-            block_id="p-legacy-poetry",
+            block_id="p-no-semantic",
             text="Ligne breve",
-            attributes={
-                "semantic_role": "quote",
-                "quote_kind": "poetry",
-                "lineation": "verse",
-                "protected_zone": "poetry",
-            },
         )
         document = Document(
-            document_id="doc-paragraph-cleanup",
+            document_id="doc-paragraph-canonical",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
@@ -328,25 +324,19 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertNotIn("quote_kind", semantic_payload)
         self.assertNotIn("lineation", semantic_payload)
         self.assertNotIn("lines", semantic_payload)
-        self.assertNotIn("quote_kind", document.blocks[0].attributes)
-        self.assertNotIn("lineation", document.blocks[0].attributes)
 
         xml_text = TeiXmlExporter().export_document(document)
         root = ET.fromstring(xml_text)
         self.assertEqual(len(root.findall(f".//{_q('lg')}")), 0)
 
-    def test_heading_does_not_retain_quote_semantics(self) -> None:
+    def test_heading_gets_canonical_heading_role(self) -> None:
         block = Heading(
-            block_id="h-stray-quote",
+            block_id="h-canonical",
             text="Titre",
-            attributes={
-                "heading_level": 1,
-                "quote_kind": "poetry",
-                "lineation": "verse",
-            },
+            attributes={"heading_level": 1},
         )
         document = Document(
-            document_id="doc-heading-cleanup",
+            document_id="doc-heading-canonical",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
@@ -358,8 +348,6 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertNotIn("quote_kind", semantic_payload)
         self.assertNotIn("lineation", semantic_payload)
         self.assertNotIn("lines", semantic_payload)
-        self.assertNotIn("quote_kind", document.blocks[0].attributes)
-        self.assertNotIn("lineation", document.blocks[0].attributes)
 
     def test_prose_quote_clears_poetry_lines(self) -> None:
         block = QuoteBlock(
@@ -418,56 +406,42 @@ class PivotSemanticContractTests(unittest.TestCase):
         self.assertIn("pivot.semantic.lines_on_non_poetry", rule_ids)
         self.assertIn("pivot.semantic.quote_kind_used_as_lineation_legacy", rule_ids)
 
-    def test_canonical_payload_still_cleans_stale_legacy_quote_keys(self) -> None:
+    def test_already_canonical_paragraph_needs_no_transformation(self) -> None:
         block = Paragraph(
-            block_id="p-canonical-with-stale-legacy",
+            block_id="p-already-canonical",
             text="Paragraphe stable",
-            attributes={
-                "semantic": {"role": "paragraph"},
-                "quote_kind": "poetry",
-                "lineation": "verse",
-                "poetry_group_id": "grp1",
-                "poetry_line_index": 1,
-            },
+            attributes={"semantic": {"role": "paragraph"}},
         )
         document = Document(
-            document_id="doc-cleanup-stale-legacy-paragraph",
+            document_id="doc-already-canonical-paragraph",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
         )
 
         transformations = PivotCanonicalizer().apply(document)
-        self.assertTrue(transformations)
+        self.assertFalse(transformations)
         self.assertEqual(document.blocks[0].attributes.get("semantic"), {"role": "paragraph"})
-        self.assertNotIn("quote_kind", document.blocks[0].attributes)
-        self.assertNotIn("lineation", document.blocks[0].attributes)
-        self.assertNotIn("poetry_group_id", document.blocks[0].attributes)
-        self.assertNotIn("poetry_line_index", document.blocks[0].attributes)
 
-    def test_heading_canonical_payload_still_cleans_stale_legacy_quote_keys(self) -> None:
+    def test_already_canonical_heading_needs_no_transformation(self) -> None:
         block = Heading(
-            block_id="h-canonical-with-stale-legacy",
+            block_id="h-already-canonical",
             text="Titre",
             attributes={
                 "heading_level": 1,
                 "semantic": {"role": "heading"},
-                "quote_kind": "poetry",
-                "lineation": "verse",
             },
         )
         document = Document(
-            document_id="doc-cleanup-stale-legacy-heading",
+            document_id="doc-already-canonical-heading",
             source_path="source.docx",
             source_format="docx",
             blocks=[block],
         )
 
         transformations = PivotCanonicalizer().apply(document)
-        self.assertTrue(transformations)
+        self.assertFalse(transformations)
         self.assertEqual(document.blocks[0].attributes.get("semantic"), {"role": "heading"})
-        self.assertNotIn("quote_kind", document.blocks[0].attributes)
-        self.assertNotIn("lineation", document.blocks[0].attributes)
 
     def test_json_round_trip_preserves_canonical_semantics(self) -> None:
         poetry_block = LineatedBlock(

@@ -6,8 +6,21 @@ import urllib.request
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from purh_editorial.model import Diagnostic, Document, Evidence, Transformation
+from purh_editorial.model import Diagnostic, Document, Evidence, InlineSpan, Transformation
+from purh_editorial.model.semantics import BlockSemantics, write_block_semantics
 from purh_editorial.utils import make_id
+
+
+def _merge_verse_inlines(blocks: list) -> list[InlineSpan]:
+    merged: list[InlineSpan] = []
+    for index, block in enumerate(blocks):
+        if block.inlines:
+            merged.extend(block.inlines)
+        else:
+            merged.append(InlineSpan(text=block.text.strip()))
+        if index < len(blocks) - 1:
+            merged.append(InlineSpan(text="", kind="line_break"))
+    return merged
 
 # ── Prompt système PURH — contexte éditorial riche ───────────────────────────
 
@@ -684,39 +697,58 @@ class StructureAiArbitrator:
                 )
                 continue
 
-            applied_block_ids: list[str] = []
-            for block_id in block_ids:
-                block = blocks_by_id[block_id]
-                before = block.block_type
-                block.block_type = "quote_block"
-                block.attributes["quote_kind"] = "poetry"
-                block.attributes["protected_zone"] = "poetry"
-                block.attributes["highlight_color"] = "ai_structure"
-                block.attributes["ai_structure_confidence"] = confidence
-                block.attributes["ai_structure_reason"] = reason
-                block.attributes["ai_structure_source_rule"] = _CLUSTER_RULE_ID
-                transformations.append(
-                    Transformation(
-                        transformation_id=make_id("tr"),
-                        module=self.module_name,
-                        target_ref=block.block_id,
-                        operation="ai_structure_transform",
-                        before=before,
-                        after="quote_block",
-                        rule_id=_APPLY_RULE_ID,
-                        applied=True,
-                        attributes={
-                            "classification": classification,
-                            "recommended_action": recommended_action,
-                            "confidence": confidence,
-                            "confidence_threshold": threshold,
-                            "quote_kind": "poetry",
-                            "reason": reason,
-                            "source_rule_id": _CLUSTER_RULE_ID,
-                        },
-                    )
+            source_blocks = [blocks_by_id[bid] for bid in block_ids if bid in blocks_by_id]
+            first_block = source_blocks[0]
+            before = first_block.block_type
+            lines = [b.text.strip() for b in source_blocks if b.text.strip()]
+            first_block.text = "\n".join(lines)
+            first_block.inlines = _merge_verse_inlines(source_blocks)
+            first_block.block_type = "lineated_block"
+            first_block.attributes["alignment"] = "left"
+            first_block.attributes["merged_from"] = block_ids
+            first_block.attributes["protected_zone"] = "poetry"
+            first_block.attributes["highlight_color"] = "ai_structure"
+            first_block.attributes["ai_structure_confidence"] = confidence
+            first_block.attributes["ai_structure_reason"] = reason
+            first_block.attributes["ai_structure_source_rule"] = _CLUSTER_RULE_ID
+            write_block_semantics(
+                first_block,
+                BlockSemantics(
+                    role="lineated_block",
+                    layout_kind="lineated_block",
+                    lineation="lineated",
+                    genre_hint="poetry",
+                    genre_confidence=confidence,
+                    genre_source="ai",
+                    lines=lines,
+                ),
+            )
+            consumed_ids = {bid for bid in block_ids[1:] if bid in blocks_by_id}
+            if consumed_ids:
+                document.blocks = [b for b in document.blocks if b.block_id not in consumed_ids]
+                blocks_by_id = {b.block_id: b for b in document.blocks}
+            applied_block_ids = [first_block.block_id]
+            transformations.append(
+                Transformation(
+                    transformation_id=make_id("tr"),
+                    module=self.module_name,
+                    target_ref=first_block.block_id,
+                    operation="ai_structure_transform",
+                    before=before,
+                    after="lineated_block",
+                    rule_id=_APPLY_RULE_ID,
+                    applied=True,
+                    attributes={
+                        "classification": classification,
+                        "recommended_action": recommended_action,
+                        "confidence": confidence,
+                        "confidence_threshold": threshold,
+                        "merged_from": block_ids,
+                        "reason": reason,
+                        "source_rule_id": _CLUSTER_RULE_ID,
+                    },
                 )
-                applied_block_ids.append(block.block_id)
+            )
 
             summary["applied"] += 1
             out_diags.append(
