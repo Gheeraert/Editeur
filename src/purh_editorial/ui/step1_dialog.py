@@ -707,7 +707,111 @@ def build_result_text(result: Step1Result, latex_path: Path | None = None, latex
     return "\n".join(sections)
 
 
-#  Boîte de dialogue 
+# ── Rendu coloré dans le widget Text ──────────────────────────────────────────
+
+_CATEGORY_LABEL: dict[str, str] = {
+    "heading_candidate":       "Candidats titre",
+    "poetry_quote_candidate":  "Candidats poésie / citation",
+    "pivot_invariant":         "Erreurs pivot (export bloqué)",
+    "structure":               "Structure",
+    "footnote_call_placement": "Appels de note",
+}
+
+_SEVERITY_TAG: dict[str, str] = {
+    "error":   "diag_error",
+    "warning": "diag_warning",
+    "info":    "diag_info",
+}
+
+
+def _configure_result_tags(widget: tk.Text) -> None:
+    widget.tag_configure("section_header", font=("TkDefaultFont", 10, "bold"))
+    widget.tag_configure("section_sep",    foreground="#aaaaaa")
+    widget.tag_configure("category_label", font=("TkDefaultFont", 9, "bold"), foreground="#333333")
+    widget.tag_configure("diag_error",     foreground="#cc0000")
+    widget.tag_configure("diag_warning",   foreground="#bb6600")
+    widget.tag_configure("diag_info",      foreground="#004499")
+    widget.tag_configure("diag_auto",      foreground="#006622", font=("TkDefaultFont", 9, "bold"))
+    widget.tag_configure("diag_excerpt",   foreground="#555555", font=("TkDefaultFont", 8, "italic"))
+    widget.tag_configure("diag_meta",      foreground="#888888", font=("TkDefaultFont", 8))
+    widget.tag_configure("latex_error",    foreground="#cc0000")
+
+
+def _w_section(widget: tk.Text, title: str) -> None:
+    widget.insert(tk.END, f"\n{title}\n", "section_header")
+    widget.insert(tk.END, "─" * 60 + "\n", "section_sep")
+
+
+def _insert_colored_diagnostics(widget: tk.Text, diagnostics: list[Diagnostic]) -> None:
+    if not diagnostics:
+        widget.insert(tk.END, "  Aucun diagnostic.\n")
+        return
+
+    from collections import defaultdict
+    by_category: dict[str, list[Diagnostic]] = defaultdict(list)
+    for diag in diagnostics:
+        by_category[diag.category].append(diag)
+
+    for category, diags in sorted(by_category.items()):
+        label = _CATEGORY_LABEL.get(category, category)
+        widget.insert(tk.END, f"  ▶ {label} ({len(diags)})\n", "category_label")
+        for diag in diags:
+            tag = _SEVERITY_TAG.get(diag.severity, "diag_info")
+            auto = diag.attributes.get("auto_applied", False)
+            if auto:
+                widget.insert(tk.END, "    ★ AUTO  ", "diag_auto")
+                widget.insert(tk.END, f"{diag.message}\n", "diag_auto")
+            else:
+                prefix = "  ✗ " if diag.severity == "error" else "  • "
+                widget.insert(tk.END, f"  {prefix}", tag)
+                widget.insert(tk.END, f"{diag.message}\n", tag)
+            if diag.evidence and diag.evidence.excerpt:
+                widget.insert(tk.END, f"       ↳ {diag.evidence.excerpt.strip()[:120]}\n", "diag_excerpt")
+            score = diag.attributes.get("score")
+            if score is not None:
+                meta = f"       score={score:.2f}"
+                veto = diag.attributes.get("veto_reasons")
+                if veto:
+                    meta += f"  veto={', '.join(str(v) for v in veto)}"
+                widget.insert(tk.END, meta + "\n", "diag_meta")
+        widget.insert(tk.END, "\n")
+
+
+def render_result_to_widget(
+    widget: tk.Text,
+    result: Step1Result,
+    latex_path: Path | None = None,
+    latex_error: str | None = None,
+) -> None:
+    report = result.pipeline_result.report
+    widget.configure(state="normal")
+    widget.delete("1.0", tk.END)
+
+    _w_section(widget, "Corrections appliquées")
+    widget.insert(tk.END, f"  Transformations : {len(report.transformations)}\n")
+
+    _w_section(widget, "Diagnostics à vérifier")
+    _insert_colored_diagnostics(widget, report.diagnostics)
+
+    _w_section(widget, "Warnings techniques")
+    widget.insert(tk.END, format_warnings(report.warnings) + "\n")
+
+    _w_section(widget, "Sorties")
+    widget.insert(tk.END, format_outputs(result) + "\n")
+    if latex_path:
+        widget.insert(tk.END, f"  - LaTeX : {latex_path}\n")
+    elif latex_error:
+        widget.insert(tk.END, f"  - LaTeX : {latex_error}\n", "latex_error")
+
+    _w_section(widget, "Résumé modules")
+    widget.insert(tk.END, format_module_runs(report.module_runs) + "\n")
+
+    widget.insert(tk.END, f"\n{DISCLAIMER_TEXT}\n")
+    widget.configure(state="disabled")
+    widget.see("1.0")
+
+
+#  Boîte de dialogue
 
 class Step1Dialog(tk.Tk):
     """Interface Step 1: collecte options, lance le pipeline, affiche le rapport."""
@@ -1012,6 +1116,7 @@ class Step1Dialog(tk.Tk):
         self._result_text = tk.Text(result_frame, height=24, wrap="word")
         self._result_text.grid(row=1, column=0, sticky="nsew")
         self._result_text.configure(state="disabled")
+        _configure_result_tags(self._result_text)
         scrollbar = ttk.Scrollbar(result_frame, orient="vertical", command=self._result_text.yview)
         scrollbar.grid(row=1, column=1, sticky="ns")
         self._result_text.configure(yscrollcommand=scrollbar.set)
@@ -1175,9 +1280,16 @@ class Step1Dialog(tk.Tk):
 
     def _on_success(self, bundle: ExportRunResult) -> None:
         result = bundle.step1_result
+        report = result.pipeline_result.report
         self._set_running(False)
         self._status.set("Analyse terminée." if not bundle.latex_error else bundle.latex_error)
-        self._set_result_text(build_result_text(result, bundle.latex_output_path, bundle.latex_error))
+
+        render_result_to_widget(self._result_text, result, bundle.latex_output_path, bundle.latex_error)
+
+        tei_blocked = any("TEI export blocked" in w for w in report.warnings)
+        if tei_blocked:
+            self._show_pivot_error_dialog(report.diagnostics)
+
         completion_message = build_completion_message(result, bundle.latex_output_path, bundle.latex_error)
         folders = output_folders_to_open(result)
         if bundle.latex_output_path is not None:
@@ -1185,7 +1297,7 @@ class Step1Dialog(tk.Tk):
         if not folders:
             messagebox.showinfo("Analyse terminée", completion_message)
             return
-        if messagebox.askyesno("Analyse terminée", completion_message + "\n\nOuvrir le dossier de sortie "):
+        if messagebox.askyesno("Analyse terminée", completion_message + "\n\nOuvrir le dossier de sortie ?"):
             for folder in folders:
                 try:
                     self._open_folder(folder)
@@ -1196,6 +1308,64 @@ class Step1Dialog(tk.Tk):
         self._set_running(False)
         self._status.set(f"Erreur: {exc}")
         messagebox.showerror("Erreur pipeline", str(exc))
+
+    def _show_pivot_error_dialog(self, diagnostics: list[Diagnostic]) -> None:
+        pivot_errors = [
+            d for d in diagnostics
+            if d.severity == "error" and d.category == "pivot_invariant"
+        ]
+
+        win = tk.Toplevel(self)
+        win.title("Export XML-TEI bloqué — Erreurs de validation pivot")
+        win.geometry("720x460")
+        win.resizable(True, True)
+        win.grab_set()
+
+        ttk.Label(
+            win,
+            text="L'export XML-TEI (et LaTeX) a été bloqué par les erreurs de validation suivantes :",
+            wraplength=680,
+            foreground="#cc0000",
+            font=("TkDefaultFont", 10, "bold"),
+        ).pack(padx=12, pady=(12, 6), anchor="w")
+
+        frame = ttk.Frame(win)
+        frame.pack(fill="both", expand=True, padx=12, pady=4)
+        frame.columnconfigure(0, weight=1)
+        frame.rowconfigure(0, weight=1)
+
+        text = tk.Text(frame, wrap="word", height=16, bg="#fff8f8")
+        text.tag_configure("rule",    foreground="#990000", font=("TkDefaultFont", 9, "bold"))
+        text.tag_configure("msg",     foreground="#cc2200")
+        text.tag_configure("excerpt", foreground="#555555", font=("TkDefaultFont", 8, "italic"))
+        text.tag_configure("ref",     foreground="#888888", font=("TkDefaultFont", 8))
+        text.grid(row=0, column=0, sticky="nsew")
+        sb = ttk.Scrollbar(frame, orient="vertical", command=text.yview)
+        sb.grid(row=0, column=1, sticky="ns")
+        text.configure(yscrollcommand=sb.set)
+
+        if not pivot_errors:
+            text.insert(tk.END, "Aucun détail disponible. Consultez les warnings dans le rapport.\n", "msg")
+        else:
+            for i, diag in enumerate(pivot_errors, 1):
+                text.insert(tk.END, f"[{i}]  Règle : {diag.rule_id or '(inconnue)'}\n", "rule")
+                text.insert(tk.END, f"      {diag.message}\n", "msg")
+                if diag.evidence and diag.evidence.excerpt:
+                    text.insert(tk.END, f"      ↳ {diag.evidence.excerpt.strip()[:200]}\n", "excerpt")
+                if diag.target_ref:
+                    text.insert(tk.END, f"      Bloc : {diag.target_ref}\n", "ref")
+                text.insert(tk.END, "\n")
+
+        text.configure(state="disabled")
+
+        ttk.Label(
+            win,
+            text="Conseil : ouvrez le JSON pivot et recherchez les blocs signalés ci-dessus.",
+            foreground="#666666",
+            wraplength=680,
+        ).pack(padx=12, pady=(4, 2), anchor="w")
+        ttk.Button(win, text="Fermer", command=win.destroy).pack(pady=(4, 12))
+        win.focus()
 
     def _set_running(self, running: bool) -> None:
         self._running = running

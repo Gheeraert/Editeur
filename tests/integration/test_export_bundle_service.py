@@ -57,8 +57,9 @@ class ExportBundleServiceTests(unittest.TestCase):
             self.assertTrue(tex_path.exists())
 
 
-    def test_latex_not_produced_when_tei_blocked_by_pivot_validation(self) -> None:
-        """Quand la validation du pivot bloque le TEI, le LaTeX ne doit pas être produit."""
+    def test_heading_without_level_gets_inferred_level_and_tei_passes(self) -> None:
+        """Un heading de style 'Titre' (sans numéro) reçoit un heading_level inféré ;
+        le pivot passe et TEI + LaTeX sont produits."""
         settings = load_settings()
         pipeline = Step1Pipeline(settings=settings)
         runtime_dir = ROOT / "tests" / "_runtime"
@@ -66,7 +67,7 @@ class ExportBundleServiceTests(unittest.TestCase):
         source_path = runtime_dir / f"titre_src_{uuid.uuid4().hex}.docx"
         create_titre_docx(source_path)
 
-        output_dir = runtime_dir / f"bundle_tei_blocked_{uuid.uuid4().hex}"
+        output_dir = runtime_dir / f"bundle_titre_{uuid.uuid4().hex}"
         output_dir.mkdir(parents=True, exist_ok=True)
         docx_path, tei_path, tex_path = build_output_paths(source_path, output_dir, "titre_test")
         pivot_json_path = output_dir / "titre_test_pivot.json"
@@ -87,13 +88,8 @@ class ExportBundleServiceTests(unittest.TestCase):
 
         warnings = bundle.step1_result.pipeline_result.report.warnings
         tei_blocked = any("TEI export blocked" in w for w in warnings)
-        self.assertTrue(tei_blocked, f"Le pivot devrait bloquer le TEI; warnings: {warnings}")
-
-        self.assertFalse(tei_path.exists(), "Le fichier TEI ne doit pas être écrit sur disque")
-        self.assertFalse(tex_path.exists(), "Le fichier LaTeX ne doit pas être produit")
-        self.assertIsNone(bundle.latex_output_path)
-        self.assertIsNotNone(bundle.latex_error)
-        self.assertIn("bloqué", bundle.latex_error)
+        self.assertFalse(tei_blocked, "heading_level inféré → pivot doit passer")
+        self.assertTrue(tei_path.exists(), "Le fichier TEI doit être écrit sur disque")
 
 
 if __name__ == "__main__":

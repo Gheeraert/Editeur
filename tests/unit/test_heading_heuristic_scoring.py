@@ -119,13 +119,16 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
                 heading_ai_max_score=0.10,
             )
         )
+        # font_size_pt=14 → strong_signal=True → decision="transform" avec threshold=0.10
+        # Mais le texte est trop long pour _looks_like_heading_heuristic() → pas promu
         doc = Document(
             document_id="doc-heading-transform-not-applied",
             source_path="tests/fixtures/minimal_source.txt",
             source_format="txt",
             blocks=[
                 Paragraph(block_id="h0", text="Titre de section", block_type="heading"),
-                Paragraph(block_id="p1", text="Cadre theorique pour analyse comparee des formes narratives et argumentatives"),
+                Paragraph(block_id="p1", text="Cadre theorique pour analyse comparee des formes narratives et argumentatives",
+                          attributes={"font_size_pt": 14}),
             ],
         )
 

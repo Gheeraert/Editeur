@@ -128,6 +128,7 @@ class HeuristicSettings:
     heading_diagnostic_threshold: float = 0.60
     heading_ai_min_score: float = 0.60
     heading_ai_max_score: float = 0.85
+    auto_apply_diagnostics: bool = False
 
 
 def settings_for_heuristic_profile(
@@ -197,6 +198,7 @@ def settings_for_heuristic_profile(
         poetry_diagnostic_threshold=p_d,
         poetry_ai_min_score=p_d,
         poetry_ai_max_score=p_t,
+        auto_apply_diagnostics=(normalized == "exploratory"),
     )
     return settings, warnings
 
@@ -253,13 +255,16 @@ class StructurePreparationService:
         # (ALLCAPS, styles Titre1/2/3) pour que l'épigraphe ne s'applique pas
         # à tout le texte avant le premier titre heuristique.
         heading_count = sum(1 for b in document.blocks if b.block_type == "heading")
+        auto_apply = self.heuristic_settings.auto_apply_diagnostics
+        _apply_decisions = {"transform", "diagnostic"} if auto_apply else {"transform"}
+
         poetry_decisions: list[HeuristicDecision] = []
         poetry_candidate_block_ids: set[str] = set()
         if use_heuristics:
             transformations.extend(self._merge_blank_bounded_poetry_sequences(document))
             poetry_decisions = self.analyze_poetry_candidates(document)
-            transformations.extend(self._annotate_poetry_sequences(document, poetry_decisions))
-            transformations.extend(self._merge_poetry_by_group(document, poetry_decisions))
+            transformations.extend(self._annotate_poetry_sequences(document, poetry_decisions, auto_apply=auto_apply))
+            transformations.extend(self._merge_poetry_by_group(document, poetry_decisions, auto_apply=auto_apply))
 
             # Zone grise ou transformation : dans les deux cas,
             # les lignes poétiques doivent neutraliser la promotion en titre.
@@ -290,14 +295,15 @@ class StructurePreparationService:
                 )
 
             #  Titre de section bibliographique 
-            if block.block_type == "heading" and _SECTION_BIBLIO_RE.match(text):
-                in_bib_section = True
-                heading_count += 1
-                continue
-
-            #  Sortie de mode biblio sur tout titre 
-            if block.block_type == "heading" and in_bib_section:
-                in_bib_section = False
+            if block.block_type == "heading":
+                # Garantir heading_level valide (pivot_validator l'exige entre 1 et 6)
+                if not isinstance(block.attributes.get("heading_level"), int):
+                    inferred = self._source_heading_level(block) or 2
+                    block.attributes["heading_level"] = inferred
+                if _SECTION_BIBLIO_RE.match(text):
+                    in_bib_section = True
+                elif in_bib_section:
+                    in_bib_section = False
                 heading_count += 1
                 continue
 
@@ -316,27 +322,30 @@ class StructurePreparationService:
                 heading_count += 1
                 continue
 
-            #  Normal + ALL CAPS  titre (peut arriver si l'ingestion a raté) 
+            #  Normal + ALL CAPS  titre (peut arriver si l'ingestion a raté)
             if (block.block_type == "paragraph"
                     and text.isupper()
                     and 4 < len(text) < 140
                     and use_heuristics
                     and heading_decision is not None
-                    and heading_decision.decision == "transform"):
+                    and heading_decision.decision in _apply_decisions):
                 self._promote_heading(block, level=1, rule="structure.allcaps.heading",
                                       transformations=transformations)
                 heading_applied = True
                 in_bib_section = False
                 heading_count += 1
+                if auto_apply and heading_decision.decision == "diagnostic":
+                    block.attributes["highlight_color"] = "exploratory_structure"
+                    diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                 continue
 
-            #  Normal + GRAS seul  titre (pattern Dissimuler) 
+            #  Normal + GRAS seul  titre (pattern Dissimuler)
             if (block.block_type == "paragraph"
                     and block.attributes.get("all_runs_bold")
                     and not block.attributes.get("all_runs_italic")
                     and use_heuristics
                     and heading_decision is not None
-                    and heading_decision.decision == "transform"
+                    and heading_decision.decision in _apply_decisions
                     and self._is_heading_candidate(text, block)):
                 level = self._bold_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.bold.heading",
@@ -344,6 +353,9 @@ class StructurePreparationService:
                 heading_applied = True
                 in_bib_section = False
                 heading_count += 1
+                if auto_apply and heading_decision.decision == "diagnostic":
+                    block.attributes["highlight_color"] = "exploratory_structure"
+                    diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                 continue
 
             #  Normal + ITALIQUE seul  titre OU auteur (pattern Héraldique) 
@@ -361,12 +373,15 @@ class StructurePreparationService:
                     continue
                 if result == "heading":
                     level = self._italic_heading_level(text)
-                    if heading_decision is not None and heading_decision.decision == "transform":
+                    if heading_decision is not None and heading_decision.decision in _apply_decisions:
                         self._promote_heading(block, level=level, rule="structure.italic.heading",
                                               transformations=transformations)
                         heading_applied = True
                         in_bib_section = False
                         heading_count += 1
+                        if auto_apply and heading_decision.decision == "diagnostic":
+                            block.attributes["highlight_color"] = "exploratory_structure"
+                            diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                         continue
 
             #  pigraphe (avant le 1er titre, court, pas de ponctuation finale) 
@@ -439,13 +454,16 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and use_heuristics
                     and heading_decision is not None
-                    and heading_decision.decision == "transform"
+                    and heading_decision.decision in _apply_decisions
                     and self._looks_like_heading_heuristic(text, block)):
                 level = self._heuristic_heading_level(text)
                 self._promote_heading(block, level=level, rule="structure.heading.heuristic",
                                       transformations=transformations)
                 heading_applied = True
                 heading_count += 1
+                if auto_apply and heading_decision.decision == "diagnostic":
+                    block.attributes["highlight_color"] = "exploratory_structure"
+                    diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
 
             if (block.block_type == "paragraph"
                     and use_heuristics
@@ -506,10 +524,16 @@ class StructurePreparationService:
                 if poetry_decision.decision not in {"diagnostic", "transform"}:
                     continue
                 excerpt = poetry_decision.evidence.get("excerpt", "")
+                is_auto = auto_apply and poetry_decision.decision == "diagnostic"
                 if poetry_decision.decision == "transform":
                     severity = "info"
                     message = (
                         "Citation poétique détectée avec un score élevé et structurée automatiquement."
+                    )
+                elif is_auto:
+                    severity = "warning"
+                    message = (
+                        "Citation poétique appliquée automatiquement (mode exploratoire) — à vérifier."
                     )
                 else:
                     severity = "info"
@@ -533,13 +557,27 @@ class StructurePreparationService:
                             "evidence": poetry_decision.evidence,
                             "veto_reasons": poetry_decision.veto_reasons,
                             "ai_candidate": poetry_decision.ai_candidate,
+                            "auto_applied": is_auto,
                         },
                     )
                 )
 
         return diagnostics, transformations
 
-    #  Helpers de promotion 
+    #  Helpers de promotion
+
+    def _make_exploratory_heading_diag(self, block_id: str, text: str, score: float) -> Diagnostic:
+        return Diagnostic(
+            diagnostic_id=make_id("diag"),
+            module=self.module_name,
+            severity="warning",
+            category=_HEADING_CATEGORY,
+            message="Titre promu automatiquement (mode exploratoire) — à vérifier.",
+            target_ref=block_id,
+            rule_id=_HEADING_RULE_ID,
+            evidence=Evidence(excerpt=text[:180]),
+            attributes={"score": score, "auto_applied": True},
+        )
 
     def _promote_heading(self, block, *, level: int, rule: str,
                           transformations: list) -> None:
@@ -802,6 +840,8 @@ class StructurePreparationService:
         self,
         document: Document,
         poetry_decisions: list[HeuristicDecision],
+        *,
+        auto_apply: bool = False,
     ) -> list[Transformation]:
         transformations: list[Transformation] = []
         blocks_by_id = {block.block_id: block for block in document.blocks}
@@ -815,6 +855,7 @@ class StructurePreparationService:
 
             group_counter += 1
             group_id = f"poetry_group_{group_counter:03d}"
+            is_auto = auto_apply and poetry_decision.decision == "diagnostic"
 
             for line_index, block_id in enumerate(poetry_decision.target_refs, start=1):
                 block = blocks_by_id.get(block_id)
@@ -825,7 +866,7 @@ class StructurePreparationService:
 
                 before = block.block_type
                 block.attributes["heuristic_score"] = poetry_decision.score
-                if poetry_decision.decision == "transform":
+                if poetry_decision.decision == "transform" or is_auto:
                     block.block_type = "lineated_block"
                     block.attributes["alignment"] = "left"
                     block.attributes.pop("quote_kind", None)
@@ -840,6 +881,8 @@ class StructurePreparationService:
                             lines=[block.text.strip()] if block.text.strip() else [],
                         ),
                     )
+                    if is_auto:
+                        block.attributes["highlight_color"] = "exploratory_structure"
 
                 transformations.append(
                     self._make_tr(
@@ -861,6 +904,8 @@ class StructurePreparationService:
         self,
         document: Document,
         poetry_decisions: list[HeuristicDecision],
+        *,
+        auto_apply: bool = False,
     ) -> list[Transformation]:
         """Fusionne les vers d'une même strophe en un seul bloc (texte séparé par \\n)."""
         transformations: list[Transformation] = []
@@ -870,7 +915,8 @@ class StructurePreparationService:
         for decision in poetry_decisions:
             if decision.veto_reasons:
                 continue
-            if decision.decision != "transform":
+            is_auto = auto_apply and decision.decision == "diagnostic"
+            if decision.decision != "transform" and not is_auto:
                 continue
             target_ids = decision.target_refs
             if len(target_ids) < 2:
@@ -904,6 +950,8 @@ class StructurePreparationService:
                     lines=lines,
                 ),
             )
+            if is_auto:
+                first_block.attributes["highlight_color"] = "exploratory_structure"
 
             for bid in target_ids[1:]:
                 consumed_ids.add(bid)
