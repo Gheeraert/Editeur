@@ -593,6 +593,7 @@ class StructurePreparationService:
             first_block = sequence[0]
             merged_from = [block.block_id for block in sequence]
             merged_text = "\n".join(block.text.strip() for block in sequence)
+            verse_lines = [block.text.strip() for block in sequence if block.text.strip()]
             merged_inlines = self._merged_poetry_inlines(sequence)
             first_block.block_type = "lineated_block"
             first_block.text = merged_text
@@ -614,7 +615,7 @@ class StructurePreparationService:
                     role="lineated_block",
                     layout_kind="lineated_block",
                     lineation="lineated",
-                    lines=[block.text.strip() for block in sequence if block.text.strip()],
+                    lines=verse_lines,
                 ),
             )
 
@@ -666,6 +667,7 @@ class StructurePreparationService:
             first_block = sequence[0]
             merged_from = [block.block_id for block in sequence]
             merged_text = "\n".join(block.text.strip() for block in sequence)
+            verse_lines = [block.text.strip() for block in sequence if block.text.strip()]
             merged_inlines = self._merged_poetry_inlines(sequence)
             before = first_block.block_type
             first_block.block_type = "lineated_block"
@@ -684,7 +686,7 @@ class StructurePreparationService:
                     role="lineated_block",
                     layout_kind="lineated_block",
                     lineation="lineated",
-                    lines=[block.text.strip() for block in sequence if block.text.strip()],
+                    lines=verse_lines,
                 ),
             )
 
@@ -747,7 +749,7 @@ class StructurePreparationService:
 
             has_blank_before = cls._has_blank_before(blocks, start)
             has_blank_after = cls._has_blank_after(blocks, end)
-            if has_blank_before and has_blank_after and 2 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
+            if has_blank_before and has_blank_after and 3 <= len(current) <= _POETRY_SEQUENCE_MAX_LINES:
                 sequences.append(current.copy())
         return sequences
 
