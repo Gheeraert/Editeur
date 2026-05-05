@@ -34,14 +34,17 @@ class TxtImporter(DocumentImporter):
 
             if line.startswith("#"):
                 flush_paragraph()
+                level = min(len(line) - len(line.lstrip("#")), 6)
                 heading_text = line.lstrip("#").strip()
-                blocks.append(Heading(block_id=f"h{block_index}", text=heading_text))
+                blocks.append(Heading(block_id=f"h{block_index}", text=heading_text,
+                                      attributes={"heading_level": max(level, 1)}))
                 block_index += 1
                 continue
 
             if self._looks_like_heading(line):
                 flush_paragraph()
-                blocks.append(Heading(block_id=f"h{block_index}", text=line.strip()))
+                blocks.append(Heading(block_id=f"h{block_index}", text=line.strip(),
+                                      attributes={"heading_level": 1}))
                 block_index += 1
                 continue
 

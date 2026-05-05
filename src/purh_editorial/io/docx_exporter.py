@@ -48,11 +48,12 @@ XML = "http://www.w3.org/XML/1998/namespace"
 
 # ── Correspondance couleurs de surlignage ─────────────────────────────────────
 _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
-    "orthotypo": WD_COLOR_INDEX.YELLOW,
-    "footnote":  WD_COLOR_INDEX.BRIGHT_GREEN,
-    "biblio":    WD_COLOR_INDEX.TURQUOISE,
-    "ai":        WD_COLOR_INDEX.PINK,
-    "ai_structure": WD_COLOR_INDEX.VIOLET,
+    "orthotypo":             WD_COLOR_INDEX.YELLOW,
+    "footnote":              WD_COLOR_INDEX.BRIGHT_GREEN,
+    "biblio":                WD_COLOR_INDEX.TURQUOISE,
+    "ai":                    WD_COLOR_INDEX.PINK,
+    "ai_structure":          WD_COLOR_INDEX.VIOLET,
+    "exploratory_structure": WD_COLOR_INDEX.DARK_YELLOW,
 }
 
 # ── Polices PURH (substituts des polices InDesign) ───────────────────────────
@@ -276,10 +277,11 @@ def _add_raw_table(doc: DocxDoc, block) -> None:
 # ── Injection des notes de bas de page (post-sauvegarde) ─────────────────────
 
 _HL_TO_WVAL = {
-    "orthotypo": "yellow",
-    "footnote":  "green",
-    "biblio":    "cyan",
-    "ai":        "magenta",
+    "orthotypo":             "yellow",
+    "footnote":              "green",
+    "biblio":                "cyan",
+    "ai":                    "magenta",
+    "exploratory_structure": "darkYellow",
 }
 
 _FOOTNOTES_XML_DECL = b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
