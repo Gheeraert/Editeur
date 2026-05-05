@@ -641,7 +641,14 @@ def run_export_bundle(
     if export_latex and latex_output_path is not None:
         _docx_path, tei_path, _json_path = extract_output_paths(step1_result)
         if tei_path is None or not tei_path.exists():
-            latex_error = "Export LaTeX ignoré : XML-TEI non disponible."
+            tei_blocked = any(
+                "TEI export blocked" in w
+                for w in step1_result.pipeline_result.report.warnings
+            )
+            if tei_blocked:
+                latex_error = "Export LaTeX ignoré : XML-TEI bloqué par validation du pivot."
+            else:
+                latex_error = "Export LaTeX ignoré : XML-TEI non disponible."
         else:
             try:
                 latex_output_path.parent.mkdir(parents=True, exist_ok=True)

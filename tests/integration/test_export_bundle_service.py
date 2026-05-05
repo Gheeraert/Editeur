@@ -14,6 +14,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.config import load_settings
 from purh_editorial.pipeline.step1 import Step1Options, Step1Pipeline
 from purh_editorial.ui.step1_dialog import build_output_paths, run_export_bundle
+from tests.helpers.docx_factory import create_titre_docx
 
 
 class ExportBundleServiceTests(unittest.TestCase):
@@ -54,6 +55,45 @@ class ExportBundleServiceTests(unittest.TestCase):
             self.assertIsNone(bundle.latex_error)
             self.assertIsNotNone(bundle.latex_output_path)
             self.assertTrue(tex_path.exists())
+
+
+    def test_latex_not_produced_when_tei_blocked_by_pivot_validation(self) -> None:
+        """Quand la validation du pivot bloque le TEI, le LaTeX ne doit pas être produit."""
+        settings = load_settings()
+        pipeline = Step1Pipeline(settings=settings)
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        source_path = runtime_dir / f"titre_src_{uuid.uuid4().hex}.docx"
+        create_titre_docx(source_path)
+
+        output_dir = runtime_dir / f"bundle_tei_blocked_{uuid.uuid4().hex}"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        docx_path, tei_path, tex_path = build_output_paths(source_path, output_dir, "titre_test")
+        pivot_json_path = output_dir / "titre_test_pivot.json"
+        options = Step1Options(
+            enable_ai=False,
+            output_path=docx_path,
+            tei_output_path=tei_path,
+            pivot_json_output_path=pivot_json_path,
+        )
+
+        bundle = run_export_bundle(
+            pipeline=pipeline,
+            source=source_path,
+            options=options,
+            export_latex=True,
+            latex_output_path=tex_path,
+        )
+
+        warnings = bundle.step1_result.pipeline_result.report.warnings
+        tei_blocked = any("TEI export blocked" in w for w in warnings)
+        self.assertTrue(tei_blocked, f"Le pivot devrait bloquer le TEI; warnings: {warnings}")
+
+        self.assertFalse(tei_path.exists(), "Le fichier TEI ne doit pas être écrit sur disque")
+        self.assertFalse(tex_path.exists(), "Le fichier LaTeX ne doit pas être produit")
+        self.assertIsNone(bundle.latex_output_path)
+        self.assertIsNotNone(bundle.latex_error)
+        self.assertIn("bloqué", bundle.latex_error)
 
 
 if __name__ == "__main__":

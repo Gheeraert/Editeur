@@ -184,3 +184,44 @@ def create_poetry_candidate_docx(path: Path) -> Path:
         archive.writestr("word/styles.xml", STYLES_XML)
         archive.writestr("docProps/core.xml", CORE_XML)
     return path
+
+
+# DOCX avec un paragraphe de style "Titre" (sans numéro de niveau) : l'importeur
+# le reconnaît comme Heading mais ne peut pas extraire heading_level → le pivot
+# validator lève une erreur → export TEI bloqué.
+TITRE_STYLES_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:style w:type="paragraph" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Titre">
+    <w:name w:val="Titre"/>
+  </w:style>
+</w:styles>
+"""
+
+TITRE_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Paragraphe introductif.</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Titre"/></w:pPr>
+      <w:r><w:t>Un motif dramaturgique récurrent</w:t></w:r>
+    </w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+
+def create_titre_docx(path: Path) -> Path:
+    """DOCX dont un heading de style 'Titre' (sans numéro) déclenche l'erreur pivot."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", TITRE_DOC_XML)
+        archive.writestr("word/styles.xml", TITRE_STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path
