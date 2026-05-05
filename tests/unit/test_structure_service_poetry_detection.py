@@ -38,9 +38,10 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
                     text="Je vois Phèdre venir.",
                     attributes={"blank_para_before": True},
                 ),
+                Paragraph(block_id="b3", text="Deuxième vers du même extrait."),
                 Paragraph(
-                    block_id="b3",
-                    text="Deuxième vers du même extrait.",
+                    block_id="b3b",
+                    text="Troisième vers : minimum requis.",
                     attributes={"blank_para_after": True},
                 ),
                 Paragraph(block_id="b4", text="Prose de reprise.", attributes={"blank_para_before": True}),
@@ -66,7 +67,8 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
             [
                 Paragraph(block_id="b1", text="Avant.", attributes={"blank_para_after": True}),
                 Paragraph(block_id="b2", text="Cette hypothèse reste fragile.", attributes={"blank_para_before": True}),
-                Paragraph(block_id="b3", text="Elle demande une enquête plus longue.", attributes={"blank_para_after": True}),
+                Paragraph(block_id="b3", text="Elle demande une enquête plus longue."),
+                Paragraph(block_id="b3b", text="Le résultat mérite discussion.", attributes={"blank_para_after": True}),
                 Paragraph(block_id="b4", text="Après.", attributes={"blank_para_before": True}),
             ]
         )
@@ -167,9 +169,10 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
                     text="Cette hypothèse reste fragile.",
                     attributes={"blank_para_before": True},
                 ),
+                Paragraph(block_id="b3", text="Elle demande une enquête plus longue."),
                 Paragraph(
-                    block_id="b3",
-                    text="Elle demande une enquête plus longue.",
+                    block_id="b3b",
+                    text="Un troisième argument s'impose.",
                     attributes={"blank_para_after": True},
                 ),
                 Paragraph(block_id="b4", text="Prose de reprise.", attributes={"blank_para_before": True}),
@@ -196,9 +199,10 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
                     text="Je vois Phèdre venir.",
                     attributes={"blank_para_before": True},
                 ),
+                Paragraph(block_id="b3", text="Deuxième vers du même extrait."),
                 Paragraph(
-                    block_id="b3",
-                    text="Deuxième vers du même extrait.",
+                    block_id="b3b",
+                    text="Troisième vers pour déclencher la fusion.",
                     attributes={"blank_para_after": True},
                 ),
                 Paragraph(block_id="b4", text="Après.", attributes={"blank_para_before": True}),
@@ -211,7 +215,7 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         self.assertIsNotNone(lineated)
         self.assertEqual(
             lineated.text,
-            "Je vois Phèdre venir.\nDeuxième vers du même extrait.",
+            "Je vois Phèdre venir.\nDeuxième vers du même extrait.\nTroisième vers pour déclencher la fusion.",
         )
         inline_text = "".join(
             ("\n" if span.kind == "line_break" else span.text) for span in lineated.inlines
@@ -250,6 +254,11 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
                     block_id="b3",
                     text="Deuxième vers du même extrait.",
                     inlines=[InlineSpan(text="Deuxième vers du même extrait.")],
+                ),
+                Paragraph(
+                    block_id="b3b",
+                    text="Troisième vers pour déclencher la fusion.",
+                    inlines=[InlineSpan(text="Troisième vers pour déclencher la fusion.")],
                     attributes={"blank_para_after": True},
                 ),
                 Paragraph(block_id="b4", text="Prose de reprise.", attributes={"blank_para_before": True}),
@@ -272,7 +281,7 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
         self.assertIsNotNone(italic_span)
         self.assertTrue(italic_span.style.italic)
         line_break_count = sum(1 for span in lineated.inlines if span.kind == "line_break")
-        self.assertEqual(line_break_count, 1)
+        self.assertEqual(line_break_count, 2)
 
     def test_racine_lineated_block_does_not_promote_internal_heading(self) -> None:
         document = _doc(
@@ -323,6 +332,55 @@ class StructureServicePoetryDetectionTests(unittest.TestCase):
             self.assertNotEqual(block.block_type, "heading")
             self.assertNotIn("heading_level", block.attributes)
             self.assertNotEqual(block.attributes.get("metopes_style"), "Heading 3")
+
+
+    def test_two_line_blank_bounded_author_attribution_is_not_lineated(self) -> None:
+        """Régression : 'Nom / Institution' sur deux lignes ne doit pas devenir lineated_block."""
+        document = _doc(
+            [
+                Paragraph(block_id="b0", text="Titre de l'article.", attributes={"blank_para_after": True}),
+                Paragraph(
+                    block_id="b1",
+                    text="Caroline Labrune",
+                    attributes={"blank_para_before": True},
+                ),
+                Paragraph(
+                    block_id="b2",
+                    text="CÉRÉdI (Université de Rouen Normandie)",
+                    attributes={"blank_para_after": True},
+                ),
+                Paragraph(block_id="b3", text="Introduction.", attributes={"blank_para_before": True}),
+            ]
+        )
+
+        self.service.process(document, mode="heuristic")
+        self.canonicalizer.apply(document)
+        lineated = next((b for b in document.blocks if b.block_type == "lineated_block"), None)
+        self.assertIsNone(lineated, "Une attribution auteur/institution sur 2 lignes ne doit pas être classée comme poésie.")
+
+    def test_two_line_blank_bounded_title_author_paratextual_is_not_lineated(self) -> None:
+        """Régression : titre + 'par Auteur' sur deux lignes ne doit pas devenir lineated_block."""
+        document = _doc(
+            [
+                Paragraph(block_id="b0", text="Avant.", attributes={"blank_para_after": True}),
+                Paragraph(
+                    block_id="b1",
+                    text="L'expiration mythologique racinienne",
+                    attributes={"blank_para_before": True},
+                ),
+                Paragraph(
+                    block_id="b2",
+                    text="par Hubert Aupetit",
+                    attributes={"blank_para_after": True},
+                ),
+                Paragraph(block_id="b3", text="Après.", attributes={"blank_para_before": True}),
+            ]
+        )
+
+        self.service.process(document, mode="heuristic")
+        self.canonicalizer.apply(document)
+        lineated = next((b for b in document.blocks if b.block_type == "lineated_block"), None)
+        self.assertIsNone(lineated, "Un titre + 'par Auteur' sur 2 lignes ne doit pas être classé comme poésie.")
 
 
 if __name__ == "__main__":

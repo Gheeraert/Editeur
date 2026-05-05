@@ -282,5 +282,66 @@ class PipelinePivotPoetryEndToEndTests(unittest.TestCase):
             self.assertTrue(bool((second_verse.get("attributes") or {}).get("blank_para_after")))
 
 
+    def test_lineated_block_lines_have_no_embedded_newlines(self) -> None:
+        """Régression : lines[0] ne doit pas contenir le texte fusionné complet avec \\n."""
+        settings = load_settings()
+        pipeline = Step1Pipeline(settings=settings)
+        runtime_dir = ROOT / "tests" / "_runtime"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+
+        source_path = runtime_dir / f"lines_corruption_{uuid.uuid4().hex}.docx"
+        pivot_path = runtime_dir / f"lines_corruption_{uuid.uuid4().hex}.json"
+
+        # Trois vers en séquence blancs-bornés
+        three_verse_doc_xml = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr><w:r><w:t>Prose avant.</w:t></w:r></w:p>
+    <w:p/>
+    <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr><w:r><w:t>Premier vers du bloc.</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr><w:r><w:t>Deuxième vers du bloc.</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr><w:r><w:t>Troisième vers du bloc.</w:t></w:r></w:p>
+    <w:p/>
+    <w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr><w:r><w:t>Prose après.</w:t></w:r></w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>"""
+        path = source_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr("word/document.xml", three_verse_doc_xml)
+            archive.writestr("word/styles.xml", STYLES_XML)
+            archive.writestr("docProps/core.xml", CORE_XML)
+
+        pipeline.run(
+            source_path,
+            Step1Options(enable_ai=False, output_path=None, pivot_json_output_path=pivot_path),
+        )
+
+        payload = json.loads(pivot_path.read_text(encoding="utf-8"))
+        blocks = payload.get("document", {}).get("blocks", [])
+
+        lineated = [
+            b for b in blocks
+            if (b.get("attributes") or {}).get("semantic", {}).get("role") == "lineated_block"
+        ]
+        if not lineated:
+            self.skipTest("Aucun lineated_block détecté (seuil heuristique non atteint).")
+
+        for block in lineated:
+            lines = block["attributes"]["semantic"].get("lines") or []
+            for i, line in enumerate(lines):
+                self.assertNotIn(
+                    "\n", str(line),
+                    f"lines[{i}] contient un \\n — corruption de first_block.text: {line!r}",
+                )
+            # L'entrée 0 ne doit pas être le texte fusionné entier
+            if len(lines) >= 2:
+                self.assertNotIn(
+                    lines[1], lines[0],
+                    f"lines[0] contient lines[1] — mutation avant construction: {lines[0]!r}",
+                )
+
+
 if __name__ == "__main__":
     unittest.main()
