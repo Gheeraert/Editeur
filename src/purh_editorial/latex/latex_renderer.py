@@ -90,8 +90,15 @@ class LatexRenderer:
                 return ""
             return "\n".join([r"\begin{quote}\small", *paragraphs, r"\end{quote}"])
         if isinstance(block, VerseBlock):
-            lines = [self._render_inline_nodes(line.content) + r"\\" for line in block.lines]
-            return "\n".join([r"\begin{verse}", *lines, r"\end{verse}"])
+            rendered_lines = []
+            for line in block.lines:
+                content = self._render_inline_nodes(line.content)
+                # After \\ or \begin{verse}, a leading [ is parsed as an optional
+                # argument (spacing or width). An empty group {} neutralises it.
+                if content.startswith("["):
+                    content = "{}" + content
+                rendered_lines.append(content + r"\\")
+            return "\n".join([r"\begin{verse}", *rendered_lines, r"\end{verse}"])
         if isinstance(block, ListBlock):
             env = "enumerate" if block.ordered else "itemize"
             entries = [rf"\item {self._render_inline_nodes(item.content)}" for item in block.items]

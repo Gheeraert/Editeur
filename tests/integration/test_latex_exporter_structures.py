@@ -93,6 +93,41 @@ class LatexExporterStructuresTests(unittest.TestCase):
         # L'avant-propos doit précéder le chapitre 1
         self.assertLess(tex.index("avant-propos"), tex.index("Chapitre 1"))
 
+    def test_verse_line_starting_with_bracket_is_protected(self) -> None:
+        """Régression : [… ] en début de vers ne doit pas être avalé comme argument de \\ ou \begin{verse}."""
+        from purh_editorial.latex.latex_renderer import LatexRenderer
+        from purh_editorial.latex.semantic_model import (
+            Book,
+            BookMetadata,
+            Division,
+            DivisionKind,
+            TextRun,
+            VerseLine,
+            VerseBlock,
+        )
+
+        line_before = VerseLine(content=[TextRun(text="Vers ordinaire")])
+        line_bracket_first = VerseLine(content=[TextRun(text="[…] suite du vers")])
+        line_bracket_middle = VerseLine(content=[TextRun(text="[…] Calchas l'attend en ces lieux")])
+        verse = VerseBlock(lines=[line_before, line_bracket_first, line_bracket_middle])
+        book = Book(
+            metadata=BookMetadata(title="Test"),
+            divisions=[Division(kind=DivisionKind.CHAPTER, title="Ch", blocks=[verse])],
+        )
+
+        tex = LatexRenderer().render_book(book)
+
+        # Les lignes commençant par [ doivent être protégées par {}
+        self.assertIn("{}[…] suite du vers" + r"\\", tex)
+        self.assertIn("{}[…] Calchas l'attend en ces lieux" + r"\\", tex)
+        # La ligne ordinaire ne doit PAS être modifiée
+        self.assertIn("Vers ordinaire" + r"\\", tex)
+        # Le motif dangereux \\[…] ne doit pas apparaître dans l'environnement verse
+        verse_start = tex.index(r"\begin{verse}")
+        verse_end = tex.index(r"\end{verse}", verse_start)
+        verse_body = tex[verse_start:verse_end]
+        self.assertNotIn(r"\\[", verse_body)
+
 
 if __name__ == "__main__":
     unittest.main()
