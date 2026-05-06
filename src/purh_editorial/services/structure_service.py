@@ -334,7 +334,9 @@ class StructurePreparationService:
                 heading_applied = True
                 in_bib_section = False
                 heading_count += 1
-                if auto_apply and heading_decision.decision == "diagnostic":
+                if heading_decision.decision == "transform":
+                    block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+                elif auto_apply and heading_decision.decision == "diagnostic":
                     block.attributes["highlight_color"] = "exploratory_structure"
                     diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                 continue
@@ -353,7 +355,9 @@ class StructurePreparationService:
                 heading_applied = True
                 in_bib_section = False
                 heading_count += 1
-                if auto_apply and heading_decision.decision == "diagnostic":
+                if heading_decision.decision == "transform":
+                    block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+                elif auto_apply and heading_decision.decision == "diagnostic":
                     block.attributes["highlight_color"] = "exploratory_structure"
                     diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                 continue
@@ -379,7 +383,9 @@ class StructurePreparationService:
                         heading_applied = True
                         in_bib_section = False
                         heading_count += 1
-                        if auto_apply and heading_decision.decision == "diagnostic":
+                        if heading_decision.decision == "transform":
+                            block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+                        elif auto_apply and heading_decision.decision == "diagnostic":
                             block.attributes["highlight_color"] = "exploratory_structure"
                             diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
                         continue
@@ -461,7 +467,9 @@ class StructurePreparationService:
                                       transformations=transformations)
                 heading_applied = True
                 heading_count += 1
-                if auto_apply and heading_decision.decision == "diagnostic":
+                if heading_decision.decision == "transform":
+                    block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+                elif auto_apply and heading_decision.decision == "diagnostic":
                     block.attributes["highlight_color"] = "exploratory_structure"
                     diagnostics.append(self._make_exploratory_heading_diag(block.block_id, text, heading_decision.score))
 
@@ -469,6 +477,7 @@ class StructurePreparationService:
                     and use_heuristics
                     and heading_decision is not None
                     and heading_decision.decision == "diagnostic"):
+                block.attributes["highlight_color"] = "suspect_unhandled"
                 diagnostics.append(
                     Diagnostic(
                         diagnostic_id=make_id("diag"),
@@ -495,6 +504,7 @@ class StructurePreparationService:
                 and heading_decision.decision == "transform"
                 and not heading_applied
             ):
+                block.attributes["highlight_color"] = "suspect_unhandled"
                 diagnostics.append(
                     Diagnostic(
                         diagnostic_id=make_id("diag"),
@@ -881,8 +891,13 @@ class StructurePreparationService:
                             lines=[block.text.strip()] if block.text.strip() else [],
                         ),
                     )
-                    if is_auto:
+                    if poetry_decision.decision == "transform":
+                        block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+                    elif is_auto:
                         block.attributes["highlight_color"] = "exploratory_structure"
+                else:
+                    # zone "diagnostic" en mode non-exploratoire : bloc non promu, signaler
+                    block.attributes["highlight_color"] = "suspect_unhandled"
 
                 transformations.append(
                     self._make_tr(
@@ -950,7 +965,9 @@ class StructurePreparationService:
                     lines=lines,
                 ),
             )
-            if is_auto:
+            if decision.decision == "transform":
+                first_block.attributes["highlight_color"] = "exploratory_structure" if auto_apply else "structure_applied"
+            elif is_auto:
                 first_block.attributes["highlight_color"] = "exploratory_structure"
 
             for bid in target_ids[1:]:

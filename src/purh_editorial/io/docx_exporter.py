@@ -54,6 +54,10 @@ _HIGHLIGHT_MAP: dict[str, WD_COLOR_INDEX] = {
     "ai":                    WD_COLOR_INDEX.PINK,
     "ai_structure":          WD_COLOR_INDEX.VIOLET,
     "exploratory_structure": WD_COLOR_INDEX.DARK_YELLOW,
+    # Modes non-exploratoires : traité automatiquement (transform zone)
+    "structure_applied":     WD_COLOR_INDEX.TEAL,
+    # Tous modes : suspect non traité, signalement manuel requis
+    "suspect_unhandled":     WD_COLOR_INDEX.RED,
 }
 
 # ── Polices PURH (substituts des polices InDesign) ───────────────────────────
@@ -215,6 +219,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
         para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT if is_lineated_block else WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
     if block.inlines:
+        block_hl = _HIGHLIGHT_MAP.get(block.attributes.get("highlight_color", ""), None)
         for span in block.inlines:
             if span.kind == "line_break":
                 _add_line_break(para)
@@ -224,6 +229,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                 if fn_id is not None:
                     _add_footnote_reference(para, fn_id)
             else:
+                span_hl = _inline_highlight(span)
                 _add_run_with_style(
                     para,
                     span.text,
@@ -232,7 +238,7 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                     small_caps=span.style.small_caps,
                     superscript=span.style.superscript,
                     subscript=span.style.subscript,
-                    highlight=_inline_highlight(span),
+                    highlight=span_hl if span_hl is not None else block_hl,
                     font_size_pt=_QUOTE_FONT_SIZE_PT if (is_quote_block or is_lineated_block) else heading_size,
                 )
     else:
@@ -282,6 +288,8 @@ _HL_TO_WVAL = {
     "biblio":                "cyan",
     "ai":                    "magenta",
     "exploratory_structure": "darkYellow",
+    "structure_applied":     "darkCyan",
+    "suspect_unhandled":     "red",
 }
 
 _FOOTNOTES_XML_DECL = b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
