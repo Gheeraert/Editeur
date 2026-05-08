@@ -68,8 +68,43 @@ def parse_tei_tree_to_semantic(tree: etree._ElementTree, fallback_title: str = "
             "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1])",
         ),
     ) or fallback_title
-    contributors = _collect_contributors(root)
-    metadata = BookMetadata(title=title, contributors=contributors)
+    subtitle = _xpath_text(
+        root,
+        ("normalize-space((.//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@type='sub'])[1])",),
+    ) or ""
+    contributors, scientific_editors, translators = _collect_all_contributors(root)
+    metadata = BookMetadata(
+        title=title,
+        subtitle=subtitle,
+        contributors=contributors,
+        scientific_editors=scientific_editors,
+        translators=translators,
+        series_title=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:seriesStmt/tei:title)[1])",
+        )) or "",
+        collection=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:seriesStmt/tei:biblScope[@unit='collection'])[1])",
+        )) or "",
+        volume_number=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:seriesStmt/tei:biblScope[@unit='volume'])[1])",
+        )) or "",
+        publisher=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:publisher)[1])",
+        )) or "",
+        pub_place=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:pubPlace)[1])",
+        )) or "",
+        isbn_print=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:idno[@type='ISBN-13'])[1])",
+        )) or "",
+        issn=_xpath_text(root, (
+            "normalize-space((.//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:idno[@type='ISSN'])[1])",
+        )) or "",
+        publication_date=_collect_date_when(root,
+            ".//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:date[@type='publishing']"),
+        legal_deposit_date=_collect_date_when(root,
+            ".//tei:teiHeader/tei:fileDesc/tei:publicationStmt//tei:date[@type='legal-deposit']"),
+    )
 
     divisions: list[Division] = []
     text = root.xpath("./tei:text", namespaces=NS)
@@ -97,17 +132,39 @@ def parse_tei_tree_to_semantic(tree: etree._ElementTree, fallback_title: str = "
     return Book(metadata=metadata, divisions=divisions)
 
 
-def _collect_contributors(root: etree._Element) -> list[str]:
-    contributors: list[str] = []
-    for xpath in (
-        ".//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:author",
-        ".//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:editor",
+def _collect_all_contributors(
+    root: etree._Element,
+) -> tuple[list[str], list[str], list[str]]:
+    """Retourne (auteurs, éditeurs sc., traducteurs) depuis le titleStmt."""
+    authors: list[str] = []
+    editors: list[str] = []
+    translators: list[str] = []
+    for node in root.xpath(
+        ".//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:author", namespaces=NS
     ):
-        for node in root.xpath(xpath, namespaces=NS):
-            text = _normalize("".join(node.itertext()))
-            if text:
-                contributors.append(text)
-    return contributors
+        text = _normalize("".join(node.itertext()))
+        if text:
+            authors.append(text)
+    for node in root.xpath(
+        ".//tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:editor", namespaces=NS
+    ):
+        role = (node.get("role") or "").strip()
+        text = _normalize("".join(node.itertext()))
+        if not text:
+            continue
+        if role == "trl":
+            translators.append(text)
+        else:
+            editors.append(text)
+    return authors, editors, translators
+
+
+def _collect_date_when(root: etree._Element, xpath: str) -> str:
+    nodes = root.xpath(xpath, namespaces=NS)
+    if not nodes:
+        return ""
+    node = nodes[0]
+    return (node.get("when") or _normalize("".join(node.itertext())) or "").strip()
 
 
 def _parse_container_divisions(container: etree._Element, container_kind: DivisionKind) -> list[Division]:

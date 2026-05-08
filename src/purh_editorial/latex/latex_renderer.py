@@ -25,13 +25,14 @@ from purh_editorial.latex.semantic_model import (
 
 class LatexRenderer:
     def render_book(self, book: Book) -> str:
+        meta = book.metadata
         lines = [
             r"\documentclass[11pt,oneside,openany]{memoir}",
             r"\usepackage{fontspec}",
             r"\usepackage{polyglossia}",
             r"\setmainlanguage{french}",
             r"\setmainfont{TeX Gyre Pagella}",
-            r"\setsansfont{TeX Gyre Heros}",
+            r"\setsansfont[Scale=MatchLowercase]{TeX Gyre Heros}",
             r"\setmonofont{Latin Modern Mono}",
             r"\usepackage[final]{microtype}",
             r"\usepackage{csquotes}",
@@ -39,6 +40,7 @@ class LatexRenderer:
             r"\usepackage{verse}",
             r"\usepackage{longtable}",
             r"\usepackage{array}",
+            r"\usepackage{xcolor}",
             r"\setstocksize{230mm}{155mm}",
             r"\settrimmedsize{\stockheight}{\stockwidth}{*}",
             r"\setlrmarginsandblock{23mm}{22mm}{*}",
@@ -48,12 +50,11 @@ class LatexRenderer:
             r"\setlength{\parskip}{0pt}",
             r"\renewcommand{\footnotesize}{\small}",
             r"\newcommand{\purhTableSize}{\small}",
+            r"\pagestyle{plain}",
             r"\begin{document}",
-            rf"\title{{{self._escape(book.metadata.title)}}}",
         ]
-        if book.metadata.contributors:
-            lines.append(rf"\author{{{self._escape(' ; '.join(book.metadata.contributors))}}}")
-        lines.extend([r"\maketitle", ""])
+        lines.extend(self._render_title_pages(meta))
+        lines.append("")
 
         for division in book.divisions:
             chapter_command = r"\chapter" if division.kind == DivisionKind.CHAPTER else r"\chapter*"
@@ -73,6 +74,159 @@ class LatexRenderer:
         output_tex.parent.mkdir(parents=True, exist_ok=True)
         output_tex.write_text(self.render_book(book), encoding="utf-8")
         return output_tex
+
+    def _render_title_pages(self, meta) -> list[str]:
+        """Génère les pages liminaires : faux-titre, titre complet, colophon."""
+        lines: list[str] = []
+        e = self._escape
+
+        has_any = bool(meta.title)
+        if not has_any:
+            return lines
+
+        # ── Faux-titre ────────────────────────────────────────────────────────
+        lines += [
+            r"\begin{titlingpage}",
+            r"\thispagestyle{empty}",
+            r"\vspace*{\fill}",
+            r"\begin{center}",
+            rf"{{\sffamily\large {e(meta.title)}}}",
+            r"\end{center}",
+            r"\vspace*{\fill}",
+            r"\end{titlingpage}",
+            r"\cleardoublepage",
+            "",
+        ]
+
+        # ── Page de titre complète ─────────────────────────────────────────────
+        lines += [r"\begin{titlingpage}", r"\thispagestyle{empty}"]
+
+        # Série / collection (en haut, gris clair)
+        series_parts: list[str] = []
+        if meta.series_title:
+            series_parts.append(e(meta.series_title))
+        if meta.collection:
+            series_parts.append(e(meta.collection))
+        if meta.volume_number:
+            series_parts.append(f"vol.~{e(meta.volume_number)}")
+        if series_parts:
+            lines += [
+                r"\vspace*{18mm}",
+                r"\begin{center}",
+                rf"{{\sffamily\small\color{{gray}} {' — '.join(series_parts)}}}",
+                r"\end{center}",
+            ]
+        else:
+            lines.append(r"\vspace*{26mm}")
+
+        # Titre & sous-titre
+        lines += [
+            r"\vspace*{\fill}",
+            r"\begin{center}",
+            rf"{{\sffamily\LARGE\bfseries {e(meta.title)}}}",
+        ]
+        if meta.subtitle:
+            lines += [
+                r"\par\medskip",
+                rf"{{\sffamily\large\itshape {e(meta.subtitle)}}}",
+            ]
+        lines.append(r"\end{center}")
+
+        # Auteur(s)
+        if meta.contributors:
+            names = " \\and ".join(e(n) for n in meta.contributors)
+            lines += [
+                r"\vspace{8mm}",
+                r"\begin{center}",
+                rf"{{\sffamily\normalsize {names}}}",
+                r"\end{center}",
+            ]
+
+        # Direction scientifique
+        if meta.scientific_editors:
+            label = "Sous la direction de" if len(meta.scientific_editors) > 1 else "Sous la direction de"
+            names = ", ".join(e(n) for n in meta.scientific_editors)
+            lines += [
+                r"\vspace{4mm}",
+                r"\begin{center}",
+                rf"{{\sffamily\small {e(label)}\\[2pt] {names}}}",
+                r"\end{center}",
+            ]
+
+        # Traducteur(s)
+        if meta.translators:
+            label = "Traduit par"
+            names = ", ".join(e(n) for n in meta.translators)
+            lines += [
+                r"\vspace{4mm}",
+                r"\begin{center}",
+                rf"{{\sffamily\small {e(label)}\\[2pt] {names}}}",
+                r"\end{center}",
+            ]
+
+        # Éditeur & lieu en bas de page
+        lines.append(r"\vspace*{\fill}")
+        pub = meta.publisher or "Presses universitaires de Rouen et du Havre"
+        place = meta.pub_place or "Mont-Saint-Aignan"
+        date_str = meta.publication_date or ""
+        pub_line = f"{e(pub)} — {e(place)}"
+        if date_str:
+            pub_line += f" — {e(date_str)}"
+        lines += [
+            r"\begin{center}",
+            rf"\rule{{0.5\textwidth}}{{0.4pt}}\\[4pt]",
+            rf"{{\sffamily\footnotesize {pub_line}}}",
+            r"\end{center}",
+            r"\end{titlingpage}",
+            r"\cleardoublepage",
+            "",
+        ]
+
+        # ── Colophon (verso page de titre) ────────────────────────────────────
+        lines += [
+            r"\thispagestyle{empty}",
+            r"\vspace*{\fill}",
+            r"\begin{flushleft}",
+            rf"{{\sffamily\footnotesize",
+        ]
+
+        # Responsabilité éditoriale
+        if meta.contributors:
+            lines.append(rf"\textbf{{{e(meta.title)}}} / {', '.join(e(n) for n in meta.contributors)}\\[4pt]")
+        else:
+            lines.append(rf"\textbf{{{e(meta.title)}}}\\[4pt]")
+
+        if meta.edition_note:
+            lines.append(rf"{e(meta.edition_note)}\\[4pt]")
+
+        # Éditeur
+        lines += [
+            rf"{{\copyright}}~{e(date_str[:4] if date_str else '')} {e(pub)}, {e(place)}\\[4pt]",
+        ]
+
+        # ISBN / ISSN
+        if meta.isbn_print:
+            lines.append(rf"ISBN (imprimé) : {e(meta.isbn_print)}\\")
+        if meta.isbn_epub:
+            lines.append(rf"ISBN (ePub) : {e(meta.isbn_epub)}\\")
+        if meta.isbn_pdf:
+            lines.append(rf"ISBN (PDF) : {e(meta.isbn_pdf)}\\")
+        if meta.issn:
+            lines.append(rf"ISSN : {e(meta.issn)}\\")
+
+        # Dépôt légal
+        if meta.legal_deposit_date:
+            lines.append(rf"Dépôt légal : {e(meta.legal_deposit_date)}\\")
+        elif date_str:
+            lines.append(rf"Dépôt légal : {e(date_str)}\\")
+
+        lines += [
+            r"}}",
+            r"\end{flushleft}",
+            r"\clearpage",
+            "",
+        ]
+        return lines
 
     def _render_paragraph(self, paragraph: Paragraph) -> str:
         return self._render_inline_nodes(paragraph.content)

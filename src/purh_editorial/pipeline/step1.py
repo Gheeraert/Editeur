@@ -27,6 +27,7 @@ from purh_editorial.services.structure_ai_arbitrator import (
     settings_for_ai_aggressiveness,
 )
 from purh_editorial.services.ai_editorial_service import AIEditorialService
+from purh_editorial.model.document import Metadata
 from purh_editorial.utils import make_id
 
 
@@ -62,6 +63,7 @@ class Step1Options:
     template_path: Path | None = None
     tei_output_path: Path | None = None
     pivot_json_output_path: Path | None = None
+    book_metadata: Metadata | None = None
 
     _ALLOWED_DECISION_MODES = {
         "deterministic",
@@ -265,6 +267,10 @@ class Step1Pipeline:
             finished_at=utc_now_iso(),
             summary={"blocks": len(document.blocks), "notes": len(document.notes)},
         ))
+
+        # ── 1b. Injection des métadonnées saisies par l'utilisateur ──────────
+        if options.book_metadata is not None:
+            _merge_metadata(document.metadata, options.book_metadata)
 
         # ── 2. Orthotypographie (déterministe) ────────────────────────────────
         t0 = utc_now_iso()
@@ -621,3 +627,21 @@ def _make_structure_provider_from_options(
         base_url=options.ai_base_url or settings.ai.base_url,
         timeout=settings.ai.timeout_seconds,
     )
+
+
+def _merge_metadata(target: "Metadata", source: "Metadata") -> None:
+    """Écrase les champs non-nuls de *source* dans *target* (fusionnement non-destructif)."""
+    _SCALAR_FIELDS = (
+        "title", "subtitle", "language", "series_title", "collection",
+        "volume_number", "publication_type", "source_label", "publisher",
+        "pub_place", "isbn_print", "isbn_epub", "isbn_pdf", "issn",
+        "publication_date", "edition_note", "legal_deposit_date",
+    )
+    for field_name in _SCALAR_FIELDS:
+        val = getattr(source, field_name, None)
+        if val:
+            setattr(target, field_name, val)
+    if source.persons:
+        target.persons = list(source.persons)
+    if source.authors:
+        target.authors = list(source.authors)

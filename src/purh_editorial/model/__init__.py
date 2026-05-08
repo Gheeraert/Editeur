@@ -10,6 +10,7 @@ from purh_editorial.model.document import (
     Metadata,
     Note,
     Paragraph,
+    PersonMetadata,
     QuoteBlock,
 )
 from purh_editorial.model.pipeline import PipelineResult
@@ -37,6 +38,7 @@ __all__ = [
     "LineatedBlock",
     "Metadata",
     "ModuleRun",
+    "PersonMetadata",
     "Note",
     "Paragraph",
     "PipelineResult",

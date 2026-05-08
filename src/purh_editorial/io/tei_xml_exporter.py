@@ -171,17 +171,96 @@ class TeiXmlExporter:
         }
 
     def _build_header(self, root: ET.Element, document: Document) -> None:
+        meta = document.metadata
         tei_header = ET.SubElement(root, self._q("teiHeader"))
         file_desc = ET.SubElement(tei_header, self._q("fileDesc"))
 
+        # ── titleStmt ────────────────────────────────────────────────────────
         title_stmt = ET.SubElement(file_desc, self._q("titleStmt"))
-        title_el = ET.SubElement(title_stmt, self._q("title"))
-        title_el.text = document.metadata.title or "Untitled"
+        title_main = ET.SubElement(title_stmt, self._q("title"), {"type": "main"})
+        title_main.text = meta.title or "Sans titre"
+        if meta.subtitle:
+            title_sub = ET.SubElement(title_stmt, self._q("title"), {"type": "sub"})
+            title_sub.text = meta.subtitle
 
-        publication_stmt = ET.SubElement(file_desc, self._q("publicationStmt"))
-        p_pub = ET.SubElement(publication_stmt, self._q("p"))
-        p_pub.text = "Publication metadata not set."
+        # Contributeurs structurés (persons)
+        for person in (meta.persons or []):
+            tag = "author" if person.role in ("pbd", "aut") else "editor"
+            person_el = ET.SubElement(title_stmt, self._q(tag), {"role": person.role})
+            pers_name = ET.SubElement(person_el, self._q("persName"))
+            if person.forename:
+                fn = ET.SubElement(pers_name, self._q("forename"))
+                fn.text = person.forename
+            if person.surname:
+                sn = ET.SubElement(pers_name, self._q("surname"))
+                sn.text = person.surname
+            if person.affiliation:
+                aff = ET.SubElement(person_el, self._q("affiliation"))
+                org = ET.SubElement(aff, self._q("orgName"))
+                org.text = person.affiliation
 
+        # Fallback sur authors: list[str] si pas de persons
+        if not meta.persons:
+            for author_name in (meta.authors or []):
+                author_el = ET.SubElement(title_stmt, self._q("author"), {"role": "pbd"})
+                pers_name = ET.SubElement(author_el, self._q("persName"))
+                pers_name.text = author_name
+
+        # ── seriesStmt ───────────────────────────────────────────────────────
+        if meta.series_title or meta.collection:
+            series_stmt = ET.SubElement(file_desc, self._q("seriesStmt"))
+            if meta.series_title:
+                s_title = ET.SubElement(series_stmt, self._q("title"))
+                s_title.text = meta.series_title
+            if meta.collection:
+                s_coll = ET.SubElement(series_stmt, self._q("biblScope"), {"unit": "collection"})
+                s_coll.text = meta.collection
+            if meta.volume_number:
+                s_vol = ET.SubElement(series_stmt, self._q("biblScope"), {"unit": "volume"})
+                s_vol.text = meta.volume_number
+
+        # ── editionStmt ──────────────────────────────────────────────────────
+        edition_stmt = ET.SubElement(file_desc, self._q("editionStmt"))
+        edition_el = ET.SubElement(edition_stmt, self._q("edition"))
+        date_el = ET.SubElement(edition_el, self._q("date"))
+        if meta.publication_date:
+            date_el.set("when", meta.publication_date)
+        if meta.edition_note:
+            date_el.text = meta.edition_note
+        resp_stmt = ET.SubElement(edition_stmt, self._q("respStmt"))
+        ET.SubElement(resp_stmt, self._q("resp"))
+        ET.SubElement(resp_stmt, self._q("name"))
+        ET.SubElement(edition_stmt, self._q("sponsor"))
+
+        # ── publicationStmt ──────────────────────────────────────────────────
+        pub_stmt = ET.SubElement(file_desc, self._q("publicationStmt"))
+
+        ab_expr = ET.SubElement(pub_stmt, self._q("ab"), {"type": "expression"})
+        bibl_expr = ET.SubElement(ab_expr, self._q("bibl"))
+        pub_el = ET.SubElement(bibl_expr, self._q("publisher"))
+        pub_el.text = meta.publisher or "PURH"
+        ET.SubElement(ET.SubElement(bibl_expr, self._q("address")), self._q("addrLine"))
+        pub_place = ET.SubElement(bibl_expr, self._q("pubPlace"))
+        pub_place.text = meta.pub_place or "Mont-Saint-Aignan"
+        avail = ET.SubElement(bibl_expr, self._q("availability"))
+        ET.SubElement(avail, self._q("licence"), {"target": "-"})
+        ET.SubElement(avail, self._q("p"))
+
+        ab_book = ET.SubElement(pub_stmt, self._q("ab"), {"type": "book"})
+        bibl_book = ET.SubElement(ab_book, self._q("bibl"))
+        isbn_el = ET.SubElement(bibl_book, self._q("idno"), {"type": "ISBN-13"})
+        isbn_el.text = meta.isbn_print or ""
+        issn_el = ET.SubElement(bibl_book, self._q("idno"), {"type": "ISSN"})
+        issn_el.text = meta.issn or ""
+        pub_date = ET.SubElement(bibl_book, self._q("date"), {"type": "publishing"})
+        if meta.publication_date:
+            pub_date.set("when", meta.publication_date)
+        legal_dep = ET.SubElement(bibl_book, self._q("date"), {"type": "legal-deposit"})
+        if meta.legal_deposit_date:
+            legal_dep.set("when", meta.legal_deposit_date)
+        ET.SubElement(bibl_book, self._q("date"), {"type": "imprint"})
+
+        # ── sourceDesc ───────────────────────────────────────────────────────
         source_desc = ET.SubElement(file_desc, self._q("sourceDesc"))
         p_src = ET.SubElement(source_desc, self._q("p"))
         p_src.text = document.source_path or "Unknown source"

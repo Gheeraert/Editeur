@@ -124,7 +124,25 @@ class Division:
 @dataclass(slots=True)
 class BookMetadata:
     title: str
+    subtitle: str = ""
+    # Auteurs (noms complets)
     contributors: list[str] = field(default_factory=list)
+    # Éditeurs scientifiques (noms complets)
+    scientific_editors: list[str] = field(default_factory=list)
+    # Traducteurs (noms complets)
+    translators: list[str] = field(default_factory=list)
+    series_title: str = ""
+    collection: str = ""
+    volume_number: str = ""
+    publisher: str = ""
+    pub_place: str = ""
+    isbn_print: str = ""
+    isbn_epub: str = ""
+    isbn_pdf: str = ""
+    issn: str = ""
+    publication_date: str = ""
+    edition_note: str = ""
+    legal_deposit_date: str = ""
 
 
 @dataclass(slots=True)

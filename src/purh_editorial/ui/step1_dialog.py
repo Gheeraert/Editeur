@@ -15,7 +15,9 @@ from tkinter import filedialog, messagebox, ttk
 from purh_editorial.config import AppSettings
 from purh_editorial.latex.latex_exporter import export_tei_to_latex
 from purh_editorial.model import Diagnostic, ModuleRun
+from purh_editorial.model.document import Metadata, PersonMetadata
 from purh_editorial.pipeline.step1 import Step1Options, Step1Pipeline, Step1Result
+from purh_editorial.ui.metadata_dialog import open_metadata_dialog
 
 
 DISCLAIMER_TEXT = (
@@ -876,6 +878,10 @@ class Step1Dialog(tk.Tk):
         self._ai_model = tk.StringVar(value=settings.ai.model)
         self._ai_base_url = tk.StringVar(value=settings.ai.base_url)
 
+        # Métadonnées du livre (facultatif)
+        self._book_metadata: Metadata | None = None
+        self._metadata_summary = tk.StringVar(value="(aucune métadonnée saisie)")
+
         self._status = tk.StringVar(value="Sélectionnez un DOCX source puis lancez l'analyse.")
 
         self._input_path.trace_add("write", self._on_input_changed)
@@ -903,18 +909,33 @@ class Step1Dialog(tk.Tk):
         self._bind_mousewheel(self._main_canvas)
 
         root.columnconfigure(0, weight=1)
-        root.rowconfigure(8, weight=1)
+        root.rowconfigure(9, weight=1)
 
-        #  Section 1 : Fichier source 
+        #  Section 0 : Métadonnées du livre (facultatif)
+        meta_frame = ttk.LabelFrame(root, text="0. Métadonnées du livre (facultatif)", padding=p)
+        meta_frame.grid(row=0, column=0, sticky="ew", pady=(0, p))
+        meta_frame.columnconfigure(1, weight=1)
+        ttk.Button(meta_frame, text="Saisir les métadonnées...", command=self._on_open_metadata).grid(
+            row=0, column=0, sticky="w"
+        )
+        ttk.Label(
+            meta_frame,
+            textvariable=self._metadata_summary,
+            foreground="#555555",
+            wraplength=860,
+            justify="left",
+        ).grid(row=0, column=1, sticky="ew", padx=(p, 0))
+
+        #  Section 1 : Fichier source
         src_frame = ttk.LabelFrame(root, text="1. Fichier source", padding=p)
-        src_frame.grid(row=0, column=0, sticky="ew", pady=(0, p))
+        src_frame.grid(row=1, column=0, sticky="ew", pady=(0, p))
         src_frame.columnconfigure(0, weight=1)
         ttk.Entry(src_frame, textvariable=self._input_path).grid(row=0, column=0, sticky="ew", padx=(0, p))
         ttk.Button(src_frame, text="Choisir...", command=self._browse_input).grid(row=0, column=1)
 
-        #  Section 2 : Export 
+        #  Section 2 : Export
         out_frame = ttk.LabelFrame(root, text="2. Export des fichiers", padding=p)
-        out_frame.grid(row=1, column=0, sticky="ew", pady=(0, p))
+        out_frame.grid(row=2, column=0, sticky="ew", pady=(0, p))
         out_frame.columnconfigure(1, weight=1)
         ttk.Label(out_frame, text="Dossier d'export").grid(row=0, column=0, sticky="w", padx=(0, p))
         ttk.Entry(out_frame, textvariable=self._output_dir).grid(row=0, column=1, sticky="ew", padx=(0, p))
@@ -929,9 +950,9 @@ class Step1Dialog(tk.Tk):
         ttk.Checkbutton(out_frame, text="Exporter le JSON pivot", variable=self._export_json).grid(row=3, column=2, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=3, sticky="w", pady=(6, 0))
 
-        #  Section 3 : Politique 
+        #  Section 3 : Politique
         opt_frame = ttk.LabelFrame(root, text="3. Politique de traitement", padding=p)
-        opt_frame.grid(row=2, column=0, sticky="ew", pady=(0, p))
+        opt_frame.grid(row=3, column=0, sticky="ew", pady=(0, p))
         opt_frame.columnconfigure(1, weight=1)
         ttk.Label(opt_frame, text="Mode de décision:").grid(row=0, column=0, sticky="w")
         ttk.Combobox(
@@ -948,9 +969,9 @@ class Step1Dialog(tk.Tk):
             state="readonly",
         ).grid(row=1, column=1, sticky="ew", padx=(8, 0), pady=(6, 0))
 
-        #  Section 4 : Seuils 
+        #  Section 4 : Seuils
         thresh_frame = ttk.LabelFrame(root, text="4. Seuils avancés", padding=p)
-        thresh_frame.grid(row=3, column=0, sticky="ew", pady=(0, p))
+        thresh_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
         thresh_frame.columnconfigure(1, weight=1)
         thresh_frame.columnconfigure(3, weight=1)
         for (r, lbl, var) in (
@@ -975,7 +996,7 @@ class Step1Dialog(tk.Tk):
             text="5. IA structurelle  classification des zones grises (Groq recommandé)",
             padding=p,
         )
-        struct_frame.grid(row=4, column=0, sticky="ew", pady=(0, p))
+        struct_frame.grid(row=5, column=0, sticky="ew", pady=(0, p))
         struct_frame.columnconfigure(1, weight=1)
 
         ttk.Checkbutton(
@@ -1029,7 +1050,7 @@ class Step1Dialog(tk.Tk):
             text="6. IA éditoriale  corrections orthotypo (Anthropic/Claude recommandé)",
             padding=p,
         )
-        edi_frame.grid(row=5, column=0, sticky="ew", pady=(0, p))
+        edi_frame.grid(row=6, column=0, sticky="ew", pady=(0, p))
         edi_frame.columnconfigure(1, weight=1)
 
         ttk.Checkbutton(
@@ -1078,9 +1099,9 @@ class Step1Dialog(tk.Tk):
             justify="left",
         ).grid(row=7, column=0, columnspan=2, sticky="w", pady=(4, 0))
 
-        #  Section 7 : Actions 
+        #  Section 7 : Actions
         actions_frame = ttk.Frame(root)
-        actions_frame.grid(row=6, column=0, sticky="ew", pady=(0, p))
+        actions_frame.grid(row=7, column=0, sticky="ew", pady=(0, p))
         actions_frame.columnconfigure(0, weight=1)
         self._progress = ttk.Progressbar(actions_frame, mode="indeterminate")
         self._progress.grid(row=0, column=0, columnspan=4, sticky="ew", pady=(0, 6))
@@ -1101,9 +1122,9 @@ class Step1Dialog(tk.Tk):
             row=2, column=0, columnspan=4, sticky="ew", pady=(6, 0)
         )
 
-        #  Section 8 : Résultats 
+        #  Section 8 : Résultats
         result_frame = ttk.LabelFrame(root, text="7. Résultats", padding=p)
-        result_frame.grid(row=8, column=0, sticky="nsew")
+        result_frame.grid(row=9, column=0, sticky="nsew")
         result_frame.columnconfigure(0, weight=1)
         result_frame.rowconfigure(1, weight=1)
         ttk.Label(
@@ -1146,6 +1167,32 @@ class Step1Dialog(tk.Tk):
             self._main_canvas.yview_scroll(-1, "units")
         elif num == 5:
             self._main_canvas.yview_scroll(1, "units")
+
+    def _on_open_metadata(self) -> None:
+        result = open_metadata_dialog(self, initial=self._book_metadata)
+        if result is not None:
+            self._book_metadata = result
+            self._update_metadata_summary()
+
+    def _update_metadata_summary(self) -> None:
+        meta = self._book_metadata
+        if meta is None:
+            self._metadata_summary.set("(aucune métadonnée saisie)")
+            return
+        parts: list[str] = []
+        if meta.title:
+            parts.append(meta.title)
+        if meta.subtitle:
+            parts.append(f"— {meta.subtitle}")
+        if meta.persons:
+            names = ", ".join(p.full_name() for p in meta.persons if p.full_name())
+            if names:
+                parts.append(f"· {names}")
+        elif meta.authors:
+            parts.append(f"· {', '.join(meta.authors)}")
+        if meta.isbn_print:
+            parts.append(f"ISBN {meta.isbn_print}")
+        self._metadata_summary.set("  ".join(parts) if parts else "(métadonnées saisies)")
 
     def _browse_input(self) -> None:
         initial = (
@@ -1221,6 +1268,7 @@ class Step1Dialog(tk.Tk):
             tei_output_path=tei_path if self._export_tei.get() else None,
             pivot_json_output_path=json_path if self._export_json.get() else None,
         )
+        options.book_metadata = self._book_metadata
 
         self._set_running(True)
         threading.Thread(

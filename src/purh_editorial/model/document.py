@@ -5,14 +5,42 @@ from typing import Any
 
 
 @dataclass(slots=True)
+class PersonMetadata:
+    """Un contributeur structuré (auteur, éditeur sc., traducteur)."""
+    forename: str = ""
+    surname: str = ""
+    affiliation: str = ""
+    # Rôle TEI Métopes : "pbd" (auteur principal), "edt" (éditeur sc.), "trl" (traducteur)
+    role: str = "pbd"
+
+    def full_name(self) -> str:
+        parts = [p for p in (self.forename, self.surname) if p]
+        return " ".join(parts)
+
+
+@dataclass(slots=True)
 class Metadata:
     title: str | None = None
     subtitle: str | None = None
+    # Contributeurs structurés (auteurs, éditeurs sc., traducteurs)
+    persons: list[PersonMetadata] = field(default_factory=list)
+    # Liste brute héritée des propriétés DOCX (lecture seule via l'importeur)
     authors: list[str] = field(default_factory=list)
     language: str | None = None
+    series_title: str | None = None
     collection: str | None = None
+    volume_number: str | None = None
     publication_type: str | None = None
     source_label: str | None = None
+    publisher: str | None = None
+    pub_place: str | None = None
+    isbn_print: str | None = None
+    isbn_epub: str | None = None
+    isbn_pdf: str | None = None
+    issn: str | None = None
+    publication_date: str | None = None
+    edition_note: str | None = None
+    legal_deposit_date: str | None = None
 
 
 @dataclass(slots=True)

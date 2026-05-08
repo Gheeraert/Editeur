@@ -464,6 +464,8 @@ class DocxExporter:
         self._clear_body(doc)
         _apply_purh_fonts(doc)
 
+        self._prepend_metadata_header(doc, document)
+
         # Carte note_id → entier (IDs numériques Word des footnotes)
         note_id_map: dict[str, int] = {
             note.note_id: i for i, note in enumerate(document.notes, start=1)
@@ -496,3 +498,80 @@ class DocxExporter:
         to_remove = [c for c in body if c.tag != qn("w:sectPr")]
         for el in to_remove:
             body.remove(el)
+
+    @staticmethod
+    def _prepend_metadata_header(doc: DocxDoc, document: Document) -> None:
+        """Insère un bloc de métadonnées en tête du document, sans mise en page."""
+        meta = document.metadata
+        # N'insérer le bloc que si l'utilisateur a explicitement renseigné
+        # des métadonnées riches (au-delà du titre auto-extrait du DOCX).
+        has_rich_metadata = any([
+            meta.persons, meta.subtitle, meta.series_title,
+            meta.collection, meta.isbn_print, meta.isbn_epub, meta.isbn_pdf,
+            meta.issn, meta.publication_date, meta.publisher,
+        ])
+        if not has_rich_metadata:
+            return
+
+        def _add_meta_para(text: str, bold: bool = False, italic: bool = False) -> None:
+            para = doc.add_paragraph(style="Normal")
+            run = para.add_run(text)
+            run.bold = bold
+            run.italic = italic
+            para.paragraph_format.first_line_indent = Cm(0)
+            para.paragraph_format.space_after = Pt(0)
+
+        _add_meta_para("─" * 50)
+
+        if meta.title:
+            _add_meta_para(meta.title, bold=True)
+        if meta.subtitle:
+            _add_meta_para(meta.subtitle, italic=True)
+
+        authors = [p for p in meta.persons if p.role in ("pbd", "aut")]
+        editors = [p for p in meta.persons if p.role == "edt"]
+        translators = [p for p in meta.persons if p.role == "trl"]
+
+        if authors:
+            names = ", ".join(p.full_name() for p in authors if p.full_name())
+            _add_meta_para(f"Auteur(s) : {names}")
+        elif meta.authors:
+            _add_meta_para(f"Auteur(s) : {', '.join(meta.authors)}")
+        if editors:
+            names = ", ".join(p.full_name() for p in editors if p.full_name())
+            _add_meta_para(f"Dir. scientifique : {names}")
+        if translators:
+            names = ", ".join(p.full_name() for p in translators if p.full_name())
+            _add_meta_para(f"Traducteur(s) : {names}")
+
+        if meta.series_title:
+            coll_str = f" — {meta.collection}" if meta.collection else ""
+            vol_str = f", vol. {meta.volume_number}" if meta.volume_number else ""
+            _add_meta_para(f"Série : {meta.series_title}{coll_str}{vol_str}")
+        elif meta.collection:
+            _add_meta_para(f"Collection : {meta.collection}")
+
+        pub_parts: list[str] = []
+        if meta.publisher:
+            pub_parts.append(meta.publisher)
+        if meta.pub_place:
+            pub_parts.append(meta.pub_place)
+        if meta.publication_date:
+            pub_parts.append(meta.publication_date)
+        if pub_parts:
+            _add_meta_para(", ".join(pub_parts))
+
+        if meta.isbn_print:
+            _add_meta_para(f"ISBN (imprimé) : {meta.isbn_print}")
+        if meta.isbn_epub:
+            _add_meta_para(f"ISBN (ePub) : {meta.isbn_epub}")
+        if meta.isbn_pdf:
+            _add_meta_para(f"ISBN (PDF) : {meta.isbn_pdf}")
+        if meta.issn:
+            _add_meta_para(f"ISSN : {meta.issn}")
+
+        if meta.edition_note:
+            _add_meta_para(meta.edition_note, italic=True)
+
+        _add_meta_para("─" * 50)
+        doc.add_paragraph("", style="Normal")
