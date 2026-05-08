@@ -39,10 +39,16 @@ _VALID_CENTURIES: frozenset[str] = frozenset({
 _ROMAN_EXCLUSIONS: frozenset[str] = frozenset({"vie"})
 
 _CENTURY_TOKEN_RE = re.compile(r"\b([IVXLCDMivxlcdm]{1,8})e\b", re.UNICODE | re.IGNORECASE)
+_PRIMO_TOKEN_RE   = re.compile(r"\b(\d+)(o)\b", re.UNICODE)
 _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
 _QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
 _TECHNICAL_TEXT_RE = re.compile(r"<[^>]+>|[\w:-]+\s*=\s*\"[^\"]*\"")
-_CENTURY_CONTEXT_RE = re.compile(r"^\s*(si[eè]cles?|s\.)\b", re.IGNORECASE | re.UNICODE)
+# Contextes dans lesquels un numéral romain + e doit être mis en petites capitales.
+# Étendu aux termes politiques/historiques courants au-delà des siècles.
+_ORDINAL_CONTEXT_RE = re.compile(
+    r"^\s*(si[eè]cles?|s\.|[Rr]épublique|[Ee]mpire|[Rr]eich)",
+    re.IGNORECASE | re.UNICODE,
+)
 _OE_LIGATURE_FORMS: dict[str, str] = {
     "boeuf": "bœuf",
     "boeufs": "bœufs",
@@ -310,6 +316,16 @@ def _build_rules() -> list[TypoRule]:
         description="Double tiret → –",
     ))
 
+    # 12b. Tiret cadratin en début d'alinéa (listes/énumérations)
+    #      Seul le trait d'union simple est corrigé ; le demi-cadratin est laissé intact
+    #      car certains éditeurs (dont les PURH eux-mêmes) l'utilisent pour leurs listes.
+    rules.append(TypoRule(
+        rule_id="purh.tiret.liste",
+        pattern=re.compile(r"^- ", re.MULTILINE),
+        replacement=EMDASH + " ",
+        description="Tiret cadratin en début d'alinéa",
+    ))
+
     # 13. etc... ou etc… → etc.
     #     Après normalisation des points de suspension, on rencontre surtout "etc…"
     #     (éventuellement suivi d'un ou plusieurs points parasites).
@@ -320,10 +336,65 @@ def _build_rules() -> list[TypoRule]:
         description="etc… → etc.",
     ))
 
+    # 13b. Suppression des doublements d'abréviations (PURH p. 10, Lexique IN)
+    #      pp. → p., vv. → v., ll. → l., ff. → f.  (seulement avant un nombre)
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.doublons",
+        pattern=re.compile(r"\b(pp|vv|ll|ff)\.(?=[ \t  ]*\d)", re.UNICODE),
+        replacement=lambda m: m.group(1)[0] + ".",
+        description="Suppression du doublement pp.→p., vv.→v., ll.→l., ff.→f.",
+    ))
+    #      §§ → §  (seulement avant un nombre)
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.paragraphes",
+        pattern=re.compile(r"§{2,}(?=[ \t  ]*\d)"),
+        replacement="§",
+        description="Suppression du doublement §§ → §",
+    ))
+
+    # 13c. Espace fine insécable dans les abréviations latines (PURH p. 11)
+    #      Ordre : forme la plus longue d'abord (s. l. n. d. avant s. l. et s. d.)
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.slnd",
+        pattern=re.compile(r"\bs\.[ \t]+l\.[ \t]+n\.[ \t]+d\.", re.UNICODE),
+        replacement="s." + NNBSP + "l." + NNBSP + "n." + NNBSP + "d.",
+        description="Espace fine insécable dans s. l. n. d.",
+    ))
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.sl",
+        pattern=re.compile(r"\bs\.[ \t]+l\.", re.UNICODE),
+        replacement="s." + NNBSP + "l.",
+        description="Espace fine insécable dans s. l.",
+    ))
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.sd",
+        pattern=re.compile(r"\bs\.[ \t]+d\.", re.UNICODE),
+        replacement="s." + NNBSP + "d.",
+        description="Espace fine insécable dans s. d.",
+    ))
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.op_cit",
+        pattern=re.compile(r"\bop\.[ \t]+cit\.", re.UNICODE),
+        replacement="op." + NNBSP + "cit.",
+        description="Espace fine insécable dans op. cit.",
+    ))
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.loc_cit",
+        pattern=re.compile(r"\bloc\.[ \t]+cit\.", re.UNICODE),
+        replacement="loc." + NNBSP + "cit.",
+        description="Espace fine insécable dans loc. cit.",
+    ))
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.art_cit",
+        pattern=re.compile(r"\bart\.[ \t]+(cit[ée]?\.?)", re.UNICODE),
+        replacement="art." + NNBSP + r"\1",
+        description="Espace fine insécable dans art. cit. / art. cité",
+    ))
+
     # 14. Espace fine insécable après abréviations de pagination
     #     p. 3, pp. 3-5, vol. II, t. I, f. 12, n° 5, fig. 2, art. cit., chap. 4
     #     On cible uniquement quand ce qui suit est un chiffre ou numéral romain
-    _abbr = r"\b(pp?|vol|t|f|fol|fig|chap|cat|pl|ms|Ms|n°|N°|col)\."
+    _abbr = r"\b(pp?|vv?|ll?|vol|t|f|fol|fig|chap|cat|pl|ms|Ms|n°|N°|col)\."
     rules.append(TypoRule(
         rule_id="purh.pagination.espace",
         pattern=re.compile(_abbr + r"\s+(?=[\dIVXLCivxlc])"),
@@ -591,9 +662,9 @@ class OrthotypoService:
         )]
 
     @staticmethod
-    def _is_century_context(full_text: str, match_end: int) -> bool:
+    def _is_ordinal_context(full_text: str, match_end: int) -> bool:
         lookahead = full_text[match_end: match_end + 32]
-        return bool(_CENTURY_CONTEXT_RE.match(lookahead))
+        return bool(_ORDINAL_CONTEXT_RE.match(lookahead))
 
     def _style_centuries_in_inlines(self, inlines: list[InlineSpan]) -> tuple[list[InlineSpan], bool]:
         if not inlines:
@@ -601,21 +672,24 @@ class OrthotypoService:
 
         full_text = "".join(span.text for span in inlines)
         roman_positions: set[int] = set()
-        exponent_positions: set[int] = set()
+        exponent_chars: dict[int, str] = {}  # position → caractère mis en exposant
         for match in _CENTURY_TOKEN_RE.finditer(full_text):
             roman = match.group(1)
             if roman.lower() not in _VALID_CENTURIES:
                 continue
             if match.group(0).lower() in _ROMAN_EXCLUSIONS:
                 continue
-            if not self._is_century_context(full_text, match.end()):
+            if not self._is_ordinal_context(full_text, match.end()):
                 continue
             roman_start = match.start(1)
             roman_end = match.end(1)
             roman_positions.update(range(roman_start, roman_end))
-            exponent_positions.add(roman_end)
+            exponent_chars[roman_end] = "e"
 
-        if not roman_positions and not exponent_positions:
+        for match in _PRIMO_TOKEN_RE.finditer(full_text):
+            exponent_chars[match.start(2)] = "o"
+
+        if not roman_positions and not exponent_chars:
             return inlines, False
 
         changed = False
@@ -636,10 +710,11 @@ class OrthotypoService:
                         changed = True
                     new_span.text = lowered
                     new_span.style.small_caps = True
-                elif absolute_index in exponent_positions:
-                    if ch != "e" or not new_span.style.superscript:
+                elif absolute_index in exponent_chars:
+                    target = exponent_chars[absolute_index]
+                    if ch != target or not new_span.style.superscript:
                         changed = True
-                    new_span.text = "e"
+                    new_span.text = target
                     new_span.style.superscript = True
                 result.append(new_span)
                 absolute_index += 1

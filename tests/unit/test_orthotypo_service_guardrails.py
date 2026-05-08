@@ -119,6 +119,68 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("version 2.0"), "version 2.0")
         self.assertEqual(_apply_orthotypo("5e chapitre"), "5e chapitre")
 
+    # ── Priorité 1a : suppression des doublements d'abréviations ─────────────
+
+    def test_pp_devient_p_avant_nombre(self) -> None:
+        self.assertEqual(_apply_orthotypo("voir pp. 53-84"), f"voir p.{NNBSP}53-84")
+        self.assertEqual(_apply_orthotypo("pp. 12"), f"p.{NNBSP}12")
+
+    def test_vv_devient_v_avant_nombre(self) -> None:
+        self.assertEqual(_apply_orthotypo("vv. 122-128"), f"v.{NNBSP}122-128")
+
+    def test_ll_devient_l_avant_nombre(self) -> None:
+        self.assertEqual(_apply_orthotypo("ll. 5 et 12"), f"l.{NNBSP}5 et 12")
+
+    def test_paragraphes_doubles_deviennent_simples(self) -> None:
+        self.assertEqual(_apply_orthotypo("§§ 5-9"), "§ 5-9")
+        self.assertEqual(_apply_orthotypo("§§§ 3"), "§ 3")
+
+    def test_doublons_sans_nombre_inchanges(self) -> None:
+        # Sans nombre suivant : on ne touche pas
+        self.assertEqual(_apply_orthotypo("pp."), "pp.")
+        self.assertEqual(_apply_orthotypo("§§"), "§§")
+
+    # ── Priorité 1b : espace fine dans les abréviations latines ──────────────
+
+    def test_op_cit_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("op. cit."), f"op.{NNBSP}cit.")
+
+    def test_loc_cit_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("loc. cit."), f"loc.{NNBSP}cit.")
+
+    def test_art_cit_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("art. cit."), f"art.{NNBSP}cit.")
+        self.assertEqual(_apply_orthotypo("art. cité"), f"art.{NNBSP}cité")
+
+    def test_sl_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("[s. l.]"), f"[s.{NNBSP}l.]")
+
+    def test_sd_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("[s. d.]"), f"[s.{NNBSP}d.]")
+
+    def test_slnd_espace_fine(self) -> None:
+        self.assertEqual(_apply_orthotypo("[s. l. n. d.]"), f"[s.{NNBSP}l.{NNBSP}n.{NNBSP}d.]")
+
+    def test_slnd_prioritaire_sur_sl_et_sd(self) -> None:
+        # La forme longue doit être traitée en premier
+        result = _apply_orthotypo("s. l. n. d.")
+        self.assertEqual(result, f"s.{NNBSP}l.{NNBSP}n.{NNBSP}d.")
+        self.assertNotIn("s. l.", result)  # pas de traitement partiel laissé
+
+    # ── Priorité 2a : tiret cadratin en début d'alinéa ───────────────────────
+
+    def test_trait_union_debut_bloc_devient_cadratin(self) -> None:
+        self.assertEqual(_apply_orthotypo("- Premier élément"), "— Premier élément")
+
+    def test_demi_cadratin_debut_bloc_non_converti(self) -> None:
+        # PURH eux-mêmes utilisent – pour leurs listes : on ne touche pas
+        self.assertEqual(_apply_orthotypo("– Premier élément"), "– Premier élément")
+
+    def test_tiret_milieu_phrase_non_affecte_par_liste(self) -> None:
+        # Le tiret en milieu de phrase doit rester géré par tiret.incise, pas liste
+        result = _apply_orthotypo("Voici — une incise.")
+        self.assertFalse(result.startswith("—"))
+
 
 if __name__ == "__main__":
     unittest.main()

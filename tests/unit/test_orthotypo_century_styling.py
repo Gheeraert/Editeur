@@ -158,6 +158,76 @@ class OrthotypoCenturyStylingTests(unittest.TestCase):
         self.assertEqual(block.text, "La vie est belle.")
         self.assertEqual([s.text for s in block.inlines], ["La vie est belle."])
 
+    # ── Priorité 2b : ordinaux romains non-siècle ─────────────────────────────
+
+    def test_iie_republique_est_style(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="la IIe République",
+            inlines=[InlineSpan(text="la IIe République")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s for s in block.inlines if s.style.small_caps]
+        superscripts = [s for s in block.inlines if s.style.superscript]
+        self.assertEqual([s.text for s in small_caps], ["ii"])
+        self.assertEqual([s.text for s in superscripts], ["e"])
+
+    def test_iiie_reich_est_style(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="le IIIe Reich",
+            inlines=[InlineSpan(text="le IIIe Reich")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s for s in block.inlines if s.style.small_caps]
+        superscripts = [s for s in block.inlines if s.style.superscript]
+        self.assertEqual([s.text for s in small_caps], ["iii"])
+        self.assertEqual([s.text for s in superscripts], ["e"])
+
+    def test_ie_empire_est_style(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="le Ie Empire",
+            inlines=[InlineSpan(text="le Ie Empire")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s for s in block.inlines if s.style.small_caps]
+        superscripts = [s for s in block.inlines if s.style.superscript]
+        self.assertEqual([s.text for s in small_caps], ["i"])
+        self.assertEqual([s.text for s in superscripts], ["e"])
+
+    def test_ordinal_romain_sans_contexte_non_style(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="version XIXe",
+            inlines=[InlineSpan(text="version XIXe")],
+        )
+        block, transformations = self._apply(paragraph)
+        self.assertFalse(any(s.style.small_caps or s.style.superscript for s in block.inlines))
+
+    # ── Priorité 2c : primo / secundo / tertio (exposant o) ──────────────────
+
+    def test_primo_secundo_tertio_o_en_exposant(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="1o voici, 2o ensuite, 3o enfin.",
+            inlines=[InlineSpan(text="1o voici, 2o ensuite, 3o enfin.")],
+        )
+        block, _ = self._apply(paragraph)
+        superscripts = [s for s in block.inlines if s.style.superscript]
+        self.assertEqual([s.text for s in superscripts], ["o", "o", "o"])
+
+    def test_primo_chiffre_reste_normal(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="1o voici.",
+            inlines=[InlineSpan(text="1o voici.")],
+        )
+        block, _ = self._apply(paragraph)
+        # le chiffre "1" ne doit pas être en petites capitales
+        regular = [s for s in block.inlines if not s.style.small_caps and not s.style.superscript]
+        self.assertTrue(any("1" in s.text for s in regular))
+
 
 if __name__ == "__main__":
     unittest.main()
