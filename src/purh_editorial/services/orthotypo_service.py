@@ -35,6 +35,8 @@ _VALID_CENTURIES: frozenset[str] = frozenset({
     "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix",
     "xx", "xxi", "xxii", "xxiii",
 })
+# Mots courants exclus de la correction des siècles (faux positifs)
+_ROMAN_EXCLUSIONS: frozenset[str] = frozenset({"vie"})
 
 _CENTURY_TOKEN_RE = re.compile(r"\b([IVXLCDMivxlcdm]{1,8})e\b", re.UNICODE | re.IGNORECASE)
 _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
@@ -268,7 +270,9 @@ def _build_rules() -> list[TypoRule]:
     def _fix_siecle(m: re.Match) -> str:
         roman = m.group(1)
         if roman.lower() not in _VALID_CENTURIES:
-            return m.group(0)   # pas un siècle connu, pas de remplacement
+            return m.group(0)
+        if m.group(0).lower() in _ROMAN_EXCLUSIONS:
+            return m.group(0)
         return roman.upper() + "e"
 
     rules.append(TypoRule(
@@ -601,6 +605,8 @@ class OrthotypoService:
         for match in _CENTURY_TOKEN_RE.finditer(full_text):
             roman = match.group(1)
             if roman.lower() not in _VALID_CENTURIES:
+                continue
+            if match.group(0).lower() in _ROMAN_EXCLUSIONS:
                 continue
             if not self._is_century_context(full_text, match.end()):
                 continue

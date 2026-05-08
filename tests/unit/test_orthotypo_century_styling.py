@@ -148,6 +148,16 @@ class OrthotypoCenturyStylingTests(unittest.TestCase):
         self.assertEqual([s.text for s in block.inlines], ["Texte sans siecle."])
         self.assertEqual(transformations, [])
 
+    def test_vie_is_not_converted_to_roman_numeral(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="La vie est belle.",
+            inlines=[InlineSpan(text="La vie est belle.")],
+        )
+        block, transformations = self._apply(paragraph)
+        self.assertEqual(block.text, "La vie est belle.")
+        self.assertEqual([s.text for s in block.inlines], ["La vie est belle."])
+
 
 if __name__ == "__main__":
     unittest.main()
