@@ -1,0 +1,10 @@
+\xpg@aux {}{french}
+\contentsline {chapter}{\numberline {1}La recherche en dix étapes}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}La définition du sujet et la construction du corpus}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}La recherche documentaire}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Le choix des éditions de référence}{2}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Les outils de recherche et Zotero}{3}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Les ressources : en ligne et en bibliothèque}{4}{subsection.1.2.3}%
+\contentsline {subsubsection}{Usuels et outils de recherche}{5}{subsection.1.2.3}%
+\contentsline {subsubsection}{Ouvrages critiques}{6}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}L'hypothèse de recherche}{8}{section.1.3}%
