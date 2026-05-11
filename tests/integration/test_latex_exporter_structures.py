@@ -24,7 +24,7 @@ class LatexExporterStructuresTests(unittest.TestCase):
         tex = output_tex.read_text(encoding="utf-8")
 
         self.assertTrue(r"\chapter{" in tex or r"\chapter*{" in tex)
-        self.assertIn(r"\begin{quote}", tex)
+        self.assertIn(r"\begin{displayquote}", tex)
         self.assertIn(r"\begin{verse}", tex)
         self.assertIn(r"\footnote{", tex)
         self.assertIn(r"\textit{", tex)

@@ -25,35 +25,148 @@ from purh_editorial.latex.semantic_model import (
 
 class LatexRenderer:
     def render_book(self, book: Book) -> str:
+        title_escaped = self._escape(book.metadata.title)
+        contributors = book.metadata.contributors
+        author_escaped = self._escape(" ; ".join(contributors)) if contributors else ""
+
         lines = [
-            r"\documentclass[11pt,oneside,openany]{memoir}",
+            r"\documentclass[12pt,twoside,final,openright]{book}",
             r"\usepackage{fontspec}",
+            r"\usepackage{microtype}",
+            r"\usepackage{ulem}",
+            r"\normalem",
+            r"",
+            r"\usepackage{csquotes}",
+            r'\MakeOuterQuote{"}',
+            r"\makeatletter",
+            r"\renewenvironment*{displayquote}",
+            r"  {\begingroup\setlength{\leftmargini}{1cm}\csq@getcargs{\csq@bdquote{}{}}}",
+            r"  {\csq@edquote\endgroup}",
+            r"\makeatother",
+            r"\renewcommand{\mkbegdispquote}",
+            r"  {\fontsize{12pt}{11pt}\selectfont\textooquote}",
+            r"",
             r"\usepackage{polyglossia}",
             r"\setmainlanguage{french}",
-            r"\setmainfont{TeX Gyre Pagella}",
-            r"\setsansfont{TeX Gyre Heros}",
-            r"\setmonofont{Latin Modern Mono}",
-            r"\usepackage[final]{microtype}",
-            r"\usepackage{csquotes}",
+            r"",
+            r"\usepackage{enumitem}",
+            r"\setlist[itemize]{topsep=0pt, itemsep=2pt, parsep=0pt}",
+            r"",
             r"\usepackage{hyperref}",
+            r"\hypersetup{hidelinks}",
+            r"",
+            r"\setmainfont{Chaparral Pro}",
+            r"",
+            r"\newfontfamily\JosefinSans{Josefin Sans}[",
+            r"  UprightFont = * Bold,",
+            r"  ItalicFont  = * Italic",
+            r"]",
+            r"",
+            r"\usepackage{anyfontsize}",
+            r"",
+            r"\usepackage{titlesec}",
+            r"\titleformat{\chapter}{\JosefinSans\LARGE\bfseries}{\thechapter}{1em}{}",
+            r"\titleformat{\section}{\JosefinSans\Large\bfseries}{\thesection}{1em}{}",
+            r"\titlespacing*{\section}{0pt}{10pt}{5pt}",
+            r"\titleformat{\subsection}{\JosefinSans\large\bfseries}{\thesubsection}{1em}{}",
+            r"\titlespacing*{\subsection}{0pt}{10pt}{5pt}",
+            r"\titleformat{\subsubsection}{\JosefinSans\normalsize\bfseries}{\thesubsection}{1em}{}",
+            r"\titlespacing*{\subsubsection}{0pt}{10pt}{3pt}",
+            r"",
+            r"\usepackage[paperwidth=152mm, paperheight=229mm, top=25mm, bottom=25mm, inner=20mm, outer=20mm]{geometry}",
+            r"",
+            r"\usepackage{fancyhdr}",
+            r"\pagestyle{fancy}",
+            r"\fancyhf{}",
+            rf"\fancyhead[LE]{{\textit{{{title_escaped}}}}}",
+            r"\fancyhead[RO]{\textit{\leftmark}}",
+            r"\fancyfoot[LE,RO]{\thepage}",
+            r"\renewcommand{\headrulewidth}{0.4pt}",
+            r"\renewcommand{\footrulewidth}{0pt}",
+            r"\fancypagestyle{plain}{",
+            r"    \fancyhf{}",
+            r"    \fancyfoot[LE,RO]{\thepage}",
+            r"    \renewcommand{\headrulewidth}{0pt}",
+            r"}",
+            r"",
+            r"\usepackage{emptypage}",
+            r"\usepackage{afterpage}",
+            r"",
+            r"\usepackage[",
+            r"  backend=biber,",
+            r"  style=ext-verbose-inote,",
+            r"  citereset=chapter,",
+            r"  autopunct=false",
+            r"]{biblatex}",
+            r"% \addbibresource{bibliography.bib}",
+            r"",
+            r"\usepackage{perpage}",
+            r"\MakePerPage{footnote}",
+            r"",
             r"\usepackage{verse}",
             r"\usepackage{longtable}",
             r"\usepackage{array}",
-            r"\setstocksize{230mm}{155mm}",
-            r"\settrimmedsize{\stockheight}{\stockwidth}{*}",
-            r"\setlrmarginsandblock{23mm}{22mm}{*}",
-            r"\setulmarginsandblock{24mm}{22mm}{*}",
-            r"\checkandfixthelayout",
-            r"\setlength{\parindent}{1.25em}",
-            r"\setlength{\parskip}{0pt}",
-            r"\renewcommand{\footnotesize}{\small}",
             r"\newcommand{\purhTableSize}{\small}",
-            r"\begin{document}",
-            rf"\title{{{self._escape(book.metadata.title)}}}",
+            r"",
+            r"\renewcommand{\baselinestretch}{1}",
+            r"\setlength{\parindent}{5mm}",
+            r"\setlength{\parskip}{4pt}",
+            r"",
+            r"\setlength{\footnotesep}{2mm}",
+            r"\usepackage[marginal]{footmisc}",
+            r"",
+            r"\pretolerance=100",
+            r"\tolerance=500",
+            r"\hyphenpenalty=500",
+            r"\exhyphenpenalty=500",
+            r"\emergencystretch=3em",
+            r"\clubpenalty=10000",
+            r"\widowpenalty=10000",
+            r"\displaywidowpenalty=10000",
+            r"",
+            r"\renewcommand{\labelitemi}{--}",
+            r"",
+            r"\usepackage{setspace}",
+            r"\usepackage{graphicx}",
+            r"\usepackage[center, cam, cross]{crop}",
+            r"",
+            rf"\title{{{title_escaped}}}",
         ]
-        if book.metadata.contributors:
-            lines.append(rf"\author{{{self._escape(' ; '.join(book.metadata.contributors))}}}")
-        lines.extend([r"\maketitle", ""])
+
+        if contributors:
+            lines.append(rf"\author{{{author_escaped}}}")
+
+        lines.extend([
+            r"\begin{document}",
+            r"\fontsize{13pt}{15pt}\selectfont",
+            r"",
+            r"\newpage",
+            r"\thispagestyle{empty}",
+            r"\vspace*{1cm}",
+            r"\begin{center}",
+            r"    \onehalfspacing",
+            rf"    {{\LARGE\textsc{{{title_escaped}}}}}",
+            r"\end{center}",
+            r"\newpage",
+            r"",
+            r"\begin{titlepage}",
+            r"    \centering",
+            r"    \vspace*{3cm}",
+            rf"    {{\huge\bfseries {title_escaped} \par}}",
+            r"    \vspace{2cm}",
+        ])
+
+        if contributors:
+            lines.append(rf"    {{\Large {author_escaped}\par}}")
+
+        lines.extend([
+            r"    \vfill",
+            r"    {\Large Presses Universitaires de Rouen et du Havre \par}",
+            r"    \vspace{0.5cm}",
+            r"    {\large 2025}",
+            r"\end{titlepage}",
+            r"",
+        ])
 
         for division in book.divisions:
             chapter_command = r"\chapter" if division.kind == DivisionKind.CHAPTER else r"\chapter*"
@@ -66,7 +179,7 @@ class LatexRenderer:
                     lines.append(rendered)
                     lines.append("")
 
-        lines.append(r"\end{document}")
+        lines.extend([r"% \printbibliography", r"\end{document}"])
         return "\n".join(lines) + "\n"
 
     def write_book(self, book: Book, output_tex: Path) -> Path:
@@ -88,7 +201,7 @@ class LatexRenderer:
                     paragraphs.append(rendered)
             if not paragraphs:
                 return ""
-            return "\n".join([r"\begin{quote}\small", *paragraphs, r"\end{quote}"])
+            return "\n".join([r"\begin{displayquote}", *paragraphs, r"\end{displayquote}"])
         if isinstance(block, VerseBlock):
             rendered_lines = []
             for line in block.lines:
