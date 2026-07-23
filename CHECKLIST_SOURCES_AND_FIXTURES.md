@@ -12,9 +12,13 @@
 
 ### 2. Manuscrits
 
-- [ ] 2 fichiers Word d'auteur représentatifs
-- [ ] leurs 2 versions stylées par les éditrices
-- [ ] si possible, une note rapide indiquant les corrections importantes
+- [x] fichier Word d'auteur représentatif — `sources/io_samples/H&P2-final.docx`
+      (manuscrit complet *Héraldique et papauté II*, avant tout travail éditorial)
+- [x] versions stylées par les éditrices — `sources/output_samples/ChNN_TitreAbrege.docx`
+      (un fichier par chapitre, après édition professionnelle ; voir `sources/README.md`
+      pour la convention de nommage et la relation avec `H&P2-final.docx`)
+- [ ] note rapide indiquant les corrections importantes par couple (à produire lors de
+      l'analyse du corpus — repérage des couples et diff structuré)
 
 ### 3. JSON pivot
 
