@@ -202,8 +202,13 @@ class FootnoteNormalizer:
 
     @staticmethod
     def _apply_rules(text: str) -> str:
-        # R1. Supprimer l'espace de tete parasite (issu du marqueur de note Word)
-        text = text.lstrip(" \t")
+        # R1. Supprimer l'espace de tete parasite (issu du marqueur de note Word).
+        #     Inclut l'espace insecable : DocxExporter._build_footnote_xml insere un
+        #     &#160; comme separateur entre l'appel de note et le texte, qui redevient
+        #     le premier caractere du texte au reimport. Sans ce nettoyage, R3 ne
+        #     detecte plus le debut de note apres un aller-retour export/reimport et
+        #     met a tort en minuscule un "Ibid."/"Idem"/etc. deja correct.
+        text = text.lstrip(" \t  ")
 
         # R2. Majuscule en debut de note
         if text and text[0].islower():

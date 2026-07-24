@@ -178,6 +178,25 @@ class OrthotypoCenturyStylingTests(unittest.TestCase):
         block, _ = self._apply(paragraph)
         self.assertEqual(block.text, "au Ier siècle")
 
+    def test_reprocessing_already_styled_enumeration_is_a_no_op(self) -> None:
+        # "xviie" n'est pas immediatement suivi de "siecle" (seul "xixe" l'est) : sur
+        # une reprise, purh.siecles remet "xixe" en majuscules puis le stylage le
+        # reconvertit en minuscules stylees, un aller-retour qui ne change rien au
+        # texte final. Avant correction, ce cas produisait une fausse transformation
+        # "century_styling" (before == after) a chaque nouveau passage du pipeline sur
+        # un document deja traite (voir docs/PHASE1_FIABILITE_PIPELINE.md, defaut 2).
+        paragraph = Paragraph(
+            block_id="p1",
+            text="du xviie au xixe siècles",
+            inlines=[InlineSpan(text="du xviie au xixe siècles")],
+        )
+        block, transformations = self._apply(paragraph)
+        self.assertTrue(any(t.attributes.get("century_styling") for t in transformations))
+
+        block2, transformations2 = self._apply(block)
+        self.assertEqual(transformations2, [])
+        self.assertEqual(block2.text, block.text)
+
 
 if __name__ == "__main__":
     unittest.main()

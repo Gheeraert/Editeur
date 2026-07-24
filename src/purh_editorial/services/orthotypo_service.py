@@ -530,6 +530,17 @@ class OrthotypoService:
                 )]
             return []
 
+        # Signature caractère par caractère (texte + petites capitales + exposant) de
+        # l'état de départ, capturée avant toute reconstruction : purh.siecles peut
+        # mettre un siècle en majuscules puis le stylage des siècles le repasse en
+        # minuscules stylées juste après, ce qui fait apparaître un "changement" pour
+        # _style_centuries_in_inlines (son entrée intermédiaire diffère) sans que le
+        # bloc ait réellement changé de bout en bout. Comparer les signatures de départ
+        # et d'arrivée est le seul moyen fiable de détecter ce cas et d'éviter de
+        # journaliser une fausse transformation (before == after) à chaque nouveau
+        # passage sur un document déjà traité.
+        before_signature = self._char_style_signature(inlines)
+
         new_inlines = self._rebuild_inlines(
             inlines,
             original,
@@ -538,9 +549,12 @@ class OrthotypoService:
         )
         new_inlines, century_styled = self._style_centuries_in_inlines(new_inlines)
         final_text = "".join(span.text for span in new_inlines)
-        regions = _find_changed_regions(original, final_text)
+        after_signature = self._char_style_signature(new_inlines)
         inlines[:] = new_inlines
         update_text(final_text)
+        if after_signature == before_signature:
+            return []
+        regions = _find_changed_regions(original, final_text)
         return [Transformation(
             transformation_id=make_id("tr"),
             module=self.module_name,
@@ -598,6 +612,15 @@ class OrthotypoService:
     def _is_century_context(full_text: str, match_end: int) -> bool:
         lookahead = full_text[match_end: match_end + 32]
         return bool(_CENTURY_CONTEXT_RE.match(lookahead))
+
+    @staticmethod
+    def _char_style_signature(inlines: list[InlineSpan]) -> list[tuple[str, bool, bool]]:
+        """Empreinte caractère par caractère (texte, petites capitales, exposant)."""
+        return [
+            (ch, span.style.small_caps, span.style.superscript)
+            for span in inlines
+            for ch in span.text
+        ]
 
     def _style_centuries_in_inlines(self, inlines: list[InlineSpan]) -> tuple[list[InlineSpan], bool]:
         if not inlines:

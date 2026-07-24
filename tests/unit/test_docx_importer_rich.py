@@ -13,6 +13,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.io import ImporterRegistry
 from tests.helpers.docx_factory import (
     create_blank_separated_docx,
+    create_docx_with_zero_id_footnote,
     create_minimal_blank_boundary_docx,
     create_poetry_candidate_docx,
     create_rich_docx,
@@ -155,6 +156,14 @@ class RichDocxImporterTests(unittest.TestCase):
         self.assertEqual(first.attributes.get("blank_para_after_count"), 1)
         self.assertTrue(last.attributes.get("blank_para_before"))
         self.assertEqual(last.attributes.get("blank_para_before_count"), 1)
+
+    def test_footnote_with_id_zero_is_not_dropped_as_separator(self) -> None:
+        docx_path = self._runtime_docx_path()
+        create_docx_with_zero_id_footnote(docx_path)
+        document = ImporterRegistry().load_document(docx_path)
+
+        self.assertEqual(len(document.notes), 1)
+        self.assertIn("Note reelle numerotee zero.", document.notes[0].text)
 
 
 if __name__ == "__main__":

@@ -346,6 +346,7 @@ def _note_text_run_xml(
     bold: bool = False,
     italic: bool = False,
     small_caps: bool = False,
+    superscript: bool = False,
     highlight_key: str | None = None,
 ) -> str:
     if not text:
@@ -356,6 +357,7 @@ def _note_text_run_xml(
             bold=bold,
             italic=italic,
             small_caps=small_caps,
+            superscript=superscript,
             highlight_key=highlight_key,
         )
         + f'<w:t xml:space="preserve">{_xml_text(text)}</w:t>'
@@ -389,6 +391,7 @@ def _build_footnote_xml(note: Note, footnote_id: int) -> str:
                     bold=span.style.bold,
                     italic=span.style.italic,
                     small_caps=span.style.small_caps,
+                    superscript=span.style.superscript,
                     highlight_key=span.attributes.get("highlight_color"),
                 )
             )

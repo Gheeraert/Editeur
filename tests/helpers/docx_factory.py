@@ -24,8 +24,8 @@ DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 FOOTNOTES_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:footnote w:id="-1"><w:p><w:r><w:t>separator</w:t></w:r></w:p></w:footnote>
-  <w:footnote w:id="0"><w:p><w:r><w:t>continuation</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:t>separator</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r><w:t>continuation</w:t></w:r></w:p></w:footnote>
   <w:footnote w:id="2">
     <w:p>
       <w:r><w:footnoteRef/></w:r>
@@ -63,6 +63,45 @@ def create_rich_docx(path: Path) -> Path:
     with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("word/document.xml", DOC_XML)
         archive.writestr("word/footnotes.xml", FOOTNOTES_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path
+
+
+# w:id="0" est ici reutilise par une vraie note de contenu (numerotation Word qui ne
+# reserve pas systematiquement -1/0 aux marqueurs separator/continuationSeparator).
+ZERO_ID_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Appel de note</w:t></w:r>
+      <w:r><w:footnoteReference w:id="0"/></w:r>
+    </w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+ZERO_ID_FOOTNOTES_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:t>separator</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:type="continuationSeparator" w:id="1"><w:p><w:r><w:t>continuation</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:id="0">
+    <w:p>
+      <w:r><w:footnoteRef/></w:r>
+      <w:r><w:t> Note reelle numerotee zero.</w:t></w:r>
+    </w:p>
+  </w:footnote>
+</w:footnotes>
+"""
+
+
+def create_docx_with_zero_id_footnote(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", ZERO_ID_DOC_XML)
+        archive.writestr("word/footnotes.xml", ZERO_ID_FOOTNOTES_XML)
         archive.writestr("word/styles.xml", STYLES_XML)
         archive.writestr("docProps/core.xml", CORE_XML)
     return path

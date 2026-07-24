@@ -254,9 +254,14 @@ class DocxImporter(DocumentImporter):
         notes: list[Note] = []
         note_labels: dict[str, str] = {}
         for footnote in root.findall(".//w:footnote", NS_WORD):
-            note_id_raw = footnote.attrib.get(f"{{{NS_WORD['w']}}}id", "")
-            if note_id_raw in {"-1", "0"}:
+            # Les marqueurs separator/continuationSeparator sont identifies par
+            # w:type, pas par leur w:id : rien ne garantit que Word reserve les id
+            # -1/0 a ces marqueurs (un document peut tres bien numeroter une vraie
+            # note de contenu "0"). Filtrer sur l'id exclurait alors une note reelle.
+            footnote_type = footnote.attrib.get(f"{{{NS_WORD['w']}}}type", "")
+            if footnote_type in {"separator", "continuationSeparator"}:
                 continue
+            note_id_raw = footnote.attrib.get(f"{{{NS_WORD['w']}}}id", "")
             note_id = f"ftn{note_id_raw}"
             inlines: list[InlineSpan] = []
             note_refs: list[str] = []
