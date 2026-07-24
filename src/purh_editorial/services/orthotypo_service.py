@@ -265,10 +265,18 @@ def _build_rules() -> list[TypoRule]:
 
     # 10. Siècles — XIIème, xiiième, XIIe → XIIe
     #     Whitelist des nombres romains valides pour éviter les faux positifs
+    #     Contexte "siècle(s)"/"s." obligatoire : sans lui, le motif capture aussi des
+    #     mots ordinaires (ex. "vie" -> roman "vi" valide) ou des ordinaux de prénom
+    #     déjà corrects (ex. "Jules Ier"), qu'il ne faut pas toucher (R-SO-001-BIS).
     def _fix_siecle(m: re.Match) -> str:
         roman = m.group(1)
         if roman.lower() not in _VALID_CENTURIES:
             return m.group(0)   # pas un siècle connu, pas de remplacement
+        lookahead = m.string[m.end():m.end() + 32]
+        if not _CENTURY_CONTEXT_RE.match(lookahead):
+            return m.group(0)   # pas de contexte "siècle" proche, pas de remplacement
+        if roman.lower() == "i":
+            return "Ier"        # le Ier siècle, jamais "Ie siècle"
         return roman.upper() + "e"
 
     rules.append(TypoRule(

@@ -148,6 +148,36 @@ class OrthotypoCenturyStylingTests(unittest.TestCase):
         self.assertEqual([s.text for s in block.inlines], ["Texte sans siecle."])
         self.assertEqual(transformations, [])
 
+    def test_regnal_ordinal_ier_is_not_corrupted_to_ie(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="l’empereur Maximilien Ier (1459-1519) et François Ier",
+            inlines=[InlineSpan(text="l’empereur Maximilien Ier (1459-1519) et François Ier")],
+        )
+        block, _ = self._apply(paragraph)
+        self.assertEqual(
+            block.text,
+            "l’empereur Maximilien Ier (1459-1519) et François Ier",
+        )
+
+    def test_common_word_vie_is_not_treated_as_century(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="prolonger la vie de l’homme",
+            inlines=[InlineSpan(text="prolonger la vie de l’homme")],
+        )
+        block, _ = self._apply(paragraph)
+        self.assertEqual(block.text, "prolonger la vie de l’homme")
+
+    def test_ier_siecle_is_not_corrupted_to_ie_siecle(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="au Ier siècle",
+            inlines=[InlineSpan(text="au Ier siècle")],
+        )
+        block, _ = self._apply(paragraph)
+        self.assertEqual(block.text, "au Ier siècle")
+
 
 if __name__ == "__main__":
     unittest.main()
