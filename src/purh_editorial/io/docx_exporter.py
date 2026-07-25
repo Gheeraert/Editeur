@@ -22,24 +22,52 @@ from purh_editorial.model.semantics import extract_verse_lines, is_canonical_lin
 
 # ── Gabarit Métopes ───────────────────────────────────────────────────────────
 # Le gabarit réel (Commons-publishing-Metopes.dotm) est un document interne PURH,
-# jamais suivi dans le dépôt public (voir docs/CORPUS_ET_FIXTURES.md). Sa résolution
-# vérifie le corpus privé local en premier (comportement inchangé pour quiconque le
-# configure), puis l'ancien chemin relatif au dépôt (compatibilité). Ceci ne change
-# rien à la conversion Métopes elle-même : uniquement où le fichier est recherché.
+# jamais suivi dans le dépôt public (voir docs/CORPUS_ET_FIXTURES.md). Résolution,
+# par ordre de priorité :
+#   1. corpus privé local (PURH_PRIVATE_CORPUS_DIR), gabarit réel avec macros/styles ;
+#   2. ancien chemin relatif au dépôt (compatibilité, généralement absent en public) ;
+#   3. gabarit public minimal (fixtures/templates/), styles Word par défaut
+#      uniquement — suffisant pour les tests publics, pas pour une édition réelle.
+# Une erreur claire est levée si aucun des trois n'est trouvé.
 _TEMPLATE_RELATIVE_PATH = "sources/editorial_rules/metopes_template_word/Commons-publishing-Metopes.dotm"
 _REPO_ROOT = Path(__file__).parent.parent.parent.parent
+_PUBLIC_TEMPLATE_PATH = _REPO_ROOT / "fixtures" / "templates" / "metopes_template_public.docx"
 
 
-def _resolve_default_template() -> Path:
+def resolve_default_template(explicit_path: Path | None = None) -> Path:
+    """Résout le gabarit Métopes à utiliser (voir ordre de priorité ci-dessus).
+
+    Lève FileNotFoundError avec un message explicite si aucun gabarit n'est
+    disponible, plutôt que de laisser une exception opaque remonter plus tard."""
+    if explicit_path is not None:
+        if explicit_path.is_file():
+            return explicit_path
+        raise FileNotFoundError(f"Gabarit Métopes explicite introuvable : {explicit_path}")
+
     private_root = resolve_private_corpus_dir()
     if private_root is not None:
         candidate = private_root / _TEMPLATE_RELATIVE_PATH
         if candidate.is_file():
             return candidate
-    return _REPO_ROOT / _TEMPLATE_RELATIVE_PATH
+
+    legacy_candidate = _REPO_ROOT / _TEMPLATE_RELATIVE_PATH
+    if legacy_candidate.is_file():
+        return legacy_candidate
+
+    if _PUBLIC_TEMPLATE_PATH.is_file():
+        return _PUBLIC_TEMPLATE_PATH
+
+    raise FileNotFoundError(
+        "Aucun gabarit Métopes disponible : configurez PURH_PRIVATE_CORPUS_DIR "
+        "avec le gabarit réel, ou fournissez template_path explicitement. "
+        f"Le gabarit public minimal ({_PUBLIC_TEMPLATE_PATH}) est aussi absent."
+    )
 
 
-_DEFAULT_TEMPLATE = _resolve_default_template()
+def _resolve_default_template() -> Path:
+    return resolve_default_template()
+
+
 
 # Content-type .dotm → .docx (python-docx refuse les templates macro)
 _CT_DOTM = b"application/vnd.ms-word.template.macroEnabledTemplate.main+xml"
@@ -707,7 +735,9 @@ class DocxExporter:
     """
 
     def __init__(self, template_path: Path | None = None) -> None:
-        self.template_path = template_path or _DEFAULT_TEMPLATE
+        # Résolu paresseusement (pas au chargement du module) : une absence de
+        # gabarit ne doit faire échouer qu'un export réel, pas tout import du module.
+        self.template_path = resolve_default_template(explicit_path=template_path)
 
     def export(self, document: Document, output_path: Path) -> Path:
         """Génère le fichier .docx et retourne son chemin."""

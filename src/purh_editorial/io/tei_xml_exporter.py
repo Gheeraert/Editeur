@@ -13,6 +13,18 @@ TEI_NS = "http://www.tei-c.org/ns/1.0"
 XML_NS = "http://www.w3.org/XML/1998/namespace"
 WORD_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
+_EXT_BY_CONTENT_TYPE = {
+    "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/bmp": "bmp",
+    "image/tiff": "tif", "image/svg+xml": "svg", "image/x-emf": "emf", "image/x-wmf": "wmf",
+}
+
+
+def media_filename_for_asset(asset) -> str:
+    """Nom de fichier stable et sans collision pour un ImageAsset dans un bundle
+    media/ (utilisé à la fois par l'export TEI et par l'écriture du bundle)."""
+    ext = _EXT_BY_CONTENT_TYPE.get(asset.content_type, "bin")
+    return f"{asset.asset_id}.{ext}"
+
 
 class TeiXmlExporter:
     """Export minimal du modèle interne vers XML-TEI."""
@@ -97,6 +109,8 @@ class TeiXmlExporter:
                 p_el = ET.SubElement(parent, self._q("p"))
                 self._append_block_content(p_el, block.text, block.inlines, note_by_id)
 
+            self._append_figures_for_block(parent, block, document)
+
         annotations = document.annotations
         annotations["tei_table_diagnostics"] = table_diagnostics
         annotations["tei_table_exported_count"] = sum(
@@ -169,6 +183,30 @@ class TeiXmlExporter:
             "rows": row_count,
             "cells": cell_count,
         }
+
+    def _append_figures_for_block(self, parent: ET.Element, block, document: Document) -> None:
+        """Émet un <figure> TEI pour chaque image incorporée rattachée à ce bloc.
+
+        Les images liées en externe (aucun octet disponible) ne sont jamais
+        référencées comme conservées : on ne les émet pas. Les images de note
+        restent hors périmètre TEI (limite documentée dans CONSERVATION_MATRIX.md)."""
+        occurrences = [
+            o for o in document.image_occurrences
+            if o.target_ref == block.block_id and o.placement != "note" and o.asset_ref
+        ]
+        for occ in sorted(occurrences, key=lambda o: o.order):
+            asset = document.image_assets.get(occ.asset_ref)
+            if asset is None:
+                continue
+            fig_el = ET.SubElement(parent, self._q("figure"), {f"{{{XML_NS}}}id": occ.occurrence_id})
+            head_text = occ.caption or occ.title
+            if head_text:
+                head_el = ET.SubElement(fig_el, self._q("head"))
+                head_el.text = head_text
+            ET.SubElement(fig_el, self._q("graphic"), {"url": f"media/{media_filename_for_asset(asset)}"})
+            if occ.alt_text:
+                desc_el = ET.SubElement(fig_el, self._q("figDesc"))
+                desc_el.text = occ.alt_text
 
     def _build_header(self, root: ET.Element, document: Document) -> None:
         tei_header = ET.SubElement(root, self._q("teiHeader"))

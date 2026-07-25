@@ -7,6 +7,7 @@ from purh_editorial.latex.semantic_model import (
     Bold,
     Book,
     DivisionKind,
+    FigureBlock,
     FootnoteRef,
     InlineNode,
     Italic,
@@ -223,7 +224,22 @@ class LatexRenderer:
             return "\n".join(lines)
         if isinstance(block, TableBlock):
             return self._render_table_block(block)
+        if isinstance(block, FigureBlock):
+            return self._render_figure_block(block)
         return ""
+
+    # Formats non directement compilables par pdflatex sans conversion prealable.
+    _UNSUPPORTED_LATEX_IMAGE_EXT = {".emf", ".wmf"}
+
+    def _render_figure_block(self, figure: FigureBlock) -> str:
+        ext = Path(figure.url).suffix.lower()
+        if ext in self._UNSUPPORTED_LATEX_IMAGE_EXT:
+            return f"% figure non compilable directement par ce moteur LaTeX (format {ext}) : {figure.url}"
+        lines = [r"\begin{figure}[h]", r"\centering", rf"\includegraphics[width=\linewidth]{{{figure.url}}}"]
+        if figure.caption:
+            lines.append(rf"\caption{{{self._escape(figure.caption)}}}")
+        lines.append(r"\end{figure}")
+        return "\n".join(lines)
 
     def _render_table_block(self, table: TableBlock) -> str:
         if table.export_comment:

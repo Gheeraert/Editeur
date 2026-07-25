@@ -100,7 +100,16 @@ class TableBlock:
     export_comment: str | None = None
 
 
-BlockNode: TypeAlias = Paragraph | QuoteBlock | VerseBlock | ListBlock | BibliographyBlock | TableBlock
+@dataclass(slots=True)
+class FigureBlock:
+    url: str
+    caption: str | None = None
+    alt_text: str | None = None
+
+
+BlockNode: TypeAlias = (
+    Paragraph | QuoteBlock | VerseBlock | ListBlock | BibliographyBlock | TableBlock | FigureBlock
+)
 
 
 class DivisionKind(str, Enum):

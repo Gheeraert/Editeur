@@ -6,6 +6,7 @@ from pathlib import Path
 from purh_editorial.config import AppSettings
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
+from purh_editorial.io.tei_xml_exporter import media_filename_for_asset
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
 from purh_editorial.serialization import build_pivot_payload, pivot_to_json
@@ -545,12 +546,19 @@ class Step1Pipeline:
                 t0 = utc_now_iso()
                 options.tei_output_path.parent.mkdir(parents=True, exist_ok=True)
                 options.tei_output_path.write_text(tei_xml, encoding="utf-8")
+                media_written = 0
+                if document.image_assets:
+                    media_dir = options.tei_output_path.parent / "media"
+                    media_dir.mkdir(parents=True, exist_ok=True)
+                    for asset in document.image_assets.values():
+                        (media_dir / media_filename_for_asset(asset)).write_bytes(asset.data)
+                        media_written += 1
                 report.add_module_run(ModuleRun(
                     module_name="tei_xml_write",
                     version=self.version,
                     started_at=t0,
                     finished_at=utc_now_iso(),
-                    summary={"output": str(options.tei_output_path)},
+                    summary={"output": str(options.tei_output_path), "media_written": media_written},
                 ))
             except Exception as exc:  # noqa: BLE001
                 report.warnings.append(f"TEI write skipped ({type(exc).__name__}): {exc}")

@@ -13,6 +13,7 @@ from purh_editorial.latex.semantic_model import (
     BookMetadata,
     Division,
     DivisionKind,
+    FigureBlock,
     FootnoteRef,
     InlineNode,
     Italic,
@@ -220,6 +221,12 @@ def _parse_block_list(children: list[etree._Element]) -> list:
             blocks.append(_parse_table_block(child))
             i += 1
             continue
+        if local == "figure":
+            figure_block = _parse_figure_block(child)
+            if figure_block is not None:
+                blocks.append(figure_block)
+            i += 1
+            continue
         if local == "bibl":
             items: list[BibliographyItem] = []
             while i < len(children) and etree.QName(children[i]).localname == "bibl":
@@ -298,6 +305,22 @@ def _parse_table_block(table_el: etree._Element) -> TableBlock:
         rows.append(TableRow(cells=cells))
 
     return TableBlock(rows=rows)
+
+
+def _parse_figure_block(figure_el: etree._Element) -> FigureBlock | None:
+    graphic_nodes = figure_el.xpath("./tei:graphic", namespaces=NS)
+    if not graphic_nodes:
+        return None
+    url = graphic_nodes[0].get("url") or ""
+    if not url:
+        return None
+    head_text = _xpath_text(figure_el, ("string(./tei:head)",))
+    desc_text = _xpath_text(figure_el, ("string(./tei:figDesc)",))
+    return FigureBlock(
+        url=url,
+        caption=head_text or None,
+        alt_text=desc_text or None,
+    )
 
 
 def _parse_inline_children(element: etree._Element) -> list[InlineNode]:

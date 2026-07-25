@@ -12,13 +12,17 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from purh_editorial.io.docx_exporter import DocxExporter
+from purh_editorial.io.docx_exporter import DocxExporter, resolve_default_template
 from purh_editorial.model import Document, Heading, InlineSpan, InlineStyle, LineatedBlock, Note, Paragraph, QuoteBlock
 from purh_editorial.services.metopes_mapper import MetopesMapper
 from purh_editorial.services.orthotypo_service import OrthotypoService
 
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-TEMPLATE_PATH = ROOT / "sources" / "editorial_rules" / "metopes_template_word" / "Commons-publishing-Metopes.dotm"
+# Résolution centralisée (corpus privé > compatibilité > gabarit public minimal) :
+# voir docx_exporter.resolve_default_template. Ce test s'exécute donc réellement en
+# CI publique (gabarit minimal), et avec le vrai gabarit Métopes si le corpus privé
+# est configuré localement — jamais un skip silencieux faute de gabarit.
+TEMPLATE_PATH = resolve_default_template()
 
 
 def _q(local_name: str) -> str:
@@ -26,13 +30,6 @@ def _q(local_name: str) -> str:
 
 
 class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        if not TEMPLATE_PATH.exists():
-            raise unittest.SkipTest(
-                f"Gabarit Métopes introuvable: {TEMPLATE_PATH}"
-            )
-
     @staticmethod
     def _runtime_path(filename: str) -> Path:
         runtime_dir = ROOT / "tests" / "_runtime"

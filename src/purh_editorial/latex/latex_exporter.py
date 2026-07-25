@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 from pathlib import Path
 
 from purh_editorial.latex.latex_renderer import LatexRenderer
@@ -14,7 +15,19 @@ def export_tei_to_latex(input_xml: Path, output_tex: Path) -> Path:
     normalize_tei_tree(tree)
     book = parse_tei_tree_to_semantic(tree, fallback_title=input_xml.stem)
     renderer = LatexRenderer()
-    return renderer.write_book(book, output_tex)
+    result = renderer.write_book(book, output_tex)
+
+    # Les figures référencent media/... : copier le bundle média du TEI à côté du
+    # .tex, faute de quoi \includegraphics pointerait vers un fichier absent.
+    source_media_dir = input_xml.parent / "media"
+    if source_media_dir.is_dir():
+        dest_media_dir = output_tex.parent / "media"
+        dest_media_dir.mkdir(parents=True, exist_ok=True)
+        for media_file in source_media_dir.iterdir():
+            if media_file.is_file():
+                shutil.copyfile(media_file, dest_media_dir / media_file.name)
+
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
