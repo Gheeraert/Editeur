@@ -3,6 +3,16 @@ from __future__ import annotations
 import zipfile
 from pathlib import Path
 
+from docx import Document as DocxDoc
+
+
+def create_minimal_template_docx(path: Path) -> Path:
+    """Gabarit DOCX minimal et public, pour les tests qui n'ont pas besoin du vrai
+    gabarit Métopes (privé, non suivi dans ce dépôt — voir docs/CORPUS_ET_FIXTURES.md)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    DocxDoc().save(path)
+    return path
+
 
 DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">

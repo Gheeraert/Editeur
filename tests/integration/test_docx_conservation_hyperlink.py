@@ -12,7 +12,7 @@ if str(SRC) not in sys.path:
 
 from purh_editorial.io import ImporterRegistry
 from purh_editorial.io.docx_exporter import DocxExporter
-from tests.helpers.docx_factory import create_hyperlink_docx
+from tests.helpers.docx_factory import create_hyperlink_docx, create_minimal_template_docx
 
 
 class DocxConservationHyperlinkTests(unittest.TestCase):
@@ -27,6 +27,7 @@ class DocxConservationHyperlinkTests(unittest.TestCase):
         runtime_dir = ROOT / "tests" / "_runtime"
         runtime_dir.mkdir(parents=True, exist_ok=True)
         return runtime_dir / filename
+
 
     def test_hyperlink_visible_text_is_preserved_on_import(self) -> None:
         docx_path = self._runtime_path(f"hyperlink_{uuid.uuid4().hex}.docx")
@@ -55,7 +56,8 @@ class DocxConservationHyperlinkTests(unittest.TestCase):
                 self.assertNotIn("url", span.attributes)
 
         export_path = self._runtime_path(f"hyperlink_export_{uuid.uuid4().hex}.docx")
-        DocxExporter().export(document, export_path)
+        template_path = create_minimal_template_docx(self._runtime_path(f"template_{uuid.uuid4().hex}.docx"))
+        DocxExporter(template_path=template_path).export(document, export_path)
         with open(export_path, "rb") as f:
             exported_bytes = f.read()
         self.assertNotIn(b"purh.univ-rouen.fr", exported_bytes)

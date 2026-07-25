@@ -15,13 +15,30 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
+from purh_editorial.config.private_corpus import resolve_private_corpus_dir
 from purh_editorial.model import Document, InlineSpan, Note
 from purh_editorial.model.semantics import extract_verse_lines, is_canonical_lineated_block
 
 # ── Gabarit Métopes ───────────────────────────────────────────────────────────
-_DEFAULT_TEMPLATE = Path(__file__).parent.parent.parent.parent / (
-    "sources/editorial_rules/metopes_template_word/Commons-publishing-Metopes.dotm"
-)
+# Le gabarit réel (Commons-publishing-Metopes.dotm) est un document interne PURH,
+# jamais suivi dans le dépôt public (voir docs/CORPUS_ET_FIXTURES.md). Sa résolution
+# vérifie le corpus privé local en premier (comportement inchangé pour quiconque le
+# configure), puis l'ancien chemin relatif au dépôt (compatibilité). Ceci ne change
+# rien à la conversion Métopes elle-même : uniquement où le fichier est recherché.
+_TEMPLATE_RELATIVE_PATH = "sources/editorial_rules/metopes_template_word/Commons-publishing-Metopes.dotm"
+_REPO_ROOT = Path(__file__).parent.parent.parent.parent
+
+
+def _resolve_default_template() -> Path:
+    private_root = resolve_private_corpus_dir()
+    if private_root is not None:
+        candidate = private_root / _TEMPLATE_RELATIVE_PATH
+        if candidate.is_file():
+            return candidate
+    return _REPO_ROOT / _TEMPLATE_RELATIVE_PATH
+
+
+_DEFAULT_TEMPLATE = _resolve_default_template()
 
 # Content-type .dotm → .docx (python-docx refuse les templates macro)
 _CT_DOTM = b"application/vnd.ms-word.template.macroEnabledTemplate.main+xml"

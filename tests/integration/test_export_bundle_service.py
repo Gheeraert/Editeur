@@ -14,7 +14,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.config import load_settings
 from purh_editorial.pipeline.step1 import Step1Options, Step1Pipeline
 from purh_editorial.ui.step1_dialog import build_output_paths, run_export_bundle
-from tests.helpers.docx_factory import create_titre_docx
+from tests.helpers.docx_factory import create_minimal_template_docx, create_titre_docx
 
 
 class ExportBundleServiceTests(unittest.TestCase):
@@ -27,9 +27,11 @@ class ExportBundleServiceTests(unittest.TestCase):
 
         docx_path, tei_path, tex_path = build_output_paths(source, output_dir, "minimal_source")
         pivot_json_path = output_dir / "minimal_source_pivot.json"
+        template_path = create_minimal_template_docx(output_dir / "template.docx")
         options = Step1Options(
             enable_ai=False,
             output_path=docx_path,
+            template_path=template_path,
             tei_output_path=tei_path,
             pivot_json_output_path=pivot_json_path,
         )
@@ -71,9 +73,11 @@ class ExportBundleServiceTests(unittest.TestCase):
         output_dir.mkdir(parents=True, exist_ok=True)
         docx_path, tei_path, tex_path = build_output_paths(source_path, output_dir, "titre_test")
         pivot_json_path = output_dir / "titre_test_pivot.json"
+        template_path = create_minimal_template_docx(output_dir / "template.docx")
         options = Step1Options(
             enable_ai=False,
             output_path=docx_path,
+            template_path=template_path,
             tei_output_path=tei_path,
             pivot_json_output_path=pivot_json_path,
         )
