@@ -37,6 +37,8 @@ _VALID_CENTURIES: frozenset[str] = frozenset({
 })
 
 _CENTURY_TOKEN_RE = re.compile(r"\b([IVXLCDMivxlcdm]{1,8})e\b", re.UNICODE | re.IGNORECASE)
+_NUMERO_STYLE_RE = re.compile(r"\b[Nn](o)" + NNBSP + r"(?=\d)")
+_INCISE_DASH_RE = re.compile(r"(?<=\w) [-–—] (?=\w)")
 _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
 _QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
 _TECHNICAL_TEXT_RE = re.compile(r"<[^>]+>|[\w:-]+\s*=\s*\"[^\"]*\"")
@@ -335,12 +337,17 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable après abréviations de pagination",
     ))
 
-    # 15. Espace fine insécable dans les numéros (n° 3, N° 12)
+    # 15. Numéro : normalise n°/N°/nº/Nº/no/No devant un chiffre vers la forme canonique
+    #     "n"/"N" + o + espace fine insécable + chiffre. Le "o" est ensuite mis en
+    #     exposant par _style_numero_in_inlines (même mécanisme que le stylage des
+    #     siècles) — remplace le symbole degré "n°" par la forme demandée par le guide
+    #     PURH (CONSIGNES_AUTEURS_PURH_2025.pdf, p. 12 : "numéro -> no, lettre o en
+    #     exposant"). Voir docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md.
     rules.append(TypoRule(
         rule_id="purh.numero",
-        pattern=re.compile(r"\b([Nn]°)\s+(?=\d)"),
-        replacement=r"\1" + NNBSP,
-        description="Espace fine insécable après n°",
+        pattern=re.compile(r"\b([Nn])[°ºoO]\.?[ \t  ]*(?=\d)"),
+        replacement=lambda m: m.group(1) + "o" + NNBSP,
+        description="Numéro -> \"o\" en exposant + espace fine insécable (n° 5 -> no 5)",
     ))
 
     # 15b. Redoublement fautif d'une abréviation pour marquer le pluriel : le français
@@ -376,13 +383,21 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable dans les nombres (milliers)",
     ))
 
-    # 17. Tiret cadratin dans les incises : " - " entre mots → " — "
-    #     (seulement quand entouré d'espaces et pas en début de ligne)
+    # 17. Tiret d'incise : abstention (auto=False), diagnostic seul.
+    #     La normalisation automatique vers le cadratin a été retirée : elle allait à
+    #     l'encontre de la pratique éditoriale observée (le corpus de caractérisation
+    #     privé montre les éditrices convertissant systématiquement vers le
+    #     demi-cadratin, l'inverse de ce que cette règle produisait), et le guide PURH
+    #     ne tranche pas explicitement la convention attendue. Une règle connue comme
+    #     probablement contraire à la pratique ne doit pas rester une correction
+    #     automatique silencieuse. Voir docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md et
+    #     analyze_incise_dash ci-dessous (diagnostic R-TI-001).
     rules.append(TypoRule(
         rule_id="purh.tiret.incise",
         pattern=re.compile(r"(?<=\w) – (?=\w)|(?<=\w) - (?=[A-Za-zÀ-ÿA-Z])"),
         replacement=" " + EMDASH + " ",
-        description="Tiret cadratin pour les incises",
+        description="Tiret d'incise — abstention, voir analyze_incise_dash",
+        auto=False,
     ))
 
     return rules
@@ -473,6 +488,36 @@ class OrthotypoService:
             diagnostics.extend(self._diagnose_quote_punctuation(block.block_id, text))
         return diagnostics
 
+    def analyze_incise_dash(self, document: Document) -> list[Diagnostic]:
+        """
+        R-TI-001 (diagnostic seul, A3) : signale un tiret d'incise (-, – ou —) sans le
+        normaliser automatiquement. purh.tiret.incise (auto=False) ne corrige plus ce
+        motif : la convention attendue (cadratin ou demi-cadratin) n'est pas tranchée
+        avec certitude — voir docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md.
+        """
+        diagnostics: list[Diagnostic] = []
+        for block in document.blocks:
+            text = "".join(span.text for span in block.inlines) if block.inlines else block.text
+            if not text:
+                continue
+            for match in _INCISE_DASH_RE.finditer(text):
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="info",
+                        category="incise_dash",
+                        message=(
+                            "Convention du tiret d’incise à vérifier : aucune "
+                            "normalisation automatique n’a été appliquée."
+                        ),
+                        target_ref=block.block_id,
+                        evidence=Evidence(excerpt=match.group(0)),
+                        rule_id="R-TI-001",
+                    )
+                )
+        return diagnostics
+
     # ── Bloc ─────────────────────────────────────────────────────────────────
 
     def _process_block(self, block) -> list[Transformation]:
@@ -544,11 +589,23 @@ class OrthotypoService:
             )
         return diagnostics
 
+    def _apply_special_stylings(
+        self, inlines: list[InlineSpan]
+    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]], list[tuple[str, str]]]:
+        """Enchaîne le stylage des siècles (petites capitales + exposant) et celui du
+        "o" de "no" (exposant) produit par purh.numero, dans cet ordre. Retourne les
+        occurrences de chacun séparément pour conserver un rule_id distinct par
+        transformation (Phase 6)."""
+        styled, century_changed, century_occurrences = self._style_centuries_in_inlines(inlines)
+        styled, numero_changed, numero_occurrences = self._style_numero_in_inlines(styled)
+        return styled, century_changed or numero_changed, century_occurrences, numero_occurrences
+
     def _build_transformations(
         self,
         target_ref: str,
         rule_occurrences: list[tuple[str, str, str]],
         century_occurrences: list[tuple[str, str]],
+        numero_occurrences: list[tuple[str, str]] | None = None,
         highlight_regions: list[tuple[int, int]] | None = None,
     ) -> list[Transformation]:
         """Une Transformation distincte par occurrence corrigée, taguée par son propre
@@ -586,19 +643,41 @@ class OrthotypoService:
             )
             for before, after in century_occurrences
         )
+        transformations.extend(
+            Transformation(
+                transformation_id=make_id("tr"),
+                module=self.module_name,
+                target_ref=target_ref,
+                operation="orthotypo",
+                before=before,
+                after=after,
+                rule_id="R-NO-001",
+                applied=True,
+                attributes={
+                    "highlight_regions": highlight_regions or [],
+                    "color": self.color,
+                    "numero_styling": True,
+                },
+            )
+            for before, after in numero_occurrences or []
+        )
         return transformations
 
     def _process_inlines_owner(self, inlines, *, target_ref, update_text) -> list[Transformation]:
         original = "".join(s.text for s in inlines)
         corrected, rule_occurrences = self._apply_all_rules_tracked(original)
         if corrected == original:
-            styled_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(inlines)
-            if century_styled:
+            styled_inlines, any_styled, century_occurrences, numero_occurrences = (
+                self._apply_special_stylings(inlines)
+            )
+            if any_styled:
                 inlines[:] = styled_inlines
                 styled_text = "".join(span.text for span in styled_inlines)
                 update_text(styled_text)
                 regions = _find_changed_regions(original, styled_text)
-                return self._build_transformations(target_ref, [], century_occurrences, regions)
+                return self._build_transformations(
+                    target_ref, [], century_occurrences, numero_occurrences, regions
+                )
             return []
 
         # Signature caractère par caractère (texte + petites capitales + exposant) de
@@ -618,7 +697,9 @@ class OrthotypoService:
             corrected,
             _find_changed_regions(original, corrected),
         )
-        new_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(new_inlines)
+        new_inlines, _any_styled, century_occurrences, numero_occurrences = (
+            self._apply_special_stylings(new_inlines)
+        )
         final_text = "".join(span.text for span in new_inlines)
         after_signature = self._char_style_signature(new_inlines)
         inlines[:] = new_inlines
@@ -626,7 +707,9 @@ class OrthotypoService:
         if after_signature == before_signature:
             return []
         regions = _find_changed_regions(original, final_text)
-        return self._build_transformations(target_ref, rule_occurrences, century_occurrences, regions)
+        return self._build_transformations(
+            target_ref, rule_occurrences, century_occurrences, numero_occurrences, regions
+        )
 
     def _process_flat(
         self,
@@ -639,16 +722,20 @@ class OrthotypoService:
     ) -> list[Transformation]:
         corrected, rule_occurrences = self._apply_all_rules_tracked(text)
         inlines = [InlineSpan(text=corrected)]
-        styled_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(inlines)
+        styled_inlines, any_styled, century_occurrences, numero_occurrences = (
+            self._apply_special_stylings(inlines)
+        )
         final_text = "".join(span.text for span in styled_inlines)
 
         if final_text == text:
             return []
         update_text(final_text)
         update_color()
-        if century_styled:
+        if any_styled:
             update_inlines(styled_inlines)
-        return self._build_transformations(target_ref, rule_occurrences, century_occurrences)
+        return self._build_transformations(
+            target_ref, rule_occurrences, century_occurrences, numero_occurrences
+        )
 
     @staticmethod
     def _is_century_context(full_text: str, match_end: int) -> bool:
@@ -727,6 +814,53 @@ class OrthotypoService:
         occurrences = [
             (match.group(0), match.group(1).lower() + "e")
             for match, changed in zip(century_matches, changed_by_match)
+            if changed
+        ]
+        return self._merge_adjacent_spans(result), True, occurrences
+
+    def _style_numero_in_inlines(
+        self, inlines: list[InlineSpan]
+    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]]]:
+        """Met en exposant le "o" de "no"/"No" produit par la règle purh.numero, quand
+        il est immédiatement suivi de l'espace fine insécable puis d'un chiffre (forme
+        canonique produite par cette règle). Même mécanisme que le stylage des siècles."""
+        if not inlines:
+            return inlines, False, []
+
+        full_text = "".join(span.text for span in inlines)
+        numero_matches = list(_NUMERO_STYLE_RE.finditer(full_text))
+        if not numero_matches:
+            return inlines, False, []
+
+        exponent_positions: dict[int, int] = {}
+        for match_index, match in enumerate(numero_matches):
+            exponent_positions[match.start(1)] = match_index
+
+        changed_by_match = [False] * len(numero_matches)
+        result: list[InlineSpan] = []
+        absolute_index = 0
+        for span in inlines:
+            if span.kind != "text" or not span.text:
+                result.append(copy.deepcopy(span))
+                absolute_index += len(span.text)
+                continue
+
+            for ch in span.text:
+                new_span = copy.deepcopy(span)
+                new_span.text = ch
+                if absolute_index in exponent_positions:
+                    match_index = exponent_positions[absolute_index]
+                    if not new_span.style.superscript:
+                        changed_by_match[match_index] = True
+                    new_span.style.superscript = True
+                result.append(new_span)
+                absolute_index += 1
+
+        if not any(changed_by_match):
+            return inlines, False, []
+        occurrences = [
+            (match.group(0), match.group(0))
+            for match, changed in zip(numero_matches, changed_by_match)
             if changed
         ]
         return self._merge_adjacent_spans(result), True, occurrences

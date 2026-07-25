@@ -270,7 +270,9 @@ class Step1Pipeline:
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
         quote_punctuation_diags = self.orthotypo.analyze_quote_punctuation(document)
+        incise_dash_diags = self.orthotypo.analyze_incise_dash(document)
         report.diagnostics.extend(quote_punctuation_diags)
+        report.diagnostics.extend(incise_dash_diags)
         report.transformations.extend(typo_tr)
         report.add_module_run(ModuleRun(
             module_name="orthotypo",
@@ -280,6 +282,7 @@ class Step1Pipeline:
             summary={
                 "corrections": len(typo_tr),
                 "quote_punctuation_diagnostics": len(quote_punctuation_diags),
+                "incise_dash_diagnostics": len(incise_dash_diags),
             },
         ))
 
