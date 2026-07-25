@@ -534,7 +534,7 @@ class Step1Pipeline:
             report.warnings.append(f"TEI export blocked: {exc}")
             report.diagnostics.extend(exc.diagnostics)
         except Exception as exc:  # noqa: BLE001
-            report.warnings.append(f"TEI export skipped: {exc}")
+            report.warnings.append(f"TEI export skipped ({type(exc).__name__}): {exc}")
 
         if options.tei_output_path and tei_xml is not None:
             try:
@@ -549,7 +549,7 @@ class Step1Pipeline:
                     summary={"output": str(options.tei_output_path)},
                 ))
             except Exception as exc:  # noqa: BLE001
-                report.warnings.append(f"TEI write skipped: {exc}")
+                report.warnings.append(f"TEI write skipped ({type(exc).__name__}): {exc}")
 
         if options.pivot_json_output_path is not None:
             pivot_json_module_run: ModuleRun | None = None
@@ -570,7 +570,7 @@ class Step1Pipeline:
             except Exception as exc:  # noqa: BLE001
                 if pivot_json_module_run is not None and report.module_runs and report.module_runs[-1] is pivot_json_module_run:
                     report.module_runs.pop()
-                report.warnings.append(f"Pivot JSON write skipped: {exc}")
+                report.warnings.append(f"Pivot JSON write skipped ({type(exc).__name__}): {exc}")
 
         pivot = build_pivot_payload(document, report=report)
         pipeline_result = PipelineResult(
