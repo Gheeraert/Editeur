@@ -10,13 +10,14 @@ from xml.etree import ElementTree as ET
 from docx import Document as DocxDoc
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.text import WD_COLOR_INDEX
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement
 from docx.oxml import parse_xml
 from docx.oxml.ns import qn
-from docx.shared import Cm, Pt
+from docx.shared import Cm, Emu, Pt
 
 from purh_editorial.config.private_corpus import resolve_private_corpus_dir
-from purh_editorial.model import Document, InlineSpan, Note
+from purh_editorial.model import Document, ImageAsset, ImageOccurrence, InlineSpan, Note
 from purh_editorial.model.semantics import extract_verse_lines, is_canonical_lineated_block
 
 # ── Gabarit Métopes ───────────────────────────────────────────────────────────
@@ -203,7 +204,33 @@ def _inline_highlight(span: InlineSpan) -> WD_COLOR_INDEX | None:
     return _HIGHLIGHT_MAP.get(key) if key else None
 
 
-def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
+def _add_image_run(para, occurrence: ImageOccurrence, image_assets: dict[str, ImageAsset]) -> None:
+    """Réinsère une image incorporée (image externe non incorporée : rien à
+    réinjecter, déjà diagnostiquée à l'import). Les images ancrées sont
+    normalisées en inline (voir ImageOccurrence.anchor_normalized_to_inline)."""
+    asset = image_assets.get(occurrence.asset_ref) if occurrence.asset_ref else None
+    if asset is None:
+        return
+    run = para.add_run()
+    kwargs: dict = {}
+    if occurrence.width_emu:
+        kwargs["width"] = Emu(occurrence.width_emu)
+    if occurrence.height_emu:
+        kwargs["height"] = Emu(occurrence.height_emu)
+    inline_shape = run.add_picture(io.BytesIO(asset.data), **kwargs)
+    if occurrence.alt_text:
+        inline_shape._inline.docPr.set("descr", occurrence.alt_text)
+    if occurrence.title:
+        inline_shape._inline.docPr.set("title", occurrence.title)
+
+
+def _add_paragraph(
+    doc: DocxDoc,
+    block,
+    note_id_map: dict[str, int],
+    image_occurrences_by_id: dict[str, ImageOccurrence],
+    image_assets: dict[str, ImageAsset],
+) -> None:
     """Ajoute un paragraphe au document Word avec son style Métopes."""
     style_name = block.attributes.get("metopes_style", "Normal")
     try:
@@ -245,6 +272,14 @@ def _add_paragraph(doc: DocxDoc, block, note_id_map: dict[str, int]) -> None:
                 fn_id = note_id_map.get(span.note_ref)
                 if fn_id is not None:
                     _add_footnote_reference(para, fn_id)
+            elif span.kind == "image":
+                occ = image_occurrences_by_id.get(span.attributes.get("occurrence_id", ""))
+                if occ is not None:
+                    _add_image_run(para, occ, image_assets)
+            elif span.kind == "complex_object":
+                # Objet non reconstruit a l'export (graphique/SmartArt/OLE/equation) ;
+                # deja detecte et diagnostique a l'import, jamais confondu avec une image.
+                continue
             else:
                 span_hl = _inline_highlight(span)
                 _add_run_with_style(
@@ -289,10 +324,27 @@ def _insert_body_element(doc: DocxDoc, element) -> None:
     body.insert(body.index(sect_pr), element)
 
 
-def _add_raw_table(doc: DocxDoc, block) -> None:
+def _add_raw_table(doc: DocxDoc, block, image_assets: dict[str, ImageAsset]) -> None:
     raw_ooxml = str(block.attributes.get("table_ooxml", "") or "").strip()
     if not raw_ooxml:
         return
+    for ref in block.attributes.get("table_image_refs") or []:
+        old_rid = ref.get("rid")
+        asset_id = ref.get("asset_id")
+        if not old_rid or not asset_id:
+            continue
+        asset = image_assets.get(asset_id)
+        if asset is None:
+            continue
+        new_rid, _image = doc.part.get_or_add_image(io.BytesIO(asset.data))
+        # Le préfixe de la relation (r:, ns4:, ...) dépend de la sérialisation
+        # ElementTree au moment de l'import (voir docx_importer.py) et n'est pas
+        # stable : on remplace par valeur exacte de rId, quel que soit le préfixe.
+        raw_ooxml = re.sub(
+            rf'((?:\w+:)?(?:embed|link|id)=")({re.escape(old_rid)})(")',
+            rf'\g<1>{new_rid}\g<3>',
+            raw_ooxml,
+        )
     table_element = parse_xml(raw_ooxml.encode("utf-8"))
     _insert_body_element(doc, table_element)
 
@@ -382,8 +434,103 @@ def _note_text_run_xml(
     )
 
 
-def _build_footnote_xml(note: Note, footnote_id: int) -> str:
+# ── Images incorporées dans les notes (injection post-sauvegarde) ────────────
+
+_CONTENT_TYPE_EXT = {
+    "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/bmp": "bmp",
+    "image/tiff": "tif", "image/svg+xml": "svg", "image/x-emf": "emf", "image/x-wmf": "wmf",
+}
+_DEFAULT_IMAGE_EXTENT_EMU = 914400  # 1 pouce, valeur de repli si aucune dimension connue.
+
+
+def _note_image_drawing_xml(rid: str, occurrence: ImageOccurrence, doc_pr_id: int) -> str:
+    cx = occurrence.width_emu or _DEFAULT_IMAGE_EXTENT_EMU
+    cy = occurrence.height_emu or _DEFAULT_IMAGE_EXTENT_EMU
+    name = _xml_attr(occurrence.title or "Image")
+    descr_attr = f' descr="{_xml_attr(occurrence.alt_text)}"' if occurrence.alt_text else ""
+    title_attr = f' title="{_xml_attr(occurrence.title)}"' if occurrence.title else ""
+    return (
+        '<w:r><w:drawing>'
+        '<wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" '
+        'distT="0" distB="0" distL="0" distR="0">'
+        f'<wp:extent cx="{cx}" cy="{cy}"/>'
+        f'<wp:docPr id="{doc_pr_id}" name="{name}"{descr_attr}{title_attr}/>'
+        '<wp:cNvGraphicFramePr>'
+        '<a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>'
+        '</wp:cNvGraphicFramePr>'
+        '<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
+        '<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+        '<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+        '<pic:nvPicPr>'
+        f'<pic:cNvPr id="{doc_pr_id}" name="{name}"/>'
+        '<pic:cNvPicPr/>'
+        '</pic:nvPicPr>'
+        '<pic:blipFill>'
+        f'<a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="{rid}"/>'
+        '<a:stretch><a:fillRect/></a:stretch>'
+        '</pic:blipFill>'
+        '<pic:spPr>'
+        f'<a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+        '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+        '</pic:spPr>'
+        '</pic:pic>'
+        '</a:graphicData>'
+        '</a:graphic>'
+        '</wp:inline>'
+        '</w:drawing></w:r>'
+    )
+
+
+def _build_note_image_plan(
+    notes: list[Note],
+    image_occurrences_by_id: dict[str, ImageOccurrence],
+    image_assets: dict[str, ImageAsset],
+    existing_rids: set[str],
+) -> dict[str, dict]:
+    """Attribue un rId et un nom de fichier media a chaque image de note a inserer.
+
+    Les octets identiques (meme asset) partagent le meme fichier media, mais chaque
+    occurrence garde sa propre relation (les relations sont locales a footnotes.xml,
+    rien n'empeche plusieurs rId de pointer vers la meme cible)."""
+    plan: dict[str, dict] = {}
+    used = set(existing_rids)
+    next_num = 1
+    media_filename_by_asset: dict[str, str] = {}
+
+    def _fresh_rid() -> str:
+        nonlocal next_num
+        while f"rId{next_num}" in used:
+            next_num += 1
+        rid = f"rId{next_num}"
+        used.add(rid)
+        return rid
+
+    for note in notes:
+        for span in note.inlines:
+            if span.kind != "image":
+                continue
+            occ = image_occurrences_by_id.get(span.attributes.get("occurrence_id", ""))
+            if occ is None or not occ.asset_ref:
+                continue
+            asset = image_assets.get(occ.asset_ref)
+            if asset is None:
+                continue
+            filename = media_filename_by_asset.get(asset.asset_id)
+            if filename is None:
+                ext = _CONTENT_TYPE_EXT.get(asset.content_type, "png")
+                filename = f"media/note_{asset.asset_id}.{ext}"
+                media_filename_by_asset[asset.asset_id] = filename
+            plan[occ.occurrence_id] = {"rid": _fresh_rid(), "filename": filename, "asset": asset, "occurrence": occ}
+    return plan
+
+
+def _build_footnote_xml(
+    note: Note,
+    footnote_id: int,
+    note_image_plan: dict[str, dict] | None = None,
+) -> str:
     """Construit un fragment OOXML <w:footnote> sans re-sérialiser tout footnotes.xml."""
+    note_image_plan = note_image_plan or {}
     parts = [
         f'<w:footnote w:type="normal" w:id="{_xml_attr(footnote_id)}">',
         '<w:p>',
@@ -398,9 +545,18 @@ def _build_footnote_xml(note: Note, footnote_id: int) -> str:
         '</w:r>',
     ]
 
+    doc_pr_id = 1000 * (footnote_id + 1)
     if note.inlines:
         for span in note.inlines:
-            if span.kind == "note_call" or not span.text:
+            if span.kind == "note_call":
+                continue
+            if span.kind == "image":
+                plan_entry = note_image_plan.get(span.attributes.get("occurrence_id", ""))
+                if plan_entry is not None:
+                    doc_pr_id += 1
+                    parts.append(_note_image_drawing_xml(plan_entry["rid"], plan_entry["occurrence"], doc_pr_id))
+                continue
+            if not span.text:
                 continue
             parts.append(
                 _note_text_run_xml(
@@ -419,14 +575,65 @@ def _build_footnote_xml(note: Note, footnote_id: int) -> str:
     return "".join(parts)
 
 
-def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[str, int]) -> None:
+_RELS_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+_IMAGE_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+
+
+def _add_relationships_xml(rels_xml: bytes | None, entries: list[tuple[str, str]]) -> bytes:
+    """Ajoute des <Relationship> (rid, target) de type image a un fichier .rels,
+    en créant le fichier s'il n'existe pas encore."""
+    if not entries:
+        return rels_xml if rels_xml is not None else b""
+    if rels_xml is None:
+        rels_xml = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
+            f'<Relationships xmlns="{_RELS_NS}"></Relationships>'
+        ).encode("utf-8")
+    fragment = "".join(
+        f'<Relationship Id="{_xml_attr(rid)}" Type="{_IMAGE_REL_TYPE}" Target="{_xml_attr(target)}"/>'
+        for rid, target in entries
+    ).encode("utf-8")
+    closing = b"</Relationships>"
+    if closing not in rels_xml:
+        raise ValueError("fichier .rels sans balise </Relationships> reconnaissable")
+    return rels_xml.replace(closing, fragment + closing, 1)
+
+
+def _ensure_content_type_defaults(content_types_xml: bytes, extensions: set[str]) -> bytes:
+    missing = [ext for ext in extensions if f'Extension="{ext}"'.encode("utf-8") not in content_types_xml]
+    if not missing:
+        return content_types_xml
+    ext_to_ct = {v: k for k, v in _CONTENT_TYPE_EXT.items()}
+    fragment = "".join(
+        f'<Default Extension="{_xml_attr(ext)}" ContentType="{_xml_attr(ext_to_ct.get(ext, "application/octet-stream"))}"/>'
+        for ext in missing
+    ).encode("utf-8")
+    closing = b"</Types>"
+    if closing not in content_types_xml:
+        return content_types_xml
+    return content_types_xml.replace(closing, fragment + closing, 1)
+
+
+def _inject_footnotes(
+    output_path: Path,
+    notes: list[Note],
+    note_id_map: dict[str, int],
+    image_occurrences_by_id: dict[str, ImageOccurrence] | None = None,
+    image_assets: dict[str, ImageAsset] | None = None,
+) -> None:
     """
     Injecte les notes dans word/footnotes.xml sans re-sérialiser le fichier entier.
 
     On préserve ainsi les déclarations XML, les namespaces et les attributs mc:Ignorable
     du gabarit Métopes. C'est plus robuste que ElementTree.tostring(root), qui renomme
     les préfixes w14/w15/wp14 en ns1/ns2 et peut déclencher la réparation de Word.
+
+    Les images incorporées dans les notes sont ajoutées ici (media, relations,
+    content-types) car footnotes.xml est déjà écrit hors du modèle objet python-docx.
     """
+    image_occurrences_by_id = image_occurrences_by_id or {}
+    image_assets = image_assets or {}
+
     with zipfile.ZipFile(output_path, "r") as z:
         all_files = {name: z.read(name) for name in z.namelist()}
 
@@ -435,15 +642,40 @@ def _inject_footnotes(output_path: Path, notes: list[Note], note_id_map: dict[st
     if closing_tag not in fn_xml:
         raise ValueError("word/footnotes.xml ne contient pas de balise </w:footnotes> reconnaissable")
 
+    existing_rels = all_files.get("word/_rels/footnotes.xml.rels")
+    existing_rids = {
+        m.decode("ascii") for m in re.findall(rb'Id="(rId\d+)"', existing_rels or b"")
+    }
+    note_image_plan = _build_note_image_plan(notes, image_occurrences_by_id, image_assets, existing_rids)
+
     fragments: list[str] = []
     for note in notes:
         fn_id = note_id_map.get(note.note_id)
         if fn_id is None:
             continue
-        fragments.append(_build_footnote_xml(note, fn_id))
+        fragments.append(_build_footnote_xml(note, fn_id, note_image_plan))
 
     insertion = "".join(fragments).encode("utf-8")
     all_files["word/footnotes.xml"] = fn_xml.replace(closing_tag, insertion + closing_tag, 1)
+
+    if note_image_plan:
+        # Target dans footnotes.xml.rels est relatif a word/, donc "media/xxx.ext".
+        rel_entries = [(entry["rid"], entry["filename"]) for entry in note_image_plan.values()]
+        all_files["word/_rels/footnotes.xml.rels"] = _add_relationships_xml(existing_rels, rel_entries)
+
+        seen_media: set[str] = set()
+        for entry in note_image_plan.values():
+            media_path = f"word/{entry['filename']}"
+            if media_path in seen_media:
+                continue
+            seen_media.add(media_path)
+            all_files[media_path] = entry["asset"].data
+
+        extensions = {entry["filename"].rsplit(".", 1)[-1] for entry in note_image_plan.values()}
+        if "[Content_Types].xml" in all_files:
+            all_files["[Content_Types].xml"] = _ensure_content_type_defaults(
+                all_files["[Content_Types].xml"], extensions
+            )
 
     with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as z:
         for name, data in all_files.items():
@@ -488,14 +720,16 @@ class DocxExporter:
         note_id_map: dict[str, int] = {
             note.note_id: i for i, note in enumerate(document.notes, start=1)
         }
+        image_occurrences_by_id = {occ.occurrence_id: occ for occ in document.image_occurrences}
+        image_assets = document.image_assets
 
         for block in document.blocks:
             if block.attributes.get("page_break_before"):
                 _add_page_break(doc)
             if block.block_type == "table":
-                _add_raw_table(doc, block)
+                _add_raw_table(doc, block, image_assets)
             else:
-                _add_paragraph(doc, block, note_id_map)
+                _add_paragraph(doc, block, note_id_map, image_occurrences_by_id, image_assets)
 
         if not document.blocks:
             doc.add_paragraph("")
@@ -503,9 +737,13 @@ class DocxExporter:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         doc.save(str(output_path))
 
-        # Injection des notes de bas de page en post-traitement
+        # Injection des notes de bas de page (et de leurs images) en post-traitement
         if document.notes:
-            _inject_footnotes(output_path, document.notes, note_id_map)
+            _inject_footnotes(
+                output_path, document.notes, note_id_map,
+                image_occurrences_by_id=image_occurrences_by_id,
+                image_assets=image_assets,
+            )
 
         return output_path
 
