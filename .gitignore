@@ -8,3 +8,14 @@ out/
 tests/_runtime/
 *.ok
 *.ok2
+
+# Corpus éditorial privé (voir docs/CORPUS_ET_FIXTURES.md) : jamais suivi
+# publiquement, seul un README générique peut l'être.
+sources/**
+!sources/README.md
+exports/
+
+# Espace privé local (hors du dépôt en pratique, filet de sécurité si jamais
+# créé par erreur sous la racine du projet).
+private_fixtures/**
+private_reports/**
