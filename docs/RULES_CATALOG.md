@@ -1,5 +1,12 @@
 # Catalogue de règles SHS — version opérationnelle
 
+> Pour les 17 règles typographiques réellement implémentées dans `OrthotypoService`
+> (fiches complètes : description, exemple fautif/attendu, niveau, source), voir
+> [CATALOGUE_REGLES_TYPOGRAPHIQUES.md](CATALOGUE_REGLES_TYPOGRAPHIQUES.md). Ce document-ci
+> reste le catalogue conceptuel couvrant aussi la structure et le pivot ; les
+> identifiants `R-SP-xxx`/`R-AB-xxx`/`R-SO-xxx` cités ci-dessous pour la typographie sont
+> antérieurs au code et ne correspondent pas à ses `rule_id` réels.
+
 ## 1. Statut
 
 Ce catalogue organise les règles selon un mécanisme de décision éditoriale compatible avec le pivot Python‑JSON.
