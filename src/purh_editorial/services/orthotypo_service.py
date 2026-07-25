@@ -410,6 +410,33 @@ def _find_changed_regions(before: str, after: str) -> list[tuple[int, int]]:
     return [(s, e) for s, e in merged]
 
 
+def _apply_rule_with_occurrences(rule: "TypoRule", text: str) -> tuple[str, list[tuple[str, str]]]:
+    """
+    Applique une règle et retourne, en plus du texte corrigé, la liste (avant, après)
+    de chaque occurrence individuellement modifiée — condition nécessaire à la
+    traçabilité par occurrence (Phase 6) : une même règle peut corriger plusieurs
+    endroits d'un même bloc, chacun doit rester distinguable dans le journal.
+    Reconstruit le texte occurrence par occurrence plutôt que via pattern.sub() pour
+    pouvoir capturer chaque fragment ; produit exactement le même texte que
+    `TypoRule.apply`.
+    """
+    occurrences: list[tuple[str, str]] = []
+    parts: list[str] = []
+    last_end = 0
+    for match in rule.pattern.finditer(text):
+        before_fragment = match.group(0)
+        after_fragment = (
+            rule.replacement(match) if callable(rule.replacement) else match.expand(rule.replacement)
+        )
+        parts.append(text[last_end:match.start()])
+        parts.append(after_fragment)
+        last_end = match.end()
+        if after_fragment != before_fragment:
+            occurrences.append((before_fragment, after_fragment))
+    parts.append(text[last_end:])
+    return "".join(parts), occurrences
+
+
 # ── Service principal ─────────────────────────────────────────────────────────
 
 class OrthotypoService:
@@ -517,32 +544,61 @@ class OrthotypoService:
             )
         return diagnostics
 
+    def _build_transformations(
+        self,
+        target_ref: str,
+        rule_occurrences: list[tuple[str, str, str]],
+        century_occurrences: list[tuple[str, str]],
+        highlight_regions: list[tuple[int, int]] | None = None,
+    ) -> list[Transformation]:
+        """Une Transformation distincte par occurrence corrigée, taguée par son propre
+        rule_id (Phase 6) — plutôt qu'une seule transformation "purh.orthotypo.batch"
+        agrégeant tout un bloc, qui empêchait de savoir quelle règle avait fait quoi."""
+        transformations = [
+            Transformation(
+                transformation_id=make_id("tr"),
+                module=self.module_name,
+                target_ref=target_ref,
+                operation="orthotypo",
+                before=before,
+                after=after,
+                rule_id=rule_id,
+                applied=True,
+                attributes={"highlight_regions": highlight_regions or [], "color": self.color},
+            )
+            for rule_id, before, after in rule_occurrences
+        ]
+        transformations.extend(
+            Transformation(
+                transformation_id=make_id("tr"),
+                module=self.module_name,
+                target_ref=target_ref,
+                operation="orthotypo",
+                before=before,
+                after=after,
+                rule_id="R-SO-001",
+                applied=True,
+                attributes={
+                    "highlight_regions": highlight_regions or [],
+                    "color": self.color,
+                    "century_styling": True,
+                },
+            )
+            for before, after in century_occurrences
+        )
+        return transformations
+
     def _process_inlines_owner(self, inlines, *, target_ref, update_text) -> list[Transformation]:
         original = "".join(s.text for s in inlines)
-        corrected = self._apply_all_rules(original)
+        corrected, rule_occurrences = self._apply_all_rules_tracked(original)
         if corrected == original:
-            styled_inlines, century_styled = self._style_centuries_in_inlines(inlines)
+            styled_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(inlines)
             if century_styled:
                 inlines[:] = styled_inlines
                 styled_text = "".join(span.text for span in styled_inlines)
                 update_text(styled_text)
                 regions = _find_changed_regions(original, styled_text)
-                return [Transformation(
-                    transformation_id=make_id("tr"),
-                    module=self.module_name,
-                    target_ref=target_ref,
-                    operation="orthotypo",
-                    before=original,
-                    after=styled_text,
-                    rule_id="purh.orthotypo.batch",
-                    applied=True,
-                    attributes={
-                        "highlight_regions": regions,
-                        "color": self.color,
-                        "century_styling": True,
-                        "rule_id": "R-SO-001",
-                    },
-                )]
+                return self._build_transformations(target_ref, [], century_occurrences, regions)
             return []
 
         # Signature caractère par caractère (texte + petites capitales + exposant) de
@@ -562,7 +618,7 @@ class OrthotypoService:
             corrected,
             _find_changed_regions(original, corrected),
         )
-        new_inlines, century_styled = self._style_centuries_in_inlines(new_inlines)
+        new_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(new_inlines)
         final_text = "".join(span.text for span in new_inlines)
         after_signature = self._char_style_signature(new_inlines)
         inlines[:] = new_inlines
@@ -570,22 +626,7 @@ class OrthotypoService:
         if after_signature == before_signature:
             return []
         regions = _find_changed_regions(original, final_text)
-        return [Transformation(
-            transformation_id=make_id("tr"),
-            module=self.module_name,
-            target_ref=target_ref,
-            operation="orthotypo",
-            before=original,
-            after=final_text,
-            rule_id="purh.orthotypo.batch",
-            applied=True,
-            attributes={
-                "highlight_regions": regions,
-                "color": self.color,
-                "century_styling": century_styled,
-                "rule_id": "R-SO-001" if century_styled else None,
-            },
-        )]
+        return self._build_transformations(target_ref, rule_occurrences, century_occurrences, regions)
 
     def _process_flat(
         self,
@@ -596,9 +637,9 @@ class OrthotypoService:
         update_color,
         update_inlines,
     ) -> list[Transformation]:
-        corrected = self._apply_all_rules(text)
+        corrected, rule_occurrences = self._apply_all_rules_tracked(text)
         inlines = [InlineSpan(text=corrected)]
-        styled_inlines, century_styled = self._style_centuries_in_inlines(inlines)
+        styled_inlines, century_styled, century_occurrences = self._style_centuries_in_inlines(inlines)
         final_text = "".join(span.text for span in styled_inlines)
 
         if final_text == text:
@@ -607,21 +648,7 @@ class OrthotypoService:
         update_color()
         if century_styled:
             update_inlines(styled_inlines)
-        return [Transformation(
-            transformation_id=make_id("tr"),
-            module=self.module_name,
-            target_ref=target_ref,
-            operation="orthotypo",
-            before=text,
-            after=final_text,
-            rule_id="purh.orthotypo.batch",
-            applied=True,
-            attributes={
-                "color": self.color,
-                "century_styling": century_styled,
-                "rule_id": "R-SO-001" if century_styled else None,
-            },
-        )]
+        return self._build_transformations(target_ref, rule_occurrences, century_occurrences)
 
     @staticmethod
     def _is_century_context(full_text: str, match_end: int) -> bool:
@@ -637,28 +664,37 @@ class OrthotypoService:
             for ch in span.text
         ]
 
-    def _style_centuries_in_inlines(self, inlines: list[InlineSpan]) -> tuple[list[InlineSpan], bool]:
+    def _style_centuries_in_inlines(
+        self, inlines: list[InlineSpan]
+    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]]]:
+        """Retourne aussi, pour la traçabilité par occurrence (Phase 6), la liste
+        (avant, après) de chaque siècle individuellement stylé — un même bloc peut en
+        contenir plusieurs (ex. "xviie au xixe siècles")."""
         if not inlines:
-            return inlines, False
+            return inlines, False, []
 
         full_text = "".join(span.text for span in inlines)
-        roman_positions: set[int] = set()
-        exponent_positions: set[int] = set()
+        century_matches: list[re.Match] = []
         for match in _CENTURY_TOKEN_RE.finditer(full_text):
             roman = match.group(1)
             if roman.lower() not in _VALID_CENTURIES:
                 continue
             if not self._is_century_context(full_text, match.end()):
                 continue
-            roman_start = match.start(1)
-            roman_end = match.end(1)
-            roman_positions.update(range(roman_start, roman_end))
-            exponent_positions.add(roman_end)
+            century_matches.append(match)
 
-        if not roman_positions and not exponent_positions:
-            return inlines, False
+        if not century_matches:
+            return inlines, False, []
 
-        changed = False
+        roman_positions: dict[int, int] = {}
+        exponent_positions: dict[int, int] = {}
+        for match_index, match in enumerate(century_matches):
+            roman_start, roman_end = match.start(1), match.end(1)
+            for pos in range(roman_start, roman_end):
+                roman_positions[pos] = match_index
+            exponent_positions[roman_end] = match_index
+
+        changed_by_match = [False] * len(century_matches)
         result: list[InlineSpan] = []
         absolute_index = 0
         for span in inlines:
@@ -671,22 +707,29 @@ class OrthotypoService:
                 new_span = copy.deepcopy(span)
                 new_span.text = ch
                 if absolute_index in roman_positions:
+                    match_index = roman_positions[absolute_index]
                     lowered = ch.lower()
                     if lowered != ch or not new_span.style.small_caps:
-                        changed = True
+                        changed_by_match[match_index] = True
                     new_span.text = lowered
                     new_span.style.small_caps = True
                 elif absolute_index in exponent_positions:
+                    match_index = exponent_positions[absolute_index]
                     if ch != "e" or not new_span.style.superscript:
-                        changed = True
+                        changed_by_match[match_index] = True
                     new_span.text = "e"
                     new_span.style.superscript = True
                 result.append(new_span)
                 absolute_index += 1
 
-        if not changed:
-            return inlines, False
-        return self._merge_adjacent_spans(result), True
+        if not any(changed_by_match):
+            return inlines, False, []
+        occurrences = [
+            (match.group(0), match.group(1).lower() + "e")
+            for match, changed in zip(century_matches, changed_by_match)
+            if changed
+        ]
+        return self._merge_adjacent_spans(result), True, occurrences
 
     @staticmethod
     def _merge_adjacent_spans(inlines: list[InlineSpan]) -> list[InlineSpan]:
@@ -720,6 +763,18 @@ class OrthotypoService:
             if rule.auto:
                 text = rule.apply(text)
         return text
+
+    @staticmethod
+    def _apply_all_rules_tracked(text: str) -> tuple[str, list[tuple[str, str, str]]]:
+        """Comme `_apply_all_rules`, mais retourne aussi la liste (rule_id, avant, après)
+        de chaque occurrence corrigée, tous rules confondues, dans l'ordre d'application."""
+        occurrences: list[tuple[str, str, str]] = []
+        for rule in TYPO_RULES:
+            if not rule.auto:
+                continue
+            text, rule_occurrences = _apply_rule_with_occurrences(rule, text)
+            occurrences.extend((rule.rule_id, before, after) for before, after in rule_occurrences)
+        return text, occurrences
 
     # ── Reconstruction des inlines avec surlignage ────────────────────────────
 
