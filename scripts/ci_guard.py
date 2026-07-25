@@ -7,7 +7,10 @@ Garde-fou de confidentialité et de terminologie, exécuté en CI (voir
 - un fichier privé (DOCX/PDF/EPUB/ZIP/INDD non explicitement autorisé) est suivi par
   Git sous sources/, fixtures/ ou exports/ ;
 - un fichier de fixture se présente comme normatif ("gold"/"or") sans satisfaire le
-  schéma de fixtures/orthotypography_gold/ (validated=true + validation_source réelle).
+  schéma de fixtures/orthotypography_gold/ (validated=true + validation_source réelle) ;
+- un fichier `.env` (secrets réels) ou une clé privée PEM est suivi par Git ;
+- un fichier suivi contient une valeur qui ressemble à une clé API (Groq, OpenAI,
+  Anthropic) ou un autre secret courant.
 
 Voir docs/CORPUS_ET_FIXTURES.md pour la politique complète.
 """
@@ -15,11 +18,42 @@ Voir docs/CORPUS_ET_FIXTURES.md pour la politique complète.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Noms de fichiers jamais suivis (secrets réels). `.env.example` reste autorisé.
+_FORBIDDEN_FILENAMES = {".env", "id_rsa", "id_dsa", "id_ecdsa", "id_ed25519"}
+_FORBIDDEN_SUFFIXES = {".pem", ".pfx", ".p12", ".key"}
+
+# Motifs de secrets courants. Chaque motif capture la valeur dans le groupe 1
+# pour permettre de la tronquer avant affichage.
+_SECRET_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    ("clé Groq", re.compile(r"\b(gsk_[A-Za-z0-9]{20,})\b")),
+    ("clé OpenAI", re.compile(r"\b(sk-[A-Za-z0-9]{20,})\b")),
+    ("clé Anthropic", re.compile(r"\b(sk-ant-[A-Za-z0-9\-_]{20,})\b")),
+    ("clé privée PEM", re.compile(r"(-----BEGIN(?: [A-Z]+)? PRIVATE KEY-----)")),
+]
+
+# Fichiers dont le contenu est fait de placeholders et ne doit pas être scanné
+# pour de "vraies" valeurs (ils contiennent volontairement des mots comme "key").
+_SECRET_SCAN_ALLOWLIST = {".env.example"}
+
+# Extensions binaires ou volumineuses à ne pas tenter de lire comme texte.
+_SECRET_SCAN_SKIP_SUFFIXES = {
+    ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico",
+    ".docx", ".pdf", ".epub", ".zip", ".dotm", ".dotx", ".indd", ".idml",
+    ".woff", ".woff2", ".ttf", ".otf",
+}
+
+
+def _mask(value: str) -> str:
+    if len(value) <= 8:
+        return "*" * len(value)
+    return f"{value[:4]}…{value[-2:]} ({len(value)} car.)"
 
 # Extensions binaires jamais suivies sous sources/ ou exports/ dans le dépôt public.
 _FORBIDDEN_EXTENSIONS = {".docx", ".pdf", ".epub", ".zip", ".indd", ".idml", ".dotm"}
@@ -94,12 +128,40 @@ def check_characterization_fixtures_do_not_claim_gold() -> list[str]:
     return errors
 
 
+def check_no_secrets_tracked(tracked: list[str]) -> list[str]:
+    errors = []
+    for path in tracked:
+        name = Path(path).name
+        suffix = Path(path).suffix.lower()
+        if name in _FORBIDDEN_FILENAMES:
+            errors.append(f"fichier de secret suivi : {path} (nom interdit : {name})")
+            continue
+        if suffix in _FORBIDDEN_SUFFIXES:
+            errors.append(f"fichier de secret suivi : {path} (extension interdite : {suffix})")
+            continue
+        if name in _SECRET_SCAN_ALLOWLIST or suffix in _SECRET_SCAN_SKIP_SUFFIXES:
+            continue
+        full_path = ROOT / path
+        try:
+            content = full_path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        for label, pattern in _SECRET_PATTERNS:
+            match = pattern.search(content)
+            if match:
+                errors.append(
+                    f"valeur ressemblant à une {label} détectée dans {path} : {_mask(match.group(1))}"
+                )
+    return errors
+
+
 def main() -> int:
     tracked = _tracked_files()
     errors: list[str] = []
     errors.extend(check_no_private_binaries(tracked))
     errors.extend(check_gold_fixtures_are_validated())
     errors.extend(check_characterization_fixtures_do_not_claim_gold())
+    errors.extend(check_no_secrets_tracked(tracked))
 
     if errors:
         print("Échec du garde-fou de confidentialité/terminologie :", file=sys.stderr)
