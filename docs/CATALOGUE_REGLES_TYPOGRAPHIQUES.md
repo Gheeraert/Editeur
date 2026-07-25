@@ -10,15 +10,19 @@ Ce catalogue documente les règles **réellement implémentées et actives** dan
 `OrthotypoService` (`src/purh_editorial/services/orthotypo_service.py`), telles
 qu'elles fonctionnent aujourd'hui — pas des règles souhaitées ou à écrire.
 
-Il ne s'agit toujours **pas** d'une validation contre le guide typographique réel des
-PURH. Ce guide (`sources/editorial_rules/CONSIGNES_AUTEURS_PURH_2025 (1).pdf` et le
-*Lexique des règles typographiques… Imprimerie nationale*) est présent dans le dépôt
-mais n'a pas encore été dépouillé — c'est l'objet de la Phase 4. Le champ **Source** de
-chaque fiche reflète honnêtement ce qui est validé aujourd'hui : soit une observation
-directe sur le corpus réel H&P2 (`docs/ANALYSE_CORPUS_HP2.md`), soit une convention
-typographique française générale non encore confrontée à une source PURH interne. Un
-champ `Source: à confirmer contre le guide PURH (Phase 4)` n'est pas une lacune de ce
-document : c'est un état de fait à ne pas masquer.
+**Mise à jour Phase 4** : `sources/editorial_rules/CONSIGNES_AUTEURS_PURH_2025 (1).pdf`
+(le guide réel des PURH, 16 pages) et le chapitre « Citations » du *Lexique des règles
+typographiques… Imprimerie nationale* ont été dépouillés — voir
+`docs/PHASE4_EXTRACTION_REGLES_PURH.md` pour le détail de l'extraction. Les champs
+Source ci-dessous ont été mis à jour en conséquence pour les règles concernées. Le reste
+du guide PURH (bibliographie, index, citations) n'a pas encore été traduit en règles
+automatisables : il s'agit de décisions structurelles (fondu/non fondu, langue, modèle
+bibliographique choisi) qui dépassent la portée d'une substitution regex — voir le
+rapport de Phase 4 pour le détail et les raisons de ne pas les avoir implémentées telles
+quelles. Le champ **Source** de chaque fiche reflète honnêtement ce qui est validé
+aujourd'hui : soit une confirmation dans le guide PURH réel (citée avec sa page), soit
+une observation directe sur le corpus H&P2 (`docs/ANALYSE_CORPUS_HP2.md`), soit une
+convention typographique générale non encore confrontée à une source PURH interne.
 
 ## 2. Nomenclature
 
@@ -97,7 +101,12 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Niveau** : 2 — correction locale automatique
 - **Source** : **confirmée par observation directe** sur le corpus H&P2
   (`docs/ANALYSE_CORPUS_HP2.md`, catégorie 1) — le pipeline produit exactement ce que les
-  éditrices PURH ont produit sur ce point, sur les 16 chapitres testés.
+  éditrices PURH ont produit sur ce point, sur les 16 chapitres testés. **Confirmée aussi
+  par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 12, section « Guillemets
+  français ou guillemets anglais ? ») : guillemets français exclusivement en texte courant,
+  espace insécable après l'ouvrant et avant le fermant, guillemets anglais réservés à une
+  citation de second niveau sans aucune espace interne — exactement le comportement de
+  cette règle.
 - **Remarques** : garde-fous techniques testés (`tests/unit/test_orthotypo_service_guardrails.py`).
 
 ### `R-ORTHO-LIGATURE-OE-001`
@@ -202,10 +211,15 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
   ni `Maximilien Ier` (ordinal de prénom, pas un siècle).
 - **Niveau** : 2 — correction locale automatique
 - **Source** : **confirmée par observation directe** sur le corpus H&P2 pour la
-  normalisation elle-même. Le garde-fou de contexte (§ ci-dessus) corrige un défaut
-  réel découvert en Phase 1 (`docs/PHASE1_FIABILITE_PIPELINE.md`, défaut 1 du même
-  esprit) : sans lui, la règle corrompait « Maximilien Ier » en « Maximilien Ie » et le
-  mot « vie » en « VIe ». Corrigé le 2026-07-24 (commit `e665399`).
+  normalisation elle-même, et **confirmée par le guide PURH réel**
+  (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 10, tableau « Siècles, abréviations et
+  symboles ») : « Les siècles sont toujours composés en chiffres romains et en petites
+  capitales » ; le tableau donne explicitement `XIXème` → `XIXe` et surtout `Ier` → `Ier`
+  (inchangé), qui valide directement le cas particulier ajouté en Phase 1. Le garde-fou
+  de contexte (§ ci-dessus) corrige un défaut réel découvert en Phase 1
+  (`docs/PHASE1_FIABILITE_PIPELINE.md`, défaut 1 du même esprit) : sans lui, la règle
+  corrompait « Maximilien Ier » en « Maximilien Ie » et le mot « vie » en « VIe ».
+  Corrigé le 2026-07-24 (commit `e665399`).
 
 ### `purh.ordinaux`
 
@@ -216,11 +230,14 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple attendu** : `la 1re partie`, `le 5e chapitre`
 - **Contre-exemple (ne doit pas toucher)** : `le 1er chapitre` (déjà correct), `version 2.0`.
 - **Niveau** : 2 — correction locale automatique
-- **Source** : convention typographique française générale, non confrontée au guide PURH.
+- **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
+  p. 10) : « Pour les ordinaux, on abrège "e" et non pas "ème", "re" et non pas "ère" » —
+  correspond exactement au comportement de cette règle.
 - **Remarques** : ne couvre pas l'abréviation « Ie » (sans r) après un prénom de
   souverain (ex. « Jules Ie » → « Jules Ier »), un motif recensé comme récurrent sur le
   corpus H&P2 (catégorie 2b de `docs/ANALYSE_CORPUS_HP2.md`, ~9 occurrences) mais non
-  encore couvert par cette règle — candidate pour la Phase 4.
+  encore couvert par cette règle — candidate pour une prochaine phase (voir
+  `docs/PHASE4_EXTRACTION_REGLES_PURH.md`).
 
 ### `purh.tiret.double`
 
@@ -239,7 +256,10 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple fautif** : `etc...`, `etc…`
 - **Exemple attendu** : `etc.`
 - **Niveau** : 2 — correction locale automatique
-- **Source** : convention typographique française générale, non confrontée au guide PURH.
+- **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
+  p. 10, tableau des abréviations) : « Et caetera : etc. Jamais en italique. Toujours
+  suivi d'un point abréviatif, qui se substitue au point final si l'abréviation termine
+  la phrase, et non de points de suspension. »
 
 ### `purh.pagination.espace`
 
@@ -250,12 +270,20 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple fautif** : `voir p. 12`, `cf. vol. II`
 - **Exemple attendu** : `voir p. 12`, `cf. vol. II`
 - **Niveau** : 2 — correction locale automatique
-- **Source** : convention typographique française standard (Imprimerie nationale),
-  cohérente avec les usages observés dans les notes du corpus H&P2 sans avoir été isolée
-  spécifiquement dans l'analyse déjà produite.
-- **Remarques** : cette règle *reconnaît* `pp.` déjà présent pour l'espacement mais ne le
-  *produit* jamais (pas de doublement automatique `p.` → `pp.`) — trou identifié par
-  l'audit initial, à traiter en Phase 4.
+- **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
+  p. 11-12) pour les entrées listées avec « espace insécable entre les 2 éléments »
+  (`loc. cit.`, `op. cit.`, `s. d.`, `s. l.`). Pour `p.`/`fig.`/`vol.`/etc., cohérent avec
+  les usages observés dans les notes du corpus H&P2 sans avoir été isolé spécifiquement
+  dans l'analyse déjà produite.
+- **Remarques** : cette règle *reconnaît* `pp.` déjà présent pour l'espacement, mais la
+  normalisation `pp.` → `p.` elle-même relève désormais de `purh.abreviations.redoublement`
+  (ci-dessous), appliquée dans l'ordre des règles.
+- **Écart identifié, non corrigé** : le guide (p. 12) abrège aussi « folio » en `fol.`/`fo`
+  et « recto/verso » en `ro`/`vo`, avec, dans ces deux derniers cas, la lettre `o`
+  **en exposant**, un style que cette règle ne produit pas (elle insère seulement une
+  espace). Non traité dans cette phase : un exposant sélectif nécessiterait un
+  éclatement en spans au même titre que le stylage des siècles (`R-SO-001`), hors
+  périmètre d'une simple substitution regex — voir `docs/PHASE4_EXTRACTION_REGLES_PURH.md`.
 
 ### `purh.numero`
 
@@ -264,7 +292,13 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple fautif** : `n° 5`, `N° 12`
 - **Exemple attendu** : `n° 5`, `N° 12`
 - **Niveau** : 2 — correction locale automatique
-- **Source** : convention typographique française générale, non confrontée au guide PURH.
+- **Source** : convention typographique française générale largement répandue (symbole
+  degré `°`), mais **contredite par le guide PURH réel**
+  (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 12) : la forme demandée pour « numéro » est
+  `no` avec la lettre `o` **en exposant** (comme pour `fo`/`ro`/`vo`), pas le symbole
+  degré `n°`. Écart identifié, non corrigé dans cette phase pour les mêmes raisons que
+  `purh.pagination.espace` ci-dessus (nécessite un éclatement en spans, pas une simple
+  substitution regex) — voir `docs/PHASE4_EXTRACTION_REGLES_PURH.md`.
 - **Remarques** : recouvrement partiel avec `purh.pagination.espace` (qui couvre aussi
   `n°`) — règle distincte conservée pour le cas où `n°` apparaît hors contexte de
   pagination.
@@ -282,6 +316,31 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Niveau** : 2 — correction locale automatique
 - **Source** : convention typographique française générale, non confrontée au guide PURH.
 
+### `purh.abreviations.redoublement`
+
+- **Titre** : Abréviation redoublée → forme simple (`pp.`/`vv.`/`ll.`/`§§`)
+- **Description** : Réduit une abréviation française redoublée pour marquer le pluriel
+  (usage anglais) vers sa forme simple correcte en français : `pp.` → `p.`, `vv.` → `v.`,
+  `ll.` → `l.`, `§§` → `§`. S'applique quel que soit le contenu qui suit (plage de pages,
+  nombre unique, etc.) ; se compose avec `purh.pagination.espace` pour l'espacement fin
+  qui suit `p.` devant un chiffre.
+- **Exemple fautif** : `pp. 53-84`, `vv. 122-128`, `ll. 5 et 12`, `§§ 5-9`
+- **Exemple attendu** : `p. 53-84`, `v. 122-128`, `l. 5 et 12`, `§ 5-9`
+- **Contre-exemple (ne doit pas toucher)** : `supp. cit.` (« pp » n'est pas en début de
+  mot, pas de redoublement d'abréviation).
+- **Niveau** : 2 — correction locale automatique
+- **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
+  p. 11) : « Ne jamais redoubler tout ou partie d'une abréviation française pour indiquer
+  le pluriel », avec exactement ces quatre exemples (`pp.`→`p.`, `vv.`→`v.`, `ll.`→`l.`,
+  `§§`→`§`).
+- **Ajoutée en Phase 4** (2026-07-25) pour combler le trou identifié par l'audit initial :
+  seule la *création* de nouveaux redoublements était jusqu'ici empêchée
+  (`purh.pagination.espace` ne fait que reconnaître `pp.` déjà présent pour l'espacement,
+  sans jamais le produire) ; les redoublements déjà présents dans un manuscrit n'étaient
+  pas normalisés. Le prompt de `ai_editorial_service.py` (« Abréviations normalisées :
+  p. XX (pas pp.) ») était déjà cohérent avec cette règle avant même son écriture — vérifié,
+  aucune double source de vérité à corriger.
+
 ### `purh.tiret.incise`
 
 - **Titre** : Tiret cadratin pour les incises
@@ -298,9 +357,12 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
   réelle. Elle ne s'est pas déclenchée sur le corpus H&P2 testé (le brut n'y contient pas
   le motif qu'elle cible), donc elle n'y a rien corrompu empiriquement — mais elle
   encoderait la mauvaise convention sur tout manuscrit utilisant déjà le tiret simple.
-  **À corriger en priorité en Phase 4**, une fois le guide PURH réel consulté pour
-  trancher la convention attendue (l'usage observé côté éditrices suggère le
-  demi-cadratin, mais ce n'est qu'une observation sur un seul ouvrage).
+  Le guide PURH réel ne tranche pas explicitement la question du tiret d'incise : il
+  mentionne seulement le tiret cadratin pour un usage différent (remplacer la répétition
+  du nom d'auteur dans une liste bibliographique, p. 8). **Toujours à corriger en
+  priorité** : l'usage observé côté éditrices (demi-cadratin pour les incises) reste la
+  meilleure indication disponible, mais ce n'est qu'une observation sur un seul ouvrage,
+  pas une règle explicite du guide.
 
 ---
 
@@ -318,7 +380,14 @@ d'information par rapport aux anciens fichiers fusionnés.
 - **Description** : Signale un guillemet fermant `»` immédiatement suivi d'un point,
   quand le contenu cité se termine déjà par une ponctuation forte — cas ambigu où la
   ponctuation peut appartenir à la citation ou à la phrase englobante.
-- **Source** : convention éditoriale prudente, non confrontée au guide PURH.
+- **Source** : le principe même de cette règle (diagnostic prudent plutôt que correction
+  automatique) est **confirmé comme nécessaire** par le guide PURH (p. 12, « Guillemet
+  fermant et ponctuation finale ») et par le *Lexique Imprimerie nationale* (chapitre
+  « Cit. », section « Guillemets et ponctuation ») : la position de la ponctuation finale
+  par rapport au guillemet fermant dépend de si la citation est *fondue* dans la phrase
+  ou en constitue une entière — une distinction structurelle que ni le guide ni le
+  lexique ne réduisent à une règle mécanique, ce qui valide le choix de rester en
+  diagnostic (Niveau 1) plutôt que de corriger automatiquement.
 
 ### `R-AN-002` / `R-AN-003` — Placement des appels de note
 
@@ -326,22 +395,44 @@ d'information par rapport aux anciens fichiers fusionnés.
 - **Niveau** : 1 — diagnostic seul.
 - **R-AN-002** : place suspecte d'un appel de note par rapport à la ponctuation.
 - **R-AN-003** : espace parasite avant un appel de note.
-- **Source** : convention éditoriale prudente, non confrontée au guide PURH.
+- **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
+  p. 11, « Appels de note ») : « L'appel de note se place toujours avant la ponctuation
+  ou le guillemet fermant... Il ne doit pas être précédé d'une espace et ne peut être
+  rejeté à la ligne suivante. » — correspond exactement à ce que ces deux diagnostics
+  signalent.
 
 ---
 
-## 6. Ce qu'il reste à faire (Phase 4)
+## 6. Ce qui a été fait en Phase 4, et ce qui reste
 
-- Dépouiller `sources/editorial_rules/CONSIGNES_AUTEURS_PURH_2025 (1).pdf` et le
-  *Lexique… Imprimerie nationale* pour remplacer, règle par règle, le champ Source
-  « non confronté au guide PURH » par une référence précise (page, section) ou une
-  correction de la règle si le guide contredit la pratique actuelle.
-- Trancher la convention de tiret d'incise (`purh.tiret.incise`, cadratin vs
-  demi-cadratin) — c'est la seule règle de ce catalogue en contradiction connue avec
-  l'usage éditorial observé.
-- Ajouter la règle manquante de redoublement d'abréviations déjà présentes
-  (`pp.`, `vv.`, `ll.`, `§§`) normalisées vers la forme correcte, identifiée par l'audit
-  initial et non couverte par `purh.pagination.espace`.
-- Compléter `purh.ordinaux` (ou créer une règle dédiée) pour l'expansion de l'abréviation
-  brute « Ie » → « Ier » après un prénom de souverain (catégorie 2b,
-  `docs/ANALYSE_CORPUS_HP2.md`).
+Voir `docs/PHASE4_EXTRACTION_REGLES_PURH.md` pour le rapport complet. En bref :
+
+**Fait** : dépouillement de `CONSIGNES_AUTEURS_PURH_2025.pdf` (intégral, 16 pages) et du
+chapitre « Citations » du *Lexique Imprimerie nationale* ; sources mises à jour
+ci-dessus pour 8 des 17 règles ; nouvelle règle `purh.abreviations.redoublement`
+implémentée et testée ; cohérence du prompt `ai_editorial_service.py` vérifiée (déjà
+cohérente, rien à corriger).
+
+**Reste à faire**, par ordre de priorité suggéré :
+
+1. Trancher la convention de tiret d'incise (`purh.tiret.incise`, cadratin vs
+   demi-cadratin) — toujours la seule règle en contradiction connue avec l'usage
+   éditorial observé ; le guide PURH ne tranche pas explicitement ce point précis.
+2. Espace insécable entre un nom propre et le numéral dynastique qui le suit
+   (« Louis XIV », « Léon X ») — **candidate la plus solide** pour une prochaine règle :
+   confirmée à la fois par 784 occurrences sur le corpus H&P2 et par le *Lexique
+   Imprimerie nationale* (règle de coupure : « les noms de souverains [ne seront pas
+   séparés] de leur numéro dynastique »). Non implémentée dans cette phase (absente de
+   la liste de gaps que cette phase devait traiter).
+3. Composition des citations (4 cas fondu/non fondu × français/étranger), guillemets de
+   second niveau (déjà couvert, confirmé), modèles bibliographiques, format des entrées
+   d'index : identifiés et documentés dans le rapport de Phase 4, mais **non
+   implémentés** — ce sont des décisions structurelles (détection de citation, langue,
+   modèle bibliographique choisi par l'auteur) hors de portée d'une substitution regex
+   isolée ; nécessitent une conception au niveau `structure_service`/zones protégées.
+4. Deux écarts de style secondaires identifiés (numéro en `no` exposant plutôt que `n°` ;
+   folio/recto/verso avec `o` exposant) — nécessitent le même mécanisme d'éclatement en
+   spans que le stylage des siècles, non traités ici.
+5. Compléter `purh.ordinaux` (ou créer une règle dédiée) pour l'expansion de l'abréviation
+   brute « Ie » → « Ier » après un prénom de souverain (catégorie 2b,
+   `docs/ANALYSE_CORPUS_HP2.md`).

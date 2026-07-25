@@ -119,6 +119,17 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("version 2.0"), "version 2.0")
         self.assertEqual(_apply_orthotypo("5e chapitre"), "5e chapitre")
 
+    def test_abreviations_redoublement_purh(self) -> None:
+        # Source : CONSIGNES_AUTEURS_PURH_2025.pdf, p. 11.
+        self.assertEqual(_apply_orthotypo("vv. 122-128"), "v. 122-128")
+        self.assertEqual(_apply_orthotypo("ll. 5 et 12"), "l. 5 et 12")
+        self.assertEqual(_apply_orthotypo("§§ 5-9"), "§ 5-9")
+        self.assertEqual(_apply_orthotypo("voir pp. 53-84"), f"voir p.{NNBSP}53-84")
+
+    def test_abreviations_redoublement_guardrails(self) -> None:
+        self.assertEqual(_apply_orthotypo("voir p. 12"), f"voir p.{NNBSP}12")
+        self.assertEqual(_apply_orthotypo("supp. cit."), "supp. cit.")
+
 
 if __name__ == "__main__":
     unittest.main()

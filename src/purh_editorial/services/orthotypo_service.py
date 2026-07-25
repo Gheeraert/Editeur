@@ -343,6 +343,21 @@ def _build_rules() -> list[TypoRule]:
         description="Espace fine insécable après n°",
     ))
 
+    # 15b. Redoublement fautif d'une abréviation pour marquer le pluriel : le français
+    #      ne redouble jamais une abréviation (pp./vv./ll./§§), contrairement à l'anglais.
+    #      Source : CONSIGNES_AUTEURS_PURH_2025.pdf, p. 11 — "Ne jamais redoubler tout ou
+    #      partie d'une abréviation française pour indiquer le pluriel."
+    #      (pp. 53-84 -> p. 53-84 ; vv. 122-128 -> v. 122-128 ; ll. 5 et 12 -> l. 5 et 12 ;
+    #      §§ 5-9 -> § 5-9). Seule la création de nouveaux redoublements était jusqu'ici
+    #      empêchée (purh.pagination.espace n'espace que la forme déjà présente) ; cette
+    #      règle normalise les redoublements déjà présents dans le manuscrit.
+    rules.append(TypoRule(
+        rule_id="purh.abreviations.redoublement",
+        pattern=re.compile(r"\b(pp|vv|ll)\.|§§"),
+        replacement=lambda m: (m.group(1)[0] + "." if m.group(1) else "§"),
+        description="Abréviation redoublée -> forme simple (pp./vv./ll./§§)",
+    ))
+
     # 16. Séparateur de milliers : espace ordinaire entre groupes de chiffres
     #     1 000 → 1 000, 1 500 000 → 1 500 000
     _thousands_re = re.compile(r"(\d{1,3}) (\d{3})(?!\d)")
