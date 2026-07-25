@@ -62,6 +62,27 @@ _OE_LIGATURE_FORMS: dict[str, str] = {
     "moeurs": "mœurs",
 }
 
+# ── Localisation par occurrence (Phase 6 bis) ─────────────────────────────────
+
+@dataclass
+class RuleOccurrence:
+    """Une correction individuellement localisée, avant regroupement en Transformation.
+
+    Convention d'offsets (voir docs/PHASE6BIS_ASSAINISSEMENT.md) : `offset_start` et
+    `offset_end` sont relatifs au texte tel qu'il existe juste avant l'application de
+    CETTE règle précise — pas au texte original du bloc, qui peut déjà avoir été modifié
+    par des règles précédentes dans la chaîne. `coordinate_space="pre_rule_text"` rend
+    ce référentiel explicite plutôt qu'implicite.
+    """
+
+    rule_id: str
+    before: str
+    after: str
+    offset_start: int
+    offset_end: int
+    coordinate_space: str = "pre_rule_text"
+
+
 # ── Règle typographique ───────────────────────────────────────────────────────
 
 @dataclass
@@ -425,17 +446,19 @@ def _find_changed_regions(before: str, after: str) -> list[tuple[int, int]]:
     return [(s, e) for s, e in merged]
 
 
-def _apply_rule_with_occurrences(rule: "TypoRule", text: str) -> tuple[str, list[tuple[str, str]]]:
+def _apply_rule_with_occurrences(rule: "TypoRule", text: str) -> tuple[str, list[RuleOccurrence]]:
     """
-    Applique une règle et retourne, en plus du texte corrigé, la liste (avant, après)
-    de chaque occurrence individuellement modifiée — condition nécessaire à la
-    traçabilité par occurrence (Phase 6) : une même règle peut corriger plusieurs
-    endroits d'un même bloc, chacun doit rester distinguable dans le journal.
+    Applique une règle et retourne, en plus du texte corrigé, une RuleOccurrence par
+    occurrence individuellement modifiée — condition nécessaire à la traçabilité par
+    occurrence (Phase 6/6 bis) : une même règle peut corriger plusieurs endroits d'un
+    même bloc, chacun doit rester distinguable et localisable dans le journal.
     Reconstruit le texte occurrence par occurrence plutôt que via pattern.sub() pour
-    pouvoir capturer chaque fragment ; produit exactement le même texte que
-    `TypoRule.apply`.
+    pouvoir capturer chaque fragment et sa position ; produit exactement le même texte
+    que `TypoRule.apply`. `offset_start`/`offset_end` sont les positions du fragment
+    *avant* dans `text` tel que reçu en paramètre (donc "pre_rule_text" pour cette
+    règle précise, pas pour le bloc d'origine).
     """
-    occurrences: list[tuple[str, str]] = []
+    occurrences: list[RuleOccurrence] = []
     parts: list[str] = []
     last_end = 0
     for match in rule.pattern.finditer(text):
@@ -447,7 +470,13 @@ def _apply_rule_with_occurrences(rule: "TypoRule", text: str) -> tuple[str, list
         parts.append(after_fragment)
         last_end = match.end()
         if after_fragment != before_fragment:
-            occurrences.append((before_fragment, after_fragment))
+            occurrences.append(RuleOccurrence(
+                rule_id=rule.rule_id,
+                before=before_fragment,
+                after=after_fragment,
+                offset_start=match.start(),
+                offset_end=match.end(),
+            ))
     parts.append(text[last_end:])
     return "".join(parts), occurrences
 
@@ -591,11 +620,11 @@ class OrthotypoService:
 
     def _apply_special_stylings(
         self, inlines: list[InlineSpan]
-    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]], list[tuple[str, str]]]:
+    ) -> tuple[list[InlineSpan], bool, list[RuleOccurrence], list[RuleOccurrence]]:
         """Enchaîne le stylage des siècles (petites capitales + exposant) et celui du
         "o" de "no" (exposant) produit par purh.numero, dans cet ordre. Retourne les
         occurrences de chacun séparément pour conserver un rule_id distinct par
-        transformation (Phase 6)."""
+        transformation (Phase 6/6 bis)."""
         styled, century_changed, century_occurrences = self._style_centuries_in_inlines(inlines)
         styled, numero_changed, numero_occurrences = self._style_numero_in_inlines(styled)
         return styled, century_changed or numero_changed, century_occurrences, numero_occurrences
@@ -603,65 +632,49 @@ class OrthotypoService:
     def _build_transformations(
         self,
         target_ref: str,
-        rule_occurrences: list[tuple[str, str, str]],
-        century_occurrences: list[tuple[str, str]],
-        numero_occurrences: list[tuple[str, str]] | None = None,
+        rule_occurrences: list[RuleOccurrence],
+        century_occurrences: list[RuleOccurrence],
+        numero_occurrences: list[RuleOccurrence] | None = None,
         highlight_regions: list[tuple[int, int]] | None = None,
     ) -> list[Transformation]:
         """Une Transformation distincte par occurrence corrigée, taguée par son propre
-        rule_id (Phase 6) — plutôt qu'une seule transformation "purh.orthotypo.batch"
-        agrégeant tout un bloc, qui empêchait de savoir quelle règle avait fait quoi."""
-        transformations = [
-            Transformation(
-                transformation_id=make_id("tr"),
-                module=self.module_name,
-                target_ref=target_ref,
-                operation="orthotypo",
-                before=before,
-                after=after,
-                rule_id=rule_id,
-                applied=True,
-                attributes={"highlight_regions": highlight_regions or [], "color": self.color},
-            )
-            for rule_id, before, after in rule_occurrences
+        rule_id et localisée par offsets (Phase 6/6 bis) — plutôt qu'une seule
+        transformation "purh.orthotypo.batch" agrégeant tout un bloc, qui empêchait de
+        savoir quelle règle avait fait quoi à quel endroit. `sequence` numérote l'ordre
+        réel d'application (règles de texte, puis stylage des siècles, puis du numéro)."""
+        all_occurrences = [
+            *rule_occurrences,
+            *century_occurrences,
+            *(numero_occurrences or []),
         ]
-        transformations.extend(
+        extra_attrs = {id(occ): {} for occ in all_occurrences}
+        for occ in century_occurrences:
+            extra_attrs[id(occ)]["century_styling"] = True
+        for occ in numero_occurrences or []:
+            extra_attrs[id(occ)]["numero_styling"] = True
+
+        return [
             Transformation(
                 transformation_id=make_id("tr"),
                 module=self.module_name,
                 target_ref=target_ref,
                 operation="orthotypo",
-                before=before,
-                after=after,
-                rule_id="R-SO-001",
+                before=occ.before,
+                after=occ.after,
+                rule_id=occ.rule_id,
                 applied=True,
                 attributes={
                     "highlight_regions": highlight_regions or [],
                     "color": self.color,
-                    "century_styling": True,
+                    "offset_start": occ.offset_start,
+                    "offset_end": occ.offset_end,
+                    "sequence": sequence,
+                    "coordinate_space": occ.coordinate_space,
+                    **extra_attrs[id(occ)],
                 },
             )
-            for before, after in century_occurrences
-        )
-        transformations.extend(
-            Transformation(
-                transformation_id=make_id("tr"),
-                module=self.module_name,
-                target_ref=target_ref,
-                operation="orthotypo",
-                before=before,
-                after=after,
-                rule_id="R-NO-001",
-                applied=True,
-                attributes={
-                    "highlight_regions": highlight_regions or [],
-                    "color": self.color,
-                    "numero_styling": True,
-                },
-            )
-            for before, after in numero_occurrences or []
-        )
-        return transformations
+            for sequence, occ in enumerate(all_occurrences)
+        ]
 
     def _process_inlines_owner(self, inlines, *, target_ref, update_text) -> list[Transformation]:
         original = "".join(s.text for s in inlines)
@@ -753,10 +766,10 @@ class OrthotypoService:
 
     def _style_centuries_in_inlines(
         self, inlines: list[InlineSpan]
-    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]]]:
-        """Retourne aussi, pour la traçabilité par occurrence (Phase 6), la liste
-        (avant, après) de chaque siècle individuellement stylé — un même bloc peut en
-        contenir plusieurs (ex. "xviie au xixe siècles")."""
+    ) -> tuple[list[InlineSpan], bool, list[RuleOccurrence]]:
+        """Retourne aussi, pour la traçabilité par occurrence (Phase 6/6 bis), une
+        RuleOccurrence localisée par siècle individuellement stylé — un même bloc peut
+        en contenir plusieurs (ex. "xviie au xixe siècles")."""
         if not inlines:
             return inlines, False, []
 
@@ -812,7 +825,13 @@ class OrthotypoService:
         if not any(changed_by_match):
             return inlines, False, []
         occurrences = [
-            (match.group(0), match.group(1).lower() + "e")
+            RuleOccurrence(
+                rule_id="R-SO-001",
+                before=match.group(0),
+                after=match.group(1).lower() + "e",
+                offset_start=match.start(),
+                offset_end=match.end(),
+            )
             for match, changed in zip(century_matches, changed_by_match)
             if changed
         ]
@@ -820,7 +839,7 @@ class OrthotypoService:
 
     def _style_numero_in_inlines(
         self, inlines: list[InlineSpan]
-    ) -> tuple[list[InlineSpan], bool, list[tuple[str, str]]]:
+    ) -> tuple[list[InlineSpan], bool, list[RuleOccurrence]]:
         """Met en exposant le "o" de "no"/"No" produit par la règle purh.numero, quand
         il est immédiatement suivi de l'espace fine insécable puis d'un chiffre (forme
         canonique produite par cette règle). Même mécanisme que le stylage des siècles."""
@@ -859,7 +878,13 @@ class OrthotypoService:
         if not any(changed_by_match):
             return inlines, False, []
         occurrences = [
-            (match.group(0), match.group(0))
+            RuleOccurrence(
+                rule_id="R-NO-001",
+                before=match.group(0),
+                after=match.group(0),
+                offset_start=match.start(),
+                offset_end=match.end(),
+            )
             for match, changed in zip(numero_matches, changed_by_match)
             if changed
         ]
@@ -899,15 +924,16 @@ class OrthotypoService:
         return text
 
     @staticmethod
-    def _apply_all_rules_tracked(text: str) -> tuple[str, list[tuple[str, str, str]]]:
-        """Comme `_apply_all_rules`, mais retourne aussi la liste (rule_id, avant, après)
-        de chaque occurrence corrigée, tous rules confondues, dans l'ordre d'application."""
-        occurrences: list[tuple[str, str, str]] = []
+    def _apply_all_rules_tracked(text: str) -> tuple[str, list[RuleOccurrence]]:
+        """Comme `_apply_all_rules`, mais retourne aussi une RuleOccurrence localisée
+        pour chaque occurrence corrigée, toutes règles confondues, dans l'ordre
+        d'application."""
+        occurrences: list[RuleOccurrence] = []
         for rule in TYPO_RULES:
             if not rule.auto:
                 continue
             text, rule_occurrences = _apply_rule_with_occurrences(rule, text)
-            occurrences.extend((rule.rule_id, before, after) for before, after in rule_occurrences)
+            occurrences.extend(rule_occurrences)
         return text, occurrences
 
     # ── Reconstruction des inlines avec surlignage ────────────────────────────
