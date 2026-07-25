@@ -1,5 +1,9 @@
 # Catalogue des règles typographiques — document de référence unique
 
+**Confidentialité** : le corpus privé cité en source de certaines règles est désigné par
+l'identifiant générique `private_corpus_a` (voir `docs/CORPUS_ET_FIXTURES.md`), jamais par
+un titre, un auteur ou un extrait de texte.
+
 Ce document fusionne et remplace `/TYPO_RULES_PURH.md` (gabarit resté vide) et
 `/docs/TYPO_RULES_PURH.md` (nomenclature `R-SP-xxx` incompatible avec le code). Les deux
 anciens fichiers restent en place uniquement comme redirections courtes vers celui-ci.
@@ -21,7 +25,7 @@ bibliographique choisi) qui dépassent la portée d'une substitution regex — v
 rapport de Phase 4 pour le détail et les raisons de ne pas les avoir implémentées telles
 quelles. Le champ **Source** de chaque fiche reflète honnêtement ce qui est validé
 aujourd'hui : soit une confirmation dans le guide PURH réel (citée avec sa page), soit
-une observation directe sur le corpus H&P2 (`docs/ANALYSE_CORPUS_HP2.md`), soit une
+une observation directe sur le corpus privé `private_corpus_a` (`docs/ANALYSE_CORPUS_HP2.md`), soit une
 convention typographique générale non encore confrontée à une source PURH interne.
 
 ## 2. Nomenclature
@@ -99,7 +103,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
   `« Il dit "bonjour" puis se tut. »` devient
   `« Il dit “bonjour” puis se tut. »`
 - **Niveau** : 2 — correction locale automatique
-- **Source** : **confirmée par observation directe** sur le corpus H&P2
+- **Source** : **confirmée par observation directe** sur le corpus privé `private_corpus_a`
   (`docs/ANALYSE_CORPUS_HP2.md`, catégorie 1) — le pipeline produit exactement ce que les
   éditrices PURH ont produit sur ce point, sur les 16 chapitres testés. **Confirmée aussi
   par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 12, section « Guillemets
@@ -132,7 +136,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple attendu** : `« Bonjour`
 - **Niveau** : 2 — correction locale automatique
 - **Source** : convention typographique française standard (Imprimerie nationale),
-  cohérente avec le corpus H&P2 mais non vérifiée isolément de `purh.guillemets.droits`.
+  cohérente avec le corpus privé `private_corpus_a` mais non vérifiée isolément de `purh.guillemets.droits`.
 
 ### `purh.guillemets.espace_avant_fermant`
 
@@ -154,7 +158,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Contre-exemples (ne doit pas toucher)** : `http://exemple.org:8080/test`, `10:30`,
   `format 16:9`, `C:\dossier\fichier`.
 - **Niveau** : 2 — correction locale automatique
-- **Source** : **confirmée par observation directe** sur le corpus H&P2 — motif présent
+- **Source** : **confirmée par observation directe** sur le corpus privé `private_corpus_a` — motif présent
   des centaines de fois dans les corrections réelles des éditrices.
 
 ### `purh.espaces.avant_ponct_faible`
@@ -188,7 +192,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Exemple attendu** : `M. Dupont arrive`
 - **Niveau** : 2 — correction locale automatique
 - **Source** : convention typographique française générale, non confrontée au guide PURH.
-- **Remarques** : aucune observation directe sur le corpus H&P2 (peu d'occurrences de
+- **Remarques** : aucune observation directe sur le corpus privé `private_corpus_a` (peu d'occurrences de
   civilités dans ce corpus) — à vérifier en priorité si un manuscrit avec davantage de
   civilités est disponible.
 
@@ -210,7 +214,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
   « vie » ressemble à un siècle « VI » + « e » mais n'est suivi d'aucun mot « siècle »)
   ni `Maximilien Ier` (ordinal de prénom, pas un siècle).
 - **Niveau** : 2 — correction locale automatique
-- **Source** : **confirmée par observation directe** sur le corpus H&P2 pour la
+- **Source** : **confirmée par observation directe** sur le corpus privé `private_corpus_a` pour la
   normalisation elle-même, et **confirmée par le guide PURH réel**
   (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 10, tableau « Siècles, abréviations et
   symboles ») : « Les siècles sont toujours composés en chiffres romains et en petites
@@ -235,7 +239,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
   correspond exactement au comportement de cette règle.
 - **Remarques** : ne couvre pas l'abréviation « Ie » (sans r) après un prénom de
   souverain (ex. « Jules Ie » → « Jules Ier »), un motif recensé comme récurrent sur le
-  corpus H&P2 (catégorie 2b de `docs/ANALYSE_CORPUS_HP2.md`, ~9 occurrences) mais non
+  corpus privé `private_corpus_a` (catégorie 2b de `docs/ANALYSE_CORPUS_HP2.md`, ~9 occurrences) mais non
   encore couvert par cette règle — candidate pour une prochaine phase (voir
   `docs/PHASE4_EXTRACTION_REGLES_PURH.md`).
 
@@ -273,7 +277,7 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 - **Source** : **confirmée par le guide PURH réel** (`CONSIGNES_AUTEURS_PURH_2025.pdf`,
   p. 11-12) pour les entrées listées avec « espace insécable entre les 2 éléments »
   (`loc. cit.`, `op. cit.`, `s. d.`, `s. l.`). Pour `p.`/`fig.`/`vol.`/etc., cohérent avec
-  les usages observés dans les notes du corpus H&P2 sans avoir été isolé spécifiquement
+  les usages observés dans les notes du corpus privé `private_corpus_a` sans avoir été isolé spécifiquement
   dans l'analyse déjà produite.
 - **Remarques** : cette règle *reconnaît* `pp.` déjà présent pour l'espacement, mais la
   normalisation `pp.` → `p.` elle-même relève désormais de `purh.abreviations.redoublement`
@@ -287,18 +291,23 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 
 ### `purh.numero`
 
-- **Titre** : Espace fine insécable après n°
-- **Description** : Insère une espace fine insécable entre `n°`/`N°` et le chiffre qui suit.
+- **Titre** : Forme « no » avec o en exposant, plutôt que le symbole degré
+- **Description** : Convertit `n°`/`N°` suivi d'un chiffre en la forme `no` (lettre `o`
+  en exposant) avec une espace fine insécable avant le chiffre — la forme demandée par
+  le guide PURH, pas le symbole degré `°`.
 - **Exemple fautif** : `n° 5`, `N° 12`
-- **Exemple attendu** : `n° 5`, `N° 12`
-- **Niveau** : 2 — correction locale automatique
-- **Source** : convention typographique française générale largement répandue (symbole
-  degré `°`), mais **contredite par le guide PURH réel**
+- **Exemple attendu** : `no 5` (o en exposant), `No 12`
+- **Niveau** : 2 — correction locale automatique, avec stylage en exposant
+  (`_style_numero_in_inlines`, `rule_id` `R-NO-001`, éclatement en spans au même titre
+  que le stylage des siècles, `R-SO-001`).
+- **Source** : **confirmée par le guide PURH réel**
   (`CONSIGNES_AUTEURS_PURH_2025.pdf`, p. 12) : la forme demandée pour « numéro » est
   `no` avec la lettre `o` **en exposant** (comme pour `fo`/`ro`/`vo`), pas le symbole
-  degré `n°`. Écart identifié, non corrigé dans cette phase pour les mêmes raisons que
-  `purh.pagination.espace` ci-dessus (nécessite un éclatement en spans, pas une simple
-  substitution regex) — voir `docs/PHASE4_EXTRACTION_REGLES_PURH.md`.
+  degré `n°`.
+- **Historique** : jusqu'en Passe 6 bis, cette règle produisait par erreur le symbole
+  degré (`n° 5`), contredisant le guide PURH réel — voir
+  `docs/PHASE4_EXTRACTION_REGLES_PURH.md` pour le constat initial. Corrigée pour produire
+  la forme exposant attendue, testée dans `tests/unit/test_orthotypo_numero_styling.py`.
 - **Remarques** : recouvrement partiel avec `purh.pagination.espace` (qui couvre aussi
   `n°`) — règle distincte conservée pour le cas où `n°` apparaît hors contexte de
   pagination.
@@ -343,26 +352,25 @@ diagnostic, toutes s'appliquent automatiquement dès l'étape 2 du pipeline
 
 ### `purh.tiret.incise`
 
-- **Titre** : Tiret cadratin pour les incises
-- **Description** : Convertit un tiret simple ou demi-cadratin entouré d'espaces
-  (` - ` ou ` – `) en tiret cadratin (` — `, U+2014) lorsqu'il relie deux mots.
-- **Exemple fautif** : `une phrase - incise - continue`
-- **Exemple attendu (production actuelle)** : `une phrase — incise — continue`
-- **Niveau** : 2 — correction locale automatique
-- **Source** : **contredite par observation directe** sur le corpus H&P2
-  (`docs/ANALYSE_CORPUS_HP2.md`, catégorie 2c). Le manuscrit brut utilise
+- **Titre** : Tiret cadratin pour les incises — **abstention depuis Passe 6 bis**
+- **Description (pattern conservé, jamais appliqué automatiquement)** : convertirait un
+  tiret simple ou demi-cadratin entouré d'espaces (` - ` ou ` – `) en tiret cadratin
+  (` — `, U+2014) lorsqu'il relie deux mots.
+- **Statut actuel** : `auto=False` dans `OrthotypoService` — cette règle **ne s'applique
+  plus jamais automatiquement**. Elle est remplacée par un diagnostic pur,
+  `analyze_incise_dash` (`rule_id` `R-TI-001`, Niveau 1), qui signale la présence d'un
+  tiret d'incise sans jamais le corriger : *« Convention du tiret d'incise à vérifier :
+  aucune normalisation automatique n'a été appliquée. »*
+- **Pourquoi** : observation directe sur le corpus privé `private_corpus_a`
+  (`docs/ANALYSE_CORPUS_HP2.md`, catégorie 2c) : le manuscrit brut utilise
   systématiquement le tiret **cadratin** « — » pour les incises ; les éditrices PURH le
   remplacent systématiquement par le tiret **demi-cadratin** « – » (50 occurrences
-  observées). Cette règle produit donc la convention **opposée** à la pratique éditoriale
-  réelle. Elle ne s'est pas déclenchée sur le corpus H&P2 testé (le brut n'y contient pas
-  le motif qu'elle cible), donc elle n'y a rien corrompu empiriquement — mais elle
-  encoderait la mauvaise convention sur tout manuscrit utilisant déjà le tiret simple.
-  Le guide PURH réel ne tranche pas explicitement la question du tiret d'incise : il
-  mentionne seulement le tiret cadratin pour un usage différent (remplacer la répétition
-  du nom d'auteur dans une liste bibliographique, p. 8). **Toujours à corriger en
-  priorité** : l'usage observé côté éditrices (demi-cadratin pour les incises) reste la
-  meilleure indication disponible, mais ce n'est qu'une observation sur un seul ouvrage,
-  pas une règle explicite du guide.
+  observées) — soit la convention **opposée** à ce que cette règle produisait. Le guide
+  PURH réel ne tranche pas explicitement la question (il mentionne seulement le tiret
+  cadratin pour un usage différent, p. 8), et l'observation ci-dessus ne porte que sur un
+  seul ouvrage : appliquer automatiquement la convention inverse de la pratique observée
+  aurait été un contresens plus risqué qu'une abstention. D'où le passage en diagnostic
+  seul (voir `tests/unit/test_orthotypo_incise_dash_abstention.py`).
 
 ---
 
@@ -401,7 +409,39 @@ d'information par rapport aux anciens fichiers fusionnés.
   rejeté à la ligne suivante. » — correspond exactement à ce que ces deux diagnostics
   signalent.
 
+### `R-TI-001` — Tiret d'incise à vérifier (ajoutée en Passe 6 bis)
+
+- **Module** : `OrthotypoService.analyze_incise_dash`
+- **Niveau** : 1 — diagnostic seul, ne modifie jamais le texte.
+- **Description** : signale la présence d'un tiret d'incise (simple ou demi-cadratin
+  entouré d'espaces reliant deux mots) sans jamais le corriger automatiquement.
+  Remplace l'ancien comportement automatique de `purh.tiret.incise` (voir plus haut),
+  désactivé (`auto=False`) car il encodait la convention opposée à celle observée côté
+  éditrices sur le corpus privé `private_corpus_a`.
+- **Source** : voir la fiche `purh.tiret.incise` ci-dessus.
+
+### `R-NO-001` — Stylage exposant du « o » de `purh.numero` (ajoutée en Passe 6 bis)
+
+- **Module** : `OrthotypoService._style_numero_in_inlines`
+- **Niveau** : 2 — transformation stylistique automatique, appliquée en complément de
+  `purh.numero` (même principe d'éclatement en spans que `R-SO-001` pour les siècles).
+- **Description** : applique le style exposant à la lettre `o` produite par
+  `purh.numero`, pour obtenir `no`/`No` avec `o` visuellement en exposant plutôt que le
+  symbole degré.
+- **Source** : voir la fiche `purh.numero` ci-dessus.
+
 ---
+
+## 6bis. Passe 6 bis — corrections apportées à `purh.numero` et `purh.tiret.incise`
+
+Les deux écarts identifiés en Phase 4 (`purh.numero` produisait le symbole degré au lieu
+de la forme exposant demandée par le guide PURH ; `purh.tiret.incise` encodait la
+convention opposée à celle observée côté éditrices) ont été traités : `purh.numero`
+produit désormais la forme exposant attendue (`R-NO-001`), et `purh.tiret.incise` est
+passée en abstention diagnostique (`R-TI-001`) plutôt que de continuer à appliquer une
+correction dont le sens s'est révélé incertain. Voir les fiches correspondantes ci-dessus
+et `docs/CORPUS_ET_FIXTURES.md` pour la terminologie corpus utilisée dans leur
+justification.
 
 ## 6. Ce qui a été fait en Phase 4, et ce qui reste
 
@@ -420,7 +460,7 @@ cohérente, rien à corriger).
    éditorial observé ; le guide PURH ne tranche pas explicitement ce point précis.
 2. Espace insécable entre un nom propre et le numéral dynastique qui le suit
    (« Louis XIV », « Léon X ») — **candidate la plus solide** pour une prochaine règle :
-   confirmée à la fois par 784 occurrences sur le corpus H&P2 et par le *Lexique
+   confirmée à la fois par 784 occurrences sur le corpus privé `private_corpus_a` et par le *Lexique
    Imprimerie nationale* (règle de coupure : « les noms de souverains [ne seront pas
    séparés] de leur numéro dynastique »). Non implémentée dans cette phase (absente de
    la liste de gaps que cette phase devait traiter).

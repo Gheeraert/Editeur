@@ -6,7 +6,7 @@ Ce document décrit les familles de fixtures à constituer pour permettre un dé
 
 Une fixture n'est pas un gros document réaliste. C'est un cas de test ciblé.
 
-Les fichiers sources complets peuvent être conservés dans `sources/`, mais les tests doivent utiliser des extraits courts, lisibles et documentés.
+Les fichiers sources complets constituent le corpus éditorial privé : ils ne sont jamais suivis par Git dans ce dépôt public (voir `docs/CORPUS_ET_FIXTURES.md` et `PURH_PRIVATE_CORPUS_DIR`). Les fixtures publiques, elles, doivent être des extraits courts, synthétiques, lisibles et documentés — voir `fixtures/orthotypography_characterization/` et `fixtures/orthotypography_gold/` pour la convention actuelle.
 
 ---
 

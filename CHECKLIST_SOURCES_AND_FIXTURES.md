@@ -12,11 +12,16 @@
 
 ### 2. Manuscrits
 
-- [x] fichier Word d'auteur représentatif — `sources/io_samples/H&P2-final.docx`
-      (manuscrit complet *Héraldique et papauté II*, avant tout travail éditorial)
-- [x] versions stylées par les éditrices — `sources/output_samples/ChNN_TitreAbrege.docx`
+Le dépôt public ne conserve aucun manuscrit réel : ces éléments vivent exclusivement dans
+le corpus éditorial privé local (voir `docs/CORPUS_ET_FIXTURES.md`,
+`PURH_PRIVATE_CORPUS_DIR`). Les entrées ci-dessous utilisent des désignations génériques ;
+le détail (titres réels, chemins) reste dans les notes privées locales, hors dépôt Git.
+
+- [x] fichier Word d'auteur représentatif — corpus privé, `manuscripts_raw/`
+      (manuscrit complet d'un ouvrage réel, avant tout travail éditorial)
+- [x] versions stylées par les éditrices — corpus privé, `manuscripts_styled/`
       (un fichier par chapitre, après édition professionnelle ; voir `sources/README.md`
-      pour la convention de nommage et la relation avec `H&P2-final.docx`)
+      pour la convention de nommage et l'installation du corpus privé)
 - [ ] note rapide indiquant les corrections importantes par couple (à produire lors de
       l'analyse du corpus — repérage des couples et diff structuré)
 

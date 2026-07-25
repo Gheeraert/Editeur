@@ -2,10 +2,14 @@
 
 Rapport diagnostique. Aucune correction de code appliquée dans le cadre de cette phase.
 
+**Confidentialité** : les manuscrits testés sont désignés par des identifiants génériques
+(`private_corpus_b`, `private_corpus_c`, `private_corpus_d`), conformément à
+`docs/CORPUS_ET_FIXTURES.md`. Aucun titre, auteur ni extrait de texte n'apparaît ici.
+
 ## Méthode
 
-Pour deux manuscrits réels de `sources/manuscripts_raw/` (`dissimuler_original.docx`,
-1 Mo, 1107 paragraphes, 505 notes ; `iphigenie_original.docx`, 5,7 Mo, 1151 paragraphes,
+Pour deux manuscrits réels de `sources/manuscripts_raw/` (`private_corpus_b`,
+1 Mo, 1107 paragraphes, 505 notes ; `private_corpus_c`, 5,7 Mo, 1151 paragraphes,
 590 notes) :
 
 1. passe 1 : `Step1Pipeline.run()` (mode `deterministic`) sur le document original →
@@ -15,7 +19,7 @@ Pour deux manuscrits réels de `sources/manuscripts_raw/` (`dissimuler_original.
 3. comparaison du texte de sortie passe 1 vs passe 2 (idempotence textuelle) et des
    compteurs de blocs/notes/bibliographie/transformations par module.
 
-`heraldique_original.docx` (85 Mo) n'a pas été testé en double passe dans cette
+`private_corpus_d` (85 Mo) n'a pas été testé en double passe dans cette
 itération pour des raisons de temps ; les deux manuscrits testés suffisent à mettre en
 évidence des défauts reproductibles et généralisables. À inclure si une vérification
 plus large est jugée utile.
@@ -55,7 +59,7 @@ tabulation — **pas l'espace insécable**. Résultat : après un aller-retour
 export → réimport, « Ibid. » n'est plus détecté comme étant en tout début de note par
 R3, et se retrouve mis en minuscule à tort.
 
-Preuve directe (`dissimuler_original.docx`) :
+Preuve directe (`private_corpus_b`) :
 - import brut, une seule passe de `FootnoteNormalizer` : 76 notes commençant par
   « Ibid. » restent inchangées (protection R3 correcte, le séparateur d'origine est un
   espace normal) ;
@@ -75,7 +79,7 @@ même règle (`Id`, `Idem`, `Op. cit.`, `Art. cit.`, `Loc. cit.`).
 
 **Confirmé. N'abîme pas le texte final, mais fausse le journal des transformations.**
 
-Sur `dissimuler_original.docx`, la passe 2 journalise 68 transformations
+Sur `private_corpus_b`, la passe 2 journalise 68 transformations
 `orthotypo.batch` avec l'attribut `century_styling: True`, dont le `before` et le
 `after` sont **rigoureusement identiques** (vérifié caractère pour caractère).
 
@@ -105,12 +109,12 @@ dit le contraire), toute fonctionnalité de traçabilité ou de relecture constr
 sera trompeuse dès le premier réexamen d'un document déjà traité.
 
 Un phénomène du même ordre (transformations `structure: 4` identiques entre passe 1 et
-passe 2) a été observé sur `iphigenie_original.docx` sans être creusé plus avant — à
+passe 2) a été observé sur `private_corpus_c` sans être creusé plus avant — à
 vérifier si la Phase 6 est engagée.
 
 ---
 
-## Défaut 3 — Conservation documentaire : une note perdue sur `dissimuler_original.docx`
+## Défaut 3 — Conservation documentaire : une note perdue sur `private_corpus_b`
 
 **Confirmé, cause non identifiée dans le temps imparti à cette phase.**
 
@@ -119,21 +123,21 @@ vérifier si la Phase 6 est engagée.
 | notes de bas de page (`word/footnotes.xml`, type normal, IDs uniques) | 505 | 504 |
 
 Une note disparaît entre l'import et l'export sur ce manuscrit. Sur
-`iphigenie_original.docx`, en comparaison, le compte de notes est stable (590 → 590).
+`private_corpus_c`, en comparaison, le compte de notes est stable (590 → 590).
 Cause non déterminée : pourrait être une note dupliquée à l'import, une note orpheline
 sans appel dans le texte, ou une perte lors de l'injection XML des notes à l'export. À
 creuser avant toute correction.
 
 Autres écarts numériques observés, de moindre gravité mais à garder en tête :
-- `dissimuler` : longueur de texte 351 917 → 351 919 caractères (+2, cohérent avec des
+- `private_corpus_b` : longueur de texte 351 917 → 351 919 caractères (+2, cohérent avec des
   normalisations orthotypographiques mineures) ;
-- `iphigenie` : longueur de texte 417 318 → 417 162 caractères (**-156**), écart plus
+- `private_corpus_c` : longueur de texte 417 318 → 417 162 caractères (**-156**), écart plus
   significatif, non expliqué ici — probablement une combinaison de suppressions
   d'espaces et de fusions de paragraphes, mais mérite une vérification dédiée avant de
   considérer la conservation comme acquise sur ce manuscrit.
 
 Le nombre de blocs structurels change fortement entre le DOCX original et la sortie
-(ex. `dissimuler` : 1107 paragraphes bruts → 752 blocs pivot → 765 paragraphes DOCX
+(ex. `private_corpus_b` : 1107 paragraphes bruts → 752 blocs pivot → 765 paragraphes DOCX
 réexportés) : ceci reflète la restructuration du pivot (fusion de runs, regroupement en
 blocs sémantiques) et n'est pas en soi un signe de perte — mais ce rapport n'a pas
 vérifié un-à-un que chaque paragraphe source retrouve son contenu dans la sortie. Ce

@@ -129,7 +129,7 @@ jour où l'index entre dans le périmètre du projet. Non implémenté.
 
 ## Trouvaille non demandée mais significative : espace insécable nom + numéral dynastique
 
-Déjà identifiée en Phase 3 (via le corpus H&P2, 784 occurrences) comme la candidate de
+Déjà identifiée en Phase 3 (via le corpus privé `private_corpus_a`, 784 occurrences) comme la candidate de
 règle la plus rentable. Le Lexique Imprimerie nationale la confirme indépendamment, dans
 sa section sur la coupure des mots : « Les initiales de prénoms et les particules ne
 seront pas séparées du nom de famille, de même que les noms de souverains de leur
