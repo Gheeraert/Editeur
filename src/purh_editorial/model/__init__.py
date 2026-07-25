@@ -12,6 +12,7 @@ from purh_editorial.model.document import (
     Paragraph,
     QuoteBlock,
 )
+from purh_editorial.model.media import ComplexObjectOccurrence, ImageAsset, ImageOccurrence
 from purh_editorial.model.pipeline import PipelineResult
 from purh_editorial.model.report import ModuleRun, ProcessingReport
 from purh_editorial.model.semantics import (
@@ -28,10 +29,13 @@ __all__ = [
     "BibliographyItem",
     "BlockSemantics",
     "Block",
+    "ComplexObjectOccurrence",
     "Diagnostic",
     "Document",
     "Evidence",
     "Heading",
+    "ImageAsset",
+    "ImageOccurrence",
     "InlineSpan",
     "InlineStyle",
     "LineatedBlock",

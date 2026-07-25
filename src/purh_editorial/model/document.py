@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from purh_editorial.model.media import ComplexObjectOccurrence, ImageAsset, ImageOccurrence
+
 
 @dataclass(slots=True)
 class Metadata:
@@ -96,6 +98,9 @@ class Document:
     annotations: dict[str, Any] = field(default_factory=dict)
     history: list[str] = field(default_factory=list)
     original_text: str = ""
+    image_assets: dict[str, ImageAsset] = field(default_factory=dict)
+    image_occurrences: list[ImageOccurrence] = field(default_factory=list)
+    complex_objects: list[ComplexObjectOccurrence] = field(default_factory=list)
 
     def block_by_id(self, block_id: str) -> Block | None:
         for block in self.blocks:
