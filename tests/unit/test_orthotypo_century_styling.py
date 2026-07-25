@@ -91,6 +91,55 @@ class OrthotypoCenturyStylingTests(unittest.TestCase):
         self.assertEqual([s.text for s in small_caps], ["xix", "xxi"])
         self.assertEqual([s.text for s in superscripts], ["e", "e"])
 
+    def test_three_centuries_enumeration_with_et_are_all_styled(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="XVIe, XVIIe et XVIIIe siècles",
+            inlines=[InlineSpan(text="XVIe, XVIIe et XVIIIe siècles")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s.text for s in block.inlines if s.style.small_caps]
+        self.assertEqual(small_caps, ["xvi", "xvii", "xviii"])
+
+    def test_du_au_enumeration_is_styled(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="du XVIe au XVIIIe siècle",
+            inlines=[InlineSpan(text="du XVIe au XVIIIe siècle")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s.text for s in block.inlines if s.style.small_caps]
+        self.assertEqual(small_caps, ["xvi", "xviii"])
+
+    def test_aux_et_enumeration_is_styled(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="aux XVIIe et XVIIIe siècles",
+            inlines=[InlineSpan(text="aux XVIIe et XVIIIe siècles")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s.text for s in block.inlines if s.style.small_caps]
+        self.assertEqual(small_caps, ["xvii", "xviii"])
+
+    def test_hyphenated_range_enumeration_is_styled(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="XVIe-XVIIIe siècles",
+            inlines=[InlineSpan(text="XVIe-XVIIIe siècles")],
+        )
+        block, _ = self._apply(paragraph)
+        small_caps = [s.text for s in block.inlines if s.style.small_caps]
+        self.assertEqual(small_caps, ["xvi", "xviii"])
+
+    def test_arrondissement_without_siecle_context_is_untouched(self) -> None:
+        paragraph = Paragraph(
+            block_id="p1",
+            text="Il habite dans le XVIe arrondissement de Paris.",
+            inlines=[InlineSpan(text="Il habite dans le XVIe arrondissement de Paris.")],
+        )
+        block, _ = self._apply(paragraph)
+        self.assertFalse(any(s.style.small_caps for s in block.inlines))
+
     def test_flat_block_can_create_styled_inlines_for_century(self) -> None:
         paragraph = Paragraph(block_id="p1", text="XIXe siècle")
         block, _ = self._apply(paragraph)

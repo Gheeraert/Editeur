@@ -79,6 +79,13 @@ class OrthotypoNumeroStylingTests(unittest.TestCase):
         self.assertEqual(transformations2, [])
         self.assertEqual(block2.text, block.text)
 
+    def test_r_no_001_is_marked_style_only_not_a_text_change(self) -> None:
+        paragraph = Paragraph(block_id="p1", text="n° 5", inlines=[InlineSpan(text="n° 5")])
+        _block, transformations = self._apply(paragraph)
+        no_001 = next(t for t in transformations if t.rule_id == "R-NO-001")
+        self.assertEqual(no_001.before, no_001.after)
+        self.assertTrue(no_001.attributes.get("style_only"))
+
 
 if __name__ == "__main__":
     unittest.main()

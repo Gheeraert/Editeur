@@ -112,6 +112,20 @@ class FootnoteNormalizerAdversarialTests(unittest.TestCase):
             self.assertIsInstance(start, int)
             self.assertIsInstance(end, int)
 
+    def test_offset_invariant_holds_by_sequential_replay(self) -> None:
+        """Rejoue les transformations dans l'ordre : chaque offset doit pointer
+        exactement vers `before` dans le texte tel qu'il existait juste avant
+        cette transformation (Partie F2)."""
+        original = "van gogh écrivait; voir op. cit., sans point final"
+        final_text, transformations, _diag = _apply(original)
+        state = original
+        for t in transformations:
+            start = t.attributes["offset_start"]
+            end = t.attributes["offset_end"]
+            self.assertEqual(state[start:end], t.before)
+            state = state[:start] + t.after + state[end:]
+        self.assertEqual(state, final_text)
+
     def test_no_transformation_emitted_when_note_already_clean(self) -> None:
         text, transformations, _diag = _apply(f"Voir op.{NNBSP}cit., p. 12.")
         self.assertEqual(transformations, [])

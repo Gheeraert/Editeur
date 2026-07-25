@@ -43,6 +43,27 @@ _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
 _QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
 _TECHNICAL_TEXT_RE = re.compile(r"<[^>]+>|[\w:-]+\s*=\s*\"[^\"]*\"")
 _CENTURY_CONTEXT_RE = re.compile(r"^\s*(si[eè]cles?|s\.)\b", re.IGNORECASE | re.UNICODE)
+# Connecteur d'énumération entre deux siècles ("XVIe, XVIIe et XVIIIe siècles",
+# "du XVIe au XVIIIe siècle", "XVIe-XVIIIe siècles") : permet de reconnaître le
+# contexte "siècle(s)" même quand il ne suit pas immédiatement CE numéro-ci.
+_CENTURY_ENUM_CONNECTOR_RE = re.compile(
+    r"^(?:[,\-]\s*|\s*(?:et|ou|au|à)\s+)([IVXLCDMivxlcdm]{1,8}[eè][rm]?[eé]?)\b",
+    re.IGNORECASE | re.UNICODE,
+)
+
+
+def _has_century_context(lookahead: str) -> bool:
+    """True si `lookahead` (texte suivant un numéro de siècle) mène à "siècle(s)"/
+    "s.", en traversant d'éventuels autres numéros d'une même énumération."""
+    remaining = lookahead
+    for _ in range(6):  # borne défensive, une énumération réaliste est courte
+        if _CENTURY_CONTEXT_RE.match(remaining):
+            return True
+        m = _CENTURY_ENUM_CONNECTOR_RE.match(remaining)
+        if not m:
+            return False
+        remaining = remaining[m.end():]
+    return False
 _OE_LIGATURE_FORMS: dict[str, str] = {
     "boeuf": "bœuf",
     "boeufs": "bœufs",
@@ -295,8 +316,8 @@ def _build_rules() -> list[TypoRule]:
         roman = m.group(1)
         if roman.lower() not in _VALID_CENTURIES:
             return m.group(0)   # pas un siècle connu, pas de remplacement
-        lookahead = m.string[m.end():m.end() + 32]
-        if not _CENTURY_CONTEXT_RE.match(lookahead):
+        lookahead = m.string[m.end():m.end() + 64]
+        if not _has_century_context(lookahead):
             return m.group(0)   # pas de contexte "siècle" proche, pas de remplacement
         if roman.lower() == "i":
             return "Ier"        # le Ier siècle, jamais "Ie siècle"
@@ -652,6 +673,13 @@ class OrthotypoService:
             extra_attrs[id(occ)]["century_styling"] = True
         for occ in numero_occurrences or []:
             extra_attrs[id(occ)]["numero_styling"] = True
+        for occ in all_occurrences:
+            # Une occurrence dont le texte est inchangé (before == after) n'est
+            # pas une correction textuelle mais un changement de style (petites
+            # capitales, exposant...) : le marquer évite de laisser croire à une
+            # transformation textuelle vide (Partie F1).
+            if occ.before == occ.after:
+                extra_attrs[id(occ)]["style_only"] = True
 
         return [
             Transformation(
@@ -752,8 +780,8 @@ class OrthotypoService:
 
     @staticmethod
     def _is_century_context(full_text: str, match_end: int) -> bool:
-        lookahead = full_text[match_end: match_end + 32]
-        return bool(_CENTURY_CONTEXT_RE.match(lookahead))
+        lookahead = full_text[match_end: match_end + 64]
+        return _has_century_context(lookahead)
 
     @staticmethod
     def _char_style_signature(inlines: list[InlineSpan]) -> list[tuple[str, bool, bool]]:

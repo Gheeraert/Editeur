@@ -89,6 +89,19 @@ class OrthotypoTransformationOffsetsTests(unittest.TestCase):
             self.assertIn("offset_end", t.attributes)
             self.assertIn("sequence", t.attributes)
 
+    def test_offset_invariant_holds_by_sequential_replay(self) -> None:
+        """Rejoue toutes les transformations dans l'ordre de `sequence` : chaque
+        offset doit pointer exactement vers `before` dans le texte tel qu'il
+        existait juste avant cette transformation précise (Partie F2)."""
+        text = 'Il dit "bonjour": "au revoir" du xviie au xixe siècles, sans doute...'
+        transformations = _apply(text)
+        by_sequence = sorted(transformations, key=lambda t: t.attributes["sequence"])
+        state = text
+        for t in by_sequence:
+            start, end = t.attributes["offset_start"], t.attributes["offset_end"]
+            self.assertEqual(state[start:end], t.before, msg=f"rule_id={t.rule_id}")
+            state = state[:start] + t.after + state[end:]
+
     def test_sequence_order_matches_application_order(self) -> None:
         text = 'Il dit "bonjour": "au revoir" du xviie au xixe siècles, sans doute...'
         transformations = _apply(text)
