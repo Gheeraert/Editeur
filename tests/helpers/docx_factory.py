@@ -68,6 +68,40 @@ def create_rich_docx(path: Path) -> Path:
     return path
 
 
+HYPERLINK_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <w:body>
+    <w:p>
+      <w:pPr><w:pStyle w:val="Normal"/></w:pPr>
+      <w:r><w:t>Voir </w:t></w:r>
+      <w:hyperlink r:id="rId1">
+        <w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t>le site des PURH</w:t></w:r>
+      </w:hyperlink>
+      <w:r><w:t> pour plus de details.</w:t></w:r>
+    </w:p>
+    <w:sectPr/>
+  </w:body>
+</w:document>
+"""
+
+HYPERLINK_RELS_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://purh.univ-rouen.fr/" TargetMode="External"/>
+</Relationships>
+"""
+
+
+def create_hyperlink_docx(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", HYPERLINK_DOC_XML)
+        archive.writestr("word/_rels/document.xml.rels", HYPERLINK_RELS_XML)
+        archive.writestr("word/styles.xml", STYLES_XML)
+        archive.writestr("docProps/core.xml", CORE_XML)
+    return path
+
+
 # w:id="0" est ici reutilise par une vraie note de contenu (numerotation Word qui ne
 # reserve pas systematiquement -1/0 aux marqueurs separator/continuationSeparator).
 ZERO_ID_DOC_XML = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

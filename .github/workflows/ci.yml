@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  fast:
+    name: Tests publics (unitaires + intégration synthétique)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      - name: Garde-fou de confidentialité et de terminologie
+        run: python scripts/ci_guard.py
+
+      - name: Suite unitaire publique
+        run: python -m unittest discover -s tests/unit -p "test_*.py" -v
+
+      - name: Suite d'intégration publique (DOCX synthétiques uniquement)
+        run: python -m unittest discover -s tests/integration -p "test_*.py" -v
+
+      - name: Suite privée (doit être entièrement ignorée sans corpus privé)
+        run: python -m unittest discover -s tests/private_integration -p "test_*.py" -v
