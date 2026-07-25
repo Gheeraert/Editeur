@@ -1,0 +1,17 @@
+{
+  "rule_id": "purh.apostrophe",
+  "automatic": true,
+  "positive_cases": [
+    {
+      "input": "L'auteur",
+      "expected_output": "L’auteur",
+      "origin": "synthétique"
+    },
+    {
+      "input": "aujourd'hui",
+      "expected_output": "aujourd’hui",
+      "origin": "synthétique"
+    }
+  ],
+  "negative_cases": []
+}

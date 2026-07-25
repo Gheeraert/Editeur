@@ -1,0 +1,23 @@
+{
+  "rule_id": "R-ORTHO-LIGATURE-OE-001",
+  "automatic": true,
+  "positive_cases": [
+    {
+      "input": "boeuf boeufs oeuf oeufs",
+      "expected_output": "bœuf bœufs œuf œufs",
+      "origin": "synthétique"
+    },
+    {
+      "input": "Boeuf Oeuvre",
+      "expected_output": "Bœuf Œuvre",
+      "origin": "synthétique"
+    }
+  ],
+  "negative_cases": [
+    {
+      "input": "coelacanthe",
+      "expected_output": "coelacanthe",
+      "origin": "synthétique (garde-fou)"
+    }
+  ]
+}

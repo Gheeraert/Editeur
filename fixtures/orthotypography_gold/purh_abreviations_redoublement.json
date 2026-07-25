@@ -1,0 +1,15 @@
+{
+  "rule_id": "purh.abreviations.redoublement",
+  "gold_cases": [
+    {
+      "rule_id": "purh.abreviations.redoublement",
+      "input": "pp. 53-84",
+      "expected_output": "p. 53-84",
+      "validation_source": {
+        "type": "guide_purh",
+        "reference": "CONSIGNES_AUTEURS_PURH_2025.pdf, p. 11 : Ne jamais redoubler tout ou partie d'une abréviation française pour indiquer le pluriel (exemple donné : pp. 53-84 -> p. 53-84)."
+      },
+      "validated": true
+    }
+  ]
+}

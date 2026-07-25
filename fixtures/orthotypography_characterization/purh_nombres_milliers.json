@@ -1,0 +1,28 @@
+{
+  "rule_id": "purh.nombres.milliers",
+  "automatic": true,
+  "positive_cases": [
+    {
+      "input": "1 000",
+      "expected_output": "1 000",
+      "origin": "synthétique"
+    },
+    {
+      "input": "1 500 000",
+      "expected_output": "1 500 000",
+      "origin": "synthétique"
+    }
+  ],
+  "negative_cases": [
+    {
+      "input": "en 2025",
+      "expected_output": "en 2025",
+      "origin": "synthétique (garde-fou)"
+    },
+    {
+      "input": "ISBN 978 2 1234 5678 9",
+      "expected_output": "ISBN 978 2 1234 5678 9",
+      "origin": "synthétique (garde-fou)"
+    }
+  ]
+}

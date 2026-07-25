@@ -1,0 +1,12 @@
+{
+  "rule_id": "purh.tiret.double",
+  "automatic": true,
+  "positive_cases": [
+    {
+      "input": "Paris--Londres",
+      "expected_output": "Paris–Londres",
+      "origin": "synthétique"
+    }
+  ],
+  "negative_cases": []
+}

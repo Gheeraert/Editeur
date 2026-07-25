@@ -1,0 +1,17 @@
+{
+  "rule_id": "purh.abreviations.etc",
+  "automatic": true,
+  "positive_cases": [
+    {
+      "input": "etc...",
+      "expected_output": "etc.",
+      "origin": "synthétique"
+    },
+    {
+      "input": "etc…",
+      "expected_output": "etc.",
+      "origin": "synthétique"
+    }
+  ],
+  "negative_cases": []
+}
