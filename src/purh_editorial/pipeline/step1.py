@@ -405,6 +405,7 @@ class Step1Pipeline:
         t0 = utc_now_iso()
         document, note_tr = self.footnotes.apply(document)
         note_diags = self.footnotes.analyze_note_call_placement(document)
+        note_diags.extend(self.footnotes.analyze_note_normalization_exclusions(document))
         report.diagnostics.extend(note_diags)
         report.transformations.extend(note_tr)
         report.add_module_run(ModuleRun(

@@ -67,7 +67,9 @@ class CheckNoSecretsTrackedTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
-            self._write(tmp_path, "config.txt", "-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----")
+            pem_header = "-----BEGIN " + "PRIVATE KEY-----"
+            pem_footer = "-----END " + "PRIVATE KEY-----"
+            self._write(tmp_path, "config.txt", f"{pem_header}\nabc\n{pem_footer}")
             ci_guard.ROOT = tmp_path
             errors = ci_guard.check_no_secrets_tracked(["config.txt"])
             self.assertTrue(any("PEM" in e for e in errors))
