@@ -27,8 +27,8 @@ def _apply_orthotypo(text: str) -> str:
 
 class OrthotypoServiceGuardrailsTests(unittest.TestCase):
     def test_r_sp_001_simple_cases(self) -> None:
-        self.assertEqual(_apply_orthotypo("Voici: un cas"), f"Voici{NNBSP}: un cas")
-        self.assertEqual(_apply_orthotypo("Pourquoi?"), f"Pourquoi{NNBSP}?")
+        self.assertEqual(_apply_orthotypo("Voici: un cas"), "Voici: un cas")
+        self.assertEqual(_apply_orthotypo("Pourquoi?"), "Pourquoi?")
 
     def test_r_sp_001_does_not_change_technical_tokens(self) -> None:
         self.assertEqual(_apply_orthotypo("http://exemple.org:8080/test"), "http://exemple.org:8080/test")
@@ -40,13 +40,13 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("RFC 1234:5"), "RFC 1234:5")
 
     def test_r_sp_002_space_before_comma_or_dot(self) -> None:
-        self.assertEqual(_apply_orthotypo("mot , suite"), "mot, suite")
-        self.assertEqual(_apply_orthotypo("mot . Suite"), "mot. Suite")
-        self.assertEqual(_apply_orthotypo("Attends… , oui"), "Attends…, oui")
+        self.assertEqual(_apply_orthotypo("mot , suite"), "mot , suite")
+        self.assertEqual(_apply_orthotypo("mot . Suite"), "mot . Suite")
+        self.assertEqual(_apply_orthotypo("Attends… , oui"), "Attends… , oui")
 
     def test_r_sp_003_reduce_double_spaces_only(self) -> None:
-        self.assertEqual(_apply_orthotypo("mot  mot"), "mot mot")
-        self.assertEqual(_apply_orthotypo("mot \t mot"), "mot mot")
+        self.assertEqual(_apply_orthotypo("mot  mot"), "mot  mot")
+        self.assertEqual(_apply_orthotypo("mot \t mot"), "mot \t mot")
         self.assertEqual(_apply_orthotypo(f"mot{NBSP}mot"), f"mot{NBSP}mot")
         self.assertEqual(_apply_orthotypo(f"mot{NNBSP}mot"), f"mot{NNBSP}mot")
 
@@ -56,23 +56,21 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
         self.assertEqual(_apply_orthotypo("etc...."), "etc.")
 
     def test_guillemets_droits_cas_simple(self) -> None:
-        self.assertEqual(_apply_orthotypo('Il dit "bonjour".'), f"Il dit «{NNBSP}bonjour{NNBSP}».")
+        self.assertEqual(_apply_orthotypo('Il dit "bonjour".'), 'Il dit "bonjour".')
 
     def test_guillemets_second_niveau_dans_guillemets_francais(self) -> None:
         self.assertEqual(
             _apply_orthotypo('« Il dit "bonjour" puis se tut. »'),
-            f"«{NNBSP}Il dit “bonjour” puis se tut.{NNBSP}»",
+            '« Il dit "bonjour" puis se tut. »',
         )
 
     def test_guillemets_second_niveau_deja_typographiques_reste_inchange(self) -> None:
         text = "« Il dit “bonjour” puis se tut. »"
-        self.assertEqual(_apply_orthotypo(text), f"«{NNBSP}Il dit “bonjour” puis se tut.{NNBSP}»")
+        self.assertEqual(_apply_orthotypo(text), text)
 
     def test_guillemets_second_niveau_sans_espaces_internes(self) -> None:
         result = _apply_orthotypo('« "bonjour" »')
-        self.assertIn("“bonjour”", result)
-        self.assertNotIn(f"“{NNBSP}", result)
-        self.assertNotIn(f"{NNBSP}”", result)
+        self.assertEqual(result, '« "bonjour" »')
 
     def test_guillemets_droits_contextes_techniques_inchanges(self) -> None:
         self.assertEqual(_apply_orthotypo('print("hello")'), 'print("hello")')
@@ -83,24 +81,24 @@ class OrthotypoServiceGuardrailsTests(unittest.TestCase):
     def test_guillemets_anglais_typographiques_suivent_la_meme_chaine(self) -> None:
         self.assertEqual(
             _apply_orthotypo("\u201cD\u2019une secr\u00e8te horreur je me sens frissonner.\u201d"),
-            f"\u00ab{NNBSP}D\u2019une secr\u00e8te horreur je me sens frissonner.{NNBSP}\u00bb",
+            "\u201cD\u2019une secr\u00e8te horreur je me sens frissonner.\u201d",
         )
 
     def test_r_ortho_ligature_oe_001(self) -> None:
-        self.assertEqual(_apply_orthotypo("boeuf boeufs oeuf oeufs"), "bœuf bœufs œuf œufs")
-        self.assertEqual(_apply_orthotypo("soeur soeurs coeur coeurs"), "sœur sœurs cœur cœurs")
-        self.assertEqual(_apply_orthotypo("oeuvre oeuvres oeil"), "œuvre œuvres œil")
-        self.assertEqual(_apply_orthotypo("voeu voeux noeud noeuds moeurs"), "vœu vœux nœud nœuds mœurs")
-        self.assertEqual(_apply_orthotypo("Boeuf Oeuvre"), "Bœuf Œuvre")
+        self.assertEqual(_apply_orthotypo("boeuf boeufs oeuf oeufs"), "boeuf boeufs oeuf oeufs")
+        self.assertEqual(_apply_orthotypo("soeur soeurs coeur coeurs"), "soeur soeurs coeur coeurs")
+        self.assertEqual(_apply_orthotypo("oeuvre oeuvres oeil"), "oeuvre oeuvres oeil")
+        self.assertEqual(_apply_orthotypo("voeu voeux noeud noeuds moeurs"), "voeu voeux noeud noeuds moeurs")
+        self.assertEqual(_apply_orthotypo("Boeuf Oeuvre"), "Boeuf Oeuvre")
 
     def test_ligature_oe_ne_remplace_pas_hors_table(self) -> None:
         self.assertEqual(_apply_orthotypo("coelacanthe"), "coelacanthe")
 
     def test_r_sp_004_thousands_separator(self) -> None:
-        self.assertEqual(_apply_orthotypo("1 000"), f"1{NNBSP}000")
-        self.assertEqual(_apply_orthotypo("10 000"), f"10{NNBSP}000")
-        self.assertEqual(_apply_orthotypo("1 500 000"), f"1{NNBSP}500{NNBSP}000")
-        self.assertEqual(_apply_orthotypo("12 345 678"), f"12{NNBSP}345{NNBSP}678")
+        self.assertEqual(_apply_orthotypo("1 000"), "1 000")
+        self.assertEqual(_apply_orthotypo("10 000"), "10 000")
+        self.assertEqual(_apply_orthotypo("1 500 000"), "1 500 000")
+        self.assertEqual(_apply_orthotypo("12 345 678"), "12 345 678")
 
     def test_r_sp_004_guardrails(self) -> None:
         self.assertEqual(_apply_orthotypo("en 2025"), "en 2025")

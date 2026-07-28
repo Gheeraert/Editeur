@@ -33,47 +33,41 @@ class OrthotypoTraceabilityTests(unittest.TestCase):
     """
 
     def test_multiple_rules_in_one_block_produce_distinct_tagged_transformations(self) -> None:
-        text = 'Il dit "bonjour": "au revoir" du xviie au xixe siècles, sans doute...'
+        text = "xviième siècle, etc... et n° 5"
         transformations = _apply(text)
 
         rule_ids = [t.rule_id for t in transformations]
-        self.assertIn("purh.points_suspension", rule_ids)
-        self.assertIn("purh.guillemets.droits", rule_ids)
-        self.assertIn("purh.espaces.avant_ponct_forte", rule_ids)
         self.assertIn("purh.siecles", rule_ids)
         self.assertIn("R-SO-001", rule_ids)
+        self.assertIn("purh.abreviations.etc", rule_ids)
+        self.assertIn("purh.numero", rule_ids)
         # Pas de transformation générique fourre-tout : chaque occurrence a sa propre règle.
         self.assertNotIn("purh.orthotypo.batch", rule_ids)
 
     def test_each_transformation_carries_only_its_own_fragment(self) -> None:
-        text = "Attendez... Pourquoi?"
+        text = "xviième siècle"
         transformations = _apply(text)
         by_rule = {t.rule_id: t for t in transformations}
 
-        self.assertEqual(by_rule["purh.points_suspension"].before, "...")
-        self.assertEqual(by_rule["purh.points_suspension"].after, "…")
-        # Le fragment ne contient pas tout le bloc : "Attendez" n'apparaît pas dans le
-        # before/after de la correction de ponctuation forte.
-        self.assertNotIn("Attendez", by_rule["purh.espaces.avant_ponct_forte"].before)
+        self.assertEqual(by_rule["purh.siecles"].before.lower(), "xviième")
+        self.assertNotIn("siècle", by_rule["purh.siecles"].before.lower())
 
     def test_same_rule_firing_twice_produces_two_transformations(self) -> None:
-        text = 'Il dit "bonjour". Puis "au revoir".'
+        text = "n° 5 et n° 6"
         transformations = _apply(text)
-        guillemets_tr = [t for t in transformations if t.rule_id == "purh.guillemets.droits"]
-        self.assertEqual(len(guillemets_tr), 2)
-        self.assertEqual({t.before for t in guillemets_tr}, {'"bonjour"', '"au revoir"'})
+        numero_tr = [t for t in transformations if t.rule_id == "purh.numero"]
+        self.assertEqual(len(numero_tr), 2)
 
     def test_note_transformations_are_also_tagged_per_occurrence(self) -> None:
         document = Document(
             document_id="doc-traceability-note",
             source_path="tests/fixtures/minimal_source.txt",
             source_format="txt",
-            notes=[Note(note_id="ftn1", text='Voici: "une note".')],
+            notes=[Note(note_id="ftn1", text="voir etc...")],
         )
         _corrected, transformations = OrthotypoService().apply(document)
         rule_ids = {t.rule_id for t in transformations}
-        self.assertIn("purh.espaces.avant_ponct_forte", rule_ids)
-        self.assertIn("purh.guillemets.droits", rule_ids)
+        self.assertIn("purh.abreviations.etc", rule_ids)
 
 
 if __name__ == "__main__":

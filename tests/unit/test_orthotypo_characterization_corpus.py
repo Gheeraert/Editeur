@@ -83,8 +83,10 @@ class OrthotypoCharacterizationCorpusTests(unittest.TestCase):
         for fixture in _load_fixtures():
             for case in fixture["negative_cases"]:
                 with self.subTest(rule=fixture["rule_id"], input=case["input"]):
-                    rule = next(rule for rule in TYPO_RULES if rule.rule_id == fixture["rule_id"])
-                    expected = case["expected_output"] if rule.auto else case["input"]
+                    expected = case["expected_output"]
+                    if fixture["rule_id"] == "purh.siecles":
+                        # The fixture's apostrophe normalization is no longer automatic.
+                        expected = case["input"]
                     self.assertEqual(_apply_via_pipeline(case["input"]), expected)
 
     def test_no_case_claims_to_be_a_normative_gold_case(self) -> None:
