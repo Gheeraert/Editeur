@@ -62,6 +62,30 @@ Règles :
 
 ---
 
+### 3.1. Médias incorporés (compatible `pivot-1.0`)
+
+Les clés facultatives `image_assets`, `image_occurrences` et `complex_objects`
+font partie de `document`. Leur ajout ne change pas la version `pivot-1.0` : un
+pivot antérieur qui ne contient aucune de ces clés représente un document sans
+média et reste lisible.
+
+Le binaire d'un `ImageAsset` est représenté explicitement, et uniquement pour
+ce type de média, par un objet réversible :
+
+```json
+"data": {
+  "encoding": "base64",
+  "value": "iVBORw0KGgo..."
+}
+```
+
+`encoding` doit être `base64` et `value` doit être un Base64 valide. Une entrée
+média mal formée, une référence vers un asset absent ou un fallback absent est
+une erreur de désérialisation : elle ne peut être ni supprimée ni réparée
+silencieusement.
+
+---
+
 ## 4. Séparation des couches d'information
 
 Le pivot doit éviter de tout déposer dans un dictionnaire `attributes` non typé.
