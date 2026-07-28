@@ -117,7 +117,7 @@ class FootnoteNormalizer:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            if not block.inlines:
+            if is_protected_block(block) or not block.inlines:
                 continue
             diagnostics.extend(self._diagnose_block_note_calls(block.block_id, block.inlines))
         return diagnostics
@@ -129,7 +129,12 @@ class FootnoteNormalizer:
         que d'appliquer une regle aveugle sur du contenu ambigu.
         """
         diagnostics: list[Diagnostic] = []
+        protected_target_refs = {
+            block.block_id for block in document.blocks if is_protected_block(block)
+        }
         for note in document.notes:
+            if is_protected_note(note, protected_target_refs=protected_target_refs):
+                continue
             text = "".join(s.text for s in note.inlines) if note.inlines else note.text
             if not text:
                 continue

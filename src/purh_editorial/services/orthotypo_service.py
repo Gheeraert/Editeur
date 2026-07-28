@@ -551,7 +551,7 @@ class OrthotypoService:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            if block.block_type == "quote_block":
+            if is_protected_block(block):
                 continue
             text = "".join(span.text for span in block.inlines) if block.inlines else block.text
             if not text or _TECHNICAL_TEXT_RE.search(text):
@@ -594,6 +594,8 @@ class OrthotypoService:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
+            if is_protected_block(block):
+                continue
             text = "".join(span.text for span in block.inlines) if block.inlines else block.text
             if not text:
                 continue
