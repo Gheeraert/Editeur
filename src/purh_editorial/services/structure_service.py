@@ -14,6 +14,7 @@ from purh_editorial.model import (
     Evidence,
     InlineSpan,
     Transformation,
+    read_block_semantics,
     write_block_semantics,
 )
 from purh_editorial.utils import make_id
@@ -292,12 +293,24 @@ class StructurePreparationService:
                 for role, rule_id, pattern in _FRONTMATTER_RULES:
                     if not pattern.fullmatch(text):
                         continue
-                    previous_role = BlockSemantics(role="paragraph")
+                    previous_role = read_block_semantics(block).role
+                    if previous_role == role:
+                        break
+                    if previous_role not in {None, "", "paragraph"}:
+                        diagnostics.append(Diagnostic(
+                            diagnostic_id=make_id("diag"), module=self.module_name,
+                            severity="warning", category="frontmatter_role_conflict",
+                            message="Étiquette front matter en conflit avec le rôle canonique existant.",
+                            target_ref=block.block_id, evidence=Evidence(excerpt=text),
+                            rule_id=rule_id, status="pending_human_review",
+                            attributes={"existing_role": previous_role, "detected_role": role},
+                        ))
+                        break
                     write_block_semantics(block, BlockSemantics(role=role))
                     transformations.append(Transformation(
                         transformation_id=make_id("tr"), module=self.module_name,
                         target_ref=block.block_id, operation="assign_semantic_role",
-                        before=previous_role.role, after=role, rule_id=rule_id, applied=True,
+                        before=previous_role, after=role, rule_id=rule_id, applied=True,
                         attributes={"provenance": "structure", "status": "automatic", "label": text},
                     ))
                     frontmatter_applied = True
