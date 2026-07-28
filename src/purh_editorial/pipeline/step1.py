@@ -54,6 +54,7 @@ class Step1Options:
     editorial_ai_model: str | None = None
     editorial_ai_base_url: str | None = None
     max_ai_calls: int = 6
+    apply_metopes_styles: bool = False
     heuristic_profile: str = "conservative"
     heading_transform_threshold: float | None = None
     heading_diagnostic_threshold: float | None = None
@@ -493,14 +494,19 @@ class Step1Pipeline:
         ))
 
         t0 = utc_now_iso()
-        document, mapper_tr = self.mapper.apply(document)
-        report.transformations.extend(mapper_tr)
+        mapper_tr = []
+        mapper_status = "skipped"
+        if options.apply_metopes_styles:
+            document, mapper_tr = self.mapper.apply(document)
+            report.transformations.extend(mapper_tr)
+            mapper_status = "success"
         report.add_module_run(ModuleRun(
             module_name="metopes_mapper",
             version=self.version,
             started_at=t0,
             finished_at=utc_now_iso(),
-            summary={"styles_assigned": len(mapper_tr)},
+            status=mapper_status,
+            summary={"enabled": options.apply_metopes_styles, "styles_assigned": len(mapper_tr)},
         ))
 
         # ── 8. Export DOCX ─────────────────────────────────────────────────────

@@ -222,8 +222,8 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
             source_path="tests/fixtures/minimal_source.txt",
             source_format="txt",
             blocks=[
-                Heading(block_id="h1", text="Titre"),
-                Paragraph(block_id="p1", text="Paragraphe courant."),
+                Heading(block_id="h1", text="Titre", attributes={"semantic": {"role": "heading", "heading_level": 1}}),
+                Paragraph(block_id="p1", text="Paragraphe courant.", attributes={"semantic": {"role": "paragraph"}}),
             ],
         )
         mapped, _ = MetopesMapper().apply(source)
@@ -254,8 +254,8 @@ class DocxExporterMetopesTemplateIntegrationTests(unittest.TestCase):
             source_path="tests/fixtures/minimal_source.txt",
             source_format="txt",
             blocks=[
-                QuoteBlock(block_id="q1", text="Citation longue."),
-                Paragraph(block_id="p1", text="Paragraphe apres citation."),
+                QuoteBlock(block_id="q1", text="Citation longue.", attributes={"semantic": {"role": "quote", "quote_kind": "prose", "lineation": "prose"}}),
+                Paragraph(block_id="p1", text="Paragraphe apres citation.", attributes={"semantic": {"role": "paragraph"}}),
             ],
         )
         mapped, _ = MetopesMapper().apply(source)

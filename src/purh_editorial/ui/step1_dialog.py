@@ -221,6 +221,7 @@ def build_step1_options_from_form(
     editorial_ai_model: str = "",
     editorial_ai_base_url: str = "",
     max_ai_calls: int = 6,
+    apply_metopes_styles: bool = False,
     # Sorties
     output_path: Path | None = None,
     tei_output_path: Path | None = None,
@@ -263,6 +264,7 @@ def build_step1_options_from_form(
         editorial_ai_model=edi_model,
         editorial_ai_base_url=edi_base_url,
         max_ai_calls=max(1, int(max_ai_calls)),
+        apply_metopes_styles=bool(apply_metopes_styles),
         output_path=output_path,
         tei_output_path=tei_output_path,
         pivot_json_output_path=pivot_json_output_path,
@@ -298,6 +300,7 @@ def build_config_dict(
     export_tei: bool = True,
     export_json: bool = True,
     export_latex: bool = True,
+    apply_metopes_styles: bool = False,
     # IA structurelle (nouveaux noms)
     struct_ai_provider: str = "",
     struct_ai_api_key: str = "",
@@ -329,6 +332,7 @@ def build_config_dict(
         "export_tei": bool(export_tei),
         "export_json": bool(export_json),
         "export_latex": bool(export_latex),
+        "apply_metopes_styles": bool(apply_metopes_styles),
         "output_docx_path": output_docx_path,
         "tei_output_path": tei_output_path,
         "pivot_json_output_path": pivot_json_output_path,
@@ -388,6 +392,7 @@ def apply_config_dict(
         "export_tei": _b(current, "export_tei", True),
         "export_json": _b(current, "export_json", True),
         "export_latex": _b(current, "export_latex", True),
+        "apply_metopes_styles": _b(current, "apply_metopes_styles", False),
         "output_docx_path": _s(current, "output_docx_path"),
         "tei_output_path": _s(current, "tei_output_path"),
         "pivot_json_output_path": _s(current, "pivot_json_output_path"),
@@ -427,7 +432,7 @@ def apply_config_dict(
     for key in ("source_path", "output_dir", "base_name", "output_docx_path", "tei_output_path", "pivot_json_output_path"):
         if key in loaded:
             merged[key] = str(loaded.get(key) or "")
-    for key in ("export_docx", "export_tei", "export_json", "export_latex"):
+    for key in ("export_docx", "export_tei", "export_json", "export_latex", "apply_metopes_styles"):
         if key in loaded:
             merged[key] = bool(loaded.get(key))
 
@@ -834,6 +839,7 @@ class Step1Dialog(tk.Tk):
         self._base_name = tk.StringVar()
         self._export_docx = tk.BooleanVar(value=True)
         self._export_tei = tk.BooleanVar(value=True)
+        self._apply_metopes_styles = tk.BooleanVar(value=False)
         self._export_json = tk.BooleanVar(value=True)
         self._export_latex = tk.BooleanVar(value=True)
         self._output_docx_path = tk.StringVar()
@@ -926,6 +932,7 @@ class Step1Dialog(tk.Tk):
         )
         ttk.Checkbutton(out_frame, text="Exporter le DOCX corrigé", variable=self._export_docx).grid(row=3, column=0, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le XML-TEI", variable=self._export_tei).grid(row=3, column=1, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Appliquer les styles Métopes", variable=self._apply_metopes_styles).grid(row=4, column=0, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le JSON pivot", variable=self._export_json).grid(row=3, column=2, sticky="w", pady=(6, 0))
         ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=3, sticky="w", pady=(6, 0))
 
@@ -1217,6 +1224,7 @@ class Step1Dialog(tk.Tk):
             editorial_ai_model=self._editorial_ai_model.get(),
             editorial_ai_base_url=self._editorial_ai_base_url.get(),
             max_ai_calls=max(1, int(self._max_ai_calls.get())),
+            apply_metopes_styles=self._apply_metopes_styles.get(),
             output_path=docx_path if self._export_docx.get() else None,
             tei_output_path=tei_path if self._export_tei.get() else None,
             pivot_json_output_path=json_path if self._export_json.get() else None,
@@ -1398,6 +1406,7 @@ class Step1Dialog(tk.Tk):
             export_tei=self._export_tei.get(),
             export_json=self._export_json.get(),
             export_latex=self._export_latex.get(),
+            apply_metopes_styles=self._apply_metopes_styles.get(),
             output_docx_path=self._output_docx_path.get().strip(),
             tei_output_path=self._output_tei_path.get().strip(),
             pivot_json_output_path=self._output_json_path.get().strip(),
@@ -1431,6 +1440,7 @@ class Step1Dialog(tk.Tk):
         self._export_tei.set(bool(config.get("export_tei", True)))
         self._export_json.set(bool(config.get("export_json", True)))
         self._export_latex.set(bool(config.get("export_latex", True)))
+        self._apply_metopes_styles.set(bool(config.get("apply_metopes_styles", False)))
         self._output_docx_path.set(str(config.get("output_docx_path", "")))
         self._output_tei_path.set(str(config.get("tei_output_path", "")))
         self._output_json_path.set(str(config.get("pivot_json_output_path", "")))
