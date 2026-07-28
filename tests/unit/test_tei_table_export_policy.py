@@ -129,6 +129,7 @@ def test_pipeline_records_table_error_and_does_not_write_tei(tmp_path: Path) -> 
     source_path = tmp_path / "source.txt"
     source_path.write_text("source", encoding="utf-8")
     output_path = tmp_path / "failed.xml"
+    output_path.write_text("stale TEI export", encoding="utf-8")
     table_error = TeiTableExportError(
         [{"code": "table_not_exported_to_tei", "block_id": "table-7", "reason": "missing_table_ooxml", "rows": 0, "cells": 0}]
     )
@@ -142,5 +143,23 @@ def test_pipeline_records_table_error_and_does_not_write_tei(tmp_path: Path) -> 
     report = result.pipeline_result.report
     assert result.pipeline_result.tei_xml is None
     assert output_path.exists() is False
+    assert list(tmp_path.glob(f".{output_path.name}.*.tmp")) == []
     assert any("table-7: missing_table_ooxml" in error for error in report.errors)
     assert any(run.module_name == "tei_xml_export" and run.status == "failed" for run in report.module_runs)
+
+
+def test_pipeline_replaces_a_stale_tei_file_atomically(tmp_path: Path) -> None:
+    source_path = tmp_path / "source.txt"
+    source_path.write_text("A paragraph.", encoding="utf-8")
+    output_path = tmp_path / "success.xml"
+    output_path.write_text("stale TEI export", encoding="utf-8")
+
+    result = Step1Pipeline(settings=load_settings()).run(
+        source_path,
+        Step1Options(enable_ai=False, output_path=None, tei_output_path=output_path),
+    )
+
+    assert result.pipeline_result.tei_xml is not None
+    assert output_path.read_text(encoding="utf-8") == result.pipeline_result.tei_xml
+    assert "stale TEI export" not in output_path.read_text(encoding="utf-8")
+    assert list(tmp_path.glob(f".{output_path.name}.*.tmp")) == []

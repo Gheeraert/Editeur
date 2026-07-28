@@ -207,6 +207,14 @@ XML-TEI et n'écrit donc aucun fichier TEI incomplet.
 
 ---
 
+#### Artefacts de sortie
+
+Si l'export TEI courant échoue alors qu'un chemin de sortie a été demandé, le
+pipeline invalide le fichier TEI cible préexistant. Aucun artefact d'une
+exécution antérieure ne peut ainsi être pris pour la sortie réussie du run
+courant. Lors d'un succès, le XML est écrit dans un fichier temporaire voisin,
+puis remplace atomiquement la cible ; le temporaire est supprimé en cas d'échec.
+
 ## 9. Export LaTeX
 
 Le LaTeX doit être, à terme, une projection directe du pivot Python‑JSON.
