@@ -7,6 +7,12 @@ from purh_editorial.services.pivot_canonicalizer import PivotCanonicalizer
 from purh_editorial.services.pivot_export_gate import PivotValidationError, export_tei_for_production
 from purh_editorial.services.pivot_validator import PivotValidator
 from purh_editorial.services.structure_service import StructurePreparationService
+from purh_editorial.services.word_review_service import (
+    WordReviewError,
+    WordReviewResult,
+    WordReviewService,
+    document_contains_tracked_changes,
+)
 
 __all__ = [
     "AIEditorialService",
@@ -18,5 +24,9 @@ __all__ = [
     "PivotValidationError",
     "PivotValidator",
     "StructurePreparationService",
+    "WordReviewError",
+    "WordReviewResult",
+    "WordReviewService",
+    "document_contains_tracked_changes",
     "export_tei_for_production",
 ]
