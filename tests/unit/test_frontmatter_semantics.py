@@ -29,8 +29,8 @@ def test_frontmatter_recognition_is_idempotent_and_preserves_existing_roles() ->
 
 def test_frontmatter_match_stops_heading_heuristics_without_rewriting_role() -> None:
     document = Document("doc", "source", "txt", blocks=[
-        Paragraph("abstract", text="Abstract:", attributes={"semantic": {"role": "abstract"}, "all_caps": True}),
-        Paragraph("conflict", text="Résumé :", attributes={"semantic": {"role": "keywords"}, "all_caps": True}),
+        Paragraph("abstract", text="ABSTRACT", attributes={"semantic": {"role": "abstract"}}),
+        Paragraph("conflict", text="RÉSUMÉ", attributes={"semantic": {"role": "keywords"}}),
     ])
     diagnostics, transformations = StructurePreparationService().process(document)
     _diagnostics_second, transformations_second = StructurePreparationService().process(document)

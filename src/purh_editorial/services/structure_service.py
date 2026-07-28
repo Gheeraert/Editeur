@@ -290,7 +290,6 @@ class StructurePreparationService:
                 continue
             if block.block_type == "paragraph":
                 frontmatter_matched = False
-                frontmatter_transformed = False
                 for role, rule_id, pattern in _FRONTMATTER_RULES:
                     if not pattern.fullmatch(text):
                         continue
@@ -315,7 +314,6 @@ class StructurePreparationService:
                         before=previous_role, after=role, rule_id=rule_id, applied=True,
                         attributes={"provenance": "structure", "status": "automatic", "label": text},
                     ))
-                    frontmatter_transformed = True
                     break
                 if frontmatter_matched:
                     continue
