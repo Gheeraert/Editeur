@@ -21,6 +21,11 @@ from purh_editorial.services.pivot_export_gate import PivotValidationError, expo
 from purh_editorial.services.pivot_validator import PivotValidator
 from purh_editorial.services.structure_service import StructurePreparationService
 from purh_editorial.services.structure_service import settings_for_heuristic_profile
+from purh_editorial.services.word_review_service import (
+    WordReviewError,
+    WordReviewResult,
+    WordReviewService,
+)
 from purh_editorial.services.structure_ai_arbitrator import (
     AnthropicStructureAiProvider,
     GroqStructureAiProvider,
@@ -97,6 +102,7 @@ class Step1Options:
     poetry_transform_threshold: float | None = None
     poetry_diagnostic_threshold: float | None = None
     output_path: Path | None = None
+    word_review_output_path: Path | None = None
     template_path: Path | None = None
     tei_output_path: Path | None = None
     pivot_json_output_path: Path | None = None
@@ -144,6 +150,7 @@ class Step1Options:
 class Step1Result:
     pipeline_result: PipelineResult
     output_docx: Path | None = None
+    word_review_result: WordReviewResult | None = None
 
 
 class Step1Pipeline:
@@ -170,6 +177,7 @@ class Step1Pipeline:
         settings: AppSettings,
         *,
         structure_ai_provider: StructureAiProvider | None = None,
+        word_review_service: WordReviewService | None = None,
     ) -> None:
         self.settings     = settings
         self.orthotypo    = OrthotypoService()
@@ -179,6 +187,7 @@ class Step1Pipeline:
         self.pivot_canonicalizer = PivotCanonicalizer()
         self.pivot_validator = PivotValidator()
         self.mapper       = MetopesMapper()
+        self.word_review = word_review_service or WordReviewService()
         self.ai           = AIEditorialService(
             api_key  = settings.ai.api_key,
             model    = settings.ai.model,
@@ -562,6 +571,63 @@ class Step1Pipeline:
                 summary={"output": str(output_docx)},
             ))
 
+        word_review_result: WordReviewResult | None = None
+        if options.word_review_output_path is not None:
+            t0 = utc_now_iso()
+            if output_docx is None:
+                message = (
+                    "Document de revision Word non produit : aucun DOCX candidat n'a ete demande."
+                )
+                report.errors.append(message)
+                report.add_module_run(ModuleRun(
+                    module_name="word_review",
+                    version=self.version,
+                    started_at=t0,
+                    finished_at=utc_now_iso(),
+                    status="failed",
+                    summary={
+                        "original": str(source_path),
+                        "candidate": None,
+                        "output": str(options.word_review_output_path),
+                        "error": message,
+                    },
+                ))
+            else:
+                try:
+                    word_review_result = self.word_review.create_review_document(
+                        original_path=source_path,
+                        revised_path=output_docx,
+                        output_path=options.word_review_output_path,
+                    )
+                    report.add_module_run(ModuleRun(
+                        module_name="word_review",
+                        version=self.version,
+                        started_at=t0,
+                        finished_at=utc_now_iso(),
+                        status="success",
+                        summary={
+                            "original": str(source_path),
+                            "candidate": str(output_docx),
+                            "output": str(word_review_result.output_path),
+                            "has_tracked_changes": word_review_result.has_tracked_changes,
+                        },
+                    ))
+                except WordReviewError as exc:
+                    report.errors.append(f"Word review failed ({type(exc).__name__}): {exc}")
+                    report.add_module_run(ModuleRun(
+                        module_name="word_review",
+                        version=self.version,
+                        started_at=t0,
+                        finished_at=utc_now_iso(),
+                        status="failed",
+                        summary={
+                            "original": str(source_path),
+                            "candidate": str(output_docx),
+                            "output": str(options.word_review_output_path),
+                            "error": str(exc),
+                        },
+                    ))
+
         tei_xml: str | None = None
         try:
             t0 = utc_now_iso()
@@ -656,7 +722,11 @@ class Step1Pipeline:
             pivot_payload=pivot,
             tei_xml=tei_xml,
         )
-        return Step1Result(pipeline_result=pipeline_result, output_docx=output_docx)
+        return Step1Result(
+            pipeline_result=pipeline_result,
+            output_docx=output_docx,
+            word_review_result=word_review_result,
+        )
 
 
 # ── Factories de providers IA ─────────────────────────────────────────────────

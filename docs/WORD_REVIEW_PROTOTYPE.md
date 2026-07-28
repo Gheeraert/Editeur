@@ -107,6 +107,17 @@ paquet en mode editable.
 Elle affiche le chemin du document cree et indique si des modifications suivies
 ont ete detectees.
 
+## Raccordement au pipeline
+
+`Step1Options.output_path` produit le DOCX candidat corrige par le pipeline.
+`Step1Options.word_review_output_path` demande ensuite le DOCX de revision
+Word. Ces deux chemins doivent etre distincts.
+
+Le raccordement exige une source DOCX et Microsoft Word sous Windows. Le
+pipeline appelle la comparaison seulement apres l'export effectif du candidat.
+Si Word echoue ou est indisponible, le candidat deja produit est conserve ;
+l'echec est consigne dans le rapport du pipeline.
+
 ## Test d'integration reel
 
 Le test d'integration avec Microsoft Word est volontairement facultatif :
