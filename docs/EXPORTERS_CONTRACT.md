@@ -188,6 +188,25 @@ Le style Word peut être un fait source ou un indice, mais la décision doit êt
 
 ---
 
+### 8.1 Tableaux non exportables
+
+Les tableaux dont l'OOXML est absent, invalide ou sans ligne étaient déjà
+détectés. En production, cette détection est bloquante :
+`TeiXmlExporter.export_document()` lève `TeiTableExportError` et ne retourne
+aucun XML. L'exception conserve les diagnostics structurés (`code`, `block_id`,
+`reason`, `rows`, `cells`).
+
+`TeiXmlExporter.export_document_result()` retourne un `TeiExportResult` avec
+les diagnostics et les compteurs. Par défaut, elle est elle aussi stricte. Une
+sortie de prévisualisation dégradée doit être demandée explicitement avec
+`allow_degraded_table_output=True`; son champ `degraded` vaut alors `true`.
+
+L'exporteur ne modifie jamais `Document.annotations`. Le pipeline de production
+enregistre un échec de tableau dans son `ProcessingReport`, ne produit pas de
+XML-TEI et n'écrit donc aucun fichier TEI incomplet.
+
+---
+
 ## 9. Export LaTeX
 
 Le LaTeX doit être, à terme, une projection directe du pivot Python‑JSON.

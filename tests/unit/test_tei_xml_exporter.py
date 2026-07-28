@@ -801,8 +801,8 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_format="docx",
             blocks=[Block(block_id="t1", block_type="table", attributes={"table_ooxml": table_ooxml})],
         )
-        self.exporter.export_document(document)
-        diags = document.annotations.get("tei_table_diagnostics", [])
+        result = self.exporter.export_document_result(document)
+        diags = result.table_diagnostics
         self.assertEqual(len(diags), 1)
         self.assertEqual(diags[0].get("code"), "table_exported_to_tei")
         self.assertEqual(diags[0].get("rows"), 1)
@@ -815,16 +815,12 @@ class TeiXmlExporterTests(unittest.TestCase):
             source_format="docx",
             blocks=[Block(block_id="t1", block_type="table", attributes={})],
         )
-        xml_text = self.exporter.export_document(document)
-        root = ET.fromstring(xml_text)
-        body = root.find(f"./{_q('text')}/{_q('body')}")
-        self.assertIsNotNone(body)
-        p = body.find(_q("p"))
-        self.assertIsNotNone(p)
-        self.assertIn("Table not exported", p.text or "")
-        diags = document.annotations.get("tei_table_diagnostics", [])
-        self.assertEqual(len(diags), 1)
-        self.assertEqual(diags[0].get("code"), "table_not_exported_to_tei")
+        from purh_editorial.io.tei_xml_exporter import TeiTableExportError
+
+        with self.assertRaises(TeiTableExportError) as raised:
+            self.exporter.export_document(document)
+        self.assertIn("t1: missing_table_ooxml", str(raised.exception))
+        self.assertEqual(raised.exception.diagnostics[0].get("code"), "table_not_exported_to_tei")
 
 
 if __name__ == "__main__":

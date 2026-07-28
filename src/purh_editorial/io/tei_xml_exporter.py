@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from xml.etree import ElementTree as ET
 
 from purh_editorial.model import Document, InlineSpan, InlineStyle, Note
@@ -18,6 +19,38 @@ _EXT_BY_CONTENT_TYPE = {
     "image/tiff": "tif", "image/svg+xml": "svg", "image/x-emf": "emf", "image/x-wmf": "wmf",
 }
 
+_TABLE_EXPORTED_CODE = "table_exported_to_tei"
+
+
+@dataclass(slots=True)
+class TeiExportResult:
+    xml: str
+    table_diagnostics: list[dict[str, object]]
+    degraded: bool = False
+
+    @property
+    def table_exported_count(self) -> int:
+        return sum(item.get("code") == _TABLE_EXPORTED_CODE for item in self.table_diagnostics)
+
+    @property
+    def table_not_exported_count(self) -> int:
+        return len(self.table_diagnostics) - self.table_exported_count
+
+
+class TeiTableExportError(Exception):
+    """A production TEI export cannot represent one or more source tables."""
+
+    def __init__(self, diagnostics: list[dict[str, object]]) -> None:
+        self.diagnostics = diagnostics
+        failures = [item for item in diagnostics if item.get("code") != _TABLE_EXPORTED_CODE]
+        details = "; ".join(
+            f"{item.get('block_id', '?')}: {item.get('reason', 'unknown_table_export_error')}"
+            for item in failures
+        )
+        super().__init__(
+            f"Export TEI impossible : {len(failures)} tableaux non exportables ({details})."
+        )
+
 
 def media_filename_for_asset(asset) -> str:
     """Nom de fichier stable et sans collision pour un ImageAsset dans un bundle
@@ -30,6 +63,19 @@ class TeiXmlExporter:
     """Export minimal du modèle interne vers XML-TEI."""
 
     def export_document(self, document: Document) -> str:
+        """Export production strict: failed tables block the returned XML."""
+        return self.export_document_result(document).xml
+
+    def export_document_result(
+        self,
+        document: Document,
+        *,
+        allow_degraded_table_output: bool = False,
+    ) -> TeiExportResult:
+        """Return XML and structured table diagnostics without mutating the pivot.
+
+        `allow_degraded_table_output` is only for explicit diagnostic previews.
+        """
         ET.register_namespace("", TEI_NS)
         root = ET.Element(self._q("TEI"))
 
@@ -102,7 +148,11 @@ class TeiXmlExporter:
                 self._append_block_content(quote_el, block.text, block.inlines, note_by_id)
             elif block.block_type == "table":
                 parent = section_stack[-1] if section_stack else body_el
-                table_diag = self._append_table_block(parent, block)
+                table_diag = self._append_table_block(
+                    parent,
+                    block,
+                    allow_degraded_table_output=allow_degraded_table_output,
+                )
                 table_diagnostics.append(table_diag)
             else:
                 parent = section_stack[-1] if section_stack else body_el
@@ -111,20 +161,25 @@ class TeiXmlExporter:
 
             self._append_figures_for_block(parent, block, document)
 
-        annotations = document.annotations
-        annotations["tei_table_diagnostics"] = table_diagnostics
-        annotations["tei_table_exported_count"] = sum(
-            1 for item in table_diagnostics if item.get("code") == "table_exported_to_tei"
+        failures = [item for item in table_diagnostics if item.get("code") != _TABLE_EXPORTED_CODE]
+        if failures and not allow_degraded_table_output:
+            raise TeiTableExportError(table_diagnostics)
+        return TeiExportResult(
+            xml=ET.tostring(root, encoding="unicode"),
+            table_diagnostics=table_diagnostics,
+            degraded=bool(failures),
         )
-        annotations["tei_table_not_exported_count"] = sum(
-            1 for item in table_diagnostics if item.get("code") != "table_exported_to_tei"
-        )
-        return ET.tostring(root, encoding="unicode")
 
-    def _append_table_block(self, parent: ET.Element, block) -> dict[str, object]:
+    def _append_table_block(
+        self,
+        parent: ET.Element,
+        block,
+        *,
+        allow_degraded_table_output: bool,
+    ) -> dict[str, object]:
         raw_ooxml = str(block.attributes.get("table_ooxml", "") or "").strip()
         if not raw_ooxml:
-            ET.SubElement(parent, self._q("p")).text = "[Table not exported: missing OOXML]"
+            self._append_table_fallback(parent, "missing OOXML", allow_degraded_table_output)
             return {
                 "code": "table_not_exported_to_tei",
                 "block_id": block.block_id,
@@ -136,7 +191,7 @@ class TeiXmlExporter:
         try:
             table_root = ET.fromstring(raw_ooxml)
         except ET.ParseError:
-            ET.SubElement(parent, self._q("p")).text = "[Table not exported: invalid OOXML]"
+            self._append_table_fallback(parent, "invalid OOXML", allow_degraded_table_output)
             return {
                 "code": "table_not_exported_to_tei",
                 "block_id": block.block_id,
@@ -147,7 +202,7 @@ class TeiXmlExporter:
 
         tr_nodes = table_root.findall(f"./{{{WORD_NS}}}tr")
         if not tr_nodes:
-            ET.SubElement(parent, self._q("p")).text = "[Table not exported: no rows]"
+            self._append_table_fallback(parent, "no rows", allow_degraded_table_output)
             return {
                 "code": "table_export_fallback",
                 "block_id": block.block_id,
@@ -178,11 +233,17 @@ class TeiXmlExporter:
                     cell_el.text = "\n".join(text_parts)
 
         return {
-            "code": "table_exported_to_tei",
+            "code": _TABLE_EXPORTED_CODE,
             "block_id": block.block_id,
             "rows": row_count,
             "cells": cell_count,
         }
+
+    def _append_table_fallback(
+        self, parent: ET.Element, reason: str, allow_degraded_table_output: bool
+    ) -> None:
+        if allow_degraded_table_output:
+            ET.SubElement(parent, self._q("p")).text = f"[Table not exported: {reason}]"
 
     def _append_figures_for_block(self, parent: ET.Element, block, document: Document) -> None:
         """Émet un <figure> TEI pour chaque image incorporée rattachée à ce bloc.

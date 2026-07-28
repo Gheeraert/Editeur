@@ -6,7 +6,7 @@ from pathlib import Path
 from purh_editorial.config import AppSettings
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
-from purh_editorial.io.tei_xml_exporter import media_filename_for_asset
+from purh_editorial.io.tei_xml_exporter import TeiTableExportError, media_filename_for_asset
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
 from purh_editorial.serialization import build_pivot_payload, pivot_to_json
@@ -541,6 +541,23 @@ class Step1Pipeline:
         except PivotValidationError as exc:
             report.warnings.append(f"TEI export blocked: {exc}")
             report.diagnostics.extend(exc.diagnostics)
+        except TeiTableExportError as exc:
+            report.errors.append(str(exc))
+            report.add_module_run(ModuleRun(
+                module_name="tei_xml_export",
+                version=self.version,
+                started_at=t0,
+                finished_at=utc_now_iso(),
+                status="failed",
+                summary={
+                    "generated": False,
+                    "table_failures": sum(
+                        item.get("code") != "table_exported_to_tei"
+                        for item in exc.diagnostics
+                    ),
+                    "table_diagnostics": exc.diagnostics,
+                },
+            ))
         except Exception as exc:  # noqa: BLE001
             report.warnings.append(f"TEI export skipped ({type(exc).__name__}): {exc}")
 
