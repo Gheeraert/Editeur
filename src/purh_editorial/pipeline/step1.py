@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import os
 from pathlib import Path
+import tempfile
 
 from purh_editorial.config import AppSettings
 from purh_editorial.io.docx_exporter import DocxExporter
 from purh_editorial.io.importer_registry import ImporterRegistry
-from purh_editorial.io.tei_xml_exporter import media_filename_for_asset
+from purh_editorial.io.tei_xml_exporter import TeiTableExportError, media_filename_for_asset
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
 from purh_editorial.model.report import utc_now_iso
 from purh_editorial.serialization import build_pivot_payload, pivot_to_json
@@ -29,6 +31,40 @@ from purh_editorial.services.structure_ai_arbitrator import (
 )
 from purh_editorial.services.ai_editorial_service import AIEditorialService
 from purh_editorial.utils import make_id
+
+
+def _invalidate_tei_output(path: Path | None, report: ProcessingReport) -> None:
+    """Remove a stale TEI target after the current production export failed."""
+    if path is None or not path.exists():
+        return
+    try:
+        path.unlink()
+    except OSError as exc:
+        report.errors.append(f"TEI stale output cleanup failed ({type(exc).__name__}): {exc}")
+
+
+def _write_tei_xml_atomically(path: Path, xml: str) -> None:
+    """Write a TEI file beside its target, then replace the target atomically."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path: Path | None = None
+    try:
+        descriptor, temp_name = tempfile.mkstemp(
+            prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, text=True
+        )
+        temp_path = Path(temp_name)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(xml)
+        os.replace(temp_path, path)
+        temp_path = None
+    except OSError as exc:
+        if temp_path is not None:
+            try:
+                temp_path.unlink(missing_ok=True)
+            except OSError as cleanup_exc:
+                raise OSError(
+                    f"{exc}; temporary TEI cleanup failed: {cleanup_exc}"
+                ) from exc
+        raise
 
 
 @dataclass
@@ -271,9 +307,11 @@ class Step1Pipeline:
         # ── 2. Orthotypographie (déterministe) ────────────────────────────────
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
+        unvalidated_typo_diags = self.orthotypo.analyze_unvalidated_rules(document)
         quote_punctuation_diags = self.orthotypo.analyze_quote_punctuation(document)
         incise_dash_diags = self.orthotypo.analyze_incise_dash(document)
         report.diagnostics.extend(quote_punctuation_diags)
+        report.diagnostics.extend(unvalidated_typo_diags)
         report.diagnostics.extend(incise_dash_diags)
         report.transformations.extend(typo_tr)
         report.add_module_run(ModuleRun(
@@ -283,6 +321,7 @@ class Step1Pipeline:
             finished_at=utc_now_iso(),
             summary={
                 "corrections": len(typo_tr),
+                "unvalidated_rule_diagnostics": len(unvalidated_typo_diags),
                 "quote_punctuation_diagnostics": len(quote_punctuation_diags),
                 "incise_dash_diagnostics": len(incise_dash_diags),
             },
@@ -440,11 +479,11 @@ class Step1Pipeline:
         if editorial_ai_requested:
             t0 = utc_now_iso()
             if editorial_ai_enabled:
-                document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
-                report.transformations.extend(ai_tr)
+                document, ai_suggestions = self.ai.apply(document, max_calls=options.max_ai_calls)
+                report.suggestions.extend(ai_suggestions)
                 ai_status = "success"
             else:
-                ai_tr = []
+                ai_suggestions = []
                 ai_status = "skipped"
                 report.warnings.append("Editorial AI skipped: no API key configured for selected provider.")
             report.add_module_run(ModuleRun(
@@ -458,7 +497,7 @@ class Step1Pipeline:
                     "editorial_ai_available": editorial_ai_available,
                     "editorial_ai_enabled": editorial_ai_enabled,
                     "enabled": editorial_ai_enabled,
-                    "corrections_applied": len(ai_tr),
+                    "suggestions_produced": len(ai_suggestions),
                     "provider": self.ai.provider,
                     "model": self.ai.model,
                     "base_url": self.ai.base_url,
@@ -542,16 +581,35 @@ class Step1Pipeline:
                 },
             ))
         except PivotValidationError as exc:
+            _invalidate_tei_output(options.tei_output_path, report)
             report.warnings.append(f"TEI export blocked: {exc}")
             report.diagnostics.extend(exc.diagnostics)
+        except TeiTableExportError as exc:
+            _invalidate_tei_output(options.tei_output_path, report)
+            report.errors.append(str(exc))
+            report.add_module_run(ModuleRun(
+                module_name="tei_xml_export",
+                version=self.version,
+                started_at=t0,
+                finished_at=utc_now_iso(),
+                status="failed",
+                summary={
+                    "generated": False,
+                    "table_failures": sum(
+                        item.get("code") != "table_exported_to_tei"
+                        for item in exc.diagnostics
+                    ),
+                    "table_diagnostics": exc.diagnostics,
+                },
+            ))
         except Exception as exc:  # noqa: BLE001
+            _invalidate_tei_output(options.tei_output_path, report)
             report.warnings.append(f"TEI export skipped ({type(exc).__name__}): {exc}")
 
         if options.tei_output_path and tei_xml is not None:
             try:
                 t0 = utc_now_iso()
-                options.tei_output_path.parent.mkdir(parents=True, exist_ok=True)
-                options.tei_output_path.write_text(tei_xml, encoding="utf-8")
+                _write_tei_xml_atomically(options.tei_output_path, tei_xml)
                 media_written = 0
                 if document.image_assets:
                     media_dir = options.tei_output_path.parent / "media"

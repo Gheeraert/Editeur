@@ -108,10 +108,9 @@ class Step1PipelineTeiExportTests(unittest.TestCase):
         self.assertLess(ordered_texts.index("[TABLE]"), ordered_texts.index("Après tableau"))
 
         source_doc = result.pipeline_result.source_document
-        table_block_count = sum(1 for b in source_doc.blocks if b.block_type == "table")
-        table_diags = source_doc.annotations.get("tei_table_diagnostics", [])
-        self.assertEqual(len(table_diags), table_block_count)
-        self.assertTrue(all(d.get("code") == "table_exported_to_tei" for d in table_diags))
+        self.assertNotIn("tei_table_diagnostics", source_doc.annotations)
+        self.assertNotIn("tei_table_exported_count", source_doc.annotations)
+        self.assertNotIn("tei_table_not_exported_count", source_doc.annotations)
 
 
 if __name__ == "__main__":

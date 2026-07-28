@@ -8,6 +8,7 @@ from typing import Callable
 
 from purh_editorial.model import Diagnostic, Document, Evidence, InlineSpan, Transformation
 from purh_editorial.utils import make_id
+from purh_editorial.utils.protection import is_protected_block, is_protected_note
 
 # ── Couleurs de surlignage ────────────────────────────────────────────────────
 COLOR_ORTHOTYPO = "orthotypo"   # jaune
@@ -442,6 +443,19 @@ def _build_rules() -> list[TypoRule]:
         auto=False,
     ))
 
+    # Only rules explicitly supported by a PURH source may alter the document.
+    # All other rules remain detectable review material until their source is
+    # documented; this is deliberately stricter than general French practice.
+    purh_validated_rule_ids = {
+        "purh.siecles",
+        "purh.ordinaux",
+        "purh.abreviations.etc",
+        "purh.pagination.espace",
+        "purh.numero",
+        "purh.abreviations.redoublement",
+    }
+    for rule in rules:
+        rule.auto = rule.auto and rule.rule_id in purh_validated_rule_ids
     return rules
 
 
@@ -514,8 +528,15 @@ class OrthotypoService:
         doc = copy.deepcopy(document)
         transformations: list[Transformation] = []
         for block in doc.blocks:
+            if is_protected_block(block):
+                continue
             transformations.extend(self._process_block(block))
+        protected_target_refs = {
+            block.block_id for block in doc.blocks if is_protected_block(block)
+        }
         for note in doc.notes:
+            if is_protected_note(note, protected_target_refs=protected_target_refs):
+                continue
             transformations.extend(self._process_note(note))
         if transformations:
             doc.history.append(
@@ -530,12 +551,38 @@ class OrthotypoService:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            if block.block_type == "quote_block":
+            if is_protected_block(block):
                 continue
             text = "".join(span.text for span in block.inlines) if block.inlines else block.text
             if not text or _TECHNICAL_TEXT_RE.search(text):
                 continue
             diagnostics.extend(self._diagnose_quote_punctuation(block.block_id, text))
+        return diagnostics
+
+    def analyze_unvalidated_rules(self, document: Document) -> list[Diagnostic]:
+        """Report non-PURH rules as review items without changing the text."""
+        diagnostics: list[Diagnostic] = []
+        for block in document.blocks:
+            if is_protected_block(block):
+                continue
+            text = "".join(span.text for span in block.inlines) if block.inlines else block.text
+            for rule in TYPO_RULES:
+                if rule.auto or not rule.pattern.search(text):
+                    continue
+                diagnostics.append(
+                    Diagnostic(
+                        diagnostic_id=make_id("diag"),
+                        module=self.module_name,
+                        severity="info",
+                        category="orthotypo_unvalidated_rule",
+                        message="Règle non validée par une source PURH : correction non appliquée.",
+                        target_ref=block.block_id,
+                        evidence=Evidence(excerpt=rule.pattern.search(text).group(0)),
+                        rule_id=rule.rule_id,
+                        status="open",
+                        attributes={"status": "pending_human_review", "description": rule.description},
+                    )
+                )
         return diagnostics
 
     def analyze_incise_dash(self, document: Document) -> list[Diagnostic]:
@@ -547,6 +594,8 @@ class OrthotypoService:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
+            if is_protected_block(block):
+                continue
             text = "".join(span.text for span in block.inlines) if block.inlines else block.text
             if not text:
                 continue
@@ -761,17 +810,20 @@ class OrthotypoService:
         update_color,
         update_inlines,
     ) -> list[Transformation]:
+        before_signature = self._char_style_signature([InlineSpan(text=text)])
         corrected, rule_occurrences = self._apply_all_rules_tracked(text)
         inlines = [InlineSpan(text=corrected)]
         styled_inlines, any_styled, century_occurrences, numero_occurrences = (
             self._apply_special_stylings(inlines)
         )
         final_text = "".join(span.text for span in styled_inlines)
+        after_signature = self._char_style_signature(styled_inlines)
 
-        if final_text == text:
+        if after_signature == before_signature:
             return []
         update_text(final_text)
-        update_color()
+        if final_text != text:
+            update_color()
         if any_styled:
             update_inlines(styled_inlines)
         return self._build_transformations(

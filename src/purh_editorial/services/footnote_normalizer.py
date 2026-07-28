@@ -10,6 +10,7 @@ from purh_editorial.services.orthotypo_service import (
     _find_changed_regions,
 )
 from purh_editorial.utils import make_id
+from purh_editorial.utils.protection import is_protected_block, is_protected_note
 
 # URLs et fins de ligne qui acceptent legitimement l'absence de point final.
 _URL_RE = re.compile(r"https?://\S+$")
@@ -95,7 +96,12 @@ class FootnoteNormalizer:
     def apply(self, document: Document) -> tuple[Document, list[Transformation]]:
         doc = copy.deepcopy(document)
         transformations: list[Transformation] = []
+        protected_target_refs = {
+            block.block_id for block in doc.blocks if is_protected_block(block)
+        }
         for note in doc.notes:
+            if is_protected_note(note, protected_target_refs=protected_target_refs):
+                continue
             tr = self._process_note(note)
             transformations.extend(tr)
         if transformations:
@@ -111,7 +117,7 @@ class FootnoteNormalizer:
         """
         diagnostics: list[Diagnostic] = []
         for block in document.blocks:
-            if not block.inlines:
+            if is_protected_block(block) or not block.inlines:
                 continue
             diagnostics.extend(self._diagnose_block_note_calls(block.block_id, block.inlines))
         return diagnostics
@@ -123,7 +129,12 @@ class FootnoteNormalizer:
         que d'appliquer une regle aveugle sur du contenu ambigu.
         """
         diagnostics: list[Diagnostic] = []
+        protected_target_refs = {
+            block.block_id for block in document.blocks if is_protected_block(block)
+        }
         for note in document.notes:
+            if is_protected_note(note, protected_target_refs=protected_target_refs):
+                continue
             text = "".join(s.text for s in note.inlines) if note.inlines else note.text
             if not text:
                 continue

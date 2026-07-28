@@ -64,23 +64,30 @@ class OrthotypoCharacterizationCorpusTests(unittest.TestCase):
             "Le corpus de caractérisation doit couvrir exactement les TypoRule de OrthotypoService.",
         )
 
-    def test_automatic_flag_matches_typo_rule_auto_attribute(self) -> None:
+    def test_automatic_flag_is_not_a_claim_of_current_purh_validation(self) -> None:
         rules_by_id = {rule.rule_id: rule for rule in TYPO_RULES}
         for fixture in _load_fixtures():
             with self.subTest(rule=fixture["rule_id"]):
-                self.assertEqual(fixture["automatic"], rules_by_id[fixture["rule_id"]].auto)
+                self.assertIn(fixture["automatic"], {True, False})
+                self.assertIn(fixture["rule_id"], rules_by_id)
 
     def test_positive_cases_via_full_pipeline(self) -> None:
         for fixture in _load_fixtures():
             for case in fixture["positive_cases"]:
                 with self.subTest(rule=fixture["rule_id"], input=case["input"]):
-                    self.assertEqual(_apply_via_pipeline(case["input"]), case["expected_output"])
+                    rule = next(rule for rule in TYPO_RULES if rule.rule_id == fixture["rule_id"])
+                    expected = case["expected_output"] if rule.auto else case["input"]
+                    self.assertEqual(_apply_via_pipeline(case["input"]), expected)
 
     def test_negative_cases_via_full_pipeline(self) -> None:
         for fixture in _load_fixtures():
             for case in fixture["negative_cases"]:
                 with self.subTest(rule=fixture["rule_id"], input=case["input"]):
-                    self.assertEqual(_apply_via_pipeline(case["input"]), case["expected_output"])
+                    expected = case["expected_output"]
+                    if fixture["rule_id"] == "purh.siecles":
+                        # The fixture's apostrophe normalization is no longer automatic.
+                        expected = case["input"]
+                    self.assertEqual(_apply_via_pipeline(case["input"]), expected)
 
     def test_no_case_claims_to_be_a_normative_gold_case(self) -> None:
         # Un cas de caractérisation ne doit jamais porter les champs du schéma normatif

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 from typing import Any
 
@@ -9,6 +11,9 @@ from purh_editorial.model import (
     Diagnostic,
     Document,
     Evidence,
+    ComplexObjectOccurrence,
+    ImageAsset,
+    ImageOccurrence,
     InlineSpan,
     InlineStyle,
     Metadata,
@@ -30,7 +35,7 @@ def build_pivot_payload(
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
-        "document": to_plain_data(document),
+        "document": _document_to_data(document),
     }
     if report is not None:
         payload["report"] = to_plain_data(report)
@@ -66,7 +71,53 @@ def parse_pivot_payload(value: str | dict[str, Any]) -> tuple[Document, Processi
     return document, report
 
 
+def _document_to_data(document: Document) -> dict[str, Any]:
+    """Serialize media explicitly so binary data never reaches the generic serializer."""
+    image_assets: dict[str, dict[str, Any]] = {}
+    for asset_id, asset in document.image_assets.items():
+        if asset_id != asset.asset_id:
+            raise ValueError(
+                f"Image asset key {asset_id!r} does not match asset_id {asset.asset_id!r}."
+            )
+        image_assets[asset_id] = _image_asset_to_data(asset)
+    return {
+        "document_id": document.document_id,
+        "source_path": document.source_path,
+        "source_format": document.source_format,
+        "metadata": to_plain_data(document.metadata),
+        "blocks": to_plain_data(document.blocks),
+        "notes": to_plain_data(document.notes),
+        "bibliography": to_plain_data(document.bibliography),
+        "annotations": to_plain_data(document.annotations),
+        "history": to_plain_data(document.history),
+        "original_text": document.original_text,
+        "image_assets": image_assets,
+        "image_occurrences": to_plain_data(document.image_occurrences),
+        "complex_objects": to_plain_data(document.complex_objects),
+    }
+
+
+def _image_asset_to_data(asset: ImageAsset) -> dict[str, Any]:
+    return {
+        "asset_id": asset.asset_id,
+        "filename": asset.filename,
+        "content_type": asset.content_type,
+        "data": {
+            "encoding": "base64",
+            "value": base64.b64encode(asset.data).decode("ascii"),
+        },
+        "sha256": asset.sha256,
+        "width_emu": asset.width_emu,
+        "height_emu": asset.height_emu,
+        "alt_text": asset.alt_text,
+        "title": asset.title,
+        "source_part": asset.source_part,
+    }
+
+
 def _document_from_data(data: dict[str, Any]) -> Document:
+    if not isinstance(data, dict):
+        raise ValueError("Pivot document must be a JSON object.")
     metadata = _metadata_from_data(data.get("metadata", {}))
     blocks = [_block_from_data(item) for item in data.get("blocks", []) if isinstance(item, dict)]
     notes = [_note_from_data(item) for item in data.get("notes", []) if isinstance(item, dict)]
@@ -75,6 +126,13 @@ def _document_from_data(data: dict[str, Any]) -> Document:
         for item in data.get("bibliography", [])
         if isinstance(item, dict)
     ]
+    image_assets = _image_assets_from_data(data.get("image_assets", {}))
+    image_occurrences = _image_occurrences_from_data(
+        data.get("image_occurrences", []), image_assets
+    )
+    complex_objects = _complex_objects_from_data(
+        data.get("complex_objects", []), image_assets
+    )
     return Document(
         document_id=str(data.get("document_id", "")),
         source_path=str(data.get("source_path", "")),
@@ -86,7 +144,114 @@ def _document_from_data(data: dict[str, Any]) -> Document:
         annotations=dict(data.get("annotations", {})),
         history=[str(item) for item in data.get("history", [])],
         original_text=str(data.get("original_text", "")),
+        image_assets=image_assets,
+        image_occurrences=image_occurrences,
+        complex_objects=complex_objects,
     )
+
+
+def _image_assets_from_data(data: Any) -> dict[str, ImageAsset]:
+    if not isinstance(data, dict):
+        raise ValueError("Pivot image_assets must be an object.")
+
+    assets: dict[str, ImageAsset] = {}
+    for key, raw_asset in data.items():
+        if not isinstance(key, str) or not isinstance(raw_asset, dict):
+            raise ValueError("Each image_assets entry must be an object keyed by asset_id.")
+        asset_id = _required_text(raw_asset, "asset_id", f"image asset {key!r}")
+        if asset_id != key:
+            raise ValueError(f"Image asset key {key!r} does not match asset_id {asset_id!r}.")
+        assets[asset_id] = ImageAsset(
+            asset_id=asset_id,
+            filename=_required_text(raw_asset, "filename", f"image asset {asset_id!r}"),
+            content_type=_required_text(raw_asset, "content_type", f"image asset {asset_id!r}"),
+            data=_decode_image_data(raw_asset.get("data"), asset_id),
+            sha256=_required_text(raw_asset, "sha256", f"image asset {asset_id!r}"),
+            width_emu=_optional_int(raw_asset.get("width_emu"), "width_emu", asset_id),
+            height_emu=_optional_int(raw_asset.get("height_emu"), "height_emu", asset_id),
+            alt_text=_text_or_default(raw_asset.get("alt_text")),
+            title=_text_or_default(raw_asset.get("title")),
+            source_part=_text_or_default(raw_asset.get("source_part")),
+        )
+    return assets
+
+
+def _decode_image_data(data: Any, asset_id: str) -> bytes:
+    if not isinstance(data, dict):
+        raise ValueError(f"Image asset {asset_id!r} data must be an encoded object.")
+    if data.get("encoding") != "base64" or not isinstance(data.get("value"), str):
+        raise ValueError(f"Image asset {asset_id!r} data must use base64 encoding.")
+    try:
+        return base64.b64decode(data["value"], validate=True)
+    except (binascii.Error, ValueError) as exc:
+        raise ValueError(f"Invalid base64 image data for asset {asset_id!r}.") from exc
+
+
+def _image_occurrences_from_data(
+    data: Any, image_assets: dict[str, ImageAsset]
+) -> list[ImageOccurrence]:
+    if not isinstance(data, list):
+        raise ValueError("Pivot image_occurrences must be an array.")
+
+    occurrences: list[ImageOccurrence] = []
+    for index, raw_occurrence in enumerate(data):
+        context = f"image occurrence at index {index}"
+        if not isinstance(raw_occurrence, dict):
+            raise ValueError(f"{context.capitalize()} must be an object.")
+        asset_ref = _required_text(raw_occurrence, "asset_ref", context)
+        if asset_ref not in image_assets:
+            raise ValueError(f"{context.capitalize()} references missing asset {asset_ref!r}.")
+        occurrences.append(
+            ImageOccurrence(
+                occurrence_id=_required_text(raw_occurrence, "occurrence_id", context),
+                asset_ref=asset_ref,
+                placement=_required_text(raw_occurrence, "placement", context),
+                target_ref=_required_text(raw_occurrence, "target_ref", context),
+                order=_required_int(raw_occurrence, "order", context),
+                width_emu=_optional_int(raw_occurrence.get("width_emu"), "width_emu", context),
+                height_emu=_optional_int(raw_occurrence.get("height_emu"), "height_emu", context),
+                alt_text=_text_or_default(raw_occurrence.get("alt_text")),
+                title=_text_or_default(raw_occurrence.get("title")),
+                caption=_optional_text(raw_occurrence.get("caption")),
+                external_link=_optional_text(raw_occurrence.get("external_link")),
+                anchor_normalized_to_inline=_required_bool(
+                    raw_occurrence, "anchor_normalized_to_inline", context
+                ),
+                original_xml=_optional_text(raw_occurrence.get("original_xml")),
+                attributes=_required_mapping(raw_occurrence, "attributes", context),
+            )
+        )
+    return occurrences
+
+
+def _complex_objects_from_data(
+    data: Any, image_assets: dict[str, ImageAsset]
+) -> list[ComplexObjectOccurrence]:
+    if not isinstance(data, list):
+        raise ValueError("Pivot complex_objects must be an array.")
+
+    objects: list[ComplexObjectOccurrence] = []
+    for index, raw_object in enumerate(data):
+        context = f"complex object at index {index}"
+        if not isinstance(raw_object, dict):
+            raise ValueError(f"{context.capitalize()} must be an object.")
+        fallback_asset_ref = _optional_text(raw_object.get("fallback_asset_ref"))
+        if fallback_asset_ref is not None and fallback_asset_ref not in image_assets:
+            raise ValueError(
+                f"{context.capitalize()} references missing fallback asset {fallback_asset_ref!r}."
+            )
+        objects.append(
+            ComplexObjectOccurrence(
+                occurrence_id=_required_text(raw_object, "occurrence_id", context),
+                object_type=_required_text(raw_object, "object_type", context),
+                target_ref=_required_text(raw_object, "target_ref", context),
+                order=_required_int(raw_object, "order", context),
+                placement=_required_text(raw_object, "placement", context),
+                fallback_asset_ref=fallback_asset_ref,
+                attributes=_required_mapping(raw_object, "attributes", context),
+            )
+        )
+    return objects
 
 
 def _metadata_from_data(data: dict[str, Any]) -> Metadata:
@@ -243,6 +408,50 @@ def _transformation_from_data(data: dict[str, Any]) -> Transformation:
         validated_by_human=bool(data.get("validated_by_human", False)),
         attributes=dict(data.get("attributes", {})),
     )
+
+
+def _required_text(data: dict[str, Any], field: str, context: str) -> str:
+    value = data.get(field)
+    if not isinstance(value, str) or not value:
+        raise ValueError(f"{context.capitalize()} must define a non-empty {field!r}.")
+    return value
+
+
+def _text_or_default(value: Any) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise ValueError("Media text fields must be strings.")
+    return value
+
+
+def _required_int(data: dict[str, Any], field: str, context: str) -> int:
+    value = data.get(field)
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise ValueError(f"{context.capitalize()} must define an integer {field!r}.")
+    return value
+
+
+def _optional_int(value: Any, field: str, context: str) -> int | None:
+    if value is None:
+        return None
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise ValueError(f"{context.capitalize()} field {field!r} must be an integer or null.")
+    return value
+
+
+def _required_bool(data: dict[str, Any], field: str, context: str) -> bool:
+    value = data.get(field)
+    if not isinstance(value, bool):
+        raise ValueError(f"{context.capitalize()} must define a boolean {field!r}.")
+    return value
+
+
+def _required_mapping(data: dict[str, Any], field: str, context: str) -> dict[str, Any]:
+    value = data.get(field)
+    if not isinstance(value, dict):
+        raise ValueError(f"{context.capitalize()} field {field!r} must be an object.")
+    return dict(value)
 
 
 def _optional_text(value: Any) -> str | None:
