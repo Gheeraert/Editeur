@@ -346,16 +346,27 @@ class StructurePreparationService:
             if (block.block_type == "paragraph"
                     and source_heading_level is not None
             ):
-                self._promote_heading(
-                    block,
-                    level=source_heading_level,
-                    rule="structure.source_style.heading",
-                    transformations=transformations,
-                )
-                heading_applied = True
-                in_bib_section = False
-                heading_count += 1
-                continue
+                veto_reasons = heading_decision.veto_reasons if heading_decision is not None else []
+                if use_heuristics and veto_reasons:
+                    diagnostics.append(Diagnostic(
+                        diagnostic_id=make_id("diag"), module=self.module_name,
+                        severity="warning", category="heading_style_content_conflict",
+                        message="Style Word de titre en conflit avec le contenu du paragraphe — à vérifier.",
+                        target_ref=block.block_id, evidence=Evidence(excerpt=text[:180]),
+                        rule_id="structure.source_style.heading", status="pending_human_review",
+                        attributes={"source_heading_level": source_heading_level, "veto_reasons": veto_reasons},
+                    ))
+                else:
+                    self._promote_heading(
+                        block,
+                        level=source_heading_level,
+                        rule="structure.source_style.heading",
+                        transformations=transformations,
+                    )
+                    heading_applied = True
+                    in_bib_section = False
+                    heading_count += 1
+                    continue
 
             #  Normal + ALL CAPS  titre (peut arriver si l'ingestion a raté)
             if (block.block_type == "paragraph"

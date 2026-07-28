@@ -292,6 +292,46 @@ class Step1DialogConfigTests(unittest.TestCase):
         )
         self.assertEqual(cfg["ai_api_key"], "clear-text-key")
 
+    def test_save_config_file_never_writes_api_keys_to_disk(self) -> None:
+        path = self._runtime_path("step1_config_no_keys")
+        cfg = build_config_dict(
+            source_path="C:/src.docx",
+            output_docx_path="",
+            tei_output_path="",
+            decision_mode="heuristic",
+            heuristic_profile="conservative",
+            heading_transform_threshold=None,
+            heading_diagnostic_threshold=None,
+            poetry_transform_threshold=None,
+            poetry_diagnostic_threshold=None,
+            ai_aggressiveness="conservative",
+            ai_provider="groq",
+            ai_api_key="super-secret-struct-key",
+            ai_model="",
+            ai_base_url="",
+            enable_structure_ai=True,
+            enable_editorial_ai=True,
+            enable_ai=False,
+            max_ai_calls=6,
+            max_structure_ai_calls=6,
+            editorial_ai_provider="anthropic",
+            editorial_ai_api_key="super-secret-editorial-key",
+        )
+        save_config_file(path, cfg)
+        raw = path.read_text(encoding="utf-8")
+        self.assertNotIn("super-secret-struct-key", raw)
+        self.assertNotIn("super-secret-editorial-key", raw)
+
+        loaded_json = json.loads(raw)
+        for field in ("struct_ai_api_key", "editorial_ai_api_key", "ai_api_key"):
+            self.assertNotIn(field, loaded_json)
+
+        # Reloading into a fresh (empty) session leaves keys blank rather
+        # than silently reintroducing them from another source.
+        merged = apply_config_dict(build_config_dict(), load_config_file(path))
+        self.assertEqual(merged["struct_ai_api_key"], "")
+        self.assertEqual(merged["editorial_ai_api_key"], "")
+
     def test_label_mappings_roundtrip(self) -> None:
         self.assertEqual(decision_mode_from_label("Déterministe strict"), "deterministic")
         self.assertEqual(decision_mode_to_label("heuristic_ai_local"), "Heuristique + IA locale")

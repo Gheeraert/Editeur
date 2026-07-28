@@ -30,6 +30,21 @@ def is_protected_block(block: Any) -> bool:
     return any(is_protected_inline(inline) for inline in getattr(block, "inlines", []))
 
 
+def is_protected_by_attributes(block: Any) -> bool:
+    """Attribute/inline-level protection only — ignores ``block_type``.
+
+    Some services own a block type that is itself listed in
+    ``_PROTECTED_BLOCK_TYPES`` so that *other* modules leave it alone (e.g.
+    ``bibliography_item`` must not be touched by orthotypo). That owning
+    module must still respect an explicit ``protected_zone``/``protected``
+    attribute or a protected inline span, but must not veto its own block
+    type — otherwise it can never process the blocks it is responsible for.
+    """
+    if _attributes_mark_protected(getattr(block, "attributes", None)):
+        return True
+    return any(is_protected_inline(inline) for inline in getattr(block, "inlines", []))
+
+
 def is_protected_note(note: Any, *, protected_target_refs: set[str] | None = None) -> bool:
     if _attributes_mark_protected(getattr(note, "attributes", None)):
         return True

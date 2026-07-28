@@ -4,9 +4,15 @@ import copy
 import re
 
 from purh_editorial.model import BibliographyItem, Document, Transformation
-from purh_editorial.services.orthotypo_service import COLOR_BIBLIO, NNBSP, _find_changed_regions
+from purh_editorial.services.orthotypo_service import (
+    COLOR_BIBLIO,
+    NNBSP,
+    TypoRule,
+    _apply_rule_with_occurrences,
+    _find_changed_regions,
+)
 from purh_editorial.utils import make_id
-from purh_editorial.utils.protection import is_protected_block
+from purh_editorial.utils.protection import is_protected_by_attributes
 
 # ── Détection d'une section bibliographique ───────────────────────────────────
 _SECTION_BIBLIO_RE = re.compile(
@@ -32,25 +38,41 @@ def _looks_like_biblio_entry(text: str) -> bool:
     return bool(_BIBLIO_ENTRY_RE.match(text.strip()))
 
 
-def _normalize_biblio_entry(text: str) -> str:
-    """Normalise une entrée bibliographique : point final, NNBSP pagination."""
-    text = text.strip()
+# Chaque règle porte son propre rule_id, distinct de "purh.biblio.batch" :
+# la granularité par règle (plutôt qu'une seule transformation agrégée par
+# entrée) permet de savoir précisément quelle correction a été appliquée où,
+# comme le fait déjà orthotypo_service pour ses propres règles.
+_BIBLIO_RULES: list[TypoRule] = [
+    TypoRule(
+        rule_id="purh.biblio.pagination_nnbsp",
+        pattern=re.compile(r"\b(pp?|vol|t|f|fig|col|n°|N°)\.\s+(?=[\dIVXLCivxlc])"),
+        replacement=lambda m: m.group(1) + "." + NNBSP,
+        description="Espace insécable fine après une abréviation de pagination (p., vol., t., n°...).",
+    ),
+    TypoRule(
+        rule_id="purh.biblio.numero_nnbsp",
+        pattern=re.compile(r"\b([Nn]°)\s+(?=\d)"),
+        replacement=lambda m: m.group(1) + NNBSP,
+        description="Espace insécable fine après « n° » suivi d'un nombre.",
+    ),
+    TypoRule(
+        rule_id="purh.biblio.ponctuation_finale",
+        pattern=re.compile(r"(?<![.!?…»])\Z"),
+        replacement=".",
+        description="Point final ajouté en fin d'entrée bibliographique.",
+    ),
+]
 
-    # NNBSP après abréviations de pagination
-    text = re.sub(
-        r"\b(pp?|vol|t|f|fig|col|n°|N°)\.\s+(?=[\dIVXLCivxlc])",
-        lambda m: m.group(1) + "." + NNBSP,
-        text,
-    )
-    # NNBSP pour n° suivi d'un nombre
-    text = re.sub(r"\b([Nn]°)\s+(?=\d)", r"\1" + NNBSP, text)
 
-    # Point final si absent
-    stripped = text.rstrip()
-    if stripped and stripped[-1] not in ".!?…»":
-        text = stripped + "."
-
-    return text
+def _normalize_biblio_entry_with_occurrences(text: str):
+    """Applique les règles biblio en chaîne, en conservant une RuleOccurrence
+    distincte (avec son propre rule_id) par correction effectuée."""
+    current = text.strip()
+    all_occurrences = []
+    for rule in _BIBLIO_RULES:
+        current, occurrences = _apply_rule_with_occurrences(rule, current)
+        all_occurrences.extend(occurrences)
+    return current, all_occurrences
 
 
 class BibliographyNormalizer:
@@ -100,10 +122,16 @@ class BibliographyNormalizer:
 
             # Normalisation des entrées (qu'elles soient issues de la section ou détectées avant)
             if block.block_type == "bibliography_item":
-                if is_protected_block(block):
+                # Note : is_protected_by_attributes (pas is_protected_block) — le
+                # block_type "bibliography_item" est lui-même dans la liste des
+                # types protégés pour empêcher les *autres* modules (orthotypo...)
+                # d'y toucher ; ce module en est le propriétaire et ne doit vetoter
+                # que sur une protection explicite (attribut/inline), pas sur son
+                # propre type de bloc.
+                if is_protected_by_attributes(block):
                     continue
                 original = block.text
-                corrected = _normalize_biblio_entry(original)
+                corrected, occurrences = _normalize_biblio_entry_with_occurrences(original)
                 if corrected != original:
                     regions = _find_changed_regions(original, corrected)
                     block.text = corrected
@@ -124,17 +152,29 @@ class BibliographyNormalizer:
                         block.inlines = new_inlines
                     else:
                         block.attributes["highlight_color"] = self.color
-                    transformations.append(Transformation(
-                        transformation_id=make_id("tr"),
-                        module=self.module_name,
-                        target_ref=block.block_id,
-                        operation="biblio_normalize",
-                        before=original,
-                        after=corrected,
-                        rule_id="purh.biblio.batch",
-                        applied=True,
-                        attributes={"highlight_regions": regions, "color": self.color},
-                    ))
+                    # Une Transformation distincte par occurrence corrigée, taguée par
+                    # son propre rule_id (cf. orthotypo_service._build_transformations) —
+                    # plutôt qu'une seule transformation "purh.biblio.batch" agrégeant
+                    # toutes les règles, qui empêchait de savoir laquelle avait agi où.
+                    for sequence, occ in enumerate(occurrences):
+                        transformations.append(Transformation(
+                            transformation_id=make_id("tr"),
+                            module=self.module_name,
+                            target_ref=block.block_id,
+                            operation="biblio_normalize",
+                            before=occ.before,
+                            after=occ.after,
+                            rule_id=occ.rule_id,
+                            applied=True,
+                            attributes={
+                                "highlight_regions": regions,
+                                "color": self.color,
+                                "offset_start": occ.offset_start,
+                                "offset_end": occ.offset_end,
+                                "sequence": sequence,
+                                "coordinate_space": occ.coordinate_space,
+                            },
+                        ))
 
         if transformations:
             doc.history.append(

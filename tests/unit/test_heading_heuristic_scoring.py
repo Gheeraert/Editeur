@@ -31,6 +31,17 @@ class HeadingHeuristicScoringTests(unittest.TestCase):
         self.assertEqual(block.block_type, "heading")
         self.assertEqual(block.attributes.get("heading_level"), 2)
 
+    def test_source_style_heading_vetoed_by_bibliography_content_is_flagged_not_promoted(self) -> None:
+        block, diagnostics, _ = _process_one(
+            Paragraph(
+                block_id="p1",
+                text="Dupont, Jean. \"Un article.\" Revue, 2020, p. 12-34.",
+                attributes={"style_name": "Heading 2"},
+            )
+        )
+        self.assertNotEqual(block.block_type, "heading")
+        self.assertTrue(any(d.category == "heading_style_content_conflict" for d in diagnostics))
+
     def test_passage_reference_is_ignored(self) -> None:
         block, diagnostics, _ = _process_one(Paragraph(block_id="p1", text="VI, I, 52", attributes={"all_runs_bold": True}))
         self.assertNotEqual(block.block_type, "heading")

@@ -4,7 +4,8 @@
       "Bash(python -c \"import docx; print\\(docx.__version__\\)\")",
       "PowerShell(pip install *)",
       "Bash(python3 *)",
-      "PowerShell(python --version)"
+      "PowerShell(python --version)",
+      "Bash(python -m pytest -q)"
     ]
   }
 }

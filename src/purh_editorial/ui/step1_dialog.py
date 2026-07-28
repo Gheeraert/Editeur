@@ -512,8 +512,20 @@ def load_config_file(path: Path) -> dict[str, object]:
     return data
 
 
+_API_KEY_CONFIG_FIELDS = ("struct_ai_api_key", "editorial_ai_api_key", "ai_api_key")
+
+
 def save_config_file(path: Path, config: dict[str, object]) -> None:
+    """Persist a Step 1 config to disk.
+
+    API keys are never written to the config file: it may be shared, backed
+    up, or committed by mistake, and the JSON has no encryption. Keys stay
+    in-memory only for the current session and must be re-entered after a
+    config reload.
+    """
     payload = apply_config_dict({}, config)
+    for field in _API_KEY_CONFIG_FIELDS:
+        payload.pop(field, None)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
