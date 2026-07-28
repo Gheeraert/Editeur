@@ -810,17 +810,20 @@ class OrthotypoService:
         update_color,
         update_inlines,
     ) -> list[Transformation]:
+        before_signature = self._char_style_signature([InlineSpan(text=text)])
         corrected, rule_occurrences = self._apply_all_rules_tracked(text)
         inlines = [InlineSpan(text=corrected)]
         styled_inlines, any_styled, century_occurrences, numero_occurrences = (
             self._apply_special_stylings(inlines)
         )
         final_text = "".join(span.text for span in styled_inlines)
+        after_signature = self._char_style_signature(styled_inlines)
 
-        if final_text == text:
+        if after_signature == before_signature:
             return []
         update_text(final_text)
-        update_color()
+        if final_text != text:
+            update_color()
         if any_styled:
             update_inlines(styled_inlines)
         return self._build_transformations(
