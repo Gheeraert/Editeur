@@ -71,7 +71,7 @@ class PivotCanonicalizer:
             poetry_group_id = None
             poetry_line_index = None
         elif block.block_type == "paragraph":
-            role = "paragraph"
+            role = role if role in {"abstract", "keywords", "acknowledgment"} else "paragraph"
             layout_kind = None
             quote_kind = None
             lineation = None

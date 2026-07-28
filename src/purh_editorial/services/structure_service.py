@@ -25,6 +25,11 @@ _SECTION_BIBLIO_RE = re.compile(
     r"travaux\s*cit(?:\u00e9|e)s?|works?\s*cited)",
     re.IGNORECASE | re.UNICODE,
 )
+_FRONTMATTER_RULES = (
+    ("abstract", "structure.frontmatter.abstract", re.compile(r"^(résumé|abstract|summary)(?:\s*[:—-].*)?$", re.I)),
+    ("keywords", "structure.frontmatter.keywords", re.compile(r"^(mots[- ]clés?|keywords?)(?:\s*[:—-].*)?$", re.I)),
+    ("acknowledgment", "structure.frontmatter.acknowledgment", re.compile(r"^(remerciements?|acknowledgments?)(?:\s*[:—-].*)?$", re.I)),
+)
 _EPIGRAPH_MAX_CHARS = 350
 _PUNCT_ENDINGS = {".", "!", "?", ",", ":", ";", "\u2026"}
 _NUMBERED_SECTION_RE = re.compile(r"^(\d+)\s*[-\.]\s*")
@@ -282,6 +287,23 @@ class StructurePreparationService:
             text = block.text.strip()
             if not text:
                 continue
+            if block.block_type == "paragraph":
+                frontmatter_applied = False
+                for role, rule_id, pattern in _FRONTMATTER_RULES:
+                    if not pattern.fullmatch(text):
+                        continue
+                    previous_role = BlockSemantics(role="paragraph")
+                    write_block_semantics(block, BlockSemantics(role=role))
+                    transformations.append(Transformation(
+                        transformation_id=make_id("tr"), module=self.module_name,
+                        target_ref=block.block_id, operation="assign_semantic_role",
+                        before=previous_role.role, after=role, rule_id=rule_id, applied=True,
+                        attributes={"provenance": "structure", "status": "automatic", "label": text},
+                    ))
+                    frontmatter_applied = True
+                    break
+                if frontmatter_applied:
+                    continue
             heading_applied = False
             heading_decision = None
             if block.block_type == "paragraph" and use_heuristics:
