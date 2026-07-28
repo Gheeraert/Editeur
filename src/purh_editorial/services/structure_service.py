@@ -289,10 +289,12 @@ class StructurePreparationService:
             if not text:
                 continue
             if block.block_type == "paragraph":
-                frontmatter_applied = False
+                frontmatter_matched = False
+                frontmatter_transformed = False
                 for role, rule_id, pattern in _FRONTMATTER_RULES:
                     if not pattern.fullmatch(text):
                         continue
+                    frontmatter_matched = True
                     previous_role = read_block_semantics(block).role
                     if previous_role == role:
                         break
@@ -313,9 +315,9 @@ class StructurePreparationService:
                         before=previous_role, after=role, rule_id=rule_id, applied=True,
                         attributes={"provenance": "structure", "status": "automatic", "label": text},
                     ))
-                    frontmatter_applied = True
+                    frontmatter_transformed = True
                     break
-                if frontmatter_applied:
+                if frontmatter_matched:
                     continue
             heading_applied = False
             heading_decision = None
