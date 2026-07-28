@@ -270,9 +270,11 @@ class Step1Pipeline:
         # ── 2. Orthotypographie (déterministe) ────────────────────────────────
         t0 = utc_now_iso()
         document, typo_tr = self.orthotypo.apply(document)
+        unvalidated_typo_diags = self.orthotypo.analyze_unvalidated_rules(document)
         quote_punctuation_diags = self.orthotypo.analyze_quote_punctuation(document)
         incise_dash_diags = self.orthotypo.analyze_incise_dash(document)
         report.diagnostics.extend(quote_punctuation_diags)
+        report.diagnostics.extend(unvalidated_typo_diags)
         report.diagnostics.extend(incise_dash_diags)
         report.transformations.extend(typo_tr)
         report.add_module_run(ModuleRun(
@@ -282,6 +284,7 @@ class Step1Pipeline:
             finished_at=utc_now_iso(),
             summary={
                 "corrections": len(typo_tr),
+                "unvalidated_rule_diagnostics": len(unvalidated_typo_diags),
                 "quote_punctuation_diagnostics": len(quote_punctuation_diags),
                 "incise_dash_diagnostics": len(incise_dash_diags),
             },
@@ -439,11 +442,11 @@ class Step1Pipeline:
         if editorial_ai_requested:
             t0 = utc_now_iso()
             if editorial_ai_enabled:
-                document, ai_tr = self.ai.apply(document, max_calls=options.max_ai_calls)
-                report.transformations.extend(ai_tr)
+                document, ai_suggestions = self.ai.apply(document, max_calls=options.max_ai_calls)
+                report.suggestions.extend(ai_suggestions)
                 ai_status = "success"
             else:
-                ai_tr = []
+                ai_suggestions = []
                 ai_status = "skipped"
                 report.warnings.append("Editorial AI skipped: no API key configured for selected provider.")
             report.add_module_run(ModuleRun(
@@ -457,7 +460,7 @@ class Step1Pipeline:
                     "editorial_ai_available": editorial_ai_available,
                     "editorial_ai_enabled": editorial_ai_enabled,
                     "enabled": editorial_ai_enabled,
-                    "corrections_applied": len(ai_tr),
+                    "suggestions_produced": len(ai_suggestions),
                     "provider": self.ai.provider,
                     "model": self.ai.model,
                     "base_url": self.ai.base_url,

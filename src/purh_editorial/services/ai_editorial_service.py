@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import json
 import re
-import copy
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
 
-from purh_editorial.model import Document, Transformation
-from purh_editorial.services.orthotypo_service import COLOR_AI, _find_changed_regions
+from purh_editorial.model import Document, Suggestion
+from purh_editorial.services.orthotypo_service import COLOR_AI
 from purh_editorial.utils import make_id
+from purh_editorial.utils.protection import is_protected_block
 
 # ── Prompt système — règles PURH explicites ───────────────────────────────────
 _SYSTEM = """\
@@ -23,7 +23,6 @@ RÈGLES ORTHOTYPOGRAPHIQUES PURH À APPLIQUER :
 - Siècles en chiffres romains : xviiie siècle en texte brut ; les petites capitales relèvent du stylage Word/TEI, pas de ta réponse JSON.
 - Abréviations normalisées : p. XX (pas pp.), n° X (pas no.), art. cit., op. cit.
 - Points de suspension : … (entité Unicode unique, jamais trois points séparés ...)
-- Trait d'union vs tiret : tiret demi-cadratin – pour les incises (jamais tiret simple -)
 
 RÈGLES STRICTES D'INTERVENTION :
 - Tu ne réécris JAMAIS un paragraphe entier.
@@ -59,7 +58,7 @@ class AICorrection:
 
 class AIEditorialService:
     """
-    Corrections éditoriales ciblées (2-12 mots, surlignées en rose).
+    Suggestions éditoriales ciblées (2-12 mots), jamais appliquées automatiquement.
     Supporte Groq (OpenAI-compatible) et Anthropic (API native).
     """
 
@@ -94,26 +93,26 @@ class AIEditorialService:
         self,
         document: Document,
         max_calls: int = MAX_API_CALLS,
-    ) -> tuple[Document, list[Transformation]]:
+    ) -> tuple[Document, list[Suggestion]]:
         if not self.available:
             return document, []
 
-        doc = copy.deepcopy(document)
-        transformations: list[Transformation] = []
+        suggestions: list[Suggestion] = []
         calls_used = 0
 
         candidates = [
-            (i, b) for i, b in enumerate(doc.blocks)
+            (i, b) for i, b in enumerate(document.blocks)
             if b.block_type == "paragraph"
             and len(b.text.strip()) >= MIN_BLOCK_LENGTH
+            and not is_protected_block(b)
         ]
 
         for idx, block in candidates:
             if calls_used >= max_calls:
                 break
 
-            context_before = _extract_context(doc.blocks, idx, window=_CONTEXT_WINDOW, before=True)
-            context_after = _extract_context(doc.blocks, idx, window=_CONTEXT_WINDOW, before=False)
+            context_before = _extract_context(document.blocks, idx, window=_CONTEXT_WINDOW, before=True)
+            context_after = _extract_context(document.blocks, idx, window=_CONTEXT_WINDOW, before=False)
 
             try:
                 corrections = self._call_api(
@@ -132,48 +131,29 @@ class AIEditorialService:
                     continue
                 if block.text.count(corr.original) != 1:
                     continue
-                original_text = block.text
-                corrected_text = block.text.replace(corr.original, corr.corrected, 1)
-                if corrected_text == original_text:
-                    continue
-                regions = _find_changed_regions(original_text, corrected_text)
-                if block.inlines:
-                    from purh_editorial.services.orthotypo_service import OrthotypoService
-                    new_inlines = OrthotypoService._rebuild_inlines(
-                        block.inlines, original_text, corrected_text, regions
-                    )
-                    for span in new_inlines:
-                        if span.attributes.get("highlight_color") == "orthotypo":
-                            span.attributes["highlight_color"] = self.color
-                    block.inlines = new_inlines
-                else:
-                    block.attributes["highlight_color"] = self.color
-                block.text = corrected_text
-                transformations.append(Transformation(
-                    transformation_id=make_id("tr"),
+                suggestions.append(Suggestion(
+                    suggestion_id=make_id("sugg"),
                     module=self.module_name,
                     target_ref=block.block_id,
-                    operation="ai_correction",
-                    before=original_text,
-                    after=corrected_text,
-                    rule_id="purh.ai.editorial",
-                    applied=True,
+                    message="Suggestion IA locale à valider par une éditrice.",
+                    rationale=corr.raison,
+                    proposed_text=corr.corrected,
+                    caution_level="high",
                     attributes={
+                        "status": "pending_human_review",
+                        "category": "ai_editorial",
+                        "rule_id": "purh.ai.editorial",
                         "raison": corr.raison,
-                        "original_phrase": corr.original,
-                        "corrected_phrase": corr.corrected,
-                        "color": self.color,
+                        "before": corr.original,
+                        "after_proposed": corr.corrected,
+                        "context_before": context_before,
+                        "context_after": context_after,
                         "model": self.model,
                         "provider": self.provider,
                     },
                 ))
 
-        if transformations:
-            doc.history.append(
-                f"{self.module_name}: {len(transformations)} correction(s) IA appliquée(s) "
-                f"({calls_used} appel(s) API, provider={self.provider})."
-            )
-        return doc, transformations
+        return document, suggestions
 
     # ── Routage provider ──────────────────────────────────────────────────────
 
@@ -319,7 +299,11 @@ def _extract_context(blocks: list, idx: int, *, window: int, before: bool) -> st
         chunk = blocks[max(0, idx - window):idx]
     else:
         chunk = blocks[idx + 1:idx + 1 + window]
-    context = " / ".join(b.text.strip()[:300] for b in chunk if b.text.strip())
+    context = " / ".join(
+        b.text.strip()[:300]
+        for b in chunk
+        if b.text.strip() and not is_protected_block(b)
+    )
     return context[:900]
 
 

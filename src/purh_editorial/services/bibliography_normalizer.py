@@ -6,6 +6,7 @@ import re
 from purh_editorial.model import BibliographyItem, Document, Transformation
 from purh_editorial.services.orthotypo_service import COLOR_BIBLIO, NNBSP, _find_changed_regions
 from purh_editorial.utils import make_id
+from purh_editorial.utils.protection import is_protected_block
 
 # ── Détection d'une section bibliographique ───────────────────────────────────
 _SECTION_BIBLIO_RE = re.compile(
@@ -99,6 +100,8 @@ class BibliographyNormalizer:
 
             # Normalisation des entrées (qu'elles soient issues de la section ou détectées avant)
             if block.block_type == "bibliography_item":
+                if is_protected_block(block):
+                    continue
                 original = block.text
                 corrected = _normalize_biblio_entry(original)
                 if corrected != original:

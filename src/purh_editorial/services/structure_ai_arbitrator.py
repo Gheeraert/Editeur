@@ -581,6 +581,50 @@ class StructureAiArbitrator:
         if not enable_ai_transform:
             return [], [], summary
 
+        # Doctrine: an AI classification is review material, never a structural
+        # decision.  Keep the candidate visible but do not merge, retype or remove
+        # blocks, regardless of the reported confidence.
+        out_diags: list[Diagnostic] = []
+        for diagnostic in diagnostics:
+            if diagnostic.rule_id != _CLUSTER_RULE_ID or diagnostic.category != _CLUSTER_CATEGORY:
+                continue
+            attrs = diagnostic.attributes or {}
+            classification = str(attrs.get("classification", "")).strip()
+            if classification not in {"poetry_quote", "list_item"}:
+                continue
+            summary["candidates"] += 1
+            summary["refused"] += 1
+            reasons = summary["refusal_reasons"]
+            reasons["human_validation_required"] = int(reasons.get("human_validation_required", 0)) + 1
+            block_ids = attrs.get("block_ids", [])
+            target_ref = (
+                str(block_ids[0])
+                if isinstance(block_ids, list) and block_ids
+                else diagnostic.target_ref
+            )
+            out_diags.append(
+                Diagnostic(
+                    diagnostic_id=make_id("diag"),
+                    module=self.module_name,
+                    severity="info",
+                    category=_APPLY_CATEGORY,
+                    message="Transformation IA structurelle non appliquée : validation humaine requise.",
+                    target_ref=target_ref,
+                    rule_id=_APPLY_RULE_ID,
+                    evidence=Evidence(excerpt=diagnostic.evidence.excerpt[:240]),
+                    attributes={
+                        "status": "pending_human_review",
+                        "reason_code": "human_validation_required",
+                        "classification": classification,
+                        "recommended_action": attrs.get("recommended_action"),
+                        "confidence": attrs.get("confidence"),
+                        "block_ids": block_ids,
+                        "reason": attrs.get("reason"),
+                    },
+                )
+            )
+        return [], out_diags, summary
+
         threshold = (
             self.settings.confidence_threshold
             if confidence_threshold is None

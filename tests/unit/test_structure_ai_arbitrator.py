@@ -300,7 +300,7 @@ class StructureAiArbitratorTests(unittest.TestCase):
         self.assertEqual(balanced_calls, 6)
         self.assertEqual(aggressive_calls, 6)
 
-    def test_apply_cluster_transforms_poetry_quote_blocks(self) -> None:
+    def test_apply_cluster_never_transforms_poetry_quote_blocks(self) -> None:
         document = Document(
             document_id="doc-cluster-poetry",
             source_path="tests/fixtures/minimal_source.txt",
@@ -338,18 +338,13 @@ class StructureAiArbitratorTests(unittest.TestCase):
         )
 
         self.assertEqual(summary["candidates"], 1)
-        self.assertEqual(summary["applied"], 1)
-        self.assertEqual(summary["refused"], 0)
-        self.assertEqual(len(transformations), 1)
-        self.assertEqual(len(document.blocks), 1)
-        merged = document.blocks[0]
-        self.assertEqual(merged.block_type, "lineated_block")
-        self.assertEqual(merged.attributes.get("highlight_color"), "ai_structure")
-        self.assertEqual(merged.attributes.get("merged_from"), ["p1", "p2", "p3"])
-        semantic = merged.attributes.get("semantic", {})
-        self.assertEqual(semantic.get("lineation"), "lineated")
-        self.assertEqual(semantic.get("lines"), ["Ligne une", "Ligne deux", "Ligne trois"])
-        self.assertTrue(any(d.attributes.get("status") == "applied" for d in diagnostics))
+        self.assertEqual(summary["applied"], 0)
+        self.assertEqual(summary["refused"], 1)
+        self.assertEqual(summary["refusal_reasons"].get("human_validation_required"), 1)
+        self.assertEqual(transformations, [])
+        self.assertEqual(len(document.blocks), 3)
+        self.assertTrue(all(block.block_type == "paragraph" for block in document.blocks))
+        self.assertTrue(any(d.attributes.get("status") == "pending_human_review" for d in diagnostics))
 
     def test_apply_cluster_refuses_list_item_without_block_type_change(self) -> None:
         document = Document(
@@ -391,11 +386,11 @@ class StructureAiArbitratorTests(unittest.TestCase):
         self.assertEqual(summary["candidates"], 1)
         self.assertEqual(summary["applied"], 0)
         self.assertEqual(summary["refused"], 1)
-        self.assertEqual(summary["refusal_reasons"].get("list_not_supported"), 1)
+        self.assertEqual(summary["refusal_reasons"].get("human_validation_required"), 1)
         self.assertEqual(len(transformations), 0)
         self.assertTrue(
             any(
-                d.message == "transformation refusée : type liste non encore supporté par cette passe"
+                d.message == "Transformation IA structurelle non appliquée : validation humaine requise."
                 for d in diagnostics
             )
         )
