@@ -6,21 +6,8 @@ import urllib.request
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from purh_editorial.model import Diagnostic, Document, Evidence, InlineSpan, Transformation
-from purh_editorial.model.semantics import BlockSemantics, write_block_semantics
+from purh_editorial.model import Diagnostic, Document, Evidence, Transformation
 from purh_editorial.utils import make_id
-
-
-def _merge_verse_inlines(blocks: list) -> list[InlineSpan]:
-    merged: list[InlineSpan] = []
-    for index, block in enumerate(blocks):
-        if block.inlines:
-            merged.extend(block.inlines)
-        else:
-            merged.append(InlineSpan(text=block.text.strip()))
-        if index < len(blocks) - 1:
-            merged.append(InlineSpan(text="", kind="line_break"))
-    return merged
 
 # ── Prompt système PURH — contexte éditorial riche ───────────────────────────
 
@@ -566,11 +553,10 @@ class StructureAiArbitrator:
         enable_ai_transform: bool,
         confidence_threshold: float | None = None,
     ) -> tuple[list[Transformation], list[Diagnostic], dict[str, Any]]:
-        """Apply a minimal set of structural AI actions from cluster diagnostics.
+        """Convertit les classifications IA structurelles en diagnostics de revue humaine.
 
-        First pass scope:
-        - apply only poetry_quote clusters when action=transform and confidence >= threshold
-        - refuse list_item transformations with a traceable diagnostic
+        Cette méthode ne modifie jamais le document : elle ne fusionne, ne supprime
+        et ne retype aucun bloc, quel que soit le niveau de confiance fourni par l’IA.
         """
         summary: dict[str, Any] = {
             "candidates": 0,
@@ -624,6 +610,8 @@ class StructureAiArbitrator:
                 )
             )
         return [], out_diags, summary
+
+
     @staticmethod
     def _candidate_from_diagnostic(
         *,
