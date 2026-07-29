@@ -11,6 +11,7 @@ from purh_editorial.rules.model import (
     ProtectionDecision,
     RuleDecision,
     RuleDescriptor,
+    RuleActionType,
     RuleNature,
 )
 from purh_editorial.rules.protocols import ThresholdPolicy
@@ -122,6 +123,7 @@ class CanonicalRuleDecisionEngine:
                     outcome=DecisionOutcome.IGNORE,
                     reason=DecisionReason.EXPLICIT_ABSTENTION,
                 )
+            self._require_primary_action(descriptor, evaluation)
             if descriptor.deployment_status is DeploymentStatus.REVIEW_ONLY:
                 outcome = DecisionOutcome.REVIEW
                 reason = DecisionReason.DETERMINISTIC_REVIEW_ONLY
@@ -152,6 +154,7 @@ class CanonicalRuleDecisionEngine:
             raise RuleDecisionError(
                 "intervention_level is required for a native heuristic decision"
             )
+        self._require_primary_action(descriptor, evaluation)
 
         thresholds = self.threshold_policy.thresholds(
             score_family=score_family,
@@ -237,14 +240,30 @@ class CanonicalRuleDecisionEngine:
             raise RuleDecisionError("evaluation requires at least one target")
         evaluated_targets = set(evaluation.target_refs)
         for action in evaluation.proposed_actions:
-            if action.action_type is not descriptor.action_type:
+            if action.action_type not in {
+                descriptor.action_type,
+                RuleActionType.DIAGNOSTIC,
+            }:
                 raise RuleDecisionError(
-                    "proposed action type differs from the rule descriptor"
+                    "proposed action type is not the declared main type or a diagnostic"
                 )
             if not set(action.target_refs).issubset(evaluated_targets):
                 raise RuleDecisionError(
                     "proposed action targets must belong to evaluation targets"
                 )
+
+    @staticmethod
+    def _require_primary_action(
+        descriptor: RuleDescriptor,
+        evaluation: DeterministicResult | HeuristicProposal,
+    ) -> None:
+        if not any(
+            action.action_type is descriptor.action_type
+            for action in evaluation.proposed_actions
+        ):
+            raise RuleDecisionError(
+                "the declared main action type is absent from proposed actions"
+            )
 
     @staticmethod
     def _build_decision(

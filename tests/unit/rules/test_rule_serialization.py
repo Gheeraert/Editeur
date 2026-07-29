@@ -8,6 +8,7 @@ import pytest
 from purh_editorial.rules.model import (
     DeploymentStatus,
     DeterministicResult,
+    EvidencePolarity,
     HeuristicEvidence,
     HeuristicProposal,
     NormativeSource,
@@ -96,7 +97,15 @@ def test_results_and_heuristic_evidence_serialize_without_enum_or_tuple() -> Non
         0.7,
         (action,),
         ("p1",),
-        (HeuristicEvidence("short", True, 0.2, "Bloc court."),),
+        (
+            HeuristicEvidence(
+                "short",
+                EvidencePolarity.POSITIVE,
+                True,
+                0.2,
+                "Bloc court.",
+            ),
+        ),
         (),
         (),
         "Titre possible.",
@@ -114,6 +123,8 @@ def test_results_and_heuristic_evidence_serialize_without_enum_or_tuple() -> Non
                 assert_native(item)
 
     assert_native(payload)
+    evidence_payload = payload["heuristic"]["positive_evidence"][0]
+    assert evidence_payload["polarity"] == "positive"
 
 
 def test_serializer_rejects_non_json_objects() -> None:

@@ -16,6 +16,7 @@ from purh_editorial.rules.model import (
     DeterministicResult,
     HeuristicEvidence,
     HeuristicProposal,
+    EvidencePolarity,
     ImplementationState,
     NormativeStatus,
     ProposedAction,
@@ -113,10 +114,22 @@ def _heuristic(
         proposed_actions=actions,
         target_refs=("block-1",),
         positive_evidence=(
-            HeuristicEvidence("positive", True, 0.4, "indice positif"),
+            HeuristicEvidence(
+                "positive",
+                EvidencePolarity.POSITIVE,
+                True,
+                0.4,
+                "indice positif",
+            ),
         ),
         negative_evidence=(
-            HeuristicEvidence("negative", False, -0.1, "indice négatif"),
+            HeuristicEvidence(
+                "negative",
+                EvidencePolarity.NEGATIVE,
+                False,
+                -0.1,
+                "indice négatif",
+            ),
         ),
         veto_reasons=veto_reasons,
         justification="proposition heuristique",
@@ -173,6 +186,124 @@ def test_active_deterministic_actions_are_decided_without_execution(
     assert decision.proposed_actions == (action,)
     assert decision.score is None
     assert decision.review_threshold is None
+
+
+@pytest.mark.parametrize(
+    "action_type",
+    [
+        RuleActionType.TEXT_TRANSFORM,
+        RuleActionType.STYLE_TRANSFORM,
+        RuleActionType.STRUCTURE_TRANSFORM,
+        RuleActionType.DIAGNOSTIC,
+        RuleActionType.PIPELINE_CONTROL,
+    ],
+)
+def test_each_declared_main_action_is_accepted_alone(
+    action_type: RuleActionType,
+) -> None:
+    action = _action(action_type)
+    decision = _decide(
+        _descriptor(action_type=action_type),
+        _deterministic(actions=(action,)),
+    )
+    assert decision.outcome is DecisionOutcome.APPLY
+    assert decision.proposed_actions == (action,)
+
+
+@pytest.mark.parametrize(
+    "action_type",
+    [
+        RuleActionType.TEXT_TRANSFORM,
+        RuleActionType.STYLE_TRANSFORM,
+        RuleActionType.STRUCTURE_TRANSFORM,
+        RuleActionType.PIPELINE_CONTROL,
+    ],
+)
+def test_main_action_can_be_followed_by_complementary_diagnostics(
+    action_type: RuleActionType,
+) -> None:
+    main = _action(action_type)
+    first_diagnostic = _action(RuleActionType.DIAGNOSTIC)
+    second_diagnostic = _action(RuleActionType.DIAGNOSTIC)
+    actions = (main, first_diagnostic, second_diagnostic)
+    decision = _decide(
+        _descriptor(action_type=action_type),
+        _deterministic(actions=actions),
+    )
+    assert decision.outcome is DecisionOutcome.APPLY
+    assert decision.proposed_actions == actions
+
+
+@pytest.mark.parametrize(
+    ("status", "outcome"),
+    [
+        (DeploymentStatus.ACTIVE, DecisionOutcome.APPLY),
+        (DeploymentStatus.REVIEW_ONLY, DecisionOutcome.REVIEW),
+        (DeploymentStatus.DISABLED, DecisionOutcome.IGNORE),
+    ],
+)
+def test_diagnostic_descriptor_accepts_one_or_more_diagnostics(
+    status: DeploymentStatus,
+    outcome: DecisionOutcome,
+) -> None:
+    diagnostics = (
+        _action(RuleActionType.DIAGNOSTIC),
+        _action(RuleActionType.DIAGNOSTIC),
+    )
+    decision = _decide(
+        _descriptor(status=status, action_type=RuleActionType.DIAGNOSTIC),
+        _deterministic(actions=diagnostics),
+    )
+    assert decision.outcome is outcome
+    assert decision.proposed_actions == diagnostics
+
+
+@pytest.mark.parametrize(
+    ("declared", "other"),
+    [
+        (RuleActionType.TEXT_TRANSFORM, RuleActionType.STYLE_TRANSFORM),
+        (RuleActionType.TEXT_TRANSFORM, RuleActionType.STRUCTURE_TRANSFORM),
+        (RuleActionType.STRUCTURE_TRANSFORM, RuleActionType.STYLE_TRANSFORM),
+        (RuleActionType.STRUCTURE_TRANSFORM, RuleActionType.PIPELINE_CONTROL),
+        (RuleActionType.PIPELINE_CONTROL, RuleActionType.TEXT_TRANSFORM),
+    ],
+)
+def test_mixing_two_different_main_action_types_is_rejected(
+    declared: RuleActionType,
+    other: RuleActionType,
+) -> None:
+    with pytest.raises(RuleDecisionError, match="proposed action type"):
+        _decide(
+            _descriptor(action_type=declared),
+            _deterministic(actions=(_action(declared), _action(other))),
+        )
+
+
+@pytest.mark.parametrize(
+    "action_type",
+    [
+        RuleActionType.TEXT_TRANSFORM,
+        RuleActionType.STYLE_TRANSFORM,
+        RuleActionType.STRUCTURE_TRANSFORM,
+        RuleActionType.PIPELINE_CONTROL,
+    ],
+)
+def test_non_diagnostic_descriptors_reject_diagnostics_without_main_action(
+    action_type: RuleActionType,
+) -> None:
+    with pytest.raises(RuleDecisionError, match="declared main action type is absent"):
+        _decide(
+            _descriptor(action_type=action_type),
+            _deterministic(actions=(_action(RuleActionType.DIAGNOSTIC),)),
+        )
+
+
+def test_diagnostic_descriptor_rejects_any_non_diagnostic_action() -> None:
+    with pytest.raises(RuleDecisionError, match="proposed action type"):
+        _decide(
+            _descriptor(action_type=RuleActionType.DIAGNOSTIC),
+            _deterministic(actions=(_action(RuleActionType.TEXT_TRANSFORM),)),
+        )
 
 
 def test_deterministic_review_only_disabled_protection_veto_and_non_match() -> None:
@@ -345,6 +476,46 @@ def test_priority_decisions_do_not_consult_thresholds(
 
 
 @pytest.mark.parametrize(
+    ("status", "protected", "veto"),
+    [
+        (DeploymentStatus.DISABLED, False, False),
+        (DeploymentStatus.ACTIVE, True, False),
+        (DeploymentStatus.ACTIVE, False, True),
+    ],
+)
+def test_priority_ignores_preserve_main_action_and_diagnostic_trace(
+    status: DeploymentStatus,
+    protected: bool,
+    veto: bool,
+) -> None:
+    descriptor = _descriptor(
+        nature=RuleNature.HEURISTIC,
+        status=status,
+        action_type=RuleActionType.STRUCTURE_TRANSFORM,
+        score_family=None if status is DeploymentStatus.DISABLED else "heading",
+    )
+    actions = (
+        _action(RuleActionType.STRUCTURE_TRANSFORM),
+        _action(RuleActionType.DIAGNOSTIC),
+    )
+    proposal = _heuristic(
+        1.0,
+        actions=actions,
+        veto_reasons=("veto",) if veto else (),
+    )
+    decision = CanonicalRuleDecisionEngine(_FailIfCalledPolicy()).decide(
+        descriptor=descriptor,
+        evaluation=proposal,
+        protection=_protection(protected),
+        decision_id="priority-with-diagnostic",
+        sequence=0,
+    )
+    assert decision.outcome is DecisionOutcome.IGNORE
+    assert decision.proposed_actions == actions
+    assert decision.review_threshold is None
+
+
+@pytest.mark.parametrize(
     ("mutator", "error"),
     [
         (lambda d, e: (d, HeuristicProposal(
@@ -450,3 +621,58 @@ def test_trace_is_complete_stable_serializable_and_deterministic() -> None:
         first.sequence = 4  # type: ignore[misc]
     assert evaluation.score == 0.85
     assert descriptor.score_family == "heading"
+
+
+def test_heuristic_trace_preserves_polarity_order_and_none_contribution() -> None:
+    descriptor = _descriptor(
+        nature=RuleNature.HEURISTIC,
+        action_type=RuleActionType.STRUCTURE_TRANSFORM,
+        score_family="heading",
+        implementation_state=ImplementationState.NATIVE,
+    )
+    positive_first = HeuristicEvidence(
+        "caps",
+        EvidencePolarity.POSITIVE,
+        True,
+        0.3,
+        "Capitales.",
+    )
+    positive_second = HeuristicEvidence(
+        "short",
+        EvidencePolarity.POSITIVE,
+        True,
+        None,
+        "Bloc court.",
+    )
+    negative = HeuristicEvidence(
+        "sentence",
+        EvidencePolarity.NEGATIVE,
+        True,
+        -0.2,
+        "Phrase complète.",
+    )
+    proposal = HeuristicProposal(
+        rule_id="test.rule",
+        score_family="heading",
+        score=0.85,
+        proposed_actions=(_action(RuleActionType.STRUCTURE_TRANSFORM),),
+        target_refs=("block-1",),
+        positive_evidence=(positive_first, positive_second),
+        negative_evidence=(negative,),
+        veto_reasons=(),
+        justification="Indices ordonnés.",
+    )
+    decision = _decide(descriptor, proposal)
+    assert decision.evidence == (positive_first, positive_second, negative)
+    assert tuple(item.polarity for item in decision.evidence) == (
+        EvidencePolarity.POSITIVE,
+        EvidencePolarity.POSITIVE,
+        EvidencePolarity.NEGATIVE,
+    )
+    assert decision.evidence[1].contribution is None
+    payload = to_json_data(decision)
+    assert [item["polarity"] for item in payload["evidence"]] == [
+        "positive",
+        "positive",
+        "negative",
+    ]

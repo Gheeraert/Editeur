@@ -10,6 +10,7 @@ from purh_editorial.rules.model import (
     DecisionOutcome,
     DeploymentStatus,
     DeterministicResult,
+    EvidencePolarity,
     ExecutionResult,
     HeuristicEvidence,
     HeuristicProposal,
@@ -280,8 +281,20 @@ def test_abstention_is_an_actionless_explained_result() -> None:
 
 
 def test_heuristic_proposal_validates_score_evidence_veto_and_fusion() -> None:
-    positive = HeuristicEvidence("short_lines", 4, 0.3, "Quatre lignes courtes.")
-    negative = HeuristicEvidence("sentence_like", False, -0.1, "Pas de phrase.")
+    positive = HeuristicEvidence(
+        "short_lines",
+        EvidencePolarity.POSITIVE,
+        4,
+        0.3,
+        "Quatre lignes courtes.",
+    )
+    negative = HeuristicEvidence(
+        "sentence_like",
+        EvidencePolarity.NEGATIVE,
+        False,
+        -0.1,
+        "Pas de phrase.",
+    )
     fusion = ProposedAction(
         RuleActionType.STRUCTURE_TRANSFORM,
         ("v1", "v2", "v3"),
@@ -325,7 +338,15 @@ def test_heuristic_proposal_validates_score_evidence_veto_and_fusion() -> None:
             (fusion,),
             ("v1",),
             (positive,),
-            (HeuristicEvidence("short_lines", False, None, "Conflit."),),
+            (
+                HeuristicEvidence(
+                    "short_lines",
+                    EvidencePolarity.NEGATIVE,
+                    False,
+                    None,
+                    "Conflit.",
+                ),
+            ),
             (),
             "Indices contradictoires.",
         )
@@ -342,6 +363,74 @@ def test_heuristic_proposal_validates_score_evidence_veto_and_fusion() -> None:
         "Veto bibliographique.",
     )
     assert veto.proposed_actions == ()
+
+
+def test_heuristic_evidence_requires_explicit_polarity_and_is_immutable() -> None:
+    positive = HeuristicEvidence(
+        "capital_letters",
+        EvidencePolarity.POSITIVE,
+        True,
+        None,
+        "Capitales observées.",
+    )
+    negative = HeuristicEvidence(
+        "final_punctuation",
+        EvidencePolarity.NEGATIVE,
+        True,
+        None,
+        "Ponctuation de phrase observée.",
+    )
+    assert positive.polarity is EvidencePolarity.POSITIVE
+    assert negative.polarity is EvidencePolarity.NEGATIVE
+    assert positive.contribution is None
+    with pytest.raises(FrozenInstanceError):
+        positive.polarity = EvidencePolarity.NEGATIVE  # type: ignore[misc]
+    with pytest.raises(TypeError, match="EvidencePolarity"):
+        HeuristicEvidence(
+            "invalid",
+            "positive",  # type: ignore[arg-type]
+            True,
+            0.1,
+            "Polarité invalide.",
+        )
+
+
+def test_heuristic_proposal_rejects_evidence_in_the_wrong_collection() -> None:
+    positive = HeuristicEvidence(
+        "short",
+        EvidencePolarity.POSITIVE,
+        True,
+        0.2,
+        "Indice positif.",
+    )
+    negative = HeuristicEvidence(
+        "punctuation",
+        EvidencePolarity.NEGATIVE,
+        True,
+        -0.1,
+        "Indice négatif.",
+    )
+    action = ProposedAction(
+        RuleActionType.STRUCTURE_TRANSFORM,
+        ("p1",),
+        semantic_patch={"role": "heading"},
+    )
+    for positives, negatives, message in (
+        ((negative,), (), "positive_evidence"),
+        ((), (positive,), "negative_evidence"),
+    ):
+        with pytest.raises(ValueError, match=message):
+            HeuristicProposal(
+                "test.heuristic",
+                "heading",
+                0.7,
+                (action,),
+                ("p1",),
+                positives,
+                negatives,
+                (),
+                "Collections incohérentes.",
+            )
 
 
 @pytest.mark.parametrize(

@@ -40,6 +40,11 @@ class DecisionOutcome(str, Enum):
     IGNORE = "ignore"
 
 
+class EvidencePolarity(str, Enum):
+    POSITIVE = "positive"
+    NEGATIVE = "negative"
+
+
 class ImplementationState(str, Enum):
     LEGACY = "legacy"
     PLANNED = "planned"
@@ -391,6 +396,7 @@ class DeterministicResult:
 @dataclass(frozen=True, slots=True)
 class HeuristicEvidence:
     code: str
+    polarity: EvidencePolarity
     value: Any
     contribution: float | None
     explanation: str
@@ -398,6 +404,8 @@ class HeuristicEvidence:
     def __post_init__(self) -> None:
         _require_non_empty(self.code, "code")
         _require_non_empty(self.explanation, "explanation")
+        if not isinstance(self.polarity, EvidencePolarity):
+            raise TypeError("polarity must be an EvidencePolarity")
         object.__setattr__(self, "value", _freeze_json_value(self.value, "value"))
 
 
@@ -436,6 +444,16 @@ class HeuristicProposal:
         positive_codes = {item.code for item in self.positive_evidence}
         negative_codes = {item.code for item in self.negative_evidence}
         veto_codes = set(self.veto_reasons)
+        if any(
+            item.polarity is not EvidencePolarity.POSITIVE
+            for item in self.positive_evidence
+        ):
+            raise ValueError("positive_evidence must contain positive evidence")
+        if any(
+            item.polarity is not EvidencePolarity.NEGATIVE
+            for item in self.negative_evidence
+        ):
+            raise ValueError("negative_evidence must contain negative evidence")
         if positive_codes & negative_codes:
             raise ValueError("positive and negative evidence codes must be distinct")
         if (positive_codes | negative_codes) & veto_codes:
