@@ -28,6 +28,7 @@ from purh_editorial.ui.step1_dialog import (
     normalize_heuristic_profile,
     normalize_optional_threshold,
     save_config_file,
+    word_review_dependency_state,
 )
 
 
@@ -78,6 +79,47 @@ class Step1DialogConfigTests(unittest.TestCase):
         self.assertEqual(config["max_structure_ai_calls"], 6)
         self.assertEqual(config["export_json"], True)
         self.assertEqual(config["pivot_json_output_path"], "")
+        self.assertEqual(config["export_word_review"], False)
+        self.assertEqual(config["word_review_output_path"], "")
+
+    def test_word_review_config_roundtrip_and_old_config_safe_default(self) -> None:
+        current = build_config_dict(
+            export_docx=True,
+            export_word_review=True,
+            word_review_output_path="C:/out/ouvrage_revision.docx",
+        )
+        restored = apply_config_dict(build_config_dict(), current)
+        self.assertTrue(restored["export_word_review"])
+        self.assertEqual(restored["word_review_output_path"], "C:/out/ouvrage_revision.docx")
+
+        old_config = {"export_docx": True}
+        safe = apply_config_dict(current, old_config)
+        self.assertFalse(safe["export_word_review"])
+        self.assertEqual(safe["word_review_output_path"], "")
+
+    def test_build_step1_options_preserves_word_review_path_or_none(self) -> None:
+        common = {
+            "decision_mode_label": "Heuristique",
+            "heuristic_profile_label": "Prudent",
+            "heading_transform_threshold": "",
+            "heading_diagnostic_threshold": "",
+            "poetry_transform_threshold": "",
+            "poetry_diagnostic_threshold": "",
+            "ai_aggressiveness_label": "Conservatrice",
+        }
+        review_path = Path("C:/out/ouvrage_revision.docx")
+        self.assertEqual(
+            build_step1_options_from_form(**common, word_review_output_path=review_path).word_review_output_path,
+            review_path,
+        )
+        self.assertIsNone(
+            build_step1_options_from_form(**common, word_review_output_path=None).word_review_output_path
+        )
+
+    def test_word_review_dependency_requires_candidate(self) -> None:
+        self.assertEqual(word_review_dependency_state(True, False), (True, False))
+        self.assertEqual(word_review_dependency_state(True, True), (True, False))
+        self.assertEqual(word_review_dependency_state(False, False), (False, True))
 
     def test_apply_config_dict_minimal_keeps_defaults(self) -> None:
         current = build_config_dict("", "", "", "heuristic", "conservative", None, None, None, None, "conservative", "groq", "", "", "", False, False, False, 6, 6)

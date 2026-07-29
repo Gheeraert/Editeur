@@ -11,12 +11,15 @@ if str(SRC) not in sys.path:
 
 from purh_editorial.model import Diagnostic, Document, Evidence, ModuleRun, Paragraph, PipelineResult, ProcessingReport
 from purh_editorial.pipeline.step1 import Step1Result
+from purh_editorial.services.word_review_service import WordReviewResult
 from purh_editorial.ui.step1_dialog import (
     build_json_output_path,
+    build_word_review_output_path,
     build_completion_message,
     build_result_text,
     extract_output_paths,
     format_diagnostics,
+    format_errors,
     format_module_runs,
     format_outputs,
     format_warnings,
@@ -131,7 +134,8 @@ class Step1DialogFormattingTests(unittest.TestCase):
         result = self._build_result()
         outputs_text = format_outputs(result)
         report_text = build_result_text(result)
-        self.assertIn("DOCX de relecture", outputs_text)
+        self.assertIn("DOCX candidat corrigé", outputs_text)
+        self.assertIn("DOCX de révision Word : non demandé", outputs_text)
         self.assertIn("XML-TEI", outputs_text)
         self.assertIn("Corrections appliquees", report_text)
         self.assertIn("Diagnostics a verifier", report_text)
@@ -142,6 +146,35 @@ class Step1DialogFormattingTests(unittest.TestCase):
         self.assertEqual(format_diagnostics([]), "Aucun diagnostic.")
         self.assertEqual(format_warnings([]), "Aucun warning.")
         self.assertEqual(format_module_runs([]), "Aucun module execute.")
+        self.assertEqual(format_errors([]), "Aucune erreur.")
+
+    def test_format_outputs_reports_successful_word_review(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/candidat.docx"), None)
+        result.word_review_result = WordReviewResult(
+            original_path=Path("C:/src/original.docx"),
+            revised_path=Path("C:/out/candidat.docx"),
+            output_path=Path("C:/out/revision.docx"),
+            has_tracked_changes=True,
+        )
+        output = format_outputs(result)
+        self.assertIn("DOCX de révision Word : C:\\out\\revision.docx", output)
+        self.assertIn("Modifications suivies détectées : oui", output)
+
+    def test_format_outputs_reports_failed_word_review(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/candidat.docx"), None)
+        result.pipeline_result.report.errors.append("Word review failed: Word unavailable")
+        result.pipeline_result.report.module_runs.append(
+            ModuleRun(
+                module_name="word_review",
+                version="2.0.0",
+                started_at="2026-01-01T00:00:02+00:00",
+                finished_at="2026-01-01T00:00:03+00:00",
+                status="failed",
+                summary={"error": "Word unavailable"},
+            )
+        )
+        self.assertIn("DOCX de révision Word : non produit", format_outputs(result))
+        self.assertIn("Word unavailable", build_result_text(result))
 
     def test_output_folders_no_file_outputs(self) -> None:
         result = self._build_result_with_outputs(None, None)
@@ -158,6 +191,16 @@ class Step1DialogFormattingTests(unittest.TestCase):
     def test_output_folders_deduplicate_same_folder(self) -> None:
         result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/out/sortie.xml"))
         self.assertEqual(output_folders_to_open(result), [Path("C:/out")])
+
+    def test_output_folders_include_word_review_without_duplicate(self) -> None:
+        result = self._build_result_with_outputs(Path("C:/out/candidat.docx"), Path("C:/tei/sortie.xml"))
+        result.word_review_result = WordReviewResult(
+            original_path=Path("C:/src/original.docx"),
+            revised_path=Path("C:/out/candidat.docx"),
+            output_path=Path("C:/out/revision.docx"),
+            has_tracked_changes=True,
+        )
+        self.assertEqual(output_folders_to_open(result), [Path("C:/out"), Path("C:/tei")])
 
     def test_output_folders_stable_order_docx_then_xml(self) -> None:
         result = self._build_result_with_outputs(Path("C:/out/relecture.docx"), Path("C:/tei/sortie.xml"))
@@ -188,7 +231,7 @@ class Step1DialogFormattingTests(unittest.TestCase):
     def test_format_outputs_has_clean_french_strings(self) -> None:
         result = self._build_result_with_outputs(None, None)
         output = format_outputs(result)
-        self.assertIn("non demandée", output)
+        self.assertIn("non demandé", output)
         self.assertIn("non produit", output)
         result_in_memory = self._build_result_with_outputs(Path("C:/out/relecture.docx"), None)
         output_in_memory = format_outputs(result_in_memory)
@@ -202,7 +245,10 @@ class Step1DialogFormattingTests(unittest.TestCase):
         self.assertIn("Transformations:", message)
         self.assertIn("Diagnostics:", message)
         self.assertIn("Warnings:", message)
-        self.assertIn("DOCX:", message)
+        self.assertIn("DOCX candidat:", message)
+        self.assertIn("Révision Word:", message)
+        self.assertIn("Modifications suivies:", message)
+        self.assertIn("Erreurs:", message)
         self.assertIn("XML-TEI:", message)
         self.assertIn("JSON pivot:", message)
 
@@ -211,6 +257,10 @@ class Step1DialogFormattingTests(unittest.TestCase):
         output_dir = Path("out")
         path = build_json_output_path(source, output_dir, "base")
         self.assertTrue(str(path).endswith("base_pivot.json"))
+
+    def test_build_word_review_output_path_suffix(self) -> None:
+        path = build_word_review_output_path(Path("Mon fichier.docx"), Path("out"), "base")
+        self.assertTrue(str(path).endswith("base_revision.docx"))
 
 
 if __name__ == "__main__":

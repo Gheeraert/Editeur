@@ -19,8 +19,9 @@ from purh_editorial.pipeline.step1 import Step1Options, Step1Pipeline, Step1Resu
 
 
 DISCLAIMER_TEXT = (
-    "Cette interface ne propose pas encore de diff complet avant/apres. "
-    "Les diagnostics signalent des points a verifier et ne sont pas des corrections automatiques."
+    "Le document de révision Word présente les corrections automatiques sous forme de "
+    "modifications suivies. Les diagnostics et suggestions nécessitant une décision humaine "
+    "restent affichés dans le rapport et ne sont pas encore injectés dans Word."
 )
 
 
@@ -192,6 +193,17 @@ def derive_ai_flags_from_decision_mode(decision_mode: str) -> tuple[bool, bool]:
     return False, False
 
 
+def word_review_dependency_state(
+    word_review_requested: bool,
+    candidate_requested: bool,
+) -> tuple[bool, bool]:
+    """Return the candidate value and whether its checkbox remains editable."""
+
+    if word_review_requested:
+        return True, False
+    return bool(candidate_requested), True
+
+
 #  Construction des options Step1 
 
 def build_step1_options_from_form(
@@ -224,6 +236,7 @@ def build_step1_options_from_form(
     apply_metopes_styles: bool = False,
     # Sorties
     output_path: Path | None = None,
+    word_review_output_path: Path | None = None,
     tei_output_path: Path | None = None,
     pivot_json_output_path: Path | None = None,
 ) -> Step1Options:
@@ -266,6 +279,7 @@ def build_step1_options_from_form(
         max_ai_calls=max(1, int(max_ai_calls)),
         apply_metopes_styles=bool(apply_metopes_styles),
         output_path=output_path,
+        word_review_output_path=word_review_output_path,
         tei_output_path=tei_output_path,
         pivot_json_output_path=pivot_json_output_path,
     )
@@ -297,6 +311,7 @@ def build_config_dict(
     output_dir: str = "",
     base_name: str = "",
     export_docx: bool = True,
+    export_word_review: bool = False,
     export_tei: bool = True,
     export_json: bool = True,
     export_latex: bool = True,
@@ -312,6 +327,7 @@ def build_config_dict(
     editorial_ai_model: str = "",
     editorial_ai_base_url: str = "",
     pivot_json_output_path: str = "",
+    word_review_output_path: str = "",
 ) -> dict[str, object]:
     """Build a Step 1 dialog config while preserving v1 positional compatibility.
 
@@ -329,11 +345,13 @@ def build_config_dict(
         "output_dir": output_dir,
         "base_name": base_name,
         "export_docx": bool(export_docx),
+        "export_word_review": bool(export_word_review),
         "export_tei": bool(export_tei),
         "export_json": bool(export_json),
         "export_latex": bool(export_latex),
         "apply_metopes_styles": bool(apply_metopes_styles),
         "output_docx_path": output_docx_path,
+        "word_review_output_path": word_review_output_path,
         "tei_output_path": tei_output_path,
         "pivot_json_output_path": pivot_json_output_path,
         "decision_mode": normalize_decision_mode(decision_mode),
@@ -389,11 +407,13 @@ def apply_config_dict(
         "output_dir": _s(current, "output_dir"),
         "base_name": _s(current, "base_name"),
         "export_docx": _b(current, "export_docx", True),
+        "export_word_review": _b(current, "export_word_review", False),
         "export_tei": _b(current, "export_tei", True),
         "export_json": _b(current, "export_json", True),
         "export_latex": _b(current, "export_latex", True),
         "apply_metopes_styles": _b(current, "apply_metopes_styles", False),
         "output_docx_path": _s(current, "output_docx_path"),
+        "word_review_output_path": _s(current, "word_review_output_path"),
         "tei_output_path": _s(current, "tei_output_path"),
         "pivot_json_output_path": _s(current, "pivot_json_output_path"),
         "decision_mode": normalize_decision_mode(_s(current, "decision_mode", "heuristic")),
@@ -429,12 +449,19 @@ def apply_config_dict(
         return merged
 
     # Champs simples
-    for key in ("source_path", "output_dir", "base_name", "output_docx_path", "tei_output_path", "pivot_json_output_path"):
+    for key in ("source_path", "output_dir", "base_name", "output_docx_path", "word_review_output_path", "tei_output_path", "pivot_json_output_path"):
         if key in loaded:
             merged[key] = str(loaded.get(key) or "")
     for key in ("export_docx", "export_tei", "export_json", "export_latex", "apply_metopes_styles"):
         if key in loaded:
             merged[key] = bool(loaded.get(key))
+    if "export_word_review" in loaded:
+        merged["export_word_review"] = bool(loaded.get("export_word_review"))
+    else:
+        # Une configuration antérieure ne doit jamais réactiver Word depuis
+        # un état de session résiduel.
+        merged["export_word_review"] = False
+        merged["word_review_output_path"] = ""
 
     if "decision_mode" in loaded:
         merged["decision_mode"] = normalize_decision_mode(str(loaded.get("decision_mode")))
@@ -578,21 +605,47 @@ def build_json_output_path(source: Path, output_dir: Path, base_name: str) -> Pa
     return output_dir / f"{safe_base}_pivot.json"
 
 
+def build_word_review_output_path(source: Path, output_dir: Path, base_name: str) -> Path:
+    normalized_base = base_name.strip() or source.stem
+    safe_base = normalized_base.replace(" ", "_")
+    return output_dir / f"{safe_base}_revision.docx"
+
+
+def format_errors(errors: list[str]) -> str:
+    if not errors:
+        return "Aucune erreur."
+    return "\n".join(f"- {error}" for error in errors)
+
+
 def format_outputs(result: Step1Result) -> str:
     lines: list[str] = []
     if result.output_docx:
-        lines.append(f"- DOCX de relecture : {result.output_docx}")
+        lines.append(f"- DOCX candidat corrigé : {result.output_docx}")
     else:
-        lines.append("- DOCX de relecture : non produit (option non demandée)")
+        lines.append("- DOCX candidat corrigé : non produit")
 
     report = result.pipeline_result.report
     tei_path: str | None = None
     json_path: str | None = None
+    word_review_run: ModuleRun | None = None
     for module_run in report.module_runs:
         if module_run.module_name == "tei_xml_write":
             tei_path = str(module_run.summary.get("output") or "")
         elif module_run.module_name == "pivot_json_write":
             json_path = str(module_run.summary.get("output") or "")
+        elif module_run.module_name == "word_review":
+            word_review_run = module_run
+
+    if result.word_review_result is not None:
+        lines.append(f"- DOCX de révision Word : {result.word_review_result.output_path}")
+        lines.append(
+            "- Modifications suivies détectées : "
+            + ("oui" if result.word_review_result.has_tracked_changes else "non")
+        )
+    elif word_review_run is not None and word_review_run.status == "failed":
+        lines.append("- DOCX de révision Word : non produit")
+    else:
+        lines.append("- DOCX de révision Word : non demandé")
 
     if tei_path:
         lines.append(f"- XML-TEI : {tei_path}")
@@ -639,6 +692,7 @@ def output_folders_to_open(result: Step1Result) -> list[Path]:
         folders.append(parent)
 
     _append_parent(docx_path)
+    _append_parent(result.word_review_result.output_path if result.word_review_result else None)
     _append_parent(tei_path)
     _append_parent(json_path)
     return folders
@@ -686,13 +740,20 @@ def build_completion_message(
 ) -> str:
     report = result.pipeline_result.report
     docx_path, tei_path, json_path = extract_output_paths(result)
+    review_path = result.word_review_result.output_path if result.word_review_result else None
+    review_changes = (
+        "oui" if result.word_review_result and result.word_review_result.has_tracked_changes else "non"
+    )
     latex_value = str(latex_path) if latex_path else ("erreur" if latex_error else "non produit")
     return (
         "Analyse terminée.\n"
         f"- Transformations: {len(report.transformations)}\n"
         f"- Diagnostics: {len(report.diagnostics)}\n"
         f"- Warnings: {len(report.warnings)}\n"
-        f"- DOCX: {docx_path if docx_path else 'non produit'}\n"
+        f"- Erreurs: {len(report.errors)}\n"
+        f"- DOCX candidat: {docx_path if docx_path else 'non produit'}\n"
+        f"- Révision Word: {review_path if review_path else 'non produite'}\n"
+        f"- Modifications suivies: {review_changes}\n"
         f"- XML-TEI: {tei_path if tei_path else 'non écrit sur disque'}\n"
         f"- JSON pivot: {json_path if json_path else 'non produit'}\n"
         f"- LaTeX: {latex_value}"
@@ -711,6 +772,7 @@ def build_result_text(result: Step1Result, latex_path: Path | None = None, latex
         "Warnings techniques",
         format_warnings(report.warnings),
         "",
+        *(["Erreurs", format_errors(report.errors), ""] if report.errors else []),
         "Sorties",
         format_outputs(result),
         *(["- LaTeX : " + str(latex_path)] if latex_path else []),
@@ -752,6 +814,7 @@ def _configure_result_tags(widget: tk.Text) -> None:
     widget.tag_configure("diag_excerpt",   foreground="#555555", font=("TkDefaultFont", 8, "italic"))
     widget.tag_configure("diag_meta",      foreground="#888888", font=("TkDefaultFont", 8))
     widget.tag_configure("latex_error",    foreground="#cc0000")
+    widget.tag_configure("result_error",   foreground="#cc0000")
 
 
 def _w_section(widget: tk.Text, title: str) -> None:
@@ -813,6 +876,10 @@ def render_result_to_widget(
     _w_section(widget, "Warnings techniques")
     widget.insert(tk.END, format_warnings(report.warnings) + "\n")
 
+    if report.errors:
+        _w_section(widget, "Erreurs")
+        widget.insert(tk.END, format_errors(report.errors) + "\n", "result_error")
+
     _w_section(widget, "Sorties")
     widget.insert(tk.END, format_outputs(result) + "\n")
     if latex_path:
@@ -850,11 +917,13 @@ class Step1Dialog(tk.Tk):
         self._output_dir = tk.StringVar(value=str(self.settings.exports_dir))
         self._base_name = tk.StringVar()
         self._export_docx = tk.BooleanVar(value=True)
+        self._export_word_review = tk.BooleanVar(value=False)
         self._export_tei = tk.BooleanVar(value=True)
         self._apply_metopes_styles = tk.BooleanVar(value=False)
         self._export_json = tk.BooleanVar(value=True)
         self._export_latex = tk.BooleanVar(value=True)
         self._output_docx_path = tk.StringVar()
+        self._output_word_review_path = tk.StringVar()
         self._output_tei_path = tk.StringVar()
         self._output_json_path = tk.StringVar()
         self._output_latex_path = tk.StringVar()
@@ -898,6 +967,8 @@ class Step1Dialog(tk.Tk):
 
         self._input_path.trace_add("write", self._on_input_changed)
         self._build_ui()
+        self._export_word_review.trace_add("write", self._on_word_review_changed)
+        self._sync_word_review_dependency()
 
     def _build_ui(self) -> None:
         p = self._PAD
@@ -942,11 +1013,27 @@ class Step1Dialog(tk.Tk):
         ttk.Label(out_frame, text="(par défaut : nom du fichier source)", foreground="#555555").grid(
             row=2, column=1, sticky="w"
         )
-        ttk.Checkbutton(out_frame, text="Exporter le DOCX corrigé", variable=self._export_docx).grid(row=3, column=0, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(out_frame, text="Exporter le XML-TEI", variable=self._export_tei).grid(row=3, column=1, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(out_frame, text="Appliquer les styles Métopes", variable=self._apply_metopes_styles).grid(row=4, column=0, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(out_frame, text="Exporter le JSON pivot", variable=self._export_json).grid(row=3, column=2, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=3, column=3, sticky="w", pady=(6, 0))
+        self._export_docx_checkbutton = ttk.Checkbutton(
+            out_frame,
+            text="Exporter le DOCX corrigé (candidat)",
+            variable=self._export_docx,
+        )
+        self._export_docx_checkbutton.grid(row=3, column=0, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(
+            out_frame,
+            text="Créer le document de révision Word",
+            variable=self._export_word_review,
+        ).grid(row=4, column=0, sticky="w", pady=(6, 0))
+        ttk.Label(
+            out_frame,
+            text="Compare l’original au DOCX corrigé et produit des modifications suivies. Microsoft Word sous Windows est requis.",
+            foreground="#555555",
+            wraplength=640,
+        ).grid(row=5, column=0, columnspan=3, sticky="w", padx=(18, 0))
+        ttk.Checkbutton(out_frame, text="Exporter le XML-TEI", variable=self._export_tei).grid(row=6, column=0, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Exporter le JSON pivot", variable=self._export_json).grid(row=6, column=1, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Exporter le LaTeX", variable=self._export_latex).grid(row=6, column=2, sticky="w", pady=(6, 0))
+        ttk.Checkbutton(out_frame, text="Appliquer les styles Métopes", variable=self._apply_metopes_styles).grid(row=6, column=3, sticky="w", pady=(6, 0))
 
         #  Section 3 : Politique 
         opt_frame = ttk.LabelFrame(root, text="3. Politique de traitement", padding=p)
@@ -1091,7 +1178,7 @@ class Step1Dialog(tk.Tk):
         ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 0))
         ttk.Label(
             edi_frame,
-            text="Attention : les clés API sont enregistrées en clair dans le fichier JSON local.",
+            text="Les clés API restent valables pour la session courante et ne sont pas enregistrées dans le fichier de configuration.",
             foreground="#8a5a00",
             wraplength=900,
             justify="left",
@@ -1186,6 +1273,20 @@ class Step1Dialog(tk.Tk):
         if chosen:
             self._output_dir.set(chosen)
 
+    def _on_word_review_changed(self, *_) -> None:
+        self._sync_word_review_dependency()
+
+    def _sync_word_review_dependency(self) -> None:
+        candidate_requested, candidate_editable = word_review_dependency_state(
+            self._export_word_review.get(),
+            self._export_docx.get(),
+        )
+        self._export_docx.set(candidate_requested)
+        if not candidate_editable:
+            self._export_docx_checkbutton.state(["disabled"])
+        else:
+            self._export_docx_checkbutton.state(["!disabled"])
+
     def _on_input_changed(self, *_) -> None:
         path = self._input_path.get().strip()
         is_docx = bool(path) and Path(path).suffix.lower() == ".docx"
@@ -1210,9 +1311,18 @@ class Step1Dialog(tk.Tk):
         output_dir = Path(output_dir_value)
         output_dir.mkdir(parents=True, exist_ok=True)
 
+        if self._export_word_review.get() and not self._export_docx.get():
+            messagebox.showerror(
+                "Révision Word impossible",
+                "Le document de révision Word exige l'export du DOCX candidat.",
+            )
+            return
+
         docx_path, tei_path, tex_path = build_output_paths(source, output_dir, self._base_name.get())
         json_path = build_json_output_path(source, output_dir, self._base_name.get())
+        word_review_path = build_word_review_output_path(source, output_dir, self._base_name.get())
         self._output_docx_path.set(str(docx_path))
+        self._output_word_review_path.set(str(word_review_path))
         self._output_tei_path.set(str(tei_path))
         self._output_json_path.set(str(json_path))
         self._output_latex_path.set(str(tex_path))
@@ -1238,6 +1348,7 @@ class Step1Dialog(tk.Tk):
             max_ai_calls=max(1, int(self._max_ai_calls.get())),
             apply_metopes_styles=self._apply_metopes_styles.get(),
             output_path=docx_path if self._export_docx.get() else None,
+            word_review_output_path=word_review_path if self._export_word_review.get() else None,
             tei_output_path=tei_path if self._export_tei.get() else None,
             pivot_json_output_path=json_path if self._export_json.get() else None,
         )
@@ -1284,6 +1395,17 @@ class Step1Dialog(tk.Tk):
             messagebox.showerror("Erreur configuration", str(exc))
 
     def _run_pipeline(self, source: Path, options: Step1Options, export_latex: bool, latex_output_path: Path) -> None:
+        pythoncom = None
+        if options.word_review_output_path is not None:
+            try:
+                import pythoncom as _pythoncom
+            except ImportError:
+                # Le pipeline consignera ensuite l'indisponibilité de Word de
+                # façon structurée ; l'import UI reste portable hors Windows.
+                pass
+            else:
+                pythoncom = _pythoncom
+                pythoncom.CoInitialize()
         try:
             if self._pipeline is None:
                 self._pipeline = Step1Pipeline(self.settings)
@@ -1297,6 +1419,9 @@ class Step1Dialog(tk.Tk):
             self.after(0, self._on_success, bundle)
         except Exception as exc:  # noqa: BLE001
             self.after(0, self._on_error, exc)
+        finally:
+            if pythoncom is not None:
+                pythoncom.CoUninitialize()
 
     def _on_success(self, bundle: ExportRunResult) -> None:
         result = bundle.step1_result
@@ -1415,11 +1540,13 @@ class Step1Dialog(tk.Tk):
             output_dir=self._output_dir.get().strip(),
             base_name=self._base_name.get().strip(),
             export_docx=self._export_docx.get(),
+            export_word_review=self._export_word_review.get(),
             export_tei=self._export_tei.get(),
             export_json=self._export_json.get(),
             export_latex=self._export_latex.get(),
             apply_metopes_styles=self._apply_metopes_styles.get(),
             output_docx_path=self._output_docx_path.get().strip(),
+            word_review_output_path=self._output_word_review_path.get().strip(),
             tei_output_path=self._output_tei_path.get().strip(),
             pivot_json_output_path=self._output_json_path.get().strip(),
             decision_mode=decision_mode,
@@ -1449,11 +1576,13 @@ class Step1Dialog(tk.Tk):
         self._output_dir.set(str(config.get("output_dir", self.settings.exports_dir)))
         self._base_name.set(str(config.get("base_name", "")))
         self._export_docx.set(bool(config.get("export_docx", True)))
+        self._export_word_review.set(bool(config.get("export_word_review", False)))
         self._export_tei.set(bool(config.get("export_tei", True)))
         self._export_json.set(bool(config.get("export_json", True)))
         self._export_latex.set(bool(config.get("export_latex", True)))
         self._apply_metopes_styles.set(bool(config.get("apply_metopes_styles", False)))
         self._output_docx_path.set(str(config.get("output_docx_path", "")))
+        self._output_word_review_path.set(str(config.get("word_review_output_path", "")))
         self._output_tei_path.set(str(config.get("tei_output_path", "")))
         self._output_json_path.set(str(config.get("pivot_json_output_path", "")))
         self._decision_mode.set(normalize_decision_mode(str(config.get("decision_mode", "heuristic"))))
@@ -1495,6 +1624,7 @@ class Step1Dialog(tk.Tk):
         self._ai_api_key.set(str(config.get("ai_api_key") or ""))
         self._ai_model.set(str(config.get("ai_model") or self.settings.ai.model))
         self._ai_base_url.set(str(config.get("ai_base_url") or self.settings.ai.base_url))
+        self._sync_word_review_dependency()
 
     @staticmethod
     def _open_folder(path: Path) -> None:
