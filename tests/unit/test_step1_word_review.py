@@ -15,6 +15,7 @@ if str(SRC) not in sys.path:
 from purh_editorial.config import load_settings
 from purh_editorial.pipeline.step1 import Step1Options, Step1Pipeline
 from purh_editorial.services.word_review_service import WordReviewError, WordReviewResult
+from purh_editorial.services.word_review_annotation_service import WordReviewAnnotationResult
 
 
 class FakeWordReviewService:
@@ -44,6 +45,15 @@ class FakeWordReviewService:
             output_path=output_path,
             has_tracked_changes=True,
         )
+
+
+class FakeWordReviewAnnotationService:
+    def __init__(self, error: WordReviewError | None = None) -> None:
+        self.error = error
+    def annotate_review_document(self, *, review_path, document, report):
+        if self.error:
+            raise self.error
+        return WordReviewAnnotationResult(review_path, 0, 0, 0, 0, 0)
 
 
 class Step1WordReviewTests(unittest.TestCase):
@@ -133,6 +143,47 @@ class Step1WordReviewTests(unittest.TestCase):
                 for error in result.pipeline_result.report.errors)
         )
         self.assertEqual(self._module_run(result, "word_review").status, "failed")
+
+    def test_annotation_failure_keeps_candidate_and_review_result(self) -> None:
+        candidate = self.tmp / "candidate.docx"
+        review = self.tmp / "review.docx"
+        pivot_json = self.tmp / "pivot.json"
+        pipeline = Step1Pipeline(
+            settings=self.settings,
+            word_review_service=FakeWordReviewService(),
+            word_review_annotation_service=FakeWordReviewAnnotationService(
+                WordReviewError("échec annotation simulé")
+            ),
+        )
+        result = pipeline.run(
+            self.source,
+            Step1Options(
+                output_path=candidate,
+                word_review_output_path=review,
+                pivot_json_output_path=pivot_json,
+            ),
+        )
+        self.assertTrue(candidate.exists())
+        self.assertTrue(pivot_json.exists())
+        self.assertIsNotNone(result.word_review_result)
+        self.assertIsNone(result.word_review_annotation_result)
+        self.assertEqual(self._module_run(result, "word_review").status, "success")
+        self.assertEqual(self._module_run(result, "word_review_comments").status, "failed")
+        self.assertTrue(any("échec annotation simulé" in error for error in result.pipeline_result.report.errors))
+
+    def test_empty_annotation_is_skipped(self) -> None:
+        candidate = self.tmp / "candidate.docx"
+        review = self.tmp / "review.docx"
+        pipeline = Step1Pipeline(
+            settings=self.settings,
+            word_review_service=FakeWordReviewService(),
+            word_review_annotation_service=FakeWordReviewAnnotationService(),
+        )
+        result = pipeline.run(
+            self.source,
+            Step1Options(output_path=candidate, word_review_output_path=review),
+        )
+        self.assertEqual(self._module_run(result, "word_review_comments").status, "skipped")
 
 
 if __name__ == "__main__":

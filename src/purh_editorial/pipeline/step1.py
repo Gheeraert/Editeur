@@ -626,7 +626,7 @@ class Step1Pipeline:
                         )
                         report.add_module_run(ModuleRun(
                             module_name="word_review_comments", version=self.version, started_at=utc_now_iso(),
-                            finished_at=utc_now_iso(), status="success",
+                            finished_at=utc_now_iso(), status=("skipped" if word_review_annotation_result.comments_requested == 0 else "success"),
                             summary={
                                 "output": str(word_review_annotation_result.output_path),
                                 "comments_requested": word_review_annotation_result.comments_requested,

@@ -99,10 +99,15 @@ class WordReviewAnnotationService:
             return result
         if not review_path.is_file() or review_path.suffix.lower() != ".docx":
             raise WordReviewError(f"Document de révision introuvable ou invalide : {review_path}")
-        fd, temp_name = tempfile.mkstemp(prefix=f".{review_path.stem}.", suffix=".comments.tmp.docx", dir=review_path.parent)
-        os.close(fd); temp_path = Path(temp_name); temp_path.unlink()
-        app = doc = None
+        temp_path: Path | None = None
+        app = None
+        doc = None
+        replacement_completed = False
         try:
+            fd, temp_name = tempfile.mkstemp(prefix=f".{review_path.stem}.", suffix=".comments.tmp.docx", dir=review_path.parent)
+            os.close(fd)
+            temp_path = Path(temp_name)
+            temp_path.unlink()
             had_highlights = document_contains_highlights(review_path)
             shutil.copy2(review_path, temp_path)
             app = _create_word_application(); app.Visible = False; app.DisplayAlerts = 0
@@ -135,6 +140,8 @@ class WordReviewAnnotationService:
             if result.comments_added and not document_contains_word_comments(temp_path):
                 raise WordReviewError("Les commentaires Word attendus sont absents du DOCX annoté.")
             os.replace(temp_path, review_path)
+            replacement_completed = True
+            temp_path = None
             return result
         except WordReviewError:
             raise
@@ -142,27 +149,40 @@ class WordReviewAnnotationService:
             raise WordReviewError(f"Annotation du document de révision impossible : {exc}") from exc
         finally:
             if doc is not None:
-                try: doc.Close(SaveChanges=False)
-                except Exception: pass
+                try:
+                    doc.Close(SaveChanges=False)
+                except Exception:
+                    pass
+                finally:
+                    doc = None
             if app is not None:
-                try: app.Quit()
-                except Exception: pass
-            if temp_path.exists():
-                try: temp_path.unlink()
-                except OSError: pass
+                try:
+                    app.Quit()
+                except Exception:
+                    # The validated replacement must survive a late COM cleanup error.
+                    pass
+                finally:
+                    app = None
+            if not replacement_completed and temp_path is not None and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except OSError:
+                    pass
 
     @staticmethod
     def _find_exact_range_bounds(word_document: Any, target_text: str, anchor_text: str) -> list[tuple[int, int]]:
         matches: list[tuple[int, int]] = []
         for paragraph in word_document.Paragraphs:
-            scope = paragraph.Range.Duplicate
-            if target_text and target_text not in str(scope.Text):
-                continue
-            finder = scope.Duplicate
-            find = finder.Find; find.ClearFormatting(); find.Text = anchor_text; find.Forward = True; find.Wrap = 0
-            while find.Execute():
-                matches.append((int(finder.Start), int(finder.End)))
-                finder.Start = finder.End
-                finder.End = scope.End
+            scope = finder = find = None
+            try:
+                scope = paragraph.Range.Duplicate
+                if target_text and target_text not in str(scope.Text): continue
+                finder = scope.Duplicate
                 find = finder.Find; find.ClearFormatting(); find.Text = anchor_text; find.Forward = True; find.Wrap = 0
+                while find.Execute():
+                    matches.append((int(finder.Start), int(finder.End)))
+                    finder.Start = finder.End; finder.End = scope.End
+                    find = finder.Find; find.ClearFormatting(); find.Text = anchor_text; find.Forward = True; find.Wrap = 0
+            finally:
+                find = finder = scope = paragraph = None
         return matches

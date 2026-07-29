@@ -21,9 +21,10 @@ from purh_editorial.services.word_review_service import WordReviewError, WordRev
 
 
 def _word_available() -> bool:
-    if os.environ.get("PURH_RUN_WORD_INTEGRATION") != "1" or sys.platform != "win32": return False
+    if os.environ.get("PURH_RUN_WORD_INTEGRATION") != "1": raise unittest.SkipTest("PURH_RUN_WORD_INTEGRATION non activé")
+    if sys.platform != "win32": raise unittest.SkipTest("Microsoft Word requiert Windows")
     try: app = _create_word_application()
-    except WordReviewError: return False
+    except WordReviewError as exc: raise AssertionError(f"PURH_RUN_WORD_INTEGRATION=1 mais Microsoft Word est indisponible : {exc}") from exc
     app.Quit(); return True
 
 
@@ -39,11 +40,21 @@ class WordReviewAnnotationIntegrationTests(unittest.TestCase):
             pivot = Document(document_id="d", source_path=str(original), source_format="docx", blocks=[Paragraph(block_id="p1", text="Ce passage doit être vérifié.")])
             report = ProcessingReport(report_id="r", document_id="d", diagnostics=[Diagnostic("d1", "review", "warning", "review", "Vérifier ce passage.", "p1", Evidence(excerpt="Ce passage doit être vérifié."))])
             result = WordReviewAnnotationService().annotate_review_document(review_path=review, document=pivot, report=report)
-            self.assertGreaterEqual(result.comments_added, 1)
+            self.assertEqual(result.comments_requested, 1); self.assertEqual(result.comments_added, 1); self.assertEqual(result.comments_skipped, 0)
             self.assertEqual(hashlib.sha256(original.read_bytes()).hexdigest(), original_sha)
             self.assertEqual(hashlib.sha256(candidate.read_bytes()).hexdigest(), candidate_sha)
             self.assertTrue(document_contains_tracked_changes(review)); self.assertTrue(document_contains_highlights(review)); self.assertTrue(document_contains_word_comments(review))
             with zipfile.ZipFile(review) as archive: self.assertIn("Vérifier ce passage.".encode(), archive.read("word/comments.xml"))
+            app = _create_word_application()
+            opened = None
+            try:
+                opened = app.Documents.Open(
+                    FileName=str(review), ReadOnly=True, AddToRecentFiles=False, Visible=False
+                )
+            finally:
+                if opened is not None:
+                    opened.Close(SaveChanges=False)
+                app.Quit()
 
 
 if __name__ == "__main__": unittest.main()
