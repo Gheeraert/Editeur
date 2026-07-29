@@ -81,6 +81,38 @@ forbidden = [
     or "word_" in name
     or ".services." in name
     or ".pipeline." in name
+    or name == "purh_editorial.rules.shadow"
+]
+print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
+def test_importing_shadow_stays_isolated() -> None:
+    code = """
+import json
+import sys
+import purh_editorial.rules.shadow
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or "ai_editorial_service" in name
+    or "structure_ai_arbitrator" in name
+    or ".ui" in name
+    or "word_" in name
+    or ".services." in name
+    or ".pipeline." in name
 ]
 print(json.dumps(forbidden))
 """
@@ -107,3 +139,16 @@ def test_existing_services_and_pipeline_do_not_import_the_new_package() -> None:
     ]
     for path in paths:
         assert "purh_editorial.rules" not in path.read_text(encoding="utf-8")
+
+
+def test_existing_services_pipeline_and_configuration_do_not_import_shadow() -> None:
+    roots = [
+        ROOT / "src/purh_editorial/services",
+        ROOT / "src/purh_editorial/pipeline",
+        ROOT / "src/purh_editorial/ui",
+    ]
+    for root in roots:
+        for path in root.rglob("*.py"):
+            assert "purh_editorial.rules.shadow" not in path.read_text(
+                encoding="utf-8"
+            )
