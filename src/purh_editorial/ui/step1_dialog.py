@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import threading
 import unicodedata
 from dataclasses import dataclass
@@ -917,6 +918,7 @@ class Step1Dialog(tk.Tk):
 
         self._pipeline: Step1Pipeline | None = None
         self._running = False
+        self._workspace_launch: tuple[subprocess.Popen[object], Path, int] | None = None
 
         # Fichiers
         self._input_path = tk.StringVar()
@@ -1447,17 +1449,10 @@ class Step1Dialog(tk.Tk):
                 "- défilement synchronisé."
             )
             if messagebox.askyesno("Révision Word", prompt):
-                try:
-                    environment = os.environ.copy()
-                    source_root = str(Path(__file__).resolve().parents[2])
-                    environment["PYTHONPATH"] = source_root + os.pathsep + environment.get("PYTHONPATH", "")
-                    subprocess.Popen([
-                        sys.executable, "-m", "purh_editorial.word_workspace",
-                        str(result.pipeline_result.source_document.source_path), str(review_result.output_path),
-                    ], env=environment)
-                    self._status.set("Espace de relecture Word ouvert.")
-                except OSError as exc:
-                    messagebox.showerror("Ouverture Word impossible", str(exc))
+                self._launch_word_workspace(
+                    Path(result.pipeline_result.source_document.source_path),
+                    review_result.output_path,
+                )
 
         tei_blocked = any("TEI export blocked" in w for w in report.warnings)
         if tei_blocked:
@@ -1481,6 +1476,62 @@ class Step1Dialog(tk.Tk):
         self._set_running(False)
         self._status.set(f"Erreur: {exc}")
         messagebox.showerror("Erreur pipeline", str(exc))
+
+    def _launch_word_workspace(self, original: Path, review: Path) -> None:
+        """Launch the isolated Word helper and wait asynchronously for readiness."""
+        if self._workspace_launch is not None:
+            return
+        handle, name = tempfile.mkstemp(prefix="purh-word-workspace-", suffix=".json")
+        os.close(handle)
+        ready_file = Path(name)
+        ready_file.unlink(missing_ok=True)
+        try:
+            environment = os.environ.copy()
+            source_root = str(Path(__file__).resolve().parents[2])
+            environment["PYTHONPATH"] = source_root + os.pathsep + environment.get("PYTHONPATH", "")
+            process = subprocess.Popen(
+                [sys.executable, "-m", "purh_editorial.word_workspace", str(original), str(review),
+                 "--ready-file", str(ready_file)],
+                env=environment,
+            )
+        except OSError as exc:
+            ready_file.unlink(missing_ok=True)
+            messagebox.showerror("Ouverture Word impossible", str(exc))
+            return
+        self._workspace_launch = (process, ready_file, 0)
+        self._status.set("Ouverture de l’espace de relecture Word…")
+        self.after(250, self._poll_word_workspace)
+
+    def _poll_word_workspace(self) -> None:
+        if self._workspace_launch is None:
+            return
+        process, ready_file, polls = self._workspace_launch
+        payload: dict[str, object] | None = None
+        if ready_file.is_file():
+            try:
+                payload = json.loads(ready_file.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                pass
+        if payload is not None and payload.get("status") == "ready":
+            self._finish_workspace_launch(ready_file)
+            self._status.set("Espace de relecture Word ouvert.")
+            return
+        if payload is not None and payload.get("status") == "error":
+            self._finish_workspace_launch(ready_file)
+            self._status.set("Ouverture de l’espace de relecture Word échouée.")
+            messagebox.showerror("Ouverture Word impossible", str(payload.get("message", "Erreur inconnue.")))
+            return
+        if process.poll() is not None or polls >= 60:
+            self._finish_workspace_launch(ready_file)
+            self._status.set("Ouverture de l’espace de relecture Word échouée.")
+            messagebox.showerror("Ouverture Word impossible", "Le processus Word n’a pas confirmé son ouverture.")
+            return
+        self._workspace_launch = (process, ready_file, polls + 1)
+        self.after(250, self._poll_word_workspace)
+
+    def _finish_workspace_launch(self, ready_file: Path) -> None:
+        ready_file.unlink(missing_ok=True)
+        self._workspace_launch = None
 
     def _show_pivot_error_dialog(self, diagnostics: list[Diagnostic]) -> None:
         pivot_errors = [
