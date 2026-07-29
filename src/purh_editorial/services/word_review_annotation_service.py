@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 import tempfile
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -72,6 +73,21 @@ def build_word_review_comments(document: Document, report: ProcessingReport) -> 
     return comments
 
 
+def document_contains_highlights(path: Path) -> bool:
+    with zipfile.ZipFile(path) as archive:
+        return any(b"<w:highlight" in archive.read(name) for name in archive.namelist() if name.startswith("word/") and name.endswith(".xml"))
+
+
+def document_contains_word_comments(path: Path) -> bool:
+    with zipfile.ZipFile(path) as archive:
+        names = set(archive.namelist())
+        if "word/comments.xml" not in names or "word/document.xml" not in names:
+            return False
+        comments = archive.read("word/comments.xml")
+        document_xml = archive.read("word/document.xml")
+        return bool(comments.strip()) and all(marker in document_xml for marker in (b"w:commentRangeStart", b"w:commentRangeEnd", b"w:commentReference"))
+
+
 class WordReviewAnnotationService:
     """Annotate a review copy atomically; ambiguous anchors are never guessed."""
 
@@ -87,13 +103,25 @@ class WordReviewAnnotationService:
         os.close(fd); temp_path = Path(temp_name); temp_path.unlink()
         app = doc = None
         try:
+            had_highlights = document_contains_highlights(review_path)
             shutil.copy2(review_path, temp_path)
             app = _create_word_application(); app.Visible = False; app.DisplayAlerts = 0
             doc = app.Documents.Open(FileName=str(temp_path), ReadOnly=False, AddToRecentFiles=False, Visible=False)
             for item in comments:
-                matches = self._find_exact_ranges(doc, item.target_text, item.anchor_text)
+                matches = self._find_exact_range_bounds(doc, item.target_text, item.anchor_text)
                 if len(matches) == 1:
-                    doc.Comments.Add(Range=matches[0], Text=item.comment_text); result.comments_added += 1
+                    start, end = matches[0]
+                    comment_range = comment = None
+                    try:
+                        comment_range = doc.Range(Start=start, End=end)
+                        comment = doc.Comments.Add(Range=comment_range, Text=item.comment_text)
+                        for name, value in (("Author", "PURH Editorial"), ("Initial", "PURH")):
+                            try: setattr(comment, name, value)
+                            except Exception: pass
+                        result.comments_added += 1
+                    finally:
+                        comment = None
+                        comment_range = None
                 elif not matches:
                     result.comments_skipped += 1; result.missing_anchors += 1
                 else:
@@ -102,8 +130,16 @@ class WordReviewAnnotationService:
             doc.Close(SaveChanges=False); doc = None
             if not document_contains_tracked_changes(temp_path):
                 raise WordReviewError("Les modifications suivies ont disparu pendant l'annotation Word.")
+            if had_highlights and not document_contains_highlights(temp_path):
+                raise WordReviewError("Les surlignages ont disparu pendant l'annotation Word.")
+            if result.comments_added and not document_contains_word_comments(temp_path):
+                raise WordReviewError("Les commentaires Word attendus sont absents du DOCX annoté.")
             os.replace(temp_path, review_path)
             return result
+        except WordReviewError:
+            raise
+        except Exception as exc:
+            raise WordReviewError(f"Annotation du document de révision impossible : {exc}") from exc
         finally:
             if doc is not None:
                 try: doc.Close(SaveChanges=False)
@@ -116,8 +152,8 @@ class WordReviewAnnotationService:
                 except OSError: pass
 
     @staticmethod
-    def _find_exact_ranges(word_document: Any, target_text: str, anchor_text: str) -> list[Any]:
-        matches: list[Any] = []
+    def _find_exact_range_bounds(word_document: Any, target_text: str, anchor_text: str) -> list[tuple[int, int]]:
+        matches: list[tuple[int, int]] = []
         for paragraph in word_document.Paragraphs:
             scope = paragraph.Range.Duplicate
             if target_text and target_text not in str(scope.Text):
@@ -125,7 +161,7 @@ class WordReviewAnnotationService:
             finder = scope.Duplicate
             find = finder.Find; find.ClearFormatting(); find.Text = anchor_text; find.Forward = True; find.Wrap = 0
             while find.Execute():
-                matches.append(finder.Duplicate)
+                matches.append((int(finder.Start), int(finder.End)))
                 finder.Start = finder.End
                 finder.End = scope.End
                 find = finder.Find; find.ClearFormatting(); find.Text = anchor_text; find.Forward = True; find.Wrap = 0
