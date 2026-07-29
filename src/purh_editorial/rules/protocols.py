@@ -7,6 +7,7 @@ from purh_editorial.rules.model import (
     ExecutionResult,
     HeuristicProposal,
     ProposedAction,
+    ProtectionDecision,
     RuleContext,
     RuleDecision,
     RuleDescriptor,
@@ -79,6 +80,21 @@ class ThresholdPolicy(Protocol):
         ...
 
 
+class RuleDecisionEngine(Protocol):
+    def decide(
+        self,
+        *,
+        descriptor: RuleDescriptor,
+        evaluation: DeterministicResult | HeuristicProposal,
+        protection: ProtectionDecision,
+        decision_id: str,
+        sequence: int,
+        intervention_level: int | None = None,
+        compatibility_flags: tuple[str, ...] = (),
+    ) -> RuleDecision:
+        ...
+
+
 class ActionExecutor(Protocol):
     def execute(
         self,
@@ -87,8 +103,3 @@ class ActionExecutor(Protocol):
         document: Document,
     ) -> ExecutionResult:
         ...
-
-
-if TYPE_CHECKING:
-    from purh_editorial.rules.model import ProtectionDecision
-
