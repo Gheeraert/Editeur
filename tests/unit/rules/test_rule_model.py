@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, replace
+import typing
 
 import pytest
 
@@ -9,10 +10,12 @@ from purh_editorial.rules.model import (
     DecisionOutcome,
     DeploymentStatus,
     DeterministicResult,
+    ExecutionResult,
     HeuristicEvidence,
     HeuristicProposal,
     ImplementationState,
     NormativeStatus,
+    NormativeSource,
     ProposedAction,
     ProtectionDecision,
     RuleActionType,
@@ -43,6 +46,15 @@ def _descriptor(**overrides: object) -> RuleDescriptor:
 
 def _protection() -> ProtectionDecision:
     return ProtectionDecision(False, "test.policy", ())
+
+
+def _source(status: NormativeStatus) -> NormativeSource:
+    return NormativeSource(
+        source_id=f"test.{status.value}",
+        authority="Tests",
+        title="Source de test",
+        status=status,
+    )
 
 
 def test_enum_values_are_stable_and_abstain_is_not_an_action() -> None:
@@ -80,6 +92,55 @@ def test_descriptor_validates_nature_score_and_aliases() -> None:
     assert legacy.score_family is None
     with pytest.raises(ValueError, match="cannot contain rule_id"):
         _descriptor(legacy_aliases=("test.rule",))
+
+
+def test_normative_source_and_rule_statuses_are_typed_and_coherent() -> None:
+    purh_source = _source(NormativeStatus.PURH_VALIDATED)
+    assert purh_source.status is NormativeStatus.PURH_VALIDATED
+    assert _descriptor(
+        normative_status=NormativeStatus.PURH_VALIDATED,
+        normative_sources=(purh_source,),
+    ).normative_sources == (purh_source,)
+    for status in (
+        NormativeStatus.DOCUMENTED_GENERAL,
+        NormativeStatus.CORPUS_OBSERVED,
+    ):
+        assert _descriptor(
+            normative_status=status,
+            normative_sources=(_source(status),),
+        ).normative_status is status
+    with pytest.raises(TypeError, match="NormativeStatus"):
+        NormativeSource(
+            source_id="test.invalid",
+            authority="Tests",
+            title="Source invalide",
+            status="purh_validated",  # type: ignore[arg-type]
+        )
+
+    for rule_status, source_status in (
+        (NormativeStatus.PURH_VALIDATED, NormativeStatus.DOCUMENTED_GENERAL),
+        (NormativeStatus.DOCUMENTED_GENERAL, NormativeStatus.PURH_VALIDATED),
+        (NormativeStatus.CORPUS_OBSERVED, NormativeStatus.DOCUMENTED_GENERAL),
+    ):
+        with pytest.raises(ValueError, match="matching source status"):
+            _descriptor(
+                normative_status=rule_status,
+                normative_sources=(_source(source_status),),
+            )
+
+    assert _descriptor(
+        normative_status=NormativeStatus.INTERNAL_UNSOURCED,
+        normative_sources=(),
+    ).normative_sources == ()
+    with pytest.raises(ValueError, match="cannot claim"):
+        _descriptor(
+            normative_status=NormativeStatus.INTERNAL_UNSOURCED,
+            normative_sources=(_source(NormativeStatus.DOCUMENTED_GENERAL),),
+        )
+    assert _descriptor(
+        normative_status=NormativeStatus.NOT_APPLICABLE,
+        normative_sources=(),
+    ).normative_status is NormativeStatus.NOT_APPLICABLE
 
 
 def test_text_action_validates_targets_and_offsets() -> None:
@@ -321,15 +382,11 @@ def test_rule_decision_has_only_minimal_coherence_validation() -> None:
     )
     assert decision.sequence == 0
     with pytest.raises(ValueError, match="review_only"):
-        RuleDecision(
-            **{
-                **{
-                    field: getattr(decision, field)
-                    for field in decision.__dataclass_fields__
-                },
-                "deployment_status": DeploymentStatus.REVIEW_ONLY,
-            }
-        )
+        replace(decision, deployment_status=DeploymentStatus.REVIEW_ONLY)
+    with pytest.raises(ValueError, match="disabled"):
+        replace(decision, deployment_status=DeploymentStatus.DISABLED)
+    with pytest.raises(ValueError, match="veto"):
+        replace(decision, veto_reasons=("protected",))
 
 
 def test_native_heuristic_decision_requires_score_and_score_family() -> None:
@@ -365,3 +422,9 @@ def test_compatibility_context_requires_tuple_flags() -> None:
     assert CompatibilityContext(None).flags == ()
     with pytest.raises(TypeError):
         CompatibilityContext(None, flags=["legacy"])  # type: ignore[arg-type]
+
+
+def test_execution_result_type_hints_resolve_at_runtime() -> None:
+    hints = typing.get_type_hints(ExecutionResult)
+    assert str(hints["transformations"]).startswith("tuple[")
+    assert str(hints["diagnostics"]).startswith("tuple[")

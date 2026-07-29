@@ -30,40 +30,40 @@ PURH_P10 = NormativeSource(
     authority="PURH",
     title="Guide de préparation éditoriale",
     locator="p. 10",
-    validation="purh_validated",
+    status=NormativeStatus.PURH_VALIDATED,
 )
 PURH_P11 = NormativeSource(
     source_id="purh.guide.p11",
     authority="PURH",
     title="Guide de préparation éditoriale",
     locator="p. 11",
-    validation="purh_validated",
+    status=NormativeStatus.PURH_VALIDATED,
 )
 PURH_P11_12 = NormativeSource(
     source_id="purh.guide.p11-12",
     authority="PURH",
     title="Guide de préparation éditoriale",
     locator="p. 11-12",
-    validation="purh_validated",
+    status=NormativeStatus.PURH_VALIDATED,
 )
 PURH_P12 = NormativeSource(
     source_id="purh.guide.p12",
     authority="PURH",
     title="Guide de préparation éditoriale",
     locator="p. 12",
-    validation="purh_validated",
+    status=NormativeStatus.PURH_VALIDATED,
 )
 GENERAL_TYPOGRAPHY = NormativeSource(
     source_id="typography.general",
     authority="Référence typographique générale",
     title="Convention typographique générale à confirmer pour les PURH",
-    validation="documented_general",
+    status=NormativeStatus.DOCUMENTED_GENERAL,
 )
 OBSERVED_CORPUS = NormativeSource(
     source_id="purh.corpus.observed",
     authority="PURH",
     title="Comportements observés dans le corpus de caractérisation",
-    validation="corpus_observed",
+    status=NormativeStatus.CORPUS_OBSERVED,
 )
 
 
@@ -792,81 +792,15 @@ CANONICAL_RULE_DESCRIPTORS = (
     *BIBLIOGRAPHY_RULES,
     *STRUCTURE_RULES,
 )
-INVENTORIED_RULE_IDS = (
-    "purh.apostrophe",
-    "purh.points_suspension",
-    "purh.guillemets.droits",
-    "R-ORTHO-LIGATURE-OE-001",
-    "purh.guillemets.espace_apres_ouvrant",
-    "purh.guillemets.espace_avant_fermant",
-    "purh.espaces.avant_ponct_forte",
-    "purh.espaces.avant_ponct_faible",
-    "purh.espaces.double",
-    "purh.civilite",
-    "purh.siecles",
-    "R-SO-001",
-    "purh.ordinaux",
-    "purh.tiret.double",
-    "purh.abreviations.etc",
-    "purh.pagination.espace",
-    "purh.numero",
-    "R-NO-001",
-    "purh.abreviations.redoublement",
-    "purh.nombres.milliers",
-    "purh.tiret.incise",
-    "R-TI-001",
-    "R-GQ-004",
-    "purh.note.espace_initiale",
-    "purh.note.majuscule_initiale",
-    "purh.note.abreviation_latine",
-    "purh.note.espace_op_cit",
-    "purh.note.espace_sans_lieu_date",
-    "purh.note.ponctuation_finale",
-    "R-AN-002",
-    "R-AN-003",
-    "R-AN-004",
-    "R-AN-005",
-    "structure.bibliography.section.start",
-    "structure.bibliography.section.end",
-    "structure.bibliography.item.promote",
-    "bibliography.entry.detect",
-    "purh.biblio.pagination_nnbsp",
-    "purh.biblio.numero_nnbsp",
-    "purh.biblio.ponctuation_finale",
-    "structure.frontmatter.abstract",
-    "structure.frontmatter.keywords",
-    "structure.frontmatter.acknowledgment",
-    "structure.frontmatter.circuit_breaker",
-    "structure.source_style.heading",
-    "structure.allcaps.heading",
-    "structure.bold.heading",
-    "structure.italic.author",
-    "structure.italic.heading",
-    "structure.epigraph.heuristic",
-    "structure.bibliography.section",
-    "structure.bibliography.heuristic",
-    "structure.indent.quote",
-    "structure.quote.guillemets",
-    "structure.heading.heuristic",
-    "R-STRUCT-HEADING-001",
-    "structure.lineated.blank_bounded.merge",
-    "structure.lineated.short_sequence.merge",
-    "R-CI-POETRY-001",
-    "structure.lineated.group.annotate",
-    "structure.lineated.stanza.merge",
-)
 
 
 @dataclass(frozen=True, slots=True)
 class CanonicalRuleRegistry:
     descriptors: tuple[RuleDescriptor, ...]
-    required_rule_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.descriptors, tuple):
             raise TypeError("descriptors must be a tuple")
-        if not isinstance(self.required_rule_ids, tuple):
-            raise TypeError("required_rule_ids must be a tuple")
 
     def get(self, rule_id: str) -> RuleDescriptor:
         for descriptor in self.descriptors:
@@ -958,14 +892,9 @@ class CanonicalRuleRegistry:
                     f"alias {alias!r} for {owner} conflicts with a primary rule_id"
                 )
 
-        for required in self.required_rule_ids:
-            if required not in primary_set:
-                errors.append(f"missing inventoried rule: {required}")
-
         return tuple(errors)
 
 
 CANONICAL_RULE_REGISTRY = CanonicalRuleRegistry(
     descriptors=CANONICAL_RULE_DESCRIPTORS,
-    required_rule_ids=INVENTORIED_RULE_IDS,
 )

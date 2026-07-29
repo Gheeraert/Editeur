@@ -20,6 +20,34 @@ from purh_editorial.rules.registry import (
 )
 
 
+EXPECTED_RULE_IDS = (
+    "purh.apostrophe", "purh.points_suspension", "purh.guillemets.droits",
+    "R-ORTHO-LIGATURE-OE-001", "purh.guillemets.espace_apres_ouvrant",
+    "purh.guillemets.espace_avant_fermant", "purh.espaces.avant_ponct_forte",
+    "purh.espaces.avant_ponct_faible", "purh.espaces.double", "purh.civilite",
+    "purh.siecles", "R-SO-001", "purh.ordinaux", "purh.tiret.double",
+    "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "R-NO-001",
+    "purh.abreviations.redoublement", "purh.nombres.milliers", "purh.tiret.incise",
+    "R-TI-001", "R-GQ-004", "purh.note.espace_initiale",
+    "purh.note.majuscule_initiale", "purh.note.abreviation_latine",
+    "purh.note.espace_op_cit", "purh.note.espace_sans_lieu_date",
+    "purh.note.ponctuation_finale", "R-AN-002", "R-AN-003", "R-AN-004", "R-AN-005",
+    "structure.bibliography.section.start", "structure.bibliography.section.end",
+    "structure.bibliography.item.promote", "bibliography.entry.detect",
+    "purh.biblio.pagination_nnbsp", "purh.biblio.numero_nnbsp",
+    "purh.biblio.ponctuation_finale", "structure.frontmatter.abstract",
+    "structure.frontmatter.keywords", "structure.frontmatter.acknowledgment",
+    "structure.frontmatter.circuit_breaker", "structure.source_style.heading",
+    "structure.allcaps.heading", "structure.bold.heading", "structure.italic.author",
+    "structure.italic.heading", "structure.epigraph.heuristic",
+    "structure.bibliography.section", "structure.bibliography.heuristic",
+    "structure.indent.quote", "structure.quote.guillemets", "structure.heading.heuristic",
+    "R-STRUCT-HEADING-001", "structure.lineated.blank_bounded.merge",
+    "structure.lineated.short_sequence.merge", "R-CI-POETRY-001",
+    "structure.lineated.group.annotate", "structure.lineated.stanza.merge",
+)
+
+
 EXPECTED_COUNTS = {
     "family": {
         RuleFamily.ORTHOTYPOGRAPHY: 23,
@@ -69,10 +97,9 @@ def _descriptor(rule_id: str, *, aliases: tuple[str, ...] = ()) -> RuleDescripto
 
 def test_canonical_registry_is_complete_valid_and_stably_ordered() -> None:
     descriptors = CANONICAL_RULE_REGISTRY.all()
-    assert len(descriptors) == 61
+    actual_ids = tuple(descriptor.rule_id for descriptor in descriptors)
+    assert actual_ids == EXPECTED_RULE_IDS
     assert CANONICAL_RULE_REGISTRY.validate() == ()
-    assert descriptors[0].rule_id == "purh.apostrophe"
-    assert descriptors[-1].rule_id == "structure.lineated.stanza.merge"
     assert len({item.rule_id for item in descriptors}) == len(descriptors)
 
 
@@ -115,16 +142,12 @@ def test_registry_supports_aliases_and_detects_alias_conflicts() -> None:
     assert any("conflicts with a primary" in error for error in errors)
 
 
-def test_registry_detects_duplicate_and_missing_inventoried_rules() -> None:
+def test_registry_detects_duplicate_rule_ids() -> None:
     first = _descriptor("one")
     duplicate = replace(first)
-    registry = CanonicalRuleRegistry(
-        (first, duplicate),
-        required_rule_ids=("one", "required.missing"),
-    )
+    registry = CanonicalRuleRegistry((first, duplicate))
     errors = registry.validate()
     assert any("duplicate rule_id" in error for error in errors)
-    assert any("missing inventoried rule" in error for error in errors)
 
 
 def test_four_families_statuses_and_implementation_states_are_present() -> None:

@@ -10,6 +10,8 @@ from purh_editorial.rules.model import (
     DeterministicResult,
     HeuristicEvidence,
     HeuristicProposal,
+    NormativeSource,
+    NormativeStatus,
     ProposedAction,
     RuleActionType,
     to_json_data,
@@ -24,6 +26,17 @@ def test_registry_descriptors_serialize_to_json_native_values() -> None:
     assert isinstance(payload, list)
     assert isinstance(payload[0]["test_refs"], list)
     assert payload[0]["deployment_status"] == DeploymentStatus.REVIEW_ONLY.value
+    assert payload[0]["normative_sources"][0]["status"] == "documented_general"
+
+
+def test_normative_source_status_serializes_as_a_json_string() -> None:
+    source = NormativeSource(
+        source_id="test.purh",
+        authority="PURH",
+        title="Source de test",
+        status=NormativeStatus.PURH_VALIDATED,
+    )
+    assert to_json_data(source)["status"] == "purh_validated"
 
 
 def test_text_style_diagnostic_and_structure_actions_serialize() -> None:
@@ -106,4 +119,3 @@ def test_results_and_heuristic_evidence_serialize_without_enum_or_tuple() -> Non
 def test_serializer_rejects_non_json_objects() -> None:
     with pytest.raises(TypeError, match="Unsupported JSON value"):
         to_json_data(re.compile("x"))
-

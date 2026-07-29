@@ -3,10 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, fields, is_dataclass
 from enum import Enum
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import Any, Mapping
 
-if TYPE_CHECKING:
-    from purh_editorial.model import Diagnostic, Transformation
+from purh_editorial.model import Diagnostic, Transformation
 
 
 class RuleFamily(str, Enum):
@@ -132,16 +131,17 @@ class NormativeSource:
     source_id: str
     authority: str
     title: str
+    status: NormativeStatus
     version: str | None = None
     locator: str | None = None
-    validation: str = "documented"
     note: str | None = None
 
     def __post_init__(self) -> None:
         _require_non_empty(self.source_id, "source_id")
         _require_non_empty(self.authority, "authority")
         _require_non_empty(self.title, "title")
-        _require_non_empty(self.validation, "validation")
+        if not isinstance(self.status, NormativeStatus):
+            raise TypeError("status must be a NormativeStatus")
 
 
 @dataclass(frozen=True, slots=True)
@@ -197,12 +197,30 @@ class RuleDescriptor:
             raise ValueError("legacy_aliases must contain non-empty strings")
         if any(not isinstance(ref, str) or not ref.startswith("tests/") for ref in self.test_refs):
             raise ValueError("test_refs must be non-empty paths under tests/")
+        source_statuses = {source.status for source in self.normative_sources}
+        required_source_status = {
+            NormativeStatus.PURH_VALIDATED: NormativeStatus.PURH_VALIDATED,
+            NormativeStatus.DOCUMENTED_GENERAL: NormativeStatus.DOCUMENTED_GENERAL,
+            NormativeStatus.CORPUS_OBSERVED: NormativeStatus.CORPUS_OBSERVED,
+        }.get(self.normative_status)
         if (
-            self.normative_status
-            in {NormativeStatus.PURH_VALIDATED, NormativeStatus.DOCUMENTED_GENERAL}
-            and not self.normative_sources
+            required_source_status is not None
+            and required_source_status not in source_statuses
         ):
-            raise ValueError("documented normative statuses require a source")
+            raise ValueError(
+                f"{self.normative_status.value} rules require a matching source status"
+            )
+        if self.normative_status is NormativeStatus.INTERNAL_UNSOURCED and (
+            source_statuses
+            & {
+                NormativeStatus.PURH_VALIDATED,
+                NormativeStatus.DOCUMENTED_GENERAL,
+                NormativeStatus.CORPUS_OBSERVED,
+            }
+        ):
+            raise ValueError(
+                "internal_unsourced rules cannot claim a documented normative source"
+            )
 
 
 @dataclass(frozen=True, slots=True)
