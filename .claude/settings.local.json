@@ -6,7 +6,8 @@
       "Bash(python3 *)",
       "PowerShell(python --version)",
       "Bash(python -m pytest -q)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(xargs wc -l)"
     ]
   }
 }
