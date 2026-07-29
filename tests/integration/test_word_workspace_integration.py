@@ -50,7 +50,22 @@ class WordWorkspaceIntegrationTests(unittest.TestCase):
                 self.assertFalse(bool(session.review_document.ReadOnly))
                 self.assertLess(session.original_window.Left, session.review_window.Left)
                 self.assertTrue(session.state.original_on_left)
-                self.assertTrue(session.state.synchronized_scrolling, session.state.warnings)
+                self.assertTrue(
+                    session.state.synchronized_scrolling,
+                    {
+                        "warnings": session.state.warnings,
+                        "strategy": session.state.side_by_side_strategy,
+                        "attempts": [
+                            {
+                                "strategy": item.strategy,
+                                "error_type": item.error_type,
+                                "hresult": item.hresult,
+                                "error_message": item.error_message,
+                            }
+                            for item in session.state.side_by_side_attempts
+                        ],
+                    },
+                )
                 self.assertEqual(hashlib.sha256(original.read_bytes()).hexdigest(), original_sha)
             finally:
                 session.close_owned_documents(save_review=False)

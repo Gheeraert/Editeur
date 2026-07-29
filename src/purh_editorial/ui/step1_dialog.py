@@ -1446,7 +1446,7 @@ class Step1Dialog(tk.Tk):
                 "Ouvrir l’espace de relecture ?\n"
                 "- original à gauche, en lecture seule ;\n"
                 "- document de révision à droite ;\n"
-                "- défilement synchronisé."
+                "- défilement synchronisé lorsque Word le permet."
             )
             if messagebox.askyesno("Révision Word", prompt):
                 self._launch_word_workspace(
@@ -1514,7 +1514,23 @@ class Step1Dialog(tk.Tk):
                 pass
         if payload is not None and payload.get("status") == "ready":
             self._finish_workspace_launch(ready_file)
-            self._status.set("Espace de relecture Word ouvert.")
+            self._status.set("Espace de relecture Word ouvert avec défilement synchronisé.")
+            return
+        if payload is not None and payload.get("status") == "partial":
+            self._finish_workspace_launch(ready_file)
+            self._status.set("Espace Word ouvert sans défilement synchronisé.")
+            attempts = payload.get("side_by_side_attempts", [])
+            details = "; ".join(
+                f"{item.get('strategy')}: {item.get('error_message', 'non confirmé')}"
+                for item in attempts if isinstance(item, dict)
+            )
+            messagebox.showwarning(
+                "Espace Word partiel",
+                "Les deux documents sont ouverts :\n- original à gauche, en lecture seule ;\n"
+                "- révision à droite, modifiable.\n\nMicrosoft Word n’a pas activé le défilement synchronisé. "
+                "Le workspace reste utilisable."
+                + (f"\n\nTentatives : {details}" if details else ""),
+            )
             return
         if payload is not None and payload.get("status") == "error":
             self._finish_workspace_launch(ready_file)

@@ -36,6 +36,19 @@ def _ready_payload(session) -> dict[str, object]:
         "original_read_only": state.original_read_only,
         "review_read_only": state.review_read_only,
         "original_on_left": state.original_on_left,
+        "side_by_side_established": state.side_by_side_established,
+        "side_by_side_strategy": state.side_by_side_strategy,
+        "side_by_side_attempts": [
+            {
+                "strategy": item.strategy,
+                "succeeded": item.succeeded,
+                "return_value": item.return_value,
+                "error_type": item.error_type,
+                "error_message": item.error_message,
+                "hresult": item.hresult,
+            }
+            for item in state.side_by_side_attempts
+        ],
         "synchronized_scrolling": state.synchronized_scrolling,
         "warnings": state.warnings,
     }
@@ -76,7 +89,9 @@ def main(argv: list[str] | None = None) -> int:
             review_path=args.review,
         )
         if args.ready_file:
-            _write_state(args.ready_file, _ready_payload(session))
+            payload = _ready_payload(session)
+            payload["status"] = "ready" if session.state.synchronized_scrolling else "partial"
+            _write_state(args.ready_file, payload)
         _wait_for_workspace(session, pythoncom)
         try:
             if session.app.Documents.Count == 0:

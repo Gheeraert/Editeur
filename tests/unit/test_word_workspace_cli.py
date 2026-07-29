@@ -26,7 +26,7 @@ class _Session:
         self.app = mock.Mock()
         self.app.Documents.Count = 0
         self.quit_called = 0
-        self.state = WordWorkspaceState(original, review, True, False, True, True, [])
+        self.state = WordWorkspaceState(original, review, True, False, True, True, True, "positional_simple", [], [])
     def quit_application(self) -> None: self.quit_called += 1
 
 

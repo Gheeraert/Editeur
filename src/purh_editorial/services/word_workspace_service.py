@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -21,6 +20,24 @@ class WindowGeometry:
     height: int
 
 
+@dataclass(frozen=True, slots=True)
+class SideBySideAttempt:
+    strategy: str
+    succeeded: bool
+    return_value: str | None = None
+    error_type: str | None = None
+    error_message: str | None = None
+    hresult: int | None = None
+
+
+@dataclass(slots=True)
+class SideBySideResult:
+    established: bool
+    synchronized: bool
+    strategy: str | None
+    attempts: list[SideBySideAttempt]
+
+
 @dataclass(slots=True)
 class WordWorkspaceState:
     original_path: Path
@@ -29,6 +46,9 @@ class WordWorkspaceState:
     review_read_only: bool
     original_on_left: bool
     synchronized_scrolling: bool
+    side_by_side_established: bool
+    side_by_side_strategy: str | None
+    side_by_side_attempts: list[SideBySideAttempt]
     warnings: list[str] = field(default_factory=list)
 
 
@@ -91,6 +111,22 @@ def _try_set_property(target: Any, name: str, value: Any) -> bool:
         return False
 
 
+def _describe_com_error(strategy: str, exc: Exception) -> SideBySideAttempt:
+    hresult = getattr(exc, "hresult", None)
+    excepinfo = getattr(exc, "excepinfo", None)
+    detail = ""
+    if isinstance(excepinfo, tuple) and len(excepinfo) > 2 and excepinfo[2]:
+        detail = str(excepinfo[2])
+    message = detail or str(exc)
+    return SideBySideAttempt(
+        strategy=strategy,
+        succeeded=False,
+        error_type=type(exc).__name__,
+        error_message=message,
+        hresult=hresult if isinstance(hresult, int) else None,
+    )
+
+
 class WordWorkspaceService:
     """Open original and review DOCX files in one dedicated Word instance."""
 
@@ -106,9 +142,6 @@ class WordWorkspaceService:
         try:
             app = _create_word_application()
             app.Visible = True
-            # Side-by-side automation is more reliable in Word's MDI mode.
-            # This affects only the dedicated instance created above.
-            _try_set_property(app, "ShowWindowsInTaskbar", False)
             constants = _word_constants(app)
             original_document = app.Documents.Open(
                 FileName=str(original), ReadOnly=True, AddToRecentFiles=False, Visible=True
@@ -131,22 +164,25 @@ class WordWorkspaceService:
                 review_window.Activate()
             except Exception:
                 pass
-            # Word may expose a Window proxy before its interactive view has
-            # finished initializing; give the dedicated UI instance one turn.
-            time.sleep(0.25)
             warnings: list[str] = []
-            if not self._compare_side_by_side(app, review_document, original_document):
+            side_by_side = self._establish_side_by_side(
+                app=app,
+                review_document=review_document,
+                original_document=original_document,
+                review_window=review_window,
+                original_window=original_window,
+            )
+            if not side_by_side.established:
                 warnings.append("Word a refusé le mode côte à côte natif ; géométrie appliquée manuellement.")
             try:
                 app.Windows.ResetPositionsSideBySide()
             except Exception:
                 warnings.append("Word n’a pas réinitialisé les positions côte à côte.")
-            try:
-                app.Windows.SyncScrollingSideBySide = True
-            except Exception:
-                warnings.append("Word a refusé l’activation du défilement synchronisé.")
             original_on_left = self._ensure_original_on_left(original_window, review_window, warnings)
-            synchronized = self._confirm_sync_scrolling(app, warnings)
+            synchronized = self._enable_and_confirm_sync_scrolling(app=app, attempts=side_by_side.attempts)
+            side_by_side.synchronized = synchronized
+            if not synchronized:
+                warnings.append("Les documents sont ouverts côte à côte, mais Word n’a pas activé le défilement synchronisé.")
             self._configure_review_view(review_window, constants)
             self._configure_original_view(original_window)
             review_document.Activate()
@@ -157,6 +193,9 @@ class WordWorkspaceService:
                 review_read_only=bool(review_document.ReadOnly),
                 original_on_left=original_on_left,
                 synchronized_scrolling=synchronized,
+                side_by_side_established=side_by_side.established,
+                side_by_side_strategy=side_by_side.strategy,
+                side_by_side_attempts=side_by_side.attempts,
                 warnings=warnings,
             )
             return WordWorkspaceSession(
@@ -204,28 +243,57 @@ class WordWorkspaceService:
         _try_set_property(original_window, "WindowState", state)
         _try_set_property(review_window, "WindowState", state)
 
-    @staticmethod
-    def _compare_side_by_side(app: Any, review_document: Any, original_document: Any) -> bool:
-        """Use the Word native API, tolerating collection differences between versions."""
-        try:
-            review_document.Windows.CompareSideBySideWith(Document=original_document)
-            return True
-        except Exception:
-            pass
-        try:
-            # Word declares this argument as a by-reference Object.  The
-            # generated pywin32 wrapper on some Office builds requires an
-            # explicit VARIANT rather than a bare Document proxy.
-            import pythoncom
-            from win32com.client import VARIANT
+    def _establish_side_by_side(
+        self, *, app: Any, review_document: Any, original_document: Any,
+        review_window: Any, original_window: Any,
+    ) -> SideBySideResult:
+        attempts: list[SideBySideAttempt] = []
 
-            for document in (original_document, original_document._oleobj_):
-                argument = VARIANT(pythoncom.VT_BYREF | pythoncom.VT_DISPATCH, document)
+        def invoke(strategy: str, callback) -> bool:
+            try:
+                review_document.Activate()
                 try:
-                    review_document.Windows.CompareSideBySideWith(argument)
-                    return True
+                    review_window.Activate()
                 except Exception:
-                    continue
+                    pass
+                returned = callback()
+                success = returned is not False
+                attempts.append(SideBySideAttempt(strategy, success, repr(returned)))
+                return success and self._confirm_side_by_side(app, original_window, review_window)
+            except Exception as exc:
+                attempts.append(_describe_com_error(strategy, exc))
+                return False
+
+        if invoke("positional_simple", lambda: review_document.Windows.CompareSideBySideWith(original_document)):
+            return SideBySideResult(True, False, "positional_simple", attempts)
+        if invoke("named_argument", lambda: review_document.Windows.CompareSideBySideWith(Document=original_document)):
+            return SideBySideResult(True, False, "named_argument", attempts)
+        try:
+            from win32com.client.dynamic import Dispatch
+            dynamic_windows = Dispatch(review_document.Windows._oleobj_)
+            if invoke("dynamic_dispatch", lambda: dynamic_windows.CompareSideBySideWith(original_document)):
+                return SideBySideResult(True, False, "dynamic_dispatch", attempts)
+        except Exception as exc:
+            attempts.append(_describe_com_error("dynamic_dispatch", exc))
+        try:
+            enabled = bool(app.CommandBars.GetEnabledMso("ViewSideBySide"))
+            if not enabled:
+                attempts.append(SideBySideAttempt("execute_mso", False, error_message="ViewSideBySide indisponible"))
+            else:
+                review_document.Activate()
+                returned = app.CommandBars.ExecuteMso("ViewSideBySide")
+                confirmed = self._confirm_side_by_side(app, original_window, review_window)
+                attempts.append(SideBySideAttempt("execute_mso", confirmed, repr(returned)))
+                if confirmed:
+                    return SideBySideResult(True, False, "execute_mso", attempts)
+        except Exception as exc:
+            attempts.append(_describe_com_error("execute_mso", exc))
+        return SideBySideResult(False, False, None, attempts)
+
+    @staticmethod
+    def _confirm_side_by_side(app: Any, original_window: Any, review_window: Any) -> bool:
+        try:
+            return original_window is not None and review_window is not None and bool(app.Windows.SyncScrollingSideBySide)
         except Exception:
             return False
 
@@ -247,13 +315,25 @@ class WordWorkspaceService:
         return False
 
     @staticmethod
-    def _confirm_sync_scrolling(app: Any, warnings: list[str]) -> bool:
+    def _enable_and_confirm_sync_scrolling(*, app: Any, attempts: list[SideBySideAttempt]) -> bool:
         try:
+            app.Windows.SyncScrollingSideBySide = True
             if bool(app.Windows.SyncScrollingSideBySide):
+                attempts.append(SideBySideAttempt("sync_property", True, "True"))
                 return True
-        except Exception:
-            pass
-        warnings.append("Word n’a pas confirmé le défilement synchronisé.")
+            attempts.append(SideBySideAttempt("sync_property", False, "False"))
+        except Exception as exc:
+            attempts.append(_describe_com_error("sync_property", exc))
+        try:
+            bars = app.CommandBars
+            if bool(bars.GetEnabledMso("SynchronousScrolling")):
+                if not bool(bars.GetPressedMso("SynchronousScrolling")):
+                    bars.ExecuteMso("SynchronousScrolling")
+                pressed = bool(bars.GetPressedMso("SynchronousScrolling"))
+                attempts.append(SideBySideAttempt("sync_command", pressed, str(pressed)))
+                return pressed
+        except Exception as exc:
+            attempts.append(_describe_com_error("sync_command", exc))
         return False
 
     @staticmethod

@@ -127,7 +127,7 @@ class WordWorkspaceServiceTests(unittest.TestCase):
         self.assertTrue(calls[1]["Visible"])
         self.assertIs(session.original_document, original)
         self.assertIs(session.review_document, review)
-        self.assertEqual(review.activated, 2)
+        self.assertGreaterEqual(review.activated, 2)
         self.assertTrue(session.state.synchronized_scrolling)
         self.assertTrue(session.state.original_on_left)
         self.assertIs(app.Documents.items[1].Windows.compared_with, original)

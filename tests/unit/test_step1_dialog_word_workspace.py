@@ -41,7 +41,7 @@ class Step1DialogWordWorkspaceTests(unittest.TestCase):
             ready = dialog._workspace_launch[1]
             ready.write_text(json.dumps({"status": "ready"}), encoding="utf-8")
             dialog._poll_word_workspace()
-            self.assertEqual(dialog._status.values[-1], "Espace de relecture Word ouvert.")
+            self.assertIn("défilement synchronisé", dialog._status.values[-1])
             self.assertIsNone(dialog._workspace_launch)
             self.assertFalse(ready.exists())
 
@@ -53,6 +53,20 @@ class Step1DialogWordWorkspaceTests(unittest.TestCase):
                 dialog._poll_word_workspace()
             showerror.assert_called_once()
             self.assertIsNone(dialog._workspace_launch)
+            self.assertFalse(ready.exists())
+
+    def test_partial_workspace_warns_without_reporting_opening_error(self) -> None:
+        with tempfile.TemporaryDirectory() as root:
+            dialog = _DialogHarness(); ready = Path(root) / "ready.json"
+            ready.write_text(json.dumps({"status": "partial", "side_by_side_attempts": []}), encoding="utf-8")
+            dialog._workspace_launch = (mock.Mock(), ready, 0)
+            with mock.patch.object(step1_dialog.messagebox, "showwarning") as warning, mock.patch.object(
+                step1_dialog.messagebox, "showerror"
+            ) as error:
+                dialog._poll_word_workspace()
+            warning.assert_called_once()
+            error.assert_not_called()
+            self.assertIn("sans défilement synchronisé", dialog._status.values[-1])
             self.assertFalse(ready.exists())
 
 
