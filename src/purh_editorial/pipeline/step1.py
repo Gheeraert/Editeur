@@ -26,6 +26,10 @@ from purh_editorial.services.word_review_service import (
     WordReviewResult,
     WordReviewService,
 )
+from purh_editorial.services.word_review_annotation_service import (
+    WordReviewAnnotationResult,
+    WordReviewAnnotationService,
+)
 from purh_editorial.services.structure_ai_arbitrator import (
     AnthropicStructureAiProvider,
     GroqStructureAiProvider,
@@ -151,6 +155,7 @@ class Step1Result:
     pipeline_result: PipelineResult
     output_docx: Path | None = None
     word_review_result: WordReviewResult | None = None
+    word_review_annotation_result: WordReviewAnnotationResult | None = None
 
 
 class Step1Pipeline:
@@ -178,6 +183,7 @@ class Step1Pipeline:
         *,
         structure_ai_provider: StructureAiProvider | None = None,
         word_review_service: WordReviewService | None = None,
+        word_review_annotation_service: WordReviewAnnotationService | None = None,
     ) -> None:
         self.settings     = settings
         self.orthotypo    = OrthotypoService()
@@ -188,6 +194,7 @@ class Step1Pipeline:
         self.pivot_validator = PivotValidator()
         self.mapper       = MetopesMapper()
         self.word_review = word_review_service or WordReviewService()
+        self.word_review_annotations = word_review_annotation_service or WordReviewAnnotationService()
         self.ai           = AIEditorialService(
             api_key  = settings.ai.api_key,
             model    = settings.ai.model,
@@ -572,6 +579,7 @@ class Step1Pipeline:
             ))
 
         word_review_result: WordReviewResult | None = None
+        word_review_annotation_result: WordReviewAnnotationResult | None = None
         if options.word_review_output_path is not None:
             t0 = utc_now_iso()
             if output_docx is None:
@@ -612,6 +620,29 @@ class Step1Pipeline:
                             "has_tracked_changes": word_review_result.has_tracked_changes,
                         },
                     ))
+                    try:
+                        word_review_annotation_result = self.word_review_annotations.annotate_review_document(
+                            review_path=word_review_result.output_path, document=document, report=report,
+                        )
+                        report.add_module_run(ModuleRun(
+                            module_name="word_review_comments", version=self.version, started_at=utc_now_iso(),
+                            finished_at=utc_now_iso(), status="success",
+                            summary={
+                                "output": str(word_review_annotation_result.output_path),
+                                "comments_requested": word_review_annotation_result.comments_requested,
+                                "comments_added": word_review_annotation_result.comments_added,
+                                "comments_skipped": word_review_annotation_result.comments_skipped,
+                                "ambiguous_anchors": word_review_annotation_result.ambiguous_anchors,
+                                "missing_anchors": word_review_annotation_result.missing_anchors,
+                            },
+                        ))
+                    except WordReviewError as exc:
+                        report.errors.append(f"Word review comments failed ({type(exc).__name__}): {exc}")
+                        report.add_module_run(ModuleRun(
+                            module_name="word_review_comments", version=self.version, started_at=utc_now_iso(),
+                            finished_at=utc_now_iso(), status="failed",
+                            summary={"output": str(word_review_result.output_path), "error": str(exc)},
+                        ))
                 except WordReviewError as exc:
                     report.errors.append(f"Word review failed ({type(exc).__name__}): {exc}")
                     report.add_module_run(ModuleRun(
@@ -726,6 +757,7 @@ class Step1Pipeline:
             pipeline_result=pipeline_result,
             output_docx=output_docx,
             word_review_result=word_review_result,
+            word_review_annotation_result=word_review_annotation_result,
         )
 
 

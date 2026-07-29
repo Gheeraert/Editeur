@@ -642,6 +642,12 @@ def format_outputs(result: Step1Result) -> str:
             "- Modifications suivies détectées : "
             + ("oui" if result.word_review_result.has_tracked_changes else "non")
         )
+        if result.word_review_annotation_result is not None:
+            annotation = result.word_review_annotation_result
+            lines.append(f"- Commentaires Word ajoutés : {annotation.comments_added}")
+            lines.append(f"- Commentaires non ancrés : {annotation.comments_skipped}")
+            if annotation.comments_skipped:
+                lines.append("- Avertissement : certains commentaires restent disponibles dans le rapport (ancre absente ou ambiguë).")
     elif word_review_run is not None and word_review_run.status == "failed":
         lines.append("- DOCX de révision Word : non produit")
     else:
@@ -1430,6 +1436,28 @@ class Step1Dialog(tk.Tk):
         self._status.set("Analyse terminée." if not bundle.latex_error else bundle.latex_error)
 
         render_result_to_widget(self._result_text, result, bundle.latex_output_path, bundle.latex_error)
+
+        review_result = result.word_review_result
+        if review_result is not None and review_result.output_path.is_file():
+            prompt = (
+                "Le document de révision Word a été créé.\n\n"
+                "Ouvrir l’espace de relecture ?\n"
+                "- original à gauche, en lecture seule ;\n"
+                "- document de révision à droite ;\n"
+                "- défilement synchronisé."
+            )
+            if messagebox.askyesno("Révision Word", prompt):
+                try:
+                    environment = os.environ.copy()
+                    source_root = str(Path(__file__).resolve().parents[2])
+                    environment["PYTHONPATH"] = source_root + os.pathsep + environment.get("PYTHONPATH", "")
+                    subprocess.Popen([
+                        sys.executable, "-m", "purh_editorial.word_workspace",
+                        str(result.pipeline_result.source_document.source_path), str(review_result.output_path),
+                    ], env=environment)
+                    self._status.set("Espace de relecture Word ouvert.")
+                except OSError as exc:
+                    messagebox.showerror("Ouverture Word impossible", str(exc))
 
         tei_blocked = any("TEI export blocked" in w for w in report.warnings)
         if tei_blocked:

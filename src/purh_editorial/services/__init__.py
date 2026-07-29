@@ -13,6 +13,13 @@ from purh_editorial.services.word_review_service import (
     WordReviewService,
     document_contains_tracked_changes,
 )
+from purh_editorial.services.word_review_annotation_service import (
+    WordReviewAnnotationResult,
+    WordReviewAnnotationService,
+    WordReviewComment,
+    build_word_review_comments,
+)
+from purh_editorial.services.word_workspace_service import WordWorkspaceService
 
 __all__ = [
     "AIEditorialService",
@@ -28,5 +35,10 @@ __all__ = [
     "WordReviewResult",
     "WordReviewService",
     "document_contains_tracked_changes",
+    "WordReviewAnnotationResult",
+    "WordReviewAnnotationService",
+    "WordReviewComment",
+    "WordWorkspaceService",
+    "build_word_review_comments",
     "export_tei_for_production",
 ]
