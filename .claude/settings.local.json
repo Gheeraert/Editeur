@@ -5,7 +5,8 @@
       "PowerShell(pip install *)",
       "Bash(python3 *)",
       "PowerShell(python --version)",
-      "Bash(python -m pytest -q)"
+      "Bash(python -m pytest -q)",
+      "WebSearch"
     ]
   }
 }
