@@ -250,7 +250,7 @@ def _compare_targets(
 ) -> tuple[bool, tuple[ShadowDifference, ...]]:
     if legacy_targets == native_targets:
         return True, ()
-    if set(legacy_targets) == set(native_targets):
+    if Counter(legacy_targets) == Counter(native_targets):
         return False, (
             ShadowDifference(ShadowDifferenceCode.TARGET_ORDER_MISMATCH),
         )

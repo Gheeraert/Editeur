@@ -371,6 +371,18 @@ def test_incomplete_observations_are_strictly_inconclusive(
             False,
             ShadowDifferenceCode.TARGET_SET_MISMATCH,
         ),
+        (
+            ("p1", "p1"),
+            ("p1",),
+            False,
+            ShadowDifferenceCode.TARGET_SET_MISMATCH,
+        ),
+        (
+            ("p1", "p2", "p1"),
+            ("p1", "p1", "p2"),
+            False,
+            ShadowDifferenceCode.TARGET_ORDER_MISMATCH,
+        ),
     ],
 )
 def test_target_comparison_preserves_order(
