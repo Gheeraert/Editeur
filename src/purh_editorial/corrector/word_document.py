@@ -41,16 +41,25 @@ def _replace_and_highlight(
     start: int,
     end: int,
     replacement: str,
-) -> None:
+) -> bool:
     target = _exact_range(paragraph, start, end)
+    original = target.Text
     absolute_start = target.Start
-    target.Text = replacement
+    try:
+        target.Text = replacement
+    except Exception as exc:
+        if "Impossible de supprimer la plage" in str(exc):
+            target = None
+            return False
+        raise
     result_length = len(replacement)
-    if result_length == 0 and absolute_start < paragraph.Range.End - 1:
-        result_length = 1
     target.SetRange(absolute_start, absolute_start + result_length)
+    if target.Text == original:
+        target = None
+        return False
     target.HighlightColorIndex = WD_YELLOW
     target = None
+    return True
 
 
 def _apply_text_edits(
@@ -58,9 +67,16 @@ def _apply_text_edits(
     finder: Callable[[str], list[Any]],
 ) -> int:
     edits = finder(_paragraph_text(paragraph))
+    changed = 0
     for edit in reversed(edits):
-        _replace_and_highlight(paragraph, edit.start, edit.end, edit.replacement)
-    return len(edits)
+        if _replace_and_highlight(
+            paragraph,
+            edit.start,
+            edit.end,
+            edit.replacement,
+        ):
+            changed += 1
+    return changed
 
 
 def _is_word_true(value: Any) -> bool:
@@ -152,9 +168,14 @@ def _apply_diagnostics(
 
 def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
-    for paragraph in story.Paragraphs:
+    for paragraph_index, paragraph in enumerate(story.Paragraphs, start=1):
         for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES:
-            counts[rule_id] += _apply_text_edits(paragraph, finder)
+            try:
+                counts[rule_id] += _apply_text_edits(paragraph, finder)
+            except Exception as exc:
+                raise RuntimeError(
+                    f"{rule_id}, paragraphe principal {paragraph_index}"
+                ) from exc
         counts["R-SO-001"] += _apply_century_styles(paragraph)
         counts["R-NO-001"] += _apply_numero_styles(paragraph)
         counts["R-TI-001"] += _apply_incise_diagnostics(paragraph)
@@ -182,10 +203,19 @@ def _apply_note_call_diagnostics(document: Any, counts: dict[str, int]) -> None:
 
 
 def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
-    for footnote in document.Footnotes:
-        for paragraph in footnote.Range.Paragraphs:
+    for footnote_index, footnote in enumerate(document.Footnotes, start=1):
+        for paragraph_index, paragraph in enumerate(
+            footnote.Range.Paragraphs,
+            start=1,
+        ):
             for rule_id, finder in FOOTNOTE_RULES:
-                counts[rule_id] += _apply_text_edits(paragraph, finder)
+                try:
+                    counts[rule_id] += _apply_text_edits(paragraph, finder)
+                except Exception as exc:
+                    raise RuntimeError(
+                        f"{rule_id}, note {footnote_index}, "
+                        f"paragraphe {paragraph_index}"
+                    ) from exc
             for rule_id, finder in FOOTNOTE_DIAGNOSTIC_RULES:
                 counts[rule_id] += _apply_diagnostics(paragraph, finder)
         paragraph = None

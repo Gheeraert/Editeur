@@ -36,6 +36,7 @@ from purh_editorial.corrector.runner import (
     HEURISTIC_RULE_IDS,
     RULE_IDS,
 )
+from purh_editorial.corrector.word_document import _apply_text_edits
 
 
 EXPECTED_DETERMINISTIC_IDS = {
@@ -281,6 +282,9 @@ def test_note_abbreviation_variants() -> None:
         "\x02\tNote",
         find_initial_space_edits("\x02\tNote"),
     ) == "\x02Note"
+    marker_edit = find_initial_space_edits("\x02\tNote")[0]
+    assert marker_edit.replacement == "N"
+    assert marker_edit.end - marker_edit.start == 2
 
 
 @pytest.mark.parametrize(
@@ -462,3 +466,68 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
     assert len(RULE_IDS) == 61
     assert len(set(RULE_IDS)) == 61
+
+
+class _IgnoringRange:
+    def __init__(self, text: str, start: int = 0, end: int | None = None) -> None:
+        self._buffer = text
+        self.Start = start
+        self.End = len(text) if end is None else end
+        self.HighlightColorIndex = 0
+
+    @property
+    def Text(self) -> str:
+        return self._buffer[self.Start : self.End]
+
+    @Text.setter
+    def Text(self, _replacement: str) -> None:
+        pass
+
+    @property
+    def Duplicate(self):
+        duplicate = _IgnoringRange(self._buffer, self.Start, self.End)
+        return duplicate
+
+    def SetRange(self, start: int, end: int) -> None:
+        self.Start = start
+        self.End = end
+
+
+class _IgnoringParagraph:
+    def __init__(self, text: str) -> None:
+        self.Range = _IgnoringRange(text)
+
+
+class _RefusingRange(_IgnoringRange):
+    @property
+    def Duplicate(self):
+        return _RefusingRange(self._buffer, self.Start, self.End)
+
+    @_IgnoringRange.Text.setter
+    def Text(self, _replacement: str) -> None:
+        raise RuntimeError("Impossible de supprimer la plage.")
+
+
+def test_word_backend_counts_only_a_change_applied_by_word() -> None:
+    paragraph = _IgnoringParagraph("Texte:")
+    assert _apply_text_edits(
+        paragraph,
+        lambda _text: [type("Edit", (), {
+            "start": 5,
+            "end": 6,
+            "replacement": "\u202f:",
+        })()],
+    ) == 0
+
+
+def test_word_backend_skips_only_a_range_word_declares_unmodifiable() -> None:
+    paragraph = _IgnoringParagraph("«Texte")
+    paragraph.Range = _RefusingRange("«Texte")
+    assert _apply_text_edits(
+        paragraph,
+        lambda _text: [type("Edit", (), {
+            "start": 0,
+            "end": 1,
+            "replacement": "«\u202f",
+        })()],
+    ) == 0

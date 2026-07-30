@@ -43,11 +43,14 @@ def find_initial_space_edits(text: str) -> list[TextEdit]:
     match = _LEADING_SPACE_RE.match(text[content_start:])
     if not match:
         return []
+    first_content = content_start + match.end()
+    if first_content >= len(text):
+        return []
     return [
         TextEdit(
             content_start + match.start(),
-            content_start + match.end(),
-            "",
+            first_content + 1,
+            text[first_content],
         )
     ]
 
