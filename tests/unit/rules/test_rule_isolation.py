@@ -254,6 +254,45 @@ print(json.dumps(forbidden))
     assert completed.stdout.strip() == "[]"
 
 
+def test_importing_private_shadow_evaluation_tool_stays_isolated() -> None:
+    tool_path = ROOT / "tools/evaluate_orthotypo_shadow_private.py"
+    code = f"""
+import importlib.util
+import json
+import sys
+spec = importlib.util.spec_from_file_location("private_shadow_tool", {str(tool_path)!r})
+module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = module
+spec.loader.exec_module(module)
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or "ai_editorial_service" in name
+    or "structure_ai_arbitrator" in name
+    or ".ui" in name
+    or "word_review" in name
+    or "word_workspace" in name
+    or (
+        name == "purh_editorial.pipeline"
+        or name.startswith("purh_editorial.pipeline.")
+    )
+]
+print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
 def test_importing_orthotypo_shadow_support_stays_isolated() -> None:
     code = """
 import json
@@ -354,3 +393,21 @@ def test_existing_etc_adapter_and_support_do_not_know_redoublement() -> None:
         content = path.read_text(encoding="utf-8")
         assert "purh.abreviations.redoublement" not in content
         assert "RedoubledAbbreviationRule" not in content
+
+
+def test_private_evaluation_tool_is_not_wired_into_production() -> None:
+    paths = [
+        ROOT / "src/purh_editorial/services/__init__.py",
+        *(
+            path
+            for root in (
+                ROOT / "src/purh_editorial/pipeline",
+                ROOT / "src/purh_editorial/ui",
+            )
+            for path in root.rglob("*.py")
+        ),
+    ]
+    for path in paths:
+        assert "evaluate_orthotypo_shadow_private" not in path.read_text(
+            encoding="utf-8"
+        )
