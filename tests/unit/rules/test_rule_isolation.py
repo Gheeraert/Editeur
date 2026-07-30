@@ -318,6 +318,39 @@ print(json.dumps(forbidden))
     assert completed.stdout.strip() == "[]"
 
 
+def test_importing_orthotypo_shadow_batch_stays_isolated() -> None:
+    code = """
+import json
+import sys
+import purh_editorial.services.orthotypo_shadow_batch
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or "ai_editorial_service" in name
+    or "structure_ai_arbitrator" in name
+    or ".ui" in name
+    or "word_" in name
+    or (
+        name == "purh_editorial.pipeline"
+        or name.startswith("purh_editorial.pipeline.")
+    )
+]
+print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
 def test_importing_private_shadow_evaluation_tool_stays_isolated() -> None:
     tool_path = ROOT / "tools/evaluate_orthotypo_shadow_private.py"
     code = f"""
@@ -414,6 +447,7 @@ def test_existing_services_pipeline_and_configuration_do_not_import_shadow() -> 
                 "orthotypo_shadow_adapter.py",
                 "orthotypo_redoublement_shadow_adapter.py",
                 "orthotypo_ordinal_shadow_adapter.py",
+                "orthotypo_shadow_batch.py",
                 "orthotypo_shadow_support.py",
             }:
                 continue
@@ -445,6 +479,7 @@ def test_shadow_adapter_is_not_wired_into_production_entry_points() -> None:
         assert "orthotypo_shadow_adapter" not in content
         assert "orthotypo_redoublement_shadow_adapter" not in content
         assert "orthotypo_ordinal_shadow_adapter" not in content
+        assert "orthotypo_shadow_batch" not in content
         assert "orthotypo_shadow_support" not in content
         assert "EtcAbbreviationRule" not in content
         assert "RedoubledAbbreviationRule" not in content
@@ -490,3 +525,13 @@ def test_private_evaluation_tool_is_not_wired_into_production() -> None:
         assert "evaluate_orthotypo_shadow_private" not in path.read_text(
             encoding="utf-8"
         )
+
+
+def test_private_tool_is_the_only_consumer_of_shadow_batch() -> None:
+    batch_import = "purh_editorial.services.orthotypo_shadow_batch"
+    for path in (ROOT / "src/purh_editorial/services").glob("*.py"):
+        if path.name == "orthotypo_shadow_batch.py":
+            continue
+        assert batch_import not in path.read_text(encoding="utf-8")
+    tool_path = ROOT / "tools/evaluate_orthotypo_shadow_private.py"
+    assert batch_import in tool_path.read_text(encoding="utf-8")

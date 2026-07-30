@@ -10,6 +10,10 @@ from docx import Document as WordDocument
 
 from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.rules.shadow import ShadowComparisonStatus
+from purh_editorial.services.orthotypo_service import OrthotypoService
+from purh_editorial.services.orthotypo_shadow_batch import (
+    OrthotypoShadowBatchRunner,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -77,6 +81,18 @@ def test_tool_writes_private_reports_from_synthetic_docx(
     imported: list[tuple[object, object]] = []
     calls: list[Path] = []
 
+    class RecordingLegacyService:
+        def __init__(self) -> None:
+            self.calls = 0
+            self.delegate = OrthotypoService()
+
+        def apply(self, document):
+            self.calls += 1
+            return self.delegate.apply(document)
+
+    legacy_service = RecordingLegacyService()
+    batch_runner = OrthotypoShadowBatchRunner(legacy_service=legacy_service)
+
     class RecordingRegistry:
         def load_document(self, path: Path):
             document = real_registry.load_document(path)
@@ -85,6 +101,11 @@ def test_tool_writes_private_reports_from_synthetic_docx(
             return document
 
     monkeypatch.setattr(tool, "ImporterRegistry", lambda: RecordingRegistry())
+    monkeypatch.setattr(
+        tool,
+        "OrthotypoShadowBatchRunner",
+        lambda: batch_runner,
+    )
     exit_code = tool.main(
         [
             "--raw-docx",
@@ -98,6 +119,7 @@ def test_tool_writes_private_reports_from_synthetic_docx(
 
     assert exit_code == 0
     assert calls == [raw_path, reference_path]
+    assert legacy_service.calls == 2
     assert all(document == snapshot for document, snapshot in imported)
     json_path = output_dir / "orthotypo_shadow_4g.json"
     markdown_path = output_dir / "orthotypo_shadow_4g.md"

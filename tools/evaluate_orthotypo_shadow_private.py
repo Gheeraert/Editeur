@@ -44,14 +44,8 @@ from purh_editorial.rules.shadow import (  # noqa: E402
     LegacyObservationStatus,
     ShadowComparisonStatus,
 )
-from purh_editorial.services.orthotypo_redoublement_shadow_adapter import (  # noqa: E402
-    OrthotypoRedoublementShadowAdapter,
-)
-from purh_editorial.services.orthotypo_ordinal_shadow_adapter import (  # noqa: E402
-    OrthotypoOrdinalShadowAdapter,
-)
-from purh_editorial.services.orthotypo_shadow_adapter import (  # noqa: E402
-    OrthotypoEtcShadowAdapter,
+from purh_editorial.services.orthotypo_shadow_batch import (  # noqa: E402
+    OrthotypoShadowBatchRunner,
 )
 from purh_editorial.services.orthotypo_shadow_support import (  # noqa: E402
     collect_orthotypo_shadow_targets,
@@ -188,12 +182,8 @@ def _summarize_rule(
     document_filename: str,
     result: Any,
     rule_id: str,
-    protection_policy_id: str,
+    targets: tuple[Any, ...],
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    targets = collect_orthotypo_shadow_targets(
-        document,
-        protection_policy_id=protection_policy_id,
-    )
     decisions = result.native_decisions
     comparisons = result.comparisons
     if not (
@@ -289,48 +279,53 @@ def _evaluate_document(
     document_filename: str,
 ) -> dict[str, Any]:
     source_snapshot = copy.deepcopy(document)
-    etc_result = OrthotypoEtcShadowAdapter().run(document)
-    if document != source_snapshot:
-        raise EvaluationInvariantError("L’adaptateur etc. a modifié le document importé.")
-    redoublement_result = OrthotypoRedoublementShadowAdapter().run(document)
+    batch_result = OrthotypoShadowBatchRunner().run(document)
     if document != source_snapshot:
         raise EvaluationInvariantError(
-            "L’adaptateur redoublement a modifié le document importé."
+            "Le batch shadow a modifié le document importé."
         )
-    ordinal_result = OrthotypoOrdinalShadowAdapter().run(document)
-    if document != source_snapshot:
-        raise EvaluationInvariantError(
-            "L’adaptateur ordinaux a modifié le document importé."
+
+    policy_ids = {
+        ETC_RULE_ID: EtcAbbreviationRule.descriptor.protection_policy_id,
+        REDOUBLEMENT_RULE_ID: (
+            RedoubledAbbreviationRule.descriptor.protection_policy_id
+        ),
+        ORDINAL_RULE_ID: OrdinalAbbreviationRule.descriptor.protection_policy_id,
+    }
+    targets_by_policy = {
+        policy_id: collect_orthotypo_shadow_targets(
+            document,
+            protection_policy_id=policy_id,
         )
+        for policy_id in set(policy_ids.values())
+    }
 
     etc_summary, etc_details = _summarize_rule(
         document=document,
         document_kind=document_kind,
         document_label=document_label,
         document_filename=document_filename,
-        result=etc_result,
+        result=batch_result.for_rule(ETC_RULE_ID),
         rule_id=ETC_RULE_ID,
-        protection_policy_id=EtcAbbreviationRule.descriptor.protection_policy_id,
+        targets=targets_by_policy[policy_ids[ETC_RULE_ID]],
     )
     redoublement_summary, redoublement_details = _summarize_rule(
         document=document,
         document_kind=document_kind,
         document_label=document_label,
         document_filename=document_filename,
-        result=redoublement_result,
+        result=batch_result.for_rule(REDOUBLEMENT_RULE_ID),
         rule_id=REDOUBLEMENT_RULE_ID,
-        protection_policy_id=(
-            RedoubledAbbreviationRule.descriptor.protection_policy_id
-        ),
+        targets=targets_by_policy[policy_ids[REDOUBLEMENT_RULE_ID]],
     )
     ordinal_summary, ordinal_details = _summarize_rule(
         document=document,
         document_kind=document_kind,
         document_label=document_label,
         document_filename=document_filename,
-        result=ordinal_result,
+        result=batch_result.for_rule(ORDINAL_RULE_ID),
         rule_id=ORDINAL_RULE_ID,
-        protection_policy_id=OrdinalAbbreviationRule.descriptor.protection_policy_id,
+        targets=targets_by_policy[policy_ids[ORDINAL_RULE_ID]],
     )
     return {
         "document_kind": document_kind,
