@@ -58,6 +58,8 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         [
             "Il écrit etc... dans une phrase.",
             "Voir pp. 12-14.",
+            "la 1ère partie",
+            "le 5ème chapitre",
         ],
     )
     _write_docx(
@@ -65,6 +67,8 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         [
             "Il écrit etc. dans une phrase.",
             f"Voir p.{NNBSP}12-14.",
+            "la 1re partie",
+            "le 5e chapitre",
         ],
     )
     monkeypatch.setenv("PURH_PRIVATE_CORPUS_DIR", str(private_root))
@@ -106,6 +110,7 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         "rules": [
             "purh.abreviations.etc",
             "purh.abreviations.redoublement",
+            "purh.ordinaux",
         ],
         "author_documents": 1,
         "edited_reference_documents": 1,
@@ -121,6 +126,11 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         == 1
     )
     assert (
+        report["aggregate"]["author"]["purh.ordinaux"]
+        ["native_actions_proposed"]
+        == 2
+    )
+    assert (
         report["aggregate"]["edited_reference"]["purh.abreviations.etc"]
         ["native_actions_proposed"]
         == 0
@@ -128,6 +138,11 @@ def test_tool_writes_private_reports_from_synthetic_docx(
     assert (
         report["aggregate"]["edited_reference"]
         ["purh.abreviations.redoublement"]["native_actions_proposed"]
+        == 0
+    )
+    assert (
+        report["aggregate"]["edited_reference"]["purh.ordinaux"]
+        ["native_actions_proposed"]
         == 0
     )
     for corpus in ("author", "edited_reference"):

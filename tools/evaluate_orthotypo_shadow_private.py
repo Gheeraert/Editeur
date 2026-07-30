@@ -1,4 +1,4 @@
-"""Banc local d'observation shadow pour deux règles orthotypographiques.
+"""Banc local d'observation shadow pour trois règles orthotypographiques.
 
 Ce script est volontairement hors pipeline. Il ne modifie aucun DOCX : chaque
 adaptateur conserve le legacy comme seule source d'effets et le natif reste
@@ -36,12 +36,19 @@ from purh_editorial.rules.orthotypography.redoublement_rule import (  # noqa: E4
     RULE_ID as REDOUBLEMENT_RULE_ID,
     RedoubledAbbreviationRule,
 )
+from purh_editorial.rules.orthotypography.ordinal_rule import (  # noqa: E402
+    RULE_ID as ORDINAL_RULE_ID,
+    OrdinalAbbreviationRule,
+)
 from purh_editorial.rules.shadow import (  # noqa: E402
     LegacyObservationStatus,
     ShadowComparisonStatus,
 )
 from purh_editorial.services.orthotypo_redoublement_shadow_adapter import (  # noqa: E402
     OrthotypoRedoublementShadowAdapter,
+)
+from purh_editorial.services.orthotypo_ordinal_shadow_adapter import (  # noqa: E402
+    OrthotypoOrdinalShadowAdapter,
 )
 from purh_editorial.services.orthotypo_shadow_adapter import (  # noqa: E402
     OrthotypoEtcShadowAdapter,
@@ -53,7 +60,7 @@ from purh_editorial.services.orthotypo_shadow_support import (  # noqa: E402
 )
 
 
-RULE_IDS = (ETC_RULE_ID, REDOUBLEMENT_RULE_ID)
+RULE_IDS = (ETC_RULE_ID, REDOUBLEMENT_RULE_ID, ORDINAL_RULE_ID)
 _METHODOLOGY_WARNING = (
     "Cette comparaison de corpus n’aligne pas automatiquement les passages "
     "auteur et corrigés. Elle mesure la parité legacy/natif et la présence "
@@ -290,6 +297,11 @@ def _evaluate_document(
         raise EvaluationInvariantError(
             "L’adaptateur redoublement a modifié le document importé."
         )
+    ordinal_result = OrthotypoOrdinalShadowAdapter().run(document)
+    if document != source_snapshot:
+        raise EvaluationInvariantError(
+            "L’adaptateur ordinaux a modifié le document importé."
+        )
 
     etc_summary, etc_details = _summarize_rule(
         document=document,
@@ -311,6 +323,15 @@ def _evaluate_document(
             RedoubledAbbreviationRule.descriptor.protection_policy_id
         ),
     )
+    ordinal_summary, ordinal_details = _summarize_rule(
+        document=document,
+        document_kind=document_kind,
+        document_label=document_label,
+        document_filename=document_filename,
+        result=ordinal_result,
+        rule_id=ORDINAL_RULE_ID,
+        protection_policy_id=OrdinalAbbreviationRule.descriptor.protection_policy_id,
+    )
     return {
         "document_kind": document_kind,
         "document_label": document_label,
@@ -318,8 +339,9 @@ def _evaluate_document(
         "rules": {
             ETC_RULE_ID: etc_summary,
             REDOUBLEMENT_RULE_ID: redoublement_summary,
+            ORDINAL_RULE_ID: ordinal_summary,
         },
-        "occurrences": [*etc_details, *redoublement_details],
+        "occurrences": [*etc_details, *redoublement_details, *ordinal_details],
     }
 
 
@@ -521,8 +543,8 @@ def _render_markdown(report: dict[str, Any]) -> str:
         "",
         "## Périmètre",
         "",
-        "Règles observées : `purh.abreviations.etc` et "
-        "`purh.abreviations.redoublement`.",
+        "Règles observées : `purh.abreviations.etc`, "
+        "`purh.abreviations.redoublement` et `purh.ordinaux`.",
         "",
         "## Avertissement méthodologique",
         "",
@@ -611,7 +633,7 @@ def _render_markdown(report: dict[str, Any]) -> str:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Évalue localement deux verticales shadow orthotypographiques."
+        description="Évalue localement trois verticales shadow orthotypographiques."
     )
     parser.add_argument("--raw-docx", required=True)
     parser.add_argument("--reference-dir", required=True)
