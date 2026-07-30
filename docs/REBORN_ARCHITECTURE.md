@@ -165,17 +165,13 @@ Une nouvelle exception doit pouvoir être ajoutée en modifiant uniquement :
 
 Les **31 règles heuristiques** restent dans le catalogue.
 
-Dans le premier état du programme, elles ne produisent aucune correction
-automatique.
+Une heuristique peut appliquer une transformation lorsque son comportement est
+explicitement défini par le code et les tests existants. Toute transformation
+reste visible par surlignage jaune et doit être testée contre les faux positifs.
+Les diagnostics restent non destructifs.
 
-Elles pourront ultérieurement :
-
-- produire un signalement ;
-- surligner une plage à vérifier ;
-- ajouter une information destinée à l’éditrice.
-
-Une règle heuristique ne devient automatique que si sa condition est reformulée
-en règle déterministe explicite.
+Les diagnostics heuristiques conservent le texte et utilisent un surlignage
+turquoise distinct des transformations.
 
 Le nouveau noyau ne contient :
 
@@ -315,10 +311,11 @@ Vérifier dans Word que le fichier de sortie s’ouvre normalement et que les
 Migrer progressivement les règles déterministes, avec leurs garde-fous,
 exceptions et tests positifs et négatifs.
 
-### 4. Signalements heuristiques
+### 4. Règles heuristiques
 
-Ajouter les règles heuristiques sous forme de signalements sans correction
-automatique.
+Ajouter les règles heuristiques dont le comportement est établi, avec un
+surlignage jaune pour chaque transformation et turquoise pour chaque
+diagnostic.
 
 ### 5. Validation réelle
 
@@ -340,7 +337,8 @@ Le redémarrage est réussi lorsque les critères suivants sont vérifiés :
 
 - les 61 règles restent documentées ;
 - les corrections déterministes sont explicites ;
-- les heuristiques ne corrigent pas automatiquement ;
+- les transformations heuristiques établies sont explicites et surlignées ;
+- les diagnostics heuristiques restent non destructifs ;
 - chaque modification automatique est surlignée ;
 - le fichier original reste intact ;
 - le DOCX de sortie s’ouvre normalement dans Word ;

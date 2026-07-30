@@ -1,24 +1,234 @@
+from __future__ import annotations
+
+import pytest
+
+from purh_editorial.corrector.rules.bibliography import (
+    find_bibliography_numero_edits,
+    find_bibliography_pagination_edits,
+)
 from purh_editorial.corrector.rules.footnotes import (
     NNBSP,
+    find_ambiguous_final_punctuation_diagnostics,
+    find_final_punctuation_edits,
+    find_initial_space_edits,
+    find_initial_capital_edits,
+    find_latin_abbreviation_edits,
+    find_lowercase_start_diagnostics,
+    find_op_cit_edits,
+    find_sans_lieu_date_edits,
     normalize_op_cit_spacing,
+    note_call_diagnostic_ids,
 )
 from purh_editorial.corrector.rules.orthotypography import (
+    ORTHOTYPOGRAPHY_TEXT_RULES,
+    apply_text_edits,
     find_centuries,
+    find_double_dash_diagnostics,
+    find_incise_dash_diagnostics,
+    find_numero_style_matches,
+    find_quote_punctuation_diagnostics,
+    find_straight_quote_diagnostics,
     normalize_points_suspension,
+)
+from purh_editorial.corrector.rules.structure import detect_frontmatter_rule
+from purh_editorial.corrector.runner import (
+    DETERMINISTIC_RULE_IDS,
+    HEURISTIC_RULE_IDS,
+    RULE_IDS,
 )
 
 
-def test_points_suspension_exact_sequence() -> None:
-    assert normalize_points_suspension("Texte... Suite") == "Texte… Suite"
+EXPECTED_DETERMINISTIC_IDS = {
+    "purh.apostrophe",
+    "purh.points_suspension",
+    "R-ORTHO-LIGATURE-OE-001",
+    "purh.guillemets.espace_apres_ouvrant",
+    "purh.guillemets.espace_avant_fermant",
+    "purh.espaces.avant_ponct_forte",
+    "purh.espaces.avant_ponct_faible",
+    "purh.espaces.double",
+    "purh.civilite",
+    "purh.siecles",
+    "purh.ordinaux",
+    "purh.abreviations.etc",
+    "purh.pagination.espace",
+    "purh.numero",
+    "purh.abreviations.redoublement",
+    "purh.nombres.milliers",
+    "purh.note.espace_initiale",
+    "purh.note.espace_op_cit",
+    "purh.note.espace_sans_lieu_date",
+    "purh.biblio.pagination_nnbsp",
+    "purh.biblio.numero_nnbsp",
+    "R-SO-001",
+    "R-NO-001",
+    "structure.frontmatter.abstract",
+    "structure.frontmatter.keywords",
+    "structure.frontmatter.acknowledgment",
+    "R-TI-001",
+    "R-AN-002",
+    "R-AN-003",
+    "structure.frontmatter.circuit_breaker",
+}
+
+EXPECTED_HEURISTIC_IDS = {
+    "purh.guillemets.droits",
+    "purh.tiret.double",
+    "purh.tiret.incise",
+    "R-GQ-004",
+    "purh.note.majuscule_initiale",
+    "purh.note.abreviation_latine",
+    "purh.note.ponctuation_finale",
+    "R-AN-004",
+    "R-AN-005",
+    "structure.bibliography.section.start",
+    "structure.bibliography.section.end",
+    "structure.bibliography.item.promote",
+    "bibliography.entry.detect",
+    "purh.biblio.ponctuation_finale",
+    "structure.source_style.heading",
+    "structure.allcaps.heading",
+    "structure.bold.heading",
+    "structure.italic.author",
+    "structure.italic.heading",
+    "structure.epigraph.heuristic",
+    "structure.bibliography.section",
+    "structure.bibliography.heuristic",
+    "structure.indent.quote",
+    "structure.quote.guillemets",
+    "structure.heading.heuristic",
+    "R-STRUCT-HEADING-001",
+    "structure.lineated.blank_bounded.merge",
+    "structure.lineated.short_sequence.merge",
+    "R-CI-POETRY-001",
+    "structure.lineated.group.annotate",
+    "structure.lineated.stanza.merge",
+}
+
+
+def _orthotypography_finder(rule_id: str):
+    return dict(ORTHOTYPOGRAPHY_TEXT_RULES)[rule_id]
+
+
+@pytest.mark.parametrize(
+    ("rule_id", "source", "expected", "negative", "conform"),
+    [
+        ("purh.apostrophe", "L'auteur", "L’auteur", "'début", "L’auteur"),
+        (
+            "purh.points_suspension",
+            "Texte... Suite",
+            "Texte… Suite",
+            "Texte.... Suite",
+            "Texte… Suite",
+        ),
+        (
+            "R-ORTHO-LIGATURE-OE-001",
+            "une soeur",
+            "une sœur",
+            "coelacanthe",
+            "une sœur",
+        ),
+        (
+            "purh.guillemets.espace_apres_ouvrant",
+            "« Bonjour",
+            f"«{NNBSP}Bonjour",
+            "Bonjour",
+            f"«{NNBSP}Bonjour",
+        ),
+        (
+            "purh.guillemets.espace_avant_fermant",
+            "Bonjour »",
+            f"Bonjour{NNBSP}»",
+            "Bonjour",
+            f"Bonjour{NNBSP}»",
+        ),
+        (
+            "purh.espaces.avant_ponct_forte",
+            "Voici:",
+            f"Voici{NNBSP}:",
+            "10:30",
+            f"Voici{NNBSP}:",
+        ),
+        (
+            "purh.espaces.avant_ponct_faible",
+            "mot , suite",
+            "mot, suite",
+            "valeur ,14",
+            "mot, suite",
+        ),
+        (
+            "purh.espaces.double",
+            "deux  espaces",
+            "deux espaces",
+            f"deux{NNBSP} espaces",
+            "deux espaces",
+        ),
+        (
+            "purh.civilite",
+            "M. Dupont",
+            f"M.{chr(0x00A0)}Dupont",
+            "M. dupont",
+            f"M.{chr(0x00A0)}Dupont",
+        ),
+        (
+            "purh.siecles",
+            "XVIème siècle",
+            "xvie siècle",
+            "XVIème chapitre",
+            "xvie siècle",
+        ),
+        ("purh.ordinaux", "1ère partie", "1re partie", "1er", "1re partie"),
+        ("purh.abreviations.etc", "etc…", "etc.", "etc", "etc."),
+        (
+            "purh.pagination.espace",
+            "p. 12",
+            f"p.{NNBSP}12",
+            "p. texte",
+            f"p.{NNBSP}12",
+        ),
+        (
+            "purh.numero",
+            "n° 5",
+            f"no{NNBSP}5",
+            "numéro cinq",
+            f"no{NNBSP}5",
+        ),
+        (
+            "purh.abreviations.redoublement",
+            "pp. 53",
+            "p. 53",
+            "supp. cit.",
+            "p. 53",
+        ),
+        (
+            "purh.nombres.milliers",
+            "1 500 000",
+            f"1{NNBSP}500{NNBSP}000",
+            "2025",
+            f"1{NNBSP}500{NNBSP}000",
+        ),
+    ],
+)
+def test_orthotypography_text_rules_are_guarded_and_idempotent(
+    rule_id: str,
+    source: str,
+    expected: str,
+    negative: str,
+    conform: str,
+) -> None:
+    finder = _orthotypography_finder(rule_id)
+    corrected = apply_text_edits(source, finder(source))
+    assert corrected == expected
+    assert finder(negative) == []
+    assert finder(conform) == []
+    assert apply_text_edits(corrected, finder(corrected)) == corrected
+
+
+def test_points_suspension_and_century_guardrails() -> None:
     assert normalize_points_suspension("Texte….") == "Texte…."
     assert normalize_points_suspension("Texte… Suite") == "Texte… Suite"
-    assert normalize_points_suspension("Texte.... Suite") == "Texte.... Suite"
-
-
-def test_century_closed_domain_and_context() -> None:
     for text in ("XVIème siècle", "xvie siècle", "VIe siècle", "Ier siècle"):
         assert len(find_centuries(text)) == 1
-
     for text in (
         "la vie continue",
         "une vie entière",
@@ -29,15 +239,226 @@ def test_century_closed_domain_and_context() -> None:
         assert find_centuries(text) == []
 
 
-def test_century_normalized_text() -> None:
-    assert find_centuries("XVIème siècle")[0].normalized == "xvie"
-    assert find_centuries("Ier siècle")[0].normalized == "ier"
+@pytest.mark.parametrize(
+    ("finder", "source", "expected", "negative", "conform"),
+    [
+        (find_initial_space_edits, "  Note", "Note", "Note", "Note"),
+        (
+            find_op_cit_edits,
+            "Voir op. cit.",
+            f"Voir op.{NNBSP}cit.",
+            "Voir loc.",
+            f"Voir op.{NNBSP}cit.",
+        ),
+        (
+            find_sans_lieu_date_edits,
+            "Voir s. l.",
+            f"Voir s.{NNBSP}l.",
+            "Voir s.",
+            f"Voir s.{NNBSP}l.",
+        ),
+    ],
+)
+def test_footnote_text_rules_are_guarded_and_idempotent(
+    finder,
+    source: str,
+    expected: str,
+    negative: str,
+    conform: str,
+) -> None:
+    corrected = apply_text_edits(source, finder(source))
+    assert corrected == expected
+    assert finder(negative) == []
+    assert finder(conform) == []
+    assert apply_text_edits(corrected, finder(corrected)) == corrected
 
 
-def test_op_cit_spacing() -> None:
-    assert normalize_op_cit_spacing("Voir op. cit.") == f"Voir op.{NNBSP}cit."
+def test_note_abbreviation_variants() -> None:
     assert normalize_op_cit_spacing("Voir art.  cit.") == f"Voir art.{NNBSP}cit."
-    assert normalize_op_cit_spacing("Voir loc.") == "Voir loc."
     normalized = f"Voir loc.{NNBSP}cit."
     assert normalize_op_cit_spacing(normalized) == normalized
+    assert apply_text_edits(
+        "\x02\tNote",
+        find_initial_space_edits("\x02\tNote"),
+    ) == "\x02Note"
 
+
+@pytest.mark.parametrize(
+    ("finder", "source", "expected", "negative", "conform"),
+    [
+        (
+            find_bibliography_pagination_edits,
+            "p. 12",
+            f"p.{NNBSP}12",
+            "p. texte",
+            f"p.{NNBSP}12",
+        ),
+        (
+            find_bibliography_numero_edits,
+            "n° 7",
+            f"n°{NNBSP}7",
+            "n° sept",
+            f"n°{NNBSP}7",
+        ),
+    ],
+)
+def test_bibliography_text_logic_is_exact_and_idempotent(
+    finder,
+    source: str,
+    expected: str,
+    negative: str,
+    conform: str,
+) -> None:
+    corrected = apply_text_edits(source, finder(source))
+    assert corrected == expected
+    assert finder(negative) == []
+    assert finder(conform) == []
+    assert apply_text_edits(corrected, finder(corrected)) == corrected
+
+
+def test_style_detectors_are_closed_and_idempotence_ready() -> None:
+    assert find_centuries("xvie siècle")[0].roman == "xvi"
+    assert find_numero_style_matches(f"no{NNBSP}5")[0].group(1) == "o"
+    assert find_numero_style_matches("nombre cinq") == []
+
+
+def test_diagnostic_detectors_do_not_change_text() -> None:
+    text = "mot - mot"
+    diagnostics = find_incise_dash_diagnostics(text)
+    assert len(diagnostics) == 1
+    assert apply_text_edits(text, diagnostics) == text
+    assert find_incise_dash_diagnostics("mot-mot") == []
+    assert note_call_diagnostic_ids(".") == ("R-AN-002",)
+    assert note_call_diagnostic_ids(" ") == ("R-AN-003",)
+    assert note_call_diagnostic_ids("t") == ()
+
+
+@pytest.mark.parametrize(
+    ("finder", "positive", "negative", "conform"),
+    [
+        (
+            find_straight_quote_diagnostics,
+            'Il dit "bonjour".',
+            'print("bonjour")',
+            "Il dit « bonjour ».",
+        ),
+        (
+            find_double_dash_diagnostics,
+            "avant--après",
+            "avant-après",
+            "avant–après",
+        ),
+        (
+            find_quote_punctuation_diagnostics,
+            "« Que faire ? ».",
+            "Il parle de « réforme ».",
+            "« Que faire ? »",
+        ),
+    ],
+)
+def test_heuristic_orthotypography_diagnostics_are_non_mutating(
+    finder,
+    positive: str,
+    negative: str,
+    conform: str,
+) -> None:
+    diagnostics = finder(positive)
+    assert len(diagnostics) == 1
+    assert apply_text_edits(positive, diagnostics) == positive
+    assert finder(negative) == []
+    assert finder(conform) == []
+    assert finder(positive) == diagnostics
+
+
+@pytest.mark.parametrize(
+    ("finder", "source", "expected", "negative", "conform"),
+    [
+        (
+            find_initial_capital_edits,
+            "fragment sans point",
+            "Fragment sans point",
+            "van Gogh",
+            "Fragment sans point",
+        ),
+        (
+            find_latin_abbreviation_edits,
+            "Voir Ibid., p. 2",
+            "Voir ibid., p. 2",
+            "Ibid., p. 2",
+            "Voir ibid., p. 2",
+        ),
+        (
+            find_final_punctuation_edits,
+            "Fragment sans point",
+            "Fragment sans point.",
+            "https://example.org",
+            "Fragment sans point.",
+        ),
+    ],
+)
+def test_heuristic_footnote_transformations_are_guarded_and_idempotent(
+    finder,
+    source: str,
+    expected: str,
+    negative: str,
+    conform: str,
+) -> None:
+    corrected = apply_text_edits(source, finder(source))
+    assert corrected == expected
+    assert finder(negative) == []
+    assert finder(conform) == []
+    assert apply_text_edits(corrected, finder(corrected)) == corrected
+
+
+@pytest.mark.parametrize(
+    ("finder", "positive", "negative"),
+    [
+        (
+            find_lowercase_start_diagnostics,
+            "https://example.org",
+            "Fragment normal.",
+        ),
+        (
+            find_ambiguous_final_punctuation_diagnostics,
+            "- élément de liste",
+            "Élément de liste.",
+        ),
+    ],
+)
+def test_heuristic_footnote_diagnostics_are_non_mutating(
+    finder,
+    positive: str,
+    negative: str,
+) -> None:
+    diagnostics = finder(positive)
+    assert len(diagnostics) == 1
+    assert apply_text_edits(positive, diagnostics) == positive
+    assert finder(negative) == []
+    assert finder(positive) == diagnostics
+
+
+@pytest.mark.parametrize(
+    ("text", "rule_id"),
+    [
+        ("Résumé :", "structure.frontmatter.abstract"),
+        ("Keywords:", "structure.frontmatter.keywords"),
+        ("Acknowledgments", "structure.frontmatter.acknowledgment"),
+    ],
+)
+def test_frontmatter_detection_is_exact(text: str, rule_id: str) -> None:
+    assert detect_frontmatter_rule(text) == rule_id
+    assert detect_frontmatter_rule("Texte ordinaire.") is None
+
+
+def test_exact_deterministic_identifier_set() -> None:
+    assert len(DETERMINISTIC_RULE_IDS) == 30
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 30
+    assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
+
+
+def test_exact_heuristic_and_complete_identifier_sets() -> None:
+    assert len(HEURISTIC_RULE_IDS) == 31
+    assert len(set(HEURISTIC_RULE_IDS)) == 31
+    assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
+    assert len(RULE_IDS) == 61
+    assert len(set(RULE_IDS)) == 61

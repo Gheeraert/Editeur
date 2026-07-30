@@ -3,22 +3,23 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Callable
 
-from purh_editorial.corrector.rules.footnotes import find_op_cit_edits
+from purh_editorial.corrector.rules.footnotes import (
+    FOOTNOTE_DIAGNOSTIC_RULES,
+    FOOTNOTE_RULES,
+    note_call_diagnostic_ids,
+)
 from purh_editorial.corrector.rules.orthotypography import (
+    ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES,
+    ORTHOTYPOGRAPHY_TEXT_RULES,
     CenturyMatch,
     find_centuries,
-    find_points_suspension_edits,
+    find_incise_dash_diagnostics,
+    find_numero_style_matches,
 )
 
 WD_MAIN_TEXT_STORY = 1
 WD_YELLOW = 7
-
-COUNTER_IDS = (
-    "purh.points_suspension",
-    "purh.siecles",
-    "R-SO-001",
-    "purh.note.espace_op_cit",
-)
+WD_TURQUOISE = 3
 
 
 def _paragraph_text(paragraph: Any) -> str:
@@ -40,13 +41,16 @@ def _replace_and_highlight(
     start: int,
     end: int,
     replacement: str,
-) -> Any:
+) -> None:
     target = _exact_range(paragraph, start, end)
     absolute_start = target.Start
     target.Text = replacement
-    target.SetRange(absolute_start, absolute_start + len(replacement))
+    result_length = len(replacement)
+    if result_length == 0 and absolute_start < paragraph.Range.End - 1:
+        result_length = 1
+    target.SetRange(absolute_start, absolute_start + result_length)
     target.HighlightColorIndex = WD_YELLOW
-    return target
+    target = None
 
 
 def _apply_text_edits(
@@ -55,12 +59,7 @@ def _apply_text_edits(
 ) -> int:
     edits = finder(_paragraph_text(paragraph))
     for edit in reversed(edits):
-        _replace_and_highlight(
-            paragraph,
-            edit.start,
-            edit.end,
-            edit.replacement,
-        )
+        _replace_and_highlight(paragraph, edit.start, edit.end, edit.replacement)
     return len(edits)
 
 
@@ -76,12 +75,15 @@ def _century_style_needs_change(paragraph: Any, match: CenturyMatch) -> bool:
     roman_end = match.start + len(match.roman)
     roman_range = _exact_range(paragraph, match.start, roman_end)
     suffix_range = _exact_range(paragraph, roman_end, match.end)
-    return not (
+    needs_change = not (
         _is_word_true(roman_range.Font.SmallCaps)
         and _is_word_false(roman_range.Font.Superscript)
         and _is_word_false(suffix_range.Font.SmallCaps)
         and _is_word_true(suffix_range.Font.Superscript)
     )
+    suffix_range = None
+    roman_range = None
+    return needs_change
 
 
 def _style_century(paragraph: Any, match: CenturyMatch) -> None:
@@ -92,61 +94,109 @@ def _style_century(paragraph: Any, match: CenturyMatch) -> None:
     roman_range.Font.Superscript = False
     suffix_range.Font.SmallCaps = False
     suffix_range.Font.Superscript = True
+    suffix_range = None
+    roman_range = None
 
 
-def _apply_centuries(paragraph: Any, counts: dict[str, int]) -> None:
-    matches = find_centuries(_paragraph_text(paragraph))
-    for match in reversed(matches):
-        text_changed = match.text != match.normalized
-        if text_changed:
-            target = _exact_range(paragraph, match.start, match.end)
-            target.Text = match.normalized
+def _apply_century_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_centuries(_paragraph_text(paragraph))):
+        if not _century_style_needs_change(paragraph, match):
+            continue
+        _style_century(paragraph, match)
+        century_range = _exact_range(paragraph, match.start, match.end)
+        century_range.HighlightColorIndex = WD_YELLOW
+        century_range = None
+        changed += 1
+    return changed
 
-        normalized_match = CenturyMatch(
-            start=match.start,
-            end=match.start + len(match.normalized),
-            text=match.normalized,
-            roman=match.roman.lower(),
-            suffix=match.suffix.lower(),
-            normalized=match.normalized,
+
+def _apply_numero_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_numero_style_matches(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, match.start(1), match.end(1))
+        if not _is_word_true(target.Font.Superscript):
+            target.Font.Superscript = True
+            complete = _exact_range(paragraph, match.start(), match.end())
+            complete.HighlightColorIndex = WD_YELLOW
+            complete = None
+            changed += 1
+        target = None
+    return changed
+
+
+def _apply_incise_diagnostics(paragraph: Any) -> int:
+    diagnostics = find_incise_dash_diagnostics(_paragraph_text(paragraph))
+    for diagnostic in diagnostics:
+        target = _exact_range(paragraph, diagnostic.start, diagnostic.end)
+        target.HighlightColorIndex = WD_TURQUOISE
+        target = None
+    return len(diagnostics)
+
+
+def _apply_diagnostics(
+    paragraph: Any,
+    finder: Callable[[str], list[Any]],
+) -> int:
+    diagnostics = finder(_paragraph_text(paragraph))
+    for diagnostic in diagnostics:
+        target = _exact_range(
+            paragraph,
+            diagnostic.start,
+            diagnostic.end,
         )
-        style_changed = _century_style_needs_change(paragraph, normalized_match)
-        if style_changed:
-            _style_century(paragraph, normalized_match)
-
-        if text_changed or style_changed:
-            century_range = _exact_range(
-                paragraph,
-                normalized_match.start,
-                normalized_match.end,
-            )
-            century_range.HighlightColorIndex = WD_YELLOW
-        if text_changed:
-            counts["purh.siecles"] += 1
-        if style_changed:
-            counts["R-SO-001"] += 1
+        target.HighlightColorIndex = WD_TURQUOISE
+        target = None
+    return len(diagnostics)
 
 
 def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
     for paragraph in story.Paragraphs:
-        counts["purh.points_suspension"] += _apply_text_edits(
-            paragraph,
-            find_points_suspension_edits,
-        )
-        _apply_centuries(paragraph, counts)
+        for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES:
+            counts[rule_id] += _apply_text_edits(paragraph, finder)
+        counts["R-SO-001"] += _apply_century_styles(paragraph)
+        counts["R-NO-001"] += _apply_numero_styles(paragraph)
+        counts["R-TI-001"] += _apply_incise_diagnostics(paragraph)
+        for rule_id, finder in ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES:
+            counts[rule_id] += _apply_diagnostics(paragraph, finder)
+    paragraph = None
+    story = None
+
+
+def _apply_note_call_diagnostics(document: Any, counts: dict[str, int]) -> None:
+    for footnote in document.Footnotes:
+        reference = footnote.Reference
+        if reference.Start <= 0:
+            reference = None
+            continue
+        preceding = reference.Duplicate
+        preceding.SetRange(reference.Start - 1, reference.Start)
+        previous_character = preceding.Text
+        for rule_id in note_call_diagnostic_ids(previous_character):
+            preceding.HighlightColorIndex = WD_TURQUOISE
+            counts[rule_id] += 1
+        preceding = None
+        reference = None
+    footnote = None
 
 
 def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
     for footnote in document.Footnotes:
         for paragraph in footnote.Range.Paragraphs:
-            counts["purh.note.espace_op_cit"] += _apply_text_edits(
-                paragraph,
-                find_op_cit_edits,
-            )
+            for rule_id, finder in FOOTNOTE_RULES:
+                counts[rule_id] += _apply_text_edits(paragraph, finder)
+            for rule_id, finder in FOOTNOTE_DIAGNOSTIC_RULES:
+                counts[rule_id] += _apply_diagnostics(paragraph, finder)
+        paragraph = None
+        footnote = None
+    _apply_note_call_diagnostics(document, counts)
 
 
-def correct_word_copy(path: Path) -> dict[str, int]:
+def correct_word_copy(
+    path: Path,
+    rule_ids: tuple[str, ...],
+) -> dict[str, int]:
     try:
         from win32com.client import DispatchEx
     except ImportError as exc:
@@ -154,7 +204,7 @@ def correct_word_copy(path: Path) -> dict[str, int]:
             "pywin32 est requis pour automatiser Microsoft Word."
         ) from exc
 
-    counts = {rule_id: 0 for rule_id in COUNTER_IDS}
+    counts = {rule_id: 0 for rule_id in rule_ids}
     word = None
     document = None
     try:
@@ -186,4 +236,3 @@ def correct_word_copy(path: Path) -> dict[str, int]:
             except Exception:
                 pass
         word = None
-
