@@ -160,15 +160,13 @@ print(json.dumps(forbidden))
     assert completed.stdout.strip() == "[]"
 
 
-def test_shadow_adapter_adds_no_pipeline_ui_word_or_ai_imports() -> None:
+def test_importing_shadow_adapter_stays_isolated() -> None:
     code = """
 import json
 import sys
-import purh_editorial.services
-before = set(sys.modules)
 import purh_editorial.services.orthotypo_shadow_adapter
 forbidden = [
-    name for name in set(sys.modules) - before
+    name for name in sys.modules
     if name == "tkinter"
     or name.startswith("win32com")
     or "ai_editorial_service" in name
