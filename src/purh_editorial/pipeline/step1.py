@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 
 from purh_editorial.config import AppSettings
-from purh_editorial.io.docx_exporter import DocxExporter
+from purh_editorial.corrector import correct_docx
 from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.io.tei_xml_exporter import TeiTableExportError, media_filename_for_asset
 from purh_editorial.model import ModuleRun, PipelineResult, ProcessingReport
@@ -15,7 +15,6 @@ from purh_editorial.serialization import build_pivot_payload, pivot_to_json
 from purh_editorial.services.bibliography_normalizer import BibliographyNormalizer
 from purh_editorial.services.footnote_normalizer import FootnoteNormalizer
 from purh_editorial.services.metopes_mapper import MetopesMapper
-from purh_editorial.services.orthotypo_service import OrthotypoService
 from purh_editorial.services.pivot_canonicalizer import PivotCanonicalizer
 from purh_editorial.services.pivot_export_gate import PivotValidationError, export_tei_for_production
 from purh_editorial.services.pivot_validator import PivotValidator
@@ -186,7 +185,6 @@ class Step1Pipeline:
         word_review_annotation_service: WordReviewAnnotationService | None = None,
     ) -> None:
         self.settings     = settings
-        self.orthotypo    = OrthotypoService()
         self.structure    = StructurePreparationService()
         self.footnotes    = FootnoteNormalizer()
         self.bibliography = BibliographyNormalizer()
@@ -321,28 +319,6 @@ class Step1Pipeline:
         ))
 
         # ── 2. Orthotypographie (déterministe) ────────────────────────────────
-        t0 = utc_now_iso()
-        document, typo_tr = self.orthotypo.apply(document)
-        unvalidated_typo_diags = self.orthotypo.analyze_unvalidated_rules(document)
-        quote_punctuation_diags = self.orthotypo.analyze_quote_punctuation(document)
-        incise_dash_diags = self.orthotypo.analyze_incise_dash(document)
-        report.diagnostics.extend(quote_punctuation_diags)
-        report.diagnostics.extend(unvalidated_typo_diags)
-        report.diagnostics.extend(incise_dash_diags)
-        report.transformations.extend(typo_tr)
-        report.add_module_run(ModuleRun(
-            module_name="orthotypo",
-            version=self.version,
-            started_at=t0,
-            finished_at=utc_now_iso(),
-            summary={
-                "corrections": len(typo_tr),
-                "unvalidated_rule_diagnostics": len(unvalidated_typo_diags),
-                "quote_punctuation_diagnostics": len(quote_punctuation_diags),
-                "incise_dash_diagnostics": len(incise_dash_diags),
-            },
-        ))
-
         # ── 3. Reconnaissance de structure ────────────────────────────────────
         t0 = utc_now_iso()
         structure_mode = "deterministic" if options.normalized_decision_mode() == "deterministic" else "heuristic"
@@ -568,14 +544,18 @@ class Step1Pipeline:
         output_docx: Path | None = None
         if options.output_path:
             t0 = utc_now_iso()
-            exporter = DocxExporter(template_path=options.template_path)
-            output_docx = exporter.export(document, options.output_path)
+            counts = correct_docx(source_path, options.output_path)
+            output_docx = options.output_path
             report.add_module_run(ModuleRun(
-                module_name="docx_export",
+                module_name="reborn_corrector",
                 version=self.version,
                 started_at=t0,
                 finished_at=utc_now_iso(),
-                summary={"output": str(output_docx)},
+                summary={
+                    "output": str(output_docx),
+                    "corrections": sum(counts.values()),
+                    "counts": counts,
+                },
             ))
 
         word_review_result: WordReviewResult | None = None

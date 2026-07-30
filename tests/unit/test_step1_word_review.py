@@ -4,6 +4,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from shutil import copy2
+from unittest.mock import patch
 
 from docx import Document
 
@@ -71,6 +73,22 @@ class Step1WordReviewTests(unittest.TestCase):
 
     def _module_run(self, result, name: str):
         return next(run for run in result.pipeline_result.report.module_runs if run.module_name == name)
+
+    def test_pipeline_uses_reborn_corrector_for_the_candidate(self) -> None:
+        candidate = self.tmp / "candidate.docx"
+
+        def fake_corrector(source: Path, output: Path) -> dict[str, int]:
+            copy2(source, output)
+            return {"purh.points_suspension": 1}
+
+        with patch("purh_editorial.pipeline.step1.correct_docx", side_effect=fake_corrector) as corrector:
+            result = Step1Pipeline(settings=self.settings).run(
+                self.source, Step1Options(output_path=candidate)
+            )
+
+        corrector.assert_called_once_with(self.source, candidate)
+        self.assertTrue(candidate.exists())
+        self.assertEqual(self._module_run(result, "reborn_corrector").summary["corrections"], 1)
 
     def test_absent_option_does_not_call_word_review_service(self) -> None:
         service = FakeWordReviewService()
