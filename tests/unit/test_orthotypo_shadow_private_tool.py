@@ -9,6 +9,7 @@ from pathlib import Path
 from docx import Document as WordDocument
 
 from purh_editorial.io.importer_registry import ImporterRegistry
+from purh_editorial.model import Block, Document, InlineSpan, InlineStyle
 from purh_editorial.rules.shadow import ShadowComparisonStatus
 from purh_editorial.services.orthotypo_service import OrthotypoService
 import purh_editorial.services.orthotypo_shadow_batch as batch_module
@@ -240,6 +241,75 @@ def test_tool_writes_private_reports_from_synthetic_docx(
     captured = capsys.readouterr()
     assert raw_path.name not in captured.out
     assert reference_path.name not in captured.out
+
+
+def test_tool_reconciles_an_already_styled_century_from_a_model_document(
+    monkeypatch,
+) -> None:
+    tool = _load_tool()
+    inlines = [
+        InlineSpan(text="au "),
+        InlineSpan(text="xvii", style=InlineStyle(small_caps=True)),
+        InlineSpan(text="e", style=InlineStyle(superscript=True)),
+        InlineSpan(text=" siècle"),
+    ]
+    document = Document(
+        document_id="styled-century",
+        source_path="source.docx",
+        source_format="docx",
+        blocks=[
+            Block(
+                block_id="p1",
+                block_type="paragraph",
+                text="".join(span.text for span in inlines),
+                inlines=inlines,
+            )
+        ],
+    )
+
+    class RecordingLegacyService:
+        def __init__(self) -> None:
+            self.calls = 0
+            self.delegate = OrthotypoService()
+
+        def apply(self, source: Document):
+            self.calls += 1
+            return self.delegate.apply(source)
+
+    legacy_service = RecordingLegacyService()
+    runner = OrthotypoShadowBatchRunner(legacy_service=legacy_service)
+    real_collect = batch_module.collect_orthotypo_shadow_targets
+    collection_calls: list[str] = []
+
+    def recording_collect(source, *, protection_policy_id):
+        collection_calls.append(protection_policy_id)
+        return real_collect(source, protection_policy_id=protection_policy_id)
+
+    monkeypatch.setattr(
+        batch_module,
+        "collect_orthotypo_shadow_targets",
+        recording_collect,
+    )
+    monkeypatch.setattr(tool, "OrthotypoShadowBatchRunner", lambda: runner)
+
+    result = tool._evaluate_document(
+        document=document,
+        document_kind="author",
+        document_label="author-001",
+        document_filename="author-001.docx",
+    )
+
+    assert legacy_service.calls == 1
+    assert len(collection_calls) == 1
+    assert result["rules"]["purh.siecles"]["native_actions_proposed"] == 0
+    assert result["rules"]["purh.siecles"]["comparison_statuses"] == {
+        ShadowComparisonStatus.MATCH.value: 1,
+        ShadowComparisonStatus.DIVERGENCE.value: 0,
+        ShadowComparisonStatus.INCONCLUSIVE.value: 0,
+    }
+    for rule_id, summary in result["rules"].items():
+        assert summary["comparison_statuses"][ShadowComparisonStatus.DIVERGENCE.value] == 0
+        assert summary["comparison_statuses"][ShadowComparisonStatus.INCONCLUSIVE.value] == 0
 
 
 def test_tool_reports_residual_reference_without_normative_conclusion(

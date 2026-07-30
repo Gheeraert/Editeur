@@ -2,11 +2,20 @@ from __future__ import annotations
 
 from collections import Counter
 import copy
+from dataclasses import replace
 
 import pytest
 
-from purh_editorial.model import Block, Document, InlineSpan, Note, Transformation
+from purh_editorial.model import (
+    Block,
+    Document,
+    InlineSpan,
+    InlineStyle,
+    Note,
+    Transformation,
+)
 from purh_editorial.rules.engine import CanonicalRuleDecisionEngine
+from purh_editorial.rules.model import ProposedAction, RuleActionType
 from purh_editorial.rules.orthotypography.century_rule import (
     RULE_ID as CENTURY_RULE_ID,
     CenturyAbbreviationRule,
@@ -96,6 +105,33 @@ def _document() -> Document:
             )
         ],
     )
+
+
+def _century_document(inlines: list[InlineSpan]) -> Document:
+    text = "".join(span.text for span in inlines)
+    return Document(
+        document_id="century-doc",
+        source_path="source.docx",
+        source_format="docx",
+        blocks=[
+            Block(
+                block_id="p1",
+                block_type="paragraph",
+                text=text,
+                inlines=inlines,
+            )
+        ],
+    )
+
+
+def _styled_xviie_spans(*, roman_small_caps: bool = True, e_sup: bool = True):
+    return [
+        InlineSpan(text="au "),
+        InlineSpan(text="xv", style=InlineStyle(small_caps=roman_small_caps)),
+        InlineSpan(text="ii", style=InlineStyle(small_caps=roman_small_caps)),
+        InlineSpan(text="e", style=InlineStyle(superscript=e_sup)),
+        InlineSpan(text=" siècle"),
+    ]
 
 
 class _RecordingLegacyService:
@@ -207,7 +243,6 @@ def test_batch_results_follow_legacy_order_and_keep_rule_effects_separate() -> N
             comparison.status is ShadowComparisonStatus.MATCH
             for comparison in rule_result.comparisons
         )
-
     assert any(
         item.rule_id == "R-SO-001" for item in result.legacy_transformations
     )
@@ -220,6 +255,138 @@ def test_batch_results_follow_legacy_order_and_keep_rule_effects_separate() -> N
             for comparison in result.for_rule(rule_id).comparisons
             for action in comparison.legacy_observation.observed_actions
         )
+
+
+def test_batch_reconciles_a_fully_styled_century_without_a_false_divergence() -> None:
+    document = _century_document(_styled_xviie_spans())
+    snapshot = copy.deepcopy(document)
+    result = OrthotypoShadowBatchRunner().run(document)
+    century = result.for_rule(CENTURY_RULE_ID)
+    assert document == snapshot
+    assert not [item for item in result.legacy_transformations if item.rule_id == CENTURY_RULE_ID]
+    assert century.native_decisions[0].proposed_actions == ()
+    assert century.native_decisions[0].outcome.value == "ignore"
+    assert century.comparisons[0].status is ShadowComparisonStatus.MATCH
+
+
+def test_batch_keeps_unstyled_and_incompletely_styled_century_actions() -> None:
+    variants = (
+        [InlineSpan(text="au xviie siècle")],
+        _styled_xviie_spans(roman_small_caps=False),
+        _styled_xviie_spans(e_sup=False),
+    )
+    for inlines in variants:
+        result = OrthotypoShadowBatchRunner().run(_century_document(inlines))
+        century = result.for_rule(CENTURY_RULE_ID)
+        assert len(century.native_decisions[0].proposed_actions) == 1
+        assert century.native_decisions[0].proposed_actions[0].before == "xviie"
+        assert any(
+            item.rule_id == CENTURY_RULE_ID
+            for item in result.legacy_transformations
+        )
+        assert century.comparisons[0].status is ShadowComparisonStatus.MATCH
+
+
+def test_batch_filters_only_the_fully_styled_century_in_a_mixed_target() -> None:
+    inlines = [
+        InlineSpan(text="au "),
+        InlineSpan(text="xvii", style=InlineStyle(small_caps=True)),
+        InlineSpan(text="e", style=InlineStyle(superscript=True)),
+        InlineSpan(text=" et xviie siècles"),
+    ]
+    result = OrthotypoShadowBatchRunner().run(_century_document(inlines))
+    century = result.for_rule(CENTURY_RULE_ID)
+    assert tuple(action.before for action in century.native_decisions[0].proposed_actions) == (
+        "xviie",
+    )
+    assert century.native_decisions[0].proposed_actions[0].offset_start == 12
+    assert tuple(
+        action.offset_start
+        for action in century.native_decisions[0].proposed_actions
+    ) == (12,)
+
+
+def test_batch_reconciles_a_fully_styled_century_in_a_note() -> None:
+    note_inlines = _styled_xviie_spans()
+    document = Document(
+        document_id="note-doc",
+        source_path="source.docx",
+        source_format="docx",
+        blocks=[Block(block_id="p1", block_type="paragraph", text="Corps.")],
+        notes=[
+            Note(
+                note_id="n1",
+                text="".join(span.text for span in note_inlines),
+                inlines=note_inlines,
+                target_ref="p1",
+            )
+        ],
+    )
+    century = OrthotypoShadowBatchRunner().run(document).for_rule(CENTURY_RULE_ID)
+    note_decision = next(
+        decision for decision in century.native_decisions if decision.target_refs == ("n1",)
+    )
+    note_comparison = next(
+        comparison for comparison in century.comparisons if comparison.rule_id == CENTURY_RULE_ID and comparison.sequence == 1
+    )
+    assert note_decision.proposed_actions == ()
+    assert note_comparison.status is ShadowComparisonStatus.MATCH
+
+
+def test_century_reconciliation_rejects_unsafe_inline_mappings() -> None:
+    action = ProposedAction(
+        action_type=RuleActionType.TEXT_TRANSFORM,
+        target_refs=("p1",),
+        before="xviie",
+        after="XVIIe",
+        offset_start=3,
+        offset_end=8,
+    )
+    document = _century_document(_styled_xviie_spans())
+    assert not batch_module._is_century_action_already_satisfied_by_style(
+        action=action,
+        document=document,
+        target_ref="p1",
+        target_text="mismatch",
+    )
+    assert not batch_module._is_century_action_already_satisfied_by_style(
+        action=replace(action, offset_end=7),
+        document=document,
+        target_ref="p1",
+        target_text="au xviie siècle",
+    )
+    no_inlines = Document(
+        document_id="flat-century",
+        source_path="source.docx",
+        source_format="docx",
+        blocks=[Block(block_id="p1", block_type="paragraph", text="au xviie siècle")],
+    )
+    assert not batch_module._is_century_action_already_satisfied_by_style(
+        action=action,
+        document=no_inlines,
+        target_ref="p1",
+        target_text="au xviie siècle",
+    )
+    document.blocks[0].inlines[1].kind = "field"
+    assert not batch_module._is_century_action_already_satisfied_by_style(
+        action=action,
+        document=document,
+        target_ref="p1",
+        target_text="au xviie siècle",
+    )
+
+
+def test_batch_keeps_author_capital_century_out_of_the_text_rule() -> None:
+    inlines = [
+        InlineSpan(text="au XVII", style=InlineStyle(superscript=False)),
+        InlineSpan(text="e", style=InlineStyle(superscript=True)),
+        InlineSpan(text=" siècle"),
+    ]
+    result = OrthotypoShadowBatchRunner().run(_century_document(inlines))
+    century = result.for_rule(CENTURY_RULE_ID)
+    assert century.native_decisions[0].proposed_actions == ()
+    assert not [item for item in result.legacy_transformations if item.rule_id == CENTURY_RULE_ID]
+    assert century.comparisons[0].status is ShadowComparisonStatus.MATCH
 
 
 def test_batch_refuses_unknown_rule_lookup_and_out_of_order_declaration(
