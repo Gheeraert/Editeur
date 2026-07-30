@@ -160,6 +160,37 @@ print(json.dumps(forbidden))
     assert completed.stdout.strip() == "[]"
 
 
+def test_importing_native_redoublement_rule_stays_isolated() -> None:
+    code = """
+import json
+import sys
+import purh_editorial.rules.orthotypography.redoublement_rule
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or "ai_editorial_service" in name
+    or "structure_ai_arbitrator" in name
+    or ".ui" in name
+    or "word_" in name
+    or ".services." in name
+    or ".pipeline." in name
+]
+print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
 def test_importing_shadow_adapter_stays_isolated() -> None:
     code = """
 import json
@@ -174,6 +205,39 @@ forbidden = [
     or ".ui" in name
     or "word_" in name
     or ".pipeline." in name
+]
+print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
+def test_importing_redoublement_shadow_adapter_stays_isolated() -> None:
+    code = """
+import json
+import sys
+import purh_editorial.services.orthotypo_redoublement_shadow_adapter
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or "ai_editorial_service" in name
+    or "structure_ai_arbitrator" in name
+    or ".ui" in name
+    or "word_" in name
+    or (
+        name == "purh_editorial.pipeline"
+        or name.startswith("purh_editorial.pipeline.")
+    )
 ]
 print(json.dumps(forbidden))
 """
@@ -245,6 +309,7 @@ def test_existing_services_pipeline_and_configuration_do_not_import_shadow() -> 
         for path in root.rglob("*.py"):
             if path.name in {
                 "orthotypo_shadow_adapter.py",
+                "orthotypo_redoublement_shadow_adapter.py",
                 "orthotypo_shadow_support.py",
             }:
                 continue
@@ -274,5 +339,18 @@ def test_shadow_adapter_is_not_wired_into_production_entry_points() -> None:
     for path in paths:
         content = path.read_text(encoding="utf-8")
         assert "orthotypo_shadow_adapter" not in content
+        assert "orthotypo_redoublement_shadow_adapter" not in content
         assert "orthotypo_shadow_support" not in content
         assert "EtcAbbreviationRule" not in content
+        assert "RedoubledAbbreviationRule" not in content
+
+
+def test_existing_etc_adapter_and_support_do_not_know_redoublement() -> None:
+    paths = [
+        ROOT / "src/purh_editorial/services/orthotypo_shadow_adapter.py",
+        ROOT / "src/purh_editorial/services/orthotypo_shadow_support.py",
+    ]
+    for path in paths:
+        content = path.read_text(encoding="utf-8")
+        assert "purh.abreviations.redoublement" not in content
+        assert "RedoubledAbbreviationRule" not in content
