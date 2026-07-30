@@ -1,8 +1,8 @@
 """Banc local d'observation shadow pour six règles orthotypographiques.
 
-Ce script est volontairement hors pipeline. Il ne modifie aucun DOCX : le
-batch conserve le legacy comme seule source d'effets et le natif reste observé
-uniquement.
+Ce script est volontairement hors pipeline. Il ne modifie aucun DOCX : chaque
+adaptateur conserve le legacy comme seule source d'effets et le natif reste
+observé uniquement.
 """
 
 from __future__ import annotations
@@ -80,7 +80,7 @@ class EvaluationInputError(ValueError):
 
 
 class EvaluationInvariantError(RuntimeError):
-    """Le batch shadow a produit un résultat incohérent."""
+    """Un adaptateur shadow a produit un résultat incohérent."""
 
 
 def _is_within(path: Path, root: Path) -> bool:
@@ -205,7 +205,7 @@ def _summarize_rule(
             "Le nombre de cibles, décisions et comparaisons doit concorder."
         )
     if result.rule_id != rule_id:
-        raise EvaluationInvariantError("Le batch a retourné une règle inattendue.")
+        raise EvaluationInvariantError("L’adaptateur a retourné une règle inattendue.")
 
     targets_by_ref = {target.target_ref: target for target in targets}
     rule_index = find_legacy_orthotypo_rule_index(rule_id)
@@ -520,8 +520,7 @@ def _render_markdown(report: dict[str, Any]) -> str:
         "## Périmètre",
         "",
         "Règles observées : `purh.abreviations.etc`, "
-        "`purh.abreviations.redoublement`, `purh.ordinaux`, `purh.siecles`, "
-        "`purh.pagination.espace` et `purh.numero`.",
+        "`purh.abreviations.redoublement` et `purh.ordinaux`.",
         "",
         "## Avertissement méthodologique",
         "",

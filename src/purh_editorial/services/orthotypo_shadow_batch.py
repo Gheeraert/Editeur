@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 import copy
-from dataclasses import dataclass, field, replace
-import re
+from dataclasses import dataclass, field
 from typing import Any
 
 from purh_editorial.model import Document, Transformation
 from purh_editorial.rules.engine import CanonicalRuleDecisionEngine
 from purh_editorial.rules.model import (
     CompatibilityContext,
-    DeterministicResult,
-    ProposedAction,
     RuleContext,
     RuleDecision,
 )
@@ -23,7 +20,6 @@ from purh_editorial.rules.orthotypography.century_rule import (
     PRE_RULE_TEXT_FACT as CENTURY_PRE_RULE_TEXT_FACT,
     RULE_ID as CENTURY_RULE_ID,
     CenturyAbbreviationRule,
-    _VALID_CENTURIES,
 )
 from purh_editorial.rules.orthotypography.numero_rule import (
     PRE_RULE_TEXT_FACT as NUMERO_PRE_RULE_TEXT_FACT,
@@ -61,7 +57,6 @@ from purh_editorial.services.orthotypo_shadow_support import (
 
 
 _COMPATIBILITY_FLAGS = ("legacy_orthotypo_shadow",)
-_STYLED_CENTURY_ACTION_RE = re.compile(r"([ivxlcdm]{1,8})e")
 
 
 class OrthotypoShadowBatchError(ValueError):
@@ -304,13 +299,6 @@ class OrthotypoShadowBatchRunner:
                 ),
             )
             evaluation = spec.native_rule.evaluate(context)
-            if spec.rule_id == CENTURY_RULE_ID:
-                evaluation = _filter_already_styled_century_actions(
-                    evaluation=evaluation,
-                    document=document,
-                    target_ref=target.target_ref,
-                    target_text=target.text,
-                )
             decision = self.engine.decide(
                 descriptor=spec.native_rule.descriptor,
                 evaluation=evaluation,
@@ -349,91 +337,3 @@ class OrthotypoShadowBatchRunner:
             native_decisions=tuple(decisions),
             comparisons=tuple(comparisons),
         )
-
-
-def _filter_already_styled_century_actions(
-    *,
-    evaluation: DeterministicResult,
-    document: Document,
-    target_ref: str,
-    target_text: str,
-) -> DeterministicResult:
-    """Écarte seulement les siècles déjà composés en petites capitales/sup."""
-    retained = tuple(
-        action
-        for action in evaluation.proposed_actions
-        if not _is_century_action_already_satisfied_by_style(
-            action=action,
-            document=document,
-            target_ref=target_ref,
-            target_text=target_text,
-        )
-    )
-    if len(retained) == len(evaluation.proposed_actions):
-        return evaluation
-    if retained:
-        return replace(evaluation, proposed_actions=retained)
-    return replace(
-        evaluation,
-        matched=False,
-        proposed_actions=(),
-        conditions_met=(),
-        justification=(
-            "Les formes de siècle détectées sont déjà satisfaites par la "
-            "composition petites capitales + exposant."
-        ),
-    )
-
-
-def _is_century_action_already_satisfied_by_style(
-    *,
-    action: ProposedAction,
-    document: Document,
-    target_ref: str,
-    target_text: str,
-) -> bool:
-    if not isinstance(action.before, str):
-        return False
-    match = _STYLED_CENTURY_ACTION_RE.fullmatch(action.before)
-    if match is None or match.group(1) not in _VALID_CENTURIES:
-        return False
-    offset_start = action.offset_start
-    offset_end = action.offset_end
-    if (
-        isinstance(offset_start, bool)
-        or isinstance(offset_end, bool)
-        or not isinstance(offset_start, int)
-        or not isinstance(offset_end, int)
-        or offset_start < 0
-        or offset_end < offset_start
-        or target_text[offset_start:offset_end] != action.before
-    ):
-        return False
-    inlines = _find_source_inlines(document, target_ref)
-    if not inlines or "".join(span.text for span in inlines) != target_text:
-        return False
-    character_styles = tuple(
-        (span.kind, span.style.small_caps, span.style.superscript)
-        for span in inlines
-        for _character in span.text
-    )
-    fragment_styles = character_styles[offset_start:offset_end]
-    if len(fragment_styles) != len(action.before):
-        return False
-    roman_styles = fragment_styles[:-1]
-    e_style = fragment_styles[-1]
-    return (
-        all(kind == "text" and small_caps for kind, small_caps, _sup in roman_styles)
-        and e_style[0] == "text"
-        and e_style[2]
-    )
-
-
-def _find_source_inlines(document: Document, target_ref: str):
-    for block in document.blocks:
-        if block.block_id == target_ref:
-            return block.inlines
-    for note in document.notes:
-        if note.note_id == target_ref:
-            return note.inlines
-    return ()
