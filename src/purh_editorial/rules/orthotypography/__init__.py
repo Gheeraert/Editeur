@@ -1,2 +1,0 @@
-"""Règles orthotypographiques natives pures."""
-
