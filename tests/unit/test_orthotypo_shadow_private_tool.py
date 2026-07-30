@@ -11,6 +11,7 @@ from docx import Document as WordDocument
 from purh_editorial.io.importer_registry import ImporterRegistry
 from purh_editorial.rules.shadow import ShadowComparisonStatus
 from purh_editorial.services.orthotypo_service import OrthotypoService
+import purh_editorial.services.orthotypo_shadow_batch as batch_module
 from purh_editorial.services.orthotypo_shadow_batch import (
     OrthotypoShadowBatchRunner,
 )
@@ -64,6 +65,9 @@ def test_tool_writes_private_reports_from_synthetic_docx(
             "Voir pp. 12-14.",
             "la 1ère partie",
             "le 5ème chapitre",
+            "XVIIème siècle",
+            "Voir p. 12",
+            "n° 5",
         ],
     )
     _write_docx(
@@ -73,6 +77,9 @@ def test_tool_writes_private_reports_from_synthetic_docx(
             f"Voir p.{NNBSP}12-14.",
             "la 1re partie",
             "le 5e chapitre",
+            "XVIIe siècle",
+            f"Voir p.{NNBSP}12",
+            f"no{NNBSP}5",
         ],
     )
     monkeypatch.setenv("PURH_PRIVATE_CORPUS_DIR", str(private_root))
@@ -92,6 +99,21 @@ def test_tool_writes_private_reports_from_synthetic_docx(
 
     legacy_service = RecordingLegacyService()
     batch_runner = OrthotypoShadowBatchRunner(legacy_service=legacy_service)
+    real_collect = batch_module.collect_orthotypo_shadow_targets
+    collection_calls: list[str] = []
+
+    def recording_collect(document, *, protection_policy_id):
+        collection_calls.append(protection_policy_id)
+        return real_collect(
+            document,
+            protection_policy_id=protection_policy_id,
+        )
+
+    monkeypatch.setattr(
+        batch_module,
+        "collect_orthotypo_shadow_targets",
+        recording_collect,
+    )
 
     class RecordingRegistry:
         def load_document(self, path: Path):
@@ -120,6 +142,8 @@ def test_tool_writes_private_reports_from_synthetic_docx(
     assert exit_code == 0
     assert calls == [raw_path, reference_path]
     assert legacy_service.calls == 2
+    assert len(collection_calls) == 2
+    assert collection_calls[0] == collection_calls[1]
     assert all(document == snapshot for document, snapshot in imported)
     json_path = output_dir / "orthotypo_shadow_4g.json"
     markdown_path = output_dir / "orthotypo_shadow_4g.md"
@@ -133,6 +157,9 @@ def test_tool_writes_private_reports_from_synthetic_docx(
             "purh.abreviations.etc",
             "purh.abreviations.redoublement",
             "purh.ordinaux",
+            "purh.siecles",
+            "purh.pagination.espace",
+            "purh.numero",
         ],
         "author_documents": 1,
         "edited_reference_documents": 1,
@@ -153,6 +180,21 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         == 2
     )
     assert (
+        report["aggregate"]["author"]["purh.siecles"]
+        ["native_actions_proposed"]
+        == 1
+    )
+    assert (
+        report["aggregate"]["author"]["purh.pagination.espace"]
+        ["native_actions_proposed"]
+        == 2
+    )
+    assert (
+        report["aggregate"]["author"]["purh.numero"]
+        ["native_actions_proposed"]
+        == 1
+    )
+    assert (
         report["aggregate"]["edited_reference"]["purh.abreviations.etc"]
         ["native_actions_proposed"]
         == 0
@@ -167,6 +209,16 @@ def test_tool_writes_private_reports_from_synthetic_docx(
         ["native_actions_proposed"]
         == 0
     )
+    for rule_id in (
+        "purh.siecles",
+        "purh.pagination.espace",
+        "purh.numero",
+    ):
+        assert (
+            report["aggregate"]["edited_reference"][rule_id]
+            ["native_actions_proposed"]
+            == 0
+        )
     for corpus in ("author", "edited_reference"):
         for rule in report["aggregate"][corpus].values():
             assert rule["comparison_statuses"] == {

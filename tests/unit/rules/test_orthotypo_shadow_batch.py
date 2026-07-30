@@ -5,9 +5,17 @@ import copy
 
 import pytest
 
-from purh_editorial.model import Block, Document, Note, Transformation
+from purh_editorial.model import Block, Document, InlineSpan, Note, Transformation
 from purh_editorial.rules.engine import CanonicalRuleDecisionEngine
+from purh_editorial.rules.orthotypography.century_rule import (
+    RULE_ID as CENTURY_RULE_ID,
+    CenturyAbbreviationRule,
+)
 from purh_editorial.rules.orthotypography.etc_rule import RULE_ID as ETC_RULE_ID
+from purh_editorial.rules.orthotypography.numero_rule import (
+    RULE_ID as NUMERO_RULE_ID,
+    NumeroAbbreviationRule,
+)
 from purh_editorial.rules.orthotypography.ordinal_rule import (
     RULE_ID as ORDINAL_RULE_ID,
     OrdinalAbbreviationRule,
@@ -15,6 +23,10 @@ from purh_editorial.rules.orthotypography.ordinal_rule import (
 from purh_editorial.rules.orthotypography.redoublement_rule import (
     RULE_ID as REDOUBLEMENT_RULE_ID,
     RedoubledAbbreviationRule,
+)
+from purh_editorial.rules.orthotypography.pagination_spacing_rule import (
+    RULE_ID as PAGINATION_RULE_ID,
+    PaginationSpacingRule,
 )
 from purh_editorial.rules.orthotypography.etc_rule import EtcAbbreviationRule
 from purh_editorial.rules.shadow import (
@@ -48,9 +60,21 @@ def _document() -> Document:
                 block_id="p1",
                 block_type="paragraph",
                 text=(
-                    "etc... Voir pp. 12-14, la 1ère partie et "
-                    "le 5ème chapitre."
+                    "XVIIème siècle, etc... Voir pp. 12-14, n° 5, "
+                    "la 1ère partie et le 5ème chapitre. "
+                    "Formes canoniques : XVIIe siècle, p.\u202f9, no\u202f8. "
+                    "La vie demeure."
                 ),
+                inlines=[
+                    InlineSpan(
+                        text=(
+                            "XVIIème siècle, etc... Voir pp. 12-14, n° 5, "
+                            "la 1ère partie et le 5ème chapitre. "
+                            "Formes canoniques : XVIIe siècle, p.\u202f9, "
+                            "no\u202f8. La vie demeure."
+                        )
+                    )
+                ],
             ),
             Block(
                 block_id="p2",
@@ -67,7 +91,7 @@ def _document() -> Document:
         notes=[
             Note(
                 note_id="n1",
-                text="Voir pp. 2 et etc...",
+                text="Au xviiième siècle, voir p. 2, n° 3 et etc...",
                 target_ref="p1",
             )
         ],
@@ -157,13 +181,19 @@ def test_batch_matches_all_three_individual_adapters_exactly() -> None:
 def test_batch_results_follow_legacy_order_and_keep_rule_effects_separate() -> None:
     result = OrthotypoShadowBatchRunner().run(_document())
     assert tuple(item.rule_id for item in result.rule_results) == (
+        CENTURY_RULE_ID,
         ORDINAL_RULE_ID,
         ETC_RULE_ID,
+        PAGINATION_RULE_ID,
+        NUMERO_RULE_ID,
         REDOUBLEMENT_RULE_ID,
     )
     expected_before = {
+        CENTURY_RULE_ID: {"XVIIème", "xviiième"},
         ORDINAL_RULE_ID: {"1ère", "5ème"},
         ETC_RULE_ID: {"etc..."},
+        PAGINATION_RULE_ID: {"pp. ", "p. "},
+        NUMERO_RULE_ID: {"n° "},
         REDOUBLEMENT_RULE_ID: {"pp."},
     }
     for rule_result in result.rule_results:
@@ -173,6 +203,23 @@ def test_batch_results_follow_legacy_order_and_keep_rule_effects_separate() -> N
             for action in comparison.legacy_observation.observed_actions
         }
         assert observed_before == expected_before[rule_result.rule_id]
+        assert all(
+            comparison.status is ShadowComparisonStatus.MATCH
+            for comparison in rule_result.comparisons
+        )
+
+    assert any(
+        item.rule_id == "R-SO-001" for item in result.legacy_transformations
+    )
+    assert any(
+        item.rule_id == "R-NO-001" for item in result.legacy_transformations
+    )
+    for rule_id in (CENTURY_RULE_ID, NUMERO_RULE_ID):
+        assert all(
+            action.action_type.value == "text_transform"
+            for comparison in result.for_rule(rule_id).comparisons
+            for action in comparison.legacy_observation.observed_actions
+        )
 
 
 def test_batch_refuses_unknown_rule_lookup_and_out_of_order_declaration(
@@ -252,7 +299,10 @@ def test_target_collection_occurs_once_per_distinct_protection_policy(
     )
     OrthotypoShadowBatchRunner().run(_document())
     expected_policies = {
+        CenturyAbbreviationRule.descriptor.protection_policy_id,
         EtcAbbreviationRule.descriptor.protection_policy_id,
+        PaginationSpacingRule.descriptor.protection_policy_id,
+        NumeroAbbreviationRule.descriptor.protection_policy_id,
         RedoubledAbbreviationRule.descriptor.protection_policy_id,
         OrdinalAbbreviationRule.descriptor.protection_policy_id,
     }

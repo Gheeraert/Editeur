@@ -16,10 +16,25 @@ from purh_editorial.rules.orthotypography.etc_rule import (
     RULE_ID as ETC_RULE_ID,
     EtcAbbreviationRule,
 )
+from purh_editorial.rules.orthotypography.century_rule import (
+    PRE_RULE_TEXT_FACT as CENTURY_PRE_RULE_TEXT_FACT,
+    RULE_ID as CENTURY_RULE_ID,
+    CenturyAbbreviationRule,
+)
+from purh_editorial.rules.orthotypography.numero_rule import (
+    PRE_RULE_TEXT_FACT as NUMERO_PRE_RULE_TEXT_FACT,
+    RULE_ID as NUMERO_RULE_ID,
+    NumeroAbbreviationRule,
+)
 from purh_editorial.rules.orthotypography.ordinal_rule import (
     PRE_RULE_TEXT_FACT as ORDINAL_PRE_RULE_TEXT_FACT,
     RULE_ID as ORDINAL_RULE_ID,
     OrdinalAbbreviationRule,
+)
+from purh_editorial.rules.orthotypography.pagination_spacing_rule import (
+    PRE_RULE_TEXT_FACT as PAGINATION_PRE_RULE_TEXT_FACT,
+    RULE_ID as PAGINATION_RULE_ID,
+    PaginationSpacingRule,
 )
 from purh_editorial.rules.orthotypography.redoublement_rule import (
     PRE_RULE_TEXT_FACT as REDOUBLEMENT_PRE_RULE_TEXT_FACT,
@@ -51,6 +66,7 @@ class OrthotypoShadowBatchError(ValueError):
 @dataclass(frozen=True, slots=True)
 class OrthotypoShadowRuleResult:
     rule_id: str
+    targets: tuple[OrthotypoShadowTarget, ...]
     native_decisions: tuple[RuleDecision, ...]
     comparisons: tuple[ShadowComparison, ...]
 
@@ -77,8 +93,19 @@ class _OrthotypoShadowRuleSpec:
     failure_justification: str
 
 
-# Ordre explicite de la chaîne legacy : ordinaux, etc., redoublement.
+# Ordre explicite des six transformations textuelles actives dans le legacy.
 _PILOT_RULE_SPECS = (
+    _OrthotypoShadowRuleSpec(
+        rule_id=CENTURY_RULE_ID,
+        native_rule=CenturyAbbreviationRule(),
+        pre_rule_text_fact=CENTURY_PRE_RULE_TEXT_FACT,
+        success_justification=(
+            "Conversion exacte des transformations legacy de siècles."
+        ),
+        failure_justification=(
+            "Une transformation legacy de siècles n’a pas pu être convertie."
+        ),
+    ),
     _OrthotypoShadowRuleSpec(
         rule_id=ORDINAL_RULE_ID,
         native_rule=OrdinalAbbreviationRule(),
@@ -102,6 +129,28 @@ _PILOT_RULE_SPECS = (
         ),
     ),
     _OrthotypoShadowRuleSpec(
+        rule_id=PAGINATION_RULE_ID,
+        native_rule=PaginationSpacingRule(),
+        pre_rule_text_fact=PAGINATION_PRE_RULE_TEXT_FACT,
+        success_justification=(
+            "Conversion exacte des transformations legacy de pagination."
+        ),
+        failure_justification=(
+            "Une transformation legacy de pagination n’a pas pu être convertie."
+        ),
+    ),
+    _OrthotypoShadowRuleSpec(
+        rule_id=NUMERO_RULE_ID,
+        native_rule=NumeroAbbreviationRule(),
+        pre_rule_text_fact=NUMERO_PRE_RULE_TEXT_FACT,
+        success_justification=(
+            "Conversion exacte des transformations legacy de numéro."
+        ),
+        failure_justification=(
+            "Une transformation legacy de numéro n’a pas pu être convertie."
+        ),
+    ),
+    _OrthotypoShadowRuleSpec(
         rule_id=REDOUBLEMENT_RULE_ID,
         native_rule=RedoubledAbbreviationRule(),
         pre_rule_text_fact=REDOUBLEMENT_PRE_RULE_TEXT_FACT,
@@ -118,7 +167,7 @@ _PILOT_RULE_SPECS = (
 
 @dataclass(slots=True)
 class OrthotypoShadowBatchRunner:
-    """Observe les trois pilotes avec une unique exécution du legacy."""
+    """Observe les six règles textuelles actives avec une exécution legacy."""
 
     legacy_service: Any = field(default_factory=OrthotypoService)
     engine: Any = field(
@@ -284,6 +333,7 @@ class OrthotypoShadowBatchRunner:
             comparisons.append(comparison)
         return OrthotypoShadowRuleResult(
             rule_id=spec.rule_id,
+            targets=targets,
             native_decisions=tuple(decisions),
             comparisons=tuple(comparisons),
         )

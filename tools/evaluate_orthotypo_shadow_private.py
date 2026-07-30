@@ -1,4 +1,4 @@
-"""Banc local d'observation shadow pour trois règles orthotypographiques.
+"""Banc local d'observation shadow pour six règles orthotypographiques.
 
 Ce script est volontairement hors pipeline. Il ne modifie aucun DOCX : chaque
 adaptateur conserve le legacy comme seule source d'effets et le natif reste
@@ -28,17 +28,23 @@ from purh_editorial.config.private_corpus import (  # noqa: E402
 from purh_editorial.io.importer_registry import ImporterRegistry  # noqa: E402
 from purh_editorial.model import Document  # noqa: E402
 from purh_editorial.rules.model import DecisionOutcome, ProposedAction  # noqa: E402
+from purh_editorial.rules.orthotypography.century_rule import (  # noqa: E402
+    RULE_ID as CENTURY_RULE_ID,
+)
 from purh_editorial.rules.orthotypography.etc_rule import (  # noqa: E402
     RULE_ID as ETC_RULE_ID,
-    EtcAbbreviationRule,
+)
+from purh_editorial.rules.orthotypography.numero_rule import (  # noqa: E402
+    RULE_ID as NUMERO_RULE_ID,
 )
 from purh_editorial.rules.orthotypography.redoublement_rule import (  # noqa: E402
     RULE_ID as REDOUBLEMENT_RULE_ID,
-    RedoubledAbbreviationRule,
 )
 from purh_editorial.rules.orthotypography.ordinal_rule import (  # noqa: E402
     RULE_ID as ORDINAL_RULE_ID,
-    OrdinalAbbreviationRule,
+)
+from purh_editorial.rules.orthotypography.pagination_spacing_rule import (  # noqa: E402
+    RULE_ID as PAGINATION_RULE_ID,
 )
 from purh_editorial.rules.shadow import (  # noqa: E402
     LegacyObservationStatus,
@@ -48,13 +54,19 @@ from purh_editorial.services.orthotypo_shadow_batch import (  # noqa: E402
     OrthotypoShadowBatchRunner,
 )
 from purh_editorial.services.orthotypo_shadow_support import (  # noqa: E402
-    collect_orthotypo_shadow_targets,
     find_legacy_orthotypo_rule_index,
     reconstruct_pre_rule_text,
 )
 
 
-RULE_IDS = (ETC_RULE_ID, REDOUBLEMENT_RULE_ID, ORDINAL_RULE_ID)
+RULE_IDS = (
+    ETC_RULE_ID,
+    REDOUBLEMENT_RULE_ID,
+    ORDINAL_RULE_ID,
+    CENTURY_RULE_ID,
+    PAGINATION_RULE_ID,
+    NUMERO_RULE_ID,
+)
 _METHODOLOGY_WARNING = (
     "Cette comparaison de corpus n’aligne pas automatiquement les passages "
     "auteur et corrigés. Elle mesure la parité legacy/natif et la présence "
@@ -285,58 +297,27 @@ def _evaluate_document(
             "Le batch shadow a modifié le document importé."
         )
 
-    policy_ids = {
-        ETC_RULE_ID: EtcAbbreviationRule.descriptor.protection_policy_id,
-        REDOUBLEMENT_RULE_ID: (
-            RedoubledAbbreviationRule.descriptor.protection_policy_id
-        ),
-        ORDINAL_RULE_ID: OrdinalAbbreviationRule.descriptor.protection_policy_id,
-    }
-    targets_by_policy = {
-        policy_id: collect_orthotypo_shadow_targets(
-            document,
-            protection_policy_id=policy_id,
+    summaries: dict[str, dict[str, Any]] = {}
+    details: list[dict[str, Any]] = []
+    for rule_id in RULE_IDS:
+        rule_result = batch_result.for_rule(rule_id)
+        summary, rule_details = _summarize_rule(
+            document=document,
+            document_kind=document_kind,
+            document_label=document_label,
+            document_filename=document_filename,
+            result=rule_result,
+            rule_id=rule_id,
+            targets=rule_result.targets,
         )
-        for policy_id in set(policy_ids.values())
-    }
-
-    etc_summary, etc_details = _summarize_rule(
-        document=document,
-        document_kind=document_kind,
-        document_label=document_label,
-        document_filename=document_filename,
-        result=batch_result.for_rule(ETC_RULE_ID),
-        rule_id=ETC_RULE_ID,
-        targets=targets_by_policy[policy_ids[ETC_RULE_ID]],
-    )
-    redoublement_summary, redoublement_details = _summarize_rule(
-        document=document,
-        document_kind=document_kind,
-        document_label=document_label,
-        document_filename=document_filename,
-        result=batch_result.for_rule(REDOUBLEMENT_RULE_ID),
-        rule_id=REDOUBLEMENT_RULE_ID,
-        targets=targets_by_policy[policy_ids[REDOUBLEMENT_RULE_ID]],
-    )
-    ordinal_summary, ordinal_details = _summarize_rule(
-        document=document,
-        document_kind=document_kind,
-        document_label=document_label,
-        document_filename=document_filename,
-        result=batch_result.for_rule(ORDINAL_RULE_ID),
-        rule_id=ORDINAL_RULE_ID,
-        targets=targets_by_policy[policy_ids[ORDINAL_RULE_ID]],
-    )
+        summaries[rule_id] = summary
+        details.extend(rule_details)
     return {
         "document_kind": document_kind,
         "document_label": document_label,
         "document_filename": document_filename,
-        "rules": {
-            ETC_RULE_ID: etc_summary,
-            REDOUBLEMENT_RULE_ID: redoublement_summary,
-            ORDINAL_RULE_ID: ordinal_summary,
-        },
-        "occurrences": [*etc_details, *redoublement_details, *ordinal_details],
+        "rules": summaries,
+        "occurrences": details,
     }
 
 

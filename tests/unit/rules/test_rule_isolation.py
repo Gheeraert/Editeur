@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+
+import pytest
 from pathlib import Path
 
 
@@ -208,6 +210,45 @@ forbidden = [
     or ".pipeline." in name
 ]
 print(json.dumps(forbidden))
+"""
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "[]"
+
+
+@pytest.mark.parametrize(
+    "module_name",
+    [
+        "purh_editorial.rules.orthotypography.century_rule",
+        "purh_editorial.rules.orthotypography.pagination_spacing_rule",
+        "purh_editorial.rules.orthotypography.numero_rule",
+    ],
+)
+def test_importing_new_native_text_rules_stays_isolated(
+    module_name: str,
+) -> None:
+    code = f"""
+import json
+import sys
+import {module_name}
+forbidden = [
+    name for name in sys.modules
+    if name == "tkinter"
+    or name.startswith("win32com")
+    or name.startswith("purh_editorial.services")
+    or name.startswith("purh_editorial.pipeline")
+    or name.startswith("purh_editorial.ui")
+    or "ai_editorial" in name
+]
+print(json.dumps(sorted(forbidden)))
 """
     env = dict(os.environ)
     env["PYTHONPATH"] = str(ROOT / "src")
@@ -484,6 +525,9 @@ def test_shadow_adapter_is_not_wired_into_production_entry_points() -> None:
         assert "EtcAbbreviationRule" not in content
         assert "RedoubledAbbreviationRule" not in content
         assert "OrdinalAbbreviationRule" not in content
+        assert "CenturyAbbreviationRule" not in content
+        assert "PaginationSpacingRule" not in content
+        assert "NumeroAbbreviationRule" not in content
 
 
 def test_existing_etc_adapter_and_support_do_not_know_redoublement() -> None:
@@ -535,3 +579,10 @@ def test_private_tool_is_the_only_consumer_of_shadow_batch() -> None:
         assert batch_import not in path.read_text(encoding="utf-8")
     tool_path = ROOT / "tools/evaluate_orthotypo_shadow_private.py"
     assert batch_import in tool_path.read_text(encoding="utf-8")
+
+
+def test_no_individual_shadow_adapter_exists_for_the_first_batch() -> None:
+    services = ROOT / "src/purh_editorial/services"
+    assert not (services / "orthotypo_century_shadow_adapter.py").exists()
+    assert not (services / "orthotypo_pagination_shadow_adapter.py").exists()
+    assert not (services / "orthotypo_numero_shadow_adapter.py").exists()
