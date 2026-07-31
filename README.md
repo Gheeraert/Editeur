@@ -25,13 +25,13 @@ L'outil est en cours de construction incrémentale. À ce stade :
 
 | Famille | Règles couvertes / catalogue |
 |---|---:|
-| Ortho-typographie de base | 23 / 23 |
+| Ortho-typographie de base | 22 / 23 |
 | Notes de bas de page | 10 / 10 |
 | Bibliographie | 3 / 7 |
 | Structuration du texte | 3 / 21 |
-| **Total** | **39 / 61** |
+| **Total** | **38 / 61** |
 
-La bibliographie repère désormais sa section (au style de titre Word associé au titre « Bibliographie »/« Sources »...) pour y ajouter le point final manquant. Le frontmatter (résumé, mots-clés, remerciements) est signalé en diagnostic (surlignage turquoise) plutôt que reclassé automatiquement, faute de style Word cible défini par le catalogue. La détection de titres, de poésie et de citations comme éléments de structure reste hors périmètre : elle reposait, dans l'architecture antérieure, sur un moteur de score que la stratégie actuelle exclut, et sa reconception sans score est un travail éditorial à part entière. Le détail de l'écart entre le catalogue et ce qui est effectivement câblé est suivi dans [`docs/REBORN_ARCHITECTURE.md`](docs/REBORN_ARCHITECTURE.md), section « État réel d'implémentation dans le chemin `reborn` ».
+La bibliographie repère désormais sa section (au style de titre Word associé au titre « Bibliographie »/« Sources »...) pour y ajouter le point final manquant. Le frontmatter (résumé, mots-clés, remerciements) est signalé en diagnostic (surlignage turquoise) plutôt que reclassé automatiquement, faute de style Word cible défini par le catalogue. **La détection de titres, de poésie et de citations comme éléments de structure n'est pas prioritaire pour l'instant** : elle reposait, dans l'architecture antérieure, sur un moteur de score que la stratégie actuelle exclut, sa reconception sans score est un travail éditorial à part entière, et la priorité reste de consolider l'ortho-typo/notes/bibliographie avant de s'y attaquer. Le détail de l'écart entre le catalogue et ce qui est effectivement câblé, ainsi qu'un plan de travail pour étendre l'automatisation bibliographique, sont suivis dans [`docs/REBORN_ARCHITECTURE.md`](docs/REBORN_ARCHITECTURE.md) (sections « État réel d'implémentation » et « Faisabilité d'une automatisation bibliographique plus poussée »).
 
 ## 4. Prérequis
 
@@ -68,4 +68,4 @@ python -m pytest
 - [Catalogue des 61 règles éditoriales](docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md)
 - [Code couleur des surlignements Word](docs/NOTICE_COULEURS_WORD.md)
 
-Le dépôt contient également une architecture antérieure (pivot Python‑JSON, scoring, seuils, exports multiples, IA multi-niveaux), abandonnée après plusieurs refontes infructueuses et non branchée sur `main.py`. Elle est conservée à titre d'archive dans [`docs/legacy/README_PIVOT_ARCHITECTURE.md`](docs/legacy/README_PIVOT_ARCHITECTURE.md) en attendant sa suppression définitive.
+L'architecture antérieure (pivot Python‑JSON, scoring, seuils, exports multiples, IA multi-niveaux) a été abandonnée après plusieurs refontes infructueuses et intégralement supprimée du dépôt. Sa documentation reste consultable à titre d'archive dans [`docs/legacy/`](docs/legacy/README_PIVOT_ARCHITECTURE.md).

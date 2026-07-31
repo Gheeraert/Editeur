@@ -63,11 +63,16 @@ silencieux.
 
 | Famille | Câblées (`RULE_IDS`) | Restant à concevoir |
 |---|---:|---:|
-| `orthotypography` | 23 | 0 |
+| `orthotypography` | 22 | 1 |
 | `footnote` | 10 | 0 |
 | `bibliography` | 3 | 4 |
 | `structure` | 3 | 18 |
-| **Total** | **39** | **22** |
+| **Total** | **38** | **23** |
+
+`purh.tiret.incise` (famille orthotypographie) est marquée `disabled` par le
+catalogue lui-même — jamais fonctionnelle, y compris dans la voie legacy — et
+n'a aucun détecteur dans `corrector/rules/`. Elle a été retirée de `RULE_IDS`
+(elle y figurait par erreur) et déplacée dans `NOT_YET_IMPLEMENTED_RULE_IDS`.
 
 `purh.biblio.ponctuation_finale` est désormais câblée : la section
 bibliographique est repérée par le style de titre Word (Titre/Heading 1-4)
@@ -94,6 +99,17 @@ explicitement (§7 ci-dessous), et leur redéfinir un déclencheur explicite san
 score est un vrai travail éditorial — pas une simple portation.
 `corrector/rules/structure.py` contient le détecteur de frontmatter
 (`detect_frontmatter_rule`), maintenant branché.
+
+**Ces 18 règles de structure ne sont pas prioritaires pour l'instant.** La
+valeur immédiate de l'outil pour les éditrices tient d'abord aux corrections
+ortho-typographiques et bibliographiques déterministes, qui couvrent la
+majorité des interventions réellement chronophages sur un manuscrit. La
+détection de structure (titres, poésie, citations) est un chantier à part
+entière, avec un vrai risque éditorial si elle est mal calibrée (ex. : un vers
+de poésie promu à tort en titre) — elle sera reprise après consolidation du
+périmètre ortho-typo/notes/bibliographie, pas avant. Voir §13 « Faisabilité
+d'une automatisation bibliographique plus poussée » pour la suite jugée la
+plus utile à court terme.
 
 Un identifiant absent de `RULE_IDS` n'apparaît pas dans le décompte renvoyé
 par `correct_docx` : cela évite qu'un compte à 0 soit confondu avec « règle
@@ -397,3 +413,92 @@ Le redémarrage est réussi lorsque les critères suivants sont vérifiés :
 
 Ces critères sont vérifiables sur les tests ciblés et sur les documents Word de
 validation.
+
+## 13. Faisabilité d'une automatisation bibliographique plus poussée
+
+### 13.1 Les 4 règles déclarées ne sont pas ce qui apporterait le plus de valeur
+
+Les 4 règles bibliographie encore hors périmètre —
+`structure.bibliography.section.start`, `structure.bibliography.section.end`,
+`structure.bibliography.item.promote`, `bibliography.entry.detect` — sont
+marquées `planned` ou `disabled`/`dormant` dans le catalogue : **aucune n'a de
+comportement établi à porter**, y compris dans la voie legacy. Les concevoir
+de zéro n'est pas une portation mais une conception complète, et leur nature
+(délimiter une section, promouvoir un bloc en « entrée bibliographique »,
+découper une entrée en champs auteur/titre/année/éditeur) appartenait à
+l'architecture pivot : ce sont des opérations de classification structurelle,
+pas des corrections de texte visibles.
+
+Or la détection de section bibliographique (l'équivalent fonctionnel de
+`section.start`/`.end`) **existe déjà** dans `reborn` : c'est exactement ce
+que fait `_apply_bibliography_entry` / `BIBLIOGRAPHY_SECTION_HEADING_RE` dans
+`word_document.py` pour scoper `purh.biblio.ponctuation_finale` (§2.1). Le
+formaliser en rule_ids séparés n'ajouterait rien d'observable dans le DOCX de
+sortie, puisque reborn n'a pas de pivot où « marquer » un bloc — seulement des
+actions Word visibles (surlignage jaune/turquoise). Quant à
+`bibliography.entry.detect` (parser une entrée en champs), c'est un problème
+de reconnaissance d'entités bien plus dur que le reste du catalogue : les
+citations d'auteurs sont notoirement mal formatées et hétérogènes (ordre des
+champs, virgules vs points, initiales vs prénoms complets, années entre
+parenthèses ou non), ce qui rend une extraction par regex fragile et à haut
+risque de faux positifs silencieux.
+
+**Conclusion : implémenter littéralement ces 4 règles n'est pas la voie à
+suivre.** Elles peuvent rester dans `NOT_YET_IMPLEMENTED_RULE_IDS`
+indéfiniment sans perte réelle — leur fonction utile (délimiter la section)
+est déjà couverte autrement.
+
+### 13.2 Ce qui apporterait réellement du temps gagné : étendre les corrections *dans* la zone déjà détectée
+
+L'objectif énoncé — automatiser le formatage bibliographique parce que les
+auteurs sont négligents sur le respect du gabarit attendu — est déjà
+partiellement atteint : `reborn` détecte la section bibliographique de façon
+déterministe (style de titre Word) et y corrige la ponctuation finale. Cette
+même zone détectée est le point d'ancrage naturel pour des règles
+supplémentaires, **sans transformation structurelle du document** — uniquement
+des corrections de texte localisées, dans l'esprit des règles
+ortho-typographiques déjà en place. Candidats plausibles, par ordre de
+facilité technique décroissante :
+
+1. **Espace avant/après séparateurs d'entrée** (virgules, points, tirets entre
+   éléments d'une référence) — même famille technique que
+   `purh.biblio.pagination_nnbsp`/`numero_nnbsp`, faisabilité élevée.
+2. **Normalisation des espaces autour du tiret de plage de pages** (« p.
+   12-25 » → tiret et espacement PURH) — regex ciblée, faisabilité élevée.
+3. **Casse du nom d'auteur** (petites capitales, tout en majuscules, ou
+   Nom/Prénom standard PURH) — faisabilité moyenne : nécessite de savoir
+   distinguer de façon fiable le segment « auteur » du reste de l'entrée, ce
+   qui suppose une convention de ponctuation stable en début d'entrée
+   (ex. : toujours suivie d'une virgule).
+4. **Normalisation de « et al. »**, des initiales de prénom, des abréviations
+   d'éditeur — faisabilité moyenne, dépend de la variabilité réelle observée
+   dans les manuscrits.
+5. **Mise en italique du titre** — faisabilité plus faible dans le modèle
+   actuel : `reborn` corrige du texte, pas la mise en forme d'une plage
+   délimitée par des règles de citation (contrairement au stylage des
+   siècles/numéros, qui s'appuie sur un motif textuel fixe) ; il faudrait
+   d'abord définir comment délimiter le titre dans une entrée à la
+   ponctuation hétérogène.
+
+### 13.3 Ce qu'il faut pour lancer ce chantier
+
+Chacune des règles candidates ci-dessus doit être ancrée sur une **source
+normative PURH concrète** avant d'être codée — pas inventée (cf. AGENTS.md
+§2.4). Le préalable concret :
+
+1. Obtenir 10 à 20 entrées bibliographiques réelles de manuscrits déjà
+   corrigés par une éditrice PURH (avant/après), pour caractériser les
+   erreurs réellement fréquentes plutôt que d'en supposer.
+2. Obtenir la référence du gabarit PURH pour la bibliographie (page du guide
+   de préparation éditoriale, comme pour les règles déjà sourcées
+   `purh.guide.p10`–`p12` dans le catalogue).
+3. Pour chaque règle candidate retenue, l'ajouter au catalogue
+   (`docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md`) avec un `rule_id` explicite
+   (`purh.biblio.xxx`), sa source normative, puis l'implémenter dans
+   `corrector/rules/bibliography.py` en suivant le même patron que
+   `find_bibliography_pagination_edits` (garde-fous locaux, tests positifs et
+   négatifs, idempotence).
+
+Sans ce matériau (exemples réels + référence PURH), toute règle supplémentaire
+serait une hypothèse non vérifiée risquant de « corriger » vers une norme
+incorrecte — silencieusement, sur un document destiné à l'impression.
