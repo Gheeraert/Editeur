@@ -3,6 +3,8 @@ from __future__ import annotations
 import pytest
 
 from purh_editorial.corrector.rules.bibliography import (
+    BIBLIOGRAPHY_SECTION_HEADING_RE,
+    find_bibliography_final_punctuation_edits,
     find_bibliography_numero_edits,
     find_bibliography_pagination_edits,
 )
@@ -63,13 +65,12 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.biblio.numero_nnbsp",
     "R-SO-001",
     "R-NO-001",
-    "structure.frontmatter.abstract",
-    "structure.frontmatter.keywords",
-    "structure.frontmatter.acknowledgment",
     "R-TI-001",
     "R-AN-002",
     "R-AN-003",
-    "structure.frontmatter.circuit_breaker",
+    "structure.frontmatter.abstract",
+    "structure.frontmatter.keywords",
+    "structure.frontmatter.acknowledgment",
 }
 
 EXPECTED_HEURISTIC_IDS = {
@@ -82,28 +83,7 @@ EXPECTED_HEURISTIC_IDS = {
     "purh.note.ponctuation_finale",
     "R-AN-004",
     "R-AN-005",
-    "structure.bibliography.section.start",
-    "structure.bibliography.section.end",
-    "structure.bibliography.item.promote",
-    "bibliography.entry.detect",
     "purh.biblio.ponctuation_finale",
-    "structure.source_style.heading",
-    "structure.allcaps.heading",
-    "structure.bold.heading",
-    "structure.italic.author",
-    "structure.italic.heading",
-    "structure.epigraph.heuristic",
-    "structure.bibliography.section",
-    "structure.bibliography.heuristic",
-    "structure.indent.quote",
-    "structure.quote.guillemets",
-    "structure.heading.heuristic",
-    "R-STRUCT-HEADING-001",
-    "structure.lineated.blank_bounded.merge",
-    "structure.lineated.short_sequence.merge",
-    "R-CI-POETRY-001",
-    "structure.lineated.group.annotate",
-    "structure.lineated.stanza.merge",
 }
 
 
@@ -320,6 +300,46 @@ def test_bibliography_text_logic_is_exact_and_idempotent(
     assert apply_text_edits(corrected, finder(corrected)) == corrected
 
 
+def test_bibliography_final_punctuation_adds_missing_period() -> None:
+    source = "Dupont Jean, Essai critique, Paris, Gallimard, 2020"
+    edits = find_bibliography_final_punctuation_edits(source)
+    assert apply_text_edits(source, edits) == source + "."
+    assert find_bibliography_final_punctuation_edits(source + ".") == []
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Entrée déjà ponctuée.",
+        "Entrée entre guillemets »",
+        "- élément de liste sans point final",
+        "Voir https://exemple.org/reference-sans-point",
+        "",
+    ],
+)
+def test_bibliography_final_punctuation_guards(source: str) -> None:
+    assert find_bibliography_final_punctuation_edits(source) == []
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Bibliographie",
+        "Sources",
+        "Références bibliographiques",
+        "Bibliography",
+        "Works cited",
+    ],
+)
+def test_bibliography_section_heading_detection(text: str) -> None:
+    assert BIBLIOGRAPHY_SECTION_HEADING_RE.match(text)
+
+
+def test_bibliography_section_heading_rejects_ordinary_titles() -> None:
+    assert BIBLIOGRAPHY_SECTION_HEADING_RE.match("Introduction") is None
+    assert BIBLIOGRAPHY_SECTION_HEADING_RE.match("Chapitre 3") is None
+
+
 def test_style_detectors_are_closed_and_idempotence_ready() -> None:
     assert find_centuries("xvie siècle")[0].roman == "xvi"
     assert find_numero_style_matches(f"no{NNBSP}5")[0].group(1) == "o"
@@ -455,17 +475,26 @@ def test_frontmatter_detection_is_exact(text: str, rule_id: str) -> None:
 
 
 def test_exact_deterministic_identifier_set() -> None:
-    assert len(DETERMINISTIC_RULE_IDS) == 30
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 30
+    # 29 des 30 règles déterministes du catalogue : seule
+    # structure.frontmatter.circuit_breaker reste à concevoir (cf.
+    # NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py — `planned`, jamais
+    # fonctionnelle même dans la voie legacy).
+    assert len(DETERMINISTIC_RULE_IDS) == 29
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 29
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
 def test_exact_heuristic_and_complete_identifier_sets() -> None:
-    assert len(HEURISTIC_RULE_IDS) == 31
-    assert len(set(HEURISTIC_RULE_IDS)) == 31
+    # 10 des 31 règles heuristiques du catalogue : les 17 règles de
+    # heading/poésie/citation/section bibliographique restent à concevoir
+    # (moteur de score legacy exclu par docs/REBORN_ARCHITECTURE.md §7), ainsi
+    # que les règles bibliographie explicitement `planned`/`dormant` dans le
+    # catalogue (cf. NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py).
+    assert len(HEURISTIC_RULE_IDS) == 10
+    assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 61
-    assert len(set(RULE_IDS)) == 61
+    assert len(RULE_IDS) == 39
+    assert len(set(RULE_IDS)) == 39
 
 
 class _IgnoringRange:

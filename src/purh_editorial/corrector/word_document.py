@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any, Callable
 
+from purh_editorial.corrector.rules.bibliography import (
+    BIBLIOGRAPHY_SECTION_HEADING_RE,
+    BIBLIOGRAPHY_TEXT_RULES,
+    find_bibliography_final_punctuation_edits,
+)
 from purh_editorial.corrector.rules.footnotes import (
     FOOTNOTE_DIAGNOSTIC_RULES,
     FOOTNOTE_RULES,
@@ -16,10 +22,16 @@ from purh_editorial.corrector.rules.orthotypography import (
     find_incise_dash_diagnostics,
     find_numero_style_matches,
 )
+from purh_editorial.corrector.rules.structure import detect_frontmatter_rule
 
 WD_MAIN_TEXT_STORY = 1
 WD_YELLOW = 7
 WD_TURQUOISE = 3
+
+# Style Word explicite (Titre 1/2/3/4 en français, Heading 1-4 en anglais) —
+# condition observable et déterministe, pas une heuristique de mise en forme
+# scorée. Cf. docs/REBORN_ARCHITECTURE.md §6.
+_HEADING_STYLE_RE = re.compile(r"(titre|heading)\s*[1-4]\b", re.IGNORECASE)
 
 
 def _paragraph_text(paragraph: Any) -> str:
@@ -166,10 +178,36 @@ def _apply_diagnostics(
     return len(diagnostics)
 
 
+def _paragraph_style_name(paragraph: Any) -> str:
+    try:
+        return str(paragraph.Range.Style.NameLocal)
+    except Exception:
+        return ""
+
+
+def _is_heading_paragraph(paragraph: Any) -> bool:
+    return bool(_HEADING_STYLE_RE.search(_paragraph_style_name(paragraph)))
+
+
+def _apply_frontmatter_diagnostic(paragraph: Any, counts: dict[str, int]) -> None:
+    rule_id = detect_frontmatter_rule(_paragraph_text(paragraph))
+    if rule_id is None:
+        return
+    paragraph.Range.HighlightColorIndex = WD_TURQUOISE
+    counts[rule_id] += 1
+
+
+def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
+    counts["purh.biblio.ponctuation_finale"] += _apply_text_edits(
+        paragraph, find_bibliography_final_punctuation_edits
+    )
+
+
 def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
+    in_bibliography_section = False
     for paragraph_index, paragraph in enumerate(story.Paragraphs, start=1):
-        for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES:
+        for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES + BIBLIOGRAPHY_TEXT_RULES:
             try:
                 counts[rule_id] += _apply_text_edits(paragraph, finder)
             except Exception as exc:
@@ -181,6 +219,18 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
         counts["R-TI-001"] += _apply_incise_diagnostics(paragraph)
         for rule_id, finder in ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES:
             counts[rule_id] += _apply_diagnostics(paragraph, finder)
+
+        if _is_heading_paragraph(paragraph):
+            in_bibliography_section = bool(
+                BIBLIOGRAPHY_SECTION_HEADING_RE.match(
+                    _paragraph_text(paragraph).strip()
+                )
+            )
+            _apply_frontmatter_diagnostic(paragraph, counts)
+        elif in_bibliography_section:
+            _apply_bibliography_entry(paragraph, counts)
+        else:
+            _apply_frontmatter_diagnostic(paragraph, counts)
     paragraph = None
     story = None
 
@@ -208,7 +258,7 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
             footnote.Range.Paragraphs,
             start=1,
         ):
-            for rule_id, finder in FOOTNOTE_RULES:
+            for rule_id, finder in FOOTNOTE_RULES + BIBLIOGRAPHY_TEXT_RULES:
                 try:
                     counts[rule_id] += _apply_text_edits(paragraph, finder)
                 except Exception as exc:

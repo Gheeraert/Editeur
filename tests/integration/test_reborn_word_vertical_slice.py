@@ -335,6 +335,9 @@ def _expected_first_counts() -> dict[str, int]:
             "purh.note.ponctuation_finale": 1,
             "R-AN-004": 1,
             "R-AN-005": 1,
+            "structure.frontmatter.abstract": 1,
+            "structure.frontmatter.keywords": 1,
+            "structure.frontmatter.acknowledgment": 1,
         }
     )
     return counts
@@ -363,7 +366,9 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
         "R-GQ-004",
         "R-AN-004",
         "R-AN-005",
-        "structure.frontmatter.circuit_breaker",
+        "structure.frontmatter.abstract",
+        "structure.frontmatter.keywords",
+        "structure.frontmatter.acknowledgment",
     }
     assert all(second_counts[rule_id] == 0 for rule_id in automatic_ids)
     assert second_counts["R-TI-001"] == 1
@@ -374,5 +379,7 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
     assert second_counts["R-GQ-004"] == 1
     assert second_counts["R-AN-004"] == 1
     assert second_counts["R-AN-005"] == 1
-    assert second_counts["structure.frontmatter.circuit_breaker"] == 0
+    assert second_counts["structure.frontmatter.abstract"] == 1
+    assert second_counts["structure.frontmatter.keywords"] == 1
+    assert second_counts["structure.frontmatter.acknowledgment"] == 1
     _assert_corrected_document(corrected_twice)

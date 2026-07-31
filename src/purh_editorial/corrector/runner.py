@@ -30,13 +30,17 @@ DETERMINISTIC_RULE_IDS = (
     "purh.note.espace_sans_lieu_date",
     "purh.biblio.pagination_nnbsp",
     "purh.biblio.numero_nnbsp",
-    "structure.frontmatter.abstract",
-    "structure.frontmatter.keywords",
-    "structure.frontmatter.acknowledgment",
     "R-TI-001",
     "R-AN-002",
     "R-AN-003",
-    "structure.frontmatter.circuit_breaker",
+    # Front matter (résumé/mots-clés/remerciements) : détection déterministe
+    # par correspondance exacte de la ligne (structure.py), appliquée comme
+    # diagnostic (surlignage turquoise) plutôt que comme transformation
+    # structurelle silencieuse — la cible Word exacte (style à appliquer)
+    # n'est pas spécifiée par le catalogue et ne doit pas être devinée.
+    "structure.frontmatter.abstract",
+    "structure.frontmatter.keywords",
+    "structure.frontmatter.acknowledgment",
 )
 
 HEURISTIC_RULE_IDS = (
@@ -49,11 +53,31 @@ HEURISTIC_RULE_IDS = (
     "purh.note.ponctuation_finale",
     "R-AN-004",
     "R-AN-005",
+    # Bibliographie : la section est repérée par le style de titre Word
+    # (Titre 1-4 / Heading 1-4) associé au titre de section reconnu
+    # (Bibliographie, Sources, Références bibliographiques...) — condition
+    # explicite et déterministe, pas un score. Voir
+    # `_apply_bibliography_entry` / `BIBLIOGRAPHY_SECTION_HEADING_RE` dans
+    # word_document.py / rules/bibliography.py.
+    "purh.biblio.ponctuation_finale",
+)
+
+# Règles du catalogue (docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md) volontairement
+# absentes de RULE_IDS : le catalogue les marque lui-même comme `planned`
+# (jamais fonctionnelles, même dans la voie legacy) ou `dormant`/`disabled`
+# (bibliography.entry.detect, structure.lineated.short_sequence.merge), ou
+# reposent sur le moteur de score/seuil de la voie legacy (`structure_service`,
+# score `heading`/`poetry`/`quote_structure`/`bibliography_structure`) que le
+# nouveau chemin d'exécution exclut explicitement
+# (docs/REBORN_ARCHITECTURE.md §7). Les concevoir sans scoring demande de
+# spécifier, règle par règle, la condition de déclenchement exacte et l'action
+# Word résultante — un vrai travail éditorial, pas une simple portation.
+NOT_YET_IMPLEMENTED_RULE_IDS = (
+    "structure.frontmatter.circuit_breaker",
     "structure.bibliography.section.start",
     "structure.bibliography.section.end",
     "structure.bibliography.item.promote",
     "bibliography.entry.detect",
-    "purh.biblio.ponctuation_finale",
     "structure.source_style.heading",
     "structure.allcaps.heading",
     "structure.bold.heading",
