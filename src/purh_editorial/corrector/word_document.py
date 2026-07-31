@@ -26,7 +26,10 @@ from purh_editorial.corrector.rules.orthotypography import (
     find_numero_style_matches,
     find_ordinal_style_matches,
 )
-from purh_editorial.corrector.rules.structure import detect_frontmatter_rule
+from purh_editorial.corrector.rules.structure import (
+    detect_frontmatter_rule,
+    is_allcaps_heading,
+)
 
 WD_MAIN_TEXT_STORY = 1
 WD_YELLOW = 7
@@ -241,6 +244,17 @@ def _apply_frontmatter_diagnostic(paragraph: Any, counts: dict[str, int]) -> Non
     counts[rule_id] += 1
 
 
+def _apply_allcaps_heading_diagnostic(paragraph: Any, counts: dict[str, int]) -> None:
+    # Diagnostic seul (surlignage turquoise), pas de transformation de texte :
+    # ramener un titre tout capitales a la casse phrase perdrait la casse
+    # d'un nom propre eventuellement present dans le titre (aucune information
+    # de casse d'origine a preserver une fois le texte tout capitales).
+    if not is_allcaps_heading(_paragraph_text(paragraph)):
+        return
+    paragraph.Range.HighlightColorIndex = WD_TURQUOISE
+    counts["structure.allcaps.heading"] += 1
+
+
 def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
     counts["purh.biblio.ponctuation_finale"] += _apply_text_edits(
         paragraph, find_bibliography_final_punctuation_edits
@@ -276,6 +290,7 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
                 )
             )
             _apply_frontmatter_diagnostic(paragraph, counts)
+            _apply_allcaps_heading_diagnostic(paragraph, counts)
         elif in_bibliography_section:
             _apply_bibliography_entry(paragraph, counts)
         else:

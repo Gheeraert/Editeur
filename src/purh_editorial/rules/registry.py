@@ -698,15 +698,22 @@ STRUCTURE_RULES = (
         tests=(STRUCTURE_TEST,),
     ),
     _rule(
+        # Implementee comme diagnostic (surlignage turquoise, condition
+        # deterministe : style Word de titre + texte tout capitales), pas
+        # comme transformation automatique de casse : ramener un titre tout
+        # capitales a la casse phrase perdrait la casse d'un nom propre
+        # eventuellement present dans le titre. Remplace le score_family
+        # "heading" du catalogue d'origine (moteur de score legacy exclu par
+        # docs/REBORN_ARCHITECTURE.md §7).
         "structure.allcaps.heading",
         owner=STRUCTURE_OWNER,
         family=RuleFamily.STRUCTURE,
-        nature=RuleNature.HEURISTIC,
+        nature=RuleNature.DETERMINISTIC,
         action=RuleActionType.STRUCTURE_TRANSFORM,
         status=DeploymentStatus.ACTIVE,
-        normative_status=NormativeStatus.INTERNAL_UNSOURCED,
-        score_family="heading",
-        tests=(STRUCTURE_TEST, "tests/unit/test_heading_heuristic_scoring.py"),
+        normative_status=NormativeStatus.CORPUS_OBSERVED,
+        sources=(OBSERVED_CORPUS,),
+        tests=("tests/unit/test_reborn_rule_logic.py",),
     ),
     _rule(
         "structure.bold.heading",

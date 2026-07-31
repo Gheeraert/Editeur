@@ -47,6 +47,15 @@ DETERMINISTIC_RULE_IDS = (
     "structure.frontmatter.abstract",
     "structure.frontmatter.keywords",
     "structure.frontmatter.acknowledgment",
+    # Titre tout capitales : condition déterministe (style Word de titre +
+    # texte tout capitales, `is_allcaps_heading` dans structure.py),
+    # appliquée comme diagnostic (surlignage turquoise) et non comme
+    # transformation automatique — ramener silencieusement à la casse
+    # phrase perdrait la casse d'un nom propre éventuellement présent dans
+    # le titre. Confirmé sur deux corpus indépendants (voir
+    # docs/journal/ANALYSE_CORPUS_HP2.md et
+    # docs/journal/OBSERVATIONS_CORPUS_2026-07-31.md).
+    "structure.allcaps.heading",
 )
 
 HEURISTIC_RULE_IDS = (
@@ -91,7 +100,6 @@ NOT_YET_IMPLEMENTED_RULE_IDS = (
     "bibliography.entry.detect",
     "purh.tiret.incise",
     "structure.source_style.heading",
-    "structure.allcaps.heading",
     "structure.bold.heading",
     "structure.italic.author",
     "structure.italic.heading",

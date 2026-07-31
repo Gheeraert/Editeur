@@ -33,7 +33,10 @@ from purh_editorial.corrector.rules.orthotypography import (
     find_straight_quote_diagnostics,
     normalize_points_suspension,
 )
-from purh_editorial.corrector.rules.structure import detect_frontmatter_rule
+from purh_editorial.corrector.rules.structure import (
+    detect_frontmatter_rule,
+    is_allcaps_heading,
+)
 from purh_editorial.corrector.runner import (
     DETERMINISTIC_RULE_IDS,
     HEURISTIC_RULE_IDS,
@@ -78,6 +81,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "structure.frontmatter.abstract",
     "structure.frontmatter.keywords",
     "structure.frontmatter.acknowledgment",
+    "structure.allcaps.heading",
 }
 
 EXPECTED_HEURISTIC_IDS = {
@@ -548,20 +552,51 @@ def test_frontmatter_detection_is_exact(text: str, rule_id: str) -> None:
     assert detect_frontmatter_rule("Texte ordinaire.") is None
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        # Extraits reels courts (titres de section generiques), voir
+        # docs/journal/ANALYSE_CORPUS_HP2.md et
+        # docs/journal/OBSERVATIONS_CORPUS_2026-07-31.md.
+        "SOURCES ET BIBLIOGRAPHIE",
+        "BIBLIOGRAPHIE SÉLECTIVE",
+        "MANUSCRITS ET DOCUMENTS D'ARCHIVES",
+        "TABLE DES FIGURES",
+        "CHAPITRE 3",
+    ],
+)
+def test_allcaps_heading_detects_real_patterns(text: str) -> None:
+    assert is_allcaps_heading(text)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "I",
+        "A",
+        "IV",
+        "Introduction",
+        "Chapitre 3",
+        "Table des figures",
+        "",
+        "12",
+        "M. Dupont",
+    ],
+)
+def test_allcaps_heading_guards_short_and_mixed_case(text: str) -> None:
+    assert not is_allcaps_heading(text)
+
+
 def test_exact_deterministic_identifier_set() -> None:
-    # 33 des 34 règles déterministes du catalogue : seule
-    # structure.frontmatter.circuit_breaker reste à concevoir (cf.
-    # NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py — `planned`, jamais
-    # fonctionnelle même dans la voie legacy). Les trois règles de style
-    # ajoutées (purh.ordinaux.style, purh.civilite.style,
-    # purh.note.italique_latin) complètent les couches de mise en forme
-    # manquantes pour les ordinaux, les civilités et les abréviations
-    # latines en note. purh.numeral_dynastique ajoute l'espace insécable
-    # entre un nom propre et le numéral romain qui le suit (candidate la
-    # plus solide identifiée par docs/ANALYSE_CORPUS_HP2.md, 784 occurrences
-    # observées sur le corpus H&P2).
-    assert len(DETERMINISTIC_RULE_IDS) == 35
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 35
+    # 34 des 34 règles déterministes du catalogue restant hors
+    # NOT_YET_IMPLEMENTED_RULE_IDS : seule structure.frontmatter.circuit_breaker
+    # reste à concevoir (cf. runner.py — `planned`, jamais fonctionnelle même
+    # dans la voie legacy). structure.allcaps.heading complète cette liste :
+    # implémentée en diagnostic (surlignage), condition déterministe (style de
+    # titre Word + texte tout capitales), pas de transformation automatique de
+    # casse (risque de perdre la casse d'un nom propre dans le titre).
+    assert len(DETERMINISTIC_RULE_IDS) == 36
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 36
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -578,8 +613,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 45
-    assert len(set(RULE_IDS)) == 45
+    assert len(RULE_IDS) == 46
+    assert len(set(RULE_IDS)) == 46
 
 
 class _IgnoringRange:

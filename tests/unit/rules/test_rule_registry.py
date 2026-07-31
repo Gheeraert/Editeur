@@ -62,8 +62,8 @@ EXPECTED_COUNTS = {
         RuleFamily.STRUCTURE: 21,
     },
     "nature": {
-        RuleNature.DETERMINISTIC: 36,
-        RuleNature.HEURISTIC: 32,
+        RuleNature.DETERMINISTIC: 37,
+        RuleNature.HEURISTIC: 31,
     },
     "action": {
         RuleActionType.TEXT_TRANSFORM: 30,
@@ -122,7 +122,7 @@ def test_registry_access_filters_and_immutability() -> None:
     registry = CANONICAL_RULE_REGISTRY
     assert registry.get("purh.siecles").family is RuleFamily.ORTHOTYPOGRAPHY
     assert len(registry.by_family(RuleFamily.FOOTNOTE)) == 11
-    assert len(registry.by_nature(RuleNature.HEURISTIC)) == 32
+    assert len(registry.by_nature(RuleNature.HEURISTIC)) == 31
     assert len(registry.by_action(RuleActionType.STYLE_TRANSFORM)) == 5
     assert len(registry.by_status(DeploymentStatus.DISABLED)) == 3
     assert len(registry.by_implementation_state(ImplementationState.PLANNED)) == 4

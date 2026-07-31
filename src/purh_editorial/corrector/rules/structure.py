@@ -28,3 +28,16 @@ def detect_frontmatter_rule(text: str) -> str | None:
             return rule_id
     return None
 
+
+# Seuil de 4 lettres : ecarte les marqueurs courts de type "I", "A" (chiffre
+# romain ou lettre de partie/annexe), qui sont legitimement tout capitales
+# et ne doivent pas etre signales.
+_ALLCAPS_HEADING_MIN_LETTERS = 4
+
+
+def is_allcaps_heading(text: str) -> bool:
+    stripped = text.strip()
+    if sum(char.isalpha() for char in stripped) < _ALLCAPS_HEADING_MIN_LETTERS:
+        return False
+    return stripped.isupper()
+
