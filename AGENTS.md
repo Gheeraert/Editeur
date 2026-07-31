@@ -1,12 +1,12 @@
 # AGENTS.md
 
-> **Statut : ce document décrit la gouvernance de l'architecture legacy (pivot Python-JSON, IA structurelle par seuils, zones protégées).** La stratégie de développement actuelle est celle du correcteur `reborn` (voir [`docs/REBORN_ARCHITECTURE.md`](docs/REBORN_ARCHITECTURE.md)), plus simple et sans scoring. Les principes généraux ci-dessous (tests obligatoires, pas d'invention normative silencieuse, traçabilité, prudence IA) restent valables ; les sections qui décrivent le pivot, les exporteurs multiples ou la hiérarchie de décision IA (§3, 4, 5, 7, 12) concernent la voie legacy, pas `reborn`.
-
 ## 1. Rôle de ce fichier
 
 Ce document fixe les règles de travail pour l'assistant de développement utilisé sur ce projet, notamment Codex AI.
 
-Le projet concerne une chaîne modulaire de préparation éditoriale pour les PURH. Le développement doit rester strictement encadré, modulaire, testable, traçable et prudent sur le plan éditorial.
+Le projet est un correcteur ortho-typographique assisté pour les PURH (Presses universitaires de Rouen et du Havre) : ouvrir une copie d'un manuscrit Word, appliquer les règles du catalogue, surligner chaque intervention, enregistrer un nouveau DOCX. Le développement doit rester strictement encadré, modulaire, testable, traçable et prudent sur le plan éditorial.
+
+L'architecture antérieure (pivot Python‑JSON, moteur de score/seuil, IA multi-niveaux, exports multiples) a été abandonnée après plusieurs refontes infructueuses et intégralement supprimée du dépôt. Elle reste consultable à titre d'archive dans `docs/legacy/` si une future tâche a besoin d'y retrouver des expressions régulières, des listes lexicales ou des cas de test.
 
 ---
 
@@ -14,193 +14,62 @@ Le projet concerne une chaîne modulaire de préparation éditoriale pour les PU
 
 ### 2.1 Pas de monolithe
 
-Ne jamais concentrer des responsabilités hétérogènes dans un gros script unique. Séparer modèle de données, logique métier, lecture/écriture, sérialisation JSON, appels IA, rendu, CLI ou interface.
+Ne jamais concentrer des responsabilités hétérogènes dans un gros script unique. `corrector/word_document.py` pilote Word, `corrector/runner.py` orchestre les règles dans un ordre explicite, `corrector/rules/*.py` contient les règles par famille — cette séparation ne doit pas se dissoudre au fil des ajouts.
 
-### 2.2 Développement incrémental, refactorisation assumée si nécessaire
+### 2.2 Développement incrémental
 
-Toute demande ordinaire doit être traitée par petits périmètres : une fonction, un module, un mapping, une famille de tests, une règle éditoriale isolée ou une fixture ciblée.
-
-Cependant, si le contrat de données est incohérent ou si plusieurs modules produisent des interprétations concurrentes, il faut préférer une branche de refactorisation propre à une accumulation de patches locaux.
-
-Dans ce cas :
-
-- documenter l'invariant visé avant de coder ;
-- créer ou modifier les tests du pivot ;
-- supprimer les heuristiques locales concurrentes ;
-- adapter ensuite les sorties ;
-- ne pas masquer le problème par un rendu opportuniste.
+Toute demande ordinaire doit être traitée par petits périmètres : une règle, une famille de tests, un garde-fou ciblé. Pas de refactorisation massive « pour harmoniser » hors demande explicite.
 
 ### 2.3 Tests obligatoires
 
-Toute évolution significative doit s'accompagner de tests : tests unitaires, tests du pivot, fixtures minimales, absence de régression sur les cas stabilisés.
-
-Un cas réel volumineux doit être réduit en fixture courte avant d'être utilisé comme garde-fou durable.
+Toute évolution significative doit s'accompagner de tests : cas positifs, cas négatifs (garde-fous), idempotence (un second passage ne doit pas répéter la même correction). `python -m pytest` doit rester vert.
 
 ### 2.4 Aucune invention normative silencieuse
 
-Ne pas inventer de règles PURH. Lorsqu'une norme locale n'est pas documentée : expliciter l'hypothèse, isoler la règle, la marquer comme provisoire, préférer un comportement conservateur et produire un diagnostic plutôt qu'une transformation automatique.
+Ne pas inventer de règles PURH ni de style Word cible non spécifié par le catalogue. Lorsqu'une norme locale n'est pas documentée ou que l'action concrète à appliquer n'est pas claire : préférer un diagnostic (surlignage turquoise, texte inchangé) à une transformation automatique devinée.
 
-### 2.5 Prudence maximale pour l'IA stylistique
+### 2.5 Aucun score, aucun seuil
 
-Le module IA ne doit jamais réécrire massivement, uniformiser abusivement, modifier silencieusement le texte source, confondre préférence stylistique et faute, transformer une citation ou intervenir dans une zone protégée sans règle explicite.
-
-Les suggestions doivent rester locales, motivées, révisables et optionnelles.
+Le chemin d'exécution actuel (« reborn », voir `docs/REBORN_ARCHITECTURE.md`) n'utilise ni score de confiance, ni seuil, ni profil de prudence, ni moteur de décision générique. Une règle est une petite fonction (ou une donnée simple associée à une fonction), avec un déclencheur explicite et testable — jamais une pondération d'indices.
 
 ### 2.6 Préserver la traçabilité
 
-Toute transformation doit pouvoir être identifiée, journalisée, expliquée, testée et annulée. Une transformation sans `rule_id`, diagnostic ou justification est suspecte.
+Chaque intervention automatique doit être surlignée dans le DOCX de sortie (jaune = transformation, turquoise = diagnostic) et rattachée à un `rule_id` stable du catalogue. Une transformation sans surlignage est un bug.
 
 ### 2.7 Préférer la lisibilité à l'astuce
 
-Le code attendu doit être clair, typé si possible, modulaire, documenté et sans magie inutile.
+Le code attendu doit être clair, typé si possible, modulaire, sans magie inutile. Les garde-fous et exceptions d'une règle sont écrits à proximité immédiate de cette règle, pas déplacés dans un moteur général d'exceptions.
 
 ### 2.8 Refuser les dépendances lourdes sans justification
 
-Ne pas ajouter de dépendance importante sans raison claire. Privilégier la standard library, les bibliothèques déjà présentes et les bibliothèques stables.
+Ne pas ajouter de dépendance sans raison claire. Le seul prérequis technique actuel est `pywin32` (automatisation Word).
 
 ---
 
-## 3. Représentation des données
+## 3. Le catalogue des 61 règles
 
-Le cœur du projet doit utiliser des dataclasses Python.
+`docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md` est la source de vérité éditoriale du projet : périmètre, identifiants stables, nature (`deterministic`/`heuristic`), type d'action. Il ne doit pas être modifié sans très bonne raison, et jamais pour faire correspondre le catalogue à une implémentation partielle — c'est l'inverse qui doit être vrai (cf. `docs/REBORN_ARCHITECTURE.md` §2.1 pour l'état réel de couverture).
 
-Le JSON sert à sérialiser le pivot, fabriquer les fixtures, échanger entre modules si nécessaire, déboguer, comparer et tracer.
-
-Le JSON n'est pas un export de confort : il doit devenir une représentation stable, versionnée et relisible du pivot.
-
-Ne pas bâtir le cœur métier sur des dictionnaires non typés si une dataclass claire est préférable.
+Un `rule_id` doit être un identifiant explicite et lisible par un humain (`purh.famille.detail`), jamais un code opaque de la forme `R-XX-000`.
 
 ---
 
-## 4. Modèle de décision éditoriale
+## 4. Méthode de livraison attendue
 
-Avant toute tâche touchant à la structuration, lire :
-
-```text
-docs/legacy/EDITORIAL_DECISION_MODEL.md
-docs/legacy/PIVOT_JSON_CONTRACT.md
-docs/legacy/EXPORTERS_CONTRACT.md
-```
-
-Principe fondamental :
-
-```text
-un fait Word n'est pas une structure éditoriale
-```
-
-Principe complémentaire :
-
-```text
-un exporteur ne doit pas inventer une structure absente du pivot
-```
-
-Un style Word, une puce, un retrait ou un gras sont des indices. Ils doivent être confrontés à d'autres indices.
-
-Le pipeline doit distinguer : faits documentaires, indices, candidats, conflits, vetos, décision, canonicalisation, validation du pivot, export.
+Pour toute tâche de développement, préciser : fichiers modifiés/créés, règle(s) concernée(s) et leur `rule_id`, garde-fous ajoutés, tests ajoutés et exécutés, ce qui reste volontairement hors périmètre (et pourquoi — cf. §2.4).
 
 ---
 
-## 5. IA : hiérarchie d'usage
+## 5. Ce qu'il faut éviter
 
-Ordre de préférence : déterministe, heuristique scorée, IA locale encadrée, IA exploratoire ou freestyle.
-
-L'IA locale sert uniquement à arbitrer une zone grise explicitement définie. L'IA exploratoire est une solution de dernier recours et ne doit pas produire de transformation automatique.
-
-Ne jamais utiliser l'IA pour remplacer une règle déterministe, une fixture manquante ou un invariant du pivot.
-
----
-
-## 6. Zones protégées
-
-Certaines zones doivent bloquer les transformations ordinaires : poésie, citation ancienne, code informatique, transcription linguistique, tableau, formule, bibliographie, légende.
-
-Lorsqu'une zone protégée est détectée, ne pas appliquer aveuglément : promotion en titre, correction typographique agressive, suggestion stylistique, normalisation d'espaces ou de ponctuation.
-
-Exemple critique : un vers dans une séquence poétique ne doit pas devenir un heading, même s'il est court, commence par une majuscule ou possède un style Word de titre.
-
-Important : une zone protégée n'est pas une sémantique complète. Elle doit conduire à une canonicalisation explicite si elle détermine la structure du bloc.
+- implémentations sans tests ;
+- règle qui compte un `rule_id` sans détecteur réellement câblé (un compte à 0 doit signifier « rien à corriger », jamais « règle non implémentée ») ;
+- réintroduction d'un score, d'un seuil ou d'un profil de prudence ;
+- transformation silencieuse (sans surlignage) ;
+- devinette d'un style Word cible ou d'une norme PURH non documentée.
 
 ---
 
-## 7. Exporteurs
+## 6. Règle d'or
 
-Les exporteurs DOCX, XML‑TEI, LaTeX, HTML ou PDF ne doivent pas contenir de logique de reconnaissance structurelle.
-
-Ils doivent :
-
-- consommer le pivot validé ;
-- représenter les types canoniques ;
-- produire un diagnostic si le pivot est incohérent ;
-- éviter toute réparation silencieuse.
-
-Ils ne doivent pas :
-
-- décider localement qu'un bloc est un titre, un vers ou une liste ;
-- utiliser un style Word source comme vérité structurelle ;
-- masquer une erreur du pivot par un rendu opportuniste.
-
----
-
-## 8. Méthode de livraison attendue
-
-Pour toute tâche de développement, fournir : fichiers modifiés/créés, choix d'architecture, limites connues, tests ajoutés, tests exécutés, ce qui reste volontairement hors périmètre.
-
-Pour toute tâche touchant les exports, préciser aussi :
-
-- quel invariant du pivot est consommé ;
-- quels tests de pivot ont été exécutés ;
-- si l'exporteur contient encore une heuristique locale à supprimer.
-
----
-
-## 9. Ce qu'il faut faire avant de coder
-
-Toujours vérifier :
-
-- quel document de cadrage gouverne la tâche ;
-- quelles fixtures existent déjà ;
-- quel comportement attendu est vérifiable ;
-- si le cas relève d'une règle déterministe, d'une heuristique, d'une zone grise ou d'une suggestion IA ;
-- si une zone protégée doit être posée avant transformation ;
-- si la décision doit être canonicalisée dans le pivot ;
-- si l'export attendu représente déjà un état pivot valide.
-
----
-
-## 10. Ce qu'il faut éviter
-
-- implémentations globales sans tests ;
-- fusion de plusieurs responsabilités ;
-- modifications massives « pour harmoniser » hors branche de refactorisation ;
-- appels à une IA sans encadrement ;
-- normalisation silencieuse ;
-- dépendance à des comportements implicites ;
-- parsing fragile si un modèle plus robuste est possible ;
-- transformation structurelle fondée sur un seul indice Word ;
-- patches locaux dans les exporteurs pour compenser un pivot incomplet.
-
----
-
-## 11. Règle d'or
-
-Quand une décision oppose sophistication et clarté, automatisation et contrôle humain, puissance et traçabilité, IA et règle explicite, choisir clarté, contrôle humain, traçabilité et règle explicite si elle existe.
-
-Quand une sortie fonctionne mais que le pivot est incohérent, corriger le pivot.
-
----
-
-## 12. Gouvernance pipeline
-
-Pour toute tâche touchant au pipeline éditorial, les documents prioritaires sont :
-
-```text
-docs/legacy/PIVOT_JSON_CONTRACT.md
-docs/legacy/EXPORTERS_CONTRACT.md
-docs/legacy/EDITORIAL_DECISION_MODEL.md
-docs/legacy/EDITORIAL_PIPELINE.md
-docs/legacy/ARCHITECTURE.md
-docs/legacy/DATA_MODEL.md
-docs/legacy/SPECS.md
-```
-
-Rappel : la sortie de production visée est l'XML‑TEI Métopes ; le DOCX reste une sortie de relecture humaine ; l'IA reste optionnelle et encadrée ; le JSON pivot sert de contrat de développement et de test.
+Entre sophistication et clarté, automatisation et contrôle humain, choisir clarté et contrôle humain. Une intervention douteuse doit être signalée (diagnostic), pas appliquée par optimisme.

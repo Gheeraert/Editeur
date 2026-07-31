@@ -3,9 +3,11 @@
 Ce dossier accueille localement le corpus éditorial privé (manuscrits réels, documents
 internes PURH, sources de référence) — **jamais suivi par Git dans ce dépôt public.**
 
-Voir `docs/CORPUS_ET_FIXTURES.md` pour la politique complète, et
-`src/purh_editorial/config/private_corpus.py` pour comment le pipeline et les tests
-privés le localisent (`PURH_PRIVATE_CORPUS_DIR`).
+Voir `docs/legacy/CORPUS_ET_FIXTURES.md` pour la politique telle que définie avec la
+voie legacy. Le chargeur automatique (`PURH_PRIVATE_CORPUS_DIR`,
+`src/purh_editorial/config/private_corpus.py`) a été supprimé avec le reste de la voie
+legacy ; ce dossier reste réservé au corpus privé si ce dispositif est reconstruit pour
+`reborn`.
 
 ## Installer le corpus privé localement
 

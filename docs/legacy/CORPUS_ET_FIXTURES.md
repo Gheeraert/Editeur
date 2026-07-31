@@ -1,3 +1,5 @@
+> **Statut : décrit un dispositif (corpus de caractérisation, corpus d'or, chargeur `PURH_PRIVATE_CORPUS_DIR`) entièrement supprimé avec la voie legacy.** `src/purh_editorial/config/private_corpus.py`, `tests/private_integration/`, `fixtures/orthotypography_characterization/` et `fixtures/orthotypography_gold/` n'existent plus. Conservé pour référence si ce dispositif doit être reconstruit pour `reborn`.
+
 # Corpus et fixtures — politique publique/privée
 
 Ce document définit la frontière entre ce qui est public dans ce dépôt et ce qui reste
