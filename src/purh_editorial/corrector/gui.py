@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import threading
 import tkinter as tk
 from pathlib import Path
@@ -136,6 +137,21 @@ class CorrectorApp(tk.Tk):
             if count:
                 lines.append(f"{rule_id} : {count}")
         self._set_result_text("\n".join(lines))
+        self._open_in_word(output_path)
+
+    def _open_in_word(self, output_path: Path) -> None:
+        # correct_word_copy a deja ferme sa propre instance Word en fin de
+        # correction (document.Close + word.Quit) : on rouvre le fichier via
+        # l'association Windows plutot que de reutiliser une automation COM,
+        # pour que l'editrice le retrouve ouvert, pret a relire, sans manip
+        # supplementaire.
+        try:
+            os.startfile(str(output_path))  # noqa: S606
+        except OSError as exc:
+            messagebox.showwarning(
+                "Ouverture impossible",
+                f"Le document corrigé n'a pas pu être ouvert automatiquement : {exc}",
+            )
 
     def _on_error(self, exc: Exception) -> None:
         self._running = False
