@@ -16,6 +16,7 @@ from purh_editorial.corrector.rules.footnotes import (
     find_initial_space_edits,
     find_initial_capital_edits,
     find_latin_abbreviation_edits,
+    find_latin_abbreviation_ranges,
     find_lowercase_start_diagnostics,
     find_op_cit_edits,
     find_sans_lieu_date_edits,
@@ -46,7 +47,11 @@ from purh_editorial.corrector.runner import (
     HEURISTIC_RULE_IDS,
     RULE_IDS,
 )
-from purh_editorial.corrector.word_document import _apply_text_edits
+from purh_editorial.corrector.word_document import (
+    FOOTNOTE_QUOTE_TEXT_RULES,
+    FOOTNOTE_REMAINING_TEXT_RULES,
+    _apply_text_edits,
+)
 
 
 EXPECTED_DETERMINISTIC_IDS = {
@@ -355,6 +360,47 @@ def test_note_abbreviation_variants() -> None:
 
 
 @pytest.mark.parametrize(
+    "source",
+    [
+        "Corneille et le mystère de l’identité",
+        "Cette idée est reprise plus loin",
+        "Une identité plurielle, une idéologie affirmée",
+    ],
+)
+def test_latin_italic_ranges_do_not_match_id_inside_a_word(source: str) -> None:
+    # "id" (abreviation latine de "idem") ne doit matcher qu'en tant que mot
+    # complet - un mot ordinaire commencant par "id" (identite, idee...) n'a
+    # rien a voir avec l'abreviation et ne doit jamais etre mis en italique.
+    assert find_latin_abbreviation_ranges(source) == []
+
+
+def test_footnotes_apply_every_orthotypography_text_rule() -> None:
+    # Les notes de bas de page doivent recevoir l'integralite de
+    # ORTHOTYPOGRAPHY_TEXT_RULES (guillemets + le reste), pas seulement un
+    # sous-ensemble choisi au fil des ajouts : sinon des familles entieres
+    # (siecles, espacement de la ponctuation forte/faible, civilites...)
+    # restent silencieusement non appliquees dans les notes alors que leur
+    # stylage associe (petites capitales, superscript) l'est deja.
+    footnote_rule_ids = {rule_id for rule_id, _ in FOOTNOTE_QUOTE_TEXT_RULES} | {
+        rule_id for rule_id, _ in FOOTNOTE_REMAINING_TEXT_RULES
+    }
+    assert footnote_rule_ids == {rule_id for rule_id, _ in ORTHOTYPOGRAPHY_TEXT_RULES}
+    assert not (
+        {rule_id for rule_id, _ in FOOTNOTE_QUOTE_TEXT_RULES}
+        & {rule_id for rule_id, _ in FOOTNOTE_REMAINING_TEXT_RULES}
+    )
+
+
+def test_latin_italic_ranges_still_match_real_abbreviations() -> None:
+    assert [
+        edit.replacement for edit in find_latin_abbreviation_ranges("Voir Id., p. 4")
+    ] == ["Id."]
+    assert [
+        edit.replacement for edit in find_latin_abbreviation_ranges("Voir Idem, p. 4")
+    ] == ["Idem"]
+
+
+@pytest.mark.parametrize(
     ("finder", "source", "expected", "negative", "conform"),
     [
         (
@@ -579,6 +625,27 @@ def test_english_quote_conversion_skips_technical_context() -> None:
     # Guillemet non apparie (nombre impair) : laisse en l'etat, rien a
     # convertir avec certitude.
     assert find_english_quote_conversion_edits('Il dit "bonjour.') == []
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        # Virgule, point-virgule ou deux-points juste apres la citation :
+        # ponctuation de prose ordinaire, pas un indice de contexte
+        # technique - ne doit pas empecher la conversion en chevrons.
+        "Mais elle est surtout une “tragédie de combat”, qui emporte le spectateur.",
+        "Nous frissonnons devant cette “tragédie de combat”; une œuvre marquante.",
+        "Les auteurs “classiques”: Corneille, Racine.",
+    ],
+)
+def test_english_quote_conversion_is_not_blocked_by_following_prose_punctuation(
+    source: str,
+) -> None:
+    edits = find_english_quote_conversion_edits(source)
+    corrected = apply_text_edits(source, edits)
+    assert "“" not in corrected and "”" not in corrected
+    assert "«" in corrected and "»" in corrected
+    assert find_straight_quote_diagnostics(corrected) == []
 
 
 @pytest.mark.parametrize(

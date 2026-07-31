@@ -451,7 +451,14 @@ def _is_technical_quote_context(
         or ("<" in before_stripped and ">" not in before_stripped)
         or (before_stripped.endswith(",") and "(" in before_stripped)
         or "\\" in quoted_content
-        or re.match(r"^\s*[)\],;:]", after)
+        # Uniquement une parenthese/crochet fermant juste apres : une
+        # virgule, un point-virgule ou un deux-points juste apres la
+        # citation est la ponctuation normale d'une phrase francaise (« mot »,
+        # « mot »; « mot »:) et ne doit pas etre pris pour un indice
+        # technique - ce motif a longtemps fait passer des citations de
+        # prose ordinaires pour du code/attribut et les a laissees en
+        # guillemets anglais non convertis.
+        or re.match(r"^\s*[)\]]", after)
     )
 
 

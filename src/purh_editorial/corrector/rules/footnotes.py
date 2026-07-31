@@ -33,7 +33,7 @@ _MIDNOTE_LATIN_ABBR_RE = re.compile(
     re.IGNORECASE,
 )
 _LATIN_ITALIC_RE = re.compile(
-    r"\b(ibid|id|idem|op\.\s*cit|art\.\s*cit|loc\.\s*cit)\.?",
+    r"\b(ibid|id|idem|op\.\s*cit|art\.\s*cit|loc\.\s*cit)\b\.?",
     re.IGNORECASE,
 )
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")

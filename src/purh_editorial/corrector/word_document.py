@@ -42,21 +42,31 @@ WD_TURQUOISE = 3
 # scorée. Cf. docs/REBORN_ARCHITECTURE.md §6.
 _HEADING_STYLE_RE = re.compile(r"(titre|heading)\s*[1-4]\b", re.IGNORECASE)
 
-# Sous-ensemble de ORTHOTYPOGRAPHY_TEXT_RULES applique aussi aux notes de bas
-# de page : la conversion des guillemets anglais/droits en chevrons (et
-# l'espace insecable qui l'accompagne) doit valoir partout, pas seulement
-# dans le texte principal. L'ordre (conversion puis espacement) est celui de
-# ORTHOTYPOGRAPHY_TEXT_RULES, indispensable pour que l'espace insecable soit
-# posee sur les chevrons fraichement convertis.
+# La conversion des guillemets anglais/droits en chevrons (et l'espace
+# insecable qui l'accompagne) doit passer avant FOOTNOTE_RULES : sinon
+# find_final_punctuation_edits verrait une note se terminant par un
+# guillemet droit ou anglais pas encore reconnu comme fermant (contrairement
+# a "»") et lui ajouterait a tort un point final.
+_FOOTNOTE_QUOTE_RULE_IDS = {
+    "purh.guillemets.anglais_vers_chevrons",
+    "purh.guillemets.espace_apres_ouvrant",
+    "purh.guillemets.espace_avant_fermant",
+}
 FOOTNOTE_QUOTE_TEXT_RULES = tuple(
     (rule_id, finder)
     for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES
-    if rule_id
-    in {
-        "purh.guillemets.anglais_vers_chevrons",
-        "purh.guillemets.espace_apres_ouvrant",
-        "purh.guillemets.espace_avant_fermant",
-    }
+    if rule_id in _FOOTNOTE_QUOTE_RULE_IDS
+)
+# Reste de ORTHOTYPOGRAPHY_TEXT_RULES (ponctuation, siecles, civilites...) :
+# applique apres FOOTNOTE_RULES pour laisser purh.note.espace_initiale
+# normaliser en premier le separateur suivant l'appel de note - sinon
+# purh.espaces.double, qui matche aussi une espace + une tabulation,
+# lui vole cette normalisation et purh.note.espace_initiale rapporterait 0
+# a tort la ou une note a effectivement ete corrigee.
+FOOTNOTE_REMAINING_TEXT_RULES = tuple(
+    (rule_id, finder)
+    for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES
+    if rule_id not in _FOOTNOTE_QUOTE_RULE_IDS
 )
 
 
@@ -372,7 +382,10 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
             start=1,
         ):
             for rule_id, finder in (
-                FOOTNOTE_QUOTE_TEXT_RULES + FOOTNOTE_RULES + BIBLIOGRAPHY_TEXT_RULES
+                FOOTNOTE_QUOTE_TEXT_RULES
+                + FOOTNOTE_RULES
+                + FOOTNOTE_REMAINING_TEXT_RULES
+                + BIBLIOGRAPHY_TEXT_RULES
             ):
                 try:
                     counts[rule_id] += _apply_text_edits(paragraph, finder)
