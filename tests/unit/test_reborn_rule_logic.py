@@ -103,6 +103,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.style.corps_de_texte",
     "purh.style.note_bas_de_page",
     "purh.style.appel_de_note",
+    "purh.style.normal_refresh",
     "structure.poetry.heuristique",
 }
 
@@ -787,8 +788,11 @@ def test_exact_deterministic_identifier_set() -> None:
     # de paragraphes consecutifs stylés "Citation intense" en un paragraphe
     # unique par saut de ligne manuel : condition déterministe (style Word
     # natif), pas le moteur de score legacy `poetry`.
-    assert len(DETERMINISTIC_RULE_IDS) == 49
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 49
+    # purh.style.normal_refresh (branche "heuristique") réapplique
+    # silencieusement le style "Normal" à chaque paragraphe qui le porte déjà
+    # (contournement d'un artefact de rendu Word), sans toucher au texte.
+    assert len(DETERMINISTIC_RULE_IDS) == 50
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 50
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -805,8 +809,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 59
-    assert len(set(RULE_IDS)) == 59
+    assert len(RULE_IDS) == 60
+    assert len(set(RULE_IDS)) == 60
 
 
 class _IgnoringRange:

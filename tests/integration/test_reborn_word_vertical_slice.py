@@ -362,6 +362,11 @@ def _expected_first_counts() -> dict[str, int]:
             # Titre, Citation, Note de bas de page... - sont deja conformes
             # ou non utilises dans ce document de test).
             "purh.style.normal": 9,
+            # Reapplication silencieuse du style "Normal" (contournement
+            # d'un artefact de rendu Word) sur les memes 9 paragraphes,
+            # independamment de la definition du style - voir
+            # _reapply_normal_style dans word_document.py.
+            "purh.style.normal_refresh": 9,
         }
     )
     return counts
@@ -392,6 +397,10 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
         "structure.frontmatter.abstract",
         "structure.frontmatter.keywords",
         "structure.frontmatter.acknowledgment",
+        # Contournement d'un artefact de rendu Word (cf.
+        # _reapply_normal_style) : reapplique a chaque passage,
+        # independamment de tout ecart de definition de style.
+        "purh.style.normal_refresh",
     }
     assert all(second_counts[rule_id] == 0 for rule_id in automatic_ids)
     assert second_counts["purh.tiret.incise.diagnostic"] == 1
@@ -404,4 +413,5 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
     assert second_counts["structure.frontmatter.abstract"] == 1
     assert second_counts["structure.frontmatter.keywords"] == 1
     assert second_counts["structure.frontmatter.acknowledgment"] == 1
+    assert second_counts["purh.style.normal_refresh"] == 9
     _assert_corrected_document(corrected_twice)

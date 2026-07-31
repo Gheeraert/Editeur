@@ -8,6 +8,7 @@ from purh_editorial.corrector import correct_docx
 WD_ALIGN_PARAGRAPH_LEFT = 0
 WD_ALIGN_PARAGRAPH_CENTER = 1
 WD_ALIGN_PARAGRAPH_JUSTIFY = 3
+WD_YELLOW = 7
 CM_TO_POINTS = 72.0 / 2.54
 
 
@@ -119,6 +120,33 @@ def _read_style_properties(path: Path) -> dict[str, dict[str, Any]]:
         word = None
 
 
+def _read_main_text_highlight_indexes(path: Path) -> set[int]:
+    # Lecture caractere par caractere (pas paragraphe.Range.HighlightColorIndex,
+    # qui renvoie une valeur "indefinie" des qu'un paragraphe melange deux
+    # couleurs, ex. un diagnostic turquoise legitime a cote du texte) : on
+    # veut verifier precisement l'absence du jaune (marqueur de stylage
+    # retire), sans se laisser perturber par d'autres surlignages valides
+    # deja presents pour d'autres regles (ex. purh.note.appel.placement).
+    word = _word_application()
+    document = None
+    try:
+        document = word.Documents.Open(
+            FileName=str(path), ReadOnly=True, AddToRecentFiles=False, Visible=False
+        )
+        indexes: set[int] = set()
+        for paragraph in document.Paragraphs:
+            for offset in range(paragraph.Range.Start, paragraph.Range.End):
+                character = document.Range(offset, offset + 1)
+                indexes.add(character.HighlightColorIndex)
+        return indexes
+    finally:
+        if document is not None:
+            document.Close(SaveChanges=False)
+        document = None
+        word.Quit()
+        word = None
+
+
 def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
     source = tmp_path / "source.docx"
     corrected = tmp_path / "corrected.docx"
@@ -137,6 +165,19 @@ def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
     assert first_counts["purh.style.corps_de_texte"] == 1
     assert first_counts["purh.style.note_bas_de_page"] == 1
     assert first_counts["purh.style.appel_de_note"] == 1
+    # Reapplication du style "Normal" sur les 2 memes paragraphes (cf.
+    # commentaire ci-dessus) : contournement d'un artefact de rendu Word,
+    # pas une correction editoriale - toujours appliquee, meme quand la
+    # definition du style n'a pas change (donc pas comptee comme "0" au
+    # deuxieme passage, contrairement aux autres regles de stylage).
+    assert first_counts["purh.style.normal_refresh"] == 2
+
+    # Mise en forme des styles (police, casse, attributs de caractere) :
+    # aucune modification de texte, donc aucun surlignage - la doctrine de
+    # tracabilite (AGENTS.md 2.6) ne vise que les modifications qui touchent
+    # le texte. Le marqueur jaune pose auparavant sur le premier caractere de
+    # chaque paragraphe stylise a ete retire.
+    assert WD_YELLOW not in _read_main_text_highlight_indexes(corrected)
 
     properties = _read_style_properties(corrected)
 
@@ -189,3 +230,7 @@ def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
         "purh.style.appel_de_note",
     ):
         assert second_counts[rule_id] == 0
+    # A l'inverse des autres regles de stylage, purh.style.normal_refresh
+    # n'est pas conditionnee par un ecart de definition de style : elle
+    # reapplique le style a chaque passage, silencieusement.
+    assert second_counts["purh.style.normal_refresh"] == 2

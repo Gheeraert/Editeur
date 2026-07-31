@@ -37,6 +37,7 @@ from purh_editorial.corrector.rules.styling import (
     PARAGRAPH_STYLE_SPECS,
     STYLE_APPEL_NOTE,
     STYLE_CITATION_INTENSE,
+    STYLE_NORMAL,
     apply_footnote_reference_style,
     apply_paragraph_style_spec,
     footnote_reference_style_needs_change,
@@ -64,6 +65,43 @@ _MANUAL_LINE_BREAK = "\v"
 # deterministe (style Word natif "Citation intense", cf. runner.py) et non
 # le moteur de score legacy que le chemin reborn exclut.
 POETRY_MERGE_RULE_ID = "structure.poetry.heuristique"
+
+# Reapplication (pas redefinition) du style "Normal" sur chaque paragraphe
+# qui le porte deja - contournement d'un artefact de rendu Word observe par
+# l'editrice (des paragraphes deja en "Normal" s'affichaient mal tant que le
+# style n'etait pas reapplique manuellement au paragraphe). Cf.
+# _reapply_normal_style.
+NORMAL_STYLE_REFRESH_RULE_ID = "purh.style.normal_refresh"
+
+# Reaffecter Range.Style efface la mise en forme directe (verifie
+# empiriquement via pywin32) sur toute la portee de la reaffectation : gras,
+# italique, petites capitales, retrait direct... Ces proprietes sont
+# sauvegardees avant la reaffectation puis restaurees, pour que
+# _reapply_normal_style ne perde aucune mise en forme directe deja presente
+# (y compris celle posee par une regle precedente du meme passage, ex.
+# petites capitales d'un siecle).
+_NORMAL_REFRESH_FONT_PROPERTIES = (
+    "Bold",
+    "Italic",
+    "Underline",
+    "Superscript",
+    "Subscript",
+    "SmallCaps",
+    "AllCaps",
+    "Name",
+    "Size",
+    "Color",
+)
+_NORMAL_REFRESH_PARAGRAPH_FORMAT_PROPERTIES = (
+    "Alignment",
+    "LeftIndent",
+    "RightIndent",
+    "FirstLineIndent",
+    "SpaceBefore",
+    "SpaceAfter",
+    "LineSpacingRule",
+    "LineSpacing",
+)
 
 # Style Word explicite (Titre 1/2/3/4 en français, Heading 1-4 en anglais) —
 # condition observable et déterministe, pas une heuristique de mise en forme
@@ -503,49 +541,29 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
     _apply_note_call_diagnostics(document, counts)
 
 
-def _mark_paragraph_style_change(paragraph: Any) -> None:
-    # Marqueur de tracabilite minimal (premier caractere du paragraphe) :
-    # surligner tout le paragraphe ecraserait un diagnostic turquoise deja
-    # pose ailleurs dans ce meme paragraphe par un passage precedent (cette
-    # regle de stylage s'applique en tout dernier, "en fin de passe").
-    marker = paragraph.Range.Duplicate
-    marker_end = min(marker.Start + 1, marker.End)
-    marker.SetRange(marker.Start, marker_end)
-    try:
-        marker.HighlightColorIndex = WD_YELLOW
-    except Exception:
-        pass
-    marker = None
-
-
-def _count_and_mark_paragraphs_with_style(document: Any, style_name: str) -> int:
+def _count_paragraphs_with_style(document: Any, style_name: str) -> int:
+    # Mise en forme uniquement (police, casse, attributs de caractere via la
+    # definition du style) : aucun texte n'est touche, donc aucun
+    # surlignage - la doctrine de tracabilite (AGENTS.md 2.6) ne vise que
+    # les modifications qui touchent le texte.
     changed = 0
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
     for paragraph in story.Paragraphs:
         if paragraph.Range.Style.NameLocal == style_name:
-            _mark_paragraph_style_change(paragraph)
             changed += 1
     paragraph = None
     story = None
     for footnote in document.Footnotes:
         for paragraph in footnote.Range.Paragraphs:
             if paragraph.Range.Style.NameLocal == style_name:
-                _mark_paragraph_style_change(paragraph)
                 changed += 1
         paragraph = None
     footnote = None
     return changed
 
 
-def _count_and_mark_footnote_references(document: Any) -> int:
-    changed = 0
-    for footnote in document.Footnotes:
-        reference = footnote.Reference
-        reference.HighlightColorIndex = WD_YELLOW
-        reference = None
-        changed += 1
-    footnote = None
-    return changed
+def _count_footnote_references(document: Any) -> int:
+    return sum(1 for _ in document.Footnotes)
 
 
 def _apply_purh_style_defaults(document: Any, counts: dict[str, int]) -> None:
@@ -568,7 +586,7 @@ def _apply_purh_style_defaults(document: Any, counts: dict[str, int]) -> None:
             continue
         apply_paragraph_style_spec(style, spec)
         style = None
-        counts[spec.rule_id] += _count_and_mark_paragraphs_with_style(
+        counts[spec.rule_id] += _count_paragraphs_with_style(
             document, spec.style_name
         )
 
@@ -580,9 +598,102 @@ def _apply_purh_style_defaults(document: Any, counts: dict[str, int]) -> None:
         if footnote_reference_style_needs_change(reference_style):
             apply_footnote_reference_style(reference_style)
             counts[FOOTNOTE_REFERENCE_STYLE_RULE_ID] += (
-                _count_and_mark_footnote_references(document)
+                _count_footnote_references(document)
             )
     reference_style = None
+
+
+def _capture_font_state(range_obj: Any) -> tuple[Any, ...]:
+    font = range_obj.Font
+    return tuple(getattr(font, name) for name in _NORMAL_REFRESH_FONT_PROPERTIES)
+
+
+def _apply_font_state(range_obj: Any, state: tuple[Any, ...]) -> None:
+    font = range_obj.Font
+    for name, value in zip(_NORMAL_REFRESH_FONT_PROPERTIES, state):
+        setattr(font, name, value)
+
+
+def _capture_paragraph_font_runs(
+    document: Any, start: int, end: int
+) -> list[tuple[int, int, tuple[Any, ...], int]]:
+    # Releve caractere par caractere (une plage d'un seul caractere n'est
+    # jamais "mixte") puis regroupe les caracteres consecutifs de meme mise
+    # en forme en une seule plage a restaurer - plus couteux qu'une
+    # reaffectation de style brute, mais necessaire pour ne perdre aucune
+    # mise en forme directe existante (gras, petites capitales poses par une
+    # regle precedente du meme passage, retrait...), y compris quand elle ne
+    # couvre qu'une partie du paragraphe.
+    runs: list[tuple[int, int, tuple[Any, ...], int]] = []
+    if start >= end:
+        return runs
+    run_start = start
+    previous_state: tuple[Any, ...] | None = None
+    previous_highlight: int | None = None
+    for offset in range(start, end):
+        character = document.Range(offset, offset + 1)
+        state = _capture_font_state(character)
+        highlight = character.HighlightColorIndex
+        character = None
+        if previous_state is None:
+            previous_state = state
+            previous_highlight = highlight
+        elif state != previous_state or highlight != previous_highlight:
+            runs.append((run_start, offset, previous_state, previous_highlight))
+            run_start = offset
+            previous_state = state
+            previous_highlight = highlight
+    runs.append((run_start, end, previous_state, previous_highlight))
+    return runs
+
+
+def _reapply_normal_style(document: Any, counts: dict[str, int]) -> None:
+    # Contournement d'un artefact de rendu Word observe par l'editrice :
+    # certains paragraphes deja au style "Normal" s'affichaient mal tant que
+    # le style n'etait pas reapplique explicitement au paragraphe (pas
+    # seulement redefini au niveau du style, cf. _apply_purh_style_defaults
+    # ci-dessus). Reapplication pure du meme style, aucune modification de
+    # texte : silencieuse, comme le reste de la mise en forme.
+    #
+    # Reaffecter Range.Style efface la mise en forme directe (verifie
+    # empiriquement via pywin32) sur toute l'etendue de la plage reaffectee -
+    # y compris quand la reaffectation ne porte que sur un seul caractere,
+    # si ce caractere appartient a une plage de mise en forme homogene plus
+    # large (ex. un paragraphe entierement en gras). La mise en forme
+    # directe (police, gras...) et le format de paragraphe (retrait,
+    # alignement...) sont donc entierement releves avant la reaffectation
+    # puis restaures ensuite.
+    story = document.StoryRanges(WD_MAIN_TEXT_STORY)
+    for paragraph in story.Paragraphs:
+        if not _paragraph_has_native_style(paragraph, STYLE_NORMAL):
+            continue
+
+        paragraph_format = paragraph.Range.ParagraphFormat
+        format_snapshot = {
+            name: getattr(paragraph_format, name)
+            for name in _NORMAL_REFRESH_PARAGRAPH_FORMAT_PROPERTIES
+        }
+        paragraph_format = None
+
+        start, end = paragraph.Range.Start, paragraph.Range.End
+        font_runs = _capture_paragraph_font_runs(document, start, end)
+
+        paragraph.Range.Style = STYLE_NORMAL
+
+        for run_start, run_end, state, highlight in font_runs:
+            run_range = document.Range(run_start, run_end)
+            _apply_font_state(run_range, state)
+            run_range.HighlightColorIndex = highlight
+            run_range = None
+
+        paragraph_format = paragraph.Range.ParagraphFormat
+        for name, value in format_snapshot.items():
+            setattr(paragraph_format, name, value)
+        paragraph_format = None
+
+        counts[NORMAL_STYLE_REFRESH_RULE_ID] += 1
+    paragraph = None
+    story = None
 
 
 def correct_word_copy(
@@ -612,12 +723,11 @@ def correct_word_copy(
         _apply_main_text(document, counts)
         _apply_footnotes(document, counts)
         _apply_purh_style_defaults(document, counts)
-        # En dernier : le marqueur de tracabilite pose par
-        # _apply_purh_style_defaults sur le premier caractere de chaque
-        # paragraphe "Citation intense" (surlignage jaune) ne doit pas
-        # entrer en conflit avec le surlignage vert clair de la fusion
-        # poetique, qui doit rester uniforme sur tout le bloc fusionne.
         _apply_poetry_merge(document, counts)
+        # En tout dernier, juste avant l'enregistrement : reapplique le
+        # style "Normal" a tous les paragraphes qui le portent deja, pour
+        # eviter l'artefact de rendu Word observe par l'editrice.
+        _reapply_normal_style(document, counts)
         document.Save()
         return counts
     except Exception as exc:

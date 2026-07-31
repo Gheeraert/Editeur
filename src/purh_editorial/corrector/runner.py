@@ -73,6 +73,13 @@ DETERMINISTIC_RULE_IDS = (
     "purh.style.corps_de_texte",
     "purh.style.note_bas_de_page",
     "purh.style.appel_de_note",
+    # Reapplication silencieuse du style "Normal" sur chaque paragraphe qui
+    # le porte deja (branche "heuristique") : contourne un artefact de
+    # rendu Word observe par l'editrice (paragraphes deja en "Normal" mal
+    # affiches tant que le style n'est pas reapplique explicitement). Aucune
+    # modification de texte, condition deterministe (style Word natif) - voir
+    # _reapply_normal_style dans word_document.py.
+    "purh.style.normal_refresh",
     # Fusion des citations poetiques (branche "heuristique") : bloc de
     # paragraphes consecutifs portant le style natif "Citation intense"
     # (rules/styling.py) fusionne en un seul paragraphe, chaque vers separe

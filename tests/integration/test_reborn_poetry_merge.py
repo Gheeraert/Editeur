@@ -7,6 +7,7 @@ from purh_editorial.corrector import correct_docx
 
 MANUAL_LINE_BREAK = "\v"
 WD_BRIGHT_GREEN = 4
+WD_NO_HIGHLIGHT = 0
 
 
 def _word_application() -> Any:
@@ -115,12 +116,11 @@ def test_poetry_citation_block_is_merged_into_a_single_paragraph(
     # l'editrice.
     assert highlights[expected_poem] == WD_BRIGHT_GREEN
     # Un vers isole (aucune fusion, un seul paragraphe "Citation intense") et
-    # la prose citee ne sont pas concernes par le vert : leur premier
-    # caractere peut rester marque en jaune par purh.style.citation_intense /
-    # purh.style.citation (marqueur de tracabilite du stylage), mais jamais
-    # en vert.
-    assert highlights["Un vers isolé"] != WD_BRIGHT_GREEN
-    assert highlights["Un paragraphe de prose citée."] != WD_BRIGHT_GREEN
+    # la prose citee ne sont pas concernes : la mise en forme des styles
+    # (police, casse, attributs de caractere) est desormais silencieuse, donc
+    # aucun surlignage ne subsiste sur ces paragraphes non fusionnes.
+    assert highlights["Un vers isolé"] == WD_NO_HIGHLIGHT
+    assert highlights["Un paragraphe de prose citée."] == WD_NO_HIGHLIGHT
 
     second_counts = correct_docx(corrected, corrected_twice)
     assert second_counts["structure.poetry.heuristique"] == 0
