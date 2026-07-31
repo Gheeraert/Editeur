@@ -30,7 +30,7 @@ EXPECTED_RULE_IDS = (
     "purh.civilite.style", "purh.tiret.double",
     "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "purh.numero.style",
     "purh.abreviations.redoublement", "purh.nombres.milliers",
-    "purh.ecriture_inclusive.point_median", "purh.tiret.incise",
+    "purh.ecriture_inclusive.point_median", "purh.date.jour_mois", "purh.tiret.incise",
     "purh.tiret.incise.diagnostic", "purh.guillemets.ponctuation_fermante", "purh.note.espace_initiale",
     "purh.note.majuscule_initiale", "purh.note.abreviation_latine",
     "purh.note.espace_op_cit", "purh.note.espace_sans_lieu_date",
@@ -56,29 +56,29 @@ EXPECTED_RULE_IDS = (
 
 EXPECTED_COUNTS = {
     "family": {
-        RuleFamily.ORTHOTYPOGRAPHY: 27,
+        RuleFamily.ORTHOTYPOGRAPHY: 28,
         RuleFamily.FOOTNOTE: 11,
         RuleFamily.BIBLIOGRAPHY: 8,
         RuleFamily.STRUCTURE: 21,
     },
     "nature": {
-        RuleNature.DETERMINISTIC: 35,
+        RuleNature.DETERMINISTIC: 36,
         RuleNature.HEURISTIC: 32,
     },
     "action": {
-        RuleActionType.TEXT_TRANSFORM: 29,
+        RuleActionType.TEXT_TRANSFORM: 30,
         RuleActionType.STYLE_TRANSFORM: 5,
         RuleActionType.STRUCTURE_TRANSFORM: 21,
         RuleActionType.DIAGNOSTIC: 8,
         RuleActionType.PIPELINE_CONTROL: 4,
     },
     "status": {
-        DeploymentStatus.ACTIVE: 46,
+        DeploymentStatus.ACTIVE: 47,
         DeploymentStatus.REVIEW_ONLY: 18,
         DeploymentStatus.DISABLED: 3,
     },
     "state": {
-        ImplementationState.LEGACY: 61,
+        ImplementationState.LEGACY: 62,
         ImplementationState.PLANNED: 4,
         ImplementationState.DORMANT: 2,
     },

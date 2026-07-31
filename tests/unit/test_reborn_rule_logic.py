@@ -61,6 +61,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.abreviations.redoublement",
     "purh.nombres.milliers",
     "purh.ecriture_inclusive.point_median",
+    "purh.date.jour_mois",
     "purh.note.espace_initiale",
     "purh.note.espace_op_cit",
     "purh.note.espace_sans_lieu_date",
@@ -209,6 +210,13 @@ def _orthotypography_finder(rule_id: str):
             "chercheur·e·s",
             "c.q.f.d.",
             "chercheur·e·s",
+        ),
+        (
+            "purh.date.jour_mois",
+            "le 24 décembre 1968",
+            f"le 24{NNBSP}décembre 1968",
+            "le 32 décembre",
+            f"le 24{NNBSP}décembre 1968",
         ),
     ],
 )
@@ -552,8 +560,8 @@ def test_exact_deterministic_identifier_set() -> None:
     # entre un nom propre et le numéral romain qui le suit (candidate la
     # plus solide identifiée par docs/ANALYSE_CORPUS_HP2.md, 784 occurrences
     # observées sur le corpus H&P2).
-    assert len(DETERMINISTIC_RULE_IDS) == 34
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 34
+    assert len(DETERMINISTIC_RULE_IDS) == 35
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 35
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -570,8 +578,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 44
-    assert len(set(RULE_IDS)) == 44
+    assert len(RULE_IDS) == 45
+    assert len(set(RULE_IDS)) == 45
 
 
 class _IgnoringRange:

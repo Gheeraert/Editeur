@@ -25,6 +25,7 @@ DETERMINISTIC_RULE_IDS = (
     "purh.abreviations.redoublement",
     "purh.nombres.milliers",
     "purh.ecriture_inclusive.point_median",
+    "purh.date.jour_mois",
     "purh.siecles.style",
     "purh.numero.style",
     "purh.ordinaux.style",

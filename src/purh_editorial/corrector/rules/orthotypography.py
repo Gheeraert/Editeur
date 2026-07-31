@@ -113,6 +113,20 @@ _INCLUSIVE_WRITING_RE = re.compile(
     + "|".join(sorted(set(_INCLUSIVE_WRITING_SUFFIXES), key=len, reverse=True))
     + r")){1,3}\b"
 )
+# Date : quantieme (1-31) suivi d'un nom de mois. Liste fermee des 12 mois,
+# volontairement plus etroite que purh.numeral_dynastique (chiffre romain
+# apres nom propre) : un chiffre arabe apres un mot capitalise est bien
+# plus frequent en debut de phrase ("Le 24 decembre...") sans rapport avec
+# un nom propre, donc pas generalise au-dela de ce motif jour+mois sans
+# risque de faux positif.
+_MONTHS = (
+    "janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre",
+)
+_DATE_JOUR_MOIS_RE = re.compile(
+    r"\b([1-9]|[12][0-9]|3[01]) (?=(?:" + "|".join(_MONTHS) + r")\b)",
+    re.IGNORECASE,
+)
 _ORDINAL_RE = re.compile(r"\b(\d+)(ère|ere|ème|eme)\b", re.UNICODE)
 _NUMERAL_DYNASTIQUE_RE = re.compile(
     r"\b([A-ZÀ-Þ]\w*) "
@@ -265,6 +279,10 @@ def find_inclusive_writing_edits(text: str) -> list[TextEdit]:
         _INCLUSIVE_WRITING_RE,
         lambda match: match.group(0).replace(".", "·"),
     )
+
+
+def find_date_jour_mois_edits(text: str) -> list[TextEdit]:
+    return _regex_edits(text, _DATE_JOUR_MOIS_RE, r"\1" + NBSP)
 
 
 def _century_chains(text: str) -> list[list[re.Match[str]]]:
@@ -465,6 +483,7 @@ ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.abreviations.redoublement", find_redoublement_edits),
     ("purh.nombres.milliers", find_thousands_edits),
     ("purh.ecriture_inclusive.point_median", find_inclusive_writing_edits),
+    ("purh.date.jour_mois", find_date_jour_mois_edits),
 )
 
 

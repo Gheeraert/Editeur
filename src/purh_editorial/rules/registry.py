@@ -369,6 +369,17 @@ ORTHOTYPOGRAPHY_RULES = (
         tests=(ORTHO_TEST,),
     ),
     _rule(
+        "purh.date.jour_mois",
+        owner=ORTHO_OWNER,
+        family=RuleFamily.ORTHOTYPOGRAPHY,
+        nature=RuleNature.DETERMINISTIC,
+        action=RuleActionType.TEXT_TRANSFORM,
+        status=DeploymentStatus.ACTIVE,
+        normative_status=NormativeStatus.CORPUS_OBSERVED,
+        sources=(OBSERVED_CORPUS,),
+        tests=(ORTHO_TEST,),
+    ),
+    _rule(
         "purh.tiret.incise",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
