@@ -22,16 +22,17 @@ from purh_editorial.rules.registry import (
 
 EXPECTED_RULE_IDS = (
     "purh.apostrophe", "purh.points_suspension", "purh.guillemets.droits",
-    "R-ORTHO-LIGATURE-OE-001", "purh.guillemets.espace_apres_ouvrant",
+    "purh.ligature.oe", "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant", "purh.espaces.avant_ponct_forte",
     "purh.espaces.avant_ponct_faible", "purh.espaces.double", "purh.civilite",
-    "purh.siecles", "R-SO-001", "purh.ordinaux", "purh.tiret.double",
-    "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "R-NO-001",
+    "purh.siecles", "purh.siecles.style", "purh.ordinaux", "purh.tiret.double",
+    "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "purh.numero.style",
     "purh.abreviations.redoublement", "purh.nombres.milliers", "purh.tiret.incise",
-    "R-TI-001", "R-GQ-004", "purh.note.espace_initiale",
+    "purh.tiret.incise.diagnostic", "purh.guillemets.ponctuation_fermante", "purh.note.espace_initiale",
     "purh.note.majuscule_initiale", "purh.note.abreviation_latine",
     "purh.note.espace_op_cit", "purh.note.espace_sans_lieu_date",
-    "purh.note.ponctuation_finale", "R-AN-002", "R-AN-003", "R-AN-004", "R-AN-005",
+    "purh.note.ponctuation_finale", "purh.note.appel.placement", "purh.note.appel.espace_avant",
+    "purh.note.diagnostic.debut_minuscule", "purh.note.diagnostic.ponctuation_finale_ambigue",
     "structure.bibliography.section.start", "structure.bibliography.section.end",
     "structure.bibliography.item.promote", "bibliography.entry.detect",
     "purh.biblio.pagination_nnbsp", "purh.biblio.numero_nnbsp",
@@ -42,8 +43,8 @@ EXPECTED_RULE_IDS = (
     "structure.italic.heading", "structure.epigraph.heuristic",
     "structure.bibliography.section", "structure.bibliography.heuristic",
     "structure.indent.quote", "structure.quote.guillemets", "structure.heading.heuristic",
-    "R-STRUCT-HEADING-001", "structure.lineated.blank_bounded.merge",
-    "structure.lineated.short_sequence.merge", "R-CI-POETRY-001",
+    "structure.heading.diagnostic", "structure.lineated.blank_bounded.merge",
+    "structure.lineated.short_sequence.merge", "structure.poetry.heuristique",
     "structure.lineated.group.annotate", "structure.lineated.stanza.merge",
 )
 

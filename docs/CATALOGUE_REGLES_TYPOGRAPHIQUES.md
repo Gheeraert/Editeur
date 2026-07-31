@@ -100,11 +100,11 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 - **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** `quote_structure`; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`.
 
-### `R-ORTHO-LIGATURE-OE-001` — Ligatures OE
+### `purh.ligature.oe` — Ligatures OE
 - **Nature :** `deterministic`; **Type d'action :** `text_transform`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Normalise les ligatures OE sur des formes lexicales prévues par le comportement historique ; la description éditoriale détaillée est à compléter.
 - **Source normative :** `documented_general` — `typography.general`.
-- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** `R-ORTHO-LIGATURE-OE-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`.
 
 ### `purh.guillemets.espace_apres_ouvrant` — Espace après guillemet ouvrant
@@ -151,16 +151,16 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 
 ### `purh.siecles` — Siècles
 - **Nature :** `deterministic`; **Type d'action :** `text_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
-- **Fonction éditoriale :** Normalise les notations de siècles en chiffres romains ; le stylage complémentaire est porté par `R-SO-001`.
+- **Fonction éditoriale :** Normalise les notations de siècles en chiffres romains ; le stylage complémentaire est porté par `purh.siecles.style`.
 - **Source normative :** `purh_validated` — `purh.guide.p10` (p. 10).
 - **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`; `tests/unit/test_orthotypo_century_styling.py`.
 
-### `R-SO-001` — Stylage des siècles
+### `purh.siecles.style` — Stylage des siècles
 - **Nature :** `deterministic`; **Type d'action :** `style_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Applique le stylage associé aux siècles ; il complète `purh.siecles` sans être une transformation textuelle.
 - **Source normative :** `purh_validated` — `purh.guide.p10` (p. 10).
-- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** `R-SO-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`; `tests/unit/test_orthotypo_century_styling.py`.
 
 ### `purh.ordinaux` — Ordinaux
@@ -193,16 +193,16 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 
 ### `purh.numero` — Numéro
 - **Nature :** `deterministic`; **Type d'action :** `text_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
-- **Fonction éditoriale :** Normalise la forme textuelle des numéros ; le stylage complémentaire est porté par `R-NO-001`.
+- **Fonction éditoriale :** Normalise la forme textuelle des numéros ; le stylage complémentaire est porté par `purh.numero.style`.
 - **Source normative :** `purh_validated` — `purh.guide.p12` (p. 12).
 - **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`; `tests/unit/test_orthotypo_numero_styling.py`.
 
-### `R-NO-001` — Stylage du numéro
+### `purh.numero.style` — Stylage du numéro
 - **Nature :** `deterministic`; **Type d'action :** `style_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Applique le stylage associé à la forme de numéro produite par `purh.numero`.
 - **Source normative :** `purh_validated` — `purh.guide.p12` (p. 12).
-- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** `R-NO-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`; `tests/unit/test_orthotypo_numero_styling.py`.
 
 ### `purh.abreviations.redoublement` — Abréviations redoublées
@@ -226,18 +226,18 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 - **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_orthotypo_deployment_characterization.py`; `tests/unit/test_orthotypo_incise_dash_abstention.py`.
 
-### `R-TI-001` — Diagnostic de tiret d'incise
+### `purh.tiret.incise.diagnostic` — Diagnostic de tiret d'incise
 - **Nature :** `deterministic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Signale un tiret d'incise à vérifier ; aucune transformation n'est produite.
 - **Source normative :** `corpus_observed` — `purh.corpus.observed`.
-- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** aucune; **Alias :** `R-TI-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_orthotypo_incise_dash_abstention.py`.
 
-### `R-GQ-004` — Ponctuation de guillemet fermant
+### `purh.guillemets.ponctuation_fermante` — Ponctuation de guillemet fermant
 - **Nature :** `heuristic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Signale la ponctuation autour d'un guillemet fermant pour revue ; aucune transformation n'est produite.
 - **Source normative :** `purh_validated` — `purh.guide.p12` (p. 12).
-- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** `quote_structure`; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.orthotypo_service`; **Protection :** `legacy.orthotypography`; **Score :** `quote_structure`; **Alias :** `R-GQ-004` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_quote_punctuation_diagnostics.py`.
 
 ### Famille `footnote` — 10 règles
@@ -284,32 +284,32 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 - **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** `footnote_form`; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_footnote_characterization_matrix.py`.
 
-### `R-AN-002` — Placement d'appel de note
+### `purh.note.appel.placement` — Placement d'appel de note
 - **Nature :** `deterministic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Signale un placement suspect d'appel de note pour revue ; aucune transformation n'est produite.
 - **Source normative :** `purh_validated` — `purh.guide.p11` (p. 11).
-- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** aucune; **Alias :** `R-AN-002` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_footnote_characterization_matrix.py`; `tests/unit/test_footnote_note_call_diagnostics.py`.
 
-### `R-AN-003` — Espace avant appel de note
+### `purh.note.appel.espace_avant` — Espace avant appel de note
 - **Nature :** `deterministic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Signale un espace parasite avant un appel de note pour revue ; aucune transformation n'est produite.
 - **Source normative :** `purh_validated` — `purh.guide.p11` (p. 11).
-- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** aucune; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** aucune; **Alias :** `R-AN-003` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_footnote_characterization_matrix.py`; `tests/unit/test_footnote_note_call_diagnostics.py`.
 
-### `R-AN-004` — Diagnostic de note
+### `purh.note.diagnostic.debut_minuscule` — Diagnostic de début de note en minuscule
 - **Nature :** `heuristic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
-- **Fonction éditoriale :** Description éditoriale détaillée à compléter. L'action déclarée est uniquement diagnostique.
+- **Fonction éditoriale :** Signale une note qui commence par une minuscule sans que ce soit une exception reconnue (URL, particule, abréviation latine) ; aucune transformation n'est produite.
 - **Source normative :** `internal_unsourced` — aucune source déclarée.
-- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** `footnote_form`; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** `footnote_form`; **Alias :** `R-AN-004` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_footnote_characterization_matrix.py`.
 
-### `R-AN-005` — Diagnostic de note
+### `purh.note.diagnostic.ponctuation_finale_ambigue` — Diagnostic de ponctuation finale ambiguë
 - **Nature :** `heuristic`; **Type d'action :** `diagnostic`; **Déploiement :** `review_only`; **Implémentation :** `legacy`.
-- **Fonction éditoriale :** Description éditoriale détaillée à compléter. L'action déclarée est uniquement diagnostique.
+- **Fonction éditoriale :** Signale une fin de note dont la ponctuation est ambiguë (ex. item de liste) et où l'ajout automatique d'un point final serait risqué ; aucune transformation n'est produite.
 - **Source normative :** `internal_unsourced` — aucune source déclarée.
-- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** `footnote_form`; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.footnote_normalizer`; **Protection :** `legacy.footnote`; **Score :** `footnote_form`; **Alias :** `R-AN-005` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_footnote_characterization_matrix.py`.
 
 ### Famille `bibliography` — 7 règles
@@ -470,11 +470,11 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 - **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `heading`; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_heading_heuristic_scoring.py`.
 
-### `R-STRUCT-HEADING-001` — Diagnostic structurel de titre
+### `structure.heading.diagnostic` — Diagnostic structurel de titre
 - **Nature :** `heuristic`; **Type d'action :** `structure_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Évalue des indices de titre et propose une transformation structurelle. Description éditoriale détaillée à compléter.
 - **Source normative :** `internal_unsourced` — aucune source déclarée.
-- **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `heading`; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `heading`; **Alias :** `R-STRUCT-HEADING-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_heading_heuristic_scoring.py`.
 
 ### `structure.lineated.blank_bounded.merge` — Fusion de séquence versifiée bornée par blancs
@@ -491,11 +491,11 @@ Les fiches sont dans l'ordre du registre. « Aucune » signifie que le descripte
 - **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `poetry`; **Alias :** aucun.
 - **Tests associés :** `tests/unit/test_structure_service_poetry_detection.py`.
 
-### `R-CI-POETRY-001` — Heuristique de poésie
+### `structure.poetry.heuristique` — Heuristique de poésie
 - **Nature :** `heuristic`; **Type d'action :** `structure_transform`; **Déploiement :** `active`; **Implémentation :** `legacy`.
 - **Fonction éditoriale :** Évalue des indices de poésie et propose une transformation structurelle. Description éditoriale détaillée à compléter.
 - **Source normative :** `internal_unsourced` — aucune source déclarée.
-- **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `poetry`; **Alias :** aucun.
+- **Module propriétaire :** `purh_editorial.services.structure_service`; **Protection :** `legacy.structure`; **Score :** `poetry`; **Alias :** `R-CI-POETRY-001` (ancien identifiant).
 - **Tests associés :** `tests/unit/test_poetry_heuristic_scoring.py`.
 
 ### `structure.lineated.group.annotate` — Annotation de groupe linéé

@@ -44,7 +44,7 @@ from purh_editorial.corrector.word_document import _apply_text_edits
 EXPECTED_DETERMINISTIC_IDS = {
     "purh.apostrophe",
     "purh.points_suspension",
-    "R-ORTHO-LIGATURE-OE-001",
+    "purh.ligature.oe",
     "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant",
     "purh.espaces.avant_ponct_forte",
@@ -63,11 +63,11 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.note.espace_sans_lieu_date",
     "purh.biblio.pagination_nnbsp",
     "purh.biblio.numero_nnbsp",
-    "R-SO-001",
-    "R-NO-001",
-    "R-TI-001",
-    "R-AN-002",
-    "R-AN-003",
+    "purh.siecles.style",
+    "purh.numero.style",
+    "purh.tiret.incise.diagnostic",
+    "purh.note.appel.placement",
+    "purh.note.appel.espace_avant",
     "structure.frontmatter.abstract",
     "structure.frontmatter.keywords",
     "structure.frontmatter.acknowledgment",
@@ -76,13 +76,12 @@ EXPECTED_DETERMINISTIC_IDS = {
 EXPECTED_HEURISTIC_IDS = {
     "purh.guillemets.droits",
     "purh.tiret.double",
-    "purh.tiret.incise",
-    "R-GQ-004",
+    "purh.guillemets.ponctuation_fermante",
     "purh.note.majuscule_initiale",
     "purh.note.abreviation_latine",
     "purh.note.ponctuation_finale",
-    "R-AN-004",
-    "R-AN-005",
+    "purh.note.diagnostic.debut_minuscule",
+    "purh.note.diagnostic.ponctuation_finale_ambigue",
     "purh.biblio.ponctuation_finale",
 }
 
@@ -103,7 +102,7 @@ def _orthotypography_finder(rule_id: str):
             "Texte… Suite",
         ),
         (
-            "R-ORTHO-LIGATURE-OE-001",
+            "purh.ligature.oe",
             "une soeur",
             "une sœur",
             "coelacanthe",
@@ -352,8 +351,8 @@ def test_diagnostic_detectors_do_not_change_text() -> None:
     assert len(diagnostics) == 1
     assert apply_text_edits(text, diagnostics) == text
     assert find_incise_dash_diagnostics("mot-mot") == []
-    assert note_call_diagnostic_ids(".") == ("R-AN-002",)
-    assert note_call_diagnostic_ids(" ") == ("R-AN-003",)
+    assert note_call_diagnostic_ids(".") == ("purh.note.appel.placement",)
+    assert note_call_diagnostic_ids(" ") == ("purh.note.appel.espace_avant",)
     assert note_call_diagnostic_ids("t") == ()
 
 
@@ -485,16 +484,17 @@ def test_exact_deterministic_identifier_set() -> None:
 
 
 def test_exact_heuristic_and_complete_identifier_sets() -> None:
-    # 10 des 31 règles heuristiques du catalogue : les 17 règles de
+    # 9 des 31 règles heuristiques du catalogue : les 17 règles de
     # heading/poésie/citation/section bibliographique restent à concevoir
     # (moteur de score legacy exclu par docs/REBORN_ARCHITECTURE.md §7), ainsi
-    # que les règles bibliographie explicitement `planned`/`dormant` dans le
-    # catalogue (cf. NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py).
-    assert len(HEURISTIC_RULE_IDS) == 10
-    assert len(set(HEURISTIC_RULE_IDS)) == 10
+    # que les règles bibliographie explicitement `planned`/`dormant` et
+    # `purh.tiret.incise` (`disabled` au catalogue, aucun détecteur dans
+    # corrector/rules/) — cf. NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py.
+    assert len(HEURISTIC_RULE_IDS) == 9
+    assert len(set(HEURISTIC_RULE_IDS)) == 9
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 39
-    assert len(set(RULE_IDS)) == 39
+    assert len(RULE_IDS) == 38
+    assert len(set(RULE_IDS)) == 38
 
 
 class _IgnoringRange:

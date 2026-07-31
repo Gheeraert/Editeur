@@ -350,14 +350,14 @@ def find_quote_punctuation_diagnostics(text: str) -> list[TextEdit]:
 ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES = (
     ("purh.guillemets.droits", find_straight_quote_diagnostics),
     ("purh.tiret.double", find_double_dash_diagnostics),
-    ("R-GQ-004", find_quote_punctuation_diagnostics),
+    ("purh.guillemets.ponctuation_fermante", find_quote_punctuation_diagnostics),
 )
 
 
 ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.apostrophe", find_apostrophe_edits),
     ("purh.points_suspension", find_points_suspension_edits),
-    ("R-ORTHO-LIGATURE-OE-001", find_oe_ligature_edits),
+    ("purh.ligature.oe", find_oe_ligature_edits),
     ("purh.guillemets.espace_apres_ouvrant", find_open_quote_space_edits),
     ("purh.guillemets.espace_avant_fermant", find_close_quote_space_edits),
     ("purh.espaces.avant_ponct_forte", find_strong_punctuation_edits),

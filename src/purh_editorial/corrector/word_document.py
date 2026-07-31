@@ -214,9 +214,9 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
                 raise RuntimeError(
                     f"{rule_id}, paragraphe principal {paragraph_index}"
                 ) from exc
-        counts["R-SO-001"] += _apply_century_styles(paragraph)
-        counts["R-NO-001"] += _apply_numero_styles(paragraph)
-        counts["R-TI-001"] += _apply_incise_diagnostics(paragraph)
+        counts["purh.siecles.style"] += _apply_century_styles(paragraph)
+        counts["purh.numero.style"] += _apply_numero_styles(paragraph)
+        counts["purh.tiret.incise.diagnostic"] += _apply_incise_diagnostics(paragraph)
         for rule_id, finder in ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES:
             counts[rule_id] += _apply_diagnostics(paragraph, finder)
 

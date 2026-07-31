@@ -305,7 +305,7 @@ def _expected_first_counts() -> dict[str, int]:
         {
             "purh.apostrophe": 1,
             "purh.points_suspension": 2,
-            "R-ORTHO-LIGATURE-OE-001": 1,
+            "purh.ligature.oe": 1,
             "purh.guillemets.espace_apres_ouvrant": 2,
             "purh.guillemets.espace_avant_fermant": 2,
             "purh.espaces.avant_ponct_forte": 2,
@@ -319,22 +319,22 @@ def _expected_first_counts() -> dict[str, int]:
             "purh.numero": 1,
             "purh.abreviations.redoublement": 1,
             "purh.nombres.milliers": 1,
-            "R-SO-001": 1,
-            "R-NO-001": 1,
+            "purh.siecles.style": 1,
+            "purh.numero.style": 1,
             "purh.note.espace_initiale": 2,
             "purh.note.espace_op_cit": 1,
             "purh.note.espace_sans_lieu_date": 1,
-            "R-TI-001": 1,
-            "R-AN-002": 1,
-            "R-AN-003": 1,
+            "purh.tiret.incise.diagnostic": 1,
+            "purh.note.appel.placement": 1,
+            "purh.note.appel.espace_avant": 1,
             "purh.guillemets.droits": 1,
             "purh.tiret.double": 1,
-            "R-GQ-004": 1,
+            "purh.guillemets.ponctuation_fermante": 1,
             "purh.note.majuscule_initiale": 1,
             "purh.note.abreviation_latine": 1,
             "purh.note.ponctuation_finale": 1,
-            "R-AN-004": 1,
-            "R-AN-005": 1,
+            "purh.note.diagnostic.debut_minuscule": 1,
+            "purh.note.diagnostic.ponctuation_finale_ambigue": 1,
             "structure.frontmatter.abstract": 1,
             "structure.frontmatter.keywords": 1,
             "structure.frontmatter.acknowledgment": 1,
@@ -358,27 +358,27 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
 
     second_counts = correct_docx(corrected, corrected_twice)
     automatic_ids = set(RULE_IDS) - {
-        "R-TI-001",
-        "R-AN-002",
-        "R-AN-003",
+        "purh.tiret.incise.diagnostic",
+        "purh.note.appel.placement",
+        "purh.note.appel.espace_avant",
         "purh.guillemets.droits",
         "purh.tiret.double",
-        "R-GQ-004",
-        "R-AN-004",
-        "R-AN-005",
+        "purh.guillemets.ponctuation_fermante",
+        "purh.note.diagnostic.debut_minuscule",
+        "purh.note.diagnostic.ponctuation_finale_ambigue",
         "structure.frontmatter.abstract",
         "structure.frontmatter.keywords",
         "structure.frontmatter.acknowledgment",
     }
     assert all(second_counts[rule_id] == 0 for rule_id in automatic_ids)
-    assert second_counts["R-TI-001"] == 1
-    assert second_counts["R-AN-002"] == 1
-    assert second_counts["R-AN-003"] == 1
+    assert second_counts["purh.tiret.incise.diagnostic"] == 1
+    assert second_counts["purh.note.appel.placement"] == 1
+    assert second_counts["purh.note.appel.espace_avant"] == 1
     assert second_counts["purh.guillemets.droits"] == 1
     assert second_counts["purh.tiret.double"] == 1
-    assert second_counts["R-GQ-004"] == 1
-    assert second_counts["R-AN-004"] == 1
-    assert second_counts["R-AN-005"] == 1
+    assert second_counts["purh.guillemets.ponctuation_fermante"] == 1
+    assert second_counts["purh.note.diagnostic.debut_minuscule"] == 1
+    assert second_counts["purh.note.diagnostic.ponctuation_finale_ambigue"] == 1
     assert second_counts["structure.frontmatter.abstract"] == 1
     assert second_counts["structure.frontmatter.keywords"] == 1
     assert second_counts["structure.frontmatter.acknowledgment"] == 1

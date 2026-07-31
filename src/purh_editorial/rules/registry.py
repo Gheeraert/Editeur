@@ -79,6 +79,7 @@ def _rule(
     sources: tuple[NormativeSource, ...] = (),
     score_family: str | None = None,
     state: ImplementationState = ImplementationState.LEGACY,
+    aliases: tuple[str, ...] = (),
     tests: tuple[str, ...],
 ) -> RuleDescriptor:
     return RuleDescriptor(
@@ -94,6 +95,7 @@ def _rule(
         score_family=score_family,
         test_refs=tests,
         implementation_state=state,
+        legacy_aliases=aliases,
     )
 
 
@@ -133,7 +135,7 @@ ORTHOTYPOGRAPHY_RULES = (
         tests=(ORTHO_TEST,),
     ),
     _rule(
-        "R-ORTHO-LIGATURE-OE-001",
+        "purh.ligature.oe",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
         nature=RuleNature.DETERMINISTIC,
@@ -141,6 +143,7 @@ ORTHOTYPOGRAPHY_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.DOCUMENTED_GENERAL,
         sources=(GENERAL_TYPOGRAPHY,),
+        aliases=("R-ORTHO-LIGATURE-OE-001",),
         tests=(ORTHO_TEST,),
     ),
     _rule(
@@ -221,7 +224,7 @@ ORTHOTYPOGRAPHY_RULES = (
         tests=(ORTHO_TEST, "tests/unit/test_orthotypo_century_styling.py"),
     ),
     _rule(
-        "R-SO-001",
+        "purh.siecles.style",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
         nature=RuleNature.DETERMINISTIC,
@@ -229,6 +232,7 @@ ORTHOTYPOGRAPHY_RULES = (
         status=DeploymentStatus.ACTIVE,
         normative_status=NormativeStatus.PURH_VALIDATED,
         sources=(PURH_P10,),
+        aliases=("R-SO-001",),
         tests=(ORTHO_TEST, "tests/unit/test_orthotypo_century_styling.py"),
     ),
     _rule(
@@ -287,7 +291,7 @@ ORTHOTYPOGRAPHY_RULES = (
         tests=(ORTHO_TEST, "tests/unit/test_orthotypo_numero_styling.py"),
     ),
     _rule(
-        "R-NO-001",
+        "purh.numero.style",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
         nature=RuleNature.DETERMINISTIC,
@@ -295,6 +299,7 @@ ORTHOTYPOGRAPHY_RULES = (
         status=DeploymentStatus.ACTIVE,
         normative_status=NormativeStatus.PURH_VALIDATED,
         sources=(PURH_P12,),
+        aliases=("R-NO-001",),
         tests=(ORTHO_TEST, "tests/unit/test_orthotypo_numero_styling.py"),
     ),
     _rule(
@@ -330,7 +335,7 @@ ORTHOTYPOGRAPHY_RULES = (
         tests=(ORTHO_TEST, "tests/unit/test_orthotypo_incise_dash_abstention.py"),
     ),
     _rule(
-        "R-TI-001",
+        "purh.tiret.incise.diagnostic",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
         nature=RuleNature.DETERMINISTIC,
@@ -338,16 +343,18 @@ ORTHOTYPOGRAPHY_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.CORPUS_OBSERVED,
         sources=(OBSERVED_CORPUS,),
+        aliases=("R-TI-001",),
         tests=("tests/unit/test_orthotypo_incise_dash_abstention.py",),
     ),
     _rule(
-        "R-GQ-004",
+        "purh.guillemets.ponctuation_fermante",
         owner=ORTHO_OWNER,
         family=RuleFamily.ORTHOTYPOGRAPHY,
         nature=RuleNature.HEURISTIC,
         action=RuleActionType.DIAGNOSTIC,
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.PURH_VALIDATED,
+        aliases=("R-GQ-004",),
         sources=(PURH_P12,),
         score_family="quote_structure",
         tests=("tests/unit/test_quote_punctuation_diagnostics.py",),
@@ -422,7 +429,7 @@ FOOTNOTE_RULES = (
         tests=(FOOTNOTE_TEST,),
     ),
     _rule(
-        "R-AN-002",
+        "purh.note.appel.placement",
         owner=FOOTNOTE_OWNER,
         family=RuleFamily.FOOTNOTE,
         nature=RuleNature.DETERMINISTIC,
@@ -430,10 +437,11 @@ FOOTNOTE_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.PURH_VALIDATED,
         sources=(PURH_P11,),
+        aliases=("R-AN-002",),
         tests=(FOOTNOTE_TEST, "tests/unit/test_footnote_note_call_diagnostics.py"),
     ),
     _rule(
-        "R-AN-003",
+        "purh.note.appel.espace_avant",
         owner=FOOTNOTE_OWNER,
         family=RuleFamily.FOOTNOTE,
         nature=RuleNature.DETERMINISTIC,
@@ -441,10 +449,11 @@ FOOTNOTE_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.PURH_VALIDATED,
         sources=(PURH_P11,),
+        aliases=("R-AN-003",),
         tests=(FOOTNOTE_TEST, "tests/unit/test_footnote_note_call_diagnostics.py"),
     ),
     _rule(
-        "R-AN-004",
+        "purh.note.diagnostic.debut_minuscule",
         owner=FOOTNOTE_OWNER,
         family=RuleFamily.FOOTNOTE,
         nature=RuleNature.HEURISTIC,
@@ -452,10 +461,11 @@ FOOTNOTE_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.INTERNAL_UNSOURCED,
         score_family="footnote_form",
+        aliases=("R-AN-004",),
         tests=(FOOTNOTE_TEST,),
     ),
     _rule(
-        "R-AN-005",
+        "purh.note.diagnostic.ponctuation_finale_ambigue",
         owner=FOOTNOTE_OWNER,
         family=RuleFamily.FOOTNOTE,
         nature=RuleNature.HEURISTIC,
@@ -463,6 +473,7 @@ FOOTNOTE_RULES = (
         status=DeploymentStatus.REVIEW_ONLY,
         normative_status=NormativeStatus.INTERNAL_UNSOURCED,
         score_family="footnote_form",
+        aliases=("R-AN-005",),
         tests=(FOOTNOTE_TEST,),
     ),
 )
@@ -717,7 +728,7 @@ STRUCTURE_RULES = (
         tests=("tests/unit/test_heading_heuristic_scoring.py",),
     ),
     _rule(
-        "R-STRUCT-HEADING-001",
+        "structure.heading.diagnostic",
         owner=STRUCTURE_OWNER,
         family=RuleFamily.STRUCTURE,
         nature=RuleNature.HEURISTIC,
@@ -725,6 +736,7 @@ STRUCTURE_RULES = (
         status=DeploymentStatus.ACTIVE,
         normative_status=NormativeStatus.INTERNAL_UNSOURCED,
         score_family="heading",
+        aliases=("R-STRUCT-HEADING-001",),
         tests=("tests/unit/test_heading_heuristic_scoring.py",),
     ),
     _rule(
@@ -751,7 +763,7 @@ STRUCTURE_RULES = (
         tests=("tests/unit/test_structure_service_poetry_detection.py",),
     ),
     _rule(
-        "R-CI-POETRY-001",
+        "structure.poetry.heuristique",
         owner=STRUCTURE_OWNER,
         family=RuleFamily.STRUCTURE,
         nature=RuleNature.HEURISTIC,
@@ -759,6 +771,7 @@ STRUCTURE_RULES = (
         status=DeploymentStatus.ACTIVE,
         normative_status=NormativeStatus.INTERNAL_UNSOURCED,
         score_family="poetry",
+        aliases=("R-CI-POETRY-001",),
         tests=("tests/unit/test_poetry_heuristic_scoring.py",),
     ),
     _rule(

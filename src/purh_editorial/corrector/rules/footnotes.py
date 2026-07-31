@@ -176,20 +176,20 @@ FOOTNOTE_RULES = (
 )
 
 FOOTNOTE_DIAGNOSTIC_RULES = (
-    ("R-AN-004", find_lowercase_start_diagnostics),
-    ("R-AN-005", find_ambiguous_final_punctuation_diagnostics),
+    ("purh.note.diagnostic.debut_minuscule", find_lowercase_start_diagnostics),
+    ("purh.note.diagnostic.ponctuation_finale_ambigue", find_ambiguous_final_punctuation_diagnostics),
 )
 
 
 def note_call_diagnostic_ids(previous_character: str) -> tuple[str, ...]:
     rule_ids: list[str] = []
     if previous_character in NOTE_CALL_SPACES:
-        rule_ids.append("R-AN-003")
+        rule_ids.append("purh.note.appel.espace_avant")
     if (
         previous_character in NOTE_CALL_FINAL_PUNCTUATION
         or previous_character in NOTE_CALL_CLOSING_QUOTES
     ):
-        rule_ids.append("R-AN-002")
+        rule_ids.append("purh.note.appel.placement")
     return tuple(rule_ids)
 
 
