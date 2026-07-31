@@ -125,13 +125,15 @@ _CENTURY_TOKEN_RE = re.compile(
     rf"(?P<suffix>ème|eme|e)\b)",
     re.IGNORECASE,
 )
-_SIECLE_LOOKAHEAD_RE = re.compile(r"\A\s+siècles?\b", re.IGNORECASE)
+_SIECLE_LOOKAHEAD_RE = re.compile(
+    r"\A\s+(?:siècles?|arrondissements?)\b", re.IGNORECASE
+)
 _CENTURY_CHAIN_SEP_RE = re.compile(
     r"\A(?:\s+|,|-|–|—|/|et|ou|au|à)+\Z", re.IGNORECASE
 )
 _NUMERO_STYLE_RE = re.compile(r"\b[Nn](o)\u202f(?=\d)")
 _ORDINAL_STYLE_RE = re.compile(r"\b(?P<number>\d+)(?P<suffix>er|re|e)\b")
-_CIVILITY_STYLE_RE = re.compile(r"\b(?:Mme|Mlle)(?P<plural>s?)\b")
+_CIVILITY_STYLE_RE = re.compile(r"\b(?:Mme|Mlle|Dr|Pr)(?P<plural>s?)\b")
 
 
 def find_apostrophe_edits(text: str) -> list[TextEdit]:
