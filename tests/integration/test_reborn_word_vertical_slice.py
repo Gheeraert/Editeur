@@ -355,6 +355,13 @@ def _expected_first_counts() -> dict[str, int]:
             "structure.frontmatter.abstract": 1,
             "structure.frontmatter.keywords": 1,
             "structure.frontmatter.acknowledgment": 1,
+            # Document cree via Documents.Add() : le style "Normal" du
+            # gabarit par defaut n'est pas Times New Roman, donc la mise en
+            # forme purh.style.normal s'applique aux 9 paragraphes du corps
+            # principal qui l'utilisent (les autres styles PURH cibles -
+            # Titre, Citation, Note de bas de page... - sont deja conformes
+            # ou non utilises dans ce document de test).
+            "purh.style.normal": 9,
         }
     )
     return counts

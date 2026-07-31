@@ -61,6 +61,18 @@ DETERMINISTIC_RULE_IDS = (
     # docs/journal/ANALYSE_CORPUS_HP2.md et
     # docs/journal/OBSERVATIONS_CORPUS_2026-07-31.md).
     "structure.allcaps.heading",
+    # Mise en forme minimale PURH des styles Word natifs (branche "stylage") :
+    # modifie la definition des styles eux-memes (Font/ParagraphFormat), pas
+    # un formatage direct paragraphe par paragraphe - voir rules/styling.py.
+    # Condition deterministe : Style.BuiltIn (jamais un style personnalise
+    # portant le meme nom).
+    "purh.style.titre",
+    "purh.style.citation",
+    "purh.style.citation_intense",
+    "purh.style.normal",
+    "purh.style.corps_de_texte",
+    "purh.style.note_bas_de_page",
+    "purh.style.appel_de_note",
 )
 
 HEURISTIC_RULE_IDS = (

@@ -32,6 +32,15 @@ from purh_editorial.corrector.rules.structure import (
     detect_frontmatter_rule,
     is_allcaps_heading,
 )
+from purh_editorial.corrector.rules.styling import (
+    FOOTNOTE_REFERENCE_STYLE_RULE_ID,
+    PARAGRAPH_STYLE_SPECS,
+    STYLE_APPEL_NOTE,
+    apply_footnote_reference_style,
+    apply_paragraph_style_spec,
+    footnote_reference_style_needs_change,
+    paragraph_style_needs_change,
+)
 
 WD_MAIN_TEXT_STORY = 1
 WD_YELLOW = 7
@@ -412,6 +421,88 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
     _apply_note_call_diagnostics(document, counts)
 
 
+def _mark_paragraph_style_change(paragraph: Any) -> None:
+    # Marqueur de tracabilite minimal (premier caractere du paragraphe) :
+    # surligner tout le paragraphe ecraserait un diagnostic turquoise deja
+    # pose ailleurs dans ce meme paragraphe par un passage precedent (cette
+    # regle de stylage s'applique en tout dernier, "en fin de passe").
+    marker = paragraph.Range.Duplicate
+    marker_end = min(marker.Start + 1, marker.End)
+    marker.SetRange(marker.Start, marker_end)
+    try:
+        marker.HighlightColorIndex = WD_YELLOW
+    except Exception:
+        pass
+    marker = None
+
+
+def _count_and_mark_paragraphs_with_style(document: Any, style_name: str) -> int:
+    changed = 0
+    story = document.StoryRanges(WD_MAIN_TEXT_STORY)
+    for paragraph in story.Paragraphs:
+        if paragraph.Range.Style.NameLocal == style_name:
+            _mark_paragraph_style_change(paragraph)
+            changed += 1
+    paragraph = None
+    story = None
+    for footnote in document.Footnotes:
+        for paragraph in footnote.Range.Paragraphs:
+            if paragraph.Range.Style.NameLocal == style_name:
+                _mark_paragraph_style_change(paragraph)
+                changed += 1
+        paragraph = None
+    footnote = None
+    return changed
+
+
+def _count_and_mark_footnote_references(document: Any) -> int:
+    changed = 0
+    for footnote in document.Footnotes:
+        reference = footnote.Reference
+        reference.HighlightColorIndex = WD_YELLOW
+        reference = None
+        changed += 1
+    footnote = None
+    return changed
+
+
+def _apply_purh_style_defaults(document: Any, counts: dict[str, int]) -> None:
+    # Modifie les definitions de style Word elles-memes (pas un formatage
+    # direct paragraphe par paragraphe) : un seul reglage par style, herite
+    # par tous les paragraphes qui l'utilisent deja, sans toucher aux
+    # paragraphes restes en style personnalise ou non stylise. Le controle
+    # `BuiltIn` ecarte tout style portant le meme nom mais recree par
+    # l'auteur/l'editrice (donc pas "natif").
+    for spec in PARAGRAPH_STYLE_SPECS:
+        try:
+            style = document.Styles(spec.style_name)
+        except Exception:
+            continue
+        if not _is_word_true(style.BuiltIn):
+            style = None
+            continue
+        if not paragraph_style_needs_change(style, spec):
+            style = None
+            continue
+        apply_paragraph_style_spec(style, spec)
+        style = None
+        counts[spec.rule_id] += _count_and_mark_paragraphs_with_style(
+            document, spec.style_name
+        )
+
+    try:
+        reference_style = document.Styles(STYLE_APPEL_NOTE)
+    except Exception:
+        reference_style = None
+    if reference_style is not None and _is_word_true(reference_style.BuiltIn):
+        if footnote_reference_style_needs_change(reference_style):
+            apply_footnote_reference_style(reference_style)
+            counts[FOOTNOTE_REFERENCE_STYLE_RULE_ID] += (
+                _count_and_mark_footnote_references(document)
+            )
+    reference_style = None
+
+
 def correct_word_copy(
     path: Path,
     rule_ids: tuple[str, ...],
@@ -438,6 +529,7 @@ def correct_word_copy(
         )
         _apply_main_text(document, counts)
         _apply_footnotes(document, counts)
+        _apply_purh_style_defaults(document, counts)
         document.Save()
         return counts
     except Exception as exc:

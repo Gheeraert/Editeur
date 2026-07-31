@@ -96,6 +96,13 @@ EXPECTED_DETERMINISTIC_IDS = {
     "structure.frontmatter.keywords",
     "structure.frontmatter.acknowledgment",
     "structure.allcaps.heading",
+    "purh.style.titre",
+    "purh.style.citation",
+    "purh.style.citation_intense",
+    "purh.style.normal",
+    "purh.style.corps_de_texte",
+    "purh.style.note_bas_de_page",
+    "purh.style.appel_de_note",
 }
 
 EXPECTED_HEURISTIC_IDS = {
@@ -775,8 +782,8 @@ def test_exact_deterministic_identifier_set() -> None:
     # droits/anglais de premier niveau en chevrons français ; une paire
     # imbriquée dans une autre reste en l'état (convention citation dans
     # citation).
-    assert len(DETERMINISTIC_RULE_IDS) == 41
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 41
+    assert len(DETERMINISTIC_RULE_IDS) == 48
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 48
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -793,8 +800,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 51
-    assert len(set(RULE_IDS)) == 51
+    assert len(RULE_IDS) == 58
+    assert len(set(RULE_IDS)) == 58
 
 
 class _IgnoringRange:
