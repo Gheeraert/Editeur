@@ -27,6 +27,7 @@ from purh_editorial.corrector.rules.orthotypography import (
     apply_text_edits,
     find_centuries,
     find_double_dash_diagnostics,
+    find_english_quote_conversion_edits,
     find_folio_style_matches,
     find_incise_dash_diagnostics,
     find_numero_style_matches,
@@ -52,6 +53,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.apostrophe",
     "purh.points_suspension",
     "purh.ligature.oe",
+    "purh.guillemets.anglais_vers_chevrons",
     "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant",
     "purh.espaces.avant_ponct_forte",
@@ -506,8 +508,8 @@ def test_diagnostic_detectors_do_not_change_text() -> None:
     [
         (
             find_straight_quote_diagnostics,
+            'class="bonjour"',
             'Il dit "bonjour".',
-            'print("bonjour")',
             "Il dit « bonjour ».",
         ),
         (
@@ -535,7 +537,48 @@ def test_heuristic_orthotypography_diagnostics_are_non_mutating(
     assert apply_text_edits(positive, diagnostics) == positive
     assert finder(negative) == []
     assert finder(conform) == []
-    assert finder(positive) == diagnostics
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ('Il dit "bonjour".', "Il dit «bonjour»."),
+        ("Il dit “bonjour”.", "Il dit «bonjour»."),
+        # Guillemets droits fermant un guillemet anglais ouvrant : melange de
+        # styles toleré pour la paire de premier niveau.
+        ('Il dit “bonjour".', "Il dit «bonjour»."),
+    ],
+)
+def test_english_quotes_become_chevrons(source: str, expected: str) -> None:
+    corrected = apply_text_edits(source, find_english_quote_conversion_edits(source))
+    assert corrected == expected
+    assert find_english_quote_conversion_edits(corrected) == []
+
+
+def test_nested_english_quotes_are_left_untouched() -> None:
+    # Guillemets dans les guillemets : seule la paire de premier niveau
+    # devient des chevrons, la paire imbriquee reste en guillemets anglais.
+    # Un guillemet anglais courbe ("“"/"”") est directionnel et permet de
+    # detecter l'imbrication sans ambiguite, y compris quand le niveau
+    # exterieur est en guillemets droits (melange de styles courant).
+    source = 'Il a dit "Elle a dit “bonjour” hier" ce matin.'
+    corrected = apply_text_edits(source, find_english_quote_conversion_edits(source))
+    assert corrected == "Il a dit «Elle a dit “bonjour” hier» ce matin."
+    assert find_english_quote_conversion_edits(corrected) == []
+
+    curly_source = "Il a dit “Elle a dit “bonjour” hier” ce matin."
+    curly_corrected = apply_text_edits(
+        curly_source, find_english_quote_conversion_edits(curly_source)
+    )
+    assert curly_corrected == "Il a dit «Elle a dit “bonjour” hier» ce matin."
+
+
+def test_english_quote_conversion_skips_technical_context() -> None:
+    assert find_english_quote_conversion_edits('class="bonjour"') == []
+    assert find_english_quote_conversion_edits("«déjà correct»") == []
+    # Guillemet non apparie (nombre impair) : laisse en l'etat, rien a
+    # convertir avec certitude.
+    assert find_english_quote_conversion_edits('Il dit "bonjour.') == []
 
 
 @pytest.mark.parametrize(
@@ -661,8 +704,12 @@ def test_exact_deterministic_identifier_set() -> None:
     # implémentée en diagnostic (surlignage), condition déterministe (style de
     # titre Word + texte tout capitales), pas de transformation automatique de
     # casse (risque de perdre la casse d'un nom propre dans le titre).
-    assert len(DETERMINISTIC_RULE_IDS) == 40
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 40
+    # purh.guillemets.anglais_vers_chevrons (nouvelle) convertit les guillemets
+    # droits/anglais de premier niveau en chevrons français ; une paire
+    # imbriquée dans une autre reste en l'état (convention citation dans
+    # citation).
+    assert len(DETERMINISTIC_RULE_IDS) == 41
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 41
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -679,8 +726,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 50
-    assert len(set(RULE_IDS)) == 50
+    assert len(RULE_IDS) == 51
+    assert len(set(RULE_IDS)) == 51
 
 
 class _IgnoringRange:

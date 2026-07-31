@@ -10,6 +10,7 @@ DETERMINISTIC_RULE_IDS = (
     "purh.apostrophe",
     "purh.points_suspension",
     "purh.ligature.oe",
+    "purh.guillemets.anglais_vers_chevrons",
     "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant",
     "purh.espaces.avant_ponct_forte",

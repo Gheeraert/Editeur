@@ -137,7 +137,8 @@ def _assert_corrected_document(path: Path) -> None:
     numero_o = None
     numero = None
     incise = None
-    straight_quote = None
+    converted_quote_open = None
+    converted_quote_close = None
     double_dash = None
     quote_punctuation = None
     first_note = None
@@ -166,7 +167,7 @@ def _assert_corrected_document(path: Path) -> None:
         assert (
             "L’auteur… bœuf «\u00a0Bonjour\u00a0» Voici\u00a0: mot, double espace "
             "M.\u00a0Dupont xvie siècle, la vie continue, 1re partie etc. p.\u00a012 "
-            "no\u00a05 p.\u00a053 1\u00a0000 mot - mot, “citation” avant--après, "
+            "no\u00a05 p.\u00a053 1\u00a0000 mot - mot, « citation » avant--après, "
             "«\u00a0Que faire\u00a0?\u00a0»."
         ) in main_text
         assert "Appel espacé " in main_text
@@ -194,8 +195,20 @@ def _assert_corrected_document(path: Path) -> None:
         assert incise.Text == " - "
         assert incise.HighlightColorIndex == WD_TURQUOISE
 
-        straight_quote = _range_for(body_paragraph, "“citation”")
-        assert straight_quote.HighlightColorIndex == WD_TURQUOISE
+        converted_quote_fragment = "« citation »"
+        converted_quote_open = _range_for(
+            body_paragraph, converted_quote_fragment, length=1
+        )
+        converted_quote_close = _range_for(
+            body_paragraph,
+            converted_quote_fragment,
+            offset=len(converted_quote_fragment) - 1,
+            length=1,
+        )
+        assert converted_quote_open.Text == "«"
+        assert converted_quote_open.HighlightColorIndex == WD_YELLOW
+        assert converted_quote_close.Text == "»"
+        assert converted_quote_close.HighlightColorIndex == WD_YELLOW
         double_dash = _range_for(body_paragraph, "--")
         assert double_dash.HighlightColorIndex == WD_TURQUOISE
         quote_punctuation = _range_for(
@@ -283,7 +296,8 @@ def _assert_corrected_document(path: Path) -> None:
         first_note = None
         quote_punctuation = None
         double_dash = None
-        straight_quote = None
+        converted_quote_close = None
+        converted_quote_open = None
         incise = None
         numero = None
         numero_o = None
@@ -306,8 +320,9 @@ def _expected_first_counts() -> dict[str, int]:
             "purh.apostrophe": 1,
             "purh.points_suspension": 2,
             "purh.ligature.oe": 1,
-            "purh.guillemets.espace_apres_ouvrant": 2,
-            "purh.guillemets.espace_avant_fermant": 2,
+            "purh.guillemets.anglais_vers_chevrons": 2,
+            "purh.guillemets.espace_apres_ouvrant": 3,
+            "purh.guillemets.espace_avant_fermant": 3,
             "purh.espaces.avant_ponct_forte": 2,
             "purh.espaces.avant_ponct_faible": 1,
             "purh.espaces.double": 1,
@@ -329,7 +344,7 @@ def _expected_first_counts() -> dict[str, int]:
             "purh.tiret.incise.diagnostic": 1,
             "purh.note.appel.placement": 1,
             "purh.note.appel.espace_avant": 1,
-            "purh.guillemets.droits": 1,
+            "purh.guillemets.droits": 0,
             "purh.tiret.double": 1,
             "purh.guillemets.ponctuation_fermante": 1,
             "purh.note.majuscule_initiale": 1,
@@ -363,7 +378,6 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
         "purh.tiret.incise.diagnostic",
         "purh.note.appel.placement",
         "purh.note.appel.espace_avant",
-        "purh.guillemets.droits",
         "purh.tiret.double",
         "purh.guillemets.ponctuation_fermante",
         "purh.note.diagnostic.debut_minuscule",
@@ -376,7 +390,6 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
     assert second_counts["purh.tiret.incise.diagnostic"] == 1
     assert second_counts["purh.note.appel.placement"] == 1
     assert second_counts["purh.note.appel.espace_avant"] == 1
-    assert second_counts["purh.guillemets.droits"] == 1
     assert second_counts["purh.tiret.double"] == 1
     assert second_counts["purh.guillemets.ponctuation_fermante"] == 1
     assert second_counts["purh.note.diagnostic.debut_minuscule"] == 1

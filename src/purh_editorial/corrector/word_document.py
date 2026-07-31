@@ -42,6 +42,23 @@ WD_TURQUOISE = 3
 # scorée. Cf. docs/REBORN_ARCHITECTURE.md §6.
 _HEADING_STYLE_RE = re.compile(r"(titre|heading)\s*[1-4]\b", re.IGNORECASE)
 
+# Sous-ensemble de ORTHOTYPOGRAPHY_TEXT_RULES applique aussi aux notes de bas
+# de page : la conversion des guillemets anglais/droits en chevrons (et
+# l'espace insecable qui l'accompagne) doit valoir partout, pas seulement
+# dans le texte principal. L'ordre (conversion puis espacement) est celui de
+# ORTHOTYPOGRAPHY_TEXT_RULES, indispensable pour que l'espace insecable soit
+# posee sur les chevrons fraichement convertis.
+FOOTNOTE_QUOTE_TEXT_RULES = tuple(
+    (rule_id, finder)
+    for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES
+    if rule_id
+    in {
+        "purh.guillemets.anglais_vers_chevrons",
+        "purh.guillemets.espace_apres_ouvrant",
+        "purh.guillemets.espace_avant_fermant",
+    }
+)
+
 
 def _paragraph_text(paragraph: Any) -> str:
     text = paragraph.Range.Text
@@ -354,7 +371,9 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
             footnote.Range.Paragraphs,
             start=1,
         ):
-            for rule_id, finder in FOOTNOTE_RULES + BIBLIOGRAPHY_TEXT_RULES:
+            for rule_id, finder in (
+                FOOTNOTE_QUOTE_TEXT_RULES + FOOTNOTE_RULES + BIBLIOGRAPHY_TEXT_RULES
+            ):
                 try:
                     counts[rule_id] += _apply_text_edits(paragraph, finder)
                 except Exception as exc:

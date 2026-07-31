@@ -153,7 +153,6 @@ _REDOUBLEMENT_RE = re.compile(r"\b(pp|vv|ll)\.|§§")
 _THOUSANDS_RE = re.compile(r"\b\d{1,3}(?: \d{3})+\b")
 _THOUSANDS_GROUP_RE = re.compile(r"(\d{1,3}) (\d{3})(?!\d)")
 _INCISE_DASH_RE = re.compile(r"(?<=\w) [-–—] (?=\w)")
-_STRAIGHT_QUOTE_RE = re.compile(r'(["“])([^"\n”]+)(["”])')
 _DOUBLE_DASH_RE = re.compile(r"--")
 _QUOTE_PUNCT_SUSPECT_RE = re.compile(r"«([^»]+)»\.")
 _QUOTE_STRONG_PUNCT = {".", ";", ":", "?", "!", "…"}
@@ -456,14 +455,80 @@ def _is_technical_quote_context(
     )
 
 
-def find_straight_quote_diagnostics(text: str) -> list[TextEdit]:
-    diagnostics: list[TextEdit] = []
-    for match in _STRAIGHT_QUOTE_RE.finditer(text):
-        if _is_technical_quote_context(text, match.start(), match.end()):
+_CURLY_QUOTE_OPEN = "“"  # “
+_CURLY_QUOTE_CLOSE = "”"  # ”
+
+
+def _find_english_quote_pairs(text: str) -> list[tuple[int, int, int]]:
+    # Guillemets droits ou anglais (" ou " / ") equilibres par une pile :
+    # depth (profondeur retournee) = nombre de paires encore ouvertes
+    # autour de celle-ci une fois refermee, donc 0 pour une paire de
+    # premier niveau, >=1 pour une paire imbriquee ("guillemets dans les
+    # guillemets"). Un guillemet droit est ambigu (meme caractere pour
+    # ouvrant et fermant) : on le traite comme ouvrant si aucune paire
+    # n'est en cours, comme fermant sinon - ce qui permet aussi de fermer
+    # une paire ouverte par un guillemet anglais courbe si le document
+    # melange les deux styles.
+    #
+    # Les chevrons deja presents («/») comptent aussi comme ouvrant/fermant
+    # dans la pile (sans etre retournes comme paire a convertir) : sinon,
+    # rejouer cette fonction sur un texte deja corrige verrait une paire
+    # anglaise imbriquee dans des chevrons comme une paire de premier
+    # niveau et la convertirait a tort - non idempotent.
+    stack: list[int] = []
+    pairs: list[tuple[int, int, int]] = []
+    for index, char in enumerate(text):
+        if char == "«" or char == _CURLY_QUOTE_OPEN:
+            stack.append(index)
+        elif char == "»" or char == _CURLY_QUOTE_CLOSE:
+            if stack:
+                start = stack.pop()
+                pairs.append((start, index, len(stack)))
+        elif char == '"':
+            if stack:
+                start = stack.pop()
+                pairs.append((start, index, len(stack)))
+            else:
+                stack.append(index)
+    return pairs
+
+
+def find_english_quote_conversion_edits(text: str) -> list[TextEdit]:
+    # Regle de base PURH : les guillemets droits ou anglais deviennent des
+    # chevrons francais. Exception : une paire imbriquee dans une autre
+    # (depth >= 1) reste en l'etat - c'est la convention pour une citation
+    # a l'interieur d'une citation. Les contextes techniques (attribut,
+    # URL, parenthese...) sont egalement laisses de cote, comme pour le
+    # diagnostic purh.guillemets.droits dont ils partagent la logique.
+    edits: list[TextEdit] = []
+    for start, end, depth in _find_english_quote_pairs(text):
+        if depth != 0:
             continue
-        diagnostics.append(
-            TextEdit(match.start(), match.end(), match.group(0))
-        )
+        if _is_technical_quote_context(text, start, end + 1):
+            continue
+        if text[start] != "«":
+            edits.append(TextEdit(start, start + 1, "«"))
+        if text[end] != "»":
+            edits.append(TextEdit(end, end + 1, "»"))
+    edits.sort(key=lambda edit: edit.start)
+    return edits
+
+
+def find_straight_quote_diagnostics(text: str) -> list[TextEdit]:
+    # Ne signale que les paires de premier niveau que la conversion
+    # elle-meme a laissees de cote par prudence (contexte technique
+    # ambigu) : une paire imbriquee est la convention attendue et n'a pas
+    # besoin d'etre relue, une paire de premier niveau normale vient d'etre
+    # convertie en chevrons par find_english_quote_conversion_edits.
+    diagnostics: list[TextEdit] = []
+    for start, end, depth in _find_english_quote_pairs(text):
+        if depth != 0:
+            continue
+        if text[start] == "«" and text[end] == "»":
+            continue
+        if not _is_technical_quote_context(text, start, end + 1):
+            continue
+        diagnostics.append(TextEdit(start, end + 1, text[start : end + 1]))
     return diagnostics
 
 
@@ -501,6 +566,7 @@ ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.apostrophe", find_apostrophe_edits),
     ("purh.points_suspension", find_points_suspension_edits),
     ("purh.ligature.oe", find_oe_ligature_edits),
+    ("purh.guillemets.anglais_vers_chevrons", find_english_quote_conversion_edits),
     ("purh.guillemets.espace_apres_ouvrant", find_open_quote_space_edits),
     ("purh.guillemets.espace_avant_fermant", find_close_quote_space_edits),
     ("purh.espaces.avant_ponct_forte", find_strong_punctuation_edits),
