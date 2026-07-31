@@ -25,6 +25,7 @@ EXPECTED_RULE_IDS = (
     "purh.ligature.oe", "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant", "purh.espaces.avant_ponct_forte",
     "purh.espaces.avant_ponct_faible", "purh.espaces.double", "purh.civilite",
+    "purh.numeral_dynastique",
     "purh.siecles", "purh.siecles.style", "purh.ordinaux", "purh.ordinaux.style",
     "purh.civilite.style", "purh.tiret.double",
     "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "purh.numero.style",
@@ -53,29 +54,29 @@ EXPECTED_RULE_IDS = (
 
 EXPECTED_COUNTS = {
     "family": {
-        RuleFamily.ORTHOTYPOGRAPHY: 25,
+        RuleFamily.ORTHOTYPOGRAPHY: 26,
         RuleFamily.FOOTNOTE: 11,
         RuleFamily.BIBLIOGRAPHY: 7,
         RuleFamily.STRUCTURE: 21,
     },
     "nature": {
-        RuleNature.DETERMINISTIC: 33,
+        RuleNature.DETERMINISTIC: 34,
         RuleNature.HEURISTIC: 31,
     },
     "action": {
-        RuleActionType.TEXT_TRANSFORM: 26,
+        RuleActionType.TEXT_TRANSFORM: 27,
         RuleActionType.STYLE_TRANSFORM: 5,
         RuleActionType.STRUCTURE_TRANSFORM: 21,
         RuleActionType.DIAGNOSTIC: 8,
         RuleActionType.PIPELINE_CONTROL: 4,
     },
     "status": {
-        DeploymentStatus.ACTIVE: 43,
+        DeploymentStatus.ACTIVE: 44,
         DeploymentStatus.REVIEW_ONLY: 18,
         DeploymentStatus.DISABLED: 3,
     },
     "state": {
-        ImplementationState.LEGACY: 58,
+        ImplementationState.LEGACY: 59,
         ImplementationState.PLANNED: 4,
         ImplementationState.DORMANT: 2,
     },

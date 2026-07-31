@@ -16,6 +16,7 @@ DETERMINISTIC_RULE_IDS = (
     "purh.espaces.avant_ponct_faible",
     "purh.espaces.double",
     "purh.civilite",
+    "purh.numeral_dynastique",
     "purh.siecles",
     "purh.ordinaux",
     "purh.abreviations.etc",

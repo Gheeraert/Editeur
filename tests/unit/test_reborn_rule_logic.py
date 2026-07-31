@@ -51,6 +51,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.espaces.avant_ponct_faible",
     "purh.espaces.double",
     "purh.civilite",
+    "purh.numeral_dynastique",
     "purh.siecles",
     "purh.ordinaux",
     "purh.abreviations.etc",
@@ -152,6 +153,13 @@ def _orthotypography_finder(rule_id: str):
             f"M.{chr(0x00A0)}Dupont",
             "M. dupont",
             f"M.{chr(0x00A0)}Dupont",
+        ),
+        (
+            "purh.numeral_dynastique",
+            "Louis XIV régna",
+            f"Louis{chr(0x00A0)}XIV régna",
+            "au XVIe siècle",
+            f"Louis{chr(0x00A0)}XIV régna",
         ),
         (
             "purh.siecles",
@@ -477,16 +485,19 @@ def test_frontmatter_detection_is_exact(text: str, rule_id: str) -> None:
 
 
 def test_exact_deterministic_identifier_set() -> None:
-    # 32 des 33 règles déterministes du catalogue : seule
+    # 33 des 34 règles déterministes du catalogue : seule
     # structure.frontmatter.circuit_breaker reste à concevoir (cf.
     # NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py — `planned`, jamais
     # fonctionnelle même dans la voie legacy). Les trois règles de style
     # ajoutées (purh.ordinaux.style, purh.civilite.style,
     # purh.note.italique_latin) complètent les couches de mise en forme
     # manquantes pour les ordinaux, les civilités et les abréviations
-    # latines en note.
-    assert len(DETERMINISTIC_RULE_IDS) == 32
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 32
+    # latines en note. purh.numeral_dynastique ajoute l'espace insécable
+    # entre un nom propre et le numéral romain qui le suit (candidate la
+    # plus solide identifiée par docs/ANALYSE_CORPUS_HP2.md, 784 occurrences
+    # observées sur le corpus H&P2).
+    assert len(DETERMINISTIC_RULE_IDS) == 33
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 33
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -500,8 +511,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 9
     assert len(set(HEURISTIC_RULE_IDS)) == 9
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 41
-    assert len(set(RULE_IDS)) == 41
+    assert len(RULE_IDS) == 42
+    assert len(set(RULE_IDS)) == 42
 
 
 class _IgnoringRange:

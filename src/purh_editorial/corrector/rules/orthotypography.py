@@ -77,6 +77,10 @@ _CIVILITY_RE = re.compile(
     re.UNICODE,
 )
 _ORDINAL_RE = re.compile(r"\b(\d+)(ère|ere|ème|eme)\b", re.UNICODE)
+_NUMERAL_DYNASTIQUE_RE = re.compile(
+    r"\b([A-ZÀ-Þ]\w*) "
+    r"(XXI|XX|XIX|XVIII|XVII|XVI|XV|XIV|XIII|XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)\b"
+)
 _ETC_RE = re.compile(r"etc(?:…\.*|\.{2,})")
 _PAGINATION_RE = re.compile(
     r"\b(pp?|vol|t|f|fol|fig|chap|cat|pl|ms|Ms|n°|N°|col)\."
@@ -212,6 +216,10 @@ def find_double_space_edits(text: str) -> list[TextEdit]:
 
 def find_civility_edits(text: str) -> list[TextEdit]:
     return _regex_edits(text, _CIVILITY_RE, r"\1" + NBSP)
+
+
+def find_numeral_dynastique_edits(text: str) -> list[TextEdit]:
+    return _regex_edits(text, _NUMERAL_DYNASTIQUE_RE, r"\1" + NBSP + r"\2")
 
 
 def _century_chains(text: str) -> list[list[re.Match[str]]]:
@@ -403,6 +411,7 @@ ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.espaces.avant_ponct_faible", find_weak_punctuation_edits),
     ("purh.espaces.double", find_double_space_edits),
     ("purh.civilite", find_civility_edits),
+    ("purh.numeral_dynastique", find_numeral_dynastique_edits),
     ("purh.siecles", find_century_text_edits),
     ("purh.ordinaux", find_ordinal_edits),
     ("purh.abreviations.etc", find_etc_edits),
