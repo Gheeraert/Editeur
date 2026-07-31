@@ -8,7 +8,7 @@ from purh_editorial.corrector.rules.orthotypography import (
     apply_text_edits,
 )
 
-_LEADING_SPACE_RE = re.compile(r"^[ \t\u00a0\u202f]+")
+_LEADING_SPACE_RE = re.compile(r"[ \t\u00a0\u202f]*")
 _OP_CIT_RE = re.compile(
     r"\b(op|art|loc)\.([ \t\u00a0\u202f]+)(cit)\.",
     re.IGNORECASE,
@@ -45,20 +45,25 @@ NOTE_CALL_CLOSING_QUOTES = {"»", '"', "”", "›"}
 
 
 def find_initial_space_edits(text: str) -> list[TextEdit]:
+    # Le numero d'appel de note (marque de reference Word, hors texte) n'est
+    # jamais suivi d'une espace automatique dans le corps de la note : sans
+    # separateur explicite, le texte colle au numero. On normalise donc le
+    # debut de note a exactement une espace normale (jamais zero, jamais une
+    # tabulation/espace insecable/espaces multiples), sans jamais toucher au
+    # premier caractere de contenu reel : un remplacement qui l'engloberait
+    # perdrait sa mise en forme de caractere (italique, gras...) puisque Word
+    # applique a un Range.Text reecrit la mise en forme du debut de la plage
+    # d'origine plutot que celle du caractere remplace.
     content_start = 1 if text.startswith("\x02") else 0
-    match = _LEADING_SPACE_RE.match(text[content_start:])
-    if not match:
+    if content_start >= len(text):
         return []
-    first_content = content_start + match.end()
-    if first_content >= len(text):
+    match = _LEADING_SPACE_RE.match(text, content_start)
+    run_end = match.end()
+    if run_end >= len(text):
         return []
-    return [
-        TextEdit(
-            content_start + match.start(),
-            first_content + 1,
-            text[first_content],
-        )
-    ]
+    if text[content_start:run_end] == " ":
+        return []
+    return [TextEdit(content_start, run_end, " ")]
 
 
 def find_op_cit_edits(text: str) -> list[TextEdit]:
@@ -82,7 +87,15 @@ def find_sans_lieu_date_edits(text: str) -> list[TextEdit]:
 
 
 def _content_start(text: str) -> int:
-    return 1 if text.startswith("\x02") else 0
+    # Doit rester cohérent avec le séparateur normalisé par
+    # find_initial_space_edits (une espace normale unique après le numéro
+    # d'appel de note) : les règles qui portent sur le "vrai" premier
+    # caractère de la note (majuscule initiale, abréviation latine,
+    # ponctuation finale...) doivent l'ignorer.
+    start = 1 if text.startswith("\x02") else 0
+    if start < len(text) and text[start] == " ":
+        start += 1
+    return start
 
 
 def _majuscule_initiale_excluded(text: str) -> bool:

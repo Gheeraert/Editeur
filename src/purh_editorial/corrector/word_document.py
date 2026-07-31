@@ -364,6 +364,8 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
                     ) from exc
             for rule_id, finder in FOOTNOTE_DIAGNOSTIC_RULES:
                 counts[rule_id] += _apply_diagnostics(paragraph, finder)
+            for rule_id, finder in ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES:
+                counts[rule_id] += _apply_diagnostics(paragraph, finder)
             counts["purh.siecles.style"] += _apply_century_styles(paragraph)
             counts["purh.numero.style"] += _apply_numero_styles(paragraph)
             counts["purh.folio.style"] += _apply_folio_styles(paragraph)

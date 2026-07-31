@@ -278,7 +278,6 @@ def test_points_suspension_and_century_guardrails() -> None:
 @pytest.mark.parametrize(
     ("finder", "source", "expected", "negative", "conform"),
     [
-        (find_initial_space_edits, "  Note", "Note", "Note", "Note"),
         (
             find_op_cit_edits,
             "Voir op. cit.",
@@ -309,17 +308,48 @@ def test_footnote_text_rules_are_guarded_and_idempotent(
     assert apply_text_edits(corrected, finder(corrected)) == corrected
 
 
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Note",  # aucun séparateur : le numéro de note colle au texte
+        "\tNote",  # tabulation résiduelle
+        "  Note",  # espaces multiples
+        " Note",  # espace insécable
+    ],
+)
+def test_footnote_initial_space_is_normalized_to_a_single_space(
+    source: str,
+) -> None:
+    corrected = apply_text_edits(source, find_initial_space_edits(source))
+    assert corrected == " Note"
+    # Le premier caractère de contenu réel ("N") ne doit jamais être inclus
+    # dans la plage remplacée : Word applique à un Range.Text réécrit la mise
+    # en forme du début de la plage d'origine, pas celle du caractère
+    # remplacé, donc l'englober perdrait sa mise en forme (italique, gras...).
+    for edit in find_initial_space_edits(source):
+        assert edit.end <= source.index("N")
+    assert find_initial_space_edits(" Note") == []
+    assert apply_text_edits(corrected, find_initial_space_edits(corrected)) == corrected
+
+
+def test_footnote_initial_space_respects_leading_marker() -> None:
+    assert apply_text_edits(
+        "\x02\tNote",
+        find_initial_space_edits("\x02\tNote"),
+    ) == "\x02 Note"
+    assert apply_text_edits(
+        "\x02Note",
+        find_initial_space_edits("\x02Note"),
+    ) == "\x02 Note"
+    marker_edit = find_initial_space_edits("\x02\tNote")[0]
+    assert marker_edit.replacement == " "
+    assert (marker_edit.start, marker_edit.end) == (1, 2)
+
+
 def test_note_abbreviation_variants() -> None:
     assert normalize_op_cit_spacing("Voir art.  cit.") == f"Voir art.{NNBSP}cit."
     normalized = f"Voir loc.{NNBSP}cit."
     assert normalize_op_cit_spacing(normalized) == normalized
-    assert apply_text_edits(
-        "\x02\tNote",
-        find_initial_space_edits("\x02\tNote"),
-    ) == "\x02Note"
-    marker_edit = find_initial_space_edits("\x02\tNote")[0]
-    assert marker_edit.replacement == "N"
-    assert marker_edit.end - marker_edit.start == 2
 
 
 @pytest.mark.parametrize(

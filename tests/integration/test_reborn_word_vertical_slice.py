@@ -322,7 +322,7 @@ def _expected_first_counts() -> dict[str, int]:
             "purh.siecles.style": 1,
             "purh.numero.style": 1,
             "purh.ordinaux.style": 1,
-            "purh.note.espace_initiale": 2,
+            "purh.note.espace_initiale": 1,
             "purh.note.espace_op_cit": 1,
             "purh.note.espace_sans_lieu_date": 1,
             "purh.note.italique_latin": 2,
