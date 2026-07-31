@@ -1,5 +1,7 @@
 # AGENTS.md
 
+> **Statut : ce document décrit la gouvernance de l'architecture legacy (pivot Python-JSON, IA structurelle par seuils, zones protégées).** La stratégie de développement actuelle est celle du correcteur `reborn` (voir [`docs/REBORN_ARCHITECTURE.md`](docs/REBORN_ARCHITECTURE.md)), plus simple et sans scoring. Les principes généraux ci-dessous (tests obligatoires, pas d'invention normative silencieuse, traçabilité, prudence IA) restent valables ; les sections qui décrivent le pivot, les exporteurs multiples ou la hiérarchie de décision IA (§3, 4, 5, 7, 12) concernent la voie legacy, pas `reborn`.
+
 ## 1. Rôle de ce fichier
 
 Ce document fixe les règles de travail pour l'assistant de développement utilisé sur ce projet, notamment Codex AI.
@@ -75,9 +77,9 @@ Ne pas bâtir le cœur métier sur des dictionnaires non typés si une dataclass
 Avant toute tâche touchant à la structuration, lire :
 
 ```text
-docs/EDITORIAL_DECISION_MODEL.md
-docs/PIVOT_JSON_CONTRACT.md
-docs/EXPORTERS_CONTRACT.md
+docs/legacy/EDITORIAL_DECISION_MODEL.md
+docs/legacy/PIVOT_JSON_CONTRACT.md
+docs/legacy/EXPORTERS_CONTRACT.md
 ```
 
 Principe fondamental :
@@ -192,13 +194,13 @@ Quand une sortie fonctionne mais que le pivot est incohérent, corriger le pivot
 Pour toute tâche touchant au pipeline éditorial, les documents prioritaires sont :
 
 ```text
-docs/PIVOT_JSON_CONTRACT.md
-docs/EXPORTERS_CONTRACT.md
-docs/EDITORIAL_DECISION_MODEL.md
-docs/EDITORIAL_PIPELINE.md
-ARCHITECTURE.md
-DATA_MODEL.md
-SPECS.md
+docs/legacy/PIVOT_JSON_CONTRACT.md
+docs/legacy/EXPORTERS_CONTRACT.md
+docs/legacy/EDITORIAL_DECISION_MODEL.md
+docs/legacy/EDITORIAL_PIPELINE.md
+docs/legacy/ARCHITECTURE.md
+docs/legacy/DATA_MODEL.md
+docs/legacy/SPECS.md
 ```
 
 Rappel : la sortie de production visée est l'XML‑TEI Métopes ; le DOCX reste une sortie de relecture humaine ; l'IA reste optionnelle et encadrée ; le JSON pivot sert de contrat de développement et de test.

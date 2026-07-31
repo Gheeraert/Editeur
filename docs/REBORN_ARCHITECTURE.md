@@ -53,6 +53,52 @@ Ce maintien ne signifie pas que les 61 règles sont :
 
 La nature et le type d’action de chaque règle restent ceux du registre.
 
+### 2.1 État réel d’implémentation dans le chemin `reborn`
+
+Le périmètre déclaré (61 règles) et le périmètre effectivement exécuté par
+`corrector/word_document.py` ne coïncident pas encore. L'écart est explicite
+et suivi dans `corrector/runner.py` (`RULE_IDS` pour ce qui est câblé,
+`NOT_YET_IMPLEMENTED_RULE_IDS` pour ce qui reste à concevoir), plutôt que
+silencieux.
+
+| Famille | Câblées (`RULE_IDS`) | Restant à concevoir |
+|---|---:|---:|
+| `orthotypography` | 23 | 0 |
+| `footnote` | 10 | 0 |
+| `bibliography` | 3 | 4 |
+| `structure` | 3 | 18 |
+| **Total** | **39** | **22** |
+
+`purh.biblio.ponctuation_finale` est désormais câblée : la section
+bibliographique est repérée par le style de titre Word (Titre/Heading 1-4)
+associé au titre de section reconnu (Bibliographie, Sources, Références
+bibliographiques...) — une condition déterministe fondée sur le style réel du
+document, pas un score. Voir `_apply_bibliography_entry` et
+`BIBLIOGRAPHY_SECTION_HEADING_RE` dans `word_document.py` /
+`rules/bibliography.py`. Les 4 règles bibliographie restantes
+(`structure.bibliography.section.start`/`.end`/`.item.promote`,
+`bibliography.entry.detect`) sont marquées `planned`/`dormant` dans le
+catalogue lui-même — jamais fonctionnelles, y compris dans la voie legacy.
+
+Les 3 règles de frontmatter (`structure.frontmatter.abstract`/`keywords`/
+`acknowledgment`) sont câblées comme **diagnostics** (surlignage turquoise
+sur la ligne détectée), pas comme transformations structurelles silencieuses :
+le catalogue ne précise pas quel style Word cible appliquer, et l'inventer
+aurait été une invention normative non sourcée. `structure.frontmatter.
+circuit_breaker` et les 17 autres règles de structure (détection de titres,
+de poésie, de citations comme structure) restent hors périmètre : elles
+reposent, dans la voie legacy, sur le moteur de score/seuil
+(`structure_service`, score `heading`/`poetry`/`quote_structure`/
+`bibliography_structure`) que le nouveau chemin d'exécution exclut
+explicitement (§7 ci-dessous), et leur redéfinir un déclencheur explicite sans
+score est un vrai travail éditorial — pas une simple portation.
+`corrector/rules/structure.py` contient le détecteur de frontmatter
+(`detect_frontmatter_rule`), maintenant branché.
+
+Un identifiant absent de `RULE_IDS` n'apparaît pas dans le décompte renvoyé
+par `correct_docx` : cela évite qu'un compte à 0 soit confondu avec « règle
+exécutée, aucune occurrence trouvée ».
+
 ## 3. Nouveau chemin d’exécution
 
 Le nouveau correcteur est construit dans un chemin isolé.

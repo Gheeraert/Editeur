@@ -1,153 +1,44 @@
-# PURH Editorial Studio
+# PURH Editorial Studio — correcteur ortho-typographique
 
-Chaîne modulaire de préparation éditoriale pour les Presses universitaires de Rouen et du Havre (PURH).
+Outil d'assistance à la correction éditoriale pour les Presses universitaires de Rouen et du Havre (PURH).
 
----
+## 1. Ce que fait l'outil
 
-## 1. Philosophie générale
-
-Le projet n'est pas une simple chaîne :
+L'outil ouvre une copie d'un manuscrit Word (`.docx`) envoyé par une autrice ou un auteur, applique les règles ortho-typographiques du catalogue PURH, **surligne chaque intervention** et enregistre un nouveau document. Le fichier original n'est jamais modifié.
 
 ```text
-DOCX auteur -> DOCX corrigé
+DOCX auteur (copie) -> détection des cas prévus par les règles -> corrections + surlignage -> nouveau DOCX
 ```
 
-Il vise une chaîne éditoriale complète, gouvernée par un pivot explicite :
+- **Surlignage jaune** : correction appliquée automatiquement (le texte a été modifié).
+- **Surlignage turquoise** : diagnostic signalé, texte inchangé — nécessite une décision humaine.
 
-```text
-DOCX auteur
-  -> import riche
-  -> modèle pivot Python‑JSON
-  -> diagnostics / corrections / structuration
-  -> validation du pivot
-  -> sorties multiples :
-       1) JSON canonique de contrôle
-       2) DOCX de relecture humaine
-       3) XML‑TEI Métopes de production
-       4) LaTeX / HTML / PDF selon les besoins
-```
+Aucune intervention n'est silencieuse : toute règle qui modifie ou signale quelque chose laisse une trace visible dans le document de sortie, à vérifier par l'éditrice avant validation finale.
 
-Le pivot est constitué par les dataclasses Python (`Document`, `Block`, `InlineSpan`, `Note`, `Diagnostic`, `Suggestion`, `Transformation`, `ProcessingReport`) et par leur sérialisation JSON canonique.
+## 2. Normes appliquées
 
-Le JSON n'est pas un simple export secondaire : il est la représentation stable, versionnée, diffable et testable du pivot.
+Les règles typographiques en vigueur à l'Imprimerie nationale, complétées et priorisées par les consignes propres aux PURH (en cas de conflit, les consignes PURH l'emportent). La liste normative complète — 61 règles réparties en quatre familles (ortho-typo de base, notes de bas de page, bibliographie, structuration du texte) — est documentée dans [`docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md`](docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md), la source de vérité du projet.
 
----
+## 3. Périmètre actuellement couvert
 
-## 2. Principe architectural majeur
+L'outil est en cours de construction incrémentale. À ce stade :
 
-```text
-Les exports ne corrigent pas le document. Ils représentent le pivot.
-```
+| Famille | Règles couvertes / catalogue |
+|---|---:|
+| Ortho-typographie de base | 23 / 23 |
+| Notes de bas de page | 10 / 10 |
+| Bibliographie | 3 / 7 |
+| Structuration du texte | 3 / 21 |
+| **Total** | **39 / 61** |
 
-Les décisions éditoriales doivent être prises en amont, inscrites dans le modèle pivot, puis validées. Les exporteurs DOCX, XML‑TEI, LaTeX, HTML ou PDF ne doivent pas redétecter localement les structures.
+La bibliographie repère désormais sa section (au style de titre Word associé au titre « Bibliographie »/« Sources »...) pour y ajouter le point final manquant. Le frontmatter (résumé, mots-clés, remerciements) est signalé en diagnostic (surlignage turquoise) plutôt que reclassé automatiquement, faute de style Word cible défini par le catalogue. La détection de titres, de poésie et de citations comme éléments de structure reste hors périmètre : elle reposait, dans l'architecture antérieure, sur un moteur de score que la stratégie actuelle exclut, et sa reconception sans score est un travail éditorial à part entière. Le détail de l'écart entre le catalogue et ce qui est effectivement câblé est suivi dans [`docs/REBORN_ARCHITECTURE.md`](docs/REBORN_ARCHITECTURE.md), section « État réel d'implémentation dans le chemin `reborn` ».
 
-Si une sortie est incorrecte, l'analyse doit suivre cet ordre :
+## 4. Prérequis
 
-1. le pivot Python‑JSON est-il correct ?
-2. les invariants du pivot sont-ils respectés ?
-3. le mapping vers la sortie cible est-il correct ?
-4. le renderer est-il fautif ?
+- Windows, avec **Microsoft Word installé** : la correction pilote Word directement via COM (`pywin32`), ce qui préserve la mise en page, les styles, les notes, les tableaux et les images du document original.
+- Python 3.11+.
 
-Un DOCX visuellement correct ne suffit donc pas à prouver que le modèle est juste. Le JSON pivot et les tests d'invariants font foi pour le développement.
-
----
-
-## 3. Problème traité
-
-Un manuscrit auteur n'est jamais une structure éditoriale propre. Un fichier Word contient des faits matériels : styles, gras, italique, retraits, puces, notes, tableaux, citations, accidents de mise en forme.
-
-Ces faits peuvent être utiles, mais ils peuvent aussi mentir. Un paragraphe Word stylé comme un titre peut être un vrai titre, mais aussi un vers accidentellement stylé, une ligne de poésie devenue puce, une légende, une référence ou un fragment de transcription.
-
-Le projet distingue donc :
-
-```text
-fait matériel -> indice -> candidat éditorial -> décision -> canonicalisation -> export
-```
-
-Cette logique est décrite dans `docs/EDITORIAL_DECISION_MODEL.md`.
-
-Le contrat du pivot est décrit dans `docs/PIVOT_JSON_CONTRACT.md`.
-
-Le contrat des exporteurs est décrit dans `docs/EXPORTERS_CONTRACT.md`.
-
----
-
-## 4. Régimes d'action
-
-### 4.1 Déterministe
-
-Règles locales, explicites, testables : espaces typographiques, guillemets, appels de notes, siècles, abréviations, corrections locales sûres.
-
-### 4.2 Heuristique scorée
-
-Détection de structures probables, avec score, justification et vetos : titre probable, citation longue, séquence poétique, bibliographie, code, transcription linguistique.
-
-### 4.3 IA locale encadrée
-
-L'IA locale ne doit intervenir qu'en zone grise, sur une question fermée et courte. Elle ne décide pas souverainement et ne passe pas outre les vetos.
-
-### 4.4 IA exploratoire
-
-L'IA exploratoire ou freestyle est désactivée par défaut. Elle peut aider à comprendre ou signaler, mais ne transforme pas automatiquement. Elle constitue une solution de dernier recours.
-
----
-
-## 5. Zones protégées
-
-Certaines zones doivent être protégées contre les transformations ordinaires : poésie, citations anciennes, code informatique, transcriptions linguistiques, tableaux, bibliographie, notes, légendes, formules.
-
-Une zone protégée peut empêcher une promotion en titre, une correction typographique agressive, une suggestion stylistique inadéquate ou une normalisation qui détruirait un usage savant.
-
-Important : une zone protégée est un veto ou un signal de prudence. Elle ne remplace pas la sémantique canonique du pivot.
-
-Exemple :
-
-```text
-protected_zone = poetry
-```
-
-ne suffit pas à garantir un export XML en `<lg>/<l>`. Le bloc doit être canonicalisé comme citation en vers :
-
-```text
-quote_kind = poetry
-lineation = verse
-```
-
----
-
-## 6. Rôle des sorties
-
-- `JSON` : forme stable du pivot, contrôle, debug, fixtures, traçabilité, tests.
-- `DOCX` : relecture humaine avec styles visibles, corrections localisées et annotations.
-- `XML‑TEI Métopes` : cible de production éditoriale.
-- `LaTeX` : projection typographique future ou intermédiaire, à rattacher au pivot.
-- `HTML/PDF` : visualisation, contrôle et publication de travail.
-
-Important :
-
-```text
-styles Word Métopes != structure TEI Métopes
-rendu visuel correct != pivot correct
-```
-
----
-
-## 7. Configuration IA
-
-L'IA reste optionnelle. L'absence de clé IA ne doit pas empêcher le fonctionnement des modules déterministes et heuristiques.
-
-Variables possibles :
-
-- `PURH_AI_PROVIDER`
-- `GROQ_API_KEY`
-- `GROQ_MODEL`
-- `GROQ_BASE_URL`
-- `GROQ_TIMEOUT_SECONDS`
-- `GROQ_MAX_BLOCKS`
-
----
-
-## 8. Lancement rapide
+## 5. Lancement
 
 ```bash
 python -m venv .venv
@@ -156,43 +47,25 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-Tests :
+Une fenêtre s'ouvre : choisir le document source, choisir (ou laisser proposer) le document de sortie, cliquer sur « Corriger ». Le résultat affiche le nombre d'interventions par règle.
+
+En ligne de commande, sans interface :
 
 ```bash
-python -m unittest discover -s tests -p "test_*.py"
+python -m purh_editorial.corrector.cli chemin\vers\source.docx chemin\vers\sortie.docx
 ```
 
----
+## 6. Tests
 
-## 9. Risques connus
+```bash
+python -m pip install pytest
+python -m pytest
+```
 
-- pivot JSON encore insuffisamment contractualisé ;
-- usage trop large de `attributes` pour des informations hétérogènes ;
-- absence ou insuffisance de tests de round‑trip JSON ;
-- confusion entre zone protégée et sémantique canonique ;
-- gestion fine des espaces insécables et fines insécables ;
-- détection des citations longues ;
-- confusion entre faux titre et vers ;
-- blocs Word accidentellement transformés en listes ;
-- tableaux et objets complexes ;
-- transcriptions linguistiques ;
-- code informatique ;
-- notes de bas de page et liaison appel/contenu ;
-- export DOCX techniquement fragile.
+## 7. Documentation complémentaire
 
----
+- [Architecture du correcteur (stratégie actuelle)](docs/REBORN_ARCHITECTURE.md)
+- [Catalogue des 61 règles éditoriales](docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md)
+- [Code couleur des surlignements Word](docs/NOTICE_COULEURS_WORD.md)
 
-## 10. Documentation complémentaire
-
-- [Architecture](ARCHITECTURE.md)
-- [Spécifications](SPECS.md)
-- [Modèle de données](DATA_MODEL.md)
-- [Contrat du pivot Python‑JSON](docs/PIVOT_JSON_CONTRACT.md)
-- [Contrat des exporteurs](docs/EXPORTERS_CONTRACT.md)
-- [Modèle de décision éditoriale](docs/EDITORIAL_DECISION_MODEL.md)
-- [Pipeline éditorial](docs/EDITORIAL_PIPELINE.md)
-- [Politique IA](AI_STYLE_POLICY_V1.md)
-- [Stratégie de test](TEST_STRATEGY.md)
-- [Fixtures](FIXTURES.md)
-- [Mapping Métopes](METOPES_MAPPING.md)
-- [Audit documentaire pivot](docs/DOCS_AUDIT_PIVOT.md)
+Le dépôt contient également une architecture antérieure (pivot Python‑JSON, scoring, seuils, exports multiples, IA multi-niveaux), abandonnée après plusieurs refontes infructueuses et non branchée sur `main.py`. Elle est conservée à titre d'archive dans [`docs/legacy/README_PIVOT_ARCHITECTURE.md`](docs/legacy/README_PIVOT_ARCHITECTURE.md) en attendant sa suppression définitive.

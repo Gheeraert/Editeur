@@ -1,8 +1,11 @@
+> **Statut : document de l'architecture legacy (pivot Python-JSON / scoring / seuils / IA multi-niveaux), non utilisé par le point d'entrée actuel (`main.py`).**
+> La stratégie actuelle est décrite dans [`docs/REBORN_ARCHITECTURE.md`](../REBORN_ARCHITECTURE.md). Conservé pour référence historique et récupération ponctuelle de code (voir `docs/REBORN_ARCHITECTURE.md` §10 « Politique de réutilisation »).
+
 # Catalogue de règles SHS — version opérationnelle
 
 > Pour les 17 règles typographiques réellement implémentées dans `OrthotypoService`
 > (fiches complètes : description, exemple fautif/attendu, niveau, source), voir
-> [CATALOGUE_REGLES_TYPOGRAPHIQUES.md](CATALOGUE_REGLES_TYPOGRAPHIQUES.md). Ce document-ci
+> [CATALOGUE_REGLES_TYPOGRAPHIQUES.md](../CATALOGUE_REGLES_TYPOGRAPHIQUES.md). Ce document-ci
 > reste le catalogue conceptuel couvrant aussi la structure et le pivot ; les
 > identifiants `R-SP-xxx`/`R-AB-xxx`/`R-SO-xxx` cités ci-dessous pour la typographie sont
 > antérieurs au code et ne correspondent pas à ses `rule_id` réels.

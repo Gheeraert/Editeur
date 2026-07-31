@@ -1,3 +1,6 @@
+> **Statut : document de l'architecture legacy (pivot Python-JSON / scoring / seuils / IA multi-niveaux), non utilisé par le point d'entrée actuel (`main.py`).**
+> La stratégie actuelle est décrite dans [`docs/REBORN_ARCHITECTURE.md`](../REBORN_ARCHITECTURE.md). Conservé pour référence historique et récupération ponctuelle de code (voir `docs/REBORN_ARCHITECTURE.md` §10 « Politique de réutilisation »).
+
 # UI V1 consolidee
 
 ## Objectif
