@@ -25,7 +25,8 @@ EXPECTED_RULE_IDS = (
     "purh.ligature.oe", "purh.guillemets.espace_apres_ouvrant",
     "purh.guillemets.espace_avant_fermant", "purh.espaces.avant_ponct_forte",
     "purh.espaces.avant_ponct_faible", "purh.espaces.double", "purh.civilite",
-    "purh.siecles", "purh.siecles.style", "purh.ordinaux", "purh.tiret.double",
+    "purh.siecles", "purh.siecles.style", "purh.ordinaux", "purh.ordinaux.style",
+    "purh.civilite.style", "purh.tiret.double",
     "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "purh.numero.style",
     "purh.abreviations.redoublement", "purh.nombres.milliers", "purh.tiret.incise",
     "purh.tiret.incise.diagnostic", "purh.guillemets.ponctuation_fermante", "purh.note.espace_initiale",
@@ -33,6 +34,7 @@ EXPECTED_RULE_IDS = (
     "purh.note.espace_op_cit", "purh.note.espace_sans_lieu_date",
     "purh.note.ponctuation_finale", "purh.note.appel.placement", "purh.note.appel.espace_avant",
     "purh.note.diagnostic.debut_minuscule", "purh.note.diagnostic.ponctuation_finale_ambigue",
+    "purh.note.italique_latin",
     "structure.bibliography.section.start", "structure.bibliography.section.end",
     "structure.bibliography.item.promote", "bibliography.entry.detect",
     "purh.biblio.pagination_nnbsp", "purh.biblio.numero_nnbsp",
@@ -51,29 +53,29 @@ EXPECTED_RULE_IDS = (
 
 EXPECTED_COUNTS = {
     "family": {
-        RuleFamily.ORTHOTYPOGRAPHY: 23,
-        RuleFamily.FOOTNOTE: 10,
+        RuleFamily.ORTHOTYPOGRAPHY: 25,
+        RuleFamily.FOOTNOTE: 11,
         RuleFamily.BIBLIOGRAPHY: 7,
         RuleFamily.STRUCTURE: 21,
     },
     "nature": {
-        RuleNature.DETERMINISTIC: 30,
+        RuleNature.DETERMINISTIC: 33,
         RuleNature.HEURISTIC: 31,
     },
     "action": {
         RuleActionType.TEXT_TRANSFORM: 26,
-        RuleActionType.STYLE_TRANSFORM: 2,
+        RuleActionType.STYLE_TRANSFORM: 5,
         RuleActionType.STRUCTURE_TRANSFORM: 21,
         RuleActionType.DIAGNOSTIC: 8,
         RuleActionType.PIPELINE_CONTROL: 4,
     },
     "status": {
-        DeploymentStatus.ACTIVE: 40,
+        DeploymentStatus.ACTIVE: 43,
         DeploymentStatus.REVIEW_ONLY: 18,
         DeploymentStatus.DISABLED: 3,
     },
     "state": {
-        ImplementationState.LEGACY: 55,
+        ImplementationState.LEGACY: 58,
         ImplementationState.PLANNED: 4,
         ImplementationState.DORMANT: 2,
     },
@@ -116,9 +118,9 @@ def test_registry_counts_match_the_pass_3_migration_table() -> None:
 def test_registry_access_filters_and_immutability() -> None:
     registry = CANONICAL_RULE_REGISTRY
     assert registry.get("purh.siecles").family is RuleFamily.ORTHOTYPOGRAPHY
-    assert len(registry.by_family(RuleFamily.FOOTNOTE)) == 10
+    assert len(registry.by_family(RuleFamily.FOOTNOTE)) == 11
     assert len(registry.by_nature(RuleNature.HEURISTIC)) == 31
-    assert len(registry.by_action(RuleActionType.STYLE_TRANSFORM)) == 2
+    assert len(registry.by_action(RuleActionType.STYLE_TRANSFORM)) == 5
     assert len(registry.by_status(DeploymentStatus.DISABLED)) == 3
     assert len(registry.by_implementation_state(ImplementationState.PLANNED)) == 4
     with pytest.raises(FrozenInstanceError):

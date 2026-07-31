@@ -119,13 +119,19 @@ _ROMAN_CENTURIES = (
 _NON_FIRST_CENTURIES = tuple(
     sorted(_ROMAN_CENTURIES[1:], key=len, reverse=True)
 )
-_CENTURY_RE = re.compile(
-    rf"\b(?:(?P<first>I)(?P<first_suffix>er)|"
+_CENTURY_TOKEN_RE = re.compile(
+    rf"\b(?:(?P<first>I)(?P<first_suffix>er)\b|"
     rf"(?P<roman>{'|'.join(_NON_FIRST_CENTURIES)})"
-    rf"(?P<suffix>ème|eme|e))(?=\s+siècles?\b)",
+    rf"(?P<suffix>ème|eme|e)\b)",
     re.IGNORECASE,
 )
+_SIECLE_LOOKAHEAD_RE = re.compile(r"\A\s+siècles?\b", re.IGNORECASE)
+_CENTURY_CHAIN_SEP_RE = re.compile(
+    r"\A(?:\s+|,|-|–|—|/|et|ou|au|à)+\Z", re.IGNORECASE
+)
 _NUMERO_STYLE_RE = re.compile(r"\b[Nn](o)\u202f(?=\d)")
+_ORDINAL_STYLE_RE = re.compile(r"\b(?P<number>\d+)(?P<suffix>er|re|e)\b")
+_CIVILITY_STYLE_RE = re.compile(r"\b(?:Mme|Mlle)(?P<plural>s?)\b")
 
 
 def find_apostrophe_edits(text: str) -> list[TextEdit]:
@@ -206,21 +212,44 @@ def find_civility_edits(text: str) -> list[TextEdit]:
     return _regex_edits(text, _CIVILITY_RE, r"\1" + NBSP)
 
 
+def _century_chains(text: str) -> list[list[re.Match[str]]]:
+    tokens = list(_CENTURY_TOKEN_RE.finditer(text))
+    chains: list[list[re.Match[str]]] = []
+    current: list[re.Match[str]] = []
+    for token in tokens:
+        if current and _CENTURY_CHAIN_SEP_RE.match(
+            text[current[-1].end() : token.start()]
+        ):
+            current.append(token)
+            continue
+        if current:
+            chains.append(current)
+        current = [token]
+    if current:
+        chains.append(current)
+    return chains
+
+
 def find_centuries(text: str) -> list[CenturyMatch]:
     results: list[CenturyMatch] = []
-    for match in _CENTURY_RE.finditer(text):
-        roman = match.group("first") or match.group("roman")
-        suffix = match.group("first_suffix") or match.group("suffix")
-        results.append(
-            CenturyMatch(
-                start=match.start(),
-                end=match.end(),
-                text=match.group(0),
-                roman=roman,
-                suffix=suffix,
-                normalized=roman.lower() + ("er" if roman.lower() == "i" else "e"),
+    for chain in _century_chains(text):
+        if not _SIECLE_LOOKAHEAD_RE.match(text[chain[-1].end() :]):
+            continue
+        for match in chain:
+            roman = match.group("first") or match.group("roman")
+            suffix = match.group("first_suffix") or match.group("suffix")
+            results.append(
+                CenturyMatch(
+                    start=match.start(),
+                    end=match.end(),
+                    text=match.group(0),
+                    roman=roman,
+                    suffix=suffix,
+                    normalized=roman.lower()
+                    + ("er" if roman.lower() == "i" else "e"),
+                )
             )
-        )
+    results.sort(key=lambda match: match.start)
     return results
 
 
@@ -244,6 +273,14 @@ def _ordinal_replacement(match: re.Match[str]) -> str:
 
 def find_ordinal_edits(text: str) -> list[TextEdit]:
     return _regex_edits(text, _ORDINAL_RE, _ordinal_replacement)
+
+
+def find_ordinal_style_matches(text: str) -> list[re.Match[str]]:
+    return list(_ORDINAL_STYLE_RE.finditer(text))
+
+
+def find_civility_style_matches(text: str) -> list[re.Match[str]]:
+    return list(_CIVILITY_STYLE_RE.finditer(text))
 
 
 def find_etc_edits(text: str) -> list[TextEdit]:

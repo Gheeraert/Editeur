@@ -65,6 +65,9 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.biblio.numero_nnbsp",
     "purh.siecles.style",
     "purh.numero.style",
+    "purh.ordinaux.style",
+    "purh.civilite.style",
+    "purh.note.italique_latin",
     "purh.tiret.incise.diagnostic",
     "purh.note.appel.placement",
     "purh.note.appel.espace_avant",
@@ -474,12 +477,16 @@ def test_frontmatter_detection_is_exact(text: str, rule_id: str) -> None:
 
 
 def test_exact_deterministic_identifier_set() -> None:
-    # 29 des 30 règles déterministes du catalogue : seule
+    # 32 des 33 règles déterministes du catalogue : seule
     # structure.frontmatter.circuit_breaker reste à concevoir (cf.
     # NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py — `planned`, jamais
-    # fonctionnelle même dans la voie legacy).
-    assert len(DETERMINISTIC_RULE_IDS) == 29
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 29
+    # fonctionnelle même dans la voie legacy). Les trois règles de style
+    # ajoutées (purh.ordinaux.style, purh.civilite.style,
+    # purh.note.italique_latin) complètent les couches de mise en forme
+    # manquantes pour les ordinaux, les civilités et les abréviations
+    # latines en note.
+    assert len(DETERMINISTIC_RULE_IDS) == 32
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 32
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -493,8 +500,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 9
     assert len(set(HEURISTIC_RULE_IDS)) == 9
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 38
-    assert len(set(RULE_IDS)) == 38
+    assert len(RULE_IDS) == 41
+    assert len(set(RULE_IDS)) == 41
 
 
 class _IgnoringRange:

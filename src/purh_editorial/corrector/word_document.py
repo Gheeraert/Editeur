@@ -12,6 +12,7 @@ from purh_editorial.corrector.rules.bibliography import (
 from purh_editorial.corrector.rules.footnotes import (
     FOOTNOTE_DIAGNOSTIC_RULES,
     FOOTNOTE_RULES,
+    find_latin_abbreviation_ranges,
     note_call_diagnostic_ids,
 )
 from purh_editorial.corrector.rules.orthotypography import (
@@ -19,8 +20,10 @@ from purh_editorial.corrector.rules.orthotypography import (
     ORTHOTYPOGRAPHY_TEXT_RULES,
     CenturyMatch,
     find_centuries,
+    find_civility_style_matches,
     find_incise_dash_diagnostics,
     find_numero_style_matches,
+    find_ordinal_style_matches,
 )
 from purh_editorial.corrector.rules.structure import detect_frontmatter_rule
 
@@ -153,6 +156,46 @@ def _apply_numero_styles(paragraph: Any) -> int:
     return changed
 
 
+def _apply_ordinal_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_ordinal_style_matches(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, match.start("suffix"), match.end("suffix"))
+        if not _is_word_true(target.Font.Superscript):
+            target.Font.Superscript = True
+            complete = _exact_range(paragraph, match.start(), match.end())
+            complete.HighlightColorIndex = WD_YELLOW
+            complete = None
+            changed += 1
+        target = None
+    return changed
+
+
+def _apply_civility_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_civility_style_matches(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, match.start() + 1, match.end())
+        if not _is_word_true(target.Font.Superscript):
+            target.Font.Superscript = True
+            complete = _exact_range(paragraph, match.start(), match.end())
+            complete.HighlightColorIndex = WD_YELLOW
+            complete = None
+            changed += 1
+        target = None
+    return changed
+
+
+def _apply_footnote_latin_italic(paragraph: Any) -> int:
+    changed = 0
+    for edit in reversed(find_latin_abbreviation_ranges(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, edit.start, edit.end)
+        if not _is_word_true(target.Font.Italic):
+            target.Font.Italic = True
+            target.HighlightColorIndex = WD_YELLOW
+            changed += 1
+        target = None
+    return changed
+
+
 def _apply_incise_diagnostics(paragraph: Any) -> int:
     diagnostics = find_incise_dash_diagnostics(_paragraph_text(paragraph))
     for diagnostic in diagnostics:
@@ -216,6 +259,8 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
                 ) from exc
         counts["purh.siecles.style"] += _apply_century_styles(paragraph)
         counts["purh.numero.style"] += _apply_numero_styles(paragraph)
+        counts["purh.ordinaux.style"] += _apply_ordinal_styles(paragraph)
+        counts["purh.civilite.style"] += _apply_civility_styles(paragraph)
         counts["purh.tiret.incise.diagnostic"] += _apply_incise_diagnostics(paragraph)
         for rule_id, finder in ORTHOTYPOGRAPHY_DIAGNOSTIC_RULES:
             counts[rule_id] += _apply_diagnostics(paragraph, finder)
@@ -268,6 +313,13 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
                     ) from exc
             for rule_id, finder in FOOTNOTE_DIAGNOSTIC_RULES:
                 counts[rule_id] += _apply_diagnostics(paragraph, finder)
+            counts["purh.siecles.style"] += _apply_century_styles(paragraph)
+            counts["purh.numero.style"] += _apply_numero_styles(paragraph)
+            counts["purh.ordinaux.style"] += _apply_ordinal_styles(paragraph)
+            counts["purh.civilite.style"] += _apply_civility_styles(paragraph)
+            counts["purh.note.italique_latin"] += _apply_footnote_latin_italic(
+                paragraph
+            )
         paragraph = None
         footnote = None
     _apply_note_call_diagnostics(document, counts)

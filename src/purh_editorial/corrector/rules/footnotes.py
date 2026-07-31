@@ -30,6 +30,10 @@ _MIDNOTE_LATIN_ABBR_RE = re.compile(
     r"(?<!^)\b(Ibid|Id|Idem|Op\.\s*cit|Art\.\s*cit|Loc\.\s*cit)\b\.?",
     re.IGNORECASE,
 )
+_LATIN_ITALIC_RE = re.compile(
+    r"\b(ibid|id|idem|op\.\s*cit|art\.\s*cit|loc\.\s*cit)\.?",
+    re.IGNORECASE,
+)
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")
 _CLOSING_PUNCTUATION_OR_QUOTE = {".", "!", "?", "…", "»", "”", "’"}
 
@@ -119,6 +123,15 @@ def find_latin_abbreviation_edits(text: str) -> list[TextEdit]:
                 )
             )
     return edits
+
+
+def find_latin_abbreviation_ranges(text: str) -> list[TextEdit]:
+    start = _content_start(text)
+    content = text[start:]
+    return [
+        TextEdit(start + match.start(), start + match.end(), match.group(0))
+        for match in _LATIN_ITALIC_RE.finditer(content)
+    ]
 
 
 def find_final_punctuation_edits(text: str) -> list[TextEdit]:
