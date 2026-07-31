@@ -151,7 +151,11 @@ NOT_YET_IMPLEMENTED_RULE_IDS = (
 RULE_IDS = DETERMINISTIC_RULE_IDS + HEURISTIC_RULE_IDS
 
 
-def correct_docx(input_path: Path, output_path: Path) -> dict[str, int]:
+def correct_docx(
+    input_path: Path,
+    output_path: Path,
+    reapply_normal_style: bool = False,
+) -> dict[str, int]:
     source = Path(input_path)
     destination = Path(output_path)
 
@@ -169,4 +173,8 @@ def correct_docx(input_path: Path, output_path: Path) -> dict[str, int]:
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
-    return correct_word_copy(destination_resolved, RULE_IDS)
+    return correct_word_copy(
+        destination_resolved,
+        RULE_IDS,
+        reapply_normal_style=reapply_normal_style,
+    )

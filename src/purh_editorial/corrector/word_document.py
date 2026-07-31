@@ -699,6 +699,7 @@ def _reapply_normal_style(document: Any, counts: dict[str, int]) -> None:
 def correct_word_copy(
     path: Path,
     rule_ids: tuple[str, ...],
+    reapply_normal_style: bool = False,
 ) -> dict[str, int]:
     try:
         from win32com.client import DispatchEx
@@ -724,10 +725,16 @@ def correct_word_copy(
         _apply_footnotes(document, counts)
         _apply_purh_style_defaults(document, counts)
         _apply_poetry_merge(document, counts)
-        # En tout dernier, juste avant l'enregistrement : reapplique le
-        # style "Normal" a tous les paragraphes qui le portent deja, pour
-        # eviter l'artefact de rendu Word observe par l'editrice.
-        _reapply_normal_style(document, counts)
+        if reapply_normal_style:
+            # En tout dernier, juste avant l'enregistrement : reapplique le
+            # style "Normal" a tous les paragraphes qui le portent deja, pour
+            # eviter l'artefact de rendu Word observe par l'editrice.
+            # Optionnel (case a cocher decochee par defaut, cf. gui.py) :
+            # meme avec la mise en forme directe restauree ensuite, c'est
+            # une operation destructive-puis-reconstructive sur toute la
+            # portee touchee, donc reservee aux documents ou l'artefact est
+            # effectivement observe.
+            _reapply_normal_style(document, counts)
         document.Save()
         return counts
     except Exception as exc:

@@ -24,6 +24,12 @@ class CorrectorApp(tk.Tk):
         self._input_path = tk.StringVar()
         self._output_path = tk.StringVar()
         self._status = tk.StringVar(value="Sélectionnez un document Word (.docx).")
+        # Decochee par defaut : la reapplication du style "Normal" est une
+        # operation destructive-puis-reconstructive (mise en forme directe
+        # sauvegardee puis restauree) reservee aux documents ou l'artefact
+        # de rendu Word est effectivement observe, pas une correction a
+        # appliquer systematiquement.
+        self._reapply_normal_style = tk.BooleanVar(value=False)
         self._running = False
 
         self._build_ui()
@@ -44,15 +50,21 @@ class CorrectorApp(tk.Tk):
         ttk.Entry(frame, textvariable=self._output_path, width=60).grid(row=3, column=0, sticky="ew")
         ttk.Button(frame, text="Choisir...", command=self._browse_output).grid(row=3, column=1, padx=(pad, 0))
 
+        ttk.Checkbutton(
+            frame,
+            text="Réapplication du style 'Normal' au paragraphe concerné",
+            variable=self._reapply_normal_style,
+        ).grid(row=4, column=0, columnspan=2, sticky="w", pady=(pad, 0))
+
         self._run_button = ttk.Button(frame, text="Corriger", command=self._on_run)
-        self._run_button.grid(row=4, column=0, columnspan=2, pady=(pad, 0), sticky="w")
+        self._run_button.grid(row=5, column=0, columnspan=2, pady=(pad, 0), sticky="w")
 
         ttk.Label(frame, textvariable=self._status, foreground="#333333", wraplength=520).grid(
-            row=5, column=0, columnspan=2, sticky="w", pady=(pad, 0)
+            row=6, column=0, columnspan=2, sticky="w", pady=(pad, 0)
         )
 
         self._result_text = tk.Text(frame, width=70, height=16, state="disabled")
-        self._result_text.grid(row=6, column=0, columnspan=2, pady=(pad, 0))
+        self._result_text.grid(row=7, column=0, columnspan=2, pady=(pad, 0))
 
     def _browse_input(self) -> None:
         path = filedialog.askopenfilename(
@@ -114,14 +126,18 @@ class CorrectorApp(tk.Tk):
 
         thread = threading.Thread(
             target=self._run_correction,
-            args=(input_path, output_path),
+            args=(input_path, output_path, self._reapply_normal_style.get()),
             daemon=True,
         )
         thread.start()
 
-    def _run_correction(self, input_path: Path, output_path: Path) -> None:
+    def _run_correction(
+        self, input_path: Path, output_path: Path, reapply_normal_style: bool
+    ) -> None:
         try:
-            counts = correct_docx(input_path, output_path)
+            counts = correct_docx(
+                input_path, output_path, reapply_normal_style=reapply_normal_style
+            )
         except Exception as exc:  # noqa: BLE001
             self.after(0, self._on_error, exc)
             return

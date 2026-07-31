@@ -365,7 +365,9 @@ def _expected_first_counts() -> dict[str, int]:
             # Reapplication silencieuse du style "Normal" (contournement
             # d'un artefact de rendu Word) sur les memes 9 paragraphes,
             # independamment de la definition du style - voir
-            # _reapply_normal_style dans word_document.py.
+            # _reapply_normal_style dans word_document.py. Option
+            # explicitement activee (reapply_normal_style=True) par ce test
+            # - decochee par defaut dans l'interface (gui.py).
             "purh.style.normal_refresh": 9,
         }
     )
@@ -380,12 +382,12 @@ def test_reborn_word_vertical_slice(tmp_path: Path) -> None:
     _create_source(source)
     source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
 
-    first_counts = correct_docx(source, corrected)
+    first_counts = correct_docx(source, corrected, reapply_normal_style=True)
     assert first_counts == _expected_first_counts()
     assert hashlib.sha256(source.read_bytes()).hexdigest() == source_hash
     _assert_corrected_document(corrected)
 
-    second_counts = correct_docx(corrected, corrected_twice)
+    second_counts = correct_docx(corrected, corrected_twice, reapply_normal_style=True)
     automatic_ids = set(RULE_IDS) - {
         "purh.tiret.incise.diagnostic",
         "purh.note.appel.placement",

@@ -12,10 +12,22 @@ def main() -> int:
     )
     parser.add_argument("input_path", type=Path)
     parser.add_argument("output_path", type=Path)
+    parser.add_argument(
+        "--reapply-normal-style",
+        action="store_true",
+        help=(
+            "Réapplique le style 'Normal' à chaque paragraphe qui le porte déjà "
+            "(contournement d'un artefact de rendu Word). Désactivé par défaut."
+        ),
+    )
     args = parser.parse_args()
 
     try:
-        counts = correct_docx(args.input_path, args.output_path)
+        counts = correct_docx(
+            args.input_path,
+            args.output_path,
+            reapply_normal_style=args.reapply_normal_style,
+        )
     except Exception as exc:
         parser.exit(1, f"Erreur : {exc}\n")
 

@@ -154,7 +154,7 @@ def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
 
     _create_source(source)
 
-    first_counts = correct_docx(source, corrected)
+    first_counts = correct_docx(source, corrected, reapply_normal_style=True)
     assert first_counts["purh.style.titre"] == 1
     assert first_counts["purh.style.citation"] == 1
     assert first_counts["purh.style.citation_intense"] == 1
@@ -219,7 +219,7 @@ def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
     assert reference["italic"] == 0
     assert reference["bold"] == 0
 
-    second_counts = correct_docx(corrected, corrected_twice)
+    second_counts = correct_docx(corrected, corrected_twice, reapply_normal_style=True)
     for rule_id in (
         "purh.style.titre",
         "purh.style.citation",
@@ -234,3 +234,17 @@ def test_purh_style_defaults_are_applied_and_idempotent(tmp_path: Path) -> None:
     # n'est pas conditionnee par un ecart de definition de style : elle
     # reapplique le style a chaque passage, silencieusement.
     assert second_counts["purh.style.normal_refresh"] == 2
+
+
+def test_normal_style_reapplication_is_opt_in_and_disabled_by_default(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source.docx"
+    corrected = tmp_path / "corrected.docx"
+
+    _create_source(source)
+
+    # Case a cocher decochee par defaut dans l'interface (gui.py) : sans
+    # argument explicite, correct_docx ne doit pas reappliquer "Normal".
+    counts = correct_docx(source, corrected)
+    assert counts["purh.style.normal_refresh"] == 0
