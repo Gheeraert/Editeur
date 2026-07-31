@@ -164,10 +164,10 @@ def _assert_corrected_document(path: Path) -> None:
         main_text = _clean_main_text(document.StoryRanges(1).Text)
         assert "Résumé\nKeywords\nAcknowledgments" in main_text
         assert (
-            "L’auteur… bœuf «\u202fBonjour\u202f» Voici\u202f: mot, double espace "
-            "M.\u00a0Dupont xvie siècle, la vie continue, 1re partie etc. p.\u202f12 "
-            "no\u202f5 p.\u202f53 1\u202f000 mot - mot, “citation” avant--après, "
-            "«\u202fQue faire\u202f?\u202f»."
+            "L’auteur… bœuf «\u00a0Bonjour\u00a0» Voici\u00a0: mot, double espace "
+            "M.\u00a0Dupont xvie siècle, la vie continue, 1re partie etc. p.\u00a012 "
+            "no\u00a05 p.\u00a053 1\u00a0000 mot - mot, “citation” avant--après, "
+            "«\u00a0Que faire\u00a0?\u00a0»."
         ) in main_text
         assert "Appel espacé " in main_text
 
@@ -185,8 +185,8 @@ def _assert_corrected_document(path: Path) -> None:
         assert century.HighlightColorIndex == WD_YELLOW
         assert "la vie continue" in body_paragraph.Range.Text
 
-        numero_o = _range_for(body_paragraph, "no\u202f5", offset=1, length=1)
-        numero = _range_for(body_paragraph, "no\u202f5", length=3)
+        numero_o = _range_for(body_paragraph, "no\u00a05", offset=1, length=1)
+        numero = _range_for(body_paragraph, "no\u00a05", length=3)
         assert numero_o.Font.Superscript == -1
         assert numero.HighlightColorIndex == WD_YELLOW
 
@@ -200,20 +200,20 @@ def _assert_corrected_document(path: Path) -> None:
         assert double_dash.HighlightColorIndex == WD_TURQUOISE
         quote_punctuation = _range_for(
             body_paragraph,
-            "«\u202fQue faire\u202f?\u202f».",
+            "«\u00a0Que faire\u00a0?\u00a0».",
         )
         assert quote_punctuation.HighlightColorIndex == WD_TURQUOISE
 
         first_note = document.Footnotes(1).Range
         assert first_note.Text.startswith("Voir")
-        assert f"op.\u202fcit." in first_note.Text
-        assert f"s.\u202fl." in first_note.Text
+        assert f"op.\u00a0cit." in first_note.Text
+        assert f"s.\u00a0l." in first_note.Text
         assert "Voir ibid., fragment." in first_note.Text
         abbreviation = first_note.Duplicate
-        abbreviation_index = first_note.Text.index("op.\u202fcit.")
+        abbreviation_index = first_note.Text.index("op.\u00a0cit.")
         abbreviation.SetRange(
             first_note.Start + abbreviation_index,
-            first_note.Start + abbreviation_index + len("op.\u202fcit."),
+            first_note.Start + abbreviation_index + len("op.\u00a0cit."),
         )
         assert abbreviation.HighlightColorIndex == WD_YELLOW
         capital = first_note.Duplicate

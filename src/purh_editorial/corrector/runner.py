@@ -24,6 +24,7 @@ DETERMINISTIC_RULE_IDS = (
     "purh.numero",
     "purh.abreviations.redoublement",
     "purh.nombres.milliers",
+    "purh.ecriture_inclusive.point_median",
     "purh.siecles.style",
     "purh.numero.style",
     "purh.ordinaux.style",
@@ -63,6 +64,7 @@ HEURISTIC_RULE_IDS = (
     # `_apply_bibliography_entry` / `BIBLIOGRAPHY_SECTION_HEADING_RE` dans
     # word_document.py / rules/bibliography.py.
     "purh.biblio.ponctuation_finale",
+    "purh.biblio.casse_auteur",
 )
 
 # Règles du catalogue (docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md) volontairement

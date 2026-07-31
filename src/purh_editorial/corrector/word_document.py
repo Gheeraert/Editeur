@@ -7,6 +7,7 @@ from typing import Any, Callable
 from purh_editorial.corrector.rules.bibliography import (
     BIBLIOGRAPHY_SECTION_HEADING_RE,
     BIBLIOGRAPHY_TEXT_RULES,
+    find_bibliography_author_casing_edits,
     find_bibliography_final_punctuation_edits,
 )
 from purh_editorial.corrector.rules.footnotes import (
@@ -243,6 +244,9 @@ def _apply_frontmatter_diagnostic(paragraph: Any, counts: dict[str, int]) -> Non
 def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
     counts["purh.biblio.ponctuation_finale"] += _apply_text_edits(
         paragraph, find_bibliography_final_punctuation_edits
+    )
+    counts["purh.biblio.casse_auteur"] += _apply_text_edits(
+        paragraph, find_bibliography_author_casing_edits
     )
 
 

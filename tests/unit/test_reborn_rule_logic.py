@@ -4,6 +4,7 @@ import pytest
 
 from purh_editorial.corrector.rules.bibliography import (
     BIBLIOGRAPHY_SECTION_HEADING_RE,
+    find_bibliography_author_casing_edits,
     find_bibliography_final_punctuation_edits,
     find_bibliography_numero_edits,
     find_bibliography_pagination_edits,
@@ -59,6 +60,7 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.numero",
     "purh.abreviations.redoublement",
     "purh.nombres.milliers",
+    "purh.ecriture_inclusive.point_median",
     "purh.note.espace_initiale",
     "purh.note.espace_op_cit",
     "purh.note.espace_sans_lieu_date",
@@ -87,6 +89,7 @@ EXPECTED_HEURISTIC_IDS = {
     "purh.note.diagnostic.debut_minuscule",
     "purh.note.diagnostic.ponctuation_finale_ambigue",
     "purh.biblio.ponctuation_finale",
+    "purh.biblio.casse_auteur",
 }
 
 
@@ -197,6 +200,15 @@ def _orthotypography_finder(rule_id: str):
             f"1{NNBSP}500{NNBSP}000",
             "2025",
             f"1{NNBSP}500{NNBSP}000",
+        ),
+        (
+            # Extrait reel, Ethnographes_originaux.docx vs
+            # ethnographes-engages-styles/*.docx.
+            "purh.ecriture_inclusive.point_median",
+            "chercheur.e.s",
+            "chercheur·e·s",
+            "c.q.f.d.",
+            "chercheur·e·s",
         ),
     ],
 )
@@ -329,6 +341,50 @@ def test_bibliography_final_punctuation_adds_missing_period() -> None:
 )
 def test_bibliography_final_punctuation_guards(source: str) -> None:
     assert find_bibliography_final_punctuation_edits(source) == []
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        # Extraits réels comparés brut/corrigé, Ch14_Source_bibliographie.docx
+        # (sources/manuscripts_styled/heraldique_styles) :
+        (
+            "FERRARI Matteo, « Stemmi esposti… »",
+            "Ferrari Matteo, « Stemmi esposti… »",
+        ),
+        (
+            "GALLAVOTTI CAVALLERO Daniela, « L’iconografia… »",
+            "Gallavotti Cavallero Daniela, « L’iconografia… »",
+        ),
+        (
+            "HERMANN-FIORE Kristina, « La salle clémentine… »",
+            "Hermann-Fiore Kristina, « La salle clémentine… »",
+        ),
+        (
+            "LAURENTIIS Elena de, « Preparatio ad missam… »",
+            "Laurentiis Elena de, « Preparatio ad missam… »",
+        ),
+    ],
+)
+def test_bibliography_author_casing_matches_real_corpus(
+    source: str, expected: str
+) -> None:
+    edits = find_bibliography_author_casing_edits(source)
+    assert apply_text_edits(source, edits) == expected
+    assert apply_text_edits(expected, find_bibliography_author_casing_edits(expected)) == expected
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Ferrari Matteo, « déjà correct »",
+        "UNESCO, rapport annuel 2020.",
+        "Ceci est une phrase normale, pas une bibliographie.",
+        "",
+    ],
+)
+def test_bibliography_author_casing_guards(source: str) -> None:
+    assert find_bibliography_author_casing_edits(source) == []
 
 
 @pytest.mark.parametrize(
@@ -496,23 +552,26 @@ def test_exact_deterministic_identifier_set() -> None:
     # entre un nom propre et le numéral romain qui le suit (candidate la
     # plus solide identifiée par docs/ANALYSE_CORPUS_HP2.md, 784 occurrences
     # observées sur le corpus H&P2).
-    assert len(DETERMINISTIC_RULE_IDS) == 33
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 33
+    assert len(DETERMINISTIC_RULE_IDS) == 34
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 34
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
 def test_exact_heuristic_and_complete_identifier_sets() -> None:
-    # 9 des 31 règles heuristiques du catalogue : les 17 règles de
+    # 10 des 32 règles heuristiques du catalogue : les 17 règles de
     # heading/poésie/citation/section bibliographique restent à concevoir
     # (moteur de score legacy exclu par docs/REBORN_ARCHITECTURE.md §7), ainsi
     # que les règles bibliographie explicitement `planned`/`dormant` et
     # `purh.tiret.incise` (`disabled` au catalogue, aucun détecteur dans
     # corrector/rules/) — cf. NOT_YET_IMPLEMENTED_RULE_IDS dans runner.py.
-    assert len(HEURISTIC_RULE_IDS) == 9
-    assert len(set(HEURISTIC_RULE_IDS)) == 9
+    # purh.biblio.casse_auteur (nouvelle) ramène la casse d'un nom d'auteur
+    # tout capitales en tête d'entrée bibliographique, grounded sur 15
+    # entrées réelles comparées brut/corrigé (Ch14_Source_bibliographie).
+    assert len(HEURISTIC_RULE_IDS) == 10
+    assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 42
-    assert len(set(RULE_IDS)) == 42
+    assert len(RULE_IDS) == 44
+    assert len(set(RULE_IDS)) == 44
 
 
 class _IgnoringRange:

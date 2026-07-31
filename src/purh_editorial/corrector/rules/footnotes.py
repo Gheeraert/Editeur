@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import re
 
-from purh_editorial.corrector.rules.orthotypography import TextEdit, apply_text_edits
-
-NNBSP = "\u202f"
+from purh_editorial.corrector.rules.orthotypography import (
+    NNBSP,
+    TextEdit,
+    apply_text_edits,
+)
 
 _LEADING_SPACE_RE = re.compile(r"^[ \t\u00a0\u202f]+")
 _OP_CIT_RE = re.compile(

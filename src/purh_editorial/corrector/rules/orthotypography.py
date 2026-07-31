@@ -4,8 +4,15 @@ import re
 from dataclasses import dataclass
 from typing import Callable
 
-NNBSP = "\u202f"
 NBSP = "\u00a0"
+# Nommee historiquement "NNBSP" (espace fine insecable, U+202F), mais la
+# valeur a ete corrigee vers l'espace insecable normale U+00A0 : verification
+# sur le corpus reel corrige par les editrices PURH (Ch14_Source_bibliographie,
+# heraldique_styles/*, dissimuler_styles/*, ~3000 espaces insecables comptees
+# au niveau XML brut) - 0 occurrence de U+202F, 100% en U+00A0, aussi bien
+# pour les guillemets que la pagination/numero/milliers. Le nom est conserve
+# pour ne pas renommer tous les appels existants.
+NNBSP = NBSP
 
 
 @dataclass(frozen=True)
@@ -76,6 +83,36 @@ _CIVILITY_RE = re.compile(
     r"\b(M\.|Mme[s]?|Dr?|Pr?|Prof\.) (?=[A-ZÀ-ÖØ-Þ])",
     re.UNICODE,
 )
+# Ecriture inclusive au point median : liste fermee de morphemes de genre/
+# nombre courants (cf. purh.ligature.oe pour le meme principe de liste
+# fermee plutot que regle generale). Verifie sur corpus reel
+# (Ethnographes_originaux.docx vs ethnographes-engages-styles/*.docx) : le
+# brut ecrit "chercheur.e.s", "auteur.e.s", "participant.e.s" au point
+# simple ; les editrices PURH convertissent systematiquement au point
+# median (U+00B7). Liste fermee choisie pour eviter de toucher de vraies
+# abreviations chainees par points (ex. "c.q.f.d.").
+_INCLUSIVE_WRITING_SUFFIXES = (
+    "iennes", "iens", "ienne", "ien",
+    "trices", "trice", "teurs", "teur",
+    "eures", "eure", "eurs", "eur",
+    "euses", "euse",
+    "elles", "elle", "els", "el",
+    "ales", "aux", "al",
+    "ives", "ifs", "ive", "if",
+    "onnes", "onne", "ons", "on",
+    "ères", "ère", "ers", "er",
+    "rices", "rice",
+    "nes", "ne",
+    "es", "e", "s",
+)
+_INCLUSIVE_WRITING_RE = re.compile(
+    # Mot de base >= 2 lettres : ecarte les abreviations latines courantes a
+    # base d'une seule lettre suivie d'un point (ex. "i.e.", ou le "e" de
+    # "e.g." coinciderait avec un suffixe de la liste).
+    r"\b[A-ZÀ-Þa-zà-öø-ÿ]{2,}(?:\.(?:"
+    + "|".join(sorted(set(_INCLUSIVE_WRITING_SUFFIXES), key=len, reverse=True))
+    + r")){1,3}\b"
+)
 _ORDINAL_RE = re.compile(r"\b(\d+)(ère|ere|ème|eme)\b", re.UNICODE)
 _NUMERAL_DYNASTIQUE_RE = re.compile(
     r"\b([A-ZÀ-Þ]\w*) "
@@ -135,7 +172,7 @@ _SIECLE_LOOKAHEAD_RE = re.compile(
 _CENTURY_CHAIN_SEP_RE = re.compile(
     r"\A(?:\s+|,|-|–|—|/|et|ou|au|à)+\Z", re.IGNORECASE
 )
-_NUMERO_STYLE_RE = re.compile(r"\b[Nn](o)\u202f(?=\d)")
+_NUMERO_STYLE_RE = re.compile(rf"\b[Nn](o){NNBSP}(?=\d)")
 _ORDINAL_STYLE_RE = re.compile(r"\b(?P<number>\d+)(?P<suffix>er|re|e)\b")
 _CIVILITY_STYLE_RE = re.compile(r"\b(?:Mme|Mlle|Dr|Pr)(?P<plural>s?)\b")
 
@@ -220,6 +257,14 @@ def find_civility_edits(text: str) -> list[TextEdit]:
 
 def find_numeral_dynastique_edits(text: str) -> list[TextEdit]:
     return _regex_edits(text, _NUMERAL_DYNASTIQUE_RE, r"\1" + NBSP + r"\2")
+
+
+def find_inclusive_writing_edits(text: str) -> list[TextEdit]:
+    return _regex_edits(
+        text,
+        _INCLUSIVE_WRITING_RE,
+        lambda match: match.group(0).replace(".", "·"),
+    )
 
 
 def _century_chains(text: str) -> list[list[re.Match[str]]]:
@@ -419,6 +464,7 @@ ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.numero", find_numero_edits),
     ("purh.abreviations.redoublement", find_redoublement_edits),
     ("purh.nombres.milliers", find_thousands_edits),
+    ("purh.ecriture_inclusive.point_median", find_inclusive_writing_edits),
 )
 
 

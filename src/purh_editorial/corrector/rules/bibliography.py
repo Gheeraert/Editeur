@@ -19,6 +19,17 @@ BIBLIOGRAPHY_SECTION_HEADING_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Nom d'auteur en tete d'entree bibliographique : la convention observee sur
+# le corpus reel (Ch14_Source_bibliographie.docx, 15 entrees comparees au
+# manuscrit brut) est "NOM Prenom, ..." dans le brut, toujours ramene a
+# "Nom Prenom, ..." par les editrices. Le prenom qui suit (capitale suivie
+# de minuscules, jamais tout capitales) sert de garde-fou : il distingue le
+# bloc nom de famille d'un titre ou d'un sigle en capitales.
+_BIBLIOGRAPHY_AUTHOR_SURNAME_RE = re.compile(
+    r"^([A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ'-]*(?: [A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ'-]*)*)"
+    r"(?=\s[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ])"
+)
+
 _CLOSING_PUNCTUATION_OR_QUOTE = {".", "!", "?", "…", "»"}
 _LIST_ITEM_RE = re.compile(r"^\s*[-–—•]\s")
 _URL_OR_DOI_END_RE = re.compile(r"(https?://\S+|doi\s*:\s*\S+)$", re.IGNORECASE)
@@ -67,8 +78,35 @@ def find_bibliography_numero_edits(text: str) -> list[TextEdit]:
     ]
 
 
+def find_bibliography_author_casing_edits(text: str) -> list[TextEdit]:
+    """Ramene un nom d'auteur tout capitales en tete d'entree a la casse titre.
+
+    Ne s'applique qu'aux paragraphes deja identifies comme entree d'une
+    section bibliographique par l'appelant (meme garde que
+    `find_bibliography_final_punctuation_edits`).
+    """
+    match = _BIBLIOGRAPHY_AUTHOR_SURNAME_RE.match(text)
+    if not match:
+        return []
+    surname = match.group(1)
+    replacement = " ".join(
+        "-".join(part[:1] + part[1:].lower() for part in word.split("-"))
+        for word in surname.split(" ")
+    )
+    if replacement == surname:
+        return []
+    return [TextEdit(match.start(1), match.end(1), replacement)]
+
+
 BIBLIOGRAPHY_TEXT_RULES = (
     ("purh.biblio.pagination_nnbsp", find_bibliography_pagination_edits),
     ("purh.biblio.numero_nnbsp", find_bibliography_numero_edits),
 )
+
+# purh.biblio.casse_auteur n'est volontairement pas dans BIBLIOGRAPHY_TEXT_RULES :
+# ce tuple est applique sans garde a tous les paragraphes du texte principal
+# (voir _apply_main_text dans word_document.py), alors que "premier mot tout
+# capitales suivi d'un mot capitalise" n'est fiable que dans une entree deja
+# identifiee comme bibliographique. Meme garde que
+# find_bibliography_final_punctuation_edits, cable via _apply_bibliography_entry.
 
