@@ -36,6 +36,7 @@ from purh_editorial.corrector.rules.styling import (
     FOOTNOTE_REFERENCE_STYLE_RULE_ID,
     PARAGRAPH_STYLE_SPECS,
     STYLE_APPEL_NOTE,
+    STYLE_CITATION_INTENSE,
     apply_footnote_reference_style,
     apply_paragraph_style_spec,
     footnote_reference_style_needs_change,
@@ -45,6 +46,24 @@ from purh_editorial.corrector.rules.styling import (
 WD_MAIN_TEXT_STORY = 1
 WD_YELLOW = 7
 WD_TURQUOISE = 3
+# Vert clair (wdBrightGreen) : troisieme couleur de tracabilite, reservee aux
+# fusions structurelles de blocs poetiques - distincte du jaune (edition de
+# texte) et du turquoise (diagnostic sans modification), pour que l'editrice
+# distingue au coup d'oeil un paragraphe fusionne d'une simple correction.
+WD_BRIGHT_GREEN = 4
+
+# Saut de ligne manuel Word (Maj+Entree), par opposition a la marque de fin
+# de paragraphe (\r) : l'inserer a la place d'un \r fusionne deux paragraphes
+# en un seul sans changer la longueur du document (remplacement 1
+# caractere pour 1 caractere), ce qui preserve les positions absolues de
+# toutes les autres jonctions deja repertoriees.
+_MANUAL_LINE_BREAK = "\v"
+
+# Identifiant repris du catalogue (docs/CATALOGUE_REGLES_TYPOGRAPHIQUES.md,
+# "structure.poetry.heuristique") mais implemente ici avec une condition
+# deterministe (style Word natif "Citation intense", cf. runner.py) et non
+# le moteur de score legacy que le chemin reborn exclut.
+POETRY_MERGE_RULE_ID = "structure.poetry.heuristique"
 
 # Style Word explicite (Titre 1/2/3/4 en français, Heading 1-4 en anglais) —
 # condition observable et déterministe, pas une heuristique de mise en forme
@@ -321,6 +340,69 @@ def _apply_allcaps_heading_diagnostic(paragraph: Any, counts: dict[str, int]) ->
     counts["structure.allcaps.heading"] += 1
 
 
+def _paragraph_has_native_style(paragraph: Any, style_name: str) -> bool:
+    try:
+        style = paragraph.Range.Style
+        return bool(_is_word_true(style.BuiltIn)) and str(style.NameLocal) == style_name
+    except Exception:
+        return False
+
+
+def _apply_poetry_merge(document: Any, counts: dict[str, int]) -> None:
+    # Bloc poesie = paragraphes consecutifs portant le style natif "Citation
+    # intense" (cf. rules/styling.py : c'est ce style, distinct de
+    # "Citation", qui est reserve a la poesie dans le gabarit PURH). Une
+    # citation poetique doit former un paragraphe Word unique, chaque vers
+    # separe du suivant par un simple saut de ligne, pas par une fin de
+    # paragraphe : condition explicite et testable, aucun score.
+    story = document.StoryRanges(WD_MAIN_TEXT_STORY)
+    paragraph_infos: list[tuple[int, int, bool]] = []
+    for paragraph in story.Paragraphs:
+        paragraph_infos.append(
+            (
+                paragraph.Range.Start,
+                paragraph.Range.End,
+                _paragraph_has_native_style(paragraph, STYLE_CITATION_INTENSE),
+            )
+        )
+    paragraph = None
+    story = None
+
+    blocks: list[tuple[int, int]] = []
+    junction_starts: list[int] = []
+    index = 0
+    while index < len(paragraph_infos):
+        start, end, is_poetry = paragraph_infos[index]
+        if not is_poetry:
+            index += 1
+            continue
+        block_start = start
+        block_end = end
+        run_length = 1
+        index += 1
+        while index < len(paragraph_infos) and paragraph_infos[index][2]:
+            junction_starts.append(block_end - 1)
+            block_end = paragraph_infos[index][1]
+            run_length += 1
+            index += 1
+        if run_length > 1:
+            blocks.append((block_start, block_end))
+
+    for start in junction_starts:
+        target = document.Range(start, start + 1)
+        if target.Text != "\r":
+            target = None
+            continue
+        target.Text = _MANUAL_LINE_BREAK
+        target = None
+        counts[POETRY_MERGE_RULE_ID] += 1
+
+    for block_start, block_end in blocks:
+        merged = document.Range(block_start, block_end)
+        merged.HighlightColorIndex = WD_BRIGHT_GREEN
+        merged = None
+
+
 def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
     counts["purh.biblio.ponctuation_finale"] += _apply_text_edits(
         paragraph, find_bibliography_final_punctuation_edits
@@ -530,6 +612,12 @@ def correct_word_copy(
         _apply_main_text(document, counts)
         _apply_footnotes(document, counts)
         _apply_purh_style_defaults(document, counts)
+        # En dernier : le marqueur de tracabilite pose par
+        # _apply_purh_style_defaults sur le premier caractere de chaque
+        # paragraphe "Citation intense" (surlignage jaune) ne doit pas
+        # entrer en conflit avec le surlignage vert clair de la fusion
+        # poetique, qui doit rester uniforme sur tout le bloc fusionne.
+        _apply_poetry_merge(document, counts)
         document.Save()
         return counts
     except Exception as exc:

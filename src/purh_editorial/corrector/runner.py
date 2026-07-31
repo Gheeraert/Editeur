@@ -73,6 +73,14 @@ DETERMINISTIC_RULE_IDS = (
     "purh.style.corps_de_texte",
     "purh.style.note_bas_de_page",
     "purh.style.appel_de_note",
+    # Fusion des citations poetiques (branche "heuristique") : bloc de
+    # paragraphes consecutifs portant le style natif "Citation intense"
+    # (rules/styling.py) fusionne en un seul paragraphe, chaque vers separe
+    # du suivant par un saut de ligne manuel plutot qu'une fin de paragraphe.
+    # Condition deterministe (style Word natif), pas le moteur de score
+    # legacy `poetry` que docs/REBORN_ARCHITECTURE.md §7 exclut - voir
+    # _apply_poetry_merge dans word_document.py.
+    "structure.poetry.heuristique",
 )
 
 HEURISTIC_RULE_IDS = (
@@ -129,7 +137,6 @@ NOT_YET_IMPLEMENTED_RULE_IDS = (
     "structure.heading.diagnostic",
     "structure.lineated.blank_bounded.merge",
     "structure.lineated.short_sequence.merge",
-    "structure.poetry.heuristique",
     "structure.lineated.group.annotate",
     "structure.lineated.stanza.merge",
 )
