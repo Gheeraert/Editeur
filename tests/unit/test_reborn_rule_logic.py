@@ -27,9 +27,12 @@ from purh_editorial.corrector.rules.orthotypography import (
     apply_text_edits,
     find_centuries,
     find_double_dash_diagnostics,
+    find_folio_style_matches,
     find_incise_dash_diagnostics,
     find_numero_style_matches,
     find_quote_punctuation_diagnostics,
+    find_recto_verso_edits,
+    find_recto_verso_style_matches,
     find_straight_quote_diagnostics,
     normalize_points_suspension,
 )
@@ -61,6 +64,8 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.abreviations.etc",
     "purh.pagination.espace",
     "purh.numero",
+    "purh.folio",
+    "purh.recto_verso",
     "purh.abreviations.redoublement",
     "purh.nombres.milliers",
     "purh.ecriture_inclusive.point_median",
@@ -72,6 +77,8 @@ EXPECTED_DETERMINISTIC_IDS = {
     "purh.biblio.numero_nnbsp",
     "purh.siecles.style",
     "purh.numero.style",
+    "purh.folio.style",
+    "purh.recto_verso.style",
     "purh.ordinaux.style",
     "purh.civilite.style",
     "purh.note.italique_latin",
@@ -191,6 +198,20 @@ def _orthotypography_finder(rule_id: str):
             f"no{NNBSP}5",
             "numéro cinq",
             f"no{NNBSP}5",
+        ),
+        (
+            "purh.folio",
+            "fol. 12",
+            f"fo{NNBSP}12",
+            "le folio de la reliure",
+            f"fo{NNBSP}12",
+        ),
+        (
+            "purh.recto_verso",
+            "recto 12",
+            f"ro{NNBSP}12",
+            "le recto de la lettre",
+            f"ro{NNBSP}12",
         ),
         (
             "purh.abreviations.redoublement",
@@ -422,6 +443,21 @@ def test_style_detectors_are_closed_and_idempotence_ready() -> None:
     assert find_centuries("xvie siècle")[0].roman == "xvi"
     assert find_numero_style_matches(f"no{NNBSP}5")[0].group(1) == "o"
     assert find_numero_style_matches("nombre cinq") == []
+    assert find_folio_style_matches(f"fo{NNBSP}12")[0].group(1) == "o"
+    assert find_folio_style_matches("folio") == []
+    assert find_recto_verso_style_matches(f"ro{NNBSP}3")[0].group(1) == "o"
+    assert find_recto_verso_style_matches(f"vo{NNBSP}4")[0].group(1) == "o"
+    assert find_recto_verso_style_matches("rose") == []
+
+
+def test_recto_verso_handles_both_forms_in_order() -> None:
+    text = f"voir ro{NNBSP}3 et vo{NNBSP}4"
+    # Deja au format cible : aucune modification supplementaire attendue.
+    assert find_recto_verso_edits(text) == []
+    corrected = apply_text_edits(
+        "voir recto 3 et verso 4", find_recto_verso_edits("voir recto 3 et verso 4")
+    )
+    assert corrected == text
 
 
 def test_diagnostic_detectors_do_not_change_text() -> None:
@@ -595,8 +631,8 @@ def test_exact_deterministic_identifier_set() -> None:
     # implémentée en diagnostic (surlignage), condition déterministe (style de
     # titre Word + texte tout capitales), pas de transformation automatique de
     # casse (risque de perdre la casse d'un nom propre dans le titre).
-    assert len(DETERMINISTIC_RULE_IDS) == 36
-    assert len(set(DETERMINISTIC_RULE_IDS)) == 36
+    assert len(DETERMINISTIC_RULE_IDS) == 40
+    assert len(set(DETERMINISTIC_RULE_IDS)) == 40
     assert set(DETERMINISTIC_RULE_IDS) == EXPECTED_DETERMINISTIC_IDS
 
 
@@ -613,8 +649,8 @@ def test_exact_heuristic_and_complete_identifier_sets() -> None:
     assert len(HEURISTIC_RULE_IDS) == 10
     assert len(set(HEURISTIC_RULE_IDS)) == 10
     assert set(HEURISTIC_RULE_IDS) == EXPECTED_HEURISTIC_IDS
-    assert len(RULE_IDS) == 46
-    assert len(set(RULE_IDS)) == 46
+    assert len(RULE_IDS) == 50
+    assert len(set(RULE_IDS)) == 50
 
 
 class _IgnoringRange:

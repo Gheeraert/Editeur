@@ -138,6 +138,17 @@ _PAGINATION_RE = re.compile(
     r"\s+(?=[\dIVXLCivxlc])"
 )
 _NUMERO_RE = re.compile(r"\b([Nn])[°ºoO]\.?[ \t\u00a0\u202f]*(?=\d)")
+# Folio et recto/verso : guide PURH p. 12 (tableau des abreviations), meme
+# convention que "numero" -> "no" (lettre o en exposant, pas le symbole
+# degre). Portee volontairement etroite : n'abrege que lorsque le mot est
+# directement suivi d'un chiffre (comme pour "no"), pour ne pas toucher aux
+# emplois ordinaires de "recto"/"verso" en prose courante ("le recto de la
+# lettre"), qui ne sont pas des abreviations de pagination.
+_FOLIO_RE = re.compile(
+    r"\b(?:folio|fol\.?|f[°º])[ \t\u00a0\u202f]*(?=\d)", re.IGNORECASE
+)
+_RECTO_RE = re.compile(r"\b(?:recto|r[°º])[ \t\u00a0\u202f]*(?=\d)", re.IGNORECASE)
+_VERSO_RE = re.compile(r"\b(?:verso|v[°º])[ \t\u00a0\u202f]*(?=\d)", re.IGNORECASE)
 _REDOUBLEMENT_RE = re.compile(r"\b(pp|vv|ll)\.|§§")
 _THOUSANDS_RE = re.compile(r"\b\d{1,3}(?: \d{3})+\b")
 _THOUSANDS_GROUP_RE = re.compile(r"(\d{1,3}) (\d{3})(?!\d)")
@@ -187,6 +198,8 @@ _CENTURY_CHAIN_SEP_RE = re.compile(
     r"\A(?:\s+|,|-|–|—|/|et|ou|au|à)+\Z", re.IGNORECASE
 )
 _NUMERO_STYLE_RE = re.compile(rf"\b[Nn](o){NNBSP}(?=\d)")
+_FOLIO_STYLE_RE = re.compile(rf"\bf(o){NNBSP}(?=\d)")
+_RECTO_VERSO_STYLE_RE = re.compile(rf"\b[rv](o){NNBSP}(?=\d)")
 _ORDINAL_STYLE_RE = re.compile(r"\b(?P<number>\d+)(?P<suffix>er|re|e)\b")
 _CIVILITY_STYLE_RE = re.compile(r"\b(?:Mme|Mlle|Dr|Pr)(?P<plural>s?)\b")
 
@@ -376,6 +389,26 @@ def find_numero_style_matches(text: str) -> list[re.Match[str]]:
     return list(_NUMERO_STYLE_RE.finditer(text))
 
 
+def find_folio_edits(text: str) -> list[TextEdit]:
+    return _regex_edits(text, _FOLIO_RE, "fo" + NNBSP)
+
+
+def find_recto_verso_edits(text: str) -> list[TextEdit]:
+    edits = list(_regex_edits(text, _RECTO_RE, "ro" + NNBSP)) + list(
+        _regex_edits(text, _VERSO_RE, "vo" + NNBSP)
+    )
+    edits.sort(key=lambda edit: edit.start)
+    return edits
+
+
+def find_folio_style_matches(text: str) -> list[re.Match[str]]:
+    return list(_FOLIO_STYLE_RE.finditer(text))
+
+
+def find_recto_verso_style_matches(text: str) -> list[re.Match[str]]:
+    return list(_RECTO_VERSO_STYLE_RE.finditer(text))
+
+
 def _redoublement_replacement(match: re.Match[str]) -> str:
     return match.group(1)[0] + "." if match.group(1) else "§"
 
@@ -480,6 +513,8 @@ ORTHOTYPOGRAPHY_TEXT_RULES = (
     ("purh.abreviations.etc", find_etc_edits),
     ("purh.pagination.espace", find_pagination_edits),
     ("purh.numero", find_numero_edits),
+    ("purh.folio", find_folio_edits),
+    ("purh.recto_verso", find_recto_verso_edits),
     ("purh.abreviations.redoublement", find_redoublement_edits),
     ("purh.nombres.milliers", find_thousands_edits),
     ("purh.ecriture_inclusive.point_median", find_inclusive_writing_edits),

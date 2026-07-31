@@ -22,9 +22,11 @@ from purh_editorial.corrector.rules.orthotypography import (
     CenturyMatch,
     find_centuries,
     find_civility_style_matches,
+    find_folio_style_matches,
     find_incise_dash_diagnostics,
     find_numero_style_matches,
     find_ordinal_style_matches,
+    find_recto_verso_style_matches,
 )
 from purh_editorial.corrector.rules.structure import (
     detect_frontmatter_rule,
@@ -160,6 +162,34 @@ def _apply_numero_styles(paragraph: Any) -> int:
     return changed
 
 
+def _apply_folio_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_folio_style_matches(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, match.start(1), match.end(1))
+        if not _is_word_true(target.Font.Superscript):
+            target.Font.Superscript = True
+            complete = _exact_range(paragraph, match.start(), match.end())
+            complete.HighlightColorIndex = WD_YELLOW
+            complete = None
+            changed += 1
+        target = None
+    return changed
+
+
+def _apply_recto_verso_styles(paragraph: Any) -> int:
+    changed = 0
+    for match in reversed(find_recto_verso_style_matches(_paragraph_text(paragraph))):
+        target = _exact_range(paragraph, match.start(1), match.end(1))
+        if not _is_word_true(target.Font.Superscript):
+            target.Font.Superscript = True
+            complete = _exact_range(paragraph, match.start(), match.end())
+            complete.HighlightColorIndex = WD_YELLOW
+            complete = None
+            changed += 1
+        target = None
+    return changed
+
+
 def _apply_ordinal_styles(paragraph: Any) -> int:
     changed = 0
     for match in reversed(find_ordinal_style_matches(_paragraph_text(paragraph))):
@@ -277,6 +307,8 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
                 ) from exc
         counts["purh.siecles.style"] += _apply_century_styles(paragraph)
         counts["purh.numero.style"] += _apply_numero_styles(paragraph)
+        counts["purh.folio.style"] += _apply_folio_styles(paragraph)
+        counts["purh.recto_verso.style"] += _apply_recto_verso_styles(paragraph)
         counts["purh.ordinaux.style"] += _apply_ordinal_styles(paragraph)
         counts["purh.civilite.style"] += _apply_civility_styles(paragraph)
         counts["purh.tiret.incise.diagnostic"] += _apply_incise_diagnostics(paragraph)
@@ -334,6 +366,8 @@ def _apply_footnotes(document: Any, counts: dict[str, int]) -> None:
                 counts[rule_id] += _apply_diagnostics(paragraph, finder)
             counts["purh.siecles.style"] += _apply_century_styles(paragraph)
             counts["purh.numero.style"] += _apply_numero_styles(paragraph)
+            counts["purh.folio.style"] += _apply_folio_styles(paragraph)
+            counts["purh.recto_verso.style"] += _apply_recto_verso_styles(paragraph)
             counts["purh.ordinaux.style"] += _apply_ordinal_styles(paragraph)
             counts["purh.civilite.style"] += _apply_civility_styles(paragraph)
             counts["purh.note.italique_latin"] += _apply_footnote_latin_italic(

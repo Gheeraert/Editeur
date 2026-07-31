@@ -29,6 +29,7 @@ EXPECTED_RULE_IDS = (
     "purh.siecles", "purh.siecles.style", "purh.ordinaux", "purh.ordinaux.style",
     "purh.civilite.style", "purh.tiret.double",
     "purh.abreviations.etc", "purh.pagination.espace", "purh.numero", "purh.numero.style",
+    "purh.folio", "purh.folio.style", "purh.recto_verso", "purh.recto_verso.style",
     "purh.abreviations.redoublement", "purh.nombres.milliers",
     "purh.ecriture_inclusive.point_median", "purh.date.jour_mois", "purh.tiret.incise",
     "purh.tiret.incise.diagnostic", "purh.guillemets.ponctuation_fermante", "purh.note.espace_initiale",
@@ -56,29 +57,29 @@ EXPECTED_RULE_IDS = (
 
 EXPECTED_COUNTS = {
     "family": {
-        RuleFamily.ORTHOTYPOGRAPHY: 28,
+        RuleFamily.ORTHOTYPOGRAPHY: 32,
         RuleFamily.FOOTNOTE: 11,
         RuleFamily.BIBLIOGRAPHY: 8,
         RuleFamily.STRUCTURE: 21,
     },
     "nature": {
-        RuleNature.DETERMINISTIC: 37,
+        RuleNature.DETERMINISTIC: 41,
         RuleNature.HEURISTIC: 31,
     },
     "action": {
-        RuleActionType.TEXT_TRANSFORM: 30,
-        RuleActionType.STYLE_TRANSFORM: 5,
+        RuleActionType.TEXT_TRANSFORM: 32,
+        RuleActionType.STYLE_TRANSFORM: 7,
         RuleActionType.STRUCTURE_TRANSFORM: 21,
         RuleActionType.DIAGNOSTIC: 8,
         RuleActionType.PIPELINE_CONTROL: 4,
     },
     "status": {
-        DeploymentStatus.ACTIVE: 47,
+        DeploymentStatus.ACTIVE: 51,
         DeploymentStatus.REVIEW_ONLY: 18,
         DeploymentStatus.DISABLED: 3,
     },
     "state": {
-        ImplementationState.LEGACY: 62,
+        ImplementationState.LEGACY: 66,
         ImplementationState.PLANNED: 4,
         ImplementationState.DORMANT: 2,
     },
@@ -123,7 +124,7 @@ def test_registry_access_filters_and_immutability() -> None:
     assert registry.get("purh.siecles").family is RuleFamily.ORTHOTYPOGRAPHY
     assert len(registry.by_family(RuleFamily.FOOTNOTE)) == 11
     assert len(registry.by_nature(RuleNature.HEURISTIC)) == 31
-    assert len(registry.by_action(RuleActionType.STYLE_TRANSFORM)) == 5
+    assert len(registry.by_action(RuleActionType.STYLE_TRANSFORM)) == 7
     assert len(registry.by_status(DeploymentStatus.DISABLED)) == 3
     assert len(registry.by_implementation_state(ImplementationState.PLANNED)) == 4
     with pytest.raises(FrozenInstanceError):
