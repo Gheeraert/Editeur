@@ -8,8 +8,8 @@ SRC_DIR = PROJECT_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from purh_editorial.ui import run_step1_dialog
+from purh_editorial.corrector import run_corrector_gui
 
 
 if __name__ == "__main__":
-    run_step1_dialog()
+    run_corrector_gui()
