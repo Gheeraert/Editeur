@@ -103,6 +103,33 @@ def test_parse_ai_response_returns_empty_list_on_invalid_json() -> None:
     assert parse_ai_response("ceci n'est pas du JSON") == []
 
 
+def test_parse_ai_response_wraps_bare_object_into_single_suggestion() -> None:
+    # Constaté avec Mistral Small 3.2 en local : le modèle renvoie parfois
+    # un objet nu au lieu d'un tableau à un élément, malgré la consigne.
+    raw = (
+        '{"rule_id": "ia.style.lourdeur", "original_text": "a", '
+        '"suggested_text": "b", "explanation": "c"}'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+    assert suggestions[0].rule_id == "ia.style.lourdeur"
+
+
+def test_parse_ai_response_unwraps_object_with_list_value() -> None:
+    raw = (
+        '{"suggestions": [{"rule_id": "ia.style.lourdeur", "original_text": "a", '
+        '"suggested_text": "b", "explanation": "c"}]}'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+    assert suggestions[0].rule_id == "ia.style.lourdeur"
+
+
+def test_parse_ai_response_returns_empty_list_for_object_without_list_or_rule_id() -> None:
+    raw = '{"status": "no suggestions"}'
+    assert parse_ai_response(raw) == []
+
+
 def test_parse_ai_response_returns_empty_list_when_root_is_not_a_list() -> None:
     assert parse_ai_response('{"rule_id": "ia.style.lourdeur"}') == []
 

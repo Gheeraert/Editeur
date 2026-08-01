@@ -81,11 +81,25 @@ def parse_ai_response(raw: str) -> list[AISuggestion]:
     `rule_id` hors catalogue est ignorée sans faire échouer les autres —
     aucune exception n'est jamais levée par cette fonction, y compris sur un
     JSON invalide ou une racine qui n'est pas un tableau.
+
+    Tolère deux déviations observées en pratique (constaté avec Mistral
+    Small 3.2 en local, malgré une consigne de prompt explicite demandant un
+    tableau) : une unique suggestion renvoyée comme objet nu plutôt que
+    tableau à un élément, ou un objet enveloppant le tableau sous une clé
+    quelconque (ex. `{"suggestions": [...]}`). Toute autre forme d'objet
+    (sans `rule_id` ni valeur de type liste) est traitée comme « aucune
+    suggestion », par prudence plutôt que de deviner davantage.
     """
     try:
         payload = json.loads(raw)
     except (json.JSONDecodeError, TypeError):
         return []
+    if isinstance(payload, dict):
+        if "rule_id" in payload:
+            payload = [payload]
+        else:
+            list_values = [v for v in payload.values() if isinstance(v, list)]
+            payload = list_values[0] if list_values else []
     if not isinstance(payload, list):
         return []
 
