@@ -295,12 +295,21 @@ src/purh_editorial/corrector/
     runner.py
     word_document.py
     cli.py
+    gui.py
 
     rules/
         orthotypography.py
         footnotes.py
         bibliography.py
         structure.py
+
+    ai/
+        client.py
+        rules.py
+        prompts.py
+        ollama_client.py
+        gemini_client.py
+        groq_client.py
 ```
 
 Les responsabilités sont limitées à ceci :
@@ -309,7 +318,10 @@ Les responsabilités sont limitées à ceci :
   modifie les plages, applique le surlignage et sauvegarde le résultat ;
 - `runner.py` applique les règles dans un ordre explicite ;
 - `cli.py` reçoit les chemins d’entrée et de sortie, puis lance le traitement ;
-- `rules/*.py` contient les règles lisibles, regroupées par famille.
+- `rules/*.py` contient les règles lisibles, regroupées par famille ;
+- `ai/*.py` contient la couche d'assistance IA optionnelle (§14) — une couche
+  distincte, jamais un remplacement du moteur déterministe/heuristique décrit
+  ci-dessus.
 
 Aucune autre couche n’est prévue à ce stade.
 
@@ -502,3 +514,78 @@ normative PURH concrète** avant d'être codée — pas inventée (cf. AGENTS.md
 Sans ce matériau (exemples réels + référence PURH), toute règle supplémentaire
 serait une hypothèse non vérifiée risquant de « corriger » vers une norme
 incorrecte — silencieusement, sur un document destiné à l'impression.
+
+## 14. Couche IA (assistance éditoriale au-delà du déterministe)
+
+### 14.1 Une couche distincte, pas une extension du moteur des §6-7
+
+Le chantier `ia` (branche `ia`) ajoute une assistance par modèle de langage
+pour des points que les règles déterministes/heuristiques ne couvrent pas et
+ne peuvent pas couvrir par nature : lourdeurs de style, ruptures syntaxiques,
+bibliographie incomplète, incohérences terminologiques (catalogue complet
+dans [`CATALOGUE_REGLES_IA.md`](CATALOGUE_REGLES_IA.md)).
+
+**Le principe « aucun score, aucun seuil, aucune décision probabiliste » du
+§7 continue de s'appliquer intégralement au moteur `RULE_IDS`** (règles
+déterministes et heuristiques du catalogue des 61 règles). La couche IA ne
+l'enfreint pas : elle vit à côté, jamais à l'intérieur du moteur de décision
+décrit aux §6-7, et ne participe à aucune des décisions `apply`/`review`
+qu'il produit.
+
+Ce qui distingue structurellement la couche IA du reste du moteur :
+
+- **Aucune suggestion IA ne modifie jamais le texte.** Contrairement aux
+  règles heuristiques du §7 (qui peuvent transformer le texte quand leur
+  comportement est établi), une suggestion IA se limite à un surlignage
+  (`wdDarkYellow`, quatrième couleur de traçabilité — voir
+  [`NOTICE_COULEURS_WORD.md`](NOTICE_COULEURS_WORD.md)) et un commentaire Word
+  natif (`Comments.Add`). L'éditrice reste seule décisionnaire de toute
+  modification.
+- **Aucun identifiant `ia.*` n'entre dans `RULE_IDS`.** Les compteurs `ia.*`
+  n'apparaissent dans le rapport que si un client IA a été explicitement
+  fourni à `correct_docx` (paramètre `ai_client`, `None` par défaut) — le
+  comportement du moteur déterministe est strictement inchangé en son
+  absence.
+- **Opt-in explicite à chaque lancement.** L'interface (`gui.py`) n'offre
+  aucun mode présélectionné : l'éditrice choisit Désactivée / Locale (Ollama)
+  / Distante (API) à chaque correction, sans mémorisation d'une session à
+  l'autre.
+
+### 14.2 Architecture technique
+
+```text
+AIClient (Protocol)
+ ├── OllamaAIClient   (local, http://localhost:11434, urllib standard)
+ ├── GeminiAIClient   (distant, palier gratuit Google AI Studio)
+ ├── GroqAIClient     (distant, palier gratuit, secours de Gemini)
+ └── FakeAIClient     (tests, aucun réseau)
+```
+
+Un backend ne fait jamais planter le traitement déterministe qui l'entoure :
+`is_available()` et `analyze_paragraph()` ne lèvent jamais d'exception (elles
+retournent respectivement `False` et `[]` sur toute panne réseau, JSON
+malformé ou configuration incomplète). `word_document.py`
+(`_apply_ai_to_paragraph`) absorbe en plus toute exception résiduelle, par
+défense en profondeur.
+
+Le ciblage évite d'interroger le modèle pour tout le document :
+
+- chaque paragraphe n'est interrogé que pour les règles pertinentes à sa
+  nature — texte courant (`AI_MAIN_TEXT_RULE_IDS`) ou entrée bibliographique
+  (`AI_BIBLIOGRAPHY_RULE_IDS`), jamais les deux ;
+- un seuil de longueur minimale (`AI_MIN_MAIN_TEXT_LENGTH`) écarte le texte
+  courant trop court, mais ne s'applique jamais à la bibliographie, où une
+  entrée courte est justement le cas à détecter ;
+- les paragraphes de titre sont exclus de l'IA ;
+- `ia.terminologie.incoherence` (portée document entier) n'est câblée dans
+  aucune de ces deux listes : `AIClient.analyze_paragraph` ne peut analyser
+  qu'un paragraphe à la fois, et sa portée document entier suppose une passe
+  de collecte préalable non encore conçue.
+
+Une suggestion n'est appliquée que si `locate_suggestion` retrouve
+exactement sa citation (`original_text`) dans le paragraphe source. Observé
+en pratique (Mistral Small 3.2 en local) : un modèle peut légèrement
+« corriger » l'orthographe dans une citation censée être verbatim, ce qui
+fait alors échouer la correspondance — la suggestion est silencieusement
+abandonnée plutôt que d'être appliquée au mauvais endroit. Le taux réel de
+suggestions perdues de cette façon reste à quantifier sur corpus.

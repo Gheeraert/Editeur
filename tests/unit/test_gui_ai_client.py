@@ -104,3 +104,34 @@ def test_remote_fields_enabled_only_in_remote_mode(app: CorrectorApp) -> None:
     app._ai_mode.set("local")
     app.update()
     assert str(app._api_key_entry.cget("state")) == "disabled"
+
+
+def test_selecting_provider_prefills_api_key_from_environment(
+    app: CorrectorApp, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "env-gemini-key")
+    app._remote_provider.set("gemini")
+    app.update()
+    assert app._api_key.get() == "env-gemini-key"
+
+
+def test_prefill_does_not_overwrite_a_manually_entered_key(
+    app: CorrectorApp, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "env-gemini-key")
+    monkeypatch.setenv("GROQ_API_KEY", "env-groq-key")
+    app._remote_provider.set("gemini")
+    app.update()
+    app._api_key.set("saisie-manuelle")
+    app._remote_provider.set("groq")
+    app.update()
+    assert app._api_key.get() == "saisie-manuelle"
+
+
+def test_prefill_does_nothing_when_environment_variable_is_absent(
+    app: CorrectorApp, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    app._remote_provider.set("gemini")
+    app.update()
+    assert app._api_key.get() == ""

@@ -39,11 +39,17 @@ class CorrectorApp(tk.Tk):
         # appliquer systematiquement.
         self._reapply_normal_style = tk.BooleanVar(value=False)
 
-        # Aucune valeur par defaut : l'editrice doit choisir explicitement un
-        # mode a chaque lancement (decision actee avec l'utilisateur - pas de
-        # mode memorise d'une session a l'autre, y compris "Desactive").
+        # Aucune valeur par defaut pour le MODE : l'editrice doit choisir
+        # explicitement Desactivee/Locale/Distante a chaque lancement
+        # (decision actee avec l'utilisateur - pas de mode memorise d'une
+        # session a l'autre). Le nom de modele et la cle API, en revanche,
+        # sont prerempits depuis l'environnement (OLLAMA_MODEL,
+        # GEMINI_API_KEY, GROQ_API_KEY - voir .env.example) par simple
+        # commodite : retaper une cle de 40 caracteres a chaque lancement
+        # n'apporte rien a la decision explicite de mode, et le champ reste
+        # librement modifiable.
         self._ai_mode = tk.StringVar(value="")
-        self._ollama_model = tk.StringVar(value="")
+        self._ollama_model = tk.StringVar(value=os.environ.get("OLLAMA_MODEL", ""))
         self._remote_provider = tk.StringVar(value="")
         self._api_key = tk.StringVar(value="")
 
@@ -51,6 +57,9 @@ class CorrectorApp(tk.Tk):
 
         self._build_ui()
         self._ai_mode.trace_add("write", lambda *_args: self._update_ai_fields_state())
+        self._remote_provider.trace_add(
+            "write", lambda *_args: self._prefill_api_key_from_environment()
+        )
         self._update_ai_fields_state()
 
     def _build_ui(self) -> None:
@@ -136,6 +145,21 @@ class CorrectorApp(tk.Tk):
         self._gemini_radio.configure(state=remote_state)
         self._groq_radio.configure(state=remote_state)
         self._api_key_entry.configure(state=remote_state)
+
+    def _prefill_api_key_from_environment(self) -> None:
+        # Ne remplace jamais une cle deja saisie manuellement par
+        # l'editrice : ne prerempit que si le champ est encore vide,
+        # typiquement juste apres avoir choisi le fournisseur.
+        if self._api_key.get().strip():
+            return
+        env_var = {"gemini": "GEMINI_API_KEY", "groq": "GROQ_API_KEY"}.get(
+            self._remote_provider.get()
+        )
+        if env_var is None:
+            return
+        value = os.environ.get(env_var, "")
+        if value:
+            self._api_key.set(value)
 
     def _browse_input(self) -> None:
         path = filedialog.askopenfilename(

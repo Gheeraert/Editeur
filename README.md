@@ -57,6 +57,8 @@ Au-delà de l'ortho-typographie, une assistance IA peut analyser le style, la sy
 - **Locale (Ollama)** : indiquer le nom exact du modèle chargé dans Ollama (`ollama list`). Aucune donnée ne quitte le poste de travail.
 - **Distante (API)** : Gemini ou Groq, avec une clé API. Le texte des paragraphes analysés est envoyé à un service tiers — un avertissement de confidentialité s'affiche à chaque lancement dans ce mode, à confirmer explicitement.
 
+Le nom du modèle Ollama et la clé API peuvent être préremplis depuis des variables d'environnement définies avant de lancer `main.py` (voir `.env.example` pour leurs noms — `OLLAMA_MODEL`, `GEMINI_API_KEY`, `GROQ_API_KEY` — par exemple `$env:GEMINI_API_KEY = "..."` en PowerShell ; l'outil ne lit pas de fichier `.env` automatiquement) : simple confort pour éviter de ressaisir une clé à chaque lancement, jamais un mode présélectionné — les champs restent visibles et modifiables, et le choix du mode lui-même reste toujours à faire explicitement.
+
 Les suggestions de la couche IA ne modifient jamais le texte : elles apparaissent en surlignage jaune foncé, accompagné d'un commentaire Word expliquant la proposition (voir [`docs/NOTICE_COULEURS_WORD.md`](docs/NOTICE_COULEURS_WORD.md)).
 
 En ligne de commande, sans interface :
