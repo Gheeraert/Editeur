@@ -52,6 +52,20 @@ class CheckNoSecretsTrackedTests(unittest.TestCase):
             # La valeur complète ne doit jamais apparaître en clair dans le message.
             self.assertNotIn("gsk_" + "a" * 40, "\n".join(errors))
 
+    def test_gemini_key_value_in_tracked_file_is_detected(self) -> None:
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            self._write(tmp_path, "config.txt", "GEMINI_API_KEY=AIza" + "a" * 35)
+            ci_guard.ROOT = tmp_path
+            errors = ci_guard.check_no_secrets_tracked(["config.txt"])
+            self.assertTrue(any("Gemini" in e for e in errors))
+
+    def test_env_example_placeholder_is_not_flagged_as_secret(self) -> None:
+        errors = ci_guard.check_no_secrets_tracked([".env.example"])
+        self.assertEqual(errors, [])
+
     def test_openai_key_value_is_detected(self) -> None:
         import tempfile
 

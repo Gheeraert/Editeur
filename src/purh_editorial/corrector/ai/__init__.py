@@ -8,6 +8,8 @@ from purh_editorial.corrector.ai.client import (
     locate_suggestion,
     parse_ai_response,
 )
+from purh_editorial.corrector.ai.gemini_client import GeminiAIClient
+from purh_editorial.corrector.ai.groq_client import GroqAIClient
 from purh_editorial.corrector.ai.ollama_client import OllamaAIClient
 from purh_editorial.corrector.ai.rules import AI_RULE_ID_SET, AI_RULE_IDS
 
@@ -15,6 +17,8 @@ __all__ = [
     "AIClient",
     "AISuggestion",
     "FakeAIClient",
+    "GeminiAIClient",
+    "GroqAIClient",
     "LocatedAISuggestion",
     "OllamaAIClient",
     "locate_suggestion",

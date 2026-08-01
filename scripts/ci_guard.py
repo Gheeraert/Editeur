@@ -10,7 +10,7 @@ Garde-fou de confidentialité et de terminologie, exécuté en CI (voir
   schéma de fixtures/orthotypography_gold/ (validated=true + validation_source réelle) ;
 - un fichier `.env` (secrets réels) ou une clé privée PEM est suivi par Git ;
 - un fichier suivi contient une valeur qui ressemble à une clé API (Groq, OpenAI,
-  Anthropic) ou un autre secret courant.
+  Anthropic, Gemini/Google) ou un autre secret courant.
 
 Voir docs/CORPUS_ET_FIXTURES.md pour la politique complète.
 """
@@ -35,6 +35,7 @@ _SECRET_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("clé Groq", re.compile(r"\b(gsk_[A-Za-z0-9]{20,})\b")),
     ("clé OpenAI", re.compile(r"\b(sk-[A-Za-z0-9]{20,})\b")),
     ("clé Anthropic", re.compile(r"\b(sk-ant-[A-Za-z0-9\-_]{20,})\b")),
+    ("clé Gemini/Google", re.compile(r"\b(AIza[A-Za-z0-9_\-]{35})\b")),
     ("clé privée PEM", re.compile(r"(-----BEGIN(?: [A-Z]+)? PRIVATE KEY-----)")),
 ]
 
