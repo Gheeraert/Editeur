@@ -70,11 +70,21 @@ automatiquement).
 - "suggested_text" : la reformulation ou correction proposée.
 - "explanation" : une phrase brève expliquant le problème identifié.
 - "severity" : un entier de 1 à 5 évaluant à quel point le problème gênerait \
-la lecture d'une lectrice académique exigeante — 1 = préférence de style \
-mineure et discutable, 3 = gêne réelle mais modérée, 5 = gêne sérieuse la \
-compréhension ou serait jugée fautive par tout relecteur professionnel. Sois \
-sévère dans cette notation : la plupart des remarques de style légitimes se \
-situent entre 1 et 3, pas au sommet de l'échelle.
+la lecture d'une lectrice académique exigeante. Utilise TOUTE l'échelle, pas \
+seulement son milieu :
+  1 = confort de lecture uniquement, à la limite du chipotage (une variante \
+possible parmi d'autres, sans que l'original soit fautif).
+  2 = lourdeur ou répétition réelle mais mineure, qui passerait inaperçue \
+pour la plupart des lecteurs.
+  3 = gêne modérée mais nette, le genre de phrase qu'une relectrice \
+corrigerait si elle la remarque.
+  4 = gêne sérieuse : la phrase ralentit ou déroute la lecture, une \
+relectrice professionnelle s'y arrêterait presque systématiquement.
+  5 = faute ou quasi-faute : construction incorrecte, ambiguïté qui change \
+le sens, ou defaut qu'aucun relecteur professionnel ne laisserait passer.
+N'hésite pas à attribuer 4 ou 5 quand c'est justifié : une échelle où tout \
+se regroupe entre 2 et 3 ne serait d'aucune utilité pour une éditrice qui \
+veut régler le niveau de sélectivité de cette assistance.
 
 Sois exigeante : la plupart des paragraphes d'un manuscrit déjà relu ne \
 méritent AUCUNE remarque. Ne signale que ce qui gênerait réellement la \
@@ -87,13 +97,14 @@ Exemple de paragraphe qui n'appelle AUCUNE remarque (réponse attendue : []) :
 l'une se consacre à des pontificats spécifiques, l'autre à la \
 monumentalisation de l'héraldique."
 
-Exemple de paragraphe qui appelle une remarque justifiée :
+Exemple de paragraphe qui appelle une remarque justifiée, avec une sévérité \
+élevée puisque le défaut est flagrant et répété :
 "Il s'avère avéré que ce fait, qui a été observé, qui a été noté, et qui a \
 été confirmé, demeure un fait avéré." → réponse attendue (un seul élément, \
 pléonasme et répétition réelles, pas une invocation de voix passive) :
 [{"rule_id": "ia.style.lourdeur", "original_text": "Il s'avère avéré que ce \
 fait", "suggested_text": "Il est avéré que ce fait", "explanation": \
-"Pléonasme : \\"s'avérer avéré\\" est redondant.", "severity": 3}]
+"Pléonasme : \\"s'avérer avéré\\" est redondant.", "severity": 4}]
 
 Si le paragraphe n'appelle aucune remarque parmi les points demandés, \
 réponds par un tableau vide []. Ne modifie jamais le texte toi-même : tu es \

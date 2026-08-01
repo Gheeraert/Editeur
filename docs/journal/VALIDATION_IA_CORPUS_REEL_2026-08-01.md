@@ -172,3 +172,37 @@ signaler. Réduire ce volume plus franchement demanderait des leviers non
 implémentés dans cette passe (score de confiance/sévérité avec seuil, second
 passage de vérification critique, ou changement de modèle) — à envisager si
 94 % reste jugé trop élevé à l'usage.
+
+## Addendum 2 — Curseur de sensibilité (score de sévérité) : biais de tendance centrale du modèle
+
+Suite à l'ajout du score de sévérité (1-5) et du curseur associé (voir le
+commit correspondant), reproduction du protocole sur le même échantillon de
+66 paragraphes de texte courant, en deux passes avec des barèmes de prompt
+différents :
+
+| | Barème simple | Barème détaillé (ancres par niveau + exemple à 4) |
+|---|---:|---:|
+| Suggestions brutes | 60/66 (91 %) | 64/66 (97 %) |
+| Sévérité 2 | 31 % | 25 % |
+| Sévérité 3 | 69 % | 75 % |
+| Sévérité 1, 4 ou 5 | 0 % | 0 % |
+
+**Constat :** sur les deux passes, Mistral Small 3.2 n'utilise jamais les
+sévérités 1, 4 ou 5, malgré un barème très explicite et un exemple few-shot
+noté 4 pour ancrer le haut de l'échelle. Le raffinement du prompt n'a
+quasiment rien changé (le taux brut a même légèrement augmenté). C'est un
+signe fort de biais de tendance centrale — un comportement documenté chez de
+nombreux LLM face à une échelle de notation, indépendant de la formulation
+du prompt — plutôt qu'un problème de consigne à corriger par une troisième
+itération.
+
+**Conséquence pour le curseur de sensibilité :** avec ce modèle, seules les
+positions 1 à 3 du curseur ont un effet réel sur le texte courant ; les
+positions 4 et 5 (« Discrète ») réduisent l'assistance au silence total pour
+`ia.style.*`, plutôt qu'à une sélectivité fine sur les cas les plus graves.
+Le mécanisme de filtrage lui-même reste correct et se comporte exactement
+comme conçu (vérifié par test d'intégration réel) : c'est la calibration du
+modèle qui limite la plage utile, pas le code. Gemini et Groq n'ont pas été
+testés sur ce point et pourraient se comporter différemment — à vérifier
+avant de conclure que ce biais est universel plutôt que spécifique à ce
+modèle local.
