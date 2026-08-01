@@ -59,6 +59,15 @@ class CorrectorApp(tk.Tk):
         self._ollama_model = tk.StringVar(value=os.environ.get("OLLAMA_MODEL", ""))
         self._remote_provider = tk.StringVar(value="")
         self._api_key = tk.StringVar(value="")
+        # Curseur de sensibilite : filtre deterministe sur la severite (1-5)
+        # que le modele attribue lui-meme a chaque suggestion (prompts.py),
+        # pas une consigne supplementaire dans le prompt - constate plus
+        # efficace en pratique pour reduire le bruit (voir
+        # docs/journal/VALIDATION_IA_CORPUS_REEL_2026-08-01.md, addendum).
+        # Valeur par defaut raisonnable (3, equilibre) : contrairement au
+        # MODE, ce n'est qu'un reglage de confort au sein d'un choix d'IA
+        # deja explicite, pas une decision de confidentialite.
+        self._ai_min_severity = tk.IntVar(value=3)
         # Ne declenche la premiere interrogation d'Ollama (liste des
         # modeles + modele actif) qu'a la premiere selection du mode
         # local, pas au demarrage de l'application - voir
@@ -155,15 +164,54 @@ class CorrectorApp(tk.Tk):
         )
         self._api_key_entry.grid(row=0, column=3, padx=(pad // 2, 0))
 
+        self._severity_row = ttk.Frame(ai_frame)
+        self._severity_row.grid(row=3, column=0, columnspan=3, sticky="ew", pady=(pad, 0))
+        self._severity_row.columnconfigure(1, weight=1)
+        ttk.Label(self._severity_row, text="Bavarde").grid(row=0, column=0)
+        self._severity_scale = ttk.Scale(
+            self._severity_row,
+            from_=1,
+            to=5,
+            orient="horizontal",
+            variable=self._ai_min_severity,
+            command=self._on_severity_scale_moved,
+        )
+        self._severity_scale.grid(row=0, column=1, sticky="ew", padx=(pad // 2, pad // 2))
+        ttk.Label(self._severity_row, text="Discrète").grid(row=0, column=2)
+        self._severity_value_label = ttk.Label(self._severity_row, width=28)
+        self._severity_value_label.grid(row=1, column=0, columnspan=3, sticky="w")
+        self._update_severity_label()
+
+    _SEVERITY_DESCRIPTIONS = {
+        1: "1/5 — très bavarde : signale même les préférences de style mineures",
+        2: "2/5 — bavarde",
+        3: "3/5 — équilibrée (par défaut)",
+        4: "4/5 — discrète",
+        5: "5/5 — très discrète : ne signale que les cas les plus graves",
+    }
+
+    def _on_severity_scale_moved(self, _value: str) -> None:
+        # ttk.Scale travaille en flottant ; le curseur de sensibilite n'a de
+        # sens qu'en entier (echelle de severite du modele, prompts.py).
+        self._ai_min_severity.set(round(self._ai_min_severity.get()))
+        self._update_severity_label()
+
+    def _update_severity_label(self) -> None:
+        self._severity_value_label.configure(
+            text=self._SEVERITY_DESCRIPTIONS[self._ai_min_severity.get()]
+        )
+
     def _update_ai_fields_state(self) -> None:
         mode = self._ai_mode.get()
         ollama_state = "normal" if mode == "local" else "disabled"
         remote_state = "normal" if mode == "remote" else "disabled"
+        severity_state = "normal" if mode in ("local", "remote") else "disabled"
         self._ollama_model_entry.configure(state=ollama_state)
         self._ollama_refresh_button.configure(state=ollama_state)
         self._gemini_radio.configure(state=remote_state)
         self._groq_radio.configure(state=remote_state)
         self._api_key_entry.configure(state=remote_state)
+        self._severity_scale.configure(state=severity_state)
         if mode == "local" and not self._ollama_models_loaded:
             self._refresh_ollama_models()
 
@@ -314,7 +362,13 @@ class CorrectorApp(tk.Tk):
 
         thread = threading.Thread(
             target=self._run_correction,
-            args=(input_path, output_path, self._reapply_normal_style.get(), ai_client),
+            args=(
+                input_path,
+                output_path,
+                self._reapply_normal_style.get(),
+                ai_client,
+                self._ai_min_severity.get(),
+            ),
             daemon=True,
         )
         thread.start()
@@ -325,6 +379,7 @@ class CorrectorApp(tk.Tk):
         output_path: Path,
         reapply_normal_style: bool,
         ai_client: AIClient | None,
+        ai_min_severity: int,
     ) -> None:
         try:
             counts = correct_docx(
@@ -332,6 +387,7 @@ class CorrectorApp(tk.Tk):
                 output_path,
                 reapply_normal_style=reapply_normal_style,
                 ai_client=ai_client,
+                ai_min_severity=ai_min_severity,
             )
         except Exception as exc:  # noqa: BLE001
             self.after(0, self._on_error, exc)

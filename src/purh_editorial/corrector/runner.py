@@ -157,6 +157,7 @@ def correct_docx(
     output_path: Path,
     reapply_normal_style: bool = False,
     ai_client: AIClient | None = None,
+    ai_min_severity: int = 1,
 ) -> dict[str, int]:
     source = Path(input_path)
     destination = Path(output_path)
@@ -180,4 +181,5 @@ def correct_docx(
         RULE_IDS,
         reapply_normal_style=reapply_normal_style,
         ai_client=ai_client,
+        ai_min_severity=ai_min_severity,
     )

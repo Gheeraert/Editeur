@@ -62,13 +62,19 @@ _RULE_INSTRUCTIONS: dict[str, str] = {
 _JSON_SCHEMA_INSTRUCTIONS = """\
 Réponds UNIQUEMENT avec un tableau JSON, sans aucun texte autour, même vide \
 (par exemple : []). Chaque élément du tableau est un objet avec exactement \
-ces clés, toutes des chaînes de caractères :
+ces clés :
 - "rule_id" : un des identifiants listés ci-dessus, jamais un autre.
 - "original_text" : une citation EXACTE et VERBATIM du paragraphe fourni \
 (ne paraphrase jamais ce champ, sous peine que la suggestion soit rejetée \
 automatiquement).
 - "suggested_text" : la reformulation ou correction proposée.
 - "explanation" : une phrase brève expliquant le problème identifié.
+- "severity" : un entier de 1 à 5 évaluant à quel point le problème gênerait \
+la lecture d'une lectrice académique exigeante — 1 = préférence de style \
+mineure et discutable, 3 = gêne réelle mais modérée, 5 = gêne sérieuse la \
+compréhension ou serait jugée fautive par tout relecteur professionnel. Sois \
+sévère dans cette notation : la plupart des remarques de style légitimes se \
+situent entre 1 et 3, pas au sommet de l'échelle.
 
 Sois exigeante : la plupart des paragraphes d'un manuscrit déjà relu ne \
 méritent AUCUNE remarque. Ne signale que ce qui gênerait réellement la \
@@ -87,7 +93,7 @@ Exemple de paragraphe qui appelle une remarque justifiée :
 pléonasme et répétition réelles, pas une invocation de voix passive) :
 [{"rule_id": "ia.style.lourdeur", "original_text": "Il s'avère avéré que ce \
 fait", "suggested_text": "Il est avéré que ce fait", "explanation": \
-"Pléonasme : \\"s'avérer avéré\\" est redondant."}]
+"Pléonasme : \\"s'avérer avéré\\" est redondant.", "severity": 3}]
 
 Si le paragraphe n'appelle aucune remarque parmi les points demandés, \
 réponds par un tableau vide []. Ne modifie jamais le texte toi-même : tu es \

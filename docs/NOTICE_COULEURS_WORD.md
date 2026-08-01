@@ -41,6 +41,8 @@ Couleur exclusivement réservée aux suggestions produites par un modèle de lan
 
 Le texte n'est **jamais modifié** par la couche IA : seul le commentaire porte la proposition, à charge pour l'éditrice de l'accepter en modifiant elle-même le texte, ou de supprimer le commentaire si la suggestion ne convient pas. Voir [`CATALOGUE_REGLES_IA.md`](CATALOGUE_REGLES_IA.md) pour la liste des points scrutés (lourdeurs de style, ruptures syntaxiques, bibliographie incomplète, incohérences terminologiques...) et leur fiabilité attendue, très variable selon le point considéré.
 
+Chaque commentaire indique une **sévérité sur 5** évaluée par le modèle (ex. « sévérité 4/5 »). Le curseur de sensibilité de l'interface (Local/Distant) filtre les suggestions en dessous du seuil choisi avant même de les chercher dans le texte — une IA réglée en mode « discrète » ne laissera passer que les cas les plus graves. Les paragraphes stylés « Citation » ou « Citation intense » ne sont jamais soumis à l'IA : une citation reproduit un texte source, pas la prose de l'éditrice.
+
 ---
 
 ## Remarques

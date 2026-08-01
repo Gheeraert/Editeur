@@ -221,3 +221,80 @@ def test_fake_ai_client_reports_unavailable_when_configured() -> None:
     client = FakeAIClient(available=False)
     assert client.is_available() is False
     assert client.analyze_paragraph("peu importe", AI_RULE_IDS) == []
+
+
+def test_ai_suggestion_defaults_to_medium_severity() -> None:
+    suggestion = AISuggestion(
+        rule_id="ia.style.lourdeur",
+        original_text="x",
+        suggested_text="y",
+        explanation="z",
+    )
+    assert suggestion.severity == 3
+
+
+def test_parse_ai_response_accepts_valid_severity() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z", "severity": 4}]'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+    assert suggestions[0].severity == 4
+
+
+def test_parse_ai_response_defaults_severity_when_field_absent() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z"}]'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+    assert suggestions[0].severity == 3
+
+
+def test_parse_ai_response_rejects_severity_out_of_range() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z", "severity": 7}]'
+    )
+    assert parse_ai_response(raw) == []
+
+
+def test_parse_ai_response_rejects_non_integer_severity() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z", "severity": "haute"}]'
+    )
+    assert parse_ai_response(raw) == []
+
+
+def test_parse_ai_response_rejects_boolean_severity() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z", "severity": true}]'
+    )
+    assert parse_ai_response(raw) == []
+
+
+def test_parse_ai_response_accepts_integer_valued_float_severity() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", "original_text": "x", '
+        '"suggested_text": "y", "explanation": "z", "severity": 4.0}]'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+    assert suggestions[0].severity == 4
+
+
+def test_locate_suggestion_propagates_severity() -> None:
+    suggestion = AISuggestion(
+        rule_id="ia.style.lourdeur",
+        original_text="lourdeur",
+        suggested_text="légèreté",
+        explanation="z",
+        severity=5,
+    )
+    located = locate_suggestion("un paragraphe avec lourdeur ici", suggestion)
+    assert located is not None
+    assert located.severity == 5

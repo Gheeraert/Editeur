@@ -8,10 +8,11 @@ scruter dans le manuscrit, au-delà de ce que couvrent déjà les règles déter
 heuristiques du moteur `reborn` (voir
 [`CATALOGUE_REGLES_TYPOGRAPHIQUES.md`](CATALOGUE_REGLES_TYPOGRAPHIQUES.md)).
 
-**Aucune de ces règles n'est implémentée à ce stade.** Ce document est le contrat de
-référence entre le prompt envoyé au modèle, le parsing de sa réponse et le rapport
-d'intervention affiché à l'éditrice — il doit être stabilisé avant d'écrire le client IA
-(étape 2 du plan de travail) et tenu à jour à chaque évolution.
+Ce document est le contrat de référence entre le prompt envoyé au modèle, le parsing de
+sa réponse et le rapport d'intervention affiché à l'éditrice — tenu à jour à chaque
+évolution du chantier `ia` (voir `src/purh_editorial/corrector/ai/` pour l'implémentation
+et `docs/journal/VALIDATION_IA_CORPUS_REEL_2026-08-01.md` pour la validation sur corpus
+réel).
 
 ## Principes qui s'appliquent à toutes les règles IA
 
@@ -28,6 +29,17 @@ d'intervention affiché à l'éditrice — il doit être stabilisé avant d'écr
   voir le principe de tolérance aux pannes de la proposition d'architecture (§1.3).
 - **Identifiants stables**, préfixés `ia.`, sur le modèle des identifiants `purh.*` /
   `structure.*` déjà en usage dans `runner.py`.
+- **Score de sévérité (1 à 5) obligatoire**, attribué par le modèle lui-même à chaque
+  suggestion (1 = préférence de style mineure et discutable, 5 = gêne sérieuse la
+  lecture). Sert de curseur de sensibilité réglable par l'éditrice dans l'interface
+  (`ai_min_severity`, `gui.py`) : une suggestion sous le seuil choisi n'est même pas
+  localisée dans le texte. Choix délibéré plutôt que de compter sur l'auto-limitation du
+  modèle par consigne de prompt seule, jugée peu efficace en pratique (voir l'addendum de
+  `docs/journal/VALIDATION_IA_CORPUS_REEL_2026-08-01.md`).
+- **Aucune analyse des paragraphes stylés « Citation » ou « Citation intense ».** Une
+  citation reproduit un texte source verbatim ; ni son style ni son contenu n'appartient à
+  l'éditrice PURH, et l'IA ne doit ni le juger ni le commenter (`_is_quote_style_paragraph`
+  dans `word_document.py`).
 
 ## Table de synthèse
 

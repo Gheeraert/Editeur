@@ -44,6 +44,7 @@ from purh_editorial.corrector.rules.styling import (
     FOOTNOTE_REFERENCE_STYLE_RULE_ID,
     PARAGRAPH_STYLE_SPECS,
     STYLE_APPEL_NOTE,
+    STYLE_CITATION,
     STYLE_CITATION_INTENSE,
     STYLE_NORMAL,
     apply_footnote_reference_style,
@@ -374,7 +375,8 @@ def _apply_diagnostics(
 
 def _format_ai_comment(suggestion: LocatedAISuggestion) -> str:
     return (
-        f"[PURH IA — {suggestion.rule_id}] {suggestion.explanation}\n\n"
+        f"[PURH IA — {suggestion.rule_id} — sévérité {suggestion.severity}/5] "
+        f"{suggestion.explanation}\n\n"
         f"Proposition : « {suggestion.suggested_text} »"
     )
 
@@ -412,9 +414,10 @@ def _apply_ai_to_paragraph(
     ai_client: AIClient,
     counts: dict[str, int],
     minimum_length: int = 0,
+    min_severity: int = 1,
 ) -> None:
     """Interroge `ai_client` pour un paragraphe et applique chaque suggestion
-    localisable.
+    localisable dont la sévérité atteint `min_severity`.
 
     N'appelle jamais le modèle pour un texte plus court que `minimum_length`
     (voir `AI_MIN_MAIN_TEXT_LENGTH`) ni pour un paragraphe vide. Toute
@@ -422,6 +425,10 @@ def _apply_ai_to_paragraph(
     lever, mais un client fourni par un appelant tiers pourrait y déroger)
     est absorbée ici : une panne de la couche IA ne doit jamais interrompre
     le traitement déterministe qui l'entoure.
+
+    `min_severity` (1 à 5, curseur de sensibilité côté interface) filtre
+    avant la localisation : une suggestion en dessous du seuil n'est même
+    pas vérifiée dans le texte, ce qui évite un travail inutile.
     """
     text = _paragraph_text(paragraph)
     if len(text.strip()) < minimum_length:
@@ -431,6 +438,8 @@ def _apply_ai_to_paragraph(
     except Exception:
         return
     for suggestion in suggestions:
+        if suggestion.severity < min_severity:
+            continue
         located = locate_suggestion(text, suggestion)
         if located is None:
             continue
@@ -540,10 +549,21 @@ def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
     )
 
 
+def _is_quote_style_paragraph(paragraph: Any) -> bool:
+    # Une citation reproduit un texte source verbatim : ni l'ortho-typo (deja
+    # protegee ailleurs) ni l'IA n'ont a la juger ou a la commenter comme si
+    # c'etait de la prose de l'auteur - le style employe (registre, lourdeur
+    # eventuelle) appartient a l'auteur cite, pas a l'editrice PURH.
+    return _paragraph_has_native_style(
+        paragraph, STYLE_CITATION
+    ) or _paragraph_has_native_style(paragraph, STYLE_CITATION_INTENSE)
+
+
 def _apply_main_text(
     document: Any,
     counts: dict[str, int],
     ai_client: AIClient | None = None,
+    ai_min_severity: int = 1,
 ) -> None:
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
     in_bibliography_section = False
@@ -580,13 +600,18 @@ def _apply_main_text(
             _apply_allcaps_heading_diagnostic(paragraph, counts)
         elif in_bibliography_section:
             _apply_bibliography_entry(paragraph, counts)
-            if ai_ready:
+            if ai_ready and not _is_quote_style_paragraph(paragraph):
                 _apply_ai_to_paragraph(
-                    document, paragraph, AI_BIBLIOGRAPHY_RULE_IDS, ai_client, counts
+                    document,
+                    paragraph,
+                    AI_BIBLIOGRAPHY_RULE_IDS,
+                    ai_client,
+                    counts,
+                    min_severity=ai_min_severity,
                 )
         else:
             _apply_frontmatter_diagnostic(paragraph, counts)
-            if ai_ready:
+            if ai_ready and not _is_quote_style_paragraph(paragraph):
                 _apply_ai_to_paragraph(
                     document,
                     paragraph,
@@ -594,6 +619,7 @@ def _apply_main_text(
                     ai_client,
                     counts,
                     minimum_length=AI_MIN_MAIN_TEXT_LENGTH,
+                    min_severity=ai_min_severity,
                 )
     paragraph = None
     story = None
@@ -813,6 +839,7 @@ def correct_word_copy(
     rule_ids: tuple[str, ...],
     reapply_normal_style: bool = False,
     ai_client: AIClient | None = None,
+    ai_min_severity: int = 1,
 ) -> dict[str, int]:
     try:
         from win32com.client import DispatchEx
@@ -839,7 +866,9 @@ def correct_word_copy(
             AddToRecentFiles=False,
             Visible=False,
         )
-        _apply_main_text(document, counts, ai_client=ai_client)
+        _apply_main_text(
+            document, counts, ai_client=ai_client, ai_min_severity=ai_min_severity
+        )
         _apply_footnotes(document, counts)
         _apply_purh_style_defaults(document, counts)
         _apply_poetry_merge(document, counts)

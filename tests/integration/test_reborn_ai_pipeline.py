@@ -194,3 +194,147 @@ def test_ai_is_skipped_without_crashing_when_client_reports_unavailable(
 
     assert counts["ia.style.lourdeur"] == 0
     assert counts["ia.biblio.reference_incomplete"] == 0
+
+
+CITATION_TEXT = (
+    "Cette citation reproduit un long passage source qui pourrait sembler "
+    "lourd ou repetitif, mais ce style appartient au poete cite, pas a "
+    "leditrice PURH."
+)
+CITATION_INTENSE_TEXT = (
+    "Cette autre citation, plus longue encore, reproduit egalement un "
+    "passage source qui pourrait sembler lourd, mais que rien ne doit "
+    "jamais commenter ni surligner au titre de assistance IA."
+)
+
+
+def _create_source_with_citations(path: Path) -> None:
+    word = _word_application()
+    document = None
+    try:
+        document = word.Documents.Add()
+        document.Content.Text = f"{CITATION_TEXT}\r{CITATION_INTENSE_TEXT}\r"
+        document.Paragraphs(1).Range.Style = "Citation"
+        document.Paragraphs(2).Range.Style = "Citation intense"
+        document.SaveAs2(FileName=str(path), FileFormat=16)
+    finally:
+        if document is not None:
+            document.Close(SaveChanges=False)
+        document = None
+        word.Quit()
+        word = None
+
+
+def test_ai_skips_paragraphs_styled_as_citation(tmp_path: Path) -> None:
+    source = tmp_path / "source.docx"
+    corrected = tmp_path / "corrected.docx"
+    _create_source_with_citations(source)
+
+    # Le faux client a une reponse prete pour les deux paragraphes : si le
+    # filtre de style Citation/Citation intense ne fonctionnait pas, ces
+    # suggestions seraient appliquees.
+    ai_client = FakeAIClient(
+        responses={
+            CITATION_TEXT: [
+                AISuggestion(
+                    rule_id="ia.style.lourdeur",
+                    original_text=CITATION_TEXT,
+                    suggested_text="peu importe",
+                    explanation="Ne devrait jamais être appliqué (style Citation).",
+                )
+            ],
+            CITATION_INTENSE_TEXT: [
+                AISuggestion(
+                    rule_id="ia.style.lourdeur",
+                    original_text=CITATION_INTENSE_TEXT,
+                    suggested_text="peu importe",
+                    explanation="Ne devrait jamais être appliqué (style Citation intense).",
+                )
+            ],
+        }
+    )
+    counts = correct_docx(source, corrected, ai_client=ai_client)
+
+    assert counts["ia.style.lourdeur"] == 0
+    paragraphs = _read_paragraphs(corrected)
+    by_text = {text: highlight for text, highlight, _start in paragraphs}
+    assert by_text[CITATION_TEXT] == WD_NO_HIGHLIGHT
+    assert by_text[CITATION_INTENSE_TEXT] == WD_NO_HIGHLIGHT
+
+
+LOW_SEVERITY_TEXT = (
+    "Ce paragraphe contient une preference de style tres mineure et "
+    "discutable, du genre que seule une IA tres bavarde signalerait."
+)
+HIGH_SEVERITY_TEXT = (
+    "Ce paragraphe contient un probleme grave qui gene serieusement la "
+    "lecture et que meme une IA tres discrete devrait signaler."
+)
+
+
+def _create_source_with_severities(path: Path) -> None:
+    word = _word_application()
+    document = None
+    try:
+        document = word.Documents.Add()
+        document.Content.Text = f"{LOW_SEVERITY_TEXT}\r{HIGH_SEVERITY_TEXT}\r"
+        document.Paragraphs(1).Range.Style = "Normal"
+        document.Paragraphs(2).Range.Style = "Normal"
+        document.SaveAs2(FileName=str(path), FileFormat=16)
+    finally:
+        if document is not None:
+            document.Close(SaveChanges=False)
+        document = None
+        word.Quit()
+        word = None
+
+
+def _make_severity_client() -> FakeAIClient:
+    return FakeAIClient(
+        responses={
+            LOW_SEVERITY_TEXT: [
+                AISuggestion(
+                    rule_id="ia.style.lourdeur",
+                    original_text="preference de style tres mineure",
+                    suggested_text="peu importe",
+                    explanation="Remarque mineure.",
+                    severity=1,
+                )
+            ],
+            HIGH_SEVERITY_TEXT: [
+                AISuggestion(
+                    rule_id="ia.style.lourdeur",
+                    original_text="probleme grave qui gene serieusement",
+                    suggested_text="peu importe",
+                    explanation="Remarque grave.",
+                    severity=5,
+                )
+            ],
+        }
+    )
+
+
+def test_ai_min_severity_filters_out_low_severity_suggestions(tmp_path: Path) -> None:
+    source = tmp_path / "source.docx"
+    corrected = tmp_path / "corrected.docx"
+    _create_source_with_severities(source)
+
+    counts = correct_docx(
+        source, corrected, ai_client=_make_severity_client(), ai_min_severity=4
+    )
+
+    # Seule la suggestion de severite 5 passe le seuil de 4 ; celle de
+    # severite 1 est filtree avant meme la localisation dans le texte.
+    assert counts["ia.style.lourdeur"] == 1
+
+
+def test_ai_min_severity_one_lets_every_suggestion_through(tmp_path: Path) -> None:
+    source = tmp_path / "source.docx"
+    corrected = tmp_path / "corrected.docx"
+    _create_source_with_severities(source)
+
+    counts = correct_docx(
+        source, corrected, ai_client=_make_severity_client(), ai_min_severity=1
+    )
+
+    assert counts["ia.style.lourdeur"] == 2

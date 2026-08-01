@@ -47,6 +47,14 @@ class AISuggestion:
     original_text: str
     suggested_text: str
     explanation: str
+    # 1 (preference de style mineure) a 5 (gene serieuse) : evaluee par le
+    # modele lui-meme (voir prompts.py), sert de filtre deterministe reglable
+    # par l'editrice (curseur de sensibilite, gui.py) plutot que de compter
+    # sur l'auto-limitation du modele - constate peu efficace en pratique
+    # (etape 9 bis : le taux de declenchement variait peu malgre des
+    # consignes de prompt plus severes). Defaut 3 (moyen) pour les
+    # suggestions construites sans cette information (tests, FakeAIClient).
+    severity: int = 3
 
 
 @dataclass(frozen=True)
@@ -66,6 +74,7 @@ class LocatedAISuggestion:
     original_text: str
     suggested_text: str
     explanation: str
+    severity: int = 3
 
 
 def locate_suggestion(
@@ -90,10 +99,32 @@ def locate_suggestion(
         original_text=suggestion.original_text,
         suggested_text=suggestion.suggested_text,
         explanation=suggestion.explanation,
+        severity=suggestion.severity,
     )
 
 
 _REQUIRED_STRING_FIELDS = ("rule_id", "original_text", "suggested_text", "explanation")
+
+
+def _extract_severity(item: dict) -> int | None:
+    """Valide le champ optionnel `severity` d'une entrée JSON.
+
+    Absent -> 3 (moyen), par tolérance envers un backend qui omettrait le
+    champ. Présent mais hors de l'intervalle [1, 5] ou de type invalide
+    (`bool` explicitement exclu : `isinstance(True, int)` vaut `True` en
+    Python) -> `None`, pour que l'appelant rejette l'entrée entière plutôt
+    que d'inventer une sévérité arbitraire.
+    """
+    if "severity" not in item:
+        return 3
+    value = item["severity"]
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int) and 1 <= value <= 5:
+        return value
+    if isinstance(value, float) and value.is_integer() and 1 <= value <= 5:
+        return int(value)
+    return None
 
 
 def parse_ai_response(raw: str) -> list[AISuggestion]:
@@ -121,6 +152,10 @@ def parse_ai_response(raw: str) -> list[AISuggestion]:
     pratique sur corpus réel (étape 9), le modèle invoque parfois ce
     diagnostic par défaut sur des phrases qui ne sont pas grammaticalement
     passives.
+
+    Valide le champ optionnel `severity` (1 à 5, voir `_extract_severity`) :
+    absent, il vaut 3 par défaut ; présent mais invalide, l'entrée entière
+    est rejetée plutôt que d'inventer une valeur.
     """
     try:
         payload = json.loads(raw)
@@ -148,12 +183,16 @@ def parse_ai_response(raw: str) -> list[AISuggestion]:
         explanation = item["explanation"]
         if _is_unsubstantiated_passive_claim(original_text, explanation):
             continue
+        severity = _extract_severity(item)
+        if severity is None:
+            continue
         suggestions.append(
             AISuggestion(
                 rule_id=rule_id,
                 original_text=original_text,
                 suggested_text=item["suggested_text"],
                 explanation=explanation,
+                severity=severity,
             )
         )
     return suggestions
