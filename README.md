@@ -49,6 +49,16 @@ python main.py
 
 Une fenêtre s'ouvre : choisir le document source, choisir (ou laisser proposer) le document de sortie, cliquer sur « Corriger ». Le résultat affiche le nombre d'interventions par règle.
 
+### Assistance IA (optionnelle)
+
+Au-delà de l'ortho-typographie, une assistance IA peut analyser le style, la syntaxe et la bibliographie (voir [`docs/CATALOGUE_REGLES_IA.md`](docs/CATALOGUE_REGLES_IA.md)). Chaque lancement exige un choix explicite parmi trois modes — aucun n'est mémorisé d'une fois sur l'autre :
+
+- **Désactivée** : comportement inchangé, seul le moteur déterministe s'exécute.
+- **Locale (Ollama)** : indiquer le nom exact du modèle chargé dans Ollama (`ollama list`). Aucune donnée ne quitte le poste de travail.
+- **Distante (API)** : Gemini ou Groq, avec une clé API. Le texte des paragraphes analysés est envoyé à un service tiers — un avertissement de confidentialité s'affiche à chaque lancement dans ce mode, à confirmer explicitement.
+
+Les suggestions de la couche IA ne modifient jamais le texte : elles apparaissent en surlignage jaune foncé, accompagné d'un commentaire Word expliquant la proposition (voir [`docs/NOTICE_COULEURS_WORD.md`](docs/NOTICE_COULEURS_WORD.md)).
+
 En ligne de commande, sans interface :
 
 ```bash

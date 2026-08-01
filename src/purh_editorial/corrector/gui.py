@@ -6,7 +6,15 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
+from purh_editorial.corrector.ai import AIClient, GeminiAIClient, GroqAIClient, OllamaAIClient
 from purh_editorial.corrector.runner import correct_docx
+
+_CONFIDENTIALITY_WARNING = (
+    "Le mode distant envoie le texte de chaque paragraphe analysé à un service "
+    "tiers (Gemini ou Groq) via Internet. Les tapuscrits peuvent contenir des "
+    "travaux inédits soumis au secret de la recherche ou sous embargo.\n\n"
+    "Confirmez-vous l'envoi de ce document à un service distant ?"
+)
 
 
 def _default_output_path(input_path: Path) -> Path:
@@ -30,9 +38,20 @@ class CorrectorApp(tk.Tk):
         # de rendu Word est effectivement observe, pas une correction a
         # appliquer systematiquement.
         self._reapply_normal_style = tk.BooleanVar(value=False)
+
+        # Aucune valeur par defaut : l'editrice doit choisir explicitement un
+        # mode a chaque lancement (decision actee avec l'utilisateur - pas de
+        # mode memorise d'une session a l'autre, y compris "Desactive").
+        self._ai_mode = tk.StringVar(value="")
+        self._ollama_model = tk.StringVar(value="")
+        self._remote_provider = tk.StringVar(value="")
+        self._api_key = tk.StringVar(value="")
+
         self._running = False
 
         self._build_ui()
+        self._ai_mode.trace_add("write", lambda *_args: self._update_ai_fields_state())
+        self._update_ai_fields_state()
 
     def _build_ui(self) -> None:
         pad = 10
@@ -56,15 +75,67 @@ class CorrectorApp(tk.Tk):
             variable=self._reapply_normal_style,
         ).grid(row=4, column=0, columnspan=2, sticky="w", pady=(pad, 0))
 
+        self._build_ai_section(frame, row=5, pad=pad)
+
         self._run_button = ttk.Button(frame, text="Corriger", command=self._on_run)
-        self._run_button.grid(row=5, column=0, columnspan=2, pady=(pad, 0), sticky="w")
+        self._run_button.grid(row=6, column=0, columnspan=2, pady=(pad, 0), sticky="w")
 
         ttk.Label(frame, textvariable=self._status, foreground="#333333", wraplength=520).grid(
-            row=6, column=0, columnspan=2, sticky="w", pady=(pad, 0)
+            row=7, column=0, columnspan=2, sticky="w", pady=(pad, 0)
         )
 
+        self._progress = ttk.Progressbar(frame, mode="indeterminate")
+        self._progress.grid(row=8, column=0, columnspan=2, sticky="ew", pady=(pad, 0))
+
         self._result_text = tk.Text(frame, width=70, height=16, state="disabled")
-        self._result_text.grid(row=7, column=0, columnspan=2, pady=(pad, 0))
+        self._result_text.grid(row=9, column=0, columnspan=2, pady=(pad, 0))
+
+    def _build_ai_section(self, frame: ttk.Frame, row: int, pad: int) -> None:
+        ai_frame = ttk.LabelFrame(frame, text="Assistance IA (au-delà de l'ortho-typographie)")
+        ai_frame.grid(row=row, column=0, columnspan=2, sticky="ew", pady=(pad, 0))
+
+        ttk.Radiobutton(
+            ai_frame, text="Désactivée", variable=self._ai_mode, value="disabled"
+        ).grid(row=0, column=0, sticky="w", padx=(0, pad))
+        ttk.Radiobutton(
+            ai_frame, text="Locale (Ollama)", variable=self._ai_mode, value="local"
+        ).grid(row=0, column=1, sticky="w", padx=(0, pad))
+        ttk.Radiobutton(
+            ai_frame, text="Distante (API)", variable=self._ai_mode, value="remote"
+        ).grid(row=0, column=2, sticky="w")
+
+        self._ollama_row = ttk.Frame(ai_frame)
+        self._ollama_row.grid(row=1, column=0, columnspan=3, sticky="w", pady=(pad // 2, 0))
+        ttk.Label(self._ollama_row, text="Modèle chargé dans Ollama :").grid(row=0, column=0)
+        self._ollama_model_entry = ttk.Entry(
+            self._ollama_row, textvariable=self._ollama_model, width=30
+        )
+        self._ollama_model_entry.grid(row=0, column=1, padx=(pad // 2, 0))
+
+        self._remote_row = ttk.Frame(ai_frame)
+        self._remote_row.grid(row=2, column=0, columnspan=3, sticky="w", pady=(pad // 2, 0))
+        self._gemini_radio = ttk.Radiobutton(
+            self._remote_row, text="Gemini", variable=self._remote_provider, value="gemini"
+        )
+        self._gemini_radio.grid(row=0, column=0, sticky="w")
+        self._groq_radio = ttk.Radiobutton(
+            self._remote_row, text="Groq", variable=self._remote_provider, value="groq"
+        )
+        self._groq_radio.grid(row=0, column=1, sticky="w", padx=(pad, 0))
+        ttk.Label(self._remote_row, text="Clé API :").grid(row=0, column=2, padx=(pad, 0))
+        self._api_key_entry = ttk.Entry(
+            self._remote_row, textvariable=self._api_key, width=30, show="•"
+        )
+        self._api_key_entry.grid(row=0, column=3, padx=(pad // 2, 0))
+
+    def _update_ai_fields_state(self) -> None:
+        mode = self._ai_mode.get()
+        ollama_state = "normal" if mode == "local" else "disabled"
+        remote_state = "normal" if mode == "remote" else "disabled"
+        self._ollama_model_entry.configure(state=ollama_state)
+        self._gemini_radio.configure(state=remote_state)
+        self._groq_radio.configure(state=remote_state)
+        self._api_key_entry.configure(state=remote_state)
 
     def _browse_input(self) -> None:
         path = filedialog.askopenfilename(
@@ -85,6 +156,38 @@ class CorrectorApp(tk.Tk):
         )
         if path:
             self._output_path.set(path)
+
+    def _build_ai_client(self) -> AIClient | None:
+        """Construit le client IA selon le mode choisi, ou lève `ValueError`
+        avec un message destiné à l'éditrice si la configuration est
+        incomplète.
+
+        Ne présélectionne jamais un mode par défaut : un mode vide (aucun
+        bouton radio coché) est traité comme une configuration incomplète,
+        pas comme "désactivé", pour forcer un choix explicite à chaque
+        lancement.
+        """
+        mode = self._ai_mode.get()
+        if mode == "":
+            raise ValueError("Choisissez un mode d'assistance IA (y compris « Désactivée »).")
+        if mode == "disabled":
+            return None
+        if mode == "local":
+            model = self._ollama_model.get().strip()
+            if not model:
+                raise ValueError("Indiquez le nom du modèle chargé dans Ollama.")
+            return OllamaAIClient(model=model)
+        if mode == "remote":
+            provider = self._remote_provider.get()
+            api_key = self._api_key.get().strip()
+            if provider == "":
+                raise ValueError("Choisissez un fournisseur distant (Gemini ou Groq).")
+            if not api_key:
+                raise ValueError("Indiquez une clé API pour le fournisseur choisi.")
+            if provider == "gemini":
+                return GeminiAIClient(api_key=api_key)
+            return GroqAIClient(api_key=api_key)
+        raise ValueError(f"Mode d'assistance IA inconnu : {mode!r}")
 
     def _on_run(self) -> None:
         if self._running:
@@ -119,24 +222,49 @@ class CorrectorApp(tk.Tk):
                 messagebox.showerror("Erreur", f"Impossible de remplacer le fichier : {exc}")
                 return
 
+        try:
+            ai_client = self._build_ai_client()
+        except ValueError as exc:
+            messagebox.showerror("Assistance IA", str(exc))
+            return
+
+        # Avertissement affiché a chaque lancement en mode distant (aucun
+        # mode n'est memorise d'une session a l'autre - voir _build_ai_client) :
+        # le tapuscrit sera envoye a un service tiers, l'editrice doit
+        # confirmer explicitement a chaque fois, pas seulement la premiere.
+        if self._ai_mode.get() == "remote":
+            if not messagebox.askyesno("Confidentialité", _CONFIDENTIALITY_WARNING):
+                return
+
         self._running = True
         self._run_button.state(["disabled"])
-        self._status.set("Correction en cours dans Microsoft Word...")
+        status = "Correction en cours dans Microsoft Word..."
+        if ai_client is not None:
+            status += " L'assistance IA peut allonger sensiblement la durée du traitement."
+        self._status.set(status)
         self._set_result_text("")
+        self._progress.start(12)
 
         thread = threading.Thread(
             target=self._run_correction,
-            args=(input_path, output_path, self._reapply_normal_style.get()),
+            args=(input_path, output_path, self._reapply_normal_style.get(), ai_client),
             daemon=True,
         )
         thread.start()
 
     def _run_correction(
-        self, input_path: Path, output_path: Path, reapply_normal_style: bool
+        self,
+        input_path: Path,
+        output_path: Path,
+        reapply_normal_style: bool,
+        ai_client: AIClient | None,
     ) -> None:
         try:
             counts = correct_docx(
-                input_path, output_path, reapply_normal_style=reapply_normal_style
+                input_path,
+                output_path,
+                reapply_normal_style=reapply_normal_style,
+                ai_client=ai_client,
             )
         except Exception as exc:  # noqa: BLE001
             self.after(0, self._on_error, exc)
@@ -145,6 +273,7 @@ class CorrectorApp(tk.Tk):
 
     def _on_success(self, output_path: Path, counts: dict[str, int]) -> None:
         self._running = False
+        self._progress.stop()
         self._run_button.state(["!disabled"])
         total = sum(counts.values())
         self._status.set(f"Terminé. {total} intervention(s) surlignée(s) dans {output_path.name}.")
@@ -171,6 +300,7 @@ class CorrectorApp(tk.Tk):
 
     def _on_error(self, exc: Exception) -> None:
         self._running = False
+        self._progress.stop()
         self._run_button.state(["!disabled"])
         self._status.set("Échec de la correction.")
         self._set_result_text(f"Erreur : {exc}")
