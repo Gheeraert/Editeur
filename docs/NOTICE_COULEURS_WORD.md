@@ -2,7 +2,7 @@
 
 ## Présentation générale
 
-Le correcteur `reborn` (`corrector/word_document.py`) travaille sur une copie du manuscrit et surligne chaque intervention directement dans le document Word produit. Trois couleurs sont utilisées aujourd'hui — le périmètre pourra s'enrichir en même temps que de nouvelles règles seront ajoutées (cf. [`docs/REBORN_ARCHITECTURE.md`](REBORN_ARCHITECTURE.md)).
+Le correcteur `reborn` (`corrector/word_document.py`) travaille sur une copie du manuscrit et surligne chaque intervention directement dans le document Word produit. Quatre couleurs sont utilisées aujourd'hui — le périmètre pourra s'enrichir en même temps que de nouvelles règles seront ajoutées (cf. [`docs/REBORN_ARCHITECTURE.md`](REBORN_ARCHITECTURE.md)).
 
 Ce document Word annoté est destiné à la relecture humaine : aucune intervention automatique n'est réputée définitive tant qu'elle n'a pas été vérifiée par l'éditrice ou l'éditeur.
 
@@ -15,6 +15,7 @@ Ce document Word annoté est destiné à la relecture humaine : aucune intervent
 | **Jaune** | Correction ortho-typographique ou bibliographique déterministe (règle `deterministic` du catalogue) | Oui | Vérification recommandée |
 | **Turquoise** | Diagnostic heuristique (règle `heuristic` du catalogue signalant un cas ambigu) | Non | Décision manuelle requise |
 | **Vert clair** | Restructuration du texte (fusion des strophes/citations poétiques en un paragraphe unique) | Oui (fusion) | Vérification recommandée |
+| **Jaune foncé** | Suggestion de la couche IA (style, syntaxe, morphologie, bibliographie, clarté — voir [`CATALOGUE_REGLES_IA.md`](CATALOGUE_REGLES_IA.md)), assortie d'un commentaire Word natif | Non | Lecture du commentaire puis décision manuelle requise |
 
 ---
 
@@ -33,6 +34,12 @@ Chaque passage turquoise appelle une lecture attentive : la chaîne a repéré u
 ## Vert clair — restructuration du texte
 
 Regroupe les règles de structuration qui modifient l'agencement des paragraphes : la fusion des strophes/citations poétiques (`structure.poetry.heuristique`) en un paragraphe unique. Le texte est bien modifié (fusion), d'où la nécessité d'un surlignage même si la règle reste d'inspiration heuristique.
+
+## Jaune foncé — suggestions de la couche IA, texte inchangé
+
+Couleur exclusivement réservée aux suggestions produites par un modèle de langage (Ollama en local, ou une API distante — Gemini, Groq), jamais utilisée par le moteur déterministe. Contrairement aux surlignages précédents, chaque passage jaune foncé est **toujours accompagné d'un commentaire Word natif** (visible dans le volet de révision ou en marge) qui explique le problème identifié et propose une reformulation.
+
+Le texte n'est **jamais modifié** par la couche IA : seul le commentaire porte la proposition, à charge pour l'éditrice de l'accepter en modifiant elle-même le texte, ou de supprimer le commentaire si la suggestion ne convient pas. Voir [`CATALOGUE_REGLES_IA.md`](CATALOGUE_REGLES_IA.md) pour la liste des points scrutés (lourdeurs de style, ruptures syntaxiques, bibliographie incomplète, incohérences terminologiques...) et leur fiabilité attendue, très variable selon le point considéré.
 
 ---
 

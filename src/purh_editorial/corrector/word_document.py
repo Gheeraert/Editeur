@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from typing import Any, Callable
 
+from purh_editorial.corrector.ai import LocatedAISuggestion
 from purh_editorial.corrector.rules.bibliography import (
     BIBLIOGRAPHY_SECTION_HEADING_RE,
     BIBLIOGRAPHY_TEXT_RULES,
@@ -52,6 +53,13 @@ WD_TURQUOISE = 3
 # texte) et du turquoise (diagnostic sans modification), pour que l'editrice
 # distingue au coup d'oeil un paragraphe fusionne d'une simple correction.
 WD_BRIGHT_GREEN = 4
+# Quatrieme couleur de tracabilite (wdDarkYellow), reservee exclusivement aux
+# suggestions de la couche IA (chantier "ia" - voir
+# docs/CATALOGUE_REGLES_IA.md) : jamais utilisee par le moteur deterministe.
+# Word ne propose que 16 couleurs de surlignage fixes (WdColorIndex) et
+# aucune n'est un orange clair ; wdDarkYellow est la plus proche disponible
+# et reste distincte du jaune (edition automatique) au premier coup d'oeil.
+WD_DARK_YELLOW = 14
 
 # Saut de ligne manuel Word (Maj+Entree), par opposition a la marque de fin
 # de paragraphe (\r) : l'inserer a la place d'un \r fusionne deux paragraphes
@@ -346,6 +354,39 @@ def _apply_diagnostics(
         target.HighlightColorIndex = WD_TURQUOISE
         target = None
     return len(diagnostics)
+
+
+def _format_ai_comment(suggestion: LocatedAISuggestion) -> str:
+    return (
+        f"[PURH IA — {suggestion.rule_id}] {suggestion.explanation}\n\n"
+        f"Proposition : « {suggestion.suggested_text} »"
+    )
+
+
+def _apply_ai_suggestion(
+    document: Any,
+    paragraph: Any,
+    suggestion: LocatedAISuggestion,
+) -> bool:
+    """Surligne la portée visée par une suggestion IA (jaune foncé) et lui
+    attache un commentaire Word natif expliquant la proposition.
+
+    Ne modifie jamais le texte du paragraphe — c'est le principe directeur
+    de toute la couche IA (voir docs/CATALOGUE_REGLES_IA.md). Retourne
+    `False` sans lever d'exception si l'opération COM échoue (plage
+    invalide, document verrouillé...), pour qu'une suggestion IA
+    défaillante n'interrompe jamais le traitement déterministe qui
+    l'entoure.
+    """
+    target = _exact_range(paragraph, suggestion.start, suggestion.end)
+    try:
+        target.HighlightColorIndex = WD_DARK_YELLOW
+        document.Comments.Add(Range=target, Text=_format_ai_comment(suggestion))
+    except Exception:
+        return False
+    finally:
+        target = None
+    return True
 
 
 def _paragraph_style_name(paragraph: Any) -> str:
