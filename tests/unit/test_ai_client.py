@@ -4,6 +4,9 @@ import re
 from pathlib import Path
 
 from purh_editorial.corrector.ai import (
+    AI_BIBLIOGRAPHY_RULE_IDS,
+    AI_MAIN_TEXT_RULE_IDS,
+    AI_PARAGRAPH_RULE_IDS,
     AI_RULE_IDS,
     AI_RULE_ID_SET,
     AISuggestion,
@@ -20,6 +23,22 @@ def test_ai_rule_ids_match_catalogue_document() -> None:
     catalogue_text = CATALOGUE_PATH.read_text(encoding="utf-8")
     documented_ids = set(re.findall(r"### `(ia\.[a-z_.]+)`", catalogue_text))
     assert documented_ids == AI_RULE_ID_SET
+
+
+def test_paragraph_scoped_rule_ids_exclude_document_wide_terminology_rule() -> None:
+    assert "ia.terminologie.incoherence" not in AI_MAIN_TEXT_RULE_IDS
+    assert "ia.terminologie.incoherence" not in AI_BIBLIOGRAPHY_RULE_IDS
+
+
+def test_main_text_and_bibliography_rule_ids_are_disjoint() -> None:
+    assert set(AI_MAIN_TEXT_RULE_IDS).isdisjoint(AI_BIBLIOGRAPHY_RULE_IDS)
+
+
+def test_ai_paragraph_rule_ids_is_union_of_main_text_and_bibliography() -> None:
+    assert set(AI_PARAGRAPH_RULE_IDS) == set(AI_MAIN_TEXT_RULE_IDS) | set(
+        AI_BIBLIOGRAPHY_RULE_IDS
+    )
+    assert set(AI_PARAGRAPH_RULE_IDS) == AI_RULE_ID_SET - {"ia.terminologie.incoherence"}
     # Le catalogue liste les identifiants dans le même ordre que le code, pour
     # que la table de synthèse du document reste alignée visuellement.
     assert len(AI_RULE_IDS) == len(set(AI_RULE_IDS))

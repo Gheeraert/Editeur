@@ -3,6 +3,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+from purh_editorial.corrector.ai import AIClient
 from purh_editorial.corrector.word_document import correct_word_copy
 
 
@@ -155,6 +156,7 @@ def correct_docx(
     input_path: Path,
     output_path: Path,
     reapply_normal_style: bool = False,
+    ai_client: AIClient | None = None,
 ) -> dict[str, int]:
     source = Path(input_path)
     destination = Path(output_path)
@@ -177,4 +179,5 @@ def correct_docx(
         destination_resolved,
         RULE_IDS,
         reapply_normal_style=reapply_normal_style,
+        ai_client=ai_client,
     )

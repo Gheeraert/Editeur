@@ -11,7 +11,13 @@ from purh_editorial.corrector.ai.client import (
 from purh_editorial.corrector.ai.gemini_client import GeminiAIClient
 from purh_editorial.corrector.ai.groq_client import GroqAIClient
 from purh_editorial.corrector.ai.ollama_client import OllamaAIClient
-from purh_editorial.corrector.ai.rules import AI_RULE_ID_SET, AI_RULE_IDS
+from purh_editorial.corrector.ai.rules import (
+    AI_BIBLIOGRAPHY_RULE_IDS,
+    AI_MAIN_TEXT_RULE_IDS,
+    AI_PARAGRAPH_RULE_IDS,
+    AI_RULE_ID_SET,
+    AI_RULE_IDS,
+)
 
 __all__ = [
     "AIClient",
@@ -25,4 +31,7 @@ __all__ = [
     "parse_ai_response",
     "AI_RULE_IDS",
     "AI_RULE_ID_SET",
+    "AI_MAIN_TEXT_RULE_IDS",
+    "AI_BIBLIOGRAPHY_RULE_IDS",
+    "AI_PARAGRAPH_RULE_IDS",
 ]

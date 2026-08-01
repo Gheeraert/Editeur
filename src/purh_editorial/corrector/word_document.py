@@ -4,7 +4,14 @@ import re
 from pathlib import Path
 from typing import Any, Callable
 
-from purh_editorial.corrector.ai import LocatedAISuggestion
+from purh_editorial.corrector.ai import (
+    AI_BIBLIOGRAPHY_RULE_IDS,
+    AI_MAIN_TEXT_RULE_IDS,
+    AI_PARAGRAPH_RULE_IDS,
+    AIClient,
+    LocatedAISuggestion,
+    locate_suggestion,
+)
 from purh_editorial.corrector.rules.bibliography import (
     BIBLIOGRAPHY_SECTION_HEADING_RE,
     BIBLIOGRAPHY_TEXT_RULES,
@@ -60,6 +67,15 @@ WD_BRIGHT_GREEN = 4
 # aucune n'est un orange clair ; wdDarkYellow est la plus proche disponible
 # et reste distincte du jaune (edition automatique) au premier coup d'oeil.
 WD_DARK_YELLOW = 14
+
+# Seuil de ciblage pour les regles IA a portee "texte courant" (style,
+# syntaxe, morphologie, clarte) : un paragraphe plus court n'offre
+# generalement pas assez de matiere pour ces categories et solliciterait le
+# modele (temps local, quota distant) pour peu de valeur. Ne s'applique PAS
+# aux entrees bibliographiques (AI_BIBLIOGRAPHY_RULE_IDS) : une reference
+# incomplete est souvent courte par nature - c'est justement le cas a
+# detecter, pas a exclure.
+AI_MIN_MAIN_TEXT_LENGTH = 40
 
 # Saut de ligne manuel Word (Maj+Entree), par opposition a la marque de fin
 # de paragraphe (\r) : l'inserer a la place d'un \r fusionne deux paragraphes
@@ -389,6 +405,39 @@ def _apply_ai_suggestion(
     return True
 
 
+def _apply_ai_to_paragraph(
+    document: Any,
+    paragraph: Any,
+    rule_ids: tuple[str, ...],
+    ai_client: AIClient,
+    counts: dict[str, int],
+    minimum_length: int = 0,
+) -> None:
+    """Interroge `ai_client` pour un paragraphe et applique chaque suggestion
+    localisable.
+
+    N'appelle jamais le modèle pour un texte plus court que `minimum_length`
+    (voir `AI_MIN_MAIN_TEXT_LENGTH`) ni pour un paragraphe vide. Toute
+    exception venue du client (le contrat `AIClient` n'est censé jamais en
+    lever, mais un client fourni par un appelant tiers pourrait y déroger)
+    est absorbée ici : une panne de la couche IA ne doit jamais interrompre
+    le traitement déterministe qui l'entoure.
+    """
+    text = _paragraph_text(paragraph)
+    if len(text.strip()) < minimum_length:
+        return
+    try:
+        suggestions = ai_client.analyze_paragraph(text, rule_ids)
+    except Exception:
+        return
+    for suggestion in suggestions:
+        located = locate_suggestion(text, suggestion)
+        if located is None:
+            continue
+        if _apply_ai_suggestion(document, paragraph, located):
+            counts[located.rule_id] += 1
+
+
 def _paragraph_style_name(paragraph: Any) -> str:
     try:
         return str(paragraph.Range.Style.NameLocal)
@@ -491,9 +540,18 @@ def _apply_bibliography_entry(paragraph: Any, counts: dict[str, int]) -> None:
     )
 
 
-def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
+def _apply_main_text(
+    document: Any,
+    counts: dict[str, int],
+    ai_client: AIClient | None = None,
+) -> None:
     story = document.StoryRanges(WD_MAIN_TEXT_STORY)
     in_bibliography_section = False
+    # Vérifié une seule fois pour tout le document, pas par paragraphe : pour
+    # Ollama, is_available() est un aller-retour réseau (même bref) ; le
+    # répéter des centaines de fois par manuscrit serait un coût inutile pour
+    # une réponse qui ne change pas en cours de traitement.
+    ai_ready = ai_client is not None and ai_client.is_available()
     for paragraph_index, paragraph in enumerate(story.Paragraphs, start=1):
         for rule_id, finder in ORTHOTYPOGRAPHY_TEXT_RULES + BIBLIOGRAPHY_TEXT_RULES:
             try:
@@ -522,8 +580,21 @@ def _apply_main_text(document: Any, counts: dict[str, int]) -> None:
             _apply_allcaps_heading_diagnostic(paragraph, counts)
         elif in_bibliography_section:
             _apply_bibliography_entry(paragraph, counts)
+            if ai_ready:
+                _apply_ai_to_paragraph(
+                    document, paragraph, AI_BIBLIOGRAPHY_RULE_IDS, ai_client, counts
+                )
         else:
             _apply_frontmatter_diagnostic(paragraph, counts)
+            if ai_ready:
+                _apply_ai_to_paragraph(
+                    document,
+                    paragraph,
+                    AI_MAIN_TEXT_RULE_IDS,
+                    ai_client,
+                    counts,
+                    minimum_length=AI_MIN_MAIN_TEXT_LENGTH,
+                )
     paragraph = None
     story = None
 
@@ -741,6 +812,7 @@ def correct_word_copy(
     path: Path,
     rule_ids: tuple[str, ...],
     reapply_normal_style: bool = False,
+    ai_client: AIClient | None = None,
 ) -> dict[str, int]:
     try:
         from win32com.client import DispatchEx
@@ -750,6 +822,11 @@ def correct_word_copy(
         ) from exc
 
     counts = {rule_id: 0 for rule_id in rule_ids}
+    if ai_client is not None:
+        # N'ajoute les compteurs IA au rapport que si une couche IA a
+        # effectivement été demandée : un rapport contenant des identifiants
+        # `ia.*` à 0 alors que l'IA n'a pas été sollicitée serait trompeur.
+        counts.update({rule_id: 0 for rule_id in AI_PARAGRAPH_RULE_IDS})
     word = None
     document = None
     try:
@@ -762,7 +839,7 @@ def correct_word_copy(
             AddToRecentFiles=False,
             Visible=False,
         )
-        _apply_main_text(document, counts)
+        _apply_main_text(document, counts, ai_client=ai_client)
         _apply_footnotes(document, counts)
         _apply_purh_style_defaults(document, counts)
         _apply_poetry_merge(document, counts)
