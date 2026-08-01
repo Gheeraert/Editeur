@@ -54,7 +54,7 @@ Une fenêtre s'ouvre : choisir le document source, choisir (ou laisser proposer)
 Au-delà de l'ortho-typographie, une assistance IA peut analyser le style, la syntaxe et la bibliographie (voir [`docs/CATALOGUE_REGLES_IA.md`](docs/CATALOGUE_REGLES_IA.md)). Chaque lancement exige un choix explicite parmi trois modes — aucun n'est mémorisé d'une fois sur l'autre :
 
 - **Désactivée** : comportement inchangé, seul le moteur déterministe s'exécute.
-- **Locale (Ollama)** : indiquer le nom exact du modèle chargé dans Ollama (`ollama list`). Aucune donnée ne quitte le poste de travail.
+- **Locale (Ollama)** : le modèle actuellement chargé dans Ollama (`ollama ps`) est proposé automatiquement dans une liste déroulante dès que ce mode est sélectionné ; un bouton « Rafraîchir » permet de re-détecter les modèles disponibles à tout moment. Ce choix reste entièrement modifiable — la présélection est un confort, pas une obligation. Aucune donnée ne quitte le poste de travail.
 - **Distante (API)** : Gemini ou Groq, avec une clé API. Le texte des paragraphes analysés est envoyé à un service tiers — un avertissement de confidentialité s'affiche à chaque lancement dans ce mode, à confirmer explicitement.
 
 Le nom du modèle Ollama et la clé API peuvent être préremplis depuis des variables d'environnement définies avant de lancer `main.py` (voir `.env.example` pour leurs noms — `OLLAMA_MODEL`, `GEMINI_API_KEY`, `GROQ_API_KEY` — par exemple `$env:GEMINI_API_KEY = "..."` en PowerShell ; l'outil ne lit pas de fichier `.env` automatiquement) : simple confort pour éviter de ressaisir une clé à chaque lancement, jamais un mode présélectionné — les champs restent visibles et modifiables, et le choix du mode lui-même reste toujours à faire explicitement.

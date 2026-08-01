@@ -19,6 +19,64 @@ _AVAILABILITY_TIMEOUT_SECONDS = 2.0
 _DEFAULT_TEMPERATURE = 0.2
 
 
+def list_ollama_models(
+    base_url: str = "http://localhost:11434",
+    timeout: float = _AVAILABILITY_TIMEOUT_SECONDS,
+) -> list[str]:
+    """Liste les modèles installés dans Ollama (équivalent de `ollama list`).
+
+    Retourne une liste vide sur toute erreur (serveur injoignable, réponse
+    inattendue) plutôt que de lever une exception — cette fonction alimente
+    une liste déroulante d'interface, jamais un chemin critique.
+    """
+    request = urllib.request.Request(f"{base_url.rstrip('/')}/api/tags", method="GET")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, OSError, ValueError, json.JSONDecodeError):
+        return []
+    if not isinstance(body, dict):
+        return []
+    models = body.get("models")
+    if not isinstance(models, list):
+        return []
+    return sorted(
+        name
+        for item in models
+        if isinstance(item, dict) and isinstance(name := item.get("name"), str)
+    )
+
+
+def active_ollama_model(
+    base_url: str = "http://localhost:11434",
+    timeout: float = _AVAILABILITY_TIMEOUT_SECONDS,
+) -> str | None:
+    """Nom du modèle actuellement chargé en mémoire par Ollama (équivalent de
+    `ollama ps`), ou `None` si aucun modèle n'est chargé ou si le serveur est
+    injoignable.
+
+    Sert uniquement à préremplir un choix par défaut dans l'interface ; ne
+    remplace jamais la nécessité de préciser un modèle explicite pour
+    `OllamaAIClient` lui-même (voir sa docstring).
+    """
+    request = urllib.request.Request(f"{base_url.rstrip('/')}/api/ps", method="GET")
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, OSError, ValueError, json.JSONDecodeError):
+        return None
+    if not isinstance(body, dict):
+        return None
+    models = body.get("models")
+    if not isinstance(models, list) or not models:
+        return None
+    first = models[0]
+    if not isinstance(first, dict):
+        return None
+    name = first.get("name")
+    return name if isinstance(name, str) else None
+
+
 class OllamaAIClient:
     """Backend local via l'API REST d'Ollama (http://localhost:11434 par
     défaut). Aucune bibliothèque HTTP tierce : `urllib` de la bibliothèque

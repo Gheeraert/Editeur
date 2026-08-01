@@ -10,7 +10,11 @@ from purh_editorial.corrector.ai.client import (
 )
 from purh_editorial.corrector.ai.gemini_client import GeminiAIClient
 from purh_editorial.corrector.ai.groq_client import GroqAIClient
-from purh_editorial.corrector.ai.ollama_client import OllamaAIClient
+from purh_editorial.corrector.ai.ollama_client import (
+    OllamaAIClient,
+    active_ollama_model,
+    list_ollama_models,
+)
 from purh_editorial.corrector.ai.rules import (
     AI_BIBLIOGRAPHY_RULE_IDS,
     AI_MAIN_TEXT_RULE_IDS,
@@ -27,6 +31,8 @@ __all__ = [
     "GroqAIClient",
     "LocatedAISuggestion",
     "OllamaAIClient",
+    "active_ollama_model",
+    "list_ollama_models",
     "locate_suggestion",
     "parse_ai_response",
     "AI_RULE_IDS",

@@ -5,7 +5,11 @@ import urllib.error
 from typing import Any
 from unittest.mock import patch
 
-from purh_editorial.corrector.ai import OllamaAIClient
+from purh_editorial.corrector.ai import (
+    OllamaAIClient,
+    active_ollama_model,
+    list_ollama_models,
+)
 
 
 class _FakeResponse:
@@ -153,3 +157,57 @@ def test_analyze_paragraph_skips_network_call_for_empty_rule_ids() -> None:
         result = client.analyze_paragraph("un paragraphe", [])
     mocked.assert_not_called()
     assert result == []
+
+
+def test_list_ollama_models_returns_names_from_tags_endpoint() -> None:
+    body = json.dumps(
+        {"models": [{"name": "mistral-small3.2:latest"}, {"name": "llama3.1:8b"}]}
+    ).encode("utf-8")
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        return_value=_FakeResponse(200, body),
+    ):
+        assert list_ollama_models() == ["llama3.1:8b", "mistral-small3.2:latest"]
+
+
+def test_list_ollama_models_returns_empty_list_on_connection_error() -> None:
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        side_effect=urllib.error.URLError("connection refused"),
+    ):
+        assert list_ollama_models() == []
+
+
+def test_list_ollama_models_returns_empty_list_on_unexpected_shape() -> None:
+    body = json.dumps({"unexpected": "shape"}).encode("utf-8")
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        return_value=_FakeResponse(200, body),
+    ):
+        assert list_ollama_models() == []
+
+
+def test_active_ollama_model_returns_first_loaded_model_name() -> None:
+    body = json.dumps({"models": [{"name": "mistral-small3.2:latest"}]}).encode("utf-8")
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        return_value=_FakeResponse(200, body),
+    ):
+        assert active_ollama_model() == "mistral-small3.2:latest"
+
+
+def test_active_ollama_model_returns_none_when_no_model_loaded() -> None:
+    body = json.dumps({"models": []}).encode("utf-8")
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        return_value=_FakeResponse(200, body),
+    ):
+        assert active_ollama_model() is None
+
+
+def test_active_ollama_model_returns_none_on_connection_error() -> None:
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        side_effect=urllib.error.URLError("connection refused"),
+    ):
+        assert active_ollama_model() is None

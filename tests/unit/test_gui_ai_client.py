@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import pytest
 
 from purh_editorial.corrector.ai import GeminiAIClient, GroqAIClient, OllamaAIClient
@@ -24,6 +26,8 @@ def _reset_ai_state(app: CorrectorApp):
     app._ollama_model.set("")
     app._remote_provider.set("")
     app._api_key.set("")
+    app._ollama_models_loaded = False
+    app._ollama_model_entry.configure(values=())
     app.update()
     yield
 
@@ -39,7 +43,15 @@ def test_disabled_mode_returns_none(app: CorrectorApp) -> None:
 
 
 def test_local_mode_without_model_raises_error(app: CorrectorApp) -> None:
-    app._ai_mode.set("local")
+    # Aucun modele ne doit etre trouve/preselectionne pour ce cas : mocke la
+    # decouverte Ollama (sinon un vrai serveur local avec un modele charge
+    # rendrait ce test non representatif, cf. le nouveau prefill automatique).
+    with (
+        patch("purh_editorial.corrector.gui.list_ollama_models", return_value=[]),
+        patch("purh_editorial.corrector.gui.active_ollama_model", return_value=None),
+    ):
+        app._ai_mode.set("local")
+        app.update()
     with pytest.raises(ValueError, match="modèle"):
         app._build_ai_client()
 
@@ -135,3 +147,75 @@ def test_prefill_does_nothing_when_environment_variable_is_absent(
     app._remote_provider.set("gemini")
     app.update()
     assert app._api_key.get() == ""
+
+
+def test_selecting_local_mode_prefills_active_ollama_model(app: CorrectorApp) -> None:
+    with (
+        patch(
+            "purh_editorial.corrector.gui.list_ollama_models",
+            return_value=["llama3.1:8b", "mistral-small3.2:latest"],
+        ),
+        patch(
+            "purh_editorial.corrector.gui.active_ollama_model",
+            return_value="mistral-small3.2:latest",
+        ),
+    ):
+        app._ai_mode.set("local")
+        app.update()
+    assert app._ollama_model.get() == "mistral-small3.2:latest"
+    assert list(app._ollama_model_entry.cget("values")) == [
+        "llama3.1:8b",
+        "mistral-small3.2:latest",
+    ]
+
+
+def test_selecting_local_mode_falls_back_to_first_model_when_none_active(
+    app: CorrectorApp,
+) -> None:
+    with (
+        patch(
+            "purh_editorial.corrector.gui.list_ollama_models",
+            return_value=["llama3.1:8b"],
+        ),
+        patch("purh_editorial.corrector.gui.active_ollama_model", return_value=None),
+    ):
+        app._ai_mode.set("local")
+        app.update()
+    assert app._ollama_model.get() == "llama3.1:8b"
+
+
+def test_selecting_local_mode_does_not_overwrite_prefilled_env_value(
+    app: CorrectorApp,
+) -> None:
+    app._ollama_model.set("un-autre-modele")
+    with (
+        patch(
+            "purh_editorial.corrector.gui.list_ollama_models",
+            return_value=["mistral-small3.2:latest"],
+        ),
+        patch(
+            "purh_editorial.corrector.gui.active_ollama_model",
+            return_value="mistral-small3.2:latest",
+        ),
+    ):
+        app._ai_mode.set("local")
+        app.update()
+    assert app._ollama_model.get() == "un-autre-modele"
+    # La liste deroulante reste alimentee malgre tout.
+    assert list(app._ollama_model_entry.cget("values")) == ["mistral-small3.2:latest"]
+
+
+def test_refresh_button_requeries_models_on_demand(app: CorrectorApp) -> None:
+    app._ai_mode.set("local")
+    with (
+        patch(
+            "purh_editorial.corrector.gui.list_ollama_models",
+            return_value=["nouveau-modele:latest"],
+        ),
+        patch(
+            "purh_editorial.corrector.gui.active_ollama_model",
+            return_value=None,
+        ),
+    ):
+        app._refresh_ollama_models()
+    assert "nouveau-modele:latest" in app._ollama_model_entry.cget("values")

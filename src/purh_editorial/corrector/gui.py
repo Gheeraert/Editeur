@@ -6,7 +6,14 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
-from purh_editorial.corrector.ai import AIClient, GeminiAIClient, GroqAIClient, OllamaAIClient
+from purh_editorial.corrector.ai import (
+    AIClient,
+    GeminiAIClient,
+    GroqAIClient,
+    OllamaAIClient,
+    active_ollama_model,
+    list_ollama_models,
+)
 from purh_editorial.corrector.runner import correct_docx
 
 _CONFIDENTIALITY_WARNING = (
@@ -52,6 +59,11 @@ class CorrectorApp(tk.Tk):
         self._ollama_model = tk.StringVar(value=os.environ.get("OLLAMA_MODEL", ""))
         self._remote_provider = tk.StringVar(value="")
         self._api_key = tk.StringVar(value="")
+        # Ne declenche la premiere interrogation d'Ollama (liste des
+        # modeles + modele actif) qu'a la premiere selection du mode
+        # local, pas au demarrage de l'application - voir
+        # _update_ai_fields_state / _refresh_ollama_models.
+        self._ollama_models_loaded = False
 
         self._running = False
 
@@ -80,7 +92,7 @@ class CorrectorApp(tk.Tk):
 
         ttk.Checkbutton(
             frame,
-            text="Réapplication du style 'Normal' au paragraphe concerné",
+            text="Réappliquer le style 'Normal' ? (déconseillé sur textes longs)",
             variable=self._reapply_normal_style,
         ).grid(row=4, column=0, columnspan=2, sticky="w", pady=(pad, 0))
 
@@ -115,11 +127,17 @@ class CorrectorApp(tk.Tk):
 
         self._ollama_row = ttk.Frame(ai_frame)
         self._ollama_row.grid(row=1, column=0, columnspan=3, sticky="w", pady=(pad // 2, 0))
-        ttk.Label(self._ollama_row, text="Modèle chargé dans Ollama :").grid(row=0, column=0)
-        self._ollama_model_entry = ttk.Entry(
-            self._ollama_row, textvariable=self._ollama_model, width=30
+        ttk.Label(self._ollama_row, text="Modèle Ollama (préselectionné, modifiable) :").grid(
+            row=0, column=0
+        )
+        self._ollama_model_entry = ttk.Combobox(
+            self._ollama_row, textvariable=self._ollama_model, width=28
         )
         self._ollama_model_entry.grid(row=0, column=1, padx=(pad // 2, 0))
+        self._ollama_refresh_button = ttk.Button(
+            self._ollama_row, text="Rafraîchir", command=self._refresh_ollama_models
+        )
+        self._ollama_refresh_button.grid(row=0, column=2, padx=(pad // 2, 0))
 
         self._remote_row = ttk.Frame(ai_frame)
         self._remote_row.grid(row=2, column=0, columnspan=3, sticky="w", pady=(pad // 2, 0))
@@ -142,9 +160,34 @@ class CorrectorApp(tk.Tk):
         ollama_state = "normal" if mode == "local" else "disabled"
         remote_state = "normal" if mode == "remote" else "disabled"
         self._ollama_model_entry.configure(state=ollama_state)
+        self._ollama_refresh_button.configure(state=ollama_state)
         self._gemini_radio.configure(state=remote_state)
         self._groq_radio.configure(state=remote_state)
         self._api_key_entry.configure(state=remote_state)
+        if mode == "local" and not self._ollama_models_loaded:
+            self._refresh_ollama_models()
+
+    def _refresh_ollama_models(self) -> None:
+        """Interroge Ollama pour lister les modèles installés et présélectionner
+        celui actuellement chargé en mémoire.
+
+        Ne remplace jamais une valeur déjà présente dans le champ (préremplie
+        depuis `OLLAMA_MODEL` ou saisie manuellement) : ne fait que proposer
+        un choix par défaut et alimenter la liste déroulante, jamais
+        n'impose un modèle. Interrogation synchrone à délai court
+        (`_AVAILABILITY_TIMEOUT_SECONDS` côté client) déclenchée par une
+        action explicite (sélection du mode local, ou clic sur
+        « Rafraîchir »), pas au démarrage de l'application.
+        """
+        self._ollama_models_loaded = True
+        models = list_ollama_models()
+        self._ollama_model_entry.configure(values=models)
+        if not self._ollama_model.get().strip():
+            default_model = active_ollama_model()
+            if default_model is None and models:
+                default_model = models[0]
+            if default_model:
+                self._ollama_model.set(default_model)
 
     def _prefill_api_key_from_environment(self) -> None:
         # Ne remplace jamais une cle deja saisie manuellement par
