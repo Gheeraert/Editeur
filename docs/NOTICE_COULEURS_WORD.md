@@ -2,7 +2,7 @@
 
 ## Présentation générale
 
-Le correcteur `reborn` (`corrector/word_document.py`) travaille sur une copie du manuscrit et surligne chaque intervention directement dans le document Word produit. Deux couleurs seulement sont utilisées aujourd'hui — le périmètre pourra s'enrichir en même temps que de nouvelles règles seront ajoutées (cf. [`docs/REBORN_ARCHITECTURE.md`](REBORN_ARCHITECTURE.md)).
+Le correcteur `reborn` (`corrector/word_document.py`) travaille sur une copie du manuscrit et surligne chaque intervention directement dans le document Word produit. Trois couleurs sont utilisées aujourd'hui — le périmètre pourra s'enrichir en même temps que de nouvelles règles seront ajoutées (cf. [`docs/REBORN_ARCHITECTURE.md`](REBORN_ARCHITECTURE.md)).
 
 Ce document Word annoté est destiné à la relecture humaine : aucune intervention automatique n'est réputée définitive tant qu'elle n'a pas été vérifiée par l'éditrice ou l'éditeur.
 
@@ -14,6 +14,7 @@ Ce document Word annoté est destiné à la relecture humaine : aucune intervent
 |---|---|---|---|
 | **Jaune** | Correction ortho-typographique ou bibliographique déterministe (règle `deterministic` du catalogue) | Oui | Vérification recommandée |
 | **Turquoise** | Diagnostic heuristique (règle `heuristic` du catalogue signalant un cas ambigu) | Non | Décision manuelle requise |
+| **Vert clair** | Restructuration du texte (fusion des strophes/citations poétiques en un paragraphe unique) | Oui (fusion) | Vérification recommandée |
 
 ---
 
@@ -29,10 +30,14 @@ Regroupe les règles heuristiques qui détectent un cas nécessitant un jugement
 
 Chaque passage turquoise appelle une lecture attentive : la chaîne a repéré un cas potentiellement problématique, mais s'abstient de trancher automatiquement.
 
+## Vert clair — restructuration du texte
+
+Regroupe les règles de structuration qui modifient l'agencement des paragraphes : la fusion des strophes/citations poétiques (`structure.poetry.heuristique`) en un paragraphe unique. Le texte est bien modifié (fusion), d'où la nécessité d'un surlignage même si la règle reste d'inspiration heuristique.
+
 ---
 
 ## Remarques
 
 - Un passage **non surligné** n'a pas été touché par l'outil ; il est transmis tel quel depuis le manuscrit de l'auteur.
-- La famille de règles « structuration du texte » (titres, poésie, sections bibliographiques, frontmatter) n'est pas encore implémentée : aucun surlignement de structure n'apparaîtra pour l'instant, y compris sur des cas que le catalogue prévoit de couvrir à terme.
+- La famille de règles « structuration du texte » couvre pour l'instant la fusion des citations poétiques (vert clair), les titres tout en majuscules et le frontmatter (turquoise) ; les autres cas prévus par le catalogue restent à implémenter.
 - La couleur disparaît si le texte est ensuite modifié manuellement dans Word : c'est normal, il s'agit d'un marqueur d'annotation, pas d'un attribut permanent du style.

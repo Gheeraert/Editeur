@@ -58,7 +58,7 @@ python -m purh_editorial.corrector.cli chemin\vers\source.docx chemin\vers\sorti
 ## 6. Tests
 
 ```bash
-python -m pip install pytest
+python -m pip install -r requirements-dev.txt
 python -m pytest
 ```
 
