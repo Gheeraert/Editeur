@@ -65,6 +65,24 @@ def test_analyze_paragraph_parses_valid_response() -> None:
     assert result[0].rule_id == "ia.style.lourdeur"
 
 
+def test_analyze_paragraph_sends_configured_temperature() -> None:
+    client = OllamaAIClient(model="mistral-small3.2", temperature=0.2)
+    body = json.dumps({"response": "[]"}).encode("utf-8")
+    captured: dict[str, object] = {}
+
+    def _fake_urlopen(request, timeout=None):
+        captured["payload"] = json.loads(request.data.decode("utf-8"))
+        return _FakeResponse(200, body)
+
+    with patch(
+        "purh_editorial.corrector.ai.ollama_client.urllib.request.urlopen",
+        side_effect=_fake_urlopen,
+    ):
+        client.analyze_paragraph("un paragraphe assez long pour etre analyse", ["ia.style.lourdeur"])
+
+    assert captured["payload"]["options"]["temperature"] == 0.2
+
+
 def test_analyze_paragraph_filters_out_rule_ids_not_requested() -> None:
     client = OllamaAIClient(model="mistral-small3.2")
     inner_json = json.dumps(

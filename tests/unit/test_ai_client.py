@@ -122,6 +122,41 @@ def test_parse_ai_response_returns_empty_list_on_invalid_json() -> None:
     assert parse_ai_response("ceci n'est pas du JSON") == []
 
 
+def test_parse_ai_response_rejects_passive_claim_without_etre_form() -> None:
+    # Constate sur corpus reel (etape 9) : le modele invoque "tournure
+    # passive" comme justification par defaut, y compris sur une phrase
+    # active simple sans aucune forme de l'auxiliaire etre.
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", '
+        '"original_text": "qui regna de 1758 a 1769", '
+        '"suggested_text": "regnant de 1758 a 1769", '
+        '"explanation": "Tournure passive excessive."}]'
+    )
+    assert parse_ai_response(raw) == []
+
+
+def test_parse_ai_response_keeps_passive_claim_with_genuine_etre_form() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", '
+        '"original_text": "les armoiries du pape furent celebrees", '
+        '"suggested_text": "les armoiries du pape ont ete celebrees", '
+        '"explanation": "Tournure passive excessive."}]'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+
+
+def test_parse_ai_response_keeps_non_passive_explanation_unaffected() -> None:
+    raw = (
+        '[{"rule_id": "ia.style.lourdeur", '
+        '"original_text": "qui regna de 1758 a 1769", '
+        '"suggested_text": "regnant de 1758 a 1769", '
+        '"explanation": "Pleonasme et lourdeur de construction."}]'
+    )
+    suggestions = parse_ai_response(raw)
+    assert len(suggestions) == 1
+
+
 def test_parse_ai_response_wraps_bare_object_into_single_suggestion() -> None:
     # Constaté avec Mistral Small 3.2 en local : le modèle renvoie parfois
     # un objet nu au lieu d'un tableau à un élément, malgré la consigne.

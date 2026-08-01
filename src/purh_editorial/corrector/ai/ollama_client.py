@@ -12,6 +12,12 @@ from purh_editorial.corrector.ai.prompts import build_system_prompt, build_user_
 # par le runner (étape 6) pour décider, sans bloquer, de sauter la passe IA.
 _AVAILABILITY_TIMEOUT_SECONDS = 2.0
 
+# Basse par defaut : cette tache est un jugement structure (repondre dans un
+# schema JSON strict, s'abstenir si de doute), pas une generation creative -
+# une temperature elevee (defaut du modele, souvent ~0.7-0.8) favorise la
+# sur-confiance et l'invention constatees sur corpus reel (etape 9).
+_DEFAULT_TEMPERATURE = 0.2
+
 
 class OllamaAIClient:
     """Backend local via l'API REST d'Ollama (http://localhost:11434 par
@@ -29,10 +35,12 @@ class OllamaAIClient:
         model: str,
         base_url: str = "http://localhost:11434",
         timeout: float = 60.0,
+        temperature: float = _DEFAULT_TEMPERATURE,
     ) -> None:
         self._model = model
         self._base_url = base_url.rstrip("/")
         self._timeout = timeout
+        self._temperature = temperature
 
     def is_available(self) -> bool:
         """Vérifie que le serveur Ollama répond.
@@ -64,6 +72,7 @@ class OllamaAIClient:
             "prompt": build_user_prompt(text),
             "format": "json",
             "stream": False,
+            "options": {"temperature": self._temperature},
         }
         request = urllib.request.Request(
             f"{self._base_url}/api/generate",

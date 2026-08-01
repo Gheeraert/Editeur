@@ -9,9 +9,15 @@ from typing import Sequence
 # copier-coller littéral du catalogue).
 _RULE_INSTRUCTIONS: dict[str, str] = {
     "ia.style.lourdeur": (
-        "ia.style.lourdeur : pléonasme, tournure passive excessive ou "
-        "accumulation de subordonnées qui alourdit la phrase, en tenant "
-        "compte du registre soutenu attendu dans une édition universitaire."
+        "ia.style.lourdeur : pléonasme, verbosité ou accumulation excessive "
+        "de subordonnées qui alourdit réellement la phrase, en tenant compte "
+        "du registre soutenu normal d'une édition universitaire (une phrase "
+        "longue et savante n'est pas en soi un défaut). N'invoque une "
+        "\"tournure passive\" que si la phrase contient effectivement une "
+        "forme conjuguée de l'auxiliaire être suivie d'un participe passé "
+        "(ex. \"fut modifié\", \"sont célébrées\") : ne l'invoque jamais par "
+        "défaut ou par habitude sur une phrase qui n'est pas grammaticalement "
+        "passive."
     ),
     "ia.style.repetition": (
         "ia.style.repetition : répétition rapprochée d'un même mot ou d'une "
@@ -63,6 +69,25 @@ ces clés, toutes des chaînes de caractères :
 automatiquement).
 - "suggested_text" : la reformulation ou correction proposée.
 - "explanation" : une phrase brève expliquant le problème identifié.
+
+Sois exigeante : la plupart des paragraphes d'un manuscrit déjà relu ne \
+méritent AUCUNE remarque. Ne signale que ce qui gênerait réellement la \
+lecture d'un lecteur académique exigeant, jamais une préférence de style \
+mineure ou discutable. En cas de doute, ne signale rien. Un paragraphe bien \
+écrit, même long ou syntaxiquement complexe, appelle un tableau vide.
+
+Exemple de paragraphe qui n'appelle AUCUNE remarque (réponse attendue : []) :
+"Le recueil s'organise en deux parties égales de six articles chacune : \
+l'une se consacre à des pontificats spécifiques, l'autre à la \
+monumentalisation de l'héraldique."
+
+Exemple de paragraphe qui appelle une remarque justifiée :
+"Il s'avère avéré que ce fait, qui a été observé, qui a été noté, et qui a \
+été confirmé, demeure un fait avéré." → réponse attendue (un seul élément, \
+pléonasme et répétition réelles, pas une invocation de voix passive) :
+[{"rule_id": "ia.style.lourdeur", "original_text": "Il s'avère avéré que ce \
+fait", "suggested_text": "Il est avéré que ce fait", "explanation": \
+"Pléonasme : \\"s'avérer avéré\\" est redondant."}]
 
 Si le paragraphe n'appelle aucune remarque parmi les points demandés, \
 réponds par un tableau vide []. Ne modifie jamais le texte toi-même : tu es \

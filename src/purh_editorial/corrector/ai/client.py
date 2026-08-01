@@ -1,10 +1,35 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from typing import Mapping, Protocol, Sequence
 
 from purh_editorial.corrector.ai.rules import AI_RULE_ID_SET
+
+# Garde-fou deterministe contre une deviation observee en pratique (etape 9,
+# corpus reel PURH, Mistral Small 3.2) : le modele invoque "tournure passive"
+# comme justification par defaut, y compris sur des phrases qui ne sont pas
+# grammaticalement passives (ex. "qui regna de 1758 a 1769", un verbe simple
+# actif). Plutot que de faire confiance a l'explication du modele, on verifie
+# la presence d'au moins une forme conjuguee de l'auxiliaire "etre" dans le
+# texte cite - une approximation volontairement large (pas un vrai parseur
+# grammatical) qui suffit a rejeter les cas les plus flagrants sans risquer
+# de rejeter un vrai passif.
+_ETRE_FORM_RE = re.compile(
+    r"\b(suis|es|est|sommes|êtes|sont|étais|était|étions|étiez|étaient|"
+    r"fus|fut|fûmes|fûtes|furent|serai|seras|sera|serons|serez|seront|"
+    r"serais|serait|serions|seriez|seraient|sois|soit|soyons|soyez|soient|"
+    r"étant|été)\b",
+    re.IGNORECASE,
+)
+_EXPLANATION_CLAIMS_PASSIVE_RE = re.compile(r"passi[fv]", re.IGNORECASE)
+
+
+def _is_unsubstantiated_passive_claim(original_text: str, explanation: str) -> bool:
+    if not _EXPLANATION_CLAIMS_PASSIVE_RE.search(explanation):
+        return False
+    return not _ETRE_FORM_RE.search(original_text)
 
 
 @dataclass(frozen=True)
@@ -89,6 +114,13 @@ def parse_ai_response(raw: str) -> list[AISuggestion]:
     quelconque (ex. `{"suggestions": [...]}`). Toute autre forme d'objet
     (sans `rule_id` ni valeur de type liste) est traitée comme « aucune
     suggestion », par prudence plutôt que de deviner davantage.
+
+    Rejette aussi toute suggestion dont l'explication invoque une « tournure
+    passive » sans qu'une forme de l'auxiliaire être n'apparaisse dans la
+    citation (voir `_is_unsubstantiated_passive_claim`) : constaté en
+    pratique sur corpus réel (étape 9), le modèle invoque parfois ce
+    diagnostic par défaut sur des phrases qui ne sont pas grammaticalement
+    passives.
     """
     try:
         payload = json.loads(raw)
@@ -112,12 +144,16 @@ def parse_ai_response(raw: str) -> list[AISuggestion]:
         rule_id = item["rule_id"]
         if rule_id not in AI_RULE_ID_SET:
             continue
+        original_text = item["original_text"]
+        explanation = item["explanation"]
+        if _is_unsubstantiated_passive_claim(original_text, explanation):
+            continue
         suggestions.append(
             AISuggestion(
                 rule_id=rule_id,
-                original_text=item["original_text"],
+                original_text=original_text,
                 suggested_text=item["suggested_text"],
-                explanation=item["explanation"],
+                explanation=explanation,
             )
         )
     return suggestions

@@ -41,6 +41,23 @@ def test_analyze_paragraph_parses_valid_response() -> None:
     assert result[0].rule_id == "ia.style.lourdeur"
 
 
+def test_analyze_paragraph_sends_configured_temperature() -> None:
+    client = GeminiAIClient(api_key="fake-key", temperature=0.2)
+    captured: dict[str, object] = {}
+
+    def _fake_post_json(url, payload, headers, timeout):
+        captured["payload"] = payload
+        return _gemini_body("[]")
+
+    with patch(
+        "purh_editorial.corrector.ai.gemini_client.post_json",
+        side_effect=_fake_post_json,
+    ):
+        client.analyze_paragraph("un paragraphe", ["ia.style.lourdeur"])
+
+    assert captured["payload"]["generationConfig"]["temperature"] == 0.2
+
+
 def test_analyze_paragraph_returns_empty_list_when_post_json_fails() -> None:
     client = GeminiAIClient(api_key="fake-key")
     with patch(

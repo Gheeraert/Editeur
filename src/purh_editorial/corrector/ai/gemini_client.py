@@ -8,6 +8,10 @@ from purh_editorial.corrector.ai.prompts import build_system_prompt, build_user_
 
 _API_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
+# Voir ollama_client._DEFAULT_TEMPERATURE : meme raisonnement, tache de
+# jugement structure plutot que generation creative.
+_DEFAULT_TEMPERATURE = 0.2
+
 
 class GeminiAIClient:
     """Backend distant via l'API Gemini (palier gratuit Google AI Studio).
@@ -29,10 +33,12 @@ class GeminiAIClient:
         api_key: str,
         model: str = "gemini-2.0-flash",
         timeout: float = 60.0,
+        temperature: float = _DEFAULT_TEMPERATURE,
     ) -> None:
         self._api_key = api_key
         self._model = model
         self._timeout = timeout
+        self._temperature = temperature
 
     def is_available(self) -> bool:
         """Vérifie qu'une clé API a été fournie.
@@ -54,7 +60,10 @@ class GeminiAIClient:
         payload = {
             "system_instruction": {"parts": [{"text": build_system_prompt(rule_ids)}]},
             "contents": [{"parts": [{"text": build_user_prompt(text)}]}],
-            "generationConfig": {"responseMimeType": "application/json"},
+            "generationConfig": {
+                "responseMimeType": "application/json",
+                "temperature": self._temperature,
+            },
         }
         url = f"{_API_BASE}/{self._model}:generateContent?key={self._api_key}"
         body = post_json(url, payload, headers={}, timeout=self._timeout)

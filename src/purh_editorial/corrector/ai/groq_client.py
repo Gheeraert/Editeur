@@ -8,6 +8,10 @@ from purh_editorial.corrector.ai.prompts import build_system_prompt, build_user_
 
 _API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
+# Voir ollama_client._DEFAULT_TEMPERATURE : meme raisonnement, tache de
+# jugement structure plutot que generation creative.
+_DEFAULT_TEMPERATURE = 0.2
+
 
 class GroqAIClient:
     """Backend distant via l'API Groq (accélérateur matériel, palier gratuit
@@ -28,10 +32,12 @@ class GroqAIClient:
         api_key: str,
         model: str = "llama-3.1-8b-instant",
         timeout: float = 60.0,
+        temperature: float = _DEFAULT_TEMPERATURE,
     ) -> None:
         self._api_key = api_key
         self._model = model
         self._timeout = timeout
+        self._temperature = temperature
 
     def is_available(self) -> bool:
         """Vérifie qu'une clé API a été fournie, sans appel réseau — même
@@ -50,6 +56,7 @@ class GroqAIClient:
                 {"role": "system", "content": build_system_prompt(rule_ids)},
                 {"role": "user", "content": build_user_prompt(text)},
             ],
+            "temperature": self._temperature,
         }
         headers = {"Authorization": f"Bearer {self._api_key}"}
         body = post_json(_API_URL, payload, headers=headers, timeout=self._timeout)

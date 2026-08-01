@@ -41,6 +41,23 @@ def test_analyze_paragraph_parses_valid_response() -> None:
     assert result[0].rule_id == "ia.biblio.reference_incomplete"
 
 
+def test_analyze_paragraph_sends_configured_temperature() -> None:
+    client = GroqAIClient(api_key="fake-key", temperature=0.2)
+    captured: dict[str, object] = {}
+
+    def _fake_post_json(url, payload, headers, timeout):
+        captured["payload"] = payload
+        return _groq_body("[]")
+
+    with patch(
+        "purh_editorial.corrector.ai.groq_client.post_json",
+        side_effect=_fake_post_json,
+    ):
+        client.analyze_paragraph("un paragraphe", ["ia.style.lourdeur"])
+
+    assert captured["payload"]["temperature"] == 0.2
+
+
 def test_analyze_paragraph_returns_empty_list_when_post_json_fails() -> None:
     client = GroqAIClient(api_key="fake-key")
     with patch(
