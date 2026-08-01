@@ -120,7 +120,7 @@ Il mérite un audit dédié pour quantifier combien de projets PURH utilisent
 chaque convention, avant de décider s'il faut étendre la détection aux noms
 `PURH_*` ou migrer ces manuscrits vers les styles natifs.
 
-## Conclusion
+## Conclusion (première passe)
 
 La mécanique technique de la couche IA (interface, parsing tolérant,
 localisation, surlignage, commentaire, ciblage par nature de paragraphe)
@@ -131,3 +131,44 @@ entre bibliographie et sources d'archives sont deux défauts qui produiraient
 plus de bruit et de risque que d'aide pour une éditrice. Le chantier IA doit
 rester en l'état « disponible mais non calibré » tant qu'un nouveau cycle de
 prompt engineering n'a pas été validé par une reproduction de ce protocole.
+
+## Addendum — Effet de 4 leviers de calibration (même jour)
+
+Sur décision explicite : le cas des dépôts d'archives (constat n°2) est mis
+de côté comme cas particulier, et « un peu de bruit est acceptable dès lors
+que l'IA ne fait que surligner/commenter ». Quatre leviers ciblés ont été
+implémentés puis validés sur le **même échantillon** de 66 paragraphes de
+texte courant, pour une comparaison directe :
+
+1. Garde-fou déterministe : rejette toute suggestion invoquant « passif »
+   sans forme conjuguée de l'auxiliaire être dans la citation.
+2. Prompt : retrait de « tournure passive excessive » de la description
+   d'exemple de `ia.style.lourdeur` (source probable du biais), remplacé par
+   des critères plus variés et une consigne de ne l'invoquer que si elle est
+   grammaticalement réelle.
+3. Prompt : barre de sévérité explicite + deux exemples few-shot (réponse
+   vide justifiée, suggestion genuine sans passif).
+4. Température abaissée de la valeur par défaut du modèle à 0,2.
+
+| | Avant | Après |
+|---|---:|---:|
+| Suggestions brutes | 66/66 (100 %) | 62/66 (94 %) |
+| Localisées avec succès | 50 (76 %) | 49 (79 %) |
+| Mentions de « passif » parmi les suggestions retenues | quasi systématique | 2 / 49 |
+
+**Résultat :** le problème précis signalé (diagnostic de voix passive
+erroné, y compris sur des phrases grammaticalement actives) est résolu de
+façon nette et mesurable — la phrase « qui régna de 1758 à 1769 », prise à
+tort pour du passif dans la première passe, reçoit désormais une critique
+différente et exacte (accumulation de parenthèses). Les catégories se
+diversifient aussi (`ia.syntaxe.construction`, `ia.clarte.ambiguite`
+apparaissent, alors que la première passe ne produisait quasiment que
+`ia.style.lourdeur`).
+
+**Limite persistante :** le taux de déclenchement global n'a presque pas
+bougé (100 % → 94 %). Le garde-fou et le prompt corrigent la *justification*
+donnée, pas la *fréquence* à laquelle le modèle trouve « quelque chose » à
+signaler. Réduire ce volume plus franchement demanderait des leviers non
+implémentés dans cette passe (score de confiance/sévérité avec seuil, second
+passage de vérification critique, ou changement de modèle) — à envisager si
+94 % reste jugé trop élevé à l'usage.
