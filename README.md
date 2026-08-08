@@ -81,3 +81,7 @@ python -m pytest
 - [Code couleur des surlignements Word](docs/NOTICE_COULEURS_WORD.md)
 
 L'architecture antérieure (pivot Python‑JSON, scoring, seuils, exports multiples, IA multi-niveaux) a été abandonnée après plusieurs refontes infructueuses et intégralement supprimée du dépôt. Sa documentation reste consultable à titre d'archive dans [`docs/legacy/`](docs/legacy/README_PIVOT_ARCHITECTURE.md).
+
+## 8. Licence
+
+Ce projet est distribué sous licence [GNU AGPL v3.0](LICENSE). Toute personne ou organisation qui fait tourner une version modifiée de l'outil sur un serveur accessible à des utilisateurs distants doit leur donner accès au code source correspondant.
